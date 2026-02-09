@@ -1,0 +1,157 @@
+export const metadata = {
+  title: "Bézout's Theorem — Algebraic Geometry — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Theorem — Bézout's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Bézout's Theorem
+
+Bézout's theorem is the fundamental intersection-counting result in projective geometry. It tells us that two projective plane curves of degrees $d$ and $e$ always meet in exactly $de$ points — provided we count correctly.
+
+---
+
+## Statement
+
+<Theorem title="Bézout's Theorem" number="1.2">
+Let $C = V(F)$ and $D = V(G)$ be projective plane curves in $\mathbb{P}^2$ over an algebraically closed field $k$, where $\deg F = d$ and $\deg G = e$. If $C$ and $D$ have **no common component** (i.e., $\gcd(F, G) = 1$), then
+
+$$\sum_{P \in C \cap D} I(P, C \cap D) = de$$
+
+where $I(P, C \cap D)$ is the **intersection multiplicity** of $C$ and $D$ at $P$.
+</Theorem>
+
+<Definition title="Intersection multiplicity" number="1.13">
+For two curves $C = V(F)$ and $D = V(G)$ in $\mathbb{P}^2$ meeting at a point $P$, the **intersection multiplicity** is
+
+$$I(P, C \cap D) = \dim_k \mathcal{O}_{P,\mathbb{P}^2} / (F, G)$$
+
+where $\mathcal{O}_{P,\mathbb{P}^2}$ is the local ring at $P$ (in an affine chart containing $P$). Intuitively, this counts "how many times" $C$ and $D$ meet at $P$.
+
+$I(P, C \cap D) = 1$ iff $C$ and $D$ are **transverse** at $P$ (different tangent lines).
+</Definition>
+
+---
+
+## Examples: Bézout in action
+
+<Example id="two-lines" title="Two lines (d=1, e=1): 1·1 = 1">
+Two distinct lines in $\mathbb{P}^2$ meet in exactly **one** point. For example, $V(x)$ and $V(y)$ meet at $[0:0:1]$. This fails in $\mathbb{A}^2$ (parallel lines!), but in $\mathbb{P}^2$ every pair of lines intersects.
+
+If the lines are $V(x)$ and $V(x+y)$, they meet at $[0:0:1]$ with $I = 1$ (transverse).
+</Example>
+
+<Example id="line-conic" title="Line meets conic (1·2 = 2)">
+The line $V(y)$ and the conic $V(x^2 + y^2 - z^2)$ in $\mathbb{P}^2$:
+
+Setting $y = 0$: $x^2 = z^2$, so $[1:0:1]$ and $[1:0:-1]$ (or equivalently $[-1:0:1]$). Two intersection points, each with multiplicity 1. Total: $1 \cdot 2 = 2$. ✓
+</Example>
+
+<Example id="tangent-line-conic" title="Tangent line to a conic (multiplicity 2)">
+The line $V(y - z)$ and the parabola $V(y z - x^2)$ (homogenization of $y = x^2$):
+
+Setting $y = z$: $z^2 = x^2$, so $[1:1:1]$ and $[-1:1:1]$. Wait — that's still 2 distinct points, each with $I = 1$.
+
+Now try $V(z)$ (the line at infinity) and $V(yz - x^2)$: setting $z = 0$, $x^2 = 0$, so only $[0:1:0]$ with multiplicity 2. The line at infinity is **tangent** to the parabola. Total: $1 \cdot 2 = 2$. ✓
+</Example>
+
+<Example id="two-conics" title="Two conics (2·2 = 4)">
+$V(x^2 + y^2 - z^2)$ and $V(x^2 - y^2 - z^2)$ in $\mathbb{P}^2$:
+
+Adding: $2x^2 - 2z^2 = 0$, so $x = \pm z$. Substituting $x = z$: $z^2 + y^2 - z^2 = y^2 = 0$, giving $[1:0:1]$. Substituting $x = -z$: similarly $[1:0:-1]$.
+
+Wait — only 2 points? Each must have multiplicity 2. Indeed, at $[1:0:1]$, locally set $z = 1$: curves are $x^2 + y^2 - 1$ and $x^2 - y^2 - 1$. At $(1, 0)$: the Jacobian rows are $(2, 0)$ and $(2, 0)$ — same tangent direction! So $I = 2$ at each point. Total: $2 + 2 = 4 = 2 \cdot 2$. ✓
+</Example>
+
+<Example id="line-cubic" title="Line meets cubic (1·3 = 3)">
+A generic line meets a smooth cubic curve in 3 points. For the cubic $V(y^2 z - x^3 + xz^2)$ (an elliptic curve), the line $V(y)$ gives:
+
+$0 = -x^3 + xz^2 = x(z^2 - x^2) = x(z-x)(z+x)$
+
+Three points: $[0:0:1]$, $[1:0:1]$, $[-1:0:1]$, each with $I = 1$. Total: $3 = 1 \cdot 3$. ✓
+
+This is the geometric basis for the **group law on elliptic curves**: three collinear points sum to zero.
+</Example>
+
+<Example id="flex-line" title="Flex tangent to a cubic (multiplicity 3)">
+The inflection point of a cubic: at a flex point $P$, the tangent line meets the curve with multiplicity 3 (all of the "budget" $1 \cdot 3 = 3$ is concentrated at one point).
+
+For $V(y^2z - x^3)$ (the cuspidal cubic), the tangent at the cusp $[0:0:1]$ is $V(y)$. Setting $y = 0$: $0 = -x^3$, so $[0:0:1]$ with multiplicity 3. This is an extreme case where the tangent line has maximal contact.
+</Example>
+
+<Example id="two-cubics" title="Two cubics (3·3 = 9) and the Cayley–Bacharach theorem">
+Two general cubics in $\mathbb{P}^2$ meet in $3 \cdot 3 = 9$ points. The **Cayley–Bacharach theorem** states:
+
+> If two cubics $C_1, C_2$ meet in 9 points, and a third cubic $C_3$ passes through 8 of them, then $C_3$ also passes through the 9th.
+
+This is the geometric heart of the **group law on elliptic curves**: if $E$ is a smooth cubic (an elliptic curve) and $L_1, L_2$ are two lines, then $V(L_1 L_2) = V(L_1) \cup V(L_2)$ is a (degenerate) cubic meeting $E$ in 6 points. Cayley–Bacharach applied to these 6 points (via a suitable third cubic) yields the associativity of the group law.
+</Example>
+
+<Example id="circle-line-affine" title="Why Bézout needs projective space">
+In $\mathbb{A}^2$: the circle $x^2 + y^2 = 1$ and the line $x = 2$.
+
+$4 + y^2 = 1 \Rightarrow y^2 = -3$: no real solutions! Over $\mathbb{C}$: $y = \pm i\sqrt{3}$, so 2 intersection points. Bézout gives $1 \cdot 2 = 2$. ✓ (over $\mathbb{C}$).
+
+Now consider $x^2 + y^2 = 1$ and $x = 0$ (the $y$-axis). Two intersection points $(0, \pm 1)$. All accounted for.
+
+But $x^2 + y^2 = 1$ and the "line at infinity": homogenize to $X^2 + Y^2 - Z^2$ and $Z = 0$. Setting $Z = 0$: $X^2 + Y^2 = 0$, giving $[1:i:0]$ and $[1:-i:0]$ over $\mathbb{C}$. These are the **circular points at infinity** — they lie on every circle!
+</Example>
+
+<Example id="degree-genus" title="Bézout and the genus formula">
+For a smooth projective curve $C \subseteq \mathbb{P}^2$ of degree $d$, the **genus** is
+
+$$g = \frac{(d-1)(d-2)}{2}.$$
+
+This follows from Bézout + the adjunction formula. Examples:
+
+| Degree $d$ | Genus $g$ | Type |
+|---|---|---|
+| 1 | 0 | Line ($\cong \mathbb{P}^1$) |
+| 2 | 0 | Conic ($\cong \mathbb{P}^1$) |
+| 3 | 1 | Cubic (elliptic curve) |
+| 4 | 3 | Quartic |
+| 5 | 6 | Quintic |
+| $d$ | $\frac{(d-1)(d-2)}{2}$ | General |
+
+The genus measures the "complexity" of the curve. Curves of genus 0 are rational (birational to $\mathbb{P}^1$). Curves of genus 1 are elliptic. Curves of genus $\geq 2$ have finite automorphism groups (Hurwitz).
+</Example>
+
+---
+
+## Higher-dimensional Bézout
+
+<Theorem title="Bézout in Pⁿ" number="1.2'">
+In $\mathbb{P}^n$, if hypersurfaces $V(F_1), \ldots, V(F_n)$ of degrees $d_1, \ldots, d_n$ meet in finitely many points, then (counted with multiplicity):
+
+$$\sum_P I(P) = d_1 \cdot d_2 \cdots d_n.$$
+</Theorem>
+
+<Example id="three-quadrics" title="Three quadrics in P³">
+Three generic quadric surfaces in $\mathbb{P}^3$ meet in $2 \cdot 2 \cdot 2 = 8$ points. For example:
+
+$$V(x_0^2 - x_1^2), \quad V(x_0^2 - x_2^2), \quad V(x_0^2 - x_3^2)$$
+
+give $x_0 = \pm x_1 = \pm x_2 = \pm x_3$, i.e., 8 points $[\pm 1 : \pm 1 : \pm 1 : \pm 1]$ (up to overall scaling: $[1:\pm 1:\pm 1:\pm 1]$, which is 8 points). Total: 8. ✓
+</Example>
+
+<Remark title="Beyond Bézout">
+Bézout's theorem generalizes vastly:
+
+- **Intersection theory** on general varieties: the intersection product in the Chow ring $A^*(X)$.
+- **Hilbert polynomials** compute intersection numbers via $\chi$.
+- **Schubert calculus** on Grassmannians: "How many lines meet 4 general lines in $\mathbb{P}^3$?" Answer: 2 (by Bézout-style computation on $\mathbb{G}(2,4)$).
+</Remark>

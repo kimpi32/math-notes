@@ -1,0 +1,565 @@
+export const metadata = {
+  title: 'Dimension — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Concept — Dimension" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Dimension
+
+Dimension is one of the most fundamental invariants of an algebraic variety. Intuitively, a curve has dimension 1, a surface dimension 2, and a point dimension 0. Making this precise requires care: we give three equivalent definitions (topological, algebraic, field-theoretic) and show their agreement.
+
+Throughout, $k$ denotes an algebraically closed field.
+
+---
+
+## Topological dimension (Krull dimension)
+
+<Definition title="Krull dimension of a topological space" number="1.8">
+Let $X$ be a topological space. The **dimension** of $X$ (or **Krull dimension**) is the supremum of the lengths of chains of irreducible closed subsets:
+
+$$\dim X = \sup\{n \mid Z_0 \subsetneq Z_1 \subsetneq \cdots \subsetneq Z_n,\; Z_i \text{ irreducible closed in } X\}.$$
+
+A chain $Z_0 \subsetneq Z_1 \subsetneq \cdots \subsetneq Z_n$ has **length** $n$ (the number of strict inclusions). If no finite bound exists, $\dim X = \infty$.
+</Definition>
+
+<Remark title="Convention on length">
+Be careful: a chain of $n+1$ irreducible closed subsets has length $n$. A single point (one irreducible closed set, no proper inclusions) contributes a chain of length 0.
+</Remark>
+
+<Example id="dim-point" title="Dimension of a point">
+Let $X = \{P\}$ be a single point. The only irreducible closed subset is $\{P\}$ itself, so the longest chain is $Z_0 = \{P\}$, which has length 0. Thus $\dim\{P\} = 0$.
+</Example>
+
+<Example id="dim-a1" title="Dimension of A^1">
+In $\mathbb{A}^1$ with the Zariski topology, the irreducible closed subsets are:
+
+- The whole space $\mathbb{A}^1$ (corresponding to the prime ideal $(0)$).
+- Individual points $\{a\}$ for $a \in k$ (corresponding to maximal ideals $(x - a)$).
+
+The longest chain of irreducible closed subsets is:
+
+$$\{a\} \subsetneq \mathbb{A}^1,$$
+
+which has length 1. Therefore $\dim \mathbb{A}^1 = 1$.
+</Example>
+
+<Example id="dim-a2" title="Dimension of A^2">
+In $\mathbb{A}^2$, the irreducible closed subsets are:
+
+- $\mathbb{A}^2$ itself (prime ideal $(0)$).
+- Irreducible curves $V(f)$ for irreducible $f \in k[x,y]$ (prime ideals $(f)$).
+- Points $\{(a,b)\}$ (maximal ideals $(x-a, y-b)$).
+
+A maximal chain:
+
+$$\{(0,0)\} \subsetneq V(y) \subsetneq \mathbb{A}^2,$$
+
+which has length 2. We cannot insert any irreducible closed set strictly between a point and an irreducible curve, or between an irreducible curve and $\mathbb{A}^2$ (this follows from the fact that $k[x,y]$ has Krull dimension 2). Therefore $\dim \mathbb{A}^2 = 2$.
+</Example>
+
+<Example id="dim-an" title="Dimension of A^n">
+By the same reasoning, the irreducible closed subsets of $\mathbb{A}^n$ are in bijection with prime ideals of $k[x_1,\ldots,x_n]$ (via $V \leftrightarrow I$). A maximal chain of prime ideals in $k[x_1,\ldots,x_n]$ is:
+
+$$(0) \subsetneq (x_1) \subsetneq (x_1, x_2) \subsetneq \cdots \subsetneq (x_1, \ldots, x_n),$$
+
+which has length $n$. This gives $\dim \mathbb{A}^n = n$. More precisely, the Krull dimension of the polynomial ring $k[x_1,\ldots,x_n]$ is $n$ (a nontrivial theorem in commutative algebra).
+</Example>
+
+---
+
+## Algebraic dimension (Krull dimension of the coordinate ring)
+
+<Definition title="Krull dimension of a ring" number="1.9">
+The **Krull dimension** of a commutative ring $A$ is the supremum of the lengths of chains of prime ideals:
+
+$$\dim A = \sup\{n \mid \mathfrak{p}_0 \subsetneq \mathfrak{p}_1 \subsetneq \cdots \subsetneq \mathfrak{p}_n,\; \mathfrak{p}_i \in \operatorname{Spec} A\}.$$
+</Definition>
+
+<Remark title="Topological = algebraic for affine varieties">
+For an affine variety $Y \subseteq \mathbb{A}^n$, the irreducible closed subsets of $Y$ correspond bijectively to the prime ideals of $k[Y] = k[x_1,\ldots,x_n]/I(Y)$ (via the $V$-$I$ correspondence restricted to $Y$). Inclusion of irreducible closed subsets reverses to inclusion of prime ideals. Therefore:
+
+$$\dim Y = \dim k[Y].$$
+
+The topological dimension of $Y$ equals the Krull dimension of its coordinate ring.
+</Remark>
+
+<Example id="dim-ring-parabola" title="Dimension via coordinate ring: the parabola">
+Let $Y = V(y - x^2) \subseteq \mathbb{A}^2$. Then $k[Y] = k[x,y]/(y-x^2) \cong k[x]$. The prime ideals of $k[x]$ are $(0)$ and $(x - a)$ for $a \in k$. The longest chain is $(0) \subsetneq (x-a)$, of length 1. So $\dim Y = 1$. This confirms that the parabola is a curve.
+</Example>
+
+<Example id="dim-ring-cusp" title="Dimension via coordinate ring: the cuspidal cubic">
+Let $Y = V(y^2 - x^3)$. Then $k[Y] = k[x,y]/(y^2 - x^3) \cong k[t^2, t^3]$. This is an integral domain of Krull dimension 1: the only prime ideals are $(0)$ and the maximal ideals (one for each point of $Y$). So $\dim Y = 1$ --- the cuspidal cubic is a curve, despite its singularity.
+</Example>
+
+<Example id="dim-coordinate-axes" title="Dimension of a reducible set">
+Let $X = V(xy) \subseteq \mathbb{A}^2$, the union of the coordinate axes. The ring $k[x,y]/(xy)$ has the following prime ideals: $(x)$, $(y)$ (corresponding to the two irreducible components), and $(x, y-a)$, $(x-a, y)$ for $a \in k$ (the points on each axis). A longest chain is:
+
+$$(x) \subsetneq (x, y-a),$$
+
+which has length 1. So $\dim X = 1$. For a reducible algebraic set, the dimension is the maximum of the dimensions of its irreducible components.
+</Example>
+
+---
+
+## Transcendence degree
+
+<Definition title="Function field" number="1.10">
+For an affine variety $Y$ (irreducible), the **function field** (or **field of rational functions**) of $Y$ is the fraction field of the coordinate ring:
+
+$$K(Y) = \operatorname{Frac}(k[Y]).$$
+
+Elements of $K(Y)$ are rational functions $f/g$ where $f, g \in k[Y]$, $g \neq 0$. A rational function is defined on the open set where its denominator does not vanish.
+</Definition>
+
+<Definition title="Transcendence degree" number="1.11">
+Let $K/k$ be a field extension. The **transcendence degree** $\operatorname{tr.deg}_k K$ is the maximum number of elements of $K$ that are algebraically independent over $k$. Equivalently, if $K$ is finitely generated over $k$, then
+
+$$\operatorname{tr.deg}_k K = n$$
+
+where $K$ is algebraic over $k(t_1, \ldots, t_n)$ for some $t_1, \ldots, t_n \in K$ that are algebraically independent over $k$, and $n$ is the smallest such number.
+</Definition>
+
+<Example id="trdeg-an" title="Transcendence degree of A^n">
+$K(\mathbb{A}^n) = k(x_1, \ldots, x_n)$, the field of rational functions in $n$ variables. The elements $x_1, \ldots, x_n$ are algebraically independent over $k$, and $K(\mathbb{A}^n)$ is generated by them, so
+
+$$\operatorname{tr.deg}_k\, k(x_1,\ldots,x_n) = n.$$
+</Example>
+
+<Example id="trdeg-parabola" title="Transcendence degree of a parabola">
+$Y = V(y - x^2)$. Then $k[Y] \cong k[x]$, so $K(Y) = k(x)$. This is a purely transcendental extension of $k$ of degree 1, so $\operatorname{tr.deg}_k\, K(Y) = 1$.
+</Example>
+
+<Example id="trdeg-cusp" title="Transcendence degree of the cuspidal cubic">
+$Y = V(y^2 - x^3)$. Then $k[Y] = k[t^2, t^3]$ and $K(Y) = k(t)$ (since $t = t^3/t^2 \in K(Y)$). So $\operatorname{tr.deg}_k\, K(Y) = 1$.
+</Example>
+
+<Example id="trdeg-surface" title="Transcendence degree of a surface in A^3">
+Let $Y = V(z - xy) \subseteq \mathbb{A}^3$. Then $k[Y] = k[x,y,z]/(z-xy) \cong k[x,y]$ via $z \mapsto xy$, so $K(Y) = k(x,y)$. We have $\operatorname{tr.deg}_k\, k(x,y) = 2$, confirming $Y$ is a surface.
+</Example>
+
+---
+
+## Equivalence of the three definitions
+
+<Theorem title="Dimension theorem" number="1.2">
+Let $Y$ be an affine variety over an algebraically closed field $k$. The following three quantities are equal:
+
+1. **Topological dimension**: $\dim Y$ = supremum of lengths of chains of irreducible closed subsets of $Y$.
+2. **Krull dimension**: $\dim k[Y]$ = supremum of lengths of chains of prime ideals in $k[Y]$.
+3. **Transcendence degree**: $\operatorname{tr.deg}_k\, K(Y)$.
+
+That is,
+
+$$\dim Y = \dim k[Y] = \operatorname{tr.deg}_k\, K(Y).$$
+</Theorem>
+
+<Remark title="Proof ingredients">
+The equality (1) = (2) is immediate from the $V$-$I$ correspondence. The key content is (2) = (3), which relies on:
+
+- **Noether normalization**: For any finitely generated $k$-algebra $A$ that is a domain, there exist algebraically independent elements $y_1, \ldots, y_d \in A$ such that $A$ is a finitely generated module over $k[y_1,\ldots,y_d]$. The number $d = \operatorname{tr.deg}_k \operatorname{Frac}(A)$.
+- **Going up / going down theorems**: These allow one to lift chains of prime ideals through integral extensions.
+
+Geometrically, Noether normalization says that every affine variety of dimension $d$ admits a **finite surjective morphism** to $\mathbb{A}^d$.
+</Remark>
+
+<Example id="noether-norm" title="Noether normalization for the twisted cubic">
+The twisted cubic $Y = V(y-x^2, z-x^3) \subseteq \mathbb{A}^3$ has coordinate ring $k[Y] \cong k[x]$. The element $x$ is algebraically independent over $k$, and $k[Y]$ is already equal to $k[x]$. So $d = 1$ and the Noether normalization map is the identity: $Y \to \mathbb{A}^1$ given by the coordinate $x$.
+
+This confirms $\dim Y = \operatorname{tr.deg}_k\, k(x) = 1$.
+</Example>
+
+<Example id="noether-norm-circle" title="Noether normalization for the circle">
+Consider $Y = V(x^2 + y^2 - 1) \subseteq \mathbb{A}^2$ over $\mathbb{C}$. The coordinate ring is $A = k[x,y]/(x^2+y^2-1)$. We need to find an element $t \in A$ such that $A$ is a finite module over $k[t]$.
+
+Take $t = x$. In $A$, we have $y^2 = 1 - x^2$, so $y$ satisfies the monic polynomial $T^2 - (1-t^2) = 0$ over $k[t]$. Thus $A = k[t] + k[t] \cdot y$ is a free $k[t]$-module of rank 2, and $A$ is integral over $k[t]$.
+
+The Noether normalization is the projection $Y \to \mathbb{A}^1$, $(x,y) \mapsto x$, which is a 2-to-1 map (generically). This confirms $\dim Y = 1$.
+</Example>
+
+---
+
+## Dimension of projective varieties
+
+<Definition title="Dimension of a projective variety" number="1.12">
+The **dimension** of a projective variety $Y \subseteq \mathbb{P}^n$ is its dimension as a topological space (supremum of lengths of chains of irreducible closed subsets). Equivalently, $\dim Y = \dim(Y \cap U_i)$ for any standard affine open $U_i$ that meets $Y$ nontrivially.
+</Definition>
+
+<Example id="dim-pn" title="Dimension of projective space">
+$\dim \mathbb{P}^n = n$. Indeed, $\mathbb{P}^n$ contains the affine open set $U_0 \cong \mathbb{A}^n$, and $\dim \mathbb{A}^n = n$. The chain of irreducible closed subsets is:
+
+$$\{[1:0:\cdots:0]\} \subsetneq V(x_1) \subsetneq V(x_1,x_2) \subsetneq \cdots \subsetneq V(x_1,\ldots,x_{n-1}) \subsetneq \mathbb{P}^n,$$
+
+where we abuse notation and write $V(x_1) = V(x_1/x_0)$ restricted to the standard chart.
+
+More precisely, in homogeneous coordinates, a maximal chain is:
+
+$$[1:0:\cdots:0] \subsetneq V(X_1) \cap \cdots \cap V(X_n) \subsetneq V(X_1) \cap \cdots \cap V(X_{n-1}) \subsetneq \cdots \subsetneq V(X_1) \subsetneq \mathbb{P}^n.$$
+</Example>
+
+<Example id="dim-projective-curve" title="Dimension of a projective curve">
+The Fermat cubic $V(X^3 + Y^3 - Z^3) \subseteq \mathbb{P}^2$ is an irreducible projective variety. In the affine chart $Z \neq 0$, it becomes $V(x^3 + y^3 - 1) \subseteq \mathbb{A}^2$. The coordinate ring is $k[x,y]/(x^3+y^3-1)$, which has Krull dimension 1 (since $x^3 + y^3 - 1$ is irreducible, it generates a prime ideal of height 1 in $k[x,y]$). So the Fermat cubic is a curve of dimension 1.
+</Example>
+
+---
+
+## Dimension of hypersurfaces
+
+<Theorem title="Dimension of a hypersurface" number="1.3">
+Let $f \in k[x_1, \ldots, x_n]$ be an irreducible polynomial. Then
+
+$$\dim V(f) = n - 1.$$
+
+More generally, if $Y = V(f) \subseteq \mathbb{A}^n$ with $f$ irreducible, then $I(Y) = (f)$ is a prime ideal of height 1 in $k[x_1,\ldots,x_n]$, so $\dim k[Y] = \dim k[x_1,\ldots,x_n]/(f) = n - 1$.
+
+Similarly, if $F$ is an irreducible homogeneous polynomial of degree $d \geq 1$ in $k[X_0,\ldots,X_n]$, then $\dim V(F) = n - 1$ in $\mathbb{P}^n$.
+</Theorem>
+
+<Remark title="Why height 1?">
+In a UFD, every nonzero prime ideal contains an irreducible element. Since $k[x_1,\ldots,x_n]$ is a UFD, the prime ideal $(f)$ for irreducible $f$ has height 1 (there is no prime ideal strictly between $(0)$ and $(f)$). By the dimension formula for quotient rings: $\dim A/\mathfrak{p} = \dim A - \operatorname{ht}(\mathfrak{p})$ (valid for finitely generated $k$-algebras that are domains), we get $\dim k[x_1,\ldots,x_n]/(f) = n - 1$.
+</Remark>
+
+<Example id="dim-hypersurface-a3" title="Hypersurfaces in A^3">
+In $\mathbb{A}^3$ with coordinates $(x,y,z)$:
+
+- $V(z) \cong \mathbb{A}^2$: a plane, dimension 2. (A hyperplane is always a hypersurface.)
+- $V(x^2 + y^2 + z^2 - 1)$: a sphere (over $\mathbb{C}$), dimension 2.
+- $V(xy - z^2)$: a quadric cone, dimension 2. This is singular at the origin (the vertex of the cone).
+- $V(x^2 + y^3 + z^5)$: an $E_8$ surface singularity, dimension 2.
+
+All hypersurfaces in $\mathbb{A}^3$ (defined by a single irreducible equation) have dimension $3 - 1 = 2$: they are surfaces.
+</Example>
+
+<Example id="dim-quadric-p3" title="Smooth quadric in P^3">
+$Q = V(X_0 X_3 - X_1 X_2) \subseteq \mathbb{P}^3$ is an irreducible quadric hypersurface, so $\dim Q = 3 - 1 = 2$. We saw earlier (Segre embedding) that $Q \cong \mathbb{P}^1 \times \mathbb{P}^1$, which is consistent: $\dim(\mathbb{P}^1 \times \mathbb{P}^1) = 1 + 1 = 2$.
+</Example>
+
+---
+
+## Codimension and dimension of intersections
+
+<Definition title="Codimension" number="1.13">
+If $Y \subseteq X$ is an irreducible closed subset of a variety $X$, the **codimension** of $Y$ in $X$ is
+
+$$\operatorname{codim}(Y, X) = \dim X - \dim Y.$$
+
+More generally, the **codimension** of $Y$ in $X$ can be defined as the supremum of lengths of chains of irreducible closed subsets $Y = Z_0 \subsetneq Z_1 \subsetneq \cdots \subsetneq Z_r \subseteq X$.
+
+For well-behaved (catenary) rings, these two definitions agree.
+</Definition>
+
+<Example id="codim-examples" title="Basic codimension computations">
+In $\mathbb{A}^n$:
+
+| Subvariety | Dimension | Codimension in $\mathbb{A}^n$ |
+|---|---|---|
+| $\mathbb{A}^n$ itself | $n$ | $0$ |
+| Hypersurface $V(f)$, $f$ irred. | $n-1$ | $1$ |
+| A point $\{P\}$ | $0$ | $n$ |
+| A line | $1$ | $n-1$ |
+| $V(x_1,\ldots,x_r)$ ($r$ coordinate hyperplanes) | $n - r$ | $r$ |
+
+Codimension-1 subvarieties are hypersurfaces. Codimension-$n$ subvarieties (in $\mathbb{A}^n$) are points.
+</Example>
+
+<Theorem title="Dimension of intersections" number="1.4">
+Let $Y, Z$ be irreducible closed subsets of $\mathbb{A}^n$ (or $\mathbb{P}^n$). Then every irreducible component $W$ of $Y \cap Z$ satisfies
+
+$$\dim W \geq \dim Y + \dim Z - n.$$
+
+In particular, if $\dim Y + \dim Z \geq n$, then $Y \cap Z \neq \varnothing$ (in the projective case).
+</Theorem>
+
+<Remark title="Codimension version">
+Equivalently, $\operatorname{codim}(W) \leq \operatorname{codim}(Y) + \operatorname{codim}(Z)$ for each irreducible component $W$ of $Y \cap Z$. The "expected" codimension of the intersection is $\operatorname{codim}(Y) + \operatorname{codim}(Z)$, and the actual codimension can only be less (i.e., the intersection can only be "larger than expected").
+</Remark>
+
+<Example id="dim-intersect-lines" title="Two lines in A^2">
+Let $Y = V(y)$ and $Z = V(y - x)$ in $\mathbb{A}^2$. Both have dimension 1. Their intersection is $V(y, y-x) = V(x,y) = \{(0,0)\}$, which has dimension 0. We check:
+
+$$\dim(Y \cap Z) = 0 \geq 1 + 1 - 2 = 0.$$
+
+Equality holds --- this is a "transverse" intersection.
+</Example>
+
+<Example id="dim-intersect-parallel" title="Parallel lines in A^2">
+$Y = V(y)$ and $Z = V(y-1)$ in $\mathbb{A}^2$. Then $Y \cap Z = V(y, y-1) = \varnothing$. The theorem gives $\dim W \geq 0$ for any component $W$, but the intersection is empty, so there is no contradiction.
+
+In $\mathbb{P}^2$, these lines do meet at the point at infinity $[1:0:0]$ (homogenize: $Y = 0$ and $Y - Z = 0$ give $Z = 0$, $Y = 0$).
+</Example>
+
+<Example id="dim-intersect-plane-line" title="Plane and line in A^3">
+Let $Y = V(z) \subseteq \mathbb{A}^3$ (a plane, dimension 2) and $Z = V(x,y) \subseteq \mathbb{A}^3$ (the $z$-axis, dimension 1). Then $Y \cap Z = V(x,y,z) = \{(0,0,0)\}$, dimension 0. The bound gives:
+
+$$\dim(Y \cap Z) = 0 \geq 2 + 1 - 3 = 0.$$
+
+Again, equality holds.
+</Example>
+
+<Example id="dim-intersect-excess" title="Excess intersection">
+Let $Y = V(x,y) \subseteq \mathbb{A}^4$ (a plane, dimension 2) and $Z = V(x,z) \subseteq \mathbb{A}^4$ (another plane, dimension 2). Then
+
+$$Y \cap Z = V(x,y,z) \cong \mathbb{A}^1, \quad \dim(Y \cap Z) = 1.$$
+
+The lower bound is $2 + 2 - 4 = 0$, but the actual dimension is 1 --- the intersection is "excess" by 1. This happens because $Y$ and $Z$ share the common direction along the $w$-axis and are not "in general position."
+</Example>
+
+---
+
+## Krull's Principal Ideal Theorem (Hauptidealsatz)
+
+<Theorem title="Krull's Hauptidealsatz" number="1.5">
+Let $A$ be a Noetherian ring and $f \in A$ a non-unit, non-zero-divisor. Then every minimal prime $\mathfrak{p}$ over $(f)$ has **height** $\leq 1$:
+
+$$\operatorname{ht}(\mathfrak{p}) \leq 1.$$
+
+More generally (**generalized principal ideal theorem**): if $\mathfrak{a} = (f_1, \ldots, f_r)$ is generated by $r$ elements, then every minimal prime $\mathfrak{p}$ over $\mathfrak{a}$ satisfies $\operatorname{ht}(\mathfrak{p}) \leq r$.
+</Theorem>
+
+<Remark title="Geometric meaning">
+Krull's theorem has a beautiful geometric interpretation. In $\mathbb{A}^n$:
+
+- A single equation $f = 0$ cuts out a set of codimension $\leq 1$ (each irreducible component is a hypersurface or the whole space).
+- The zero set of $r$ equations has every component of codimension $\leq r$.
+- Equivalently, every component of $V(f_1,\ldots,f_r) \subseteq \mathbb{A}^n$ has dimension $\geq n - r$.
+
+One cannot cut dimension by more than one with each equation. This is the algebraic version of the geometric intuition that "each equation imposes at most one constraint."
+</Remark>
+
+<Example id="hauptideal-single" title="Single equation in A^3">
+Let $f = x^2 + y^2 + z^2 \in k[x,y,z]$. The ideal $(f)$ is prime (since $f$ is irreducible over $\mathbb{C}$, using the fact that $x^2 + y^2 + z^2 = (x + iy + \sqrt{-1-1}\, z)(\cdots)$ --- actually, $x^2+y^2+z^2$ is irreducible over $\mathbb{C}$ because it cannot factor as a product of two linear forms). By the Hauptidealsatz, the minimal prime over $(f)$ is $(f)$ itself with height 1. So $\dim V(f) = 3 - 1 = 2$.
+</Example>
+
+<Example id="hauptideal-two-eqs" title="Two equations in A^3">
+In $\mathbb{A}^3$, consider $V(x, y)$: this is the $z$-axis. The ideal $(x,y)$ has height 2 in $k[x,y,z]$, and $\dim V(x,y) = 1 = 3 - 2$. The generalized principal ideal theorem guarantees $\operatorname{ht}(x,y) \leq 2$, and indeed equality holds here.
+
+Now consider $V(x^2, xy)$. We have $V(x^2, xy) = V(x) \cup V(x, y) = V(x)$, which is the entire $yz$-plane of dimension 2. The minimal prime over $(x^2, xy)$ is $(x)$, which has height 1 --- well within the bound of 2.
+</Example>
+
+<Example id="hauptideal-not-sharp" title="When the bound is not sharp">
+Consider $V(xy, xz) \subseteq \mathbb{A}^3$. The ideal $(xy, xz)$ is generated by 2 elements, so the generalized Hauptidealsatz guarantees each component has codimension $\leq 2$. The decomposition is
+
+$$V(xy, xz) = V(x) \cup V(y,z).$$
+
+Here $V(x)$ has codimension 1 and $V(y,z)$ has codimension 2. Both are within the bound. The variety $V(x)$ has codimension strictly less than 2 --- the two equations $xy = 0$ and $xz = 0$ do not impose independent conditions along $V(x)$.
+</Example>
+
+---
+
+## Examples: computing dimensions
+
+<Example id="dim-twisted-cubic" title="Dimension of the twisted cubic">
+The twisted cubic $C \subseteq \mathbb{A}^3$ is the image of $t \mapsto (t, t^2, t^3)$. Its coordinate ring is $k[C] = k[x,y,z]/(y-x^2, z-x^3) \cong k[x]$, so
+
+$$\dim C = \dim k[x] = 1.$$
+
+Alternatively, $K(C) = k(x)$, so $\operatorname{tr.deg}_k K(C) = 1$. The twisted cubic is a curve --- a 1-dimensional subvariety of $\mathbb{A}^3$ with codimension 2.
+
+Note that $C$ is defined by the ideal $(y-x^2, z-x^3)$, which has height 2 in $k[x,y,z]$, consistent with $\dim C = 3 - 2 = 1$.
+</Example>
+
+<Example id="dim-rational-normal" title="Dimension of the rational normal curve">
+The rational normal curve of degree $d$ is the image of $\nu_d : \mathbb{P}^1 \to \mathbb{P}^d$ given by
+
+$$[s:t] \mapsto [s^d : s^{d-1}t : \cdots : t^d].$$
+
+Since $\nu_d$ is an isomorphism onto its image, $\dim \nu_d(\mathbb{P}^1) = \dim \mathbb{P}^1 = 1$. The rational normal curve is a curve of codimension $d - 1$ in $\mathbb{P}^d$.
+</Example>
+
+<Example id="dim-grassmannian" title="Dimension of the Grassmannian">
+The Grassmannian $\mathbb{G}(r, n)$ parametrizes $r$-dimensional subspaces of $k^n$. An $r$-dimensional subspace is specified by an $r \times n$ matrix of rank $r$, modulo the action of $\operatorname{GL}_r$. The space of $r \times n$ matrices has dimension $rn$, and $\operatorname{GL}_r$ has dimension $r^2$, so
+
+$$\dim \mathbb{G}(r,n) = rn - r^2 = r(n - r).$$
+
+Concrete cases:
+
+| Grassmannian | Parametrizes | Dimension |
+|---|---|---|
+| $\mathbb{G}(1, n) = \mathbb{P}^{n-1}$ | Lines through origin in $k^n$ | $n - 1$ |
+| $\mathbb{G}(2, 4)$ | Lines in $\mathbb{P}^3$ | $2 \cdot 2 = 4$ |
+| $\mathbb{G}(2, 5)$ | Lines in $\mathbb{P}^4$ | $2 \cdot 3 = 6$ |
+| $\mathbb{G}(3, 6)$ | Planes in $\mathbb{P}^5$ | $3 \cdot 3 = 9$ |
+
+The Grassmannian $\mathbb{G}(2,4)$ sits inside $\mathbb{P}^5$ via the Plucker embedding, where it is a quadric hypersurface. Check: $\dim \mathbb{G}(2,4) = 4 = \dim \mathbb{P}^5 - 1 = 5 - 1$. This is consistent with $\mathbb{G}(2,4)$ being a hypersurface in $\mathbb{P}^5$.
+</Example>
+
+<Example id="dim-flag" title="Dimension of flag varieties">
+A **complete flag** in $k^n$ is a sequence
+
+$$0 = V_0 \subsetneq V_1 \subsetneq V_2 \subsetneq \cdots \subsetneq V_n = k^n$$
+
+where $\dim V_i = i$. The **flag variety** $\operatorname{Fl}(n) = \operatorname{Fl}(1,2,\ldots,n-1;\, n)$ parametrizes all such flags. It is a projective variety of dimension
+
+$$\dim \operatorname{Fl}(n) = \frac{n(n-1)}{2}.$$
+
+This can be computed by a "tower of fibrations": choosing $V_1 \subseteq V_2 \subseteq \cdots$ successively, one gets a tower
+
+$$\operatorname{Fl}(n) \to \mathbb{G}(n-1, n) \to \mathbb{G}(n-2, n) \to \cdots$$
+
+At each step, the fiber is a projective space. Alternatively, $\operatorname{Fl}(n) = \operatorname{GL}_n / B$ where $B$ is the Borel subgroup of upper triangular matrices, and $\dim \operatorname{Fl}(n) = \dim \operatorname{GL}_n - \dim B = n^2 - \frac{n(n+1)}{2} = \frac{n(n-1)}{2}$.
+
+For $n = 3$: $\dim \operatorname{Fl}(3) = 3$, parametrizing flags $0 \subsetneq V_1 \subsetneq V_2 \subsetneq k^3$ (a point in a line in a plane in 3-space).
+
+More generally, a **partial flag variety** $\operatorname{Fl}(d_1, \ldots, d_s;\, n)$ parametrizing flags $V_{d_1} \subsetneq \cdots \subsetneq V_{d_s} \subsetneq k^n$ has dimension
+
+$$\dim \operatorname{Fl}(d_1, \ldots, d_s;\, n) = \sum_{i=1}^{s} d_i(d_{i+1} - d_i)$$
+
+where $d_{s+1} = n$.
+</Example>
+
+<Example id="dim-determinantal" title="Dimension of determinantal varieties">
+Let $M_{m \times n}(k) \cong \mathbb{A}^{mn}$ be the space of $m \times n$ matrices, and define
+
+$$\mathcal{M}_r = \{A \in M_{m \times n}(k) \mid \operatorname{rank}(A) \leq r\}.$$
+
+This is the **determinantal variety** defined by the vanishing of all $(r+1) \times (r+1)$ minors of a generic $m \times n$ matrix. Its dimension is
+
+$$\dim \mathcal{M}_r = r(m + n - r).$$
+
+To see this: a matrix of rank exactly $r$ is determined by its image (an $r$-dimensional subspace of $k^m$, parametrized by $\mathbb{G}(r,m)$ of dimension $r(m-r)$) together with a surjective linear map $k^n \to k^r$ (which, modulo the choice of basis, contributes $rn - r^2 = r(n-r)$ parameters). Total: $r(m-r) + r(n-r) = r(m+n-2r)$, but we must also account for the $r^2$ parameters in $\operatorname{GL}_r$. A cleaner computation:
+
+$$\dim \mathcal{M}_r = \dim\{(A,V) \mid \operatorname{Im}(A) \subseteq V,\; \dim V = r\} = \dim \mathbb{G}(r,m) + rn = r(m-r) + rn = r(m+n-r).$$
+
+Special cases:
+
+- $r = 0$: $\mathcal{M}_0 = \{0\}$, dimension 0. Check: $0 \cdot (m+n-0) = 0$.
+- $r = 1$: $\mathcal{M}_1$ has dimension $m + n - 1$. For $2 \times 2$ matrices ($m = n = 2$): $\dim \mathcal{M}_1 = 1 \cdot 3 = 3$. This is the locus $V(\det) \subseteq \mathbb{A}^4$, a hypersurface of dimension 3 in $\mathbb{A}^4$. Consistent!
+- $r = \min(m,n) - 1$: the variety $V(\det)$ (for square matrices $m = n$) has dimension $n^2 - 1$, which is codimension 1 in $\mathbb{A}^{n^2}$.
+</Example>
+
+<Example id="dim-det-square" title="The determinantal hypersurface V(det)">
+For the space $M_n(k) \cong \mathbb{A}^{n^2}$ of $n \times n$ matrices, the locus of singular matrices is
+
+$$V(\det) = \mathcal{M}_{n-1} = \{A \mid \det(A) = 0\}.$$
+
+Since $\det$ is an irreducible polynomial of degree $n$ in the $n^2$ matrix entries, $V(\det)$ is an irreducible hypersurface of dimension $n^2 - 1$.
+
+Let us verify using the determinantal formula: $\dim \mathcal{M}_{n-1} = (n-1)(n + n - (n-1)) = (n-1)(n+1) = n^2 - 1$.
+
+For $n = 2$: $\det = ad - bc$ on $\mathbb{A}^4$, giving a 3-dimensional hypersurface. The singular locus of $V(\det)$ is $\{a = b = c = d = 0\}$ (the zero matrix), a single point.
+
+For $n = 3$: $V(\det) \subseteq \mathbb{A}^9$ has dimension 8. It is singular along $\mathcal{M}_1$ (matrices of rank $\leq 1$), which has dimension $3 + 3 - 1 = 5$.
+</Example>
+
+---
+
+## Fiber dimension theorem
+
+<Theorem title="Fiber dimension theorem (Chevalley)" number="1.6">
+Let $f : X \to Y$ be a dominant morphism of irreducible varieties. Then:
+
+1. $\dim X \geq \dim Y$.
+2. For every point $y \in f(X)$, every irreducible component of the fiber $f^{-1}(y)$ has dimension $\geq \dim X - \dim Y$.
+3. There exists a nonempty open subset $U \subseteq Y$ such that for all $y \in U$:
+
+$$\dim f^{-1}(y) = \dim X - \dim Y.$$
+
+4. More precisely, for each integer $r \geq 0$, the set
+
+$$\{x \in X \mid \text{every component of } f^{-1}(f(x)) \text{ through } x \text{ has dimension} \geq r\}$$
+
+is a closed subset of $X$.
+</Theorem>
+
+<Remark title="Geometric content">
+The fiber dimension theorem says that the "generic fiber" of a dominant morphism $f: X \to Y$ has dimension $\dim X - \dim Y$, and fibers can only **jump up** in dimension over special closed subsets. The dimension cannot drop below the generic value.
+
+This is sometimes called the **semicontinuity of fiber dimension**: the function $y \mapsto \dim f^{-1}(y)$ is upper semicontinuous.
+</Remark>
+
+<Example id="fiber-projection" title="Projection from a surface">
+Let $X = V(xz - y) \subseteq \mathbb{A}^3$, which is isomorphic to $\mathbb{A}^2$ via $(x,z) \mapsto (x, xz, z)$, so $\dim X = 2$. Consider the projection $f : X \to \mathbb{A}^1$ given by $f(x,y,z) = x$.
+
+For $a \neq 0$: $f^{-1}(a) = \{(a, y, z) \mid az - y = 0\} = \{(a, az, z) \mid z \in k\} \cong \mathbb{A}^1$, dimension 1.
+
+For $a = 0$: $f^{-1}(0) = \{(0, y, z) \mid 0 \cdot z - y = 0\} = \{(0, 0, z) \mid z \in k\} \cong \mathbb{A}^1$, dimension 1.
+
+In this case, every fiber has dimension $1 = 2 - 1$. The fiber dimension is constant.
+</Example>
+
+<Example id="fiber-blowup" title="Blow-up of A^2 at the origin">
+The blow-up of $\mathbb{A}^2$ at the origin is
+
+$$\operatorname{Bl}_0(\mathbb{A}^2) = \{((x,y), [s:t]) \in \mathbb{A}^2 \times \mathbb{P}^1 \mid xt - ys = 0\}.$$
+
+This is an irreducible variety of dimension 2. The natural projection $\pi : \operatorname{Bl}_0(\mathbb{A}^2) \to \mathbb{A}^2$ is a morphism with:
+
+- For $(x,y) \neq (0,0)$: $\pi^{-1}(x,y) = \{((x,y), [x:y])\}$, a single point (dimension 0).
+- For $(x,y) = (0,0)$: $\pi^{-1}(0,0) = \{((0,0), [s:t])\} \cong \mathbb{P}^1$, dimension 1.
+
+The generic fiber dimension is $2 - 2 = 0$, and the special fiber over the origin jumps to dimension 1. The set where fiber dimension $\geq 1$ is $\{(0,0)\}$, which is indeed closed.
+</Example>
+
+<Example id="fiber-rank" title="Fibers of the rank stratification">
+Consider the map $f : M_{m \times n}(k) \to \mathbb{G}(r, m)$ sending a matrix $A$ of rank $r$ to its image $\operatorname{Im}(A) \in \mathbb{G}(r,m)$. (This is defined on the locally closed subset of matrices of rank exactly $r$.)
+
+The fiber over a fixed $r$-plane $V \subseteq k^m$ is the set of all $m \times n$ matrices with image $V$, which is the set of $n$-tuples of vectors in $V$, i.e., $\operatorname{Hom}(k^n, V) \cong k^{rn}$ (modulo the constraint that the map is surjective onto $V$, which is an open condition). So the fiber has dimension $rn$ (as the open subset of matrices of rank $r$ in $k^{rn}$).
+
+The total dimension: $\dim \mathbb{G}(r,m) + rn = r(m-r) + rn = r(m+n-r)$, matching our earlier computation.
+</Example>
+
+<Example id="fiber-incidence" title="Incidence correspondence for lines in P^2">
+Consider the incidence variety
+
+$$\Sigma = \{(p, \ell) \in \mathbb{P}^2 \times (\mathbb{P}^2)^* \mid p \in \ell\}$$
+
+where $(\mathbb{P}^2)^*$ is the dual projective plane parametrizing lines. Then $\Sigma \subseteq \mathbb{P}^2 \times \mathbb{P}^2$ is defined by $a_0 x_0 + a_1 x_1 + a_2 x_2 = 0$ where $[x_0:x_1:x_2]$ are coordinates on $\mathbb{P}^2$ and $[a_0:a_1:a_2]$ are coordinates on $(\mathbb{P}^2)^*$.
+
+**Projection to $\mathbb{P}^2$**: The fiber over a point $p$ is the set of lines through $p$, which is $\mathbb{P}^1$. So every fiber has dimension 1, and $\dim \Sigma = \dim \mathbb{P}^2 + 1 = 3$.
+
+**Projection to $(\mathbb{P}^2)^*$**: The fiber over a line $\ell$ is the set of points on $\ell$, which is $\mathbb{P}^1$. Again every fiber has dimension 1, and $\dim \Sigma = \dim (\mathbb{P}^2)^* + 1 = 3$.
+
+Both projections give $\dim \Sigma = 3$, which is consistent.
+</Example>
+
+---
+
+## Summary of dimension computations
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Variety</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Dimension</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Method</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\mathbb{A}^n$</td><td className="px-4 py-2 border-b border-gray-100">$n$</td><td className="px-4 py-2 border-b border-gray-100">$\operatorname{tr.deg}_k\, k(x_1,\ldots,x_n) = n$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\mathbb{P}^n$</td><td className="px-4 py-2 border-b border-gray-100">$n$</td><td className="px-4 py-2 border-b border-gray-100">Contains $\mathbb{A}^n$ as dense open</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Point</td><td className="px-4 py-2 border-b border-gray-100">$0$</td><td className="px-4 py-2 border-b border-gray-100">Single irreducible closed set</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Hypersurface $V(f) \subseteq \mathbb{A}^n$</td><td className="px-4 py-2 border-b border-gray-100">$n - 1$</td><td className="px-4 py-2 border-b border-gray-100">$\operatorname{ht}(f) = 1$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Twisted cubic in $\mathbb{A}^3$</td><td className="px-4 py-2 border-b border-gray-100">$1$</td><td className="px-4 py-2 border-b border-gray-100">$k[C] \cong k[t]$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$V(xy-z^2) \subseteq \mathbb{A}^3$ (quadric cone)</td><td className="px-4 py-2 border-b border-gray-100">$2$</td><td className="px-4 py-2 border-b border-gray-100">Irreducible hypersurface</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\mathbb{G}(r, n)$</td><td className="px-4 py-2 border-b border-gray-100">$r(n-r)$</td><td className="px-4 py-2 border-b border-gray-100">Fiber argument</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\operatorname{Fl}(n)$ (flag variety)</td><td className="px-4 py-2 border-b border-gray-100">$\frac{n(n-1)}{2}$</td><td className="px-4 py-2 border-b border-gray-100">$\operatorname{GL}_n/B$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\mathcal{M}_r$ (rank $\leq r$ matrices in $M_{m \times n}$)</td><td className="px-4 py-2 border-b border-gray-100">$r(m+n-r)$</td><td className="px-4 py-2 border-b border-gray-100">Incidence correspondence</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$V(\det) \subseteq M_n(k)$</td><td className="px-4 py-2 border-b border-gray-100">$n^2 - 1$</td><td className="px-4 py-2 border-b border-gray-100">Irreducible hypersurface in $\mathbb{A}^{n^2}$</td></tr>
+</tbody>
+</table>
+</div>
+
+<Remark title="Looking ahead">
+Dimension is the starting point for the theory of algebraic geometry:
+
+- **Curves** ($\dim = 1$): classified by genus; rich connections to number theory and complex analysis.
+- **Surfaces** ($\dim = 2$): the Enriques--Kodaira classification; birational geometry becomes nontrivial (blow-ups, minimal models).
+- **Higher dimensions**: the minimal model program (Mori theory) extends the classification, but many fundamental questions remain open.
+
+In [Hartshorne Ch. II](/algebraic-geometry/ch02-schemes), dimension will be redefined for schemes using the Krull dimension of the structure sheaf, recovering the same notion for varieties.
+</Remark>

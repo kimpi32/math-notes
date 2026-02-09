@@ -1,0 +1,264 @@
+export const metadata = {
+  title: 'Coherent and Quasi-coherent Sheaves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "3. 코호몰로지", href: "/algebraic-geometry/ch03-cohomology" },
+  { label: "Concept — Coherent Sheaves" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Coherent and Quasi-coherent Sheaves
+
+Quasi-coherent and coherent sheaves are the "linear algebra" of scheme theory. They generalize modules over a ring to the global setting of schemes, and provide the objects on which sheaf cohomology acts.
+
+---
+
+## Quasi-coherent sheaves
+
+<Definition title="Quasi-coherent sheaf" number="3.1">
+A sheaf of $\mathcal{O}_X$-modules $\mathcal{F}$ on a scheme $X$ is **quasi-coherent** if for every affine open $U = \operatorname{Spec} A \subseteq X$, there exists an $A$-module $M$ such that
+
+$$\mathcal{F}|_U \cong \widetilde{M}$$
+
+where $\widetilde{M}$ is the sheaf associated to $M$: $\widetilde{M}(D(f)) = M_f$ for distinguished opens.
+
+Equivalently, $\mathcal{F}$ is quasi-coherent if on every affine open $U = \operatorname{Spec} A$, the natural map
+
+$$\mathcal{F}(U) \otimes_A A_f \xrightarrow{\sim} \mathcal{F}(D(f))$$
+
+is an isomorphism for all $f \in A$.
+</Definition>
+
+<Example id="structure-sheaf" title="The structure sheaf">
+$\mathcal{O}_X$ itself is quasi-coherent (and coherent): on $U = \operatorname{Spec} A$, it corresponds to $\widetilde{A}$, the module $A$ over itself.
+</Example>
+
+<Example id="ideal-sheaf" title="Ideal sheaves">
+For a closed subscheme $Z \hookrightarrow X$ defined by an ideal sheaf $\mathcal{I}_Z \subseteq \mathcal{O}_X$, both $\mathcal{I}_Z$ and the quotient $\mathcal{O}_Z = \mathcal{O}_X / \mathcal{I}_Z$ are quasi-coherent. On an affine open $\operatorname{Spec} A$, $\mathcal{I}_Z$ corresponds to an ideal $I \subseteq A$ and $\mathcal{O}_Z$ to $A/I$.
+</Example>
+
+<Example id="localization-sheaf" title="Localization sheaf">
+On $\mathbb{A}^1 = \operatorname{Spec} k[x]$, the sheaf $\mathcal{F}$ with $\mathcal{F}(\mathbb{A}^1) = k[x, 1/(x-1)]$ is quasi-coherent — it corresponds to the $k[x]$-module $k[x]_{(x-1)}$... but wait, that's a localization, not a finitely generated module. Quasi-coherent sheaves allow **arbitrary** modules, not just finitely generated ones.
+</Example>
+
+<Remark title="The tilde construction">
+For an affine scheme $X = \operatorname{Spec} A$ and an $A$-module $M$, the associated sheaf $\widetilde{M}$ is defined by:
+
+- $\widetilde{M}(D(f)) = M_f = M \otimes_A A_f$ for distinguished opens.
+- Stalks: $\widetilde{M}_\mathfrak{p} = M_\mathfrak{p}$ for $\mathfrak{p} \in \operatorname{Spec} A$.
+
+The functor $M \mapsto \widetilde{M}$ gives an **equivalence of categories**:
+
+$$A\text{-}\mathbf{Mod} \xrightarrow{\;\sim\;} \mathbf{QCoh}(\operatorname{Spec} A), \quad M \mapsto \widetilde{M}$$
+
+with quasi-inverse $\mathcal{F} \mapsto \Gamma(\operatorname{Spec} A, \mathcal{F}) = \mathcal{F}(\operatorname{Spec} A)$.
+</Remark>
+
+---
+
+## Coherent sheaves
+
+<Definition title="Coherent sheaf" number="3.2">
+A quasi-coherent sheaf $\mathcal{F}$ on a **locally Noetherian** scheme $X$ is **coherent** if on every affine open $U = \operatorname{Spec} A$, the corresponding module $M$ is **finitely generated** over $A$.
+
+Equivalently, $\mathcal{F}$ is coherent if:
+1. $\mathcal{F}$ is of **finite type** (locally finitely generated), and
+2. For every open $U$ and every morphism $\mathcal{O}_U^n \to \mathcal{F}|_U$, the kernel is of finite type.
+
+On a Noetherian scheme, coherent = finitely generated quasi-coherent.
+</Definition>
+
+<Example id="coherent-Ox" title="Structure sheaf and its ideals">
+On a Noetherian scheme $X$:
+- $\mathcal{O}_X$ is coherent.
+- Every ideal sheaf $\mathcal{I} \subseteq \mathcal{O}_X$ defining a closed subscheme is coherent (since $A$ is Noetherian, every ideal is finitely generated).
+- $\mathcal{O}_Z$ for a closed subscheme $Z$ is coherent.
+</Example>
+
+<Example id="locally-free" title="Locally free sheaves are coherent">
+A locally free sheaf of rank $r$ (= vector bundle of rank $r$) is coherent. On each affine open, it corresponds to a free module $A^r$.
+
+Key examples on $\mathbb{P}^n$:
+- $\mathcal{O}(d)$ for $d \in \mathbb{Z}$: the twisting sheaf (rank 1, invertible).
+- $\Omega^1_{\mathbb{P}^n}$: the cotangent sheaf (rank $n$).
+- $\mathcal{T}_{\mathbb{P}^n}$: the tangent sheaf (rank $n$).
+</Example>
+
+<Example id="skyscraper-coherent" title="Skyscraper sheaves are coherent">
+For a closed point $p \in X$ with residue field $k(p)$, the skyscraper sheaf $k(p)_p$ (= pushforward of $k(p)$ from $\{p\}$ to $X$) is coherent. On $\operatorname{Spec} A$ with $p = \mathfrak{m}$, it corresponds to $A/\mathfrak{m}$.
+
+More generally, any sheaf supported on a finite set of closed points is coherent.
+</Example>
+
+<Example id="non-coherent" title="Quasi-coherent but not coherent">
+On $\mathbb{A}^1 = \operatorname{Spec} k[x]$:
+- $\widetilde{k(x)}$ (the constant sheaf of the function field) is quasi-coherent but **not** coherent: $k(x)$ is not finitely generated over $k[x]$.
+- $\widetilde{\bigoplus_{n \geq 0} k[x]}$ (infinite direct sum) is quasi-coherent but not coherent.
+
+On a Noetherian scheme, **infinite direct sums** of coherent sheaves are quasi-coherent but typically not coherent.
+</Example>
+
+---
+
+## Operations on quasi-coherent sheaves
+
+<Definition title="Sheaf operations" number="3.3">
+For quasi-coherent sheaves $\mathcal{F}, \mathcal{G}$ on a scheme $X$:
+
+- **Direct sum**: $\mathcal{F} \oplus \mathcal{G}$, corresponding to $M \oplus N$ on affines.
+- **Tensor product**: $\mathcal{F} \otimes_{\mathcal{O}_X} \mathcal{G}$, corresponding to $M \otimes_A N$.
+- **Sheaf Hom**: $\mathcal{H}om(\mathcal{F}, \mathcal{G})$, corresponding to $\operatorname{Hom}_A(M, N)$ (coherent if $\mathcal{F}$ is coherent).
+- **Dual**: $\mathcal{F}^\vee = \mathcal{H}om(\mathcal{F}, \mathcal{O}_X)$.
+- **Pullback**: For $f: X \to Y$, $f^*\mathcal{G} = f^{-1}\mathcal{G} \otimes_{f^{-1}\mathcal{O}_Y} \mathcal{O}_X$.
+- **Pushforward**: $f_*\mathcal{F}$ (quasi-coherent if $f$ is quasi-compact and quasi-separated).
+</Definition>
+
+<Example id="twist" title="Twisting on projective space">
+On $\mathbb{P}^n$, for a coherent sheaf $\mathcal{F}$ and $d \in \mathbb{Z}$:
+
+$$\mathcal{F}(d) = \mathcal{F} \otimes \mathcal{O}(d).$$
+
+This is the **twist** of $\mathcal{F}$ by $d$. Key fact: for $d \gg 0$, $\mathcal{F}(d)$ is **generated by global sections** (Serre's theorem A). The global sections:
+
+- $\Gamma(\mathbb{P}^n, \mathcal{O}(d)) = k[x_0, \ldots, x_n]_d$ for $d \geq 0$
+- $\Gamma(\mathbb{P}^n, \mathcal{O}(d)) = 0$ for $d < 0$
+</Example>
+
+<Example id="euler-sequence" title="The Euler sequence">
+On $\mathbb{P}^n$, there is a fundamental short exact sequence of locally free sheaves:
+
+$$0 \to \Omega^1_{\mathbb{P}^n} \to \mathcal{O}(-1)^{n+1} \to \mathcal{O} \to 0.$$
+
+Dualizing: $0 \to \mathcal{O} \to \mathcal{O}(1)^{n+1} \to \mathcal{T}_{\mathbb{P}^n} \to 0$.
+
+Taking determinants: $\omega_{\mathbb{P}^n} = \det \Omega^1 = \mathcal{O}(-(n+1))$.
+
+This single sequence encodes the geometry of projective space: its tangent bundle, canonical class, and Chern classes.
+</Example>
+
+<Example id="ideal-sequence" title="The ideal sheaf sequence">
+For a closed subscheme $Z \hookrightarrow X$ with ideal sheaf $\mathcal{I}_Z$:
+
+$$0 \to \mathcal{I}_Z \to \mathcal{O}_X \to \mathcal{O}_Z \to 0.$$
+
+This is exact as a sequence of coherent sheaves. Taking cohomology gives the long exact sequence:
+
+$$0 \to H^0(X, \mathcal{I}_Z) \to H^0(X, \mathcal{O}_X) \to H^0(Z, \mathcal{O}_Z) \to H^1(X, \mathcal{I}_Z) \to \cdots$$
+
+which is the primary tool for computing cohomology by induction on dimension.
+</Example>
+
+---
+
+## Coherent sheaves on projective space
+
+<Example id="sheaves-on-P1" title="Classification on ℙ¹">
+On $\mathbb{P}^1$, every coherent sheaf $\mathcal{F}$ splits as a direct sum:
+
+$$\mathcal{F} \cong \mathcal{O}(a_1) \oplus \cdots \oplus \mathcal{O}(a_r) \oplus \mathcal{T}$$
+
+where $a_1 \geq \cdots \geq a_r$ and $\mathcal{T}$ is a **torsion sheaf** (supported on finitely many points). This is **Grothendieck's theorem** (1957).
+
+For vector bundles (locally free sheaves), every vector bundle on $\mathbb{P}^1$ splits as $\bigoplus \mathcal{O}(a_i)$. The integers $a_1 \geq \cdots \geq a_r$ are uniquely determined.
+
+This fails spectacularly on $\mathbb{P}^n$ for $n \geq 2$: there exist **indecomposable** vector bundles of every rank $\geq 2$.
+</Example>
+
+<Example id="tangent-bundle-P2" title="Tangent bundle of ℙ²">
+The tangent bundle $\mathcal{T}_{\mathbb{P}^2}$ is an indecomposable rank-2 vector bundle. From the Euler sequence:
+
+$$0 \to \mathcal{O} \to \mathcal{O}(1)^3 \to \mathcal{T}_{\mathbb{P}^2} \to 0.$$
+
+Since $\mathcal{T}_{\mathbb{P}^2}$ has rank 2 and $c_1 = 3$, if it split as $\mathcal{O}(a) \oplus \mathcal{O}(b)$ with $a + b = 3$, then $h^0(\mathcal{T}) = h^0(\mathcal{O}(a)) + h^0(\mathcal{O}(b))$. From the Euler sequence, $h^0(\mathcal{T}_{\mathbb{P}^2}) = 8$ (the dimension of $\operatorname{Aut}(\mathbb{P}^2) = PGL(3)$). No splitting $\mathcal{O}(a) \oplus \mathcal{O}(b)$ gives $h^0 = 8$.
+</Example>
+
+<Example id="structure-sheaf-curve" title="Structure sheaf of a curve in ℙ²">
+Let $C = V(F) \subseteq \mathbb{P}^2$ be a smooth curve of degree $d$. The ideal sheaf sequence:
+
+$$0 \to \mathcal{O}_{\mathbb{P}^2}(-d) \xrightarrow{\cdot F} \mathcal{O}_{\mathbb{P}^2} \to \mathcal{O}_C \to 0.$$
+
+Taking global sections: $H^0(\mathbb{P}^2, \mathcal{O}_C) = k$ (the curve is connected). The long exact sequence gives:
+
+$$h^0(\mathcal{O}_C) = 1, \quad h^1(\mathcal{O}_C) = \binom{d-1}{2} = \frac{(d-1)(d-2)}{2} = g(C).$$
+
+So the arithmetic genus of a degree-$d$ plane curve is $g = \binom{d-1}{2}$. For $d = 3$: $g = 1$ (elliptic curve).
+</Example>
+
+---
+
+## Coherent sheaves on Spec A
+
+<Remark title="Affine case: cohomology vanishes">
+On an affine scheme $X = \operatorname{Spec} A$, the category $\mathbf{QCoh}(X)$ is equivalent to $A$-$\mathbf{Mod}$, and all higher cohomology vanishes:
+
+$$H^i(\operatorname{Spec} A, \widetilde{M}) = 0 \quad \text{for all } i > 0.$$
+
+This is **Serre's criterion for affineness**: a Noetherian scheme is affine $\iff$ $H^i(X, \mathcal{F}) = 0$ for all quasi-coherent $\mathcal{F}$ and $i > 0$.
+
+Consequence: cohomology is a purely **non-affine** phenomenon. It measures the obstruction to extending local sections to global sections.
+</Remark>
+
+---
+
+## The category of coherent sheaves
+
+<Remark title="Abelian category structure">
+For a Noetherian scheme $X$, the category $\mathbf{Coh}(X)$ of coherent sheaves is an **abelian category**:
+- Kernels and cokernels of morphisms of coherent sheaves are coherent.
+- Short exact sequences $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ make sense.
+- The category has enough injectives (needed for derived functors).
+
+The **Grothendieck group** $K_0(X) = K_0(\mathbf{Coh}(X))$ is the free abelian group on isomorphism classes $[\mathcal{F}]$, modulo $[\mathcal{F}] = [\mathcal{F}'] + [\mathcal{F}'']$ for every short exact sequence. For $X = \mathbb{P}^n$:
+
+$$K_0(\mathbb{P}^n) \cong \mathbb{Z}^{n+1}$$
+
+generated by $[\mathcal{O}], [\mathcal{O}(1)], \ldots, [\mathcal{O}(n)]$ (or equivalently by $[\mathcal{O}_{H^0}], \ldots, [\mathcal{O}_{H^n}]$ where $H^i$ is a linear subspace of dimension $i$).
+</Remark>
+
+<Example id="derived-category" title="The derived category">
+The **bounded derived category** $D^b(\mathbf{Coh}(X))$ is one of the most powerful invariants of $X$. Two smooth projective varieties $X$ and $Y$ are **derived equivalent** if $D^b(\mathbf{Coh}(X)) \cong D^b(\mathbf{Coh}(Y))$.
+
+Bondal–Orlov theorem: if $X$ is smooth projective with $\omega_X$ ample or anti-ample, then $X$ is determined by $D^b(\mathbf{Coh}(X))$. But derived equivalence can hold for non-isomorphic varieties:
+- An abelian variety $A$ and its dual $A^\vee$ are derived equivalent (Mukai).
+- Certain K3 surfaces can be derived equivalent without being isomorphic.
+</Example>
+
+---
+
+## Summary table
+
+<Remark title="Summary: Coherent vs Quasi-coherent">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Property</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Quasi-coherent</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Coherent</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">On $\operatorname{Spec} A$</td><td className="border border-gray-200 px-3 py-2">$\widetilde{M}$, any $M$</td><td className="border border-gray-200 px-3 py-2">$\widetilde{M}$, $M$ f.g.</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Abelian category?</td><td className="border border-gray-200 px-3 py-2">Yes</td><td className="border border-gray-200 px-3 py-2">Yes (Noeth.)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Closed under $\otimes$?</td><td className="border border-gray-200 px-3 py-2">Yes</td><td className="border border-gray-200 px-3 py-2">Yes</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Closed under $\oplus$?</td><td className="border border-gray-200 px-3 py-2">Yes (infinite)</td><td className="border border-gray-200 px-3 py-2">Finite only</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Closed under $f^*$?</td><td className="border border-gray-200 px-3 py-2">Yes</td><td className="border border-gray-200 px-3 py-2">Yes (f.t.)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Closed under $f_*$?</td><td className="border border-gray-200 px-3 py-2">qcqs</td><td className="border border-gray-200 px-3 py-2">proper</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Example</td><td className="border border-gray-200 px-3 py-2">$\widetilde{k(x)}$ on $\mathbb{A}^1$</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(d)$ on $\mathbb{P}^n$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Cohomology</td><td className="border border-gray-200 px-3 py-2">Vanishes on affines</td><td className="border border-gray-200 px-3 py-2">Finite-dim on proper</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>

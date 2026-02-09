@@ -1,0 +1,521 @@
+export const metadata = { title: 'Serre Duality — Algebraic Geometry — Math Notes' }
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "3. 코호몰로지", href: "/algebraic-geometry/ch03-cohomology" },
+  { label: "Theorem — Serre Duality" },
+]} />
+
+<div className="mb-6"><div className="flex items-center gap-3 mb-3"><Tag type="theorem" /><StatusBadge status="complete" /></div></div>
+
+# Serre Duality
+
+Serre duality is one of the fundamental theorems in algebraic geometry, establishing a perfect pairing between cohomology groups of a coherent sheaf and its dual. This theorem generalizes classical duality theorems from topology and provides essential computational tools for understanding coherent sheaf cohomology on projective varieties.
+
+## Statement of Serre Duality
+
+<Theorem>
+**Serre Duality Theorem**
+
+Let $X$ be a smooth projective variety of dimension $n$ over an algebraically closed field $k$, and let $\mathcal{F}$ be a coherent sheaf on $X$. Then there exists a coherent sheaf $\omega_X$ (the canonical sheaf or dualizing sheaf) and a natural perfect pairing
+
+$$
+H^i(X, \mathcal{F}) \times H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X) \to H^n(X, \omega_X) \cong k
+$$
+
+for all $0 \leq i \leq n$. This induces isomorphisms
+
+$$
+H^i(X, \mathcal{F}) \cong H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X)^\vee
+$$
+
+where $\mathcal{F}^\vee = \mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{O}_X)$ is the dual sheaf.
+</Theorem>
+
+<Remark>
+The canonical sheaf $\omega_X$ can be characterized in several equivalent ways:
+- As the sheaf of top differential forms: $\omega_X = \Omega_X^n = \bigwedge^n \Omega_X^1$
+- As the dualizing sheaf in the sense of Grothendieck duality
+- For a smooth variety in projective space, via the adjunction formula
+
+The isomorphism $H^n(X, \omega_X) \cong k$ is sometimes called the trace map and plays a crucial role in the duality pairing.
+</Remark>
+
+## The Trace Map
+
+<Definition>
+**Trace Map**
+
+Let $X$ be a smooth projective variety of dimension $n$ over $k$. The trace map is a canonical linear functional
+
+$$
+\text{tr}_X: H^n(X, \omega_X) \to k
+$$
+
+that is an isomorphism. This map is functorial and compatible with finite morphisms in the appropriate sense.
+</Definition>
+
+<Remark>
+The trace map can be constructed using Čech cohomology. For a sufficiently fine affine cover $\mathcal{U} = \{U_i\}$ of $X$, an element of $H^n(X, \omega_X)$ is represented by a Čech $n$-cocycle. The trace map extracts the "global residue" from this data. In characteristic zero, this is closely related to the classical residue theorem.
+</Remark>
+
+## The Duality Pairing
+
+The duality pairing in Serre's theorem is given by the composition:
+
+$$
+H^i(X, \mathcal{F}) \times H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X) \xrightarrow{\cup} H^n(X, \mathcal{F} \otimes \mathcal{F}^\vee \otimes \omega_X) \xrightarrow{\text{ev}} H^n(X, \omega_X) \xrightarrow{\text{tr}_X} k
+$$
+
+where:
+- The first map is the cup product in sheaf cohomology
+- The evaluation map $\text{ev}: \mathcal{F} \otimes \mathcal{F}^\vee \to \mathcal{O}_X$ induces the second map
+- The third map is the trace
+
+<Remark>
+The non-degeneracy of this pairing is the key content of Serre duality. It implies that the natural map
+
+$$
+H^i(X, \mathcal{F}) \to H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X)^\vee
+$$
+
+is an isomorphism. This is particularly useful because it allows us to compute one cohomology group in terms of the dual of another, often simpler, cohomology group.
+</Remark>
+
+## Examples on Curves
+
+<Example id="curve-genus-g" title="Serre Duality for Curves">
+Let $C$ be a smooth projective curve of genus $g$ over $k$. Then $\dim C = 1$ and $\omega_C$ is a line bundle of degree $2g - 2$ (by Riemann-Roch).
+
+For the structure sheaf $\mathcal{O}_C$, Serre duality gives:
+
+$$
+H^0(C, \mathcal{O}_C)^\vee \cong H^1(C, \mathcal{O}_C^\vee \otimes \omega_C) = H^1(C, \omega_C)
+$$
+
+and
+
+$$
+H^1(C, \mathcal{O}_C)^\vee \cong H^0(C, \omega_C)
+$$
+
+Since $h^0(C, \mathcal{O}_C) = 1$ (constant functions) and $h^1(C, \mathcal{O}_C) = g$ (by definition of genus), we get $h^0(C, \omega_C) = g$, which is the classical fact that the space of holomorphic differentials on a Riemann surface has dimension equal to the genus.
+</Example>
+
+<Example id="line-bundle-on-curve" title="Line Bundles on Curves">
+Let $C$ be a smooth projective curve of genus $g$, and let $\mathcal{L}$ be a line bundle on $C$. Then $\mathcal{L}^\vee = \mathcal{L}^{-1}$ and Serre duality states:
+
+$$
+H^0(C, \mathcal{L})^\vee \cong H^1(C, \mathcal{L}^{-1} \otimes \omega_C) = H^1(C, \omega_C \otimes \mathcal{L}^{-1})
+$$
+
+$$
+H^1(C, \mathcal{L})^\vee \cong H^0(C, \omega_C \otimes \mathcal{L}^{-1})
+$$
+
+This is often written as:
+
+$$
+h^0(C, \mathcal{L}) - h^1(C, \mathcal{L}) = h^0(C, \mathcal{L}) - h^0(C, \omega_C \otimes \mathcal{L}^{-1})
+$$
+
+Combined with Riemann-Roch, which states $h^0(C, \mathcal{L}) - h^1(C, \mathcal{L}) = \deg(\mathcal{L}) + 1 - g$, this gives the complete picture of cohomology dimensions for line bundles on curves.
+</Example>
+
+<Example id="canonical-bundle-curve" title="Canonical Bundle is Self-Dual">
+For a curve $C$ of genus $g$, we have $\omega_C \otimes \omega_C^{-1} \cong \mathcal{O}_C$. Applying Serre duality to $\omega_C$:
+
+$$
+H^0(C, \omega_C)^\vee \cong H^1(C, \omega_C^{-1} \otimes \omega_C) = H^1(C, \mathcal{O}_C)
+$$
+
+Both sides have dimension $g$. The dual pairing
+
+$$
+H^0(C, \omega_C) \times H^1(C, \mathcal{O}_C) \to k
+$$
+
+is perfect and plays a central role in the theory of Jacobians and theta functions.
+</Example>
+
+## Serre Duality for Projective Space
+
+<Example id="projective-space" title="Projective Space $\mathbb{P}^n$">
+Let $X = \mathbb{P}^n_k$. The canonical sheaf is $\omega_{\mathbb{P}^n} = \mathcal{O}_{\mathbb{P}^n}(-n-1)$.
+
+For the twisted structure sheaf $\mathcal{O}_{\mathbb{P}^n}(m)$, we have:
+
+$$
+\mathcal{O}_{\mathbb{P}^n}(m)^\vee = \mathcal{O}_{\mathbb{P}^n}(-m)
+$$
+
+and
+
+$$
+\mathcal{O}_{\mathbb{P}^n}(m)^\vee \otimes \omega_{\mathbb{P}^n} = \mathcal{O}_{\mathbb{P}^n}(-m-n-1)
+$$
+
+Serre duality gives:
+
+$$
+H^i(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(m))^\vee \cong H^{n-i}(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(-m-n-1))
+$$
+
+For example, when $i = 0$ and $m \geq 0$:
+
+$$
+H^0(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(m))^\vee \cong H^n(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(-m-n-1))
+$$
+
+The left side has dimension $\binom{m+n}{n}$ (homogeneous polynomials of degree $m$), while the right side vanishes since $-m-n-1 < -n-1$. This matches the fact that $H^n(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(d)) = 0$ for $d > -n-1$.
+</Example>
+
+<Example id="top-cohomology-pn" title="Top Cohomology of $\mathbb{P}^n$">
+Consider $H^n(\mathbb{P}^n, \omega_{\mathbb{P}^n}) = H^n(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(-n-1))$. By Serre duality with $i = n$ and $\mathcal{F} = \omega_{\mathbb{P}^n}$:
+
+$$
+H^n(\mathbb{P}^n, \omega_{\mathbb{P}^n})^\vee \cong H^0(\mathbb{P}^n, \omega_{\mathbb{P}^n}^\vee \otimes \omega_{\mathbb{P}^n}) = H^0(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n})
+$$
+
+The right side is one-dimensional (spanned by constant functions), so $H^n(\mathbb{P}^n, \omega_{\mathbb{P}^n}) \cong k$, confirming that the trace map is an isomorphism.
+
+More generally, for any $m$:
+
+$$
+H^n(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(m)) \cong H^0(\mathbb{P}^n, \mathcal{O}_{\mathbb{P}^n}(-m-n-1))^\vee
+$$
+
+which is $k$ if $m = -n-1$, and zero otherwise.
+</Example>
+
+## Examples on Surfaces
+
+<Example id="surface-canonical" title="Surfaces and the Canonical Divisor">
+Let $S$ be a smooth projective surface over $k$. The canonical sheaf $\omega_S$ is a line bundle, often denoted $K_S$ when viewed as a divisor class.
+
+For a line bundle $\mathcal{L}$ on $S$, Serre duality gives:
+
+$$
+H^i(S, \mathcal{L})^\vee \cong H^{2-i}(S, \omega_S \otimes \mathcal{L}^{-1})
+$$
+
+In particular:
+- $H^0(S, \mathcal{L})^\vee \cong H^2(S, \omega_S \otimes \mathcal{L}^{-1})$
+- $H^1(S, \mathcal{L})^\vee \cong H^1(S, \omega_S \otimes \mathcal{L}^{-1})$ (self-dual middle cohomology)
+- $H^2(S, \mathcal{L})^\vee \cong H^0(S, \omega_S \otimes \mathcal{L}^{-1})$
+
+For $\mathcal{L} = \mathcal{O}_S$, we get:
+
+$$
+h^2(S, \mathcal{O}_S) = h^0(S, \omega_S) = p_g(S)
+$$
+
+the geometric genus of the surface.
+</Example>
+
+<Example id="quadric-surface" title="Quadric Surface in $\mathbb{P}^3$">
+Let $Q \subset \mathbb{P}^3$ be a smooth quadric surface. Then $Q \cong \mathbb{P}^1 \times \mathbb{P}^1$ and we can compute the canonical sheaf using the adjunction formula:
+
+$$
+\omega_Q = (\omega_{\mathbb{P}^3} \otimes \mathcal{O}_{\mathbb{P}^3}(2))|_Q = \mathcal{O}_{\mathbb{P}^3}(-4+2)|_Q = \mathcal{O}_Q(-2)
+$$
+
+Actually, $\mathcal{O}_Q(-2) \cong \mathcal{O}_{\mathbb{P}^1 \times \mathbb{P}^1}(-1, -1)$ under the isomorphism $Q \cong \mathbb{P}^1 \times \mathbb{P}^1$.
+
+For $\mathcal{L} = \mathcal{O}_Q(a, b)$, Serre duality gives:
+
+$$
+H^i(Q, \mathcal{O}_Q(a, b))^\vee \cong H^{2-i}(Q, \mathcal{O}_Q(-a-2, -b-2))
+$$
+
+For example:
+- $H^0(Q, \mathcal{O}_Q(1, 1))$ has dimension 4 (the linear forms restricted to $Q$)
+- $H^2(Q, \mathcal{O}_Q(1, 1))^\vee \cong H^0(Q, \mathcal{O}_Q(-3, -3)) = 0$, which matches
+
+This can be verified using the Künneth formula and the cohomology of $\mathbb{P}^1$.
+</Example>
+
+<Example id="k3-surface" title="K3 Surfaces">
+A K3 surface is a smooth projective surface $S$ with $\omega_S \cong \mathcal{O}_S$ and $H^1(S, \mathcal{O}_S) = 0$.
+
+Serre duality for $\mathcal{O}_S$ gives:
+
+$$
+H^0(S, \mathcal{O}_S)^\vee \cong H^2(S, \omega_S) = H^2(S, \mathcal{O}_S)
+$$
+
+Both are one-dimensional. The pairing
+
+$$
+H^0(S, \mathcal{O}_S) \times H^2(S, \mathcal{O}_S) \to k
+$$
+
+is perfect, with both sides spanned by the constant function 1 and a generator of $H^2(S, \mathcal{O}_S)$ respectively.
+
+For the middle cohomology:
+
+$$
+H^1(S, \mathcal{O}_S)^\vee \cong H^1(S, \omega_S) = H^1(S, \mathcal{O}_S)
+$$
+
+Since this vanishes for K3 surfaces, the self-duality is vacuous. However, for a general surface, this gives a symmetric bilinear form on $H^1(S, \mathcal{O}_S)$.
+</Example>
+
+## Serre Duality and Arithmetic Genus
+
+<Example id="arithmetic-genus" title="Arithmetic Genus Formula">
+Let $X$ be a smooth projective variety of dimension $n$. The arithmetic genus is defined by:
+
+$$
+p_a(X) = (-1)^n(\chi(\mathcal{O}_X) - 1)
+$$
+
+where $\chi(\mathcal{O}_X) = \sum_{i=0}^n (-1)^i h^i(X, \mathcal{O}_X)$ is the Euler characteristic.
+
+By Serre duality, $h^i(X, \mathcal{O}_X) = h^{n-i}(X, \omega_X)$. Therefore:
+
+$$
+\chi(\mathcal{O}_X) = \sum_{i=0}^n (-1)^i h^i(X, \mathcal{O}_X) = \sum_{i=0}^n (-1)^i h^{n-i}(X, \omega_X)
+$$
+
+Reindexing with $j = n - i$:
+
+$$
+\chi(\mathcal{O}_X) = \sum_{j=0}^n (-1)^{n-j} h^j(X, \omega_X) = (-1)^n \chi(\omega_X)
+$$
+
+This shows that $\chi(\mathcal{O}_X)$ and $\chi(\omega_X)$ are related by a sign depending on dimension.
+</Example>
+
+## Connection to Riemann-Roch
+
+<Example id="riemann-roch-curve" title="Riemann-Roch for Curves via Serre Duality">
+The classical Riemann-Roch theorem for a line bundle $\mathcal{L}$ on a curve $C$ of genus $g$ states:
+
+$$
+h^0(C, \mathcal{L}) - h^1(C, \mathcal{L}) = \deg(\mathcal{L}) + 1 - g
+$$
+
+Using Serre duality, $h^1(C, \mathcal{L}) = h^0(C, \omega_C \otimes \mathcal{L}^{-1})$, so we can rewrite this as:
+
+$$
+h^0(C, \mathcal{L}) - h^0(C, \omega_C \otimes \mathcal{L}^{-1}) = \deg(\mathcal{L}) + 1 - g
+$$
+
+For $\mathcal{L} = \mathcal{O}_C$, this gives $1 - h^0(C, \omega_C) = 1 - g$, hence $h^0(C, \omega_C) = g$.
+
+For $\mathcal{L} = \omega_C$, we get $h^0(C, \omega_C) - h^0(C, \mathcal{O}_C) = (2g - 2) + 1 - g = g - 1$, which gives $h^0(C, \omega_C) = g$ again (since $h^0(C, \mathcal{O}_C) = 1$).
+
+Serre duality thus provides an independent proof of key special cases of Riemann-Roch and relates the dimensions of cohomology groups for dual bundles.
+</Example>
+
+## Connection to Poincaré Duality
+
+<Remark>
+For a smooth projective variety $X$ over $\mathbb{C}$, there are deep connections between Serre duality (an algebraic statement) and Poincaré duality (a topological statement about singular cohomology).
+
+Let $X$ be smooth and projective of dimension $n$ over $\mathbb{C}$. There is a natural comparison between:
+- Serre duality: $H^i(X, \Omega_X^p)^\vee \cong H^{n-i}(X, \Omega_X^{n-p})$
+- Poincaré duality: $H^k(X, \mathbb{C})^\vee \cong H^{2n-k}(X, \mathbb{C})$
+
+Using the Hodge decomposition $H^k(X, \mathbb{C}) = \bigoplus_{p+q=k} H^q(X, \Omega_X^p)$, one can show that Serre duality is compatible with Poincaré duality. Specifically, the $(p,q)$ component of Poincaré duality corresponds to Serre duality for $\Omega_X^p$.
+
+This connection is made precise through Hodge theory and provides a bridge between algebraic and analytic/topological perspectives on duality.
+</Remark>
+
+<Example id="hodge-symmetry" title="Hodge Symmetry from Serre Duality">
+For a smooth projective variety $X$ over $\mathbb{C}$ of dimension $n$, the Hodge numbers $h^{p,q}(X) = h^q(X, \Omega_X^p)$ satisfy:
+
+$$
+h^{p,q}(X) = h^{q,p}(X)
+$$
+
+(complex conjugation symmetry) and
+
+$$
+h^{p,q}(X) = h^{n-p, n-q}(X)
+$$
+
+(Serre duality).
+
+For a surface ($n = 2$), this gives a diamond pattern:
+- $h^{0,0} = 1$
+- $h^{1,0} = h^{0,1}$ and $h^{2,0} = h^{0,2}$ (complex conjugation)
+- $h^{0,0} = h^{2,2} = 1$ and $h^{1,0} = h^{1,2}$, $h^{0,1} = h^{2,1}$ (Serre duality)
+- $h^{1,1}$ is self-dual
+
+These symmetries severely constrain the possible Hodge diamonds and are fundamental to the classification of surfaces.
+</Example>
+
+## Grothendieck Duality
+
+<Remark>
+Serre duality is a special case of the more general Grothendieck duality theorem, which applies to proper morphisms of schemes (not necessarily smooth or projective).
+
+For a proper morphism $f: X \to Y$ of noetherian schemes of finite type over a field, there exists a dualizing complex and an adjunction:
+
+$$
+Rf_* \mathcal{R}\mathcal{H}om_X^\bullet(\mathcal{F}, f^! \mathcal{G}) \cong \mathcal{R}\mathcal{H}om_Y^\bullet(Rf_* \mathcal{F}, \mathcal{G})
+$$
+
+where $f^!$ is the exceptional inverse image functor (the right adjoint to $Rf_*$).
+
+When $f: X \to \text{Spec}(k)$ is smooth and projective of relative dimension $n$, then $f^! \mathcal{O}_{\text{Spec}(k)} = \omega_X[n]$ (the canonical sheaf shifted by $n$ in the derived category), and Grothendieck duality specializes to Serre duality.
+</Remark>
+
+<Example id="relative-duality" title="Relative Duality">
+Let $f: X \to Y$ be a smooth projective morphism of relative dimension $n$ between smooth varieties. The relative canonical sheaf is $\omega_{X/Y} = \omega_X \otimes f^* \omega_Y^{-1}$.
+
+Grothendieck duality for $f$ gives, for a coherent sheaf $\mathcal{F}$ on $X$:
+
+$$
+R^i f_* \mathcal{F} \cong (R^{n-i} f_*(\mathcal{F}^\vee \otimes \omega_{X/Y}))^\vee
+$$
+
+as sheaves on $Y$ (where the dual is taken sheaf-theoretically).
+
+For example, if $X = C \times Y$ where $C$ is a curve of genus $g$ and $f: C \times Y \to Y$ is projection, then for $\mathcal{F} = \mathcal{O}_C \boxtimes \mathcal{E}$ (where $\mathcal{E}$ is a locally free sheaf on $Y$):
+
+$$
+R^0 f_* (\mathcal{O}_C \boxtimes \mathcal{E}) = \mathcal{E}
+$$
+
+$$
+R^1 f_* (\mathcal{O}_C \boxtimes \mathcal{E}) = H^1(C, \mathcal{O}_C) \otimes \mathcal{E} \cong \mathcal{E}^{\oplus g}
+$$
+
+Relative duality then states $R^1 f_* (\mathcal{O}_C \boxtimes \mathcal{E}) \cong (R^0 f_*(\mathcal{O}_C \boxtimes (\mathcal{E}^\vee \otimes \omega_{C/Y})))^\vee$.
+</Example>
+
+## Examples with Non-Locally Free Sheaves
+
+<Example id="ideal-sheaf" title="Ideal Sheaf of a Subvariety">
+Let $X$ be a smooth projective variety of dimension $n$, and let $Y \subset X$ be a smooth closed subvariety of codimension $c$. Consider the ideal sheaf $\mathcal{I}_Y$.
+
+We have an exact sequence:
+
+$$
+0 \to \mathcal{I}_Y \to \mathcal{O}_X \to \mathcal{O}_Y \to 0
+$$
+
+The dual sequence is:
+
+$$
+0 \to \mathcal{O}_X^\vee \to \mathcal{I}_Y^\vee \to \mathcal{E}xt^1(\mathcal{O}_Y, \mathcal{O}_X) \to 0
+$$
+
+Since $\mathcal{O}_X^\vee \cong \mathcal{O}_X$, we have $\mathcal{I}_Y^\vee \not\cong \mathcal{I}_Y$ in general.
+
+For Serre duality applied to $\mathcal{I}_Y$:
+
+$$
+H^i(X, \mathcal{I}_Y)^\vee \cong H^{n-i}(X, \mathcal{I}_Y^\vee \otimes \omega_X)
+$$
+
+This is useful for computing cohomology of ideal sheaves. For instance, if $Y$ is a point on a curve $C$, then $\mathcal{I}_Y = \mathcal{O}_C(-Y)$ (a line bundle), and Serre duality gives the classical result for line bundles.
+</Example>
+
+<Example id="skyscraper-sheaf" title="Skyscraper Sheaves">
+Let $X$ be a smooth projective variety of dimension $n$, and let $p \in X$ be a point. Consider the skyscraper sheaf $k_p$ at $p$ (i.e., $k_p$ has stalk $k$ at $p$ and zero elsewhere).
+
+The dual sheaf $k_p^\vee = \mathcal{H}om(k_p, \mathcal{O}_X)$ is zero since there are no non-zero morphisms from a skyscraper at $p$ to $\mathcal{O}_X$ (as $\mathcal{O}_X$ is torsion-free).
+
+Therefore, $k_p^\vee \otimes \omega_X = 0$, and Serre duality gives:
+
+$$
+H^i(X, k_p)^\vee \cong H^{n-i}(X, 0) = 0 \quad \text{for } i < n
+$$
+
+$$
+H^n(X, k_p)^\vee \cong H^0(X, 0) = 0
+$$
+
+But we know that $H^0(X, k_p) = k$ (the global sections are just the value at $p$), and all other cohomology groups vanish. This seems contradictory, but the resolution is that Serre duality as stated applies most cleanly to locally free sheaves or more generally to sheaves with nice duality properties.
+
+For skyscraper sheaves, one must use the more sophisticated formulation in terms of $\mathcal{E}xt$ sheaves and local duality.
+</Example>
+
+## Vanishing Theorems and Serre Duality
+
+<Example id="kodaira-vanishing" title="Kodaira Vanishing and Serre Duality">
+Kodaira vanishing states that for a smooth projective variety $X$ over $\mathbb{C}$ and an ample line bundle $\mathcal{L}$:
+
+$$
+H^i(X, \omega_X \otimes \mathcal{L}) = 0 \quad \text{for all } i > 0
+$$
+
+Combined with Serre duality for $\mathcal{F} = \mathcal{L}^{-1}$:
+
+$$
+H^i(X, \mathcal{L}^{-1})^\vee \cong H^{n-i}(X, \omega_X \otimes \mathcal{L})
+$$
+
+we conclude that when $\mathcal{L}$ is ample:
+
+$$
+H^i(X, \mathcal{L}^{-1}) = 0 \quad \text{for all } i < n
+$$
+
+This means that for an anti-ample line bundle $\mathcal{L}^{-1}$, all cohomology vanishes except possibly in the top degree. This is a powerful consequence of combining Kodaira vanishing with Serre duality.
+</Example>
+
+<Example id="castelnuovo-mumford" title="Castelnuovo-Mumford Regularity">
+Let $X = \mathbb{P}^n$ and let $\mathcal{F}$ be a coherent sheaf. We say $\mathcal{F}$ is $m$-regular if:
+
+$$
+H^i(X, \mathcal{F}(m-i)) = 0 \quad \text{for all } i > 0
+$$
+
+By Serre duality:
+
+$$
+H^i(X, \mathcal{F}(m-i))^\vee \cong H^{n-i}(X, \mathcal{F}^\vee(m-i) \otimes \omega_X)
+$$
+
+$$
+= H^{n-i}(X, \mathcal{F}^\vee(-n-1-m+i))
+$$
+
+So $\mathcal{F}$ is $m$-regular if and only if:
+
+$$
+H^{n-i}(X, \mathcal{F}^\vee(-n-1-m+i)) = 0 \quad \text{for all } i > 0
+$$
+
+Equivalently, setting $j = n - i$:
+
+$$
+H^j(X, \mathcal{F}^\vee(-m-1-j)) = 0 \quad \text{for all } j < n
+$$
+
+This shows that $m$-regularity of $\mathcal{F}$ is closely related to vanishing properties of $\mathcal{F}^\vee$ twisted by appropriate line bundles, via Serre duality.
+</Example>
+
+## Summary and Applications
+
+Serre duality is a cornerstone of modern algebraic geometry with far-reaching consequences:
+
+1. **Computational Tool**: It allows computing difficult cohomology groups in terms of simpler dual groups
+2. **Theoretical Foundation**: It underpins the theory of dualizing sheaves and canonical bundles
+3. **Classification**: Essential for the classification of varieties (e.g., Kodaira dimension, minimal model program)
+4. **Intersection Theory**: Related to Poincaré duality and provides a cohomological perspective on intersection pairings
+5. **Generalizations**: Leads to Grothendieck duality, which extends to arbitrary proper morphisms
+
+The theorem demonstrates the deep symmetry inherent in the cohomology of coherent sheaves and continues to be a central tool in birational geometry, moduli theory, and derived categories.
+
+<Remark>
+**Further Directions**
+
+Beyond the classical Serre duality theorem, there are several important generalizations and related topics:
+
+- **Verdier Duality**: A topological version for constructible sheaves on general spaces
+- **Local Duality**: Relates cohomology with support to local cohomology modules in commutative algebra
+- **Duality for Stacks**: Extends Grothendieck duality to Deligne-Mumford and Artin stacks
+- **Equivariant Duality**: Versions for varieties with group actions
+- **Arithmetic Duality**: Analogues in arithmetic geometry (Poitou-Tate duality, etc.)
+
+Each of these builds on the fundamental ideas in Serre's original theorem while adapting to new geometric and categorical contexts.
+</Remark>

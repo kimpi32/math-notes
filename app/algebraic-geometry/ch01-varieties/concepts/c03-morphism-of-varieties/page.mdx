@@ -1,0 +1,431 @@
+export const metadata = {
+  title: 'Morphisms of Varieties — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Concept — Morphisms of Varieties" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Morphisms of Varieties
+
+Having defined [affine](/algebraic-geometry/ch01-varieties/concepts/c01-affine-variety) and [projective](/algebraic-geometry/ch01-varieties/concepts/c02-projective-variety) varieties, we now study the maps between them. The notion of **morphism** is the algebraic geometer's replacement for "continuous map" or "differentiable map": it captures maps that respect the polynomial structure. Throughout, $k$ denotes an algebraically closed field.
+
+---
+
+## Regular functions
+
+The first step is to define what a "polynomial function" on a variety means.
+
+### On affine varieties
+
+<Definition title="Regular function on an affine variety" number="1.10">
+Let $Y \subseteq \mathbb{A}^n$ be an affine variety. A **regular function** on $Y$ is the restriction to $Y$ of a polynomial $f \in k[x_1, \ldots, x_n]$. Two polynomials $f, g$ define the same regular function on $Y$ if and only if $f - g \in I(Y)$.
+
+The ring of all regular functions on $Y$ is the **coordinate ring**
+
+$$\mathcal{O}(Y) = k[Y] = k[x_1, \ldots, x_n] / I(Y).$$
+
+Since $Y$ is irreducible, $I(Y)$ is prime, so $k[Y]$ is an integral domain. Its fraction field $k(Y) = \operatorname{Frac}(k[Y])$ is the **function field** of $Y$.
+</Definition>
+
+<Example id="regular-affine-line" title="Regular functions on the affine line">
+$\mathbb{A}^1$ has coordinate ring $k[\mathbb{A}^1] = k[x]$. A regular function on $\mathbb{A}^1$ is simply a polynomial $f(x) \in k[x]$. Rational functions like $1/x$ are **not** regular on all of $\mathbb{A}^1$ (they are undefined at $x = 0$), but $1/x$ is regular on the open set $D(x) = \mathbb{A}^1 \setminus \{0\}$.
+</Example>
+
+<Example id="regular-plane-curve" title="Regular functions on a plane curve">
+Let $Y = V(y^2 - x^3 + x) \subseteq \mathbb{A}^2$ be the affine part of the elliptic curve $y^2 = x^3 - x$. Then
+
+$$k[Y] = k[x,y]/(y^2 - x^3 + x).$$
+
+Every element of $k[Y]$ can be written uniquely as $f(x) + g(x) y$ where $f, g \in k[x]$, since $y^2 = x^3 - x$ allows reducing the power of $y$. For instance, $y^3 = y \cdot y^2 = y(x^3 - x) = x^3 y - xy$ in $k[Y]$.
+</Example>
+
+### On projective varieties
+
+<Definition title="Regular function on a projective variety" number="1.11">
+Let $Y \subseteq \mathbb{P}^n$ be a projective variety and let $P \in Y$. A function $f: U \to k$ defined on an open neighborhood $U$ of $P$ is **regular at $P$** if there exist homogeneous polynomials $g, h \in k[x_0, \ldots, x_n]$ of the same degree with $h(P) \neq 0$ and $f = g/h$ on $U \cap D(h)$.
+
+A function is **regular on an open set $U$** if it is regular at every point of $U$. The ring of regular functions on $U$ is denoted $\mathcal{O}(U)$ or $\mathcal{O}_Y(U)$.
+</Definition>
+
+<Theorem title="Global regular functions on projective varieties" number="1.2">
+Let $Y \subseteq \mathbb{P}^n$ be a connected projective variety. Then every regular function $f \in \mathcal{O}(Y)$ is **constant**:
+
+$$\mathcal{O}(Y) = k.$$
+</Theorem>
+
+<Proof>
+Since $Y$ is projective, it is complete (i.e., the image of $Y$ under any morphism to an affine variety is closed). The regular function $f: Y \to \mathbb{A}^1 \subseteq \mathbb{P}^1$ has image $f(Y)$ that is both closed (by completeness) and contained in $\mathbb{A}^1$. Since $Y$ is irreducible, $f(Y)$ is irreducible and closed in $\mathbb{A}^1$. If $f$ were nonconstant, $f(Y)$ would be an irreducible closed subset of $\mathbb{A}^1$ of dimension $\geq 1$, hence $f(Y) = \mathbb{A}^1$. But $f(Y)$ is also the image of a projective variety under projection, and the image of a complete variety under any morphism is closed, so $f(Y)$ is closed in $\mathbb{P}^1$, i.e., $f(Y)$ is also a projective subset of $\mathbb{A}^1$, which forces $f(Y)$ to be a finite set. Contradiction unless $f$ is constant.
+
+Alternatively, one can argue directly: cover $Y$ by affine opens $U_i = Y \cap D(x_i)$. On each $U_i$, $f$ restricts to a regular function. Write $f = g_i/x_i^d$ for some homogeneous $g_i$ of degree $d$ on $U_i$. The compatibility conditions force $g_i x_j^d = g_j x_i^d$, which (combined with the fact that $k[x_0,\ldots,x_n]$ is a UFD) forces $g_i = c \cdot x_i^d$ for some constant $c \in k$, giving $f = c$.
+</Proof>
+
+<Example id="regular-projective-constant" title="No nonconstant regular functions on P^n">
+Consider $\mathbb{P}^1$. A rational function $g(x_0,x_1)/h(x_0,x_1)$ with $g, h$ homogeneous of the same degree $d$ defines a "function" $\mathbb{P}^1 \to k$, but it has poles where $h = 0$. The only way to avoid all poles on $\mathbb{P}^1$ is if $h$ divides $g$ in the homogeneous coordinate ring, giving a constant. For instance, $x_0/x_1$ is regular on $D(x_1)$ but has a pole at $[1:0]$. There is no nonconstant regular function defined on all of $\mathbb{P}^1$.
+</Example>
+
+<Remark title="The meaning of completeness">
+The theorem $\mathcal{O}(\mathbb{P}^n) = k$ is the algebraic analogue of a fundamental fact in complex analysis: every holomorphic function on a compact complex manifold is constant (by the maximum modulus principle). A projective variety is "compact" in the Zariski sense, and this forces the global regular functions to collapse.
+
+This is precisely **why we need morphisms** rather than just regular functions: the interesting maps between projective varieties cannot be captured by their rings of global functions.
+</Remark>
+
+---
+
+## Morphisms of affine varieties
+
+<Definition title="Morphism of affine varieties" number="1.12">
+Let $X \subseteq \mathbb{A}^m$ and $Y \subseteq \mathbb{A}^n$ be affine varieties. A **morphism** (or **regular map**) $\varphi: X \to Y$ is a map of the form
+
+$$\varphi(P) = (f_1(P), \ldots, f_n(P))$$
+
+where each $f_i \in k[X]$ is a regular function on $X$. Equivalently, $\varphi$ is the restriction to $X$ of a polynomial map $\mathbb{A}^m \to \mathbb{A}^n$ whose image lands in $Y$.
+</Definition>
+
+<Theorem title="Morphisms ↔ k-algebra homomorphisms (antiequivalence)" number="1.3">
+There is a natural bijection
+
+$$\operatorname{Mor}(X, Y) \;\xrightarrow{\;\sim\;}\; \operatorname{Hom}_{k\text{-alg}}(k[Y],\, k[X])$$
+
+sending a morphism $\varphi: X \to Y$ to its **pullback** $\varphi^*: k[Y] \to k[X]$ defined by $\varphi^*(g) = g \circ \varphi$.
+
+Consequently, the category of affine varieties over $k$ with morphisms is **anti-equivalent** (contravariantly equivalent) to the category of finitely generated reduced $k$-algebras that are integral domains:
+
+$$\mathbf{AffVar}_k^{\mathrm{op}} \;\simeq\; \mathbf{FGDom}_k.$$
+
+An isomorphism $X \cong Y$ of affine varieties corresponds to an isomorphism $k[X] \cong k[Y]$ of $k$-algebras.
+</Theorem>
+
+<Proof>
+The map $\varphi \mapsto \varphi^*$ is well-defined: if $\varphi = (f_1, \ldots, f_n)$, then for $g = \bar{g}(y_1,\ldots,y_n) \in k[Y]$, we have $\varphi^*(g)(P) = g(\varphi(P)) = \bar{g}(f_1(P),\ldots,f_n(P)) \in k[X]$.
+
+Conversely, given a $k$-algebra homomorphism $\alpha: k[Y] \to k[X]$, write $k[Y] = k[y_1,\ldots,y_n]/I(Y)$ and set $f_i = \alpha(\bar{y}_i) \in k[X]$. Define $\varphi(P) = (f_1(P), \ldots, f_n(P))$. For any $g \in I(Y)$, we have $\alpha(\bar{g}) = 0$ in $k[X]$, so $g(f_1(P),\ldots,f_n(P)) = 0$ for all $P \in X$, meaning $\varphi(P) \in Y$.
+
+These two constructions are inverse to each other, establishing the bijection.
+</Proof>
+
+<Example id="morphism-parabola" title="Parametrization of the parabola">
+The morphism $\varphi: \mathbb{A}^1 \to Y = V(y - x^2) \subseteq \mathbb{A}^2$ given by $t \mapsto (t, t^2)$ corresponds to the $k$-algebra homomorphism
+
+$$\varphi^*: k[Y] = k[x,y]/(y - x^2) \to k[t], \quad x \mapsto t, \; y \mapsto t^2.$$
+
+This is an **isomorphism** of $k$-algebras (since $k[Y] \cong k[x]$ via $y \mapsto x^2$), confirming that $\varphi$ is an isomorphism of varieties.
+</Example>
+
+<Example id="morphism-projection" title="Projection maps">
+Let $Y = V(y^2 - x^3 + x) \subseteq \mathbb{A}^2$ be the affine elliptic curve. The projection to the first coordinate
+
+$$\pi: Y \to \mathbb{A}^1, \quad (x, y) \mapsto x$$
+
+is a morphism. The corresponding pullback is $\pi^*: k[t] \to k[Y]$, $t \mapsto \bar{x}$. This is injective (so $\pi$ is dominant), and the extension $k[t] \hookrightarrow k[x,y]/(y^2 - x^3 + x)$ is integral of degree 2: generically, each fiber $\pi^{-1}(a) = \{(a, y) : y^2 = a^3 - a\}$ consists of 2 points (the two square roots), unless $a^3 - a = 0$ (i.e., $a = 0, \pm 1$), where the fiber is a single point.
+</Example>
+
+<Example id="morphism-inclusion" title="Inclusion of a subvariety">
+Let $Y \subseteq X$ be a closed subvariety (e.g., $Y = V(y) \subseteq X = \mathbb{A}^2$). The inclusion $\iota: Y \hookrightarrow X$ is a morphism, and the pullback $\iota^*: k[X] \to k[Y]$ is the surjection $k[X] \twoheadrightarrow k[X]/I(Y) = k[Y]$. Closed immersions correspond to surjective $k$-algebra maps; open immersions correspond to localizations.
+</Example>
+
+<Example id="morphism-coordinate-ring" title="Morphisms to A^1 are regular functions">
+A morphism $\varphi: X \to \mathbb{A}^1$ is the same data as a single regular function $f = \varphi \in k[X]$: the pullback $\varphi^*: k[t] \to k[X]$ sends $t \mapsto f$. More generally, a morphism $X \to \mathbb{A}^n$ is exactly an $n$-tuple of regular functions $(f_1, \ldots, f_n) \in k[X]^n$, reproducing Definition 1.12.
+</Example>
+
+---
+
+## Morphisms of projective varieties
+
+<Definition title="Morphism of projective varieties" number="1.13">
+Let $X \subseteq \mathbb{P}^m$ and $Y \subseteq \mathbb{P}^n$ be projective varieties. A **morphism** $\varphi: X \to Y$ is a map such that for every $P \in X$, there exist homogeneous polynomials $f_0, \ldots, f_n \in k[x_0, \ldots, x_m]$ of the **same degree** with
+
+$$\varphi(P) = [f_0(P) : \cdots : f_n(P)]$$
+
+and the $f_i$ do not all vanish at $P$. (The choice of $f_i$ may need to vary on different open subsets covering $X$; the condition is that such a local representation exists in a neighborhood of each point.)
+</Definition>
+
+<Remark title="Local nature of morphisms">
+Unlike in affine geometry, projective morphisms often cannot be described by a single formula valid everywhere. One typically covers $X$ by open sets on each of which the morphism has a polynomial description, and checks compatibility on overlaps. This local nature is a precursor to the language of **sheaves** and **schemes**.
+</Remark>
+
+<Example id="morphism-veronese" title="The Veronese embedding as a morphism">
+The **degree-$d$ Veronese embedding** is the morphism
+
+$$\nu_d: \mathbb{P}^n \to \mathbb{P}^N, \quad [x_0:\cdots:x_n] \mapsto [\cdots : x_0^{i_0}\cdots x_n^{i_n} : \cdots]_{i_0+\cdots+i_n=d}$$
+
+where $N = \binom{n+d}{d} - 1$. All component polynomials are monomials of degree $d$, so they are homogeneous of the same degree. At any point $P \in \mathbb{P}^n$, at least one coordinate $x_j \neq 0$, so the monomial $x_j^d \neq 0$, ensuring the map is well-defined everywhere.
+
+For $n = 1$, $d = 2$: $\nu_2: \mathbb{P}^1 \to \mathbb{P}^2$, $[s:t] \mapsto [s^2 : st : t^2]$. The image is the conic $V(xz - y^2)$, and $\nu_2$ is an **isomorphism** onto its image.
+
+For $n = 1$, $d = 3$: $\nu_3: \mathbb{P}^1 \to \mathbb{P}^3$, $[s:t] \mapsto [s^3 : s^2 t : st^2 : t^3]$. The image is the **twisted cubic curve** in $\mathbb{P}^3$, defined by the $2 \times 2$ minors of $\begin{pmatrix} x_0 & x_1 & x_2 \\ x_1 & x_2 & x_3 \end{pmatrix}$.
+</Example>
+
+<Example id="morphism-segre" title="The Segre embedding as a morphism">
+The **Segre embedding** is the morphism
+
+$$\sigma: \mathbb{P}^m \times \mathbb{P}^n \to \mathbb{P}^{(m+1)(n+1)-1}, \quad ([x_i], [y_j]) \mapsto [x_i y_j]_{i,j}.$$
+
+For $m = n = 1$: $\sigma([s:t],[u:v]) = [su : sv : tu : tv]$. The image is $V(z_0 z_3 - z_1 z_2) \subseteq \mathbb{P}^3$, the smooth quadric surface.
+
+The Segre map is well-defined: at least one $x_i \neq 0$ and one $y_j \neq 0$, so $x_i y_j \neq 0$. It is an isomorphism onto its image, making $\mathbb{P}^m \times \mathbb{P}^n$ a projective variety. This is how we give the product of projective varieties the structure of a projective variety.
+</Example>
+
+<Example id="morphism-projection-projective" title="Projection from a point">
+Let $P = [1:0:\cdots:0] \in \mathbb{P}^n$ and let $H = V(x_0) \cong \mathbb{P}^{n-1}$. The **projection from $P$** is the morphism
+
+$$\pi_P: \mathbb{P}^n \setminus \{P\} \to \mathbb{P}^{n-1}, \quad [x_0:x_1:\cdots:x_n] \mapsto [x_1:\cdots:x_n].$$
+
+This is well-defined: if $Q \neq P$, then not all of $x_1,\ldots,x_n$ are zero. Geometrically, $\pi_P$ sends $Q$ to the intersection of the line $\overline{PQ}$ with the hyperplane $H$.
+
+If $X \subseteq \mathbb{P}^n$ is a projective variety with $P \notin X$, then $\pi_P|_X: X \to \mathbb{P}^{n-1}$ is a morphism. This is a fundamental tool: it can be used to show that every projective variety of dimension $d$ admits a finite surjective morphism to $\mathbb{P}^d$ (Noether normalization, geometric form).
+</Example>
+
+---
+
+## The category of varieties
+
+<Definition title="(Quasi-projective) variety" number="1.14">
+A **quasi-projective variety** is a locally closed subset (= open subset of a closed subset) of some $\mathbb{P}^n$, with the induced Zariski topology and the induced notion of regular functions. This includes:
+
+- **Affine varieties**: closed subsets of $\mathbb{A}^n$ (since $\mathbb{A}^n$ is an open subset of $\mathbb{P}^n$).
+- **Projective varieties**: closed subsets of $\mathbb{P}^n$.
+- **Quasi-affine varieties**: open subsets of affine varieties (e.g., $\mathbb{A}^n \setminus V(f)$).
+
+A **morphism** $\varphi: X \to Y$ between quasi-projective varieties is a continuous map (in the Zariski topology) such that for every open $U \subseteq Y$ and every regular function $f \in \mathcal{O}(U)$, the pullback $f \circ \varphi$ is regular on $\varphi^{-1}(U)$.
+</Definition>
+
+<Remark title="The category Var_k">
+With this definition, varieties over $k$ form a category $\mathbf{Var}_k$. Isomorphisms in this category are bijective morphisms whose inverse is also a morphism. This is a subtlety: a bijective morphism is **not** automatically an isomorphism (see the cusp example below). The category $\mathbf{Var}_k$ is the starting point for algebraic geometry; the passage to $\mathbf{Sch}_k$ (schemes) generalizes this by allowing nilpotents and non-closed points.
+</Remark>
+
+---
+
+## Examples of morphisms
+
+<Example id="morphism-frobenius" title="The Frobenius endomorphism">
+Let $k$ be an algebraically closed field of characteristic $p > 0$ (e.g., $k = \overline{\mathbb{F}_p}$). The **Frobenius endomorphism** on $\mathbb{A}^n$ is
+
+$$\operatorname{Fr}: \mathbb{A}^n \to \mathbb{A}^n, \quad (a_1, \ldots, a_n) \mapsto (a_1^p, \ldots, a_n^p).$$
+
+This is a morphism (each component is a polynomial). The pullback is
+
+$$\operatorname{Fr}^*: k[x_1,\ldots,x_n] \to k[x_1,\ldots,x_n], \quad x_i \mapsto x_i^p.$$
+
+On a projective variety $X \subseteq \mathbb{P}^n$ defined over $\mathbb{F}_p$, the Frobenius acts as $[a_0:\cdots:a_n] \mapsto [a_0^p:\cdots:a_n^p]$. This is well-defined since $({\lambda a_i})^p = \lambda^p a_i^p$. The **fixed points** of $\operatorname{Fr}$ are precisely the $\mathbb{F}_p$-rational points: $X(\mathbb{F}_p) = X^{\operatorname{Fr}}$.
+
+**Key properties:**
+- $\operatorname{Fr}$ is a **bijection** on points (since $a \mapsto a^p$ is bijective on $k = \overline{\mathbb{F}_p}$).
+- $\operatorname{Fr}$ is **not** an isomorphism: the pullback $x_i \mapsto x_i^p$ is injective but not surjective ($x_i$ is not in the image).
+- $\operatorname{Fr}$ is a **purely inseparable** morphism of degree $p^n$.
+- Counting fixed points of iterates $\operatorname{Fr}^r$ gives $|X(\mathbb{F}_{p^r})|$, which is the subject of the **Weil conjectures**.
+</Example>
+
+<Example id="morphism-duple" title="The d-uple embedding">
+The **$d$-uple embedding** (= Veronese embedding for general $n$) sends
+
+$$\rho_d: \mathbb{P}^n \to \mathbb{P}^N, \quad N = \binom{n+d}{d} - 1,$$
+
+mapping each point to its vector of all degree-$d$ monomials. For $n = 2$, $d = 2$ (the **quadratic Veronese**):
+
+$$\rho_2: \mathbb{P}^2 \to \mathbb{P}^5, \quad [x:y:z] \mapsto [x^2 : xy : xz : y^2 : yz : z^2].$$
+
+The image is the **Veronese surface** $V_2 \subseteq \mathbb{P}^5$. A line $V(ax + by + cz)$ in $\mathbb{P}^2$ corresponds to a conic on $V_2$ (a hyperplane section). The key property: $\rho_d$ converts degree-$d$ hypersurfaces to hyperplane sections.
+
+As a morphism, $\rho_d$ is an isomorphism onto its image. The inverse is obtained by noting that the image lies in a linear subspace where the coordinate ratios recover the original coordinates.
+</Example>
+
+<Example id="morphism-normalization" title="Normalization of the cuspidal cubic">
+The cuspidal cubic $Y = V(y^2 - x^3) \subseteq \mathbb{A}^2$ has coordinate ring $k[Y] = k[t^2, t^3] \subset k[t]$. The **normalization** is the morphism
+
+$$\nu: \mathbb{A}^1 \to Y, \quad t \mapsto (t^2, t^3)$$
+
+corresponding to the inclusion $\nu^*: k[t^2, t^3] \hookrightarrow k[t]$. This is a bijection on points but **not** an isomorphism (the pullback is not surjective: $t \notin k[t^2, t^3]$).
+
+The normalization "resolves" the cusp: $\mathbb{A}^1$ is smooth, and $\nu$ is a birational morphism that is an isomorphism away from the singular point. The preimage of the cusp $(0,0) \in Y$ is the single point $0 \in \mathbb{A}^1$.
+</Example>
+
+<Example id="morphism-normalization-node" title="Normalization of the nodal cubic">
+The nodal cubic $Y = V(y^2 - x^2(x+1)) \subseteq \mathbb{A}^2$ has a node at the origin. The normalization is
+
+$$\nu: \mathbb{A}^1 \to Y, \quad t \mapsto (t^2 - 1, \; t(t^2 - 1)).$$
+
+This corresponds to $\nu^*: k[Y] = k[x,y]/(y^2 - x^2(x+1)) \hookrightarrow k[t]$ via $x \mapsto t^2 - 1$, $y \mapsto t^3 - t$.
+
+Unlike the cusp, the normalization of the node is **not bijective**: the two points $t = 1$ and $t = -1$ both map to the node $(0, 0) \in Y$. The node has two distinct tangent directions, and the normalization "separates" them into two points on $\mathbb{A}^1$.
+</Example>
+
+<Example id="morphism-parametric" title="Parametrization of the rational normal curve">
+The **rational normal curve** of degree $d$ is the image of
+
+$$\varphi: \mathbb{P}^1 \to \mathbb{P}^d, \quad [s:t] \mapsto [s^d : s^{d-1}t : \cdots : st^{d-1} : t^d].$$
+
+This is the $d$-uple embedding of $\mathbb{P}^1$. For $d = 3$, the image $C \subseteq \mathbb{P}^3$ is the twisted cubic, defined by
+
+$$\operatorname{rank} \begin{pmatrix} x_0 & x_1 & x_2 \\ x_1 & x_2 & x_3 \end{pmatrix} \leq 1.$$
+
+The morphism $\varphi$ is an isomorphism onto $C$: the inverse on the chart $x_0 \neq 0$ is $[x_0:x_1:x_2:x_3] \mapsto [x_0:x_1]$, and on $x_3 \neq 0$ it is $[x_0:x_1:x_2:x_3] \mapsto [x_2:x_3]$.
+</Example>
+
+---
+
+## Isomorphisms vs. bijective morphisms
+
+A critical subtlety in algebraic geometry is that a bijective morphism need not be an isomorphism. The Zariski topology is too coarse for a "bijective continuous map with continuous inverse" argument to work.
+
+<Theorem title="Bijective ≠ isomorphism" number="1.4">
+A morphism $\varphi: X \to Y$ of varieties that is bijective on points is **not** necessarily an isomorphism. For $\varphi$ to be an isomorphism, one needs $\varphi^{-1}$ to also be a morphism.
+
+In the affine case, $\varphi$ is an isomorphism if and only if $\varphi^*: k[Y] \to k[X]$ is an isomorphism of $k$-algebras. A bijective morphism has $\varphi^*$ injective, but it may fail to be surjective.
+</Theorem>
+
+<Example id="cusp-bijection" title="The cusp: bijective but not an isomorphism">
+The morphism $\varphi: \mathbb{A}^1 \to Y = V(y^2 - x^3)$, $t \mapsto (t^2, t^3)$ is:
+
+- **Bijective**: given $(a, b) \in Y$ with $b^2 = a^3$, if $a = 0$ then $b = 0$ and $t = 0$; if $a \neq 0$ then $t = b/a$ is the unique preimage.
+- **A homeomorphism** in the Zariski topology (since any bijective polynomial map between irreducible curves is a homeomorphism).
+- **Not an isomorphism**: the pullback $\varphi^*: k[x,y]/(y^2 - x^3) \to k[t]$ sends $x \mapsto t^2$, $y \mapsto t^3$. The image is $k[t^2, t^3] \subsetneq k[t]$, so $\varphi^*$ is not surjective. Concretely, there is no polynomial in $(t^2, t^3)$ that equals $t$.
+
+The "inverse" would need to send $(x,y) \mapsto y/x$, but $y/x$ is not a regular function at the origin (it is a rational function with an indeterminacy). The cusp singularity prevents the inverse from being a morphism.
+
+**Lesson**: In characteristic 0, a bijective morphism $\varphi: X \to Y$ with $Y$ normal (e.g., smooth) **is** an isomorphism (by Zariski's Main Theorem). The failure for the cusp occurs because $Y$ is not normal.
+</Example>
+
+<Example id="frobenius-bijection" title="Frobenius: bijective but not an isomorphism (char p)">
+In characteristic $p > 0$, the Frobenius $\operatorname{Fr}: \mathbb{A}^1 \to \mathbb{A}^1$, $a \mapsto a^p$ is bijective (since $k$ is algebraically closed), but the pullback $\operatorname{Fr}^*: k[x] \to k[x]$, $x \mapsto x^p$ is not surjective. So $\operatorname{Fr}$ is bijective but not an isomorphism.
+
+This phenomenon is **purely characteristic $p$**: in characteristic 0, every bijective morphism $\mathbb{A}^1 \to \mathbb{A}^1$ is an isomorphism. Over $\mathbb{C}$, an endomorphism of $\mathbb{A}^1$ is given by $x \mapsto f(x)$, and bijectivity forces $\deg f = 1$, i.e., $f$ is linear.
+</Example>
+
+---
+
+## Automorphisms
+
+<Definition title="Automorphism" number="1.15">
+An **automorphism** of a variety $X$ is an isomorphism $\varphi: X \to X$. The group of all automorphisms is denoted $\operatorname{Aut}(X)$.
+</Definition>
+
+### Automorphisms of the affine line
+
+<Example id="aut-a1" title="Aut(A^1) = Aff(1, k)">
+An automorphism $\varphi: \mathbb{A}^1 \to \mathbb{A}^1$ corresponds to a $k$-algebra isomorphism $\varphi^*: k[x] \to k[x]$. Any such isomorphism sends $x \mapsto ax + b$ where $a \in k^*$, $b \in k$ (since $\varphi^*(x)$ must generate $k[x]$ and have degree 1). Therefore
+
+$$\operatorname{Aut}(\mathbb{A}^1) = \{x \mapsto ax + b \mid a \in k^*, b \in k\} \cong \operatorname{Aff}(1, k) = k^* \ltimes k.$$
+
+This is the **affine group** of the line. Higher-degree polynomial maps $x \mapsto x + x^2$, while injective over $\mathbb{C}$, are not surjective, hence not automorphisms.
+</Example>
+
+<Example id="aut-an" title="Aut(A^n) for n >= 2 (the Jacobian conjecture)">
+For $n = 2$, $\operatorname{Aut}(\mathbb{A}^2)$ is much larger. It contains:
+
+- **Affine maps**: $(x, y) \mapsto (ax + by + e, cx + dy + f)$ with $\begin{pmatrix} a & b \\ c & d\end{pmatrix}$ invertible.
+- **Triangular (de Jonquieres) maps**: $(x, y) \mapsto (ax + p(y), by + c)$ with $a, b \in k^*$, $p(y) \in k[y]$.
+
+By the **Jung--van der Kulk theorem**, $\operatorname{Aut}(\mathbb{A}^2)$ is the amalgamated free product of the affine group and the triangular group over their intersection.
+
+For $n \geq 3$, $\operatorname{Aut}(\mathbb{A}^n)$ is not fully understood. The **Jacobian conjecture** (open, one of Smale's problems) asserts: if $\varphi: \mathbb{A}^n \to \mathbb{A}^n$ has Jacobian determinant $\det(J_\varphi) \in k^*$ (a nonzero constant), then $\varphi$ is an automorphism.
+</Example>
+
+### Automorphisms of the projective line
+
+<Example id="aut-p1" title="Aut(P^1) = PGL(2, k)">
+An automorphism $\varphi: \mathbb{P}^1 \to \mathbb{P}^1$ is given by
+
+$$[x_0 : x_1] \mapsto [ax_0 + bx_1 : cx_0 + dx_1], \quad \begin{pmatrix} a & b \\ c & d \end{pmatrix} \in GL(2, k).$$
+
+Two matrices give the same automorphism iff they differ by a scalar, so
+
+$$\operatorname{Aut}(\mathbb{P}^1) \cong PGL(2, k) = GL(2, k) / k^*.$$
+
+In the affine coordinate $t = x_1/x_0$, the automorphism becomes the **Mobius transformation**
+
+$$t \mapsto \frac{ct + d}{at + b} \quad \text{(or equivalently } t \mapsto \frac{\alpha t + \beta}{\gamma t + \delta}\text{)}.$$
+
+**Key properties:**
+- $\dim PGL(2) = 3$, so automorphisms of $\mathbb{P}^1$ form a 3-dimensional group.
+- $PGL(2)$ acts **3-transitively** on $\mathbb{P}^1$: given any three distinct points $P_1, P_2, P_3$ and any other three distinct points $Q_1, Q_2, Q_3$, there is a unique $\varphi \in PGL(2)$ with $\varphi(P_i) = Q_i$.
+- For $n \geq 2$: $\operatorname{Aut}(\mathbb{P}^n) = PGL(n+1, k)$, acting by linear changes of coordinates.
+</Example>
+
+### Automorphisms of elliptic curves
+
+<Example id="aut-elliptic" title="Aut(E) for an elliptic curve">
+Let $E$ be an elliptic curve over $k$ with identity $O \in E$. An automorphism $\varphi: E \to E$ preserving $O$ (i.e., $\varphi(O) = O$) is an automorphism of $E$ as an **abelian variety**. The group of such automorphisms is:
+
+- **Generic case** ($\operatorname{char} k \neq 2, 3$, and $j(E) \neq 0, 1728$): $\operatorname{Aut}(E, O) = \{\pm 1\} \cong \mathbb{Z}/2\mathbb{Z}$, generated by the negation map $P \mapsto -P$ (inversion in the group law).
+
+- **$j = 1728$** ($E: y^2 = x^3 - x$, char $k \neq 2$): $\operatorname{Aut}(E, O) \cong \mathbb{Z}/4\mathbb{Z}$, generated by $(x, y) \mapsto (-x, iy)$ where $i^2 = -1$. This is an order-4 automorphism.
+
+- **$j = 0$** ($E: y^2 = x^3 - 1$, char $k \neq 2, 3$): $\operatorname{Aut}(E, O) \cong \mathbb{Z}/6\mathbb{Z}$, generated by $(x, y) \mapsto (\zeta_3 x, -y)$ where $\zeta_3$ is a primitive cube root of unity. The order-3 element $(x,y) \mapsto (\zeta_3 x, y)$ is a "rotation" of the curve.
+
+If we drop the condition $\varphi(O) = O$, then $\operatorname{Aut}(E) = E \rtimes \operatorname{Aut}(E, O)$, where $E$ acts on itself by **translations** $\tau_Q: P \mapsto P + Q$. Translations are automorphisms of $E$ as a variety (but not as a group).
+</Example>
+
+---
+
+## Morphisms as functors: the categorical perspective
+
+<Remark title="The antiequivalence in practice">
+The antiequivalence $\mathbf{AffVar}_k^{\mathrm{op}} \simeq \mathbf{FGDom}_k$ means that every algebraic statement about coordinate rings translates to a geometric statement about varieties, and vice versa. Here is a dictionary:
+
+| **Geometry** (varieties) | **Algebra** (coordinate rings) |
+|---|---|
+| Morphism $\varphi: X \to Y$ | $k$-algebra map $\varphi^*: k[Y] \to k[X]$ |
+| Isomorphism $X \cong Y$ | Ring isomorphism $k[X] \cong k[Y]$ |
+| Closed immersion $X \hookrightarrow Y$ | Surjection $k[Y] \twoheadrightarrow k[X]$ |
+| Dominant morphism | Injective ring map $k[Y] \hookrightarrow k[X]$ |
+| $X$ is a point | $k[X] = k$ |
+| Product $X \times Y$ | Tensor product $k[X] \otimes_k k[Y]$ |
+| $X$ is smooth | $k[X]$ is a regular ring |
+| $X$ is normal | $k[X]$ is integrally closed |
+| Finite morphism $X \to Y$ | $k[X]$ is a finite $k[Y]$-module |
+</Remark>
+
+<Example id="morphism-dictionary" title="Using the dictionary: is the map X → Y finite?">
+Let $\varphi: Y = V(y^2 - x) \to \mathbb{A}^1$ be the projection $(x, y) \mapsto x$. The pullback is $\varphi^*: k[t] \to k[x,y]/(y^2 - x) \cong k[y]$, $t \mapsto y^2$. Is $k[y]$ a finite $k[y^2]$-module? Yes: $k[y] = k[y^2] \cdot 1 + k[y^2] \cdot y$, so $k[y]$ is free of rank 2 over $k[y^2]$. Therefore $\varphi$ is a **finite morphism** of degree 2. Geometrically, each fiber has at most 2 points: the two square roots of $x$.
+</Example>
+
+---
+
+## Summary of key examples
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Morphism</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Formula</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Pullback / ring map</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Key property</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-parabola" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Parabola parametrization</a></td><td className="px-4 py-2 border-b border-gray-100">$t \mapsto (t, t^2)$</td><td className="px-4 py-2 border-b border-gray-100">$k[x] \xrightarrow{\sim} k[t]$</td><td className="px-4 py-2 border-b border-gray-100">Isomorphism</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-normalization" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Cusp normalization</a></td><td className="px-4 py-2 border-b border-gray-100">$t \mapsto (t^2, t^3)$</td><td className="px-4 py-2 border-b border-gray-100">$k[t^2,t^3] \hookrightarrow k[t]$</td><td className="px-4 py-2 border-b border-gray-100">Bijective, not an isomorphism</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-normalization-node" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Node normalization</a></td><td className="px-4 py-2 border-b border-gray-100">$t \mapsto (t^2-1, t^3-t)$</td><td className="px-4 py-2 border-b border-gray-100">$k[Y] \hookrightarrow k[t]$</td><td className="px-4 py-2 border-b border-gray-100">Not injective (node is identified)</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-projection" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Elliptic curve projection</a></td><td className="px-4 py-2 border-b border-gray-100">$(x,y) \mapsto x$</td><td className="px-4 py-2 border-b border-gray-100">$k[t] \hookrightarrow k[Y]$, degree 2</td><td className="px-4 py-2 border-b border-gray-100">Finite, 2-to-1 generically</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-veronese" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Veronese $\nu_d$</a></td><td className="px-4 py-2 border-b border-gray-100">$[x_i] \mapsto [\text{monomials deg } d]$</td><td className="px-4 py-2 border-b border-gray-100">Linearizes degree-$d$ hypersurfaces</td><td className="px-4 py-2 border-b border-gray-100">Closed embedding</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-segre" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Segre $\sigma$</a></td><td className="px-4 py-2 border-b border-gray-100">$([x_i],[y_j]) \mapsto [x_i y_j]$</td><td className="px-4 py-2 border-b border-gray-100">Realizes $\mathbb{P}^m \times \mathbb{P}^n$ as projective</td><td className="px-4 py-2 border-b border-gray-100">Closed embedding</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-projection-projective" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Projection from a point</a></td><td className="px-4 py-2 border-b border-gray-100">$[x_0:\cdots:x_n] \mapsto [x_1:\cdots:x_n]$</td><td className="px-4 py-2 border-b border-gray-100">Defined on $\mathbb{P}^n \setminus \{P\}$</td><td className="px-4 py-2 border-b border-gray-100">Rational map from $\mathbb{P}^n$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#morphism-frobenius" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Frobenius (char $p$)</a></td><td className="px-4 py-2 border-b border-gray-100">$a \mapsto a^p$</td><td className="px-4 py-2 border-b border-gray-100">$x_i \mapsto x_i^p$, not surjective</td><td className="px-4 py-2 border-b border-gray-100">Bijective, not an isomorphism</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#aut-p1" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\operatorname{Aut}(\mathbb{P}^1)$</a></td><td className="px-4 py-2 border-b border-gray-100">Mobius transformations</td><td className="px-4 py-2 border-b border-gray-100">$PGL(2,k)$</td><td className="px-4 py-2 border-b border-gray-100">3-transitive on points</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#aut-elliptic" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\operatorname{Aut}(E, O)$</a></td><td className="px-4 py-2 border-b border-gray-100">$P \mapsto -P$, etc.</td><td className="px-4 py-2 border-b border-gray-100">$\mathbb{Z}/2$, $\mathbb{Z}/4$, or $\mathbb{Z}/6$</td><td className="px-4 py-2 border-b border-gray-100">Depends on $j$-invariant</td></tr>
+</tbody>
+</table>
+</div>
+
+<Remark title="Looking ahead">
+Morphisms of varieties are the foundation for the next steps in algebraic geometry:
+- [Rational maps](/algebraic-geometry/ch01-varieties/concepts/c06-rational-map) generalize morphisms by allowing "indeterminacy loci" where the map is undefined.
+- [Dimension](/algebraic-geometry/ch01-varieties/concepts/c04-dimension) can be defined via the transcendence degree of the function field, which is preserved under birational equivalence.
+- [Nonsingularity](/algebraic-geometry/ch01-varieties/concepts/c05-nonsingular) is intimately related to whether the local ring is regular, and normalization morphisms resolve certain singularities.
+- In the language of **schemes**, morphisms are defined via locally ringed spaces, subsuming all the cases above and extending to non-reduced, non-irreducible, and arithmetic settings.
+</Remark>

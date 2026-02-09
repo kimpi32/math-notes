@@ -1,65 +1,100 @@
-import Image from "next/image";
+import Link from "next/link";
+import { subjects } from "@/lib/subjects";
+
+const colorStyles: Record<string, { border: string; bg: string; hover: string; accent: string }> = {
+  blue: {
+    border: "border-blue-200",
+    bg: "bg-blue-50/50",
+    hover: "hover:border-blue-400 hover:shadow-blue-100",
+    accent: "text-blue-600",
+  },
+  emerald: {
+    border: "border-emerald-200",
+    bg: "bg-emerald-50/50",
+    hover: "hover:border-emerald-400 hover:shadow-emerald-100",
+    accent: "text-emerald-600",
+  },
+  rose: {
+    border: "border-rose-200",
+    bg: "bg-rose-50/50",
+    hover: "hover:border-rose-400 hover:shadow-rose-100",
+    accent: "text-rose-600",
+  },
+  violet: {
+    border: "border-violet-200",
+    bg: "bg-violet-50/50",
+    hover: "hover:border-violet-400 hover:shadow-violet-100",
+    accent: "text-violet-600",
+  },
+  orange: {
+    border: "border-orange-200",
+    bg: "bg-orange-50/50",
+    hover: "hover:border-orange-400 hover:shadow-orange-100",
+    accent: "text-orange-600",
+  },
+};
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="text-center mb-16">
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          수학 강의 노트
+        </h1>
+        <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+          대학 수학 과정을 <strong className="text-gray-700">개념</strong>,{" "}
+          <strong className="text-gray-700">정리</strong>,{" "}
+          <strong className="text-gray-700">증명</strong>으로 체계적으로 정리합니다.
+        </p>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-6">
+        {subjects.map((subject) => {
+          const style = colorStyles[subject.color] || colorStyles.blue;
+          const totalItems = subject.chapters.reduce(
+            (sum, ch) => sum + ch.concepts.length + ch.theorems.length + ch.proofs.length,
+            0
+          );
+          return (
+            <Link
+              key={subject.id}
+              href={`/${subject.id}`}
+              className={`group block border-2 ${style.border} ${style.bg} rounded-2xl p-8 transition-all ${style.hover} hover:shadow-lg`}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div className={`text-sm font-medium ${style.accent} mb-1`}>
+                {subject.titleEn}
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:translate-x-1 transition-transform">
+                {subject.titleKo}
+              </h2>
+              <p className="text-sm text-gray-500 mb-4 leading-relaxed">
+                {subject.description}
+              </p>
+              <div className="flex items-center gap-4 text-xs text-gray-400">
+                <span>{subject.chapters.length}개 챕터</span>
+                <span>{totalItems}개 항목</span>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      <div className="mt-16 text-center">
+        <div className="inline-flex items-center gap-6 text-xs text-gray-400">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-blue-400" />
+            개념
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            정리
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-purple-400" />
+            증명
+          </span>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

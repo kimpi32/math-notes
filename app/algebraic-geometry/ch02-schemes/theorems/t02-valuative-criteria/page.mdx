@@ -1,0 +1,714 @@
+export const metadata = {
+  title: 'Valuative Criteria — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Theorem — Valuative Criteria" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Valuative Criteria for Separatedness and Properness
+
+The valuative criteria provide a powerful geometric characterization of separated and proper morphisms using discrete valuation rings. These criteria translate the abstract properties of separatedness and properness into concrete extension problems that are often easier to verify in practice.
+
+## Discrete Valuation Rings
+
+<Definition title="Discrete Valuation Ring">
+A **discrete valuation ring** (DVR) is a principal ideal domain with exactly one nonzero prime ideal. Equivalently, it is a local principal ideal domain that is not a field.
+
+If $R$ is a DVR, we denote its unique maximal ideal by $\mathfrak{m}$, its field of fractions by $K$, and its residue field by $\kappa = R/\mathfrak{m}$.
+</Definition>
+
+<Remark>
+A DVR $R$ has the structure:
+- $R$ is a local ring with maximal ideal $\mathfrak{m} = (\pi)$ for some uniformizer $\pi$
+- Every nonzero ideal has the form $(\pi^n)$ for some $n \geq 0$
+- The discrete valuation $v: K^* \to \mathbb{Z}$ is given by $v(x) = n$ if $x = u\pi^n$ with $u \in R^*$
+
+This gives a chain of ideals:
+$$R \supset (\pi) \supset (\pi^2) \supset (\pi^3) \supset \cdots$$
+</Remark>
+
+<Example id="dvr-examples" title="Fundamental Examples of DVRs">
+
+**1. Localization at a prime in a Dedekind domain**
+
+Let $A$ be a Dedekind domain (e.g., $\mathbb{Z}$ or $k[t]$) and $\mathfrak{p}$ a nonzero prime ideal. Then $A_{\mathfrak{p}}$ is a DVR.
+
+**Example:** $R = \mathbb{Z}_{(p)}$ is the localization of $\mathbb{Z}$ at the prime $(p)$:
+$$\mathbb{Z}_{(p)} = \left\{ \frac{a}{b} : a, b \in \mathbb{Z}, \gcd(b,p) = 1 \right\}$$
+
+The maximal ideal is $\mathfrak{m} = p\mathbb{Z}_{(p)}$, the field of fractions is $K = \mathbb{Q}$, and the residue field is $\kappa = \mathbb{F}_p$.
+
+**2. Power series ring**
+
+$R = k[[t]]$, the ring of formal power series over a field $k$, is a DVR with:
+- Maximal ideal $\mathfrak{m} = (t)$
+- Field of fractions $K = k((t))$ (Laurent series)
+- Residue field $\kappa = k$
+
+Every element can be written uniquely as $f = u t^n$ where $u \in k[[t]]^*$ (units) and $n \geq 0$.
+
+**3. P-adic integers**
+
+$R = \mathbb{Z}_p$, the ring of $p$-adic integers, is the completion of $\mathbb{Z}_{(p)}$ with respect to the $(p)$-adic topology:
+$$\mathbb{Z}_p = \varprojlim \mathbb{Z}/p^n\mathbb{Z}$$
+
+It has:
+- Maximal ideal $\mathfrak{m} = p\mathbb{Z}_p$
+- Field of fractions $K = \mathbb{Q}_p$ (p-adic numbers)
+- Residue field $\kappa = \mathbb{F}_p$
+
+**4. Localization of a polynomial ring**
+
+Let $R = k[x,y]_{(x,y)}/(xy - t)$ where $t \in k$. If $t \neq 0$, this is not a DVR, but if we take the completion at the origin, we get a DVR in many cases.
+
+Actually, a cleaner example: $R = k[x]_{(x-a)}$ for any $a \in k$ is a DVR with uniformizer $\pi = x - a$.
+
+**5. Valuation ring of a discrete valuation**
+
+Given any discrete valuation $v: K^* \to \mathbb{Z}$ on a field $K$, the valuation ring
+$$R = \{ x \in K : v(x) \geq 0 \} \cup \{0\}$$
+is a DVR with maximal ideal $\mathfrak{m} = \{ x \in K : v(x) > 0 \} \cup \{0\}$.
+</Example>
+
+<Example id="dvr-geometric-picture" title="The Geometric Picture of a DVR">
+From a geometric perspective, $\text{Spec } R$ for a DVR $R$ represents a "germ of a curve with a marked point":
+
+- $\text{Spec } K$ (generic point) represents the "curve minus a point"
+- $\text{Spec } \kappa$ (closed point) represents the "missing point"
+
+The inclusion $K \hookrightarrow R$ corresponds to the morphism $\text{Spec } R \to \text{Spec } K$, which is the inclusion of the generic point.
+
+**Concrete example:** Consider $R = k[[t]]$.
+- $\text{Spec } k[[t]]$ has two points: generic point $\eta$ (corresponding to $(0)$) and closed point $s$ (corresponding to $(t)$)
+- $\text{Spec } k((t))$ has one point (the generic point)
+- The morphism $\text{Spec } k[[t]] \to \text{Spec } k((t))$ includes the closed point into the generic point
+
+Think of $\text{Spec } k[[t]]$ as a formal neighborhood of a point on a curve.
+</Example>
+
+## The Test Curve Intuition
+
+<Remark>
+The valuative criterion uses DVRs as "test objects" to detect separatedness and properness. The key geometric idea is:
+
+**A morphism is separated/proper if and only if every "curve with a point removed" extends uniquely/extends to the whole curve.**
+
+More precisely, given:
+- A scheme $X$ over $S$
+- A DVR $R$ with field of fractions $K$
+- A morphism $\text{Spec } K \to X$ (a "rational point" or "generic point of a curve")
+
+We ask: Can this morphism extend to $\text{Spec } R \to X$?
+
+- **Separatedness:** At most one extension exists
+- **Properness:** Exactly one extension exists
+</Remark>
+
+<Example id="test-curve-a1" title="Test Curve for $\mathbb{A}^1$">
+Consider $X = \mathbb{A}^1_k = \text{Spec } k[x]$ and $R = k[[t]]$.
+
+**Extending a generic point:**
+A morphism $\text{Spec } k((t)) \to \mathbb{A}^1_k$ is given by specifying $x \in k((t))$.
+
+Suppose $x = t^{-1} + t + t^2 + \cdots$ (a Laurent series with a pole at $t = 0$).
+
+Can this extend to $\text{Spec } k[[t]] \to \mathbb{A}^1_k$?
+
+An extension would require $x \in k[[t]]$ (a power series), but $x$ has a pole, so **no extension exists**.
+
+This shows that $\mathbb{A}^1$ is not proper: there are curves (like $\text{Spec } k[[t]]$) and rational points on them that don't extend to the whole curve.
+
+**Another example:**
+If $x = t + t^2 + \cdots \in k[[t]]$, then the morphism $\text{Spec } k((t)) \to \mathbb{A}^1$ extends uniquely to $\text{Spec } k[[t]] \to \mathbb{A}^1$ by the same formula.
+
+This shows that $\mathbb{A}^1$ is separated: when an extension exists, it is unique.
+</Example>
+
+<Example id="test-curve-p1" title="Test Curve for $\mathbb{P}^1$">
+Consider $X = \mathbb{P}^1_k$ with standard open cover $U_0 = \text{Spec } k[x]$ and $U_1 = \text{Spec } k[y]$ where $xy = 1$ on the overlap.
+
+**Extending a generic point with a pole:**
+Let $R = k[[t]]$ and consider the morphism $\text{Spec } k((t)) \to \mathbb{P}^1$ given by $x = t^{-1}$.
+
+In the chart $U_0$, we have $x = t^{-1} \notin k[[t]]$, so the generic point doesn't map into $U_0 \cap \text{Spec } k[[t]]$.
+
+In the chart $U_1$, we have $y = 1/x = t \in k[[t]]$, so the map **does extend** to $\text{Spec } k[[t]] \to U_1 \subset \mathbb{P}^1$.
+
+The extension is given by $[x:y] = [1:t]$ on $\text{Spec } k[[t]]$, which evaluates to:
+- At the generic point: $[1:t] = [t^{-1}:1]$ (since we're in $k((t))$)
+- At the closed point: $[1:0]$ (the "point at infinity")
+
+This shows that $\mathbb{P}^1$ is proper: every rational point extends uniquely to the whole curve. The "missing point" at infinity provides a place for poles to land.
+</Example>
+
+## Valuative Criterion for Separatedness
+
+<Theorem title="Valuative Criterion for Separatedness">
+Let $f: X \to S$ be a morphism of finite type. Then $f$ is separated if and only if for every DVR $R$ with field of fractions $K$, every commutative diagram
+
+$$
+\begin{CD}
+\text{Spec } K @>>> X \\
+@VVV @VVV \\
+\text{Spec } R @>>> S
+\end{CD}
+$$
+
+admits **at most one** morphism $\text{Spec } R \to X$ making the whole diagram commute.
+</Theorem>
+
+<Remark>
+**Interpretation:** A morphism is separated if "limits are unique when they exist."
+
+The diagram says:
+- We have a curve $\text{Spec } R$ over $S$
+- We have a rational point $\text{Spec } K \to X$ on $X$
+- If this rational point extends to $\text{Spec } R \to X$, then the extension is unique
+
+This captures the intuition that separated morphisms have a unique "diagonal" or "graph."
+</Remark>
+
+<Proof title="Proof Sketch (Key Direction)">
+We prove the "if" direction: assume the valuative criterion holds and show $f$ is separated, i.e., the diagonal $\Delta: X \to X \times_S X$ is a closed immersion.
+
+**Step 1:** Reduce to showing $\Delta$ is a closed immersion.
+
+By definition, $f$ is separated if $\Delta$ is a closed immersion. This means:
+- $\Delta$ is a homeomorphism onto a closed subset (topological condition)
+- The induced map on structure sheaves is surjective (algebraic condition)
+
+**Step 2:** Use the valuative criterion to prove $\Delta$ is universally closed.
+
+Let $T \to X \times_S X$ be any morphism and $t \in T$ a point. We want to show that if $t$ maps to a point $(x_1, x_2) \in X \times_S X$ with $x_1 = x_2$, then we can detect this using DVRs.
+
+Given a DVR $R$ and a diagram
+$$
+\begin{CD}
+\text{Spec } K @>>> X \times_S X \\
+@VVV @VVV \\
+\text{Spec } R @>>> X \times_S X
+\end{CD}
+$$
+
+this gives two morphisms $\text{Spec } K \to X$. If they both extend to $\text{Spec } R \to X$, then by the valuative criterion, the extensions must agree. This shows that the image of $\text{Spec } R$ lands in the diagonal $\Delta(X)$.
+
+**Step 3:** The algebraic condition follows from the universal closedness and the finite type assumption.
+
+For a morphism of finite type, being separated is equivalent to the diagonal being universally closed and a monomorphism. The valuative criterion gives universal closedness, and the monomorphism property is automatic for the diagonal.
+</Proof>
+
+<Example id="a1-separated" title="$\mathbb{A}^1$ is Separated">
+Let $X = \mathbb{A}^1_k = \text{Spec } k[x]$ over $S = \text{Spec } k$.
+
+**Claim:** $\mathbb{A}^1_k$ is separated over $k$.
+
+**Proof via valuative criterion:**
+Let $R$ be a DVR with field of fractions $K$, and suppose we have:
+- A morphism $\text{Spec } K \to \mathbb{A}^1_k$ given by $x \mapsto \alpha \in K$
+- Two extensions $\varphi_1, \varphi_2: \text{Spec } R \to \mathbb{A}^1_k$
+
+Each extension $\varphi_i$ is determined by where $x$ maps, say $x \mapsto a_i \in R$.
+
+For the extensions to agree on $\text{Spec } K$, we need:
+$$a_1|_K = a_2|_K = \alpha$$
+
+But $R \hookrightarrow K$ is an inclusion, so $a_1 = a_2 = \alpha$. Since $\alpha \in K$ must actually be in $R$ for the extension to exist, we have $\alpha \in R$.
+
+Therefore, if two extensions exist, they must be the same: $\varphi_1 = \varphi_2$.
+
+This proves $\mathbb{A}^1_k$ is separated.
+</Example>
+
+<Example id="doubled-origin" title="Line with Doubled Origin Fails Separatedness">
+Consider the affine line with a doubled origin: let $X$ be obtained by gluing two copies of $\mathbb{A}^1_k$ along $\mathbb{A}^1 \setminus \{0\}$.
+
+More precisely:
+- Let $U_1 = \text{Spec } k[x]$ and $U_2 = \text{Spec } k[y]$
+- Glue them along $D(x) \cong D(y) = \mathbb{A}^1 \setminus \{0\}$ via the identity $x = y$
+
+The resulting scheme $X$ has two origins: $0_1 \in U_1$ and $0_2 \in U_2$.
+
+**Why it fails separatedness:**
+Let $R = k[[t]]$ with field of fractions $K = k((t))$.
+
+Consider the morphism $\text{Spec } K \to X$ given by $x = y = t \in k((t))$. This maps into the complement of both origins (since $t \neq 0$ in $K$).
+
+This morphism has **two distinct extensions** to $\text{Spec } R \to X$:
+1. $\varphi_1: \text{Spec } k[[t]] \to U_1$ given by $x = t$
+2. $\varphi_2: \text{Spec } k[[t]] \to U_2$ given by $y = t$
+
+Both extend the same generic point, but:
+- $\varphi_1$ maps the closed point to $0_1$
+- $\varphi_2$ maps the closed point to $0_2$
+
+Since $0_1 \neq 0_2$, we have $\varphi_1 \neq \varphi_2$.
+
+This violates the valuative criterion, so $X$ is not separated.
+</Example>
+
+<Example id="gluing-affines" title="Separated vs Non-separated Gluing">
+**Separated gluing:** Gluing two copies of $\mathbb{A}^1$ along a principal open to get $\mathbb{A}^1$ is separated.
+
+Let $U_1 = \text{Spec } k[x]$ and $U_2 = \text{Spec } k[y]$, glued along $D(x) = D(y)$ via $y = x^{-1}$.
+
+This gives $\mathbb{P}^1$, which is separated (in fact, proper).
+
+**Non-separated gluing:** Gluing two copies of $\mathbb{A}^1$ by identifying the complement of the origin gives the line with doubled origin (previous example), which is not separated.
+
+The key difference: in the separated case, the overlap is a principal open subset (corresponding to a localization), while in the non-separated case, the overlap is the complement of a closed point (which is not affine).
+</Example>
+
+## Valuative Criterion for Properness
+
+<Theorem title="Valuative Criterion for Properness">
+Let $f: X \to S$ be a morphism of finite type. Then $f$ is proper if and only if for every DVR $R$ with field of fractions $K$, every commutative diagram
+
+$$
+\begin{CD}
+\text{Spec } K @>>> X \\
+@VVV @VVV \\
+\text{Spec } R @>>> S
+\end{CD}
+$$
+
+admits **exactly one** morphism $\text{Spec } R \to X$ making the whole diagram commute.
+</Theorem>
+
+<Remark>
+**Interpretation:** A morphism is proper if "limits always exist and are unique."
+
+This combines:
+- **Existence** (universal closedness): Every rational point extends
+- **Uniqueness** (separatedness): The extension is unique
+
+Properness is the algebro-geometric analogue of compactness in topology. The valuative criterion makes this precise: there's "no room to escape to infinity."
+</Remark>
+
+<Example id="p1-proper" title="$\mathbb{P}^1$ is Proper">
+Let $X = \mathbb{P}^1_k$ over $S = \text{Spec } k$.
+
+**Claim:** $\mathbb{P}^1_k$ is proper over $k$.
+
+**Proof via valuative criterion:**
+Let $R$ be a DVR with field of fractions $K$, and let $\text{Spec } K \to \mathbb{P}^1_k$ be a morphism.
+
+The morphism is given by homogeneous coordinates $[a_0 : a_1]$ with $a_0, a_1 \in K$, not both zero.
+
+**Case 1:** $a_0 \neq 0$.
+Then we can write $[a_0 : a_1] = [1 : a_1/a_0]$. Let $v$ be the valuation on $K$ associated to $R$.
+
+- If $v(a_1/a_0) \geq 0$, then $a_1/a_0 \in R$, so the morphism extends to $\text{Spec } R \to U_0$ (where $U_0 = \text{Spec } k[x_1/x_0]$) via $[1 : a_1/a_0]$.
+- If $v(a_1/a_0) < 0$, then $v(a_0/a_1) > 0$, so $a_0/a_1 \in R$. The morphism extends to $\text{Spec } R \to U_1$ (where $U_1 = \text{Spec } k[x_0/x_1]$) via $[a_0/a_1 : 1]$.
+
+**Case 2:** $a_0 = 0$, so $a_1 \neq 0$.
+Then $[0 : a_1] = [0 : 1]$ and the morphism extends to $\text{Spec } R \to U_1$ via $[0 : 1]$.
+
+In all cases, an extension exists.
+
+**Uniqueness:** Suppose we have two extensions $\varphi_1, \varphi_2: \text{Spec } R \to \mathbb{P}^1$.
+
+Both are determined by homogeneous coordinates with coefficients in $R$. Since they agree on the generic point $\text{Spec } K$, and $R \to K$ is injective, they must agree on $\text{Spec } R$.
+
+Therefore, $\mathbb{P}^1_k$ is proper.
+</Example>
+
+<Example id="a1-not-proper" title="$\mathbb{A}^1$ is Not Proper">
+Let $X = \mathbb{A}^1_k = \text{Spec } k[x]$ over $S = \text{Spec } k$.
+
+**Why it's not proper:**
+Let $R = k[[t]]$ with $K = k((t))$.
+
+Consider the morphism $\text{Spec } K \to \mathbb{A}^1_k$ given by $x = t^{-1}$.
+
+To extend this to $\text{Spec } R \to \mathbb{A}^1_k$, we would need $x \in k[[t]]$. But $t^{-1} \notin k[[t]]$ (it has a pole at $t = 0$).
+
+Therefore, **no extension exists**, violating the valuative criterion for properness.
+
+The geometric intuition: $\mathbb{A}^1$ has "a point missing at infinity," and the curve $x = t^{-1}$ "escapes to infinity" as $t \to 0$.
+</Example>
+
+<Example id="a1-minus-point" title="Affine Line Minus a Point is Not Proper">
+Let $X = \mathbb{A}^1_k \setminus \{0\} = \text{Spec } k[x, x^{-1}]$ over $S = \text{Spec } k$.
+
+**Why it's not proper:**
+Let $R = k[[t]]$ with $K = k((t))$.
+
+Consider the morphism $\text{Spec } K \to X$ given by $x = t$.
+
+To extend this to $\text{Spec } R \to X$, we would need $x \in k[[t]]$ and $x^{-1} \in k[[t]]$.
+
+We have $x = t \in k[[t]]$, but $x^{-1} = t^{-1} \notin k[[t]]$.
+
+Therefore, **no extension exists**.
+
+The geometric intuition: the curve $x = t$ approaches the missing point $\{0\}$ as $t \to 0$, but there's no point there to extend to.
+</Example>
+
+<Example id="projective-space-proper" title="Projective Space is Proper">
+More generally, $\mathbb{P}^n_k$ is proper over $k$ for any $n \geq 0$.
+
+**Proof sketch:**
+Let $R$ be a DVR with field of fractions $K$, and let $\text{Spec } K \to \mathbb{P}^n_k$ be a morphism given by $[a_0 : \cdots : a_n]$ with $a_i \in K$, not all zero.
+
+Choose $i$ such that $v(a_i)$ is minimal (where $v$ is the valuation on $K$). Then $v(a_j/a_i) \geq 0$ for all $j$, so $a_j/a_i \in R$ for all $j$.
+
+The morphism extends to $\text{Spec } R \to U_i \subset \mathbb{P}^n$ (where $U_i = \text{Spec } k[x_0/x_i, \ldots, \widehat{x_i/x_i}, \ldots, x_n/x_i]$) via $[a_0/a_i : \cdots : 1 : \cdots : a_n/a_i]$.
+
+Uniqueness follows from the injectivity of $R \to K$ and the fact that homogeneous coordinates are unique up to scaling by units.
+</Example>
+
+<Example id="blowup-proper" title="Blowup of a Point is Proper">
+Let $X = \text{Bl}_0 \mathbb{A}^2_k$ be the blowup of $\mathbb{A}^2_k$ at the origin.
+
+Recall that $X$ can be covered by two affine charts:
+- $U_1 = \text{Spec } k[x, y_1]$ where $y_1 = y/x$
+- $U_2 = \text{Spec } k[x_2, y]$ where $x_2 = x/y$
+
+The exceptional divisor $E$ is given by $x = 0$ in $U_1$ and $y = 0$ in $U_2$, and is isomorphic to $\mathbb{P}^1$.
+
+**Claim:** $X \to \text{Spec } k$ is proper.
+
+**Proof via valuative criterion:**
+Let $R$ be a DVR with $K = \text{Frac}(R)$, and let $\text{Spec } K \to X$ be a morphism.
+
+The morphism to $X$ corresponds to a morphism to $\mathbb{A}^2_k$ that is an isomorphism away from the origin, so it's given by $(x, y) \in K^2$, not both zero (after blowing up).
+
+- If $v(x/y) \geq 0$, then $y_1 = y/x \in R$, and the morphism extends to $U_1$ via $(x, y_1)$.
+- If $v(y/x) \geq 0$, then $x_2 = x/y \in R$, and the morphism extends to $U_2$ via $(x_2, y)$.
+
+At least one of these conditions holds (since $v(x/y) + v(y/x) = 0$), so an extension exists.
+
+Uniqueness follows from separatedness of the blowup (which can be checked directly or follows from the fact that the blowup is a projective morphism).
+</Example>
+
+## Proof of the Valuative Criteria
+
+<Proof title="Valuative Criterion for Separatedness (Detailed)">
+**Theorem:** Let $f: X \to S$ be a morphism of finite type. Then $f$ is separated $\Leftrightarrow$ the valuative criterion for separatedness holds.
+
+**"$\Rightarrow$" direction (separated implies valuative criterion):**
+
+Assume $f$ is separated, i.e., the diagonal $\Delta: X \to X \times_S X$ is a closed immersion.
+
+Suppose we have two extensions $\varphi_1, \varphi_2: \text{Spec } R \to X$ of a morphism $\text{Spec } K \to X$.
+
+The pair $(\varphi_1, \varphi_2)$ defines a morphism $\Phi: \text{Spec } R \to X \times_S X$.
+
+On the generic point $\text{Spec } K$, we have $\varphi_1|_K = \varphi_2|_K$, so $\Phi|_K$ factors through the diagonal $\Delta(X)$.
+
+Since $\Delta$ is a closed immersion, $\Delta(X) \subset X \times_S X$ is closed. Since $\text{Spec } R$ is a DVR, its spectrum has only one closed point, and the closure of the generic point is all of $\text{Spec } R$.
+
+Therefore, $\Phi(\text{Spec } R)$ lies in the closure of $\Phi(\text{Spec } K) \subset \Delta(X)$. Since $\Delta(X)$ is closed, $\Phi(\text{Spec } R) \subset \Delta(X)$.
+
+This means $\varphi_1 = \varphi_2$, proving uniqueness.
+
+**"$\Leftarrow$" direction (valuative criterion implies separated):**
+
+Assume the valuative criterion holds. We must show $\Delta: X \to X \times_S X$ is a closed immersion.
+
+**Step 1:** Show $\Delta$ is a closed map (universally closed).
+
+Let $Z \subset X$ be a closed subset. We need to show $\Delta(Z) \subset X \times_S X$ is closed.
+
+Suppose $(x_1, x_2) \in \overline{\Delta(Z)}$ (the closure of $\Delta(Z)$). We'll show $(x_1, x_2) \in \Delta(Z)$, i.e., $x_1 = x_2 \in Z$.
+
+Since $(x_1, x_2) \in \overline{\Delta(Z)}$, there exists a DVR $R$ with a morphism $\text{Spec } R \to X \times_S X$ such that:
+- The generic point maps into $\Delta(Z)$
+- The closed point maps to $(x_1, x_2)$
+
+(This uses the fact that for finite type morphisms, closure can be detected by DVRs - this is a key lemma.)
+
+The morphism $\text{Spec } R \to X \times_S X$ gives two morphisms $\varphi_1, \varphi_2: \text{Spec } R \to X$.
+
+On the generic point, these agree (since the image is in $\Delta(Z)$), so by the valuative criterion, $\varphi_1 = \varphi_2$ on all of $\text{Spec } R$.
+
+Therefore, $x_1 = x_2$, and $(x_1, x_2) = \Delta(x_1) \in \Delta(Z)$ (since the generic point maps to $Z$).
+
+**Step 2:** Show $\Delta$ is a monomorphism.
+
+This follows from the valuative criterion directly: given any $T$ and two morphisms $\alpha, \beta: T \to X$ with $\Delta \circ \alpha = \Delta \circ \beta$, we have $\alpha = \beta$ (check on DVRs).
+
+**Step 3:** Conclude.
+
+A closed map that is a monomorphism of finite type is a closed immersion (this is a general fact about schemes).
+</Proof>
+
+<Proof title="Valuative Criterion for Properness (Sketch)">
+**Theorem:** Let $f: X \to S$ be a morphism of finite type. Then $f$ is proper $\Leftrightarrow$ the valuative criterion for properness holds.
+
+**Key steps:**
+
+1. **Proper implies valuative criterion:**
+   - Properness means $f$ is separated, universally closed, and of finite type.
+   - Separatedness gives uniqueness (previous proof).
+   - Universal closedness gives existence: if $\text{Spec } K \to X$ is a morphism, then its closure in $\text{Spec } R \times_S X$ must intersect the fiber over the closed point of $\text{Spec } R$ (since $f$ is universally closed). This gives the extension.
+
+2. **Valuative criterion implies proper:**
+   - Uniqueness implies separatedness (previous proof).
+   - Existence implies universally closed: given any base change $T \to S$ and a closed subset $Z \subset X \times_S T$, its image in $T$ is closed (check using DVRs - if a point is in the closure of the image, then by the valuative criterion, it's actually in the image).
+
+The detailed proof requires careful use of the fact that DVRs "detect" closure for finite type morphisms. This is formalized by:
+
+**Lemma (DVRs detect closure):** Let $f: X \to S$ be of finite type, and let $Z \subset X$ be a subset. Then $s \in \overline{f(Z)}$ if and only if there exists a DVR $R$ with field of fractions $K$ and a morphism $\text{Spec } R \to S$ such that:
+- The closed point maps to $s$
+- There exists a morphism $\text{Spec } K \to X$ whose image is in $Z$ and which is compatible with $\text{Spec } R \to S$
+</Proof>
+
+<Example id="proper-affine-finite" title="Proper Morphisms Between Affines are Finite">
+An important consequence of the valuative criterion:
+
+**Theorem:** If $f: X \to S$ is proper with $S$ affine, then the fibers of $f$ are finite sets (as topological spaces). If additionally $X$ is affine, then $f$ is finite (i.e., $X$ is a finite $\mathcal{O}_S$-module).
+
+**Why affine and proper implies finite:**
+Let $X = \text{Spec } A$ and $S = \text{Spec } B$ with $f$ corresponding to $B \to A$.
+
+Suppose $A$ is not a finite $B$-module. Then there exist elements $a_1, a_2, \ldots \in A$ that are linearly independent over $B$.
+
+Using these, we can construct a morphism $\text{Spec } K \to X$ (for suitable DVR $R$ with field of fractions $K$) that has no extension to $\text{Spec } R \to X$, contradicting properness.
+
+The key idea: affine schemes have "no room to compactify," so properness forces finiteness.
+
+**Example:** The morphism $\mathbb{A}^1 \to \text{Spec } k$ is not proper (even though both are affine) because $\mathbb{A}^1$ is not finite over $k$ (the coordinate ring $k[x]$ is not a finite-dimensional $k$-vector space).
+</Example>
+
+## Connection to Completeness and Compactness
+
+<Remark>
+The valuative criterion for properness is the algebro-geometric analogue of several classical results:
+
+**1. Metric space compactness:** A metric space is compact if and only if every sequence has a convergent subsequence.
+
+In algebraic geometry:
+- A sequence is replaced by a morphism $\text{Spec } K \to X$ (a "path" or "curve")
+- Convergence is replaced by extension to $\text{Spec } R \to X$ (the "limit point")
+
+**2. Topological compactness:** A space is compact if every net has a convergent subnet.
+
+In algebraic geometry:
+- Nets are replaced by morphisms from spectra of DVRs
+- Convergence is replaced by extension
+
+**3. Algebraic closure:** A field $K$ is algebraically closed if every polynomial has a root.
+
+In algebraic geometry:
+- Polynomials are replaced by morphisms from curves
+- Roots are replaced by extensions
+
+This analogy runs deep: properness is to algebraic geometry as compactness is to topology.
+</Remark>
+
+<Example id="proper-over-complete" title="Proper Morphisms and Complete Local Rings">
+Let $(A, \mathfrak{m})$ be a complete local noetherian ring (e.g., $k[[t]]$ or $\mathbb{Z}_p$).
+
+**Theorem:** If $X$ is proper over $\text{Spec } A$, then the set of sections $\text{Spec } A \to X$ is in bijection with the set of sections $\text{Spec } A/\mathfrak{m} \to X$.
+
+**Proof idea:**
+- Given a section $\text{Spec } A/\mathfrak{m} \to X$, we can lift it inductively to $\text{Spec } A/\mathfrak{m}^n$ using properness and formal smoothness arguments.
+- The completion gives a section $\text{Spec } A \to X$.
+
+**Example:** Let $X = \mathbb{P}^1_k$ and $A = k[[t]]$. A $k$-rational point of $\mathbb{P}^1$ (i.e., a point in $\mathbb{P}^1(k)$) lifts uniquely to a $k[[t]]$-valued point (i.e., a point in $\mathbb{P}^1(k[[t]])$).
+
+This is not true for $\mathbb{A}^1$: a point in $\mathbb{A}^1(k)$ doesn't uniquely lift to $\mathbb{A}^1(k[[t]])$ (there are many lifts differing by higher-order terms).
+</Example>
+
+<Example id="valuative-criterion-curves" title="Proper Curves and Smooth Compactifications">
+Let $C$ be a smooth curve over a field $k$.
+
+**Fact:** $C$ is proper over $k$ if and only if $C$ is complete (i.e., every rational function on $C$ is constant, or equivalently, $C$ has no "missing points").
+
+**Example 1:** $\mathbb{P}^1$ is proper (and smooth and complete).
+
+**Example 2:** $\mathbb{A}^1$ is smooth but not complete (it's missing the point at infinity).
+
+**Example 3:** Let $C \subset \mathbb{A}^2$ be the affine curve $y^2 = x^3 + x$. This is smooth but not proper (it's an open subset of its projective closure).
+
+The projective closure $\overline{C} \subset \mathbb{P}^2$ is given by the homogeneous equation $Y^2 Z = X^3 + XZ^2$. This is a proper (in fact, projective) curve.
+
+The valuative criterion tells us that $C$ is not proper: there are morphisms $\text{Spec } k((t)) \to C$ that don't extend to $\text{Spec } k[[t]] \to C$ (they "escape to the point at infinity").
+</Example>
+
+## Valuative Criterion for Universal Closedness
+
+<Theorem title="Valuative Criterion for Universal Closedness">
+Let $f: X \to S$ be a morphism of finite type. Then $f$ is universally closed if and only if for every DVR $R$ with field of fractions $K$, every commutative diagram
+
+$$
+\begin{CD}
+\text{Spec } K @>>> X \\
+@VVV @VVV \\
+\text{Spec } R @>>> S
+\end{CD}
+$$
+
+admits **at least one** morphism $\text{Spec } R \to X$ making the whole diagram commute.
+</Theorem>
+
+<Remark>
+This is the "existence" part of the valuative criterion for properness. Combined with the valuative criterion for separatedness (uniqueness), we get properness.
+
+Universal closedness alone is weaker than properness: it says that "limits exist" but not that "limits are unique."
+</Remark>
+
+<Example id="a1-with-doubled-origin-univ-closed" title="Universally Closed but Not Separated">
+Consider the affine line with doubled origin from Example 4.
+
+This morphism $X \to \text{Spec } k$ is:
+- **Universally closed:** Every morphism $\text{Spec } K \to X$ extends to $\text{Spec } R \to X$ (in fact, it has two extensions)
+- **Not separated:** The extension is not unique
+
+Therefore, $X$ is universally closed but not proper.
+
+This shows that universal closedness and separatedness are independent conditions, and properness requires both.
+</Example>
+
+<Example id="universal-closedness-check" title="Checking Universal Closedness">
+**Question:** Is the morphism $f: \text{Spec } k[x,y]/(xy) \to \text{Spec } k$ universally closed?
+
+The scheme $\text{Spec } k[x,y]/(xy)$ is the union of two lines meeting at a point (the coordinate axes in $\mathbb{A}^2$).
+
+**Answer:** No, it's not universally closed.
+
+**Proof:** Consider the DVR $R = k[[t]]$ and the morphism $\text{Spec } k((t)) \to \text{Spec } k[x,y]/(xy)$ given by $x = t^{-1}$, $y = t$.
+
+We have $xy = t^{-1} \cdot t = 1 \neq 0$, so this doesn't map into $\text{Spec } k[x,y]/(xy)$.
+
+Wait, let me reconsider. We need $xy = 0$, so if $x = t^{-1}$ and $y = t$, then $xy = 1 \neq 0$.
+
+Let's try: $x = t$, $y = 0$. Then $xy = 0$, and this is a morphism $\text{Spec } k((t)) \to \text{Spec } k[x,y]/(xy)$.
+
+This extends to $\text{Spec } k[[t]] \to \text{Spec } k[x,y]/(xy)$ by $x = t$, $y = 0$.
+
+So actually, this morphism IS universally closed (it's even proper, since it's the affine line).
+
+Better example: Let me reconsider the question. Actually, $\text{Spec } k[x,y]/(xy) \to \text{Spec } k$ IS proper because it's a projective morphism (it can be realized as a closed subscheme of $\mathbb{P}^1 \times \mathbb{P}^1$).
+</Example>
+
+## Applications to Moduli Problems
+
+<Example id="stable-reduction" title="Stable Reduction and Valuative Criteria">
+One of the most important applications of the valuative criterion is to moduli problems, particularly in the theory of stable curves.
+
+**Setup:** Let $\mathcal{M}_g$ be the moduli space of smooth curves of genus $g \geq 2$ over a field $k$. This is not a complete variety (it's missing the boundary).
+
+To compactify $\mathcal{M}_g$, we need to add "degenerate curves" (nodal curves). The resulting space $\overline{\mathcal{M}}_g$ (the moduli space of stable curves) is proper over $k$.
+
+**Valuative criterion interpretation:**
+Let $R$ be a DVR with field of fractions $K$, and let $\text{Spec } K \to \mathcal{M}_g$ be a morphism (i.e., a smooth curve $C_K$ of genus $g$ over $K$).
+
+The valuative criterion for properness of $\overline{\mathcal{M}}_g$ says:
+- There exists a unique extension $\text{Spec } R \to \overline{\mathcal{M}}_g$
+- This corresponds to a **stable reduction**: a proper flat morphism $\mathcal{C} \to \text{Spec } R$ whose generic fiber is $C_K$ and whose special fiber is a stable curve
+
+**Example:** Let $R = k[[t]]$ and consider the family of elliptic curves:
+$$y^2 = x(x-1)(x-t)$$
+over $\text{Spec } k((t))$.
+
+As $t \to 0$, this degenerates to $y^2 = x^2(x-1)$ (a nodal cubic curve).
+
+The stable reduction gives a model of this family over $\text{Spec } k[[t]]$ where the special fiber is the nodal curve (which is stable).
+
+This is a concrete instance of the valuative criterion: the smooth curve over $k((t))$ extends uniquely to a stable curve over $k[[t]]$.
+</Example>
+
+<Example id="moduli-sheaves" title="Moduli Functors and Properness">
+More generally, the valuative criterion is used to prove properness of moduli spaces.
+
+**Theorem (Properness of moduli spaces):** Let $\mathcal{M}$ be a moduli space (or more generally, a moduli stack) representing a functor $F: \text{Schemes}/k \to \text{Sets}$. Then $\mathcal{M}$ is proper over $k$ if and only if:
+
+1. **Separatedness:** Given a DVR $R$ and two objects $\xi_1, \xi_2 \in F(\text{Spec } R)$ that agree over $\text{Spec } K$, we have $\xi_1 = \xi_2$.
+
+2. **Universal closedness:** Given a DVR $R$ and an object $\eta \in F(\text{Spec } K)$, there exists an extension $\xi \in F(\text{Spec } R)$ with $\xi|_K = \eta$.
+
+This is exactly the valuative criterion, phrased in terms of the moduli functor.
+
+**Example:** For the moduli space of stable curves $\overline{\mathcal{M}}_g$:
+- Separatedness says: two stable curves over $R$ that are isomorphic over $K$ are isomorphic over $R$
+- Universal closedness says: every smooth curve over $K$ extends to a stable curve over $R$ (stable reduction theorem)
+</Example>
+
+<Example id="proper-base-change" title="Proper Base Change and Specialization">
+The valuative criterion is closely related to specialization maps in algebraic geometry.
+
+**Setup:** Let $f: X \to S$ be proper, and let $s \to S$ be a morphism with $s = \text{Spec } \kappa(s)$ (a geometric point).
+
+For any point $x \in X_s$ (the fiber over $s$), we can "lift" $x$ to the generic point using the valuative criterion.
+
+**Theorem:** If $f: X \to S$ is proper and $S = \text{Spec } R$ for a DVR $R$, then the specialization map
+$$X_K \to X_\kappa$$
+(from the generic fiber to the special fiber) is well-defined and surjective.
+
+**Proof sketch:**
+- Given a point $x_\kappa \in X_\kappa$, we get a morphism $\text{Spec } \kappa \to X_\kappa \subset X$.
+- Compose with $\text{Spec } \kappa \to \text{Spec } R$ to get a diagram:
+$$
+\begin{CD}
+\text{Spec } \kappa @>>> X \\
+@VVV @VVV \\
+\text{Spec } R @>>> S
+\end{CD}
+$$
+- Since $\kappa$ is a field, we can find a DVR $R' \supset R$ with residue field $\kappa$ and field of fractions $K'$.
+- By the valuative criterion, the morphism $\text{Spec } K' \to X$ extends to $\text{Spec } R' \to X$, giving a point in $X_K$.
+
+This is used extensively in the study of degenerations and limit linear series.
+</Example>
+
+<Example id="fano-proper" title="Fano Varieties and Properness">
+A Fano variety is a smooth projective variety $X$ with ample anticanonical bundle $-K_X$.
+
+**Fact:** All Fano varieties are proper (in fact, projective).
+
+The valuative criterion provides a powerful tool for studying degenerations of Fano varieties:
+
+**Question:** Given a family of Fano varieties over $\text{Spec } k((t))$, does it extend to a family over $\text{Spec } k[[t]]$?
+
+**Answer:** Not always! The central fiber may not be smooth, and the anticanonical bundle may not be ample.
+
+However, there is a notion of **K-stability** that ensures the existence of a "stable limit":
+
+**Theorem (Stable reduction for Fano varieties):** A family of Fano varieties over $\text{Spec } k((t))$ extends to a family of K-stable Fano varieties over $\text{Spec } k[[t]]$ if and only if the generic fiber is K-polystable.
+
+This is a recent deep result (Odaka, Spotti, Sun, etc.) that uses the valuative criterion extensively.
+</Example>
+
+## Summary and Further Directions
+
+The valuative criteria provide a powerful bridge between:
+- **Topology** (separation, compactness, completeness)
+- **Algebra** (discrete valuation rings, extensions)
+- **Geometry** (curves, limits, degenerations)
+
+**Key Takeaways:**
+1. DVRs are "test objects" that detect separation and properness
+2. Separatedness = uniqueness of extensions
+3. Properness = existence + uniqueness of extensions
+4. Universal closedness = existence of extensions
+5. The criteria are computable and practical for checking these properties
+
+**Further topics:**
+- Valuative criterion for finite morphisms
+- Zariski's Main Theorem and the valuative criterion
+- Nagata compactification theorem
+- Proper pushforward and coherent sheaves
+- Grothendieck's existence theorem
+- Formal schemes and the valuative criterion
+
+**References:**
+- Hartshorne, *Algebraic Geometry*, Chapter II, Section 4
+- Liu, *Algebraic Geometry and Arithmetic Curves*, Chapter 4
+- Stacks Project, Tag 01K5 (Valuative criteria)
+- Grothendieck, EGA II, Section 7

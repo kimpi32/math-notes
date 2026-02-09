@@ -1,0 +1,148 @@
+export const metadata = {
+  title: 'Proof of Nullstellensatz — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Proof — Nullstellensatz" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Hilbert's Nullstellensatz
+
+We prove the **strong Nullstellensatz**: for $k = \bar{k}$ and any ideal $\mathfrak{a} \subseteq k[x_1,\ldots,x_n]$,
+
+$$I(V(\mathfrak{a})) = \sqrt{\mathfrak{a}}.$$
+
+The proof proceeds in three steps: (1) the weak Nullstellensatz via Zariski's lemma, (2) the ideal form as an immediate corollary, and (3) the strong form via the **Rabinowitsch trick**.
+
+---
+
+## Step 1: Zariski's Lemma
+
+<Theorem title="Zariski's Lemma" number="P.1">
+Let $k$ be a field and $K$ a finitely generated $k$-algebra that is also a field. Then $K$ is a finite algebraic extension of $k$.
+</Theorem>
+
+<Proof>
+Suppose $K = k[\alpha_1, \ldots, \alpha_m]$ as a $k$-algebra. We want to show all $\alpha_i$ are algebraic over $k$.
+
+Suppose not. After reordering, let $\alpha_1, \ldots, \alpha_r$ be a transcendence basis of $K/k$ (so $r \geq 1$), and $\alpha_{r+1}, \ldots, \alpha_m$ are algebraic over $k(\alpha_1, \ldots, \alpha_r)$.
+
+Then $K$ is a finite extension of $k(\alpha_1, \ldots, \alpha_r) = k(x_1, \ldots, x_r)$ (the rational function field). So $K$ is a finitely generated $k[x_1,\ldots,x_r]$-module. Say $K = k[x_1,\ldots,x_r][\beta_1,\ldots,\beta_s]$ where each $\beta_j$ satisfies a monic polynomial over $k(x_1,\ldots,x_r)$.
+
+Clearing denominators: there exists $0 \neq d \in k[x_1,\ldots,x_r]$ such that each $\beta_j$ is integral over $k[x_1,\ldots,x_r][1/d]$. Hence $K$ is integral over $k[x_1,\ldots,x_r][1/d]$.
+
+But $K$ is a field, so $k[x_1,\ldots,x_r][1/d]$ must also be a field (a subring of a field that is integral over it is a field if the field is integral over it — by the lying-over theorem). But $k[x_1,\ldots,x_r][1/d]$ is a localization of $k[x_1,\ldots,x_r]$, which is not a field when $r \geq 1$ (e.g., the element $x_1 + 1$ is not a unit unless $d$ has infinitely many factors, which is impossible).
+
+Contradiction. So $r = 0$, and all $\alpha_i$ are algebraic over $k$.
+</Proof>
+
+---
+
+## Step 2: Weak Nullstellensatz
+
+<Theorem title="Weak Nullstellensatz" number="P.2">
+Let $k = \bar{k}$. Every maximal ideal of $k[x_1,\ldots,x_n]$ is of the form $(x_1 - a_1, \ldots, x_n - a_n)$ for some $a_i \in k$.
+</Theorem>
+
+<Proof>
+Let $\mathfrak{m}$ be a maximal ideal. Then $K = k[x_1,\ldots,x_n]/\mathfrak{m}$ is a field that is a finitely generated $k$-algebra.
+
+By Zariski's Lemma, $K/k$ is algebraic. Since $k = \bar{k}$, we have $K = k$.
+
+The projection $k[x_1,\ldots,x_n] \twoheadrightarrow K = k$ sends $x_i \mapsto a_i$ for some $a_i \in k$. The kernel of this map is $(x_1 - a_1, \ldots, x_n - a_n)$, which is contained in $\mathfrak{m}$. But $(x_1 - a_1, \ldots, x_n - a_n)$ is already maximal, so $\mathfrak{m} = (x_1 - a_1, \ldots, x_n - a_n)$.
+</Proof>
+
+**Corollary (Ideal form).** If $\mathfrak{a}$ is a proper ideal, then $\mathfrak{a} \subseteq \mathfrak{m}$ for some maximal ideal $\mathfrak{m} = (x_1 - a_1, \ldots, x_n - a_n)$, so $(a_1, \ldots, a_n) \in V(\mathfrak{a})$. In particular, $V(\mathfrak{a}) \neq \varnothing$.
+
+---
+
+## Step 3: Strong Nullstellensatz (Rabinowitsch trick)
+
+<Theorem title="Strong Nullstellensatz" number="P.3">
+$I(V(\mathfrak{a})) = \sqrt{\mathfrak{a}}$.
+</Theorem>
+
+<Proof>
+**Easy inclusion** ($\supseteq$): If $f^r \in \mathfrak{a}$, then for any $P \in V(\mathfrak{a})$, $f(P)^r = 0$ in $k$, so $f(P) = 0$. Thus $f \in I(V(\mathfrak{a}))$.
+
+**Hard inclusion** ($\subseteq$, the Rabinowitsch trick): Let $f \in I(V(\mathfrak{a}))$. We need to show $f^r \in \mathfrak{a}$ for some $r$.
+
+Introduce a new variable $t$ and consider the ideal
+
+$$\mathfrak{b} = \mathfrak{a} + (1 - tf) \subseteq k[x_1, \ldots, x_n, t].$$
+
+**Claim**: $V(\mathfrak{b}) = \varnothing$ in $\mathbb{A}^{n+1}$.
+
+*Proof of claim*: If $(a_1,\ldots,a_n, b) \in V(\mathfrak{b})$, then $(a_1,\ldots,a_n) \in V(\mathfrak{a})$, so $f(a_1,\ldots,a_n) = 0$ (since $f \in I(V(\mathfrak{a}))$). But also $1 - bf(a_1,\ldots,a_n) = 1 - 0 = 1 \neq 0$. Contradiction. So $V(\mathfrak{b}) = \varnothing$.
+
+By the ideal form of the Nullstellensatz, $\mathfrak{b} = (1)$. So there exist $g_1, \ldots, g_s \in \mathfrak{a}$ and polynomials $h_i, q \in k[x_1,\ldots,x_n,t]$ such that
+
+$$1 = h_1 g_1 + \cdots + h_s g_s + q \cdot (1 - tf).$$
+
+Now substitute $t = 1/f$ (formally, work in $k[x_1,\ldots,x_n][1/f]$, i.e., localize at $f$):
+
+$$1 = h_1(x, 1/f) g_1 + \cdots + h_s(x, 1/f) g_s + 0.$$
+
+Multiply both sides by $f^N$ for large enough $N$ to clear all denominators:
+
+$$f^N = H_1 g_1 + \cdots + H_s g_s \in \mathfrak{a}$$
+
+where $H_i \in k[x_1,\ldots,x_n]$. So $f^N \in \mathfrak{a}$, i.e., $f \in \sqrt{\mathfrak{a}}$.
+</Proof>
+
+---
+
+## Commentary
+
+<Remark title="The beauty of the Rabinowitsch trick">
+The trick of introducing the auxiliary variable $t$ with the relation $tf = 1$ is a stroke of genius. It converts the statement "$f$ vanishes wherever $\mathfrak{a}$ vanishes" into the statement "$\mathfrak{a}$ and $1 - tf$ have no common zero," which is exactly what the weak Nullstellensatz can handle.
+
+This is a prototype of a ubiquitous technique in algebraic geometry: to study the complement of $V(f)$, adjoin $f^{-1}$ (pass to a localization).
+</Remark>
+
+<Remark title="Alternative proofs">
+There are several other proofs of the Nullstellensatz:
+
+1. **Via Noether normalization**: Show that $k[x_1,\ldots,x_n]/\mathfrak{p}$ is a finite extension of a polynomial ring, then use the weak form.
+2. **Model-theoretic proof**: Use quantifier elimination for algebraically closed fields.
+3. **Proof using resultants**: For $n = 2$, the resultant $\mathrm{Res}_x(f, g) = 0$ iff $f$ and $g$ share a root.
+4. **Artin–Tate lemma**: A more general algebraic statement that implies Zariski's lemma directly.
+
+The Rabinowitsch trick proof is the most elementary and is the one given in Hartshorne (Theorem I.1.3A) and Atiyah–Macdonald (Exercise 7.14).
+</Remark>
+
+<Example id="trace-the-proof" title="Tracing the proof: a concrete example">
+Let $\mathfrak{a} = (x^2, xy) \subseteq k[x,y]$ and $f = x$.
+
+$V(\mathfrak{a}) = V(x^2, xy) = V(x) = \{(0, b) \mid b \in k\}$ (the $y$-axis).
+
+$f = x$ vanishes on all of $V(\mathfrak{a})$, so $f \in I(V(\mathfrak{a}))$.
+
+**Rabinowitsch**: Consider $\mathfrak{b} = (x^2, xy, 1 - tx) \subseteq k[x,y,t]$.
+
+From $1 - tx$: $x = 1/t$ (heuristically). Then $x^2 = 1/t^2$ and $xy = y/t$. In the quotient, $1 = tx$, so $x$ is a unit, and $(x^2, xy) = (x)$ becomes $(1)$. Formally:
+
+$x \cdot (1-tx) + t \cdot x^2 = x - tx^2 + tx^2 = x$, so $x \in \mathfrak{b}$.
+Then $1 = (1-tx) + tx = (1-tx) + t \cdot x \in \mathfrak{b}$. So $\mathfrak{b} = (1)$.
+
+Now: $1 = 1 \cdot (1 - tx) + t \cdot x$. Substituting $t = 1/x$ and multiplying by $x$:
+
+$$x = x \cdot (1 - \frac{1}{x} \cdot x) + 1 \cdot x = 0 + x.$$
+
+Hmm, this is trivial. Let's be more careful. We had $x \in \mathfrak{b}$, and $x^2 \in \mathfrak{a}$. So $f^2 = x^2 \in \mathfrak{a}$, giving $f \in \sqrt{\mathfrak{a}}$.
+
+Indeed: $\sqrt{(x^2, xy)} = \sqrt{(x) \cdot (x, y)} = (x)$, and $f = x \in (x) = \sqrt{\mathfrak{a}}$. ✓
+</Example>

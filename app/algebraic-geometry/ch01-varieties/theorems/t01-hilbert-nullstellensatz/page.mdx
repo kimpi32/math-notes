@@ -1,0 +1,154 @@
+export const metadata = {
+  title: 'Hilbert Nullstellensatz — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Theorem — Hilbert's Nullstellensatz" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Hilbert's Nullstellensatz
+
+The Nullstellensatz ("zero locus theorem") is the foundational theorem of algebraic geometry. It establishes the dictionary between algebra (ideals in polynomial rings) and geometry (algebraic sets in affine space).
+
+---
+
+## Statements
+
+There are three versions, each progressively stronger.
+
+<Theorem title="Weak Nullstellensatz" number="1.1a">
+Let $k$ be an algebraically closed field. If $\mathfrak{m}$ is a maximal ideal of $k[x_1, \ldots, x_n]$, then
+
+$$\mathfrak{m} = (x_1 - a_1, \ldots, x_n - a_n)$$
+
+for some $(a_1, \ldots, a_n) \in k^n$.
+
+Equivalently: the points of $\mathbb{A}^n_k$ are in natural bijection with the maximal ideals of $k[x_1,\ldots,x_n]$.
+</Theorem>
+
+<Theorem title="Nullstellensatz (Ideal form)" number="1.1b">
+Let $k = \bar{k}$ and let $\mathfrak{a} \subseteq k[x_1,\ldots,x_n]$ be a proper ideal. Then $V(\mathfrak{a}) \neq \varnothing$.
+
+In words: a system of polynomial equations over an algebraically closed field has no solution if and only if $1 \in \mathfrak{a}$ (i.e., the ideal is the whole ring).
+</Theorem>
+
+<Theorem title="Strong Nullstellensatz (Hilbert)" number="1.1c">
+Let $k = \bar{k}$. For any ideal $\mathfrak{a} \subseteq k[x_1,\ldots,x_n]$:
+
+$$I(V(\mathfrak{a})) = \sqrt{\mathfrak{a}}$$
+
+where $\sqrt{\mathfrak{a}} = \{f \mid f^r \in \mathfrak{a} \text{ for some } r \geq 1\}$ is the radical of $\mathfrak{a}$.
+</Theorem>
+
+<Remark title="The Galois correspondence">
+The strong Nullstellensatz establishes an **inclusion-reversing bijection**:
+
+$$\left\{\begin{array}{c}\text{radical ideals}\\ \mathfrak{a} \subseteq k[x_1,\ldots,x_n]\end{array}\right\} \xleftrightarrow{\;1:1\;} \left\{\begin{array}{c}\text{algebraic sets}\\ Y \subseteq \mathbb{A}^n\end{array}\right\}$$
+
+via $\mathfrak{a} \mapsto V(\mathfrak{a})$ and $Y \mapsto I(Y)$. Under this correspondence:
+
+| Algebra | Geometry |
+|---------|----------|
+| Radical ideal $\mathfrak{a}$ | Algebraic set $V(\mathfrak{a})$ |
+| Prime ideal $\mathfrak{p}$ | Irreducible variety |
+| Maximal ideal $\mathfrak{m}$ | Point |
+| $\mathfrak{a} \subseteq \mathfrak{b}$ | $V(\mathfrak{a}) \supseteq V(\mathfrak{b})$ |
+| $\mathfrak{a} + \mathfrak{b}$ | $V(\mathfrak{a}) \cap V(\mathfrak{b})$ |
+| $\mathfrak{a} \cap \mathfrak{b}$ | $V(\mathfrak{a}) \cup V(\mathfrak{b})$ |
+| $(0)$ | $\mathbb{A}^n$ |
+| $(1) = k[x_1,\ldots,x_n]$ | $\varnothing$ |
+</Remark>
+
+---
+
+## Examples illustrating the Nullstellensatz
+
+<Example id="radical-vs-ideal" title="Radical matters: V(x²) = V(x)">
+In $k[x,y]$: $\mathfrak{a} = (x^2)$ and $\mathfrak{b} = (x)$.
+
+$$V(x^2) = V(x) = \{(0,b) \mid b \in k\} = \text{the } y\text{-axis}.$$
+
+But $(x^2) \neq (x)$. The Nullstellensatz says $I(V(x^2)) = \sqrt{(x^2)} = (x)$. The "extra" algebraic information in $(x^2)$ — the nilpotent structure — is invisible to the zero set. Schemes recover this: $\operatorname{Spec} k[x,y]/(x^2)$ is a "thickened" $y$-axis (a "double line").
+</Example>
+
+<Example id="empty-locus" title="No solutions ⟺ ideal is (1)">
+Consider the system $x^2 + 1 = 0$ over $\mathbb{R}$:
+
+- Over $\mathbb{R}$: $V(x^2+1) = \varnothing$, but $(x^2+1) \neq (1)$ in $\mathbb{R}[x]$. The Nullstellensatz **fails** because $\mathbb{R}$ is not algebraically closed.
+- Over $\mathbb{C}$: $V(x^2+1) = \{i, -i\} \neq \varnothing$, consistent with $(x^2+1) \neq (1)$ in $\mathbb{C}[x]$.
+
+The algebraic closure hypothesis is essential.
+</Example>
+
+<Example id="intersection-ideal" title="Intersection via ideal sum">
+The intersection of the parabola $V(y - x^2)$ and the line $V(y - 1)$ in $\mathbb{A}^2$:
+
+$$V(y - x^2) \cap V(y - 1) = V(y - x^2, y - 1) = V(x^2 - 1, y - 1) = \{(\pm 1, 1)\}.$$
+
+The ideal sum $(y - x^2) + (y - 1) = (x^2 - 1, y - 1)$ detects both intersection points. Its radical is $(x-1, y-1) \cap (x+1, y-1)$, the intersection of the two maximal ideals.
+</Example>
+
+<Example id="tangent-intersection" title="Tangent intersection and non-radical ideal">
+The line $y = 0$ meets the parabola $y = x^2$ tangentially at the origin:
+
+$$V(y - x^2, y) = V(x^2, y) = \{(0, 0)\}.$$
+
+The ideal $(x^2, y)$ is **not** radical: $x \notin (x^2, y)$ but $x^2 \in (x^2, y)$. Its radical is $(x, y)$, the maximal ideal of the origin. The non-radical ideal remembers that this is a tangent intersection (multiplicity 2), but $V$ forgets it.
+</Example>
+
+<Example id="nullstellensatz-parametric" title="Parametric system: when do solutions exist?">
+For which values of $a \in k$ does the system
+
+$$x^2 + y^2 = 1, \quad x + y = a$$
+
+have a solution over $k = \bar{k}$? Substituting $y = a - x$: $x^2 + (a-x)^2 = 1$, i.e., $2x^2 - 2ax + a^2 - 1 = 0$. This has a solution iff the discriminant $4a^2 - 8(a^2 - 1) = 8 - 4a^2 \neq 0$ or equals 0 (it's a quadratic, so always has a root over $\bar{k}$). In fact, $V(x^2+y^2-1, x+y-a) \neq \varnothing$ for **all** $a \in \bar{k}$, since the ideal $(x^2+y^2-1, x+y-a)$ is always proper.
+</Example>
+
+<Example id="containment" title="The containment I(Y₁ ∩ Y₂) ⊇ I(Y₁) + I(Y₂)">
+Let $Y_1 = V(y - x^2)$ and $Y_2 = V(y)$ in $\mathbb{A}^2$. Then $Y_1 \cap Y_2 = \{(0,0)\}$.
+
+$$I(Y_1) + I(Y_2) = (y - x^2, y) = (y, x^2).$$
+
+But $I(Y_1 \cap Y_2) = I(\{(0,0)\}) = (x, y)$.
+
+So $I(Y_1 \cap Y_2) \supsetneq I(Y_1) + I(Y_2)$. The inclusion can be strict! We have $I(Y_1 \cap Y_2) = \sqrt{I(Y_1) + I(Y_2)}$, and indeed $\sqrt{(y, x^2)} = (x, y)$.
+</Example>
+
+<Example id="nullstellensatz-char-p" title="Nullstellensatz in characteristic p">
+The Nullstellensatz works over **any** algebraically closed field, including $k = \overline{\mathbb{F}_p}$.
+
+Over $\overline{\mathbb{F}_2}$: $V(x^2 + x) = V(x(x+1)) = V(x) \cup V(x+1)$. But in characteristic 2, $x + 1 = x - 1$, so $V(x+1) = V(x-1) = \{1\}$ and $V(x) = \{0\}$. The Nullstellensatz still holds: $I(V(x^2+x)) = \sqrt{(x^2+x)} = (x^2+x) = (x(x+1))$, which is already radical.
+</Example>
+
+---
+
+## Consequences
+
+<Remark title="Key consequences of the Nullstellensatz">
+1. **Anti-equivalence**: The category of affine varieties over $k$ is anti-equivalent to the category of finitely generated reduced $k$-algebras that are domains. The functor sends $X \mapsto k[X]$ (coordinate ring) and a morphism $\varphi : X \to Y$ to $\varphi^* : k[Y] \to k[X]$.
+
+2. **Function determines variety**: If $I(X) = I(Y)$, then $X = Y$. A variety is completely determined by its polynomial functions.
+
+3. **Closed points are dense**: In any affine variety $X = V(\mathfrak{p})$, the closed points (= maximal ideals containing $\mathfrak{p}$) are dense.
+
+4. **Algebraic closure is necessary**: Over $\mathbb{R}$, the ideal $(x^2 + 1) \subseteq \mathbb{R}[x]$ is maximal but does not correspond to a point of $\mathbb{A}^1_\mathbb{R}$. Over non-algebraically closed fields, one must use the scheme-theoretic $\operatorname{Spec}$ instead.
+</Remark>
+
+<Remark title="Looking ahead">
+The Nullstellensatz is the starting point for scheme theory. Grothendieck's key insight: replace maximal ideals (points) with **all** prime ideals. The spectrum $\operatorname{Spec} A$ of a ring $A$ has a point for every prime ideal, not just the maximal ones. This allows non-radical ideals (= nilpotents = infinitesimal thickenings) and non-algebraically closed fields to be handled uniformly.
+
+See the [proof of the Nullstellensatz](/algebraic-geometry/ch01-varieties/proofs/p01-nullstellensatz-proof) for the classical argument via the Rabinowitsch trick.
+</Remark>

@@ -1,0 +1,375 @@
+export const metadata = { title: 'Ext Sheaves — Algebraic Geometry — Math Notes' }
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "3. 코호몰로지", href: "/algebraic-geometry/ch03-cohomology" },
+  { label: "Concept — Ext Sheaves" },
+]} />
+
+<div className="mb-6"><div className="flex items-center gap-3 mb-3"><Tag type="concept" /><StatusBadge status="complete" /></div></div>
+
+# Ext Sheaves and Local-to-Global Spectral Sequence
+
+The Ext functors provide a fundamental tool for studying extensions of sheaves and computing global cohomology through local data. This concept bridges homological algebra with sheaf cohomology theory.
+
+## Ext as Derived Functors
+
+<Definition title="Ext Functors for Modules">
+Let $R$ be a ring and let $M, N$ be $R$-modules. The Ext functors are defined as:
+$$\text{Ext}^i_R(M, N) = R^i \text{Hom}_R(-, N)(M)$$
+where $R^i \text{Hom}_R(-, N)$ is the $i$-th right derived functor of $\text{Hom}_R(-, N)$.
+
+Equivalently, taking a projective resolution $P_\bullet \to M$:
+$$\text{Ext}^i_R(M, N) = H^i(\text{Hom}_R(P_\bullet, N))$$
+</Definition>
+
+<Remark>
+The functor $\text{Hom}_R(M, -)$ is left exact but not right exact in general. The Ext functors measure the failure of right exactness. We have $\text{Ext}^0_R(M, N) = \text{Hom}_R(M, N)$.
+</Remark>
+
+<Example id="ext-computation-modules" title="Computing Ext for Modules">
+Let $R = \mathbb{Z}$ and consider $M = \mathbb{Z}/n\mathbb{Z}$ and $N = \mathbb{Z}/m\mathbb{Z}$.
+
+The projective resolution of $M$ is:
+$$0 \to \mathbb{Z} \xrightarrow{n} \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z} \to 0$$
+
+Applying $\text{Hom}_\mathbb{Z}(-, \mathbb{Z}/m\mathbb{Z})$:
+$$0 \to \text{Hom}(\mathbb{Z}/n\mathbb{Z}, \mathbb{Z}/m\mathbb{Z}) \to \text{Hom}(\mathbb{Z}, \mathbb{Z}/m\mathbb{Z}) \xrightarrow{n} \text{Hom}(\mathbb{Z}, \mathbb{Z}/m\mathbb{Z})$$
+
+This gives:
+$$0 \to \mathbb{Z}/\gcd(n,m)\mathbb{Z} \to \mathbb{Z}/m\mathbb{Z} \xrightarrow{n} \mathbb{Z}/m\mathbb{Z}$$
+
+Therefore:
+- $\text{Ext}^0_\mathbb{Z}(\mathbb{Z}/n\mathbb{Z}, \mathbb{Z}/m\mathbb{Z}) = \mathbb{Z}/\gcd(n,m)\mathbb{Z}$
+- $\text{Ext}^1_\mathbb{Z}(\mathbb{Z}/n\mathbb{Z}, \mathbb{Z}/m\mathbb{Z}) = \mathbb{Z}/\gcd(n,m)\mathbb{Z}$
+- $\text{Ext}^i_\mathbb{Z}(\mathbb{Z}/n\mathbb{Z}, \mathbb{Z}/m\mathbb{Z}) = 0$ for $i \geq 2$
+</Example>
+
+## Ext Sheaves
+
+<Definition title="Ext Sheaves">
+Let $(X, \mathcal{O}_X)$ be a ringed space and let $\mathcal{F}, \mathcal{G}$ be $\mathcal{O}_X$-modules. The Ext sheaves are defined as:
+$$\mathcal{E}xt^i_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G}) = R^i \mathcal{H}om_{\mathcal{O}_X}(-, \mathcal{G})(\mathcal{F})$$
+where $R^i \mathcal{H}om_{\mathcal{O}_X}$ denotes the $i$-th right derived functor of the sheaf Hom functor.
+
+On stalks, we have:
+$$\mathcal{E}xt^i_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})_x = \text{Ext}^i_{\mathcal{O}_{X,x}}(\mathcal{F}_x, \mathcal{G}_x)$$
+</Definition>
+
+<Remark>
+The sheaf $\mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$ is defined by:
+$$\mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})(U) = \text{Hom}_{\mathcal{O}_X|_U}(\mathcal{F}|_U, \mathcal{G}|_U)$$
+
+This is a sheaf, and $\mathcal{E}xt^0_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G}) = \mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$.
+</Remark>
+
+<Example id="ext-sheaves-locally-free" title="Ext Sheaves with Locally Free Sheaves">
+Let $X$ be a scheme and let $\mathcal{E}$ be a locally free sheaf of finite rank on $X$. For any $\mathcal{O}_X$-module $\mathcal{F}$:
+$$\mathcal{E}xt^i_{\mathcal{O}_X}(\mathcal{E}, \mathcal{F}) = 0 \quad \text{for } i > 0$$
+
+This is because locally free sheaves are locally isomorphic to $\mathcal{O}_X^{\oplus n}$, which has projective dimension zero. Moreover:
+$$\mathcal{H}om_{\mathcal{O}_X}(\mathcal{E}, \mathcal{F}) \cong \mathcal{E}^\vee \otimes_{\mathcal{O}_X} \mathcal{F}$$
+where $\mathcal{E}^\vee = \mathcal{H}om_{\mathcal{O}_X}(\mathcal{E}, \mathcal{O}_X)$ is the dual sheaf.
+</Example>
+
+<Example id="ext-sheaves-ideal-sheaf" title="Ext with Ideal Sheaves">
+Let $X = \text{Spec } A$ be an affine scheme and $Z \subset X$ a closed subscheme defined by an ideal $I \subset A$. Let $\mathcal{I} = \tilde{I}$ be the corresponding ideal sheaf.
+
+For the structure sheaf $\mathcal{O}_Z = \mathcal{O}_X/\mathcal{I}$:
+$$\mathcal{E}xt^0_{\mathcal{O}_X}(\mathcal{O}_Z, \mathcal{O}_X) = \mathcal{I}$$
+$$\mathcal{E}xt^1_{\mathcal{O}_X}(\mathcal{O}_Z, \mathcal{O}_X) = \mathcal{O}_X/\mathcal{I} = \mathcal{O}_Z$$
+
+These come from the short exact sequence:
+$$0 \to \mathcal{I} \to \mathcal{O}_X \to \mathcal{O}_Z \to 0$$
+</Example>
+
+## The Local-to-Global Spectral Sequence
+
+<Theorem title="Local-to-Global Ext Spectral Sequence">
+Let $X$ be a noetherian scheme and let $\mathcal{F}, \mathcal{G}$ be coherent $\mathcal{O}_X$-modules. There exists a spectral sequence:
+$$E_2^{p,q} = H^p(X, \mathcal{E}xt^q_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})) \Rightarrow \text{Ext}^{p+q}_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$$
+where $\text{Ext}^n_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G}) = H^n(X, \mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G}'))$ for any injective resolution $\mathcal{G} \to \mathcal{G}'_\bullet$.
+</Theorem>
+
+<Proof>
+This is the Grothendieck spectral sequence for the composition of functors:
+$$\text{Ext}^n_{\mathcal{O}_X}(\mathcal{F}, -) = H^0(X, R^n \mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, -))$$
+
+We compose the functors:
+- $\mathcal{G} \mapsto \mathcal{H}om_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$ (from $\mathcal{O}_X$-modules to $\mathcal{O}_X$-modules)
+- $\mathcal{H} \mapsto H^0(X, \mathcal{H})$ (from $\mathcal{O}_X$-modules to abelian groups)
+
+The first functor has right derived functors $\mathcal{E}xt^q_{\mathcal{O}_X}(\mathcal{F}, -)$, and the second has right derived functors $H^p(X, -)$. The Grothendieck spectral sequence gives:
+$$E_2^{p,q} = R^p H^0(X, R^q \mathcal{H}om(\mathcal{F}, -)(\mathcal{G})) = H^p(X, \mathcal{E}xt^q(\mathcal{F}, \mathcal{G}))$$
+converging to:
+$$R^{p+q}(H^0 \circ \mathcal{H}om(\mathcal{F}, -))(\mathcal{G}) = \text{Ext}^{p+q}_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$$
+</Proof>
+
+<Remark>
+This spectral sequence shows how to compute global Ext groups from:
+1. Local Ext sheaves $\mathcal{E}xt^q_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})$
+2. Global cohomology $H^p(X, -)$
+
+It relates local homological algebra to global topology.
+</Remark>
+
+<Example id="ext-locally-free-spectral-sequence" title="Spectral Sequence with Locally Free Sheaves">
+Let $X$ be a smooth projective variety and $\mathcal{E}$ a locally free sheaf. For any coherent sheaf $\mathcal{F}$:
+$$\mathcal{E}xt^q_{\mathcal{O}_X}(\mathcal{E}, \mathcal{F}) = 0 \quad \text{for } q > 0$$
+
+The spectral sequence degenerates at $E_2$:
+
+- $E_2^{p,0} = H^p(X, \mathcal{E}^\vee \otimes \mathcal{F})$
+- $E_2^{p,q} = 0$ for $q > 0$
+
+Therefore:
+$$\text{Ext}^n_{\mathcal{O}_X}(\mathcal{E}, \mathcal{F}) = H^n(X, \mathcal{E}^\vee \otimes \mathcal{F})$$
+
+This is a fundamental computation technique.
+</Example>
+
+## Extensions of Sheaves and Ext¹
+
+<Definition title="Extensions of Sheaves">
+Let $\mathcal{F}$ and $\mathcal{G}$ be $\mathcal{O}_X$-modules. An extension of $\mathcal{G}$ by $\mathcal{F}$ is a short exact sequence:
+$$0 \to \mathcal{F} \to \mathcal{E} \to \mathcal{G} \to 0$$
+
+Two extensions $\mathcal{E}$ and $\mathcal{E}'$ are equivalent if there exists an isomorphism $\mathcal{E} \to \mathcal{E}'$ making the diagram commute:
+$$\require{AMScd}$$
+$$0 \to \mathcal{F} \to \mathcal{E} \to \mathcal{G} \to 0$$
+$$\phantom{0 \to \mathcal{F}} \downarrow \cong \phantom{\mathcal{G} \to 0}$$
+$$0 \to \mathcal{F} \to \mathcal{E}' \to \mathcal{G} \to 0$$
+</Definition>
+
+<Theorem title="Extensions and Ext¹">
+There is a natural bijection:
+$$\text{Ext}^1_{\mathcal{O}_X}(\mathcal{G}, \mathcal{F}) \cong \{\text{extensions of } \mathcal{G} \text{ by } \mathcal{F}\}/\sim$$
+
+The trivial extension $0 \to \mathcal{F} \to \mathcal{F} \oplus \mathcal{G} \to \mathcal{G} \to 0$ corresponds to the zero element.
+</Theorem>
+
+<Proof>
+Given an extension $0 \to \mathcal{F} \to \mathcal{E} \to \mathcal{G} \to 0$, take an injective resolution $\mathcal{F} \to \mathcal{I}^\bullet$. The extension gives a map $\mathcal{E} \to \mathcal{I}^0$ which lifts partially to $\mathcal{I}^1$, producing an element of:
+$$\text{Ext}^1(\mathcal{G}, \mathcal{F}) = H^1(\text{Hom}_{\mathcal{O}_X}(\mathcal{G}, \mathcal{I}^\bullet))$$
+
+Conversely, an element of $\text{Ext}^1(\mathcal{G}, \mathcal{F})$ is represented by a cocycle which can be used to construct an extension via pushout.
+
+The correspondence is natural and respects the group structure where addition of extensions corresponds to Baer sum.
+</Proof>
+
+<Example id="ext1-line-bundles" title="Extensions of Line Bundles">
+Let $X = \mathbb{P}^1_k$ and consider extensions:
+$$0 \to \mathcal{O}(a) \to \mathcal{E} \to \mathcal{O}(b) \to 0$$
+
+Using the spectral sequence:
+$$\text{Ext}^1_{\mathcal{O}_X}(\mathcal{O}(b), \mathcal{O}(a)) = H^1(\mathbb{P}^1, \mathcal{O}(a-b))$$
+
+For $a - b \geq -1$, we have $H^1(\mathbb{P}^1, \mathcal{O}(a-b)) = 0$, so all extensions split.
+
+For $a - b \leq -2$, we have:
+$$\dim \text{Ext}^1(\mathcal{O}(b), \mathcal{O}(a)) = b - a - 1$$
+
+These non-split extensions give rank 2 vector bundles on $\mathbb{P}^1$.
+</Example>
+
+<Example id="ext1-tangent-bundle" title="Extensions and Tangent Bundle">
+On $\mathbb{P}^n$, the tangent bundle $T_{\mathbb{P}^n}$ fits in the Euler sequence:
+$$0 \to \mathcal{O}_{\mathbb{P}^n} \to \mathcal{O}_{\mathbb{P}^n}(1)^{\oplus(n+1)} \to T_{\mathbb{P}^n} \to 0$$
+
+This represents an element of:
+$$\text{Ext}^1_{\mathcal{O}}(T_{\mathbb{P}^n}, \mathcal{O}_{\mathbb{P}^n}) = H^1(\mathbb{P}^n, T_{\mathbb{P}^n}^\vee)$$
+
+Using $T_{\mathbb{P}^n}^\vee \cong \Omega^1_{\mathbb{P}^n} \cong \mathcal{O}(-2)^{\oplus n}$ (from the cotangent sequence), this shows:
+$$\text{Ext}^1(T_{\mathbb{P}^n}, \mathcal{O}) = H^1(\mathbb{P}^n, \Omega^1_{\mathbb{P}^n})$$
+which vanishes for $n \geq 2$ by cohomology computations.
+</Example>
+
+## Examples on Curves
+
+<Example id="ext-curve-structure-sheaf" title="Ext on Curves with Structure Sheaves">
+Let $C$ be a smooth projective curve of genus $g$ and let $p \in C$ be a closed point. Consider:
+$$\text{Ext}^i_{\mathcal{O}_C}(k(p), \mathcal{O}_C)$$
+where $k(p) = \mathcal{O}_C/\mathfrak{m}_p$ is the skyscraper sheaf at $p$.
+
+The local-to-global spectral sequence gives:
+$$E_2^{p,q} = H^p(C, \mathcal{E}xt^q_{\mathcal{O}_C}(k(p), \mathcal{O}_C))$$
+
+Locally at $p$, we have $\mathcal{E}xt^1_{\mathcal{O}_C}(k(p), \mathcal{O}_C)_p = k(p)$ and the sheaf $\mathcal{E}xt^1$ is supported at $p$:
+$$\mathcal{E}xt^1_{\mathcal{O}_C}(k(p), \mathcal{O}_C) = k(p)$$
+
+Therefore:
+- $\text{Ext}^0_{\mathcal{O}_C}(k(p), \mathcal{O}_C) = 0$ (no global sections)
+- $\text{Ext}^1_{\mathcal{O}_C}(k(p), \mathcal{O}_C) = H^0(C, k(p)) \oplus H^1(C, 0) = k$
+- $\text{Ext}^2_{\mathcal{O}_C}(k(p), \mathcal{O}_C) = H^1(C, k(p)) = 0$
+</Example>
+
+<Example id="ext-ideal-sheaf-point" title="Ext with Ideal Sheaf of a Point">
+Let $C$ be a smooth projective curve and $\mathcal{I}_p$ the ideal sheaf of a point $p$. We have the exact sequence:
+$$0 \to \mathcal{I}_p \to \mathcal{O}_C \to k(p) \to 0$$
+
+For any coherent sheaf $\mathcal{F}$, applying $\text{Hom}(-, \mathcal{F})$:
+$$0 \to \text{Hom}(k(p), \mathcal{F}) \to \text{Hom}(\mathcal{O}_C, \mathcal{F}) \to \text{Hom}(\mathcal{I}_p, \mathcal{F})$$
+$$\to \text{Ext}^1(k(p), \mathcal{F}) \to \text{Ext}^1(\mathcal{O}_C, \mathcal{F}) \to \text{Ext}^1(\mathcal{I}_p, \mathcal{F}) \to \cdots$$
+
+Since $\text{Hom}(k(p), \mathcal{F}) = \mathcal{F}_p/\mathfrak{m}_p \mathcal{F}_p$ and $\text{Hom}(\mathcal{O}_C, \mathcal{F}) = H^0(C, \mathcal{F})$, this sequence computes Ext groups with ideal sheaves.
+</Example>
+
+<Example id="ext-line-bundles-curve" title="Ext between Line Bundles on Curves">
+Let $C$ be a smooth projective curve and $\mathcal{L}, \mathcal{M}$ line bundles on $C$. Then:
+$$\text{Ext}^i_{\mathcal{O}_C}(\mathcal{L}, \mathcal{M}) = H^i(C, \mathcal{L}^\vee \otimes \mathcal{M})$$
+
+By Serre duality:
+$$\text{Ext}^1_{\mathcal{O}_C}(\mathcal{L}, \mathcal{M}) = H^1(C, \mathcal{L}^\vee \otimes \mathcal{M}) \cong H^0(C, \mathcal{L} \otimes \mathcal{M}^\vee \otimes \omega_C)^\vee$$
+
+In particular, for the structure sheaf:
+$$\text{Ext}^1_{\mathcal{O}_C}(\mathcal{O}_C, \mathcal{O}_C) = H^1(C, \mathcal{O}_C) = k^g$$
+where $g$ is the genus of $C$.
+</Example>
+
+## Examples on Projective Space
+
+<Example id="ext-pn-twists" title="Ext on Projective Space">
+Let $X = \mathbb{P}^n$ over a field $k$. For integers $a, b$:
+$$\text{Ext}^i_{\mathcal{O}_X}(\mathcal{O}(a), \mathcal{O}(b)) = H^i(\mathbb{P}^n, \mathcal{O}(b-a))$$
+
+Using the cohomology of $\mathcal{O}(m)$ on $\mathbb{P}^n$:
+
+- $H^0(\mathbb{P}^n, \mathcal{O}(m)) = k^{\binom{m+n}{n}}$ for $m \geq 0$
+- $H^n(\mathbb{P}^n, \mathcal{O}(m)) = k^{\binom{-m-1}{n}}$ for $m \leq -n-1$
+- $H^i(\mathbb{P}^n, \mathcal{O}(m)) = 0$ otherwise
+
+Therefore:
+
+- $\text{Ext}^0(\mathcal{O}(a), \mathcal{O}(b)) = k^{\binom{b-a+n}{n}}$ for $b \geq a$
+- $\text{Ext}^n(\mathcal{O}(a), \mathcal{O}(b)) = k^{\binom{a-b-1}{n}}$ for $b \leq a - n - 1$
+- $\text{Ext}^i(\mathcal{O}(a), \mathcal{O}(b)) = 0$ otherwise
+</Example>
+
+<Example id="ext-pn-coherent" title="Ext with Coherent Sheaves on Projective Space">
+Let $\mathcal{F}$ be a coherent sheaf on $\mathbb{P}^n$ with a locally free resolution:
+$$0 \to \mathcal{E}_r \to \cdots \to \mathcal{E}_1 \to \mathcal{E}_0 \to \mathcal{F} \to 0$$
+
+For any coherent sheaf $\mathcal{G}$:
+$$\text{Ext}^i(\mathcal{F}, \mathcal{G}) = H^i(\text{Hom}^\bullet(\mathcal{E}_\bullet, \mathcal{G}))$$
+
+Since each $\mathcal{E}_j$ is locally free:
+$$\text{Hom}(\mathcal{E}_j, \mathcal{G}) = \mathcal{E}_j^\vee \otimes \mathcal{G}$$
+
+This reduces Ext computations to cohomology of vector bundles.
+</Example>
+
+<Example id="ext-quotient-sheaf-pn" title="Ext with Quotient Sheaves">
+On $\mathbb{P}^2$, consider a twisted cubic curve $C \subset \mathbb{P}^3$ embedded by $\mathcal{O}_{\mathbb{P}^1}(3)$. The structure sheaf $\mathcal{O}_C$ has a resolution:
+$$0 \to \mathcal{O}_{\mathbb{P}^3}(-3)^{\oplus 2} \to \mathcal{O}_{\mathbb{P}^3}(-2)^{\oplus 3} \to \mathcal{O}_{\mathbb{P}^3} \to \mathcal{O}_C \to 0$$
+
+For $\mathcal{G} = \mathcal{O}_{\mathbb{P}^3}(n)$:
+$$\text{Ext}^1(\mathcal{O}_C, \mathcal{O}(n)) = H^1(\text{Hom}^\bullet(\mathcal{E}_\bullet, \mathcal{O}(n)))$$
+
+The complex $\text{Hom}^\bullet(\mathcal{E}_\bullet, \mathcal{O}(n))$ is:
+$$0 \to \mathcal{O}(n) \to \mathcal{O}(n+2)^{\oplus 3} \to \mathcal{O}(n+3)^{\oplus 2} \to 0$$
+
+Computing cohomology determines the Ext groups.
+</Example>
+
+## Connection to Serre Duality
+
+<Theorem title="Serre Duality via Ext">
+Let $X$ be a smooth projective variety of dimension $n$ over a field $k$ with dualizing sheaf $\omega_X$. For coherent sheaves $\mathcal{F}, \mathcal{G}$ on $X$:
+$$\text{Ext}^i_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G})^\vee \cong \text{Ext}^{n-i}_{\mathcal{O}_X}(\mathcal{G}, \mathcal{F} \otimes \omega_X)$$
+
+In particular, for $\mathcal{G} = \mathcal{O}_X$:
+$$\text{Ext}^i(\mathcal{F}, \mathcal{O}_X)^\vee \cong \text{Ext}^{n-i}(\mathcal{O}_X, \mathcal{F} \otimes \omega_X) = H^{n-i}(X, \mathcal{F} \otimes \omega_X)$$
+</Theorem>
+
+<Remark>
+This formulation of Serre duality via Ext highlights the role of the dualizing sheaf in homological algebra. It generalizes the classical Serre duality:
+$$H^i(X, \mathcal{F})^\vee \cong H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X)$$
+for locally free sheaves.
+</Remark>
+
+<Example id="serre-duality-ext-curve" title="Serre Duality on Curves via Ext">
+Let $C$ be a smooth projective curve of genus $g$ with canonical bundle $\omega_C$. For line bundles $\mathcal{L}, \mathcal{M}$:
+$$\text{Ext}^0(\mathcal{L}, \mathcal{M})^\vee = \text{Hom}(\mathcal{L}, \mathcal{M})^\vee \cong \text{Ext}^1(\mathcal{M}, \mathcal{L} \otimes \omega_C)$$
+
+Explicitly:
+$$H^0(C, \mathcal{L}^\vee \otimes \mathcal{M})^\vee \cong H^1(C, \mathcal{M}^\vee \otimes \mathcal{L} \otimes \omega_C)$$
+
+This is the classical Serre duality for curves, expressed in Ext language.
+</Example>
+
+<Example id="ext-self-duality" title="Self-Duality for Ext">
+On a smooth projective surface $S$ with canonical bundle $\omega_S$, consider a coherent sheaf $\mathcal{F}$. Then:
+$$\text{Ext}^i(\mathcal{F}, \mathcal{F})^\vee \cong \text{Ext}^{2-i}(\mathcal{F}, \mathcal{F} \otimes \omega_S)$$
+
+For $i = 1$:
+$$\text{Ext}^1(\mathcal{F}, \mathcal{F})^\vee \cong \text{Ext}^1(\mathcal{F}, \mathcal{F} \otimes \omega_S)$$
+
+This duality is important in deformation theory, where $\text{Ext}^1(\mathcal{F}, \mathcal{F})$ parametrizes first-order deformations of $\mathcal{F}$.
+</Example>
+
+## Vanishing Theorems via Ext
+
+<Theorem title="Local Vanishing of Ext Sheaves">
+Let $X$ be a regular scheme and $\mathcal{F}, \mathcal{G}$ coherent $\mathcal{O}_X$-modules. Then:
+$$\mathcal{E}xt^i_{\mathcal{O}_X}(\mathcal{F}, \mathcal{G}) = 0 \quad \text{for } i > \dim X$$
+
+This follows because every point has a regular local ring, which has finite global dimension equal to its dimension.
+</Theorem>
+
+<Example id="ext-vanishing-curve" title="Ext Vanishing on Curves">
+Let $C$ be a smooth curve (regular of dimension 1). For any coherent sheaves $\mathcal{F}, \mathcal{G}$:
+$$\mathcal{E}xt^i(\mathcal{F}, \mathcal{G}) = 0 \quad \text{for } i \geq 2$$
+
+This implies the local-to-global spectral sequence has only two rows:
+$$E_2^{p,q} = H^p(C, \mathcal{E}xt^q(\mathcal{F}, \mathcal{G})) \quad \text{with } q \in \{0, 1\}$$
+
+The spectral sequence gives exact sequences:
+$$0 \to H^1(C, \mathcal{H}om(\mathcal{F}, \mathcal{G})) \to \text{Ext}^1(\mathcal{F}, \mathcal{G}) \to H^0(C, \mathcal{E}xt^1(\mathcal{F}, \mathcal{G})) \to 0$$
+</Example>
+
+<Example id="ext-higher-dimensional" title="Ext on Higher Dimensional Varieties">
+Let $X$ be a smooth projective variety of dimension $n$. For a locally free sheaf $\mathcal{E}$ and coherent sheaf $\mathcal{F}$:
+$$\text{Ext}^i(\mathcal{E}, \mathcal{F}) = H^i(X, \mathcal{E}^\vee \otimes \mathcal{F})$$
+
+By standard vanishing (e.g., for ample line bundles $\mathcal{L}$ and large $m$):
+$$H^i(X, \mathcal{E}^\vee \otimes \mathcal{F} \otimes \mathcal{L}^m) = 0 \quad \text{for } i > 0, m \gg 0$$
+
+This gives:
+$$\text{Ext}^i(\mathcal{E} \otimes \mathcal{L}^{-m}, \mathcal{F}) = 0 \quad \text{for } i > 0, m \gg 0$$
+</Example>
+
+## Computational Techniques
+
+<Remark>
+The primary methods for computing Ext groups are:
+
+1. **Spectral Sequence Method**: Use the local-to-global spectral sequence when $\mathcal{E}xt$ sheaves are known.
+
+2. **Resolution Method**: Take a locally free resolution of $\mathcal{F}$ and compute cohomology of the Hom complex.
+
+3. **Long Exact Sequence**: From a short exact sequence of sheaves, derive long exact sequences of Ext groups.
+
+4. **Reduction to Cohomology**: When one sheaf is locally free, reduce to cohomology computations via $\text{Ext}^i(\mathcal{E}, \mathcal{F}) = H^i(X, \mathcal{E}^\vee \otimes \mathcal{F})$.
+</Remark>
+
+<Example id="ext-long-exact-sequence" title="Long Exact Sequence for Ext">
+Given a short exact sequence of coherent sheaves:
+$$0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$$
+
+For any coherent sheaf $\mathcal{G}$, we obtain long exact sequences:
+$$0 \to \text{Hom}(\mathcal{F}'', \mathcal{G}) \to \text{Hom}(\mathcal{F}, \mathcal{G}) \to \text{Hom}(\mathcal{F}', \mathcal{G})$$
+$$\to \text{Ext}^1(\mathcal{F}'', \mathcal{G}) \to \text{Ext}^1(\mathcal{F}, \mathcal{G}) \to \text{Ext}^1(\mathcal{F}', \mathcal{G}) \to \cdots$$
+
+And in the other variable:
+$$0 \to \text{Hom}(\mathcal{G}, \mathcal{F}') \to \text{Hom}(\mathcal{G}, \mathcal{F}) \to \text{Hom}(\mathcal{G}, \mathcal{F}'')$$
+$$\to \text{Ext}^1(\mathcal{G}, \mathcal{F}') \to \text{Ext}^1(\mathcal{G}, \mathcal{F}) \to \text{Ext}^1(\mathcal{G}, \mathcal{F}'') \to \cdots$$
+
+These sequences are essential for inductive computations.
+</Example>
+
+---
+
+The theory of Ext sheaves provides a powerful framework for understanding both local and global aspects of coherent sheaves. The local-to-global spectral sequence serves as a bridge between pointwise homological algebra and global cohomology, while the connection to extensions and Serre duality reveals deep structural properties of algebraic varieties.

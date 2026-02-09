@@ -1,0 +1,515 @@
+export const metadata = {
+  title: 'Rational Maps — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Concept — Rational Maps" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Rational Maps and Birational Equivalence
+
+Throughout, let $k$ be an algebraically closed field and let all varieties be irreducible. A **morphism** of varieties must be defined everywhere, but many natural geometric constructions (projection from a point, parametrizations of singular curves, etc.) are only defined on a dense open subset. The language of **rational maps** makes this precise and leads to the central notion of **birational equivalence** --- the idea that two varieties are "essentially the same" if they agree on large open subsets.
+
+---
+
+## 1. Rational maps
+
+<Definition title="Rational map" number="1.1">
+Let $X$ and $Y$ be varieties. A **rational map** $\varphi : X \dashrightarrow Y$ is an equivalence class of pairs $(U, \varphi_U)$ where $U \subseteq X$ is a nonempty open subset and $\varphi_U : U \to Y$ is a morphism, with $(U, \varphi_U) \sim (V, \varphi_V)$ if $\varphi_U = \varphi_V$ on $U \cap V$.
+
+The dashed arrow "$\dashrightarrow$" signals that $\varphi$ need not be defined everywhere.
+</Definition>
+
+<Remark title="Why equivalence classes?">
+Since $X$ is irreducible, any two nonempty open subsets $U, V \subseteq X$ have $U \cap V \neq \varnothing$. A morphism from a variety to a separated variety is determined by its values on any dense open subset. So the equivalence relation is well-behaved: if two morphisms agree on a dense open subset, they agree wherever both are defined. This is the algebro-geometric analogue of **analytic continuation**.
+</Remark>
+
+<Example id="identity-rational" title="Every morphism is a rational map">
+Any morphism $f : X \to Y$ determines a rational map by taking $U = X$. The rational map $\mathrm{id} : X \dashrightarrow X$ is the class of $(\mathrm{id}_X, X)$.
+</Example>
+
+<Example id="inclusion-rational" title="Rational map from an inclusion of function fields">
+Let $X = V(y^2 - x^3) \subseteq \mathbb{A}^2$ (the cuspidal cubic). Define $\varphi : X \dashrightarrow \mathbb{A}^1$ by $\varphi(x, y) = y/x$. This is defined on the open set $U = X \setminus \{(0,0)\}$. On $U$, we have $y/x = x^2 \cdot x^{-1} \cdot y/y = \ldots$ --- more directly, $y/x$ is a well-defined regular function on $U$ since $x \neq 0$ there ($x = 0$ forces $y = 0$ on $X$). This gives a rational map $X \dashrightarrow \mathbb{A}^1$.
+</Example>
+
+---
+
+## 2. Domain of definition
+
+<Definition title="Domain of definition" number="1.2">
+The **domain of definition** of a rational map $\varphi : X \dashrightarrow Y$ is the largest open set $U \subseteq X$ on which some (hence every) representative of $\varphi$ is defined:
+
+$$\mathrm{dom}(\varphi) = \bigcup \{ U \mid (U, \varphi_U) \text{ is a representative of } \varphi \}.$$
+
+A point $P \notin \mathrm{dom}(\varphi)$ is called a **point of indeterminacy** of $\varphi$.
+</Definition>
+
+<Theorem title="Domain of a rational map to projective space" number="1.1">
+Let $X$ be a smooth variety and $\varphi : X \dashrightarrow \mathbb{P}^n$ a rational map. Then the indeterminacy locus of $\varphi$ has codimension $\geq 2$ in $X$.
+
+In particular, if $X$ is a smooth **curve**, then every rational map $X \dashrightarrow \mathbb{P}^n$ extends to a morphism defined on all of $X$.
+</Theorem>
+
+<Example id="projection-from-point" title="Projection from a point in P^2">
+Define $\pi : \mathbb{P}^2 \dashrightarrow \mathbb{P}^1$ by
+
+$$\pi([x : y : z]) = [x : y].$$
+
+This is well-defined whenever $(x, y) \neq (0, 0)$, i.e., on $\mathbb{P}^2 \setminus \{[0:0:1]\}$. The point $P = [0:0:1]$ is the unique point of indeterminacy --- geometrically, $\pi$ is "projection away from $P$." Each fiber $\pi^{-1}([a:b])$ is the line through $P$ and the point $[a:b:0]$, minus $P$ itself.
+
+The domain of definition is $\mathrm{dom}(\pi) = \mathbb{P}^2 \setminus \{P\}$, which has complement of codimension 2, consistent with the theorem above (since $\mathbb{P}^2$ is smooth).
+</Example>
+
+<Example id="projection-conic" title="Projection of a conic from a point on it">
+Let $C = V(xz - y^2) \subseteq \mathbb{P}^2$ (a smooth conic) and let $P = [0:0:1] \in C$. The projection from $P$ restricts to a rational map
+
+$$\pi|_C : C \dashrightarrow \mathbb{P}^1, \quad [x:y:z] \mapsto [x:y].$$
+
+Since $C$ is a smooth curve, this extends to a morphism on all of $C$. To find $\pi(P)$: near $P = [0:0:1]$, use $y^2 = xz$. For points of $C$ near $P$ with $x \neq 0$, we get $[x:y] = [x:y]$. Taking the limit as $[x:y:z] \to [0:0:1]$ along $C$, we parametrize: $[t^2 : t : 1]$ gives $\pi = [t^2 : t] = [t:1]$, so $\pi(P) = \lim_{t \to 0} [t:1] = [0:1]$.
+
+This gives an isomorphism $C \xrightarrow{\sim} \mathbb{P}^1$, confirming that every smooth conic is rational.
+</Example>
+
+<Example id="indeterminacy-surface" title="Indeterminacy on a surface">
+Consider the rational map $\varphi : \mathbb{A}^2 \dashrightarrow \mathbb{P}^1$ defined by $\varphi(x,y) = [x:y]$. The domain of definition is $\mathbb{A}^2 \setminus \{(0,0)\}$: the origin is the single point of indeterminacy. The "value" at the origin is ambiguous because lines through the origin have all possible slopes --- this is precisely the situation resolved by **blowing up**.
+</Example>
+
+---
+
+## 3. Dominant rational maps
+
+<Definition title="Dominant rational map" number="1.3">
+A rational map $\varphi : X \dashrightarrow Y$ is **dominant** if the image of $\varphi$ (on any representative) is dense in $Y$, i.e., $\overline{\varphi(U)} = Y$ for some (hence every) representative $(U, \varphi_U)$.
+</Definition>
+
+<Remark title="Composition of rational maps">
+In general, the composition of two rational maps $X \dashrightarrow Y \dashrightarrow Z$ is **not** well-defined: the image of the first might miss the domain of the second. However, if $\varphi : X \dashrightarrow Y$ is **dominant**, then $\varphi(U)$ meets every nonempty open subset of $Y$, so the composition $\psi \circ \varphi$ is well-defined as a rational map for any $\psi : Y \dashrightarrow Z$. This is why dominance is essential.
+</Remark>
+
+<Example id="dominant-non-dominant" title="Dominant vs. non-dominant">
+1. The inclusion $\mathbb{A}^1 \hookrightarrow \mathbb{A}^2$, $t \mapsto (t, 0)$, viewed as a rational map, is **not dominant**: its image is the $x$-axis, which is not dense in $\mathbb{A}^2$.
+
+2. The projection $\mathbb{A}^2 \dashrightarrow \mathbb{A}^1$, $(x,y) \mapsto x$, is **dominant** (and in fact surjective).
+
+3. The parametrization $\mathbb{A}^1 \dashrightarrow V(y^2 - x^3)$, $t \mapsto (t^2, t^3)$, is dominant: its image is the entire cuspidal cubic.
+</Example>
+
+---
+
+## 4. Birational equivalence
+
+<Definition title="Birational equivalence" number="1.4">
+A rational map $\varphi : X \dashrightarrow Y$ is a **birational equivalence** (or **birational map**) if there exists a rational map $\psi : Y \dashrightarrow X$ such that $\psi \circ \varphi = \mathrm{id}_X$ and $\varphi \circ \psi = \mathrm{id}_Y$ as rational maps.
+
+Two varieties $X$ and $Y$ are **birationally equivalent** (or simply **birational**), written $X \sim_{\mathrm{bir}} Y$, if there exists a birational equivalence between them.
+</Definition>
+
+<Remark title="Birational = isomorphic on dense open subsets">
+$X \sim_{\mathrm{bir}} Y$ if and only if there exist dense open subsets $U \subseteq X$ and $V \subseteq Y$ such that $U \cong V$ as varieties. In other words, $X$ and $Y$ are "the same" up to removing proper closed subsets. Birational geometry studies properties invariant under this coarser equivalence.
+</Remark>
+
+<Theorem title="Birational equivalence via function fields" number="1.2">
+Let $X$ and $Y$ be varieties over $k$. Then $X \sim_{\mathrm{bir}} Y$ if and only if $k(X) \cong k(Y)$ as $k$-algebras (i.e., the function fields are isomorphic).
+
+More precisely, the category of varieties with dominant rational maps is equivalent to the category of finitely generated field extensions of $k$.
+</Theorem>
+
+<Example id="a1-minus-point" title="A^1 minus a point is birational to A^1">
+$\mathbb{A}^1 \setminus \{0\}$ and $\mathbb{A}^1$ are birational: both have function field $k(t)$. The inclusion $\mathbb{A}^1 \setminus \{0\} \hookrightarrow \mathbb{A}^1$ and the identity $\mathbb{A}^1 \to \mathbb{A}^1$ give an isomorphism on the open set $\mathbb{A}^1 \setminus \{0\}$.
+
+However, $\mathbb{A}^1 \setminus \{0\}$ is **not isomorphic** to $\mathbb{A}^1$ as a variety: the coordinate ring of $\mathbb{A}^1 \setminus \{0\}$ is $k[t, t^{-1}]$, which has a unit ($t$) that is not a scalar, while $k[\mathbb{A}^1] = k[t]$ does not.
+</Example>
+
+<Example id="an-birational-pn" title="A^n is birational to P^n">
+$\mathbb{A}^n$ and $\mathbb{P}^n$ are birational: $\mathbb{A}^n$ embeds as the standard open set $U_0 = \{x_0 \neq 0\} \subseteq \mathbb{P}^n$, which is dense. Both have function field $k(x_1, \ldots, x_n)$.
+</Example>
+
+---
+
+## 5. Rational varieties
+
+<Definition title="Rational variety" number="1.5">
+A variety $X$ of dimension $n$ is **rational** if $X \sim_{\mathrm{bir}} \mathbb{P}^n$ (equivalently, $X \sim_{\mathrm{bir}} \mathbb{A}^n$), i.e., $k(X) \cong k(x_1, \ldots, x_n)$ is a purely transcendental extension.
+
+$X$ is **unirational** if there exists a dominant rational map $\mathbb{P}^n \dashrightarrow X$ (equivalently, $k(X) \hookrightarrow k(x_1, \ldots, x_n)$).
+</Definition>
+
+<Remark title="Rational implies unirational, but not conversely">
+Every rational variety is unirational. The converse is a deep and subtle question:
+- In dimension 1 (curves): rational $\Leftrightarrow$ unirational (Luroth's theorem).
+- In dimension 2 (surfaces) over $k$ of characteristic 0: rational $\Leftrightarrow$ unirational (Castelnuovo's theorem).
+- In dimension $\geq 3$: unirational $\not\Rightarrow$ rational in general (Clemens--Griffiths, Iskovskikh--Manin, Artin--Mumford).
+</Remark>
+
+<Example id="smooth-conics-rational" title="Smooth conics are rational">
+Any smooth conic $C \subseteq \mathbb{P}^2$ is rational ($C \cong \mathbb{P}^1$). Given a point $P \in C$, projection from $P$ gives a birational map $C \dashrightarrow \mathbb{P}^1$ that is actually an isomorphism (see the projection example above). For instance, $V(x^2 + y^2 - z^2) \subseteq \mathbb{P}^2$ with $P = [0:1:1]$:
+
+$$[x:y:z] \mapsto [x : z - y]$$
+
+gives $\mathbb{P}^1 \to C$ by $[s:t] \mapsto [2st : s^2 - t^2 : s^2 + t^2]$.
+</Example>
+
+<Example id="smooth-quadric-surface" title="Smooth quadric surfaces are rational">
+The smooth quadric $Q = V(xw - yz) \subseteq \mathbb{P}^3$ satisfies $Q \cong \mathbb{P}^1 \times \mathbb{P}^1$ (via the Segre embedding). Since $\mathbb{P}^1 \times \mathbb{P}^1 \sim_{\mathrm{bir}} \mathbb{A}^2$ (the product of two copies of $\mathbb{A}^1$ is $\mathbb{A}^2$), we get $Q \sim_{\mathrm{bir}} \mathbb{P}^2$. So smooth quadric surfaces are rational.
+
+Explicitly, $k(Q) = k(s, t)$ where $s, t$ parametrize the two rulings.
+</Example>
+
+---
+
+## 6. Stereographic projection
+
+<Example id="stereographic" title="Stereographic projection">
+Let $Q = V(x_0^2 + x_1^2 + \cdots + x_n^2 - x_{n+1}^2) \subseteq \mathbb{P}^{n+1}$ be a smooth quadric hypersurface, and let $P = [0 : 0 : \cdots : 0 : 1 : 1] \in Q$. Projection from $P$ to the hyperplane $\{x_{n+1} = 0\} \cong \mathbb{P}^n$ gives a birational map $Q \dashrightarrow \mathbb{P}^n$.
+
+**Concrete case $n = 1$:** $Q = V(x^2 + y^2 - z^2) \subseteq \mathbb{P}^2$, $P = [0:1:1]$. The line through $P$ and $[t:s:0] \in \mathbb{P}^1$ is parametrized by $[\lambda t : \lambda s + \mu : \mu]$. Substituting into $x^2 + y^2 = z^2$:
+
+$$\lambda^2 t^2 + (\lambda s + \mu)^2 = \mu^2$$
+
+$$\lambda^2 t^2 + \lambda^2 s^2 + 2\lambda s \mu + \mu^2 = \mu^2$$
+
+$$\lambda(t^2 + s^2) + 2s\mu = 0 \quad \Longrightarrow \quad \lambda/\mu = -2s/(t^2 + s^2).$$
+
+So the second intersection point (besides $P$) is:
+
+$$[x:y:z] = \left[-2st : t^2 + s^2 - 2s^2 : t^2 + s^2\right] \cdot \frac{1}{t^2+s^2} \sim [-2st : t^2 - s^2 : t^2 + s^2].$$
+
+This is the classical parametrization of Pythagorean triples: setting $s = 1$, $t \in k$:
+
+$$(x, y, z) \sim (-2t,\; t^2 - 1,\; t^2 + 1).$$
+
+Over $\mathbb{Q}$, this recovers all rational points on the unit circle $x^2 + y^2 = z^2$.
+</Example>
+
+---
+
+## 7. The Cremona transformation
+
+<Example id="cremona" title="The standard Cremona transformation">
+The **standard Cremona transformation** is the rational map $\sigma : \mathbb{P}^2 \dashrightarrow \mathbb{P}^2$ defined by
+
+$$\sigma([x : y : z]) = [yz : xz : xy] = [1/x : 1/y : 1/z].$$
+
+**Domain of definition:** $\sigma$ is defined wherever at least one of $yz, xz, xy$ is nonzero, i.e., wherever at most one coordinate vanishes. The **indeterminacy locus** consists of the three coordinate vertices:
+
+$$\mathrm{Ind}(\sigma) = \{[1:0:0],\; [0:1:0],\; [0:0:1]\}.$$
+
+**Self-inverse:** $\sigma \circ \sigma = \mathrm{id}$ as a rational map. Indeed:
+
+$$\sigma(\sigma([x:y:z])) = \sigma([yz:xz:xy]) = [(xz)(xy) : (yz)(xy) : (yz)(xz)] = [x^2yz : xy^2z : xyz^2] = [x:y:z].$$
+
+So $\sigma$ is a **birational involution** of $\mathbb{P}^2$.
+
+**Image of lines:** The line $V(ax + by + cz) \subseteq \mathbb{P}^2$ maps under $\sigma$ to
+
+$$a \cdot yz + b \cdot xz + c \cdot xy = 0 \quad \Longleftrightarrow \quad V(ayz + bxz + cxy),$$
+
+which is a **conic** passing through all three coordinate vertices. So $\sigma$ takes lines to conics and vice versa.
+
+**Image of conics through two base points:** A conic $V(f)$ passing through two of the three coordinate vertices (say $[1:0:0]$ and $[0:1:0]$) maps to a **line**. For instance, $V(z^2 - xy)$ passes through $[1:0:0]$ and $[0:1:0]$, and its image under $\sigma$ is $V((xy)^2 - (yz)(xz)) = V(x^2 y^2 - xyz^2) = V(xy - z^2)$ ... wait, let us compute directly: substituting into $z^2 = xy$, we get $(xy)^2 = (yz)(xz)$, i.e., $x^2 y^2 = xyz^2$, giving $xy = z^2$. But the **proper transform** under $\sigma$ of the conic $V(z^2 - xy)$ is a line. To see this clearly, note that $\sigma^*$ sends degree-$d$ curves to degree-$2d$ curves, but passing through each base point with multiplicity $\geq d$ reduces the degree by the multiplicities.
+
+The Cremona transformation is the simplest example of a **birational automorphism** of $\mathbb{P}^2$ that is not a linear automorphism ($\mathrm{PGL}_3$). In fact, the **Noether--Castelnuovo theorem** states that every birational automorphism of $\mathbb{P}^2$ (over an algebraically closed field) is a composition of linear automorphisms and the standard Cremona transformation.
+</Example>
+
+<Example id="cremona-affine" title="Cremona in affine coordinates">
+Restricting $\sigma$ to the affine chart $z = 1$: $\sigma(x, y) = (1/x, 1/y)$ as a rational map $\mathbb{A}^2 \dashrightarrow \mathbb{A}^2$. This is defined on $\{xy \neq 0\}$ and maps the hyperbola $V(xy - 1)$ to the single point $(1, 1)$ (but only as a rational map --- the proper transform is more subtle).
+
+On the torus $(\mathbb{A}^1 \setminus \{0\})^2 = \{xy \neq 0\}$, the map $(x,y) \mapsto (1/x, 1/y)$ is an **automorphism** (not just birational), reflecting the group inversion on the algebraic torus.
+</Example>
+
+---
+
+## 8. Parametrization of singular cubics
+
+<Example id="cuspidal-cubic-param" title="Birational parametrization of the cuspidal cubic">
+Let $C = V(y^2 - x^3) \subseteq \mathbb{A}^2$. Define $\varphi : \mathbb{A}^1 \to C$ by
+
+$$\varphi(t) = (t^2, t^3).$$
+
+**Claim:** $\varphi$ is a birational equivalence $\mathbb{A}^1 \dashrightarrow C$.
+
+*Forward map:* $\varphi$ is a morphism (polynomial map), and $(t^2)^3 = t^6 = (t^3)^2$, so the image lies on $C$.
+
+*Inverse rational map:* Define $\psi : C \dashrightarrow \mathbb{A}^1$ by $\psi(x, y) = y/x$. This is defined on $C \setminus \{(0,0)\}$. On $C$, we have $y^2 = x^3$, so $(y/x)^2 = x$, giving $(y/x)^3 = x \cdot (y/x) = y$. Thus
+
+$$\varphi(\psi(x,y)) = \left((y/x)^2, (y/x)^3\right) = (x, y).$$
+
+And $\psi(\varphi(t)) = t^3/t^2 = t$ for $t \neq 0$.
+
+**Key point:** $\varphi$ is a bijection $\mathbb{A}^1 \to C$, but it is **not** an isomorphism of varieties. The inverse $\psi$ is only a rational map (undefined at the cusp). The coordinate rings are
+
+$$k[C] = k[t^2, t^3] \subsetneq k[t] = k[\mathbb{A}^1],$$
+
+and the inclusion $k[t^2, t^3] \hookrightarrow k[t]$ corresponds to $\varphi$. Since $k[t^2, t^3] \not\cong k[t]$, we have $C \not\cong \mathbb{A}^1$, even though $C \sim_{\mathrm{bir}} \mathbb{A}^1$.
+</Example>
+
+<Example id="nodal-cubic-param" title="Birational parametrization of the nodal cubic">
+Let $C = V(y^2 - x^2(x + 1)) \subseteq \mathbb{A}^2$. The node at the origin has two tangent directions $y = \pm x$.
+
+Define $\varphi : \mathbb{A}^1 \to C$ by
+
+$$\varphi(t) = (t^2 - 1,\; t(t^2 - 1)) = (t^2 - 1,\; t^3 - t).$$
+
+**Verification:** $(t^3 - t)^2 = t^2(t^2-1)^2$ and $(t^2-1)^2((t^2-1)+1) = (t^2-1)^2 \cdot t^2$. Check.
+
+**Inverse:** $\psi(x, y) = y/x$, defined for $x \neq 0$. On $C$, $(y/x)^2 = x + 1$, so $t = y/x$ gives $x = t^2 - 1$, $y = t^3 - t$.
+
+**Failure of bijectivity:** $\varphi(1) = (0, 0) = \varphi(-1)$. The map $\varphi$ identifies $t = 1$ and $t = -1$ to the node. So $\varphi$ is a bijection on $\mathbb{A}^1 \setminus \{1, -1\} \to C \setminus \{(0,0)\}$, but it is 2-to-1 at the node.
+
+The normalization of $C$ is $\mathbb{A}^1$, and $\varphi$ is the normalization map. The nodal cubic is rational: $k(C) = k(t)$.
+</Example>
+
+---
+
+## 9. Rational curves and parametrizations
+
+<Definition title="Rational curve" number="1.6">
+A curve $C$ is **rational** if $C \sim_{\mathrm{bir}} \mathbb{P}^1$ (equivalently, $C$ has genus 0, or equivalently, $k(C) \cong k(t)$ is a purely transcendental extension of transcendence degree 1).
+</Definition>
+
+<Example id="rational-curve-degree-d" title="Rational normal curves">
+For each $d \geq 1$, the **rational normal curve** of degree $d$ is the image of
+
+$$\nu_d : \mathbb{P}^1 \to \mathbb{P}^d, \quad [s:t] \mapsto [s^d : s^{d-1}t : \cdots : st^{d-1} : t^d].$$
+
+- $d = 1$: $\mathbb{P}^1 \xrightarrow{\sim} \mathbb{P}^1$ (the identity).
+- $d = 2$: the smooth conic $V(x_0 x_2 - x_1^2) \subseteq \mathbb{P}^2$.
+- $d = 3$: the **twisted cubic** $\subseteq \mathbb{P}^3$, cut out by $x_0 x_2 - x_1^2$, $x_0 x_3 - x_1 x_2$, $x_1 x_3 - x_2^2$.
+
+All of these are rational: the Veronese map $\nu_d$ is an isomorphism onto its image.
+</Example>
+
+<Example id="elliptic-not-rational" title="Elliptic curves are NOT rational">
+The elliptic curve $E = V(y^2 z - x^3 + xz^2) \subseteq \mathbb{P}^2$ has genus 1, so $E \not\sim_{\mathrm{bir}} \mathbb{P}^1$. Equivalently, $k(E) \not\cong k(t)$: the function field $k(E) = k(x)[y]/(y^2 - x^3 + x)$ is a quadratic extension of $k(x)$, but it is **not** purely transcendental.
+
+No rational parametrization of $E$ exists. This is the fundamental difference between genus 0 and genus $\geq 1$.
+</Example>
+
+<Example id="cubic-surface-rational" title="Smooth cubic surfaces are rational">
+Let $S \subseteq \mathbb{P}^3$ be a smooth cubic surface over $k = \bar{k}$. A classical theorem of Cayley and Salmon states that $S$ contains exactly 27 lines. Choosing any one line $\ell \subseteq S$ and projecting from $\ell$ gives a birational map $S \dashrightarrow \mathbb{P}^2$. Thus every smooth cubic surface is rational.
+
+For example, the Fermat cubic $x^3 + y^3 + z^3 + w^3 = 0$ contains the line $\{x + y = 0,\; z + w = 0\}$ (set $y = -x$, $w = -z$). Projection from this line gives $S \sim_{\mathrm{bir}} \mathbb{P}^2$.
+</Example>
+
+---
+
+## 10. Blowing up as a birational map
+
+<Example id="blowup-origin" title="Blowing up the origin in A^2">
+The **blowup** of $\mathbb{A}^2$ at the origin is the variety
+
+$$\mathrm{Bl}_0 \mathbb{A}^2 = \{((x, y), [s : t]) \in \mathbb{A}^2 \times \mathbb{P}^1 \mid xt = ys\} \subseteq \mathbb{A}^2 \times \mathbb{P}^1.$$
+
+The projection $\pi : \mathrm{Bl}_0 \mathbb{A}^2 \to \mathbb{A}^2$ is a **birational morphism**: it is an isomorphism over $\mathbb{A}^2 \setminus \{(0,0)\}$, and the fiber over the origin is
+
+$$\pi^{-1}(0, 0) = \{(0, 0)\} \times \mathbb{P}^1 \cong \mathbb{P}^1,$$
+
+called the **exceptional divisor** $E$. The blowup "replaces the origin by the set of all tangent directions through it."
+
+**Explicit charts:** In the chart $s \neq 0$ (set $s = 1$), we have $y = xt$, so the chart is $\mathbb{A}^2$ with coordinates $(x, t)$ and $\pi(x, t) = (x, xt)$. In the chart $t \neq 0$ (set $t = 1$), we have $x = ys$, giving coordinates $(s, y)$ and $\pi(s, y) = (sy, y)$.
+
+**The blowup is birational to $\mathbb{A}^2$:** $\pi$ has an inverse rational map $\mathbb{A}^2 \dashrightarrow \mathrm{Bl}_0 \mathbb{A}^2$ given by $(x, y) \mapsto ((x, y), [x : y])$, defined for $(x, y) \neq (0, 0)$. So $\mathrm{Bl}_0 \mathbb{A}^2 \sim_{\mathrm{bir}} \mathbb{A}^2$.
+</Example>
+
+<Example id="blowup-resolves-node" title="Blowing up resolves the node">
+Let $C = V(y^2 - x^2(x+1)) \subseteq \mathbb{A}^2$ be the nodal cubic. The **strict transform** of $C$ under the blowup $\pi : \mathrm{Bl}_0 \mathbb{A}^2 \to \mathbb{A}^2$ is obtained by taking $\pi^{-1}(C \setminus \{0\})$ and taking its closure.
+
+In the chart $y = xt$: substituting into $y^2 = x^2(x+1)$ gives $(xt)^2 = x^2(x+1)$, so $x^2 t^2 = x^2(x+1)$. Canceling $x^2$ (this removes the exceptional divisor component): $t^2 = x + 1$, i.e., $x = t^2 - 1$. This is a smooth curve (check: $\partial/\partial t (t^2 - x - 1) = 2t$ and $\partial/\partial x = -1$ are never simultaneously zero).
+
+The two branches at the node (slopes $t = 1$ and $t = -1$) are separated in the blowup: they correspond to two distinct points $(x, t) = (0, 1)$ and $(0, -1)$ on the strict transform. The blowup **resolves the singularity**.
+</Example>
+
+<Example id="blowup-resolves-cusp" title="Blowing up the cusp requires two blowups">
+For the cuspidal cubic $C = V(y^2 - x^3)$: in the chart $y = xt$, we get $x^2 t^2 = x^3$, so $t^2 = x$ (after canceling $x^2$). The strict transform is $V(t^2 - x)$, which is smooth --- but actually, we need to check the other chart as well. In the chart $x = ys$: $y^2 = (ys)^3 = y^3 s^3$, so $1 = ys^3$ (canceling $y^2$), giving a smooth curve.
+
+So a single blowup resolves the cusp. The strict transform is isomorphic to $\mathbb{A}^1$ (parametrized by $t$, with $x = t^2$), confirming $C \sim_{\mathrm{bir}} \mathbb{A}^1$.
+
+More generally, **every** singularity of a curve can be resolved by a finite sequence of blowups (Hironaka's theorem gives resolution of singularities in all dimensions in characteristic 0).
+</Example>
+
+---
+
+## 11. The function field and birational invariance
+
+<Definition title="Function field" number="1.7">
+Let $X$ be a variety. The **function field** $k(X)$ is the field of fractions of the coordinate ring $k[X]$ (for $X$ affine), or equivalently, the set of rational functions on $X$ --- equivalence classes of pairs $(U, f)$ where $U \subseteq X$ is open and $f \in \mathcal{O}_X(U)$, with the obvious equivalence.
+
+For a projective variety $X \subseteq \mathbb{P}^n$, $k(X)$ consists of quotients $g/h$ of homogeneous polynomials of the **same degree**, restricted to $X$, with $h \not\equiv 0$ on $X$.
+</Definition>
+
+<Theorem title="Birational invariance of the function field" number="1.3">
+Two varieties $X$ and $Y$ are birationally equivalent if and only if $k(X) \cong k(Y)$.
+</Theorem>
+
+<Example id="function-field-cusp" title="Function field of the cuspidal cubic">
+$C = V(y^2 - x^3) \subseteq \mathbb{A}^2$. The coordinate ring is $k[C] = k[x, y]/(y^2 - x^3) \cong k[t^2, t^3]$, where $t = y/x$. The function field is
+
+$$k(C) = \mathrm{Frac}(k[t^2, t^3]) = k(t),$$
+
+since $t = t^3/t^2 \in \mathrm{Frac}(k[t^2, t^3])$. So $k(C) = k(t)$, confirming $C \sim_{\mathrm{bir}} \mathbb{A}^1$.
+</Example>
+
+<Example id="function-field-node" title="Function field of the nodal cubic">
+$C = V(y^2 - x^2(x+1))$. Setting $t = y/x$, we get $t^2 = x + 1$, so $x = t^2 - 1$ and $y = t(t^2 - 1)$. The function field is
+
+$$k(C) = k(x, y) / (y^2 - x^2(x+1)) = k(t),$$
+
+again purely transcendental. So the nodal cubic is rational.
+</Example>
+
+<Example id="function-field-elliptic" title="Function field of an elliptic curve">
+$E = V(y^2 - x^3 + x)$. The function field is
+
+$$k(E) = k(x)[y]/(y^2 - x^3 + x) = k(x)(\sqrt{x^3 - x}).$$
+
+This is a degree-2 extension of $k(x)$. Is it purely transcendental? **No.** The field $k(E)$ has genus 1 (as a function field of one variable over $k$), and by the Riemann--Roch theorem, $k(E) \not\cong k(t)$. This is what prevents $E$ from being rational.
+</Example>
+
+<Remark title="Birational invariants">
+The function field is the ultimate birational invariant, but it is often hard to work with directly. Other birational invariants include:
+- **Dimension:** $\dim X = \mathrm{tr.deg}_k \, k(X)$.
+- **Genus** (for curves): $g(C)$ is a birational invariant; $C$ is rational iff $g = 0$.
+- **Kodaira dimension** $\kappa(X)$: takes values in $\{-\infty, 0, 1, \ldots, \dim X\}$.
+- **Plurigenera** $P_m(X) = \dim H^0(X, \omega_X^{\otimes m})$ for smooth projective $X$.
+- **Fundamental group** $\pi_1(X)$ (over $\mathbb{C}$, for smooth projective varieties).
+</Remark>
+
+---
+
+## 12. Luroth's theorem
+
+<Theorem title="Luroth's theorem" number="1.4">
+Let $k$ be a field and let $L$ be a field with $k \subsetneq L \subseteq k(t)$ and $\mathrm{tr.deg}_k \, L = 1$. Then $L = k(s)$ for some $s \in k(t)$, i.e., $L$ is itself a purely transcendental extension of $k$.
+
+Equivalently: every unirational curve is rational.
+</Theorem>
+
+<Example id="luroth-example" title="Luroth's theorem in action">
+Consider the subfield $L = k(t^2) \subseteq k(t)$. By Luroth's theorem, $L$ is purely transcendental over $k$, which is obvious: $L = k(s)$ where $s = t^2$.
+
+A less trivial example: $L = k\!\left(\frac{t^2}{t+1}\right) \subseteq k(t)$. Set $u = \frac{t^2}{t+1}$. Then $ut + u = t^2$, so $t^2 - ut - u = 0$, giving $t = \frac{u \pm \sqrt{u^2 + 4u}}{2}$. Thus $[k(t) : L] = 2$ (generically). Luroth's theorem guarantees $L = k(u)$ is purely transcendental --- and indeed $u = t^2/(t+1)$ is a single rational function of $t$.
+</Example>
+
+<Example id="luroth-geometry" title="Geometric meaning of Luroth's theorem">
+Let $C$ be a smooth projective curve and suppose there is a dominant rational map $\varphi : \mathbb{P}^1 \dashrightarrow C$. This gives an inclusion $k(C) \hookrightarrow k(\mathbb{P}^1) = k(t)$. Since $C$ is a curve, $\mathrm{tr.deg}_k \, k(C) = 1$, so Luroth's theorem says $k(C) \cong k(s)$, hence $C \sim_{\mathrm{bir}} \mathbb{P}^1$.
+
+**Consequence:** A curve that can be parametrized by rational functions is necessarily rational. There is no distinction between "rational" and "unirational" for curves.
+</Example>
+
+---
+
+## 13. Unirational vs. rational in higher dimensions
+
+<Theorem title="Castelnuovo's rationality criterion" number="1.5">
+Let $S$ be a smooth projective surface over an algebraically closed field of characteristic 0. Then $S$ is rational if and only if $q(S) = P_2(S) = 0$, where $q = h^1(\mathcal{O}_S)$ is the irregularity and $P_2 = h^0(\omega_S^{\otimes 2})$ is the second plurigenus.
+
+In particular, every unirational surface (in characteristic 0) is rational.
+</Theorem>
+
+<Example id="castelnuovo-application" title="Applying Castelnuovo's criterion">
+Let $S \subseteq \mathbb{P}^3$ be a smooth cubic surface. Then $\omega_S \cong \mathcal{O}_S(-1)$ (by adjunction: $\omega_S = \omega_{\mathbb{P}^3}(3)|_S = \mathcal{O}(-4+3)|_S = \mathcal{O}_S(-1)$). Since $\mathcal{O}_S(-1)$ has no global sections, $P_1 = 0$, and also $P_2 = h^0(\mathcal{O}_S(-2)) = 0$. Furthermore $q = h^1(\mathcal{O}_S) = 0$ (by the Lefschetz hyperplane theorem). So by Castelnuovo's criterion, $S$ is rational.
+</Example>
+
+<Remark title="The Luroth problem in dimension 3">
+In dimension $\geq 3$, unirational does **not** imply rational. The first counterexamples were found in the early 1970s, using three different methods:
+
+1. **Clemens and Griffiths (1972):** A smooth cubic threefold $X_3 \subseteq \mathbb{P}^4$ is unirational but **not rational**. The obstruction comes from the **intermediate Jacobian** $J(X_3)$: it is a principally polarized abelian variety that is not a product of Jacobians of curves, which would be necessary if $X_3$ were rational.
+
+2. **Iskovskikh and Manin (1971):** A smooth quartic threefold $X_4 \subseteq \mathbb{P}^4$ is not rational. In fact, $\mathrm{Bir}(X_4) = \mathrm{Aut}(X_4)$ --- every birational automorphism is a regular automorphism. Since a rational variety has a huge birational automorphism group, this rules out rationality.
+
+3. **Artin and Mumford (1972):** Certain conic bundles $X \to \mathbb{P}^2$ are unirational but have $\mathrm{Br}(X)[2] \neq 0$ (nontrivial 2-torsion in the Brauer group), which is a birational invariant that vanishes for rational varieties.
+</Remark>
+
+<Example id="cubic-threefold" title="The cubic threefold">
+Let $X = V(x_0^3 + x_1^3 + x_2^3 + x_3^3 + x_4^3) \subseteq \mathbb{P}^4$ (the Fermat cubic threefold). This is:
+- **Unirational:** Project from a line $\ell \subseteq X$ to get a conic bundle over $\mathbb{P}^2$. A unirational parametrization can be written down explicitly.
+- **Not rational:** By Clemens--Griffiths. The intermediate Jacobian $J(X)$ is a 5-dimensional abelian variety that is not a Jacobian of a curve and not a product of lower-dimensional abelian varieties.
+
+So $k(X) \hookrightarrow k(x_1, x_2, x_3)$ (unirational), but $k(X) \not\cong k(x_1, x_2, x_3)$ (not rational). This is the 3-dimensional failure of the Luroth problem.
+</Example>
+
+<Example id="quartic-threefold" title="Quartic threefolds: birational rigidity">
+A general smooth quartic threefold $X_4 \subseteq \mathbb{P}^4$ satisfies $\mathrm{Bir}(X_4) = \mathrm{Aut}(X_4)$. In particular, if $X_4$ has no nontrivial automorphisms (which is the general case), then $\mathrm{Bir}(X_4) = \{\mathrm{id}\}$.
+
+This is called **birational rigidity**. It immediately implies $X_4$ is irrational, since $\mathrm{Bir}(\mathbb{P}^3)$ is enormous (it contains the Cremona group).
+
+It is unknown whether a general smooth quartic threefold is unirational.
+</Example>
+
+---
+
+## 14. The birational geometry program
+
+<Remark title="Overview of the birational classification">
+The ultimate goal of algebraic geometry is to classify varieties up to birational equivalence. The **Minimal Model Program** (MMP), initiated by Mori in the 1980s, provides a framework:
+
+1. **Kodaira dimension $\kappa(X)$:** For a smooth projective variety $X$, $\kappa(X) \in \{-\infty, 0, 1, \ldots, \dim X\}$. This is a birational invariant.
+
+2. **The trichotomy** (for surfaces):
+   - $\kappa = -\infty$: $X$ is birational to a ruled surface (fiber bundle over a curve with fibers $\cong \mathbb{P}^1$). Rational surfaces are the special case where the base is $\mathbb{P}^1$.
+   - $\kappa = 0$: abelian surfaces, K3 surfaces, Enriques surfaces, bielliptic surfaces.
+   - $\kappa = 1$ or $2$: $X$ has a unique **minimal model** (no $(-1)$-curves), and $\kappa = 2$ means $X$ is of **general type**.
+
+3. **Higher dimensions:** The MMP seeks to produce either a **minimal model** ($K_X$ nef) or a **Mori fiber space** ($K_X$ not pseudo-effective). The existence of minimal models was proved by Birkar--Cascini--Hacon--McKernan (2010) for varieties of general type.
+
+4. **Key operations:** The MMP proceeds by **contracting** extremal rays and performing **flips** --- these are birational transformations that simplify the variety while preserving essential birational invariants.
+</Remark>
+
+<Example id="mmp-surface" title="MMP for surfaces: blowing down (-1)-curves">
+For surfaces, the MMP reduces to the classical theory of **Castelnuovo contractions**. A smooth projective surface $S$ contains a $(-1)$-curve $E \cong \mathbb{P}^1$ with $E^2 = -1$ if and only if $S$ is the blowup of another smooth surface $S'$ at a point, with $E$ the exceptional divisor. By repeatedly contracting $(-1)$-curves, we arrive at either:
+
+- $\mathbb{P}^2$ or a Hirzebruch surface $\mathbb{F}_n$ ($\kappa = -\infty$), or
+- A **minimal surface** with $K_S$ nef ($\kappa \geq 0$).
+
+For example, the blowup of $\mathbb{P}^2$ at one point gives a surface $S$ with one $(-1)$-curve $E$. Contracting $E$ recovers $\mathbb{P}^2$. But $S$ is also isomorphic to $\mathbb{F}_1$ (the first Hirzebruch surface), so we see that $\mathbb{F}_1 \sim_{\mathrm{bir}} \mathbb{P}^2$ but $\mathbb{F}_1 \not\cong \mathbb{P}^2$.
+</Example>
+
+---
+
+## Summary of key examples
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Variety</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Function field</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Rational?</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Key point</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\mathbb{P}^n$</td><td className="px-4 py-2 border-b border-gray-100">$k(x_1, \ldots, x_n)$</td><td className="px-4 py-2 border-b border-gray-100">Yes (by definition)</td><td className="px-4 py-2 border-b border-gray-100">The "standard" rational variety</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Smooth conic $\subseteq \mathbb{P}^2$</td><td className="px-4 py-2 border-b border-gray-100">$k(t)$</td><td className="px-4 py-2 border-b border-gray-100">Yes</td><td className="px-4 py-2 border-b border-gray-100">Stereographic projection</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Cuspidal cubic $y^2 = x^3$</td><td className="px-4 py-2 border-b border-gray-100">$k(t)$</td><td className="px-4 py-2 border-b border-gray-100">Yes</td><td className="px-4 py-2 border-b border-gray-100">$t = y/x$, birational but not isomorphic to $\mathbb{A}^1$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Nodal cubic $y^2 = x^2(x+1)$</td><td className="px-4 py-2 border-b border-gray-100">$k(t)$</td><td className="px-4 py-2 border-b border-gray-100">Yes</td><td className="px-4 py-2 border-b border-gray-100">$t = y/x$, normalization resolves node</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Elliptic curve $y^2 = x^3 - x$</td><td className="px-4 py-2 border-b border-gray-100">$k(x, \sqrt{x^3 - x})$</td><td className="px-4 py-2 border-b border-gray-100">No</td><td className="px-4 py-2 border-b border-gray-100">Genus 1, no rational parametrization</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Smooth quadric $\subseteq \mathbb{P}^3$</td><td className="px-4 py-2 border-b border-gray-100">$k(s, t)$</td><td className="px-4 py-2 border-b border-gray-100">Yes</td><td className="px-4 py-2 border-b border-gray-100">$\cong \mathbb{P}^1 \times \mathbb{P}^1$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Smooth cubic surface $\subseteq \mathbb{P}^3$</td><td className="px-4 py-2 border-b border-gray-100">$k(s, t)$</td><td className="px-4 py-2 border-b border-gray-100">Yes</td><td className="px-4 py-2 border-b border-gray-100">27 lines, projection from a line</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Cubic threefold $\subseteq \mathbb{P}^4$</td><td className="px-4 py-2 border-b border-gray-100">$k(X) \hookrightarrow k(s,t,u)$</td><td className="px-4 py-2 border-b border-gray-100">No (unirational)</td><td className="px-4 py-2 border-b border-gray-100">Clemens--Griffiths, intermediate Jacobian</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">Quartic threefold $\subseteq \mathbb{P}^4$</td><td className="px-4 py-2 border-b border-gray-100">---</td><td className="px-4 py-2 border-b border-gray-100">No</td><td className="px-4 py-2 border-b border-gray-100">Birationally rigid (Iskovskikh--Manin)</td></tr>
+</tbody>
+</table>
+</div>
+
+<Remark title="Looking ahead">
+Rational maps are the beginning of **birational geometry**, one of the deepest branches of algebraic geometry. Key topics that build on this material include:
+
+- **Resolution of singularities** (Hironaka): every variety is birational to a smooth one.
+- **Minimal model program** (Mori, Kawamata, Shokurov, Birkar--Cascini--Hacon--McKernan): classification of varieties by Kodaira dimension.
+- **Derived categories and birational geometry** (Bondal, Orlov, Kawamata): birational varieties often have equivalent derived categories.
+- **Rationality problems**: determining which varieties are rational remains one of the most active areas. Recent breakthroughs include the proof that very general quartic threefolds are not stably rational (Colliot-Thelene and Pirutka, 2016, via the specialization method of Voisin).
+</Remark>

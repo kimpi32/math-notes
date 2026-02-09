@@ -1,0 +1,371 @@
+export const metadata = {
+  title: 'Category — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Concept — Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Category
+
+A category is the most basic structure in category theory. It captures the idea of "objects with structure-preserving maps between them" at the highest level of abstraction.
+
+<Definition title="Category" number="1.1">
+A **category** $\mathcal{C}$ consists of the following data:
+
+1. A collection $\mathrm{Ob}(\mathcal{C})$ of **objects**.
+2. For every pair of objects $A, B$, a collection $\mathrm{Hom}_{\mathcal{C}}(A, B)$ of **morphisms** (or arrows) from $A$ to $B$.
+3. For every triple $A, B, C$, a **composition** map
+
+$$\circ : \mathrm{Hom}(B, C) \times \mathrm{Hom}(A, B) \to \mathrm{Hom}(A, C), \qquad (g, f) \mapsto g \circ f$$
+
+4. For every object $A$, an **identity morphism** $\mathrm{id}_A \in \mathrm{Hom}(A, A)$.
+
+subject to the axioms:
+
+- **Associativity.** For $f: A \to B$, $g: B \to C$, $h: C \to D$:
+
+$$h \circ (g \circ f) = (h \circ g) \circ f$$
+
+- **Identity.** For $f : A \to B$:
+
+$$f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f$$
+</Definition>
+
+<Definition title="Locally small category" number="1.2">
+A category $\mathcal{C}$ is **locally small** if for every pair of objects $A, B$, the collection $\mathrm{Hom}(A, B)$ is a set (not a proper class).
+
+A category is **small** if both $\mathrm{Ob}(\mathcal{C})$ and all $\mathrm{Hom}(A,B)$ are sets.
+</Definition>
+
+<Remark title="Size issues">
+The distinction between "small" and "large" categories matters. The category of all sets cannot have a set of objects (Russell's paradox). Most categories we work with are locally small but not small. We will be casual about set-theoretic issues, following Gelfand–Manin's convention: assume a fixed Grothendieck universe when needed.
+</Remark>
+
+---
+
+## The Zoo: Examples of Categories
+
+### Concrete categories (objects = sets with structure)
+
+<Example id="set" title="Set — the category of sets">
+- **Objects:** All sets.
+- **Morphisms:** $\mathrm{Hom}(A, B)$ = all functions $f: A \to B$.
+- **Composition:** Ordinary function composition.
+- **Identity:** The identity function $\mathrm{id}_A(x) = x$.
+
+$\mathbf{Set}$ is in some sense the "mother of all categories." The Yoneda embedding sends every category into a category of $\mathbf{Set}$-valued functors.
+</Example>
+
+<Example id="grp" title="Grp — the category of groups">
+- **Objects:** All groups.
+- **Morphisms:** Group homomorphisms $\varphi : G \to H$ (maps preserving the group operation).
+- **Composition:** Composition of homomorphisms.
+- **Identity:** The identity homomorphism.
+
+Note: $\mathrm{Hom}(G, H)$ is just a set here — it does not naturally have a group structure (unless $H$ is abelian).
+</Example>
+
+<Example id="ab" title="Ab — the category of abelian groups">
+- **Objects:** Abelian groups.
+- **Morphisms:** Group homomorphisms.
+
+Unlike $\mathbf{Grp}$, this is an **additive category**: each $\mathrm{Hom}(A, B)$ is itself an abelian group (under pointwise addition), and composition is bilinear. This makes $\mathbf{Ab}$ an **abelian category** — the natural home for homological algebra.
+</Example>
+
+<Example id="top" title="Top — the category of topological spaces">
+- **Objects:** Topological spaces $(X, \tau)$.
+- **Morphisms:** Continuous maps.
+
+Variants: $\mathbf{Top}_*$ (pointed spaces, basepoint-preserving maps), $\mathbf{Haus}$ (Hausdorff spaces).
+</Example>
+
+<Example id="rmod" title="R-Mod — the category of modules">
+Fix a ring $R$.
+
+- **Objects:** Left $R$-modules.
+- **Morphisms:** $R$-module homomorphisms.
+
+When $R = k$ is a field, $R\text{-}\mathbf{Mod} = \mathbf{Vect}_k$, the category of $k$-vector spaces. This is the most important abelian category in linear algebra.
+
+When $R = \mathbb{Z}$, $R\text{-}\mathbf{Mod} = \mathbf{Ab}$.
+</Example>
+
+### Algebraic / order-theoretic categories
+
+<Example id="poset" title="A poset as a category">
+Any **partially ordered set** $(P, \leq)$ defines a category:
+
+- **Objects:** Elements of $P$.
+- **Morphisms:** There is exactly one morphism $x \to y$ if $x \leq y$, and none otherwise.
+
+$$\mathrm{Hom}(x, y) = \begin{cases} \{*\} & \text{if } x \leq y \\ \varnothing & \text{otherwise} \end{cases}$$
+
+- **Composition:** Transitivity of $\leq$.
+- **Identity:** Reflexivity of $\leq$.
+
+This means: **functors from poset categories = order-preserving maps**. Many constructions in order theory (meets, joins) become special cases of categorical limits and colimits.
+</Example>
+
+<Example id="bg" title="A group as a category">
+Any **group** $G$ defines a category $\mathbf{B}G$ with:
+
+- **Objects:** A single object $*$.
+- **Morphisms:** $\mathrm{Hom}(*, *) = G$.
+- **Composition:** The group operation.
+- **Identity:** The group identity $e$.
+
+The invertibility of all morphisms makes $\mathbf{B}G$ a **groupoid** (a category where every morphism is an isomorphism). A functor $\mathbf{B}G \to \mathbf{Set}$ is exactly a **$G$-set** (a set with a $G$-action). This is why the Yoneda lemma specializes to Cayley's theorem for groups.
+</Example>
+
+<Example id="monoid" title="A monoid as a category">
+More generally, any **monoid** $(M, \cdot, e)$ defines a one-object category:
+
+- **Objects:** $\{*\}$.
+- **Morphisms:** $\mathrm{Hom}(*, *) = M$.
+- **Composition:** The monoid operation.
+
+A group is a monoid where every element is invertible — hence the previous example. A functor from a monoid category to $\mathbf{Set}$ is an **$M$-action** on a set.
+</Example>
+
+### Categories from other categories
+
+<Example id="opposite" title="The opposite category">
+For any category $\mathcal{C}$, the **opposite category** $\mathcal{C}^{\mathrm{op}}$ has:
+
+- **Objects:** Same as $\mathcal{C}$.
+- **Morphisms:** $\mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(A, B) = \mathrm{Hom}_{\mathcal{C}}(B, A)$ — all arrows reversed.
+
+This is a powerful trick: any theorem about categories immediately gives a "dual" theorem by passing to $\mathcal{C}^{\mathrm{op}}$. For instance, a product in $\mathcal{C}$ is a coproduct in $\mathcal{C}^{\mathrm{op}}$.
+</Example>
+
+<Example id="product" title="The product category">
+Given categories $\mathcal{C}$ and $\mathcal{D}$, the **product category** $\mathcal{C} \times \mathcal{D}$ has:
+
+- **Objects:** Pairs $(C, D)$ with $C \in \mathcal{C}$, $D \in \mathcal{D}$.
+- **Morphisms:** $\mathrm{Hom}((C,D),(C',D')) = \mathrm{Hom}_\mathcal{C}(C,C') \times \mathrm{Hom}_\mathcal{D}(D,D')$.
+- **Composition:** Componentwise.
+</Example>
+
+<Example id="functor-cat" title="The functor category">
+For categories $\mathcal{C}$ and $\mathcal{D}$, the **functor category** $[\mathcal{C}, \mathcal{D}]$ (also written $\mathcal{D}^{\mathcal{C}}$) has:
+
+- **Objects:** Functors $F : \mathcal{C} \to \mathcal{D}$.
+- **Morphisms:** Natural transformations $\alpha : F \Rightarrow G$.
+- **Composition:** Vertical composition of natural transformations.
+
+The presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is the target of the Yoneda embedding. It is always complete and cocomplete, even if $\mathcal{C}$ is not.
+</Example>
+
+### Geometric / topological categories
+
+<Example id="rel" title="Rel — the category of relations">
+- **Objects:** Sets.
+- **Morphisms:** $\mathrm{Hom}(A, B)$ = all relations $R \subseteq A \times B$.
+- **Composition:** Relational composition. Given $R \subseteq A \times B$ and $S \subseteq B \times C$:
+
+$$S \circ R = \{(a, c) \mid \exists\, b \in B : (a,b) \in R \text{ and } (b,c) \in S\}$$
+
+- **Identity:** The diagonal relation $\Delta_A = \{(a,a) \mid a \in A\}$.
+
+$\mathbf{Set}$ is a subcategory of $\mathbf{Rel}$ (every function is a relation). But $\mathbf{Rel}$ is richer: morphisms are not required to be functions. Note that $\mathbf{Rel}$ is **self-dual**: $\mathbf{Rel} \cong \mathbf{Rel}^{\mathrm{op}}$ via $(a,b) \mapsto (b,a)$.
+</Example>
+
+<Example id="mat" title="Mat_k — the matrix category">
+Fix a field $k$.
+
+- **Objects:** Natural numbers $0, 1, 2, 3, \ldots$
+- **Morphisms:** $\mathrm{Hom}(m, n)$ = all $n \times m$ matrices with entries in $k$.
+- **Composition:** Matrix multiplication.
+- **Identity:** The $n \times n$ identity matrix $I_n$.
+
+This is a **skeleton** of $\mathbf{Vect}_k^{\mathrm{fd}}$ (finite-dimensional vector spaces): every finite-dimensional vector space is isomorphic to exactly one object $n$ in $\mathbf{Mat}_k$. The fact that matrix multiplication is associative is precisely the category axiom — and it encodes all of linear algebra.
+</Example>
+
+<Example id="man" title="Smooth manifolds and more">
+- $\mathbf{Man}$: smooth manifolds with smooth maps.
+- $\mathbf{Diff}$: smooth manifolds with diffeomorphisms only (a groupoid).
+
+The functor $\mathbf{Man} \to \mathbf{Vect}_{\mathbb{R}}$ sending $M \mapsto T_p M$ (tangent space at a point) is a key example in differential geometry. The chain rule $D(g \circ f)_p = Dg_{f(p)} \circ Df_p$ is precisely the statement that differentiation is a **functor**.
+</Example>
+
+<Example id="open" title="Open sets of a topological space">
+For a topological space $X$, define a category $\mathbf{Open}(X)$:
+
+- **Objects:** Open sets $U \subseteq X$.
+- **Morphisms:** Inclusions $U \hookrightarrow V$ (at most one morphism per pair).
+- **Composition:** Transitivity of inclusion.
+
+This is a poset category. A **presheaf** on $X$ is a contravariant functor $\mathbf{Open}(X)^{\mathrm{op}} \to \mathbf{Set}$ (or to $\mathbf{Ab}$, $R\text{-}\mathbf{Mod}$, etc.). Sheaves, the foundation of algebraic geometry, are presheaves satisfying a gluing condition. The category $\mathbf{Sh}(X)$ of abelian sheaves on $X$ is an abelian category — and its derived category is the starting point for sheaf cohomology.
+</Example>
+
+### Combinatorial / categorical categories
+
+<Example id="delta" title="The simplex category Δ">
+The **simplex category** $\mathbf{\Delta}$ has:
+
+- **Objects:** Finite totally ordered sets $[n] = \{0, 1, \ldots, n\}$ for $n \geq 0$.
+- **Morphisms:** Order-preserving maps $[m] \to [n]$.
+
+Every morphism is a composition of **face maps** $\delta^i : [n-1] \to [n]$ (skip $i$) and **degeneracy maps** $\sigma^j : [n+1] \to [n]$ (repeat $j$). A **simplicial set** is a functor $\mathbf{\Delta}^{\mathrm{op}} \to \mathbf{Set}$; a **simplicial object** in $\mathcal{C}$ is a functor $\mathbf{\Delta}^{\mathrm{op}} \to \mathcal{C}$.
+
+The nerve of a category, simplicial homology, and the Dold-Kan correspondence all live here.
+</Example>
+
+<Example id="path" title="The free category on a graph (path category)">
+Given a directed graph (quiver) $Q$, the **free category** $\mathbf{F}(Q)$ has:
+
+- **Objects:** Vertices of $Q$.
+- **Morphisms:** Finite directed paths in $Q$ (including empty paths as identities).
+- **Composition:** Concatenation of paths.
+
+For example, the quiver $\bullet \xrightarrow{a} \bullet \xrightarrow{b} \bullet$ generates a category with three objects and morphisms $\mathrm{id}, a, b, b \circ a$. **Representations** of quivers (functors $\mathbf{F}(Q) \to \mathbf{Vect}_k$) are a major area in representation theory — Gabriel's theorem classifies indecomposable representations for Dynkin quivers.
+</Example>
+
+<Example id="slice" title="Slice categories">
+For a category $\mathcal{C}$ and an object $X$, the **slice category** (or over-category) $\mathcal{C}/X$ has:
+
+- **Objects:** Morphisms $f: A \to X$ in $\mathcal{C}$ (think: "objects equipped with a map to $X$").
+- **Morphisms:** A morphism from $(f: A \to X)$ to $(g: B \to X)$ is a map $h: A \to B$ such that $g \circ h = f$.
+
+$$
+\begin{array}{ccc}
+A & \xrightarrow{h} & B \\
+& \searrow\scriptstyle{f} \quad \swarrow\scriptstyle{g} & \\
+& X &
+\end{array}
+$$
+
+Dually, the **coslice category** $X/\mathcal{C}$ has objects $X \to A$. Slice categories arise everywhere: $\mathbf{Set}/S$ is equivalent to the category of $S$-indexed families of sets; $\mathbf{Ring}/k$ for a field $k$ is the category of $k$-algebras.
+</Example>
+
+### Categories central to homological algebra
+
+<Example id="ch-a" title="Ch(A) — the category of chain complexes">
+For an abelian category $\mathcal{A}$ (e.g. $R\text{-}\mathbf{Mod}$), the category $\mathbf{Ch}(\mathcal{A})$ has:
+
+- **Objects:** Chain complexes $\cdots \xrightarrow{d_{n+1}} A_n \xrightarrow{d_n} A_{n-1} \xrightarrow{d_{n-1}} \cdots$ with $d_n \circ d_{n+1} = 0$.
+- **Morphisms:** Chain maps $f_\bullet : A_\bullet \to B_\bullet$ (families of maps commuting with differentials).
+
+This is again an abelian category. It is the starting point for constructing the [homotopy category](/category-theory/ch04-complexes-cohomology/concepts/c05-homotopy-category) and the [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category).
+</Example>
+
+<Example id="k-a" title="K(A) — the homotopy category">
+Same objects as $\mathbf{Ch}(\mathcal{A})$, but morphisms are chain maps modulo **chain homotopy**:
+
+$$f \sim g \iff \exists\, s : f - g = d \circ s + s \circ d$$
+
+$\mathbf{K}(\mathcal{A})$ is **not** abelian in general — this is a key motivation for passing to the derived category. It is, however, a **triangulated category**: the distinguished triangles come from mapping cones.
+</Example>
+
+<Example id="d-a" title="D(A) — the derived category (preview)">
+Starting from $\mathbf{K}(\mathcal{A})$, we **localize** at quasi-isomorphisms (chain maps inducing isomorphisms on cohomology):
+
+$$\mathbf{D}(\mathcal{A}) = \mathbf{K}(\mathcal{A})[\mathrm{qis}^{-1}]$$
+
+This is the central construction in Gelfand–Manin. The derived category "remembers" only the cohomological information of complexes. Two complexes with the same cohomology become isomorphic. Derived functors ($R\Gamma$, $\mathrm{R}Hom$, $\otimes^L$) live naturally here.
+</Example>
+
+### "Exotic" categories
+
+<Example id="discrete" title="A category with no non-identity morphisms (discrete category)">
+Any set $S$ defines a **discrete category**:
+
+- **Objects:** Elements of $S$.
+- **Morphisms:** Only identities — $\mathrm{Hom}(x, y) = \varnothing$ for $x \neq y$.
+
+A functor from a discrete category to $\mathcal{C}$ is just a family of objects of $\mathcal{C}$. The limit of such a functor is the product; the colimit is the coproduct.
+</Example>
+
+<Example id="walking-arrow" title="The walking arrow (interval category)">
+The category $\mathbf{2}$ has two objects and one non-identity morphism:
+
+$$0 \xrightarrow{!} 1$$
+
+A functor $\mathbf{2} \to \mathcal{C}$ is just a morphism in $\mathcal{C}$. More generally, $\mathbf{n}$ (the ordinal $\{0 < 1 < \cdots < n-1\}$ as a poset category) classifies chains of $n-1$ composable morphisms. These "walking" categories are the basic shapes that index diagrams.
+</Example>
+
+<Example id="delooping" title="The delooping: from a ring to a category">
+A ring $R$ can be viewed as a one-object **$\mathbf{Ab}$-enriched category** $\mathbf{B}R$:
+
+- **Objects:** $\{*\}$.
+- **Morphisms:** $\mathrm{Hom}(*,*) = R$ (an abelian group).
+- **Composition:** Ring multiplication.
+
+A left $R$-module is precisely a functor $\mathbf{B}R \to \mathbf{Ab}$. This perspective generalizes: an $\mathcal{A}$-enriched category with one object is a monoid in $\mathcal{A}$, and its "modules" are enriched functors to $\mathcal{A}$.
+</Example>
+
+---
+
+## Non-examples and subtleties
+
+<Remark title="What is NOT a category">
+A common mistake is to think any collection of "things and relations" forms a category. The key requirement is **composition must be defined and associative**. For instance:
+
+- A directed graph is not a category — there is no guarantee that a path from $A$ to $B$ and from $B$ to $C$ gives a single edge from $A$ to $C$. (But the **free category** on a graph is a category, where morphisms are paths.)
+- A metric space is not obviously a category. But it can be seen as an **enriched category** over $([0,\infty], \geq, +)$: the "hom-object" $d(x,y)$ satisfies $d(x,z) \leq d(x,y) + d(y,z)$ (triangle inequality = composition) and $d(x,x) = 0$ (identity). This is Lawvere's beautiful observation.
+</Remark>
+
+## Summary of examples
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Category</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Objects</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Morphisms</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Key property</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#set" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Set}$</a></td><td className="px-4 py-2 border-b border-gray-100">Sets</td><td className="px-4 py-2 border-b border-gray-100">Functions</td><td className="px-4 py-2 border-b border-gray-100">Foundational</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#grp" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Grp}$</a></td><td className="px-4 py-2 border-b border-gray-100">Groups</td><td className="px-4 py-2 border-b border-gray-100">Homomorphisms</td><td className="px-4 py-2 border-b border-gray-100">Not abelian category</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#ab" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Ab}$</a></td><td className="px-4 py-2 border-b border-gray-100">Abelian groups</td><td className="px-4 py-2 border-b border-gray-100">Homomorphisms</td><td className="px-4 py-2 border-b border-gray-100">Abelian category</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#rmod" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$R\text{-}\mathbf{Mod}$</a></td><td className="px-4 py-2 border-b border-gray-100">$R$-modules</td><td className="px-4 py-2 border-b border-gray-100">$R$-linear maps</td><td className="px-4 py-2 border-b border-gray-100">Abelian, enough injectives</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#top" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Top}$</a></td><td className="px-4 py-2 border-b border-gray-100">Spaces</td><td className="px-4 py-2 border-b border-gray-100">Continuous maps</td><td className="px-4 py-2 border-b border-gray-100">Not abelian</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#rel" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Rel}$</a></td><td className="px-4 py-2 border-b border-gray-100">Sets</td><td className="px-4 py-2 border-b border-gray-100">Relations</td><td className="px-4 py-2 border-b border-gray-100">Self-dual</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#mat" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Mat}_k$</a></td><td className="px-4 py-2 border-b border-gray-100">$\mathbb{N}$</td><td className="px-4 py-2 border-b border-gray-100">Matrices</td><td className="px-4 py-2 border-b border-gray-100">Skeleton of $\mathbf{Vect}_k^{\mathrm{fd}}$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#poset" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Poset</a></td><td className="px-4 py-2 border-b border-gray-100">Elements</td><td className="px-4 py-2 border-b border-gray-100">$\leq$</td><td className="px-4 py-2 border-b border-gray-100">Thin category</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#bg" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{B}G$</a></td><td className="px-4 py-2 border-b border-gray-100">$\{*\}$</td><td className="px-4 py-2 border-b border-gray-100">Group $G$</td><td className="px-4 py-2 border-b border-gray-100">Groupoid</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#monoid" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Monoid</a></td><td className="px-4 py-2 border-b border-gray-100">$\{*\}$</td><td className="px-4 py-2 border-b border-gray-100">Monoid $M$</td><td className="px-4 py-2 border-b border-gray-100">Generalizes $\mathbf{B}G$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#opposite" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathcal{C}^{\mathrm{op}}$</a></td><td className="px-4 py-2 border-b border-gray-100">Same as $\mathcal{C}$</td><td className="px-4 py-2 border-b border-gray-100">Reversed</td><td className="px-4 py-2 border-b border-gray-100">Duality</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#product" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathcal{C} \times \mathcal{D}$</a></td><td className="px-4 py-2 border-b border-gray-100">Pairs</td><td className="px-4 py-2 border-b border-gray-100">Componentwise</td><td className="px-4 py-2 border-b border-gray-100">Product</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#functor-cat" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$[\mathcal{C}, \mathcal{D}]$</a></td><td className="px-4 py-2 border-b border-gray-100">Functors</td><td className="px-4 py-2 border-b border-gray-100">Natural transformations</td><td className="px-4 py-2 border-b border-gray-100">Yoneda target</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#man" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Man}$</a></td><td className="px-4 py-2 border-b border-gray-100">Manifolds</td><td className="px-4 py-2 border-b border-gray-100">Smooth maps</td><td className="px-4 py-2 border-b border-gray-100">Geometric</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#open" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Open}(X)$</a></td><td className="px-4 py-2 border-b border-gray-100">Open sets</td><td className="px-4 py-2 border-b border-gray-100">Inclusions</td><td className="px-4 py-2 border-b border-gray-100">Site for sheaves</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#delta" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{\Delta}$</a></td><td className="px-4 py-2 border-b border-gray-100">$[n]$</td><td className="px-4 py-2 border-b border-gray-100">Order-preserving</td><td className="px-4 py-2 border-b border-gray-100">Simplicial objects</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#path" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{F}(Q)$</a></td><td className="px-4 py-2 border-b border-gray-100">Vertices</td><td className="px-4 py-2 border-b border-gray-100">Paths</td><td className="px-4 py-2 border-b border-gray-100">Free category</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#slice" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathcal{C}/X$</a></td><td className="px-4 py-2 border-b border-gray-100">Maps to $X$</td><td className="px-4 py-2 border-b border-gray-100">Commuting triangles</td><td className="px-4 py-2 border-b border-gray-100">Slice / over-category</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#ch-a" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{Ch}(\mathcal{A})$</a></td><td className="px-4 py-2 border-b border-gray-100">Complexes</td><td className="px-4 py-2 border-b border-gray-100">Chain maps</td><td className="px-4 py-2 border-b border-gray-100">Abelian</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#k-a" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{K}(\mathcal{A})$</a></td><td className="px-4 py-2 border-b border-gray-100">Complexes</td><td className="px-4 py-2 border-b border-gray-100">Maps mod homotopy</td><td className="px-4 py-2 border-b border-gray-100">Triangulated</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#d-a" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{D}(\mathcal{A})$</a></td><td className="px-4 py-2 border-b border-gray-100">Complexes</td><td className="px-4 py-2 border-b border-gray-100">Localized at qis</td><td className="px-4 py-2 border-b border-gray-100">Triangulated, derived</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#discrete" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">Discrete</a></td><td className="px-4 py-2 border-b border-gray-100">Elements of $S$</td><td className="px-4 py-2 border-b border-gray-100">Only identities</td><td className="px-4 py-2 border-b border-gray-100">Limits = products</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#walking-arrow" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{2}$</a></td><td className="px-4 py-2 border-b border-gray-100">$\{0, 1\}$</td><td className="px-4 py-2 border-b border-gray-100">One non-identity</td><td className="px-4 py-2 border-b border-gray-100">Walking arrow</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100"><a href="#delooping" className="text-blue-600 hover:text-blue-800 underline underline-offset-2">$\mathbf{B}R$</a></td><td className="px-4 py-2 border-b border-gray-100">$\{*\}$</td><td className="px-4 py-2 border-b border-gray-100">Ring $R$</td><td className="px-4 py-2 border-b border-gray-100">$R$-modules = functors</td></tr>
+</tbody>
+</table>
+</div>
+
+<Remark title="Looking ahead">
+The definition of a category is the first step. The real power comes from:
+
+1. [Functors](/category-theory/ch01-categories-functors/concepts/c03-functor) — structure-preserving maps between categories
+2. [Natural transformations](/category-theory/ch01-categories-functors/concepts/c04-natural-transformation) — maps between functors
+3. [The Yoneda Lemma](/category-theory/ch01-categories-functors/theorems/t01-yoneda) — the fundamental theorem connecting objects to functors
+
+In the Gelfand–Manin framework, these three levels organize into the **2-category** $\mathbf{Cat}$, and the entire machinery of derived categories is built by systematically manipulating these structures.
+</Remark>

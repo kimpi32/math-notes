@@ -1,0 +1,380 @@
+export const metadata = {
+  title: 'Affine Communication Lemma — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Theorem — Affine Communication" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Affine Communication Lemma
+
+The Affine Communication Lemma is a fundamental technical tool in scheme theory that allows us to verify that certain properties of schemes are well-defined, independent of the choice of affine cover. This lemma provides a systematic way to prove that properties defined on affine schemes extend globally to arbitrary schemes.
+
+## The Problem: Affine-Local Properties
+
+When defining properties of schemes, we often begin by defining the property for affine schemes (i.e., schemes of the form $\mathrm{Spec}(A)$) where we can work with commutative algebra. The natural question is: how do we extend this to arbitrary schemes?
+
+<Definition>
+A property $\mathcal{P}$ of schemes is called **affine-local** if whenever $X$ is a scheme and $X = \bigcup_{i \in I} U_i$ is a cover by open affine subschemes, then $X$ has property $\mathcal{P}$ if and only if each $U_i$ has property $\mathcal{P}$.
+</Definition>
+
+The difficulty is that a scheme admits many different affine covers. We need to ensure that if we check a property on one affine cover, the result doesn't depend on which cover we chose.
+
+<Example id="welldef-problem" title="Well-definedness problem">
+Suppose we want to define "X is Noetherian" to mean "X has an affine cover by Noetherian rings." We need to verify:
+1. If one affine cover consists of Noetherian rings, do all affine covers?
+2. If we take a finer affine cover, is the property preserved?
+
+Without the Affine Communication Lemma, we would need to verify these questions separately for each property we care about.
+</Example>
+
+## Statement of the Affine Communication Lemma
+
+<Theorem>
+**Affine Communication Lemma.** Let $\mathcal{P}$ be a property of rings. Suppose that $\mathcal{P}$ satisfies:
+
+1. **Localization:** If a ring $A$ has property $\mathcal{P}$, then $A_f$ has property $\mathcal{P}$ for all $f \in A$.
+
+2. **Cover:** If $A$ is a ring and $f_1, \ldots, f_n \in A$ generate the unit ideal, and each $A_{f_i}$ has property $\mathcal{P}$, then $A$ has property $\mathcal{P}$.
+
+Then the property "$X = \mathrm{Spec}(A)$ is affine and $A$ has property $\mathcal{P}$" is affine-local. In particular, for any scheme $X$, we can unambiguously define "$X$ has property $\mathcal{P}$" to mean that $X$ admits an affine cover by rings with property $\mathcal{P}$ (equivalently, every affine cover consists of rings with property $\mathcal{P}$).
+</Theorem>
+
+<Remark>
+The name "Communication Lemma" comes from the idea that the two conditions allow information to "communicate" between different levels of localization: we can pass from a ring to its localizations (condition 1) and back from localizations to the ring (condition 2).
+</Remark>
+
+## Complete Proof
+
+<Proof>
+We need to show that if $X$ is a scheme with two affine covers $\mathcal{U} = \{U_i = \mathrm{Spec}(A_i)\}$ and $\mathcal{V} = \{V_j = \mathrm{Spec}(B_j)\}$, then every $A_i$ has property $\mathcal{P}$ if and only if every $B_j$ has property $\mathcal{P}$.
+
+**Step 1: Reduction to principal open sets.**
+
+Since $\mathcal{V}$ covers $X$, each $U_i$ is covered by the open sets $U_i \cap V_j$. For each $j$, $U_i \cap V_j$ is an open subset of the affine scheme $U_i = \mathrm{Spec}(A_i)$, so we can write:
+$$U_i = \bigcup_{j} (U_i \cap V_j)$$
+
+Each $U_i \cap V_j$ is a union of principal open sets in $\mathrm{Spec}(A_i)$. Since $\mathrm{Spec}(A_i)$ is quasi-compact, we can find finitely many elements $f_{i,1}, \ldots, f_{i,n_i} \in A_i$ such that:
+$$U_i = \bigcup_{k=1}^{n_i} D(f_{i,k})$$
+and each $D(f_{i,k}) \subseteq U_i \cap V_{j(k)}$ for some $j(k)$.
+
+**Step 2: Principal opens are affine and inherit the property.**
+
+Each principal open $D(f_{i,k}) = \mathrm{Spec}((A_i)_{f_{i,k}})$ is affine. Moreover, $D(f_{i,k}) \subseteq V_{j(k)} = \mathrm{Spec}(B_{j(k)})$, so $D(f_{i,k})$ is also an open subset of $\mathrm{Spec}(B_{j(k)})$, hence a union of principal opens in $\mathrm{Spec}(B_{j(k)})$.
+
+By quasi-compactness again, $D(f_{i,k})$ can be covered by finitely many principal opens $D(g_1), \ldots, D(g_m)$ where $g_\ell \in B_{j(k)}$.
+
+**Step 3: Apply localization property.**
+
+Assume each $B_j$ has property $\mathcal{P}$. Then by condition (1), each localization $(B_{j(k)})_{g_\ell}$ has property $\mathcal{P}$.
+
+**Step 4: Identify localizations.**
+
+The principal open $D(g_\ell) \subseteq \mathrm{Spec}(B_{j(k)})$ corresponds to $\mathrm{Spec}((B_{j(k)})_{g_\ell})$, and this is also a principal open in $D(f_{i,k}) = \mathrm{Spec}((A_i)_{f_{i,k}})$.
+
+Therefore, $(B_{j(k)})_{g_\ell} \cong ((A_i)_{f_{i,k}})_h$ for some $h \in (A_i)_{f_{i,k}}$.
+
+Since $(B_{j(k)})_{g_\ell}$ has property $\mathcal{P}$ and this ring is isomorphic to a localization of $(A_i)_{f_{i,k}}$, we see that $(A_i)_{f_{i,k}}$ can be covered by localizations with property $\mathcal{P}$.
+
+**Step 5: Apply cover property.**
+
+The sets $D(g_\ell)$ cover $D(f_{i,k})$, which means the elements $g_1, \ldots, g_m$ (viewed as elements of $(A_i)_{f_{i,k}}$ via the isomorphism) generate the unit ideal in $(A_i)_{f_{i,k}}$.
+
+By condition (2), $(A_i)_{f_{i,k}}$ has property $\mathcal{P}$.
+
+**Step 6: Conclude.**
+
+The elements $f_{i,1}, \ldots, f_{i,n_i}$ generate the unit ideal in $A_i$ (since the $D(f_{i,k})$ cover $\mathrm{Spec}(A_i)$), and we've shown each localization $(A_i)_{f_{i,k}}$ has property $\mathcal{P}$.
+
+By condition (2) again, $A_i$ has property $\mathcal{P}$.
+
+By symmetry, if all $A_i$ have property $\mathcal{P}$, then all $B_j$ have property $\mathcal{P}$.
+</Proof>
+
+<Remark>
+The proof shows that the two conditions in the Affine Communication Lemma are precisely what's needed to pass from one affine cover to another. The localization condition allows us to zoom in to smaller affine opens, while the cover condition allows us to build up from a cover.
+</Remark>
+
+## Application: The Noetherian Property
+
+<Example id="noetherian-affine-local" title="Noetherian schemes">
+The property "$A$ is a Noetherian ring" satisfies both conditions of the Affine Communication Lemma:
+
+**Localization:** If $A$ is Noetherian and $f \in A$, then $A_f$ is Noetherian. This is a standard result: every ideal of $A_f$ is of the form $I \cdot A_f$ where $I$ is an ideal of $A$.
+
+**Cover:** If $f_1, \ldots, f_n$ generate the unit ideal and each $A_{f_i}$ is Noetherian, then $A$ is Noetherian. To see this, let $I_1 \subseteq I_2 \subseteq \cdots$ be an ascending chain of ideals in $A$. Then $I_1 \cdot A_{f_i} \subseteq I_2 \cdot A_{f_i} \subseteq \cdots$ is an ascending chain in each $A_{f_i}$, which stabilizes. By the gluing property of ideals, the original chain stabilizes in $A$.
+
+Therefore, we can define: **A scheme $X$ is Noetherian if it admits a cover by affine opens $\mathrm{Spec}(A_i)$ where each $A_i$ is Noetherian.** The Affine Communication Lemma guarantees this is well-defined.
+</Example>
+
+<Example id="noetherian-equivalences" title="Equivalent characterizations">
+For a scheme $X$, the following are equivalent:
+1. $X$ is Noetherian (admits a cover by Noetherian affine schemes)
+2. Every open affine subscheme $\mathrm{Spec}(A) \subseteq X$ has $A$ Noetherian
+3. $X$ is quasi-compact and every open subset is quasi-compact
+4. $X$ satisfies the descending chain condition on open subsets
+
+The Affine Communication Lemma proves the equivalence of (1) and (2).
+</Example>
+
+## Application: Reducedness
+
+<Example id="reduced-affine-local" title="Reduced schemes">
+The property "$A$ is reduced" (no nonzero nilpotent elements) is affine-local:
+
+**Localization:** If $A$ is reduced and $f \in A$, then $A_f$ is reduced. Indeed, if $(a/f^n)^m = 0$ in $A_f$, then $f^k a^m = 0$ in $A$ for some $k$. Since $A$ is reduced, $f^k a^m = 0$ implies $a^m = 0$ (as $f^k$ is not a zero divisor in a reduced ring... actually, we need to be more careful).
+
+More precisely: if $a \in A$ is nilpotent in $A_f$, then $a^n/1 = 0/1$ in $A_f$ for some $n$, so $f^m a^n = 0$ in $A$ for some $m$. This means $(fa)^{\min(m,n)} = 0$, so $fa$ is nilpotent in $A$, hence $fa = 0$ since $A$ is reduced. But then $a$ maps to zero in $A_f$, so $a/1 = 0/1$.
+
+Actually, the cleanest proof: $A_f = A[1/f] \subseteq A[f^{-1}]$ embeds in $\mathrm{Frac}(A)$ when $A$ is reduced, so $A_f$ is reduced.
+
+**Cover:** If $f_1, \ldots, f_n$ generate the unit ideal and each $A_{f_i}$ is reduced, then $A$ is reduced. If $a \in A$ is nilpotent with $a^m = 0$, then $a/1 = 0$ in each $A_{f_i}$, so $f_i^{k_i} a = 0$ for each $i$. Taking $k = \max k_i$, we have $f_i^k a = 0$ for all $i$. Since $(f_1, \ldots, f_n) = A$, we have $(f_1^k, \ldots, f_n^k) = A$, so $\sum r_i f_i^k = 1$ for some $r_i$. Then $a = \sum r_i f_i^k a = 0$.
+
+Therefore, reducedness is affine-local.
+</Example>
+
+<Example id="reduced-geometric" title="Geometric interpretation">
+A scheme $X$ is reduced if and only if the structure sheaf $\mathcal{O}_X$ has no nilpotent sections on any open set. Equivalently, the nilradical $\mathcal{N} \subseteq \mathcal{O}_X$ is zero.
+
+This is the scheme-theoretic version of saying that the space has no "embedded fuzz" or "fattened points."
+</Example>
+
+## Application: Integrality and Normality
+
+<Example id="integral-normal" title="Integral and normal schemes">
+**Integrality:** A scheme $X$ is **integral** if it is both reduced and irreducible. However, this is NOT purely an affine-local property in the sense of the Communication Lemma, because irreducibility involves global topology. Nevertheless, for an affine scheme $X = \mathrm{Spec}(A)$:
+- $X$ is integral $\iff$ $A$ is an integral domain
+
+**Normality:** A scheme $X$ is **normal** if every local ring $\mathcal{O}_{X,x}$ is an integrally closed domain. For affine schemes, $\mathrm{Spec}(A)$ is normal $\iff$ $A$ is a normal ring (integrally closed in its fraction field).
+
+The property "$A$ is a normal ring" is affine-local:
+
+**Localization:** If $A$ is normal and $f \in A$, then $A_f$ is normal. This follows because $(A_f)_\mathfrak{p} = A_\mathfrak{q}$ where $\mathfrak{q}$ is the preimage of $\mathfrak{p}$, and integrally closed is preserved by localization.
+
+**Cover:** If each $A_{f_i}$ is normal and $(f_1, \ldots, f_n) = A$, then $A$ is normal. This requires showing $A$ is integrally closed in its fraction field $K$. If $x \in K$ is integral over $A$, then $x$ is integral over each $A_{f_i}$, so $x \in A_{f_i}$ for all $i$. By gluing, $x \in A$.
+</Example>
+
+<Example id="normal-resolution" title="Normalization">
+Given any reduced scheme $X$, there exists a finite morphism $\nu: X' \to X$ where $X'$ is normal, called the **normalization** of $X$. For affine $X = \mathrm{Spec}(A)$, this is $X' = \mathrm{Spec}(\tilde{A})$ where $\tilde{A}$ is the integral closure of $A$ in its total ring of fractions.
+
+The affine-locality of normality ensures that normalizations glue: if $X = \bigcup U_i$ with $U_i$ affine, then the normalizations $\nu_i: U_i' \to U_i$ glue to give $\nu: X' \to X$.
+</Example>
+
+## Application: Cohen-Macaulay Property
+
+<Example id="cohen-macaulay" title="Cohen-Macaulay schemes">
+A scheme $X$ is **Cohen-Macaulay** if every local ring $\mathcal{O}_{X,x}$ is a Cohen-Macaulay ring (depth equals Krull dimension).
+
+For affine schemes, this translates to: $\mathrm{Spec}(A)$ is Cohen-Macaulay $\iff$ $A_\mathfrak{p}$ is Cohen-Macaulay for all primes $\mathfrak{p}$.
+
+The property "$A$ is Cohen-Macaulay" satisfies the Communication Lemma:
+
+**Localization:** If $A$ is Cohen-Macaulay (meaning all localizations at primes are CM), then $A_f$ is Cohen-Macaulay, since $(A_f)_\mathfrak{p} = A_\mathfrak{q}$ for appropriate primes.
+
+**Cover:** If each $A_{f_i}$ is Cohen-Macaulay, then $A$ is Cohen-Macaulay. This follows because every prime of $A$ is contained in the non-vanishing locus of some $f_i$, so we can check the CM property at that localization.
+
+Therefore, Cohen-Macaulay is an affine-local property.
+</Example>
+
+<Example id="cm-hierarchy" title="Hierarchy of properties">
+We have the following implications for properties of schemes:
+$$\text{smooth} \implies \text{regular} \implies \text{Cohen-Macaulay} \implies \text{reduced}$$
+
+Each of these properties is affine-local (can be verified using the Communication Lemma). The regularity condition ($\mathcal{O}_{X,x}$ is a regular local ring) is particularly important in algebraic geometry.
+</Example>
+
+## Application: Quasi-coherent Sheaves
+
+The Affine Communication Lemma extends beyond properties of schemes to properties of sheaves.
+
+<Example id="quasi-coherent" title="Quasi-coherent sheaves">
+Let $X$ be a scheme and $\mathcal{F}$ a sheaf of $\mathcal{O}_X$-modules. We say $\mathcal{F}$ is **quasi-coherent** if for every affine open $U = \mathrm{Spec}(A) \subseteq X$, we have $\mathcal{F}|_U \cong \widetilde{M}$ for some $A$-module $M$.
+
+The key question: does this definition depend on the choice of affine cover?
+
+**Answer:** No, by a sheaf-theoretic version of the Affine Communication Lemma. The point is that:
+1. If $\mathcal{F}|_U \cong \widetilde{M}$ and $D(f) \subseteq U$, then $\mathcal{F}|_{D(f)} \cong \widetilde{M_f}$
+2. If $U = \bigcup D(f_i)$ with $(f_i) = A$ and $\mathcal{F}|_{D(f_i)} \cong \widetilde{M_i}$ where the $M_i$ glue, then $\mathcal{F}|_U \cong \widetilde{M}$
+
+This shows quasi-coherence is affine-local.
+</Example>
+
+<Example id="qcoh-properties" title="Properties of quasi-coherent sheaves">
+Many properties of quasi-coherent sheaves are also affine-local:
+- $\mathcal{F}$ is **coherent** if it's quasi-coherent and on each affine open $\mathrm{Spec}(A)$, corresponds to a finitely generated $A$-module
+- $\mathcal{F}$ is **locally free** of rank $n$ if on each point has a neighborhood where $\mathcal{F} \cong \mathcal{O}_X^n$
+- $\mathcal{F}$ is **flat** over $Y$ if all stalks are flat modules
+
+Each of these can be verified using Communication-Lemma-type arguments.
+</Example>
+
+## The QCQS Hypothesis
+
+Some results require the scheme to be quasi-compact and quasi-separated (QCQS).
+
+<Definition>
+A scheme $X$ is **quasi-compact** if every open cover has a finite subcover. It is **quasi-separated** if the diagonal morphism $\Delta: X \to X \times X$ is quasi-compact (equivalently, the intersection of any two quasi-compact opens is quasi-compact).
+</Definition>
+
+<Example id="qcqs-importance" title="Why QCQS matters">
+The Communication Lemma as stated works for arbitrary schemes because we can check properties on any affine cover, and affine schemes are quasi-compact.
+
+However, when we want to work with modules and coherent sheaves, QCQS becomes crucial:
+
+**Gluing coherent sheaves:** On a QCQS scheme, coherent sheaves can be glued from local data. On non-QCQS schemes, this can fail.
+
+**Descent:** Many descent results (gluing morphisms, gluing objects) require QCQS to ensure that patching data on a cover extends uniquely to a global object.
+
+For example, the theorem "quasi-coherent sheaves on $\mathrm{Spec}(A)$ correspond to $A$-modules" extends to: "quasi-coherent sheaves on a QCQS scheme $X$ form an abelian category with nice properties."
+</Example>
+
+<Example id="non-qcqs" title="Non-quasi-separated schemes">
+The **affine line with doubled origin** is a scheme that is not quasi-separated:
+$$X = \mathrm{Spec}(k[t]) \sqcup_{\mathrm{Spec}(k[t,t^{-1}])} \mathrm{Spec}(k[t])$$
+
+This is the gluing of two copies of $\mathbb{A}^1$ along $\mathbb{A}^1 \setminus \{0\}$.
+
+On this scheme:
+- Quasi-coherent sheaves can have pathological behavior
+- Some affine-local properties become ambiguous
+- Descent fails in certain cases
+
+This example shows why quasi-separatedness is a reasonable hypothesis for many theorems.
+</Example>
+
+## Non-examples: Properties That Are NOT Affine-Local
+
+<Example id="non-example-affine" title="Being affine is not affine-local">
+The property "X is an affine scheme" is NOT affine-local. For example, $\mathbb{P}^1$ can be covered by two affine opens $U_0 \cong \mathbb{A}^1$ and $U_1 \cong \mathbb{A}^1$, but $\mathbb{P}^1$ itself is not affine.
+
+The issue is that being affine is a global property related to the algebra of global sections: $X \cong \mathrm{Spec}(\Gamma(X, \mathcal{O}_X))$ if and only if $X$ is affine. This cannot be detected by looking at an affine cover alone.
+</Example>
+
+<Example id="non-example-connected" title="Connectedness is not affine-local">
+Topological properties like connectedness are generally not affine-local in the Communication Lemma sense, though they have their own local characterizations.
+
+For instance, $X = \mathrm{Spec}(A_1 \times A_2)$ is disconnected (two connected components), but this can be covered by affine opens in various ways. The property depends on the global topology, not just local ring-theoretic properties.
+
+Similarly, irreducibility is a global topological property: $\mathbb{A}^1 \setminus \{0\} = D(t) \cup D(1-t)$ is irreducible but covered by two principal opens.
+</Example>
+
+<Example id="non-example-finite-type" title="Finite type is not purely affine-local">
+A morphism $f: X \to Y$ being of finite type means it's locally of finite type and quasi-compact. The "locally of finite type" part is affine-local (on an affine cover, the coordinate rings are finitely generated algebras), but the quasi-compactness is a global condition.
+
+Similarly, being proper, finite, or étale are properties of morphisms that involve both local (affine-local) conditions and global (topological) conditions.
+</Example>
+
+<Example id="non-example-global-generation" title="Global generation is not affine-local">
+A sheaf $\mathcal{F}$ on $X$ is **globally generated** if the global sections map surjectively to every stalk: $\Gamma(X, \mathcal{F}) \otimes k(x) \to \mathcal{F}_x$ is surjective for all $x \in X$.
+
+This is not affine-local because it depends on the global sections $\Gamma(X, \mathcal{F})$, which is not determined by local data. For example, on $\mathbb{P}^n$, the sheaf $\mathcal{O}(d)$ is globally generated for $d \geq 0$ but not for $d < 0$, even though locally it's always isomorphic to $\mathcal{O}$.
+</Example>
+
+## Connection to Descent Theory
+
+The Affine Communication Lemma is a special case of more general **descent theory**, which studies when local data can be glued to global objects.
+
+<Definition>
+A property $\mathcal{P}$ of schemes **satisfies fpqc descent** if whenever $f: Y \to X$ is a faithfully flat quasi-compact morphism and $Y$ has property $\mathcal{P}$, then $X$ has property $\mathcal{P}$.
+</Definition>
+
+<Example id="descent-relation" title="Affine Communication as descent">
+The Affine Communication Lemma can be viewed as descent for the Zariski topology:
+
+Given a Zariski open cover $X = \bigcup U_i$, we have a "covering family" of morphisms $\{U_i \to X\}$. The Communication Lemma says that a property descends along this cover if:
+1. It pulls back along localizations (open immersions)
+2. It descends from a cover
+
+This is precisely the pattern of descent theory: **ascent** (pulling back) and **descent** (gluing from a cover).
+</Example>
+
+<Example id="fpqc-descent-properties" title="Properties satisfying fpqc descent">
+Many important properties satisfy fpqc (faithfully flat and quasi-compact) descent:
+- Reduced
+- Normal
+- Regular
+- Cohen-Macaulay
+- Locally Noetherian
+
+The Communication Lemma handles the special case of descent for Zariski covers (where the covering maps are open immersions), which is sufficient for proving affine-locality.
+</Example>
+
+<Example id="descent-failure" title="When descent fails">
+Not all properties satisfy descent:
+
+**Affineness:** As noted, being affine does not satisfy Zariski descent (though it does satisfy fpqc descent!).
+
+**Geometric connectivity:** Connectedness does not satisfy descent in general, though there are refined versions that do.
+
+**Ampleness:** For a line bundle $\mathcal{L}$ on $X$, being ample is not Zariski-local. The sections of $\mathcal{L}^{\otimes n}$ for large $n$ must separate points and give a projective embedding globally.
+</Example>
+
+<Remark>
+The study of which properties satisfy which types of descent (Zariski, étale, fppf, fpqc, etc.) is a central theme in modern algebraic geometry. The Communication Lemma is the entry point to this circle of ideas.
+</Remark>
+
+## Summary Table of Affine-Local Properties
+
+The following table summarizes common affine-local properties and whether they satisfy the Communication Lemma:
+
+| Property | Affine-Local? | Localization? | Cover? | Notes |
+|----------|---------------|---------------|---------|-------|
+| Noetherian | Yes | Yes | Yes | Standard application |
+| Reduced | Yes | Yes | Yes | No nilpotents |
+| Integral domain | No | Yes | No | Cover fails: $k[t] \times k[t]$ |
+| Normal | Yes | Yes | Yes | Integrally closed |
+| Regular | Yes | Yes | Yes | Regular local rings |
+| Cohen-Macaulay | Yes | Yes | Yes | Depth equals dimension |
+| Gorenstein | Yes | Yes | Yes | CM + canonical module |
+| Locally Noetherian | Yes | Yes | Yes | Same as Noetherian |
+| Jacobson | Yes | Yes | Yes | Closed points dense |
+| Quasi-coherent sheaf | Yes | Yes | Yes | Module-like sheaves |
+| Coherent sheaf | Yes (on LN) | Yes | Yes | Finitely generated |
+| Flat morphism | Yes | Yes | Yes | Checked on stalks |
+| Smooth morphism | Yes (locally) | Yes | Yes | Flat + geometrically regular fibers |
+| Affine | No | N/A | N/A | Global property |
+| Quasi-compact | No | N/A | N/A | Topological property |
+| Connected | No | N/A | N/A | Topological property |
+| Irreducible | No | N/A | N/A | Topological property |
+
+## Practical Workflow
+
+When proving a property is affine-local using the Communication Lemma:
+
+1. **Define the property for affine schemes** in terms of the coordinate ring
+2. **Verify localization:** Show that if $A$ has $\mathcal{P}$, then $A_f$ has $\mathcal{P}$
+3. **Verify cover:** Show that if $(f_i) = A$ and each $A_{f_i}$ has $\mathcal{P}$, then $A$ has $\mathcal{P}$
+4. **Conclude:** The property is well-defined for all schemes via any affine cover
+
+The second step is usually straightforward from commutative algebra. The third step often requires using the gluing properties of modules or ideals.
+
+<Example id="workflow-example" title="Verifying a property is affine-local">
+Let's verify that "having finite Krull dimension" is affine-local:
+
+**Affine version:** $\mathrm{Spec}(A)$ has finite Krull dimension if $\dim A < \infty$.
+
+**Localization:** If $\dim A < \infty$, then $\dim A_f \leq \dim A < \infty$. (Every prime of $A_f$ contracts to a prime of $A$.)
+
+**Cover:** If $(f_1, \ldots, f_n) = A$ and $\dim A_{f_i} < \infty$ for all $i$, then $\dim A < \infty$.
+
+To see this, let $\mathfrak{p}_0 \subsetneq \cdots \subsetneq \mathfrak{p}_r$ be a chain of primes in $A$. Some $f_i \notin \mathfrak{p}_0$ (since $(f_1, \ldots, f_n) = A$). Then all primes in the chain localize to primes in $A_{f_i}$, giving a chain of length $r$ in $A_{f_i}$. So $r \leq \dim A_{f_i} < \infty$.
+
+Therefore, having finite Krull dimension is affine-local.
+</Example>
+
+---
+
+The Affine Communication Lemma is an indispensable tool for translating commutative algebra into scheme theory. By systematically verifying the localization and cover conditions, we can confidently extend ring-theoretic properties to geometric properties of schemes, knowing that our definitions are independent of choices and behave well under localization. This lemma underlies much of the foundational theory of schemes and provides a template for thinking about local-to-global principles throughout algebraic geometry.

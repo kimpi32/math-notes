@@ -1,0 +1,101 @@
+export const metadata = {
+  title: "Bertini's Theorem — Algebraic Geometry — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Theorem — Bertini's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Bertini's Theorem
+
+Bertini's theorem says that "a general hyperplane section of a smooth variety is smooth." It is the fundamental tool for inductive arguments in algebraic geometry — reducing the study of varieties to lower-dimensional ones by cutting with hyperplanes.
+
+---
+
+## Statement
+
+<Theorem title="Bertini's Theorem" number="1.3">
+Let $X \subseteq \mathbb{P}^n$ be a nonsingular projective variety over an algebraically closed field $k$ of characteristic $0$. Then for a **general** hyperplane $H \in (\mathbb{P}^n)^*$ (meaning for all $H$ in a dense open subset of the dual projective space), the intersection $X \cap H$ is:
+
+1. Either empty, or
+2. A nonsingular variety of dimension $\dim X - 1$.
+</Theorem>
+
+<Remark title="General = generic">
+"General" means "for all hyperplanes in a dense open subset of the parameter space $(\mathbb{P}^n)^*$." There may be **finitely many** (or a lower-dimensional family of) bad hyperplanes, but "most" hyperplanes give smooth sections. The precise statement is that the set of bad hyperplanes is contained in a proper closed subset of $(\mathbb{P}^n)^*$.
+</Remark>
+
+<Remark title="Characteristic p caveat">
+Bertini's theorem can fail in characteristic $p > 0$. For example, consider the Frobenius morphism and inseparable maps. The correct statement in positive characteristic involves separability conditions. The version above (char $0$) is the one in Hartshorne II.8.18.
+</Remark>
+
+---
+
+## Examples
+
+<Example id="surface-section" title="Hyperplane section of a smooth surface">
+Let $X = V(x_0^2 + x_1^2 + x_2^2 + x_3^2) \subseteq \mathbb{P}^3$ (a smooth quadric surface, $\cong \mathbb{P}^1 \times \mathbb{P}^1$). A general hyperplane $H = V(a_0 x_0 + \cdots + a_3 x_3)$ meets $X$ in a smooth curve of degree 2 in $H \cong \mathbb{P}^2$, i.e., a smooth conic $\cong \mathbb{P}^1$.
+
+A **special** hyperplane like $H = V(x_0)$ gives $V(x_1^2 + x_2^2 + x_3^2, x_0)$, which is still a smooth conic. In fact, for this particular quadric, **every** hyperplane section is smooth (or empty) because $X$ itself is smooth and the dual variety has codimension $> 0$.
+
+But if $X$ were a quadric cone $V(x_0^2 + x_1^2 - x_2^2)$ (singular at $[0:0:0:1]$), then $H = V(x_3)$ gives a smooth section, while $H = V(x_2 - x_0)$ passes through the vertex and gives a singular section.
+</Example>
+
+<Example id="curve-section" title="Hyperplane section of a curve = points">
+A smooth curve $C \subseteq \mathbb{P}^n$ of degree $d$ meets a general hyperplane in $d$ distinct points (smooth = multiplicity 1 at each). Bertini says these $d$ points are all distinct (no tangencies with a general hyperplane).
+
+For the twisted cubic $C \subseteq \mathbb{P}^3$ ($\deg C = 3$): a general plane meets $C$ in 3 distinct points.
+</Example>
+
+<Example id="linear-system" title="Bertini for linear systems">
+The theorem generalizes: let $|D|$ be a **linear system** (family of divisors) on a smooth variety $X$. If $|D|$ is **base-point free** (no point lies in every member), then a general member of $|D|$ is smooth.
+
+For $X = \mathbb{P}^2$ and $|D| = |\mathcal{O}(d)|$ (degree-$d$ curves), a general degree-$d$ curve in $\mathbb{P}^2$ is smooth. This is "obvious" for $d = 1$ (all lines are smooth) and non-trivial for higher $d$.
+</Example>
+
+<Example id="pencil-of-cubics" title="A pencil of cubics in P²">
+Consider the pencil (1-parameter family) of cubics $\{sF + tG = 0\}_{[s:t] \in \mathbb{P}^1}$ where $F$ and $G$ are two smooth cubics meeting in 9 points (by Bézout). By Bertini, a general member of the pencil is smooth. But finitely many members are singular — these correspond to special values of $[s:t]$.
+
+For the pencil $\{s(y^2z - x^3 + xz^2) + t(y^2z - x^3 - xz^2) = 0\}$: a general member is a smooth elliptic curve, but special members degenerate (e.g., a nodal cubic, or a cuspidal cubic, or a reducible cubic).
+</Example>
+
+<Example id="lefschetz-hyperplane" title="Connection to Lefschetz hyperplane theorem">
+Bertini is the algebraic side of the **Lefschetz hyperplane theorem**: for a smooth projective variety $X \subseteq \mathbb{P}^n$ of dimension $\geq 2$ and a general hyperplane section $Y = X \cap H$:
+
+$$\pi_i(Y) \xrightarrow{\sim} \pi_i(X) \quad \text{for } i < \dim X - 1.$$
+
+In particular, a smooth surface section of a smooth 3-fold has the same fundamental group. This is a powerful topological tool, and Bertini's smoothness is the algebraic prerequisite.
+</Example>
+
+<Example id="induction" title="Induction on dimension via Bertini">
+Many theorems in algebraic geometry are proved by induction on dimension, with Bertini providing the inductive step. For example:
+
+**Claim**: A smooth hypersurface $X = V(F) \subseteq \mathbb{P}^n$ of degree $d \geq 2$ is connected (for $n \geq 2$).
+
+*Proof sketch*: By induction on $n$. A general hyperplane section $X \cap H$ is smooth of dimension $\dim X - 1 \geq 1$ (by Bertini). If $n = 2$: $X$ is a smooth curve in $\mathbb{P}^2$, which is connected. For $n \geq 3$: $X \cap H$ is connected by induction, and Lefschetz says $\pi_0(X \cap H) \to \pi_0(X)$ is surjective, so $X$ is connected.
+</Example>
+
+---
+
+## Variants and generalizations
+
+<Remark title="Other Bertini-type results">
+- **Bertini for singularities**: If $X$ is normal with isolated singularities, a general hyperplane section is also normal with isolated singularities.
+- **Generic smoothness** (char 0): For a dominant morphism $f: X \to Y$ of varieties in characteristic 0, the fiber $f^{-1}(y)$ is smooth for $y$ in a dense open subset of $Y$.
+- **Bertini with multiplicities**: If $X$ has singularities of multiplicity $\leq m$, a general hyperplane section also has singularities of multiplicity $\leq m$.
+
+Bertini, together with the Lefschetz hyperplane theorem, is one of the main reasons algebraic geometers can reduce problems to the study of curves and surfaces.
+</Remark>

@@ -1,0 +1,524 @@
+export const metadata = {
+  title: 'Fiber Product and Base Change — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Concept — Fiber Product" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Fiber Product and Base Change
+
+The fiber product is one of the most fundamental constructions in scheme theory, providing a categorical framework for understanding intersections, fibers of morphisms, base change, and many other geometric phenomena. This concept makes precise the intuitive notion of "pulling back" geometric objects along morphisms.
+
+## Universal Property of Fiber Products
+
+<Definition title="Fiber Product">
+Let $f: X \to S$ and $g: Y \to S$ be morphisms of schemes. The **fiber product** of $X$ and $Y$ over $S$, denoted $X \times_S Y$, is a scheme together with projection morphisms $p_1: X \times_S Y \to X$ and $p_2: X \times_S Y \to Y$ satisfying:
+
+1. **Commutativity**: $f \circ p_1 = g \circ p_2$
+2. **Universal property**: For any scheme $T$ with morphisms $\alpha: T \to X$ and $\beta: T \to Y$ such that $f \circ \alpha = g \circ \beta$, there exists a unique morphism $\gamma: T \to X \times_S Y$ making the diagram commute:
+
+$$
+\begin{array}{ccc}
+T & \xrightarrow{\beta} & Y \\
+\downarrow{\gamma} & & \downarrow{g} \\
+X \times_S Y & \xrightarrow{p_2} & Y \\
+\downarrow{p_1} & & \downarrow{g} \\
+X & \xrightarrow{f} & S
+\end{array}
+$$
+
+That is, $p_1 \circ \gamma = \alpha$ and $p_2 \circ \gamma = \beta$.
+</Definition>
+
+<Remark>
+The fiber product is characterized by its universal property, which guarantees uniqueness up to unique isomorphism. When it exists, we say that the category of schemes has fiber products. The fundamental theorem is that fiber products always exist in the category of schemes.
+</Remark>
+
+## Existence Theorem
+
+<Theorem title="Existence of Fiber Products">
+Let $f: X \to S$ and $g: Y \to S$ be morphisms of schemes. Then the fiber product $X \times_S Y$ exists in the category of schemes.
+
+Moreover, if $S = \mathrm{Spec}(R)$, $X = \mathrm{Spec}(A)$, and $Y = \mathrm{Spec}(B)$ are affine schemes, then:
+$$
+X \times_S Y = \mathrm{Spec}(A \otimes_R B)
+$$
+</Theorem>
+
+<Remark>
+The general construction proceeds by covering $X$, $Y$, and $S$ with affine open sets and gluing the affine fiber products. The affine case is fundamental and relies on the tensor product of rings.
+</Remark>
+
+## The Affine Case
+
+The affine case provides the foundation for understanding fiber products through commutative algebra.
+
+<Example id="affine-fiber-product" title="Basic Affine Fiber Product">
+Let $S = \mathrm{Spec}(\mathbb{Z})$, $X = \mathrm{Spec}(\mathbb{Z}[x])$, and $Y = \mathrm{Spec}(\mathbb{Z}[y])$. Then:
+$$
+X \times_S Y = \mathrm{Spec}(\mathbb{Z}[x] \otimes_\mathbb{Z} \mathbb{Z}[y]) = \mathrm{Spec}(\mathbb{Z}[x,y])
+$$
+
+This is the affine plane over $\mathbb{Z}$, which we can think of as the product of the affine line with itself.
+</Example>
+
+<Example id="tensor-product-computation" title="Tensor Product Computation">
+Consider $S = \mathrm{Spec}(k)$ for a field $k$, $X = \mathrm{Spec}(k[x]/(x^2))$, and $Y = \mathrm{Spec}(k[y]/(y^3))$. Then:
+$$
+X \times_S Y = \mathrm{Spec}\left(\frac{k[x]}{(x^2)} \otimes_k \frac{k[y]}{(y^3)}\right) = \mathrm{Spec}\left(\frac{k[x,y]}{(x^2, y^3)}\right)
+$$
+
+This represents a "thickened point" with specific nilpotent structure in two directions.
+</Example>
+
+<Example id="field-extension-tensor" title="Field Extensions and Tensor Products">
+Let $k$ be a field and $K = k[t]/(f(t))$ a field extension where $f$ is irreducible of degree $n$. Consider:
+$$
+X \times_{\mathrm{Spec}(k)} Y = \mathrm{Spec}(K \otimes_k K)
+$$
+
+If $K/k$ is separable, then $K \otimes_k K$ has $n$ distinct $K$-algebra homomorphisms to $K$ (corresponding to embeddings of $K$ into an algebraic closure), and:
+$$
+K \otimes_k K \cong K \times \cdots \times K \quad (n \text{ copies})
+$$
+
+If $K/k$ is inseparable, the structure is more subtle, involving nilpotents.
+</Example>
+
+<Example id="intersection-as-fiber-product" title="Intersection as Fiber Product">
+Let $X = \mathrm{Spec}(k[x,y])$ be the affine plane, and consider two closed subschemes:
+- $V_1 = V(y - x^2) \subseteq X$ (a parabola)
+- $V_2 = V(y - 1) \subseteq X$ (a horizontal line)
+
+Both naturally map to $X$, so we can form:
+$$
+V_1 \times_X V_2 = \mathrm{Spec}\left(\frac{k[x,y]}{(y-x^2)} \otimes_{k[x,y]} \frac{k[x,y]}{(y-1)}\right)
+$$
+
+The tensor product is:
+$$
+\frac{k[x,y]}{(y-x^2, y-1)} = \frac{k[x]}{(x^2-1)} = k[x]/(x-1)(x+1)
+$$
+
+Over an algebraically closed field, this gives two points: the intersections at $(1,1)$ and $(-1,1)$.
+</Example>
+
+<Proof>
+To compute the tensor product, note that:
+$$
+\frac{k[x,y]}{(y-x^2)} \otimes_{k[x,y]} \frac{k[x,y]}{(y-1)} \cong \frac{k[x,y]}{(y-x^2)} \otimes_{k[x,y]/(\mathrm{ideals})} k[x,y]/(y-1)
+$$
+
+In the left factor, $y = x^2$, and in the right factor, $y = 1$. These conditions must both hold in the tensor product, giving $x^2 = 1$.
+</Proof>
+
+## Fibers of Morphisms
+
+One of the most important applications of fiber products is describing the fibers of a morphism.
+
+<Definition title="Fiber of a Morphism">
+Let $f: X \to Y$ be a morphism of schemes and let $y \in Y$ be a point. The **fiber** of $f$ over $y$ is the fiber product:
+$$
+X_y := X \times_Y \mathrm{Spec}(\kappa(y))
+$$
+where $\kappa(y) = \mathcal{O}_{Y,y}/\mathfrak{m}_y$ is the residue field at $y$.
+</Definition>
+
+<Example id="fiber-affine-morphism" title="Fiber of an Affine Morphism">
+Consider $f: \mathrm{Spec}(\mathbb{C}[x,y]) \to \mathrm{Spec}(\mathbb{C}[t])$ induced by $t \mapsto x^2 + y^2$. For a point $a \in \mathbb{C}$, the fiber over $a$ is:
+$$
+X_a = \mathrm{Spec}\left(\mathbb{C}[x,y] \otimes_{\mathbb{C}[t]} \mathbb{C}[t]/(t-a)\right) = \mathrm{Spec}\left(\frac{\mathbb{C}[x,y]}{(x^2+y^2-a)}\right)
+$$
+
+For $a \neq 0$, this is a circle. For $a = 0$, it's a single point (the origin). The fiber over the generic point is $\mathrm{Spec}(\mathbb{C}(t)[x,y]/(x^2+y^2-t))$, a curve over the function field.
+</Example>
+
+<Example id="projection-fiber" title="Fiber of a Projection">
+Consider the projection $\pi: \mathbb{A}^2_k \to \mathbb{A}^1_k$ given by $(x,y) \mapsto x$. This corresponds to the ring homomorphism $k[t] \to k[x,y]$ sending $t \mapsto x$.
+
+For a closed point $a \in k$, the fiber is:
+$$
+\pi^{-1}(a) = \mathrm{Spec}(k[x,y]/(x-a)) \cong \mathrm{Spec}(k[y]) = \mathbb{A}^1_k
+$$
+
+Each fiber is an affine line. The fiber over the generic point $\eta$ is:
+$$
+\pi^{-1}(\eta) = \mathrm{Spec}(k(x)[y]) = \mathbb{A}^1_{k(x)}
+$$
+an affine line over the function field $k(x)$.
+</Example>
+
+<Example id="finite-morphism-fiber" title="Fiber of a Finite Morphism">
+Consider $f: \mathrm{Spec}(\mathbb{C}[t]) \to \mathrm{Spec}(\mathbb{C}[s])$ induced by $s \mapsto t^n$ (an $n$-fold cover). The fiber over $a \in \mathbb{C}$ is:
+$$
+X_a = \mathrm{Spec}\left(\frac{\mathbb{C}[t]}{(t^n - a)}\right)
+$$
+
+If $a \neq 0$, this splits as $n$ distinct points (the $n$-th roots of $a$). If $a = 0$, we get:
+$$
+X_0 = \mathrm{Spec}\left(\frac{\mathbb{C}[t]}{(t^n)}\right)
+$$
+a non-reduced scheme (a "fat point" of length $n$).
+</Example>
+
+## Base Change and Extension of Scalars
+
+Base change is the process of "changing the base scheme" for a morphism or scheme.
+
+<Definition title="Base Change">
+Let $f: X \to S$ be an $S$-scheme and $g: T \to S$ a morphism. The **base change** of $X$ from $S$ to $T$ is:
+$$
+X_T := X \times_S T
+$$
+This comes with a natural morphism $f_T: X_T \to T$ making $X_T$ a $T$-scheme.
+</Definition>
+
+<Example id="extension-of-scalars" title="Extension of Scalars for Varieties">
+Let $X$ be a variety over a field $k$, say $X = \mathrm{Spec}(A)$ where $A$ is a finitely generated $k$-algebra. For a field extension $K/k$, the base change is:
+$$
+X_K = X \times_{\mathrm{Spec}(k)} \mathrm{Spec}(K) = \mathrm{Spec}(A \otimes_k K)
+$$
+
+For example, if $X = V(x^2 + y^2 + 1) \subseteq \mathbb{A}^2_\mathbb{R}$, then over $\mathbb{R}$ this has no real points. But:
+$$
+X_\mathbb{C} = \mathrm{Spec}\left(\frac{\mathbb{R}[x,y]}{(x^2+y^2+1)} \otimes_\mathbb{R} \mathbb{C}\right) = \mathrm{Spec}\left(\frac{\mathbb{C}[x,y]}{(x^2+y^2+1)}\right)
+$$
+which does have complex points, e.g., $(i, 0)$ and $(0, i)$.
+</Example>
+
+<Example id="reduction-modulo-p" title="Reduction Modulo p">
+Let $X = \mathrm{Spec}(\mathbb{Z}[x,y]/(f(x,y)))$ for some polynomial $f \in \mathbb{Z}[x,y]$. The reduction modulo $p$ is:
+$$
+X_{\mathbb{F}_p} = X \times_{\mathrm{Spec}(\mathbb{Z})} \mathrm{Spec}(\mathbb{F}_p) = \mathrm{Spec}\left(\frac{\mathbb{Z}[x,y]}{(f)} \otimes_\mathbb{Z} \mathbb{F}_p\right)
+$$
+
+This equals $\mathrm{Spec}(\mathbb{F}_p[x,y]/(\bar{f}))$ where $\bar{f}$ is $f$ reduced modulo $p$.
+
+For instance, if $X = \mathrm{Spec}(\mathbb{Z}[x]/(x^2 - 2))$, then:
+- $X_{\mathbb{F}_3} = \mathrm{Spec}(\mathbb{F}_3[x]/(x^2-2))$ has two points since $x^2 - 2$ splits in $\mathbb{F}_3$
+- $X_{\mathbb{F}_5} = \mathrm{Spec}(\mathbb{F}_5[x]/(x^2-2))$ is a field extension of degree 2
+</Example>
+
+<Example id="families-base-change" title="Base Change for Families">
+Consider a family of elliptic curves over $\mathbb{A}^1_k$ given by:
+$$
+\mathcal{E} \to \mathbb{A}^1_k
+$$
+
+For any $k$-scheme $T$, we can pull back the family to get:
+$$
+\mathcal{E}_T = \mathcal{E} \times_{\mathbb{A}^1_k} T \to T
+$$
+
+Specifically, if $T = \mathrm{Spec}(k)$ corresponding to a point $t_0 \in \mathbb{A}^1_k$, we recover the fiber $\mathcal{E}_{t_0}$, a single elliptic curve.
+</Example>
+
+## Products of Schemes
+
+When $S = \mathrm{Spec}(k)$ for a field $k$, the fiber product becomes the ordinary product.
+
+<Example id="product-affine-spaces" title="Product of Affine Spaces">
+Over a field $k$:
+$$
+\mathbb{A}^m_k \times_k \mathbb{A}^n_k = \mathrm{Spec}(k[x_1,\ldots,x_m]) \times_{\mathrm{Spec}(k)} \mathrm{Spec}(k[y_1,\ldots,y_n])
+$$
+$$
+= \mathrm{Spec}(k[x_1,\ldots,x_m] \otimes_k k[y_1,\ldots,y_n]) = \mathrm{Spec}(k[x_1,\ldots,x_m,y_1,\ldots,y_n]) = \mathbb{A}^{m+n}_k
+$$
+</Example>
+
+<Example id="product-projective-spaces" title="Segre Embedding">
+The product $\mathbb{P}^m_k \times_k \mathbb{P}^n_k$ exists as a scheme, and the Segre embedding shows it can be embedded in $\mathbb{P}^{(m+1)(n+1)-1}_k = \mathbb{P}^{mn+m+n}_k$ via:
+$$
+([x_0:\cdots:x_m], [y_0:\cdots:y_n]) \mapsto [x_i y_j]_{i,j}
+$$
+
+On affine charts, if we take $\mathrm{Spec}(k[x_1/x_0, \ldots, x_m/x_0])$ and $\mathrm{Spec}(k[y_1/y_0, \ldots, y_n/y_n])$, their product is:
+$$
+\mathrm{Spec}\left(k\left[\frac{x_1}{x_0}, \ldots, \frac{x_m}{x_0}\right] \otimes_k k\left[\frac{y_1}{y_0}, \ldots, \frac{y_n}{y_0}\right]\right) = \mathrm{Spec}\left(k\left[\frac{x_i y_j}{x_0 y_0}\right]\right)
+$$
+</Example>
+
+## The Diagonal Morphism
+
+The diagonal morphism is a fundamental tool for studying separatedness and other properties.
+
+<Definition title="Diagonal Morphism">
+Let $f: X \to S$ be an $S$-scheme. The **diagonal morphism** is:
+$$
+\Delta_{X/S}: X \to X \times_S X
+$$
+defined by the universal property applied to the pair $(id_X, id_X): X \rightrightarrows X$.
+</Definition>
+
+<Remark>
+On points, the diagonal morphism sends $x \in X$ to $(x,x) \in X \times_S X$. This is well-defined because $f(x) = f(x)$ in $S$.
+</Remark>
+
+<Example id="diagonal-affine-line" title="Diagonal of the Affine Line">
+For $X = \mathbb{A}^1_k = \mathrm{Spec}(k[t])$ over $S = \mathrm{Spec}(k)$:
+$$
+X \times_S X = \mathrm{Spec}(k[t] \otimes_k k[t]) = \mathrm{Spec}(k[s,t])
+$$
+
+The diagonal $\Delta: X \to X \times_S X$ corresponds to the ring homomorphism:
+$$
+k[s,t] \to k[t], \quad s \mapsto t, \quad t \mapsto t
+$$
+
+The image of the diagonal is $V(s-t) \subseteq \mathbb{A}^2_k$, the line $s = t$.
+</Example>
+
+<Example id="diagonal-closed-embedding" title="Diagonal as Closed Embedding">
+For any separated scheme $X$ over $S$, the diagonal $\Delta: X \to X \times_S X$ is a closed embedding.
+
+For instance, if $X = \mathbb{A}^n_k$ over $k$, then:
+$$
+\Delta: \mathbb{A}^n_k \to \mathbb{A}^n_k \times_k \mathbb{A}^n_k = \mathbb{A}^{2n}_k
+$$
+is the closed embedding corresponding to the ideal $(x_1 - y_1, \ldots, x_n - y_n)$.
+</Example>
+
+<Theorem title="Separatedness via Diagonal">
+A morphism $f: X \to S$ is separated if and only if the diagonal morphism $\Delta_{X/S}: X \to X \times_S X$ is a closed embedding.
+</Theorem>
+
+## Graph of a Morphism
+
+<Definition title="Graph of a Morphism">
+Let $f: X \to Y$ be a morphism of $S$-schemes. The **graph** of $f$ is the morphism:
+$$
+\Gamma_f: X \to X \times_S Y
+$$
+defined by $\Gamma_f = (id_X, f)$ using the universal property.
+</Definition>
+
+<Example id="graph-polynomial" title="Graph of a Polynomial">
+Consider $f: \mathbb{A}^1_k \to \mathbb{A}^1_k$ given by a polynomial $p(x) \in k[x]$. The graph is:
+$$
+\Gamma_f: \mathbb{A}^1_k \to \mathbb{A}^1_k \times_k \mathbb{A}^1_k = \mathbb{A}^2_k
+$$
+
+This corresponds to the ring homomorphism:
+$$
+k[x,y] \to k[x], \quad x \mapsto x, \quad y \mapsto p(x)
+$$
+
+The image is the closed subscheme $V(y - p(x)) \subseteq \mathbb{A}^2_k$.
+</Example>
+
+<Example id="graph-frobenius" title="Graph of Frobenius">
+Let $k = \mathbb{F}_p$ and consider the Frobenius morphism $F: \mathbb{A}^1_k \to \mathbb{A}^1_k$ given by $x \mapsto x^p$. The graph is:
+$$
+\Gamma_F: \mathbb{A}^1_k \to \mathbb{A}^2_k
+$$
+with image $V(y - x^p)$, a curve in the plane defined over $\mathbb{F}_p$.
+</Example>
+
+<Theorem title="Graph as Closed Embedding">
+If $f: X \to Y$ is a morphism of $S$-schemes and $X$ is separated over $S$, then the graph $\Gamma_f: X \to X \times_S Y$ is a closed embedding.
+</Theorem>
+
+## Concrete Intersection Computations
+
+<Example id="twisted-cubic-line" title="Twisted Cubic Intersecting a Line">
+Consider the twisted cubic $C \subseteq \mathbb{P}^3$ parametrized by $[s^3:s^2t:st^2:t^3]$ and a line $L$ given by $x_0 = x_1 = 0$. To find their intersection scheme-theoretically, we form:
+$$
+C \cap L = C \times_{\mathbb{P}^3} L
+$$
+
+In affine coordinates where $t \neq 0$, we have $C: (x,y,z) = (s^3, s^2, s)$ and $L: x = y = 0$. The intersection conditions are $s^3 = 0$ and $s^2 = 0$, giving $s = 0$ with multiplicity 3. Thus:
+$$
+C \cap L = \mathrm{Spec}\left(\frac{k[s]}{(s^3)}\right)
+$$
+a non-reduced point of length 3, reflecting that the cubic is tangent to the line to third order.
+</Example>
+
+<Example id="plane-curves-intersection" title="Intersection of Plane Curves with Multiplicity">
+Let $C_1 = V(y - x^2)$ and $C_2 = V(y)$ in $\mathbb{A}^2_k$. Their intersection is:
+$$
+C_1 \cap C_2 = \mathrm{Spec}\left(\frac{k[x,y]}{(y-x^2, y)}\right) = \mathrm{Spec}\left(\frac{k[x]}{(x^2)}\right)
+$$
+
+This is a non-reduced point at the origin with multiplicity 2, correctly capturing the tangency of the parabola to the $x$-axis.
+</Example>
+
+## Base Change and Preservation of Properties
+
+Many important properties of morphisms are preserved under base change.
+
+<Theorem title="Properties Preserved Under Base Change">
+Let $f: X \to S$ be a morphism and $T \to S$ a base change. The following properties of $f$ are preserved by base change to $f_T: X_T \to T$:
+
+1. Open/closed embedding
+2. Affine/finite/quasi-finite
+3. Flat
+4. Smooth/étale
+5. Proper/separated
+6. Surjective (if $T \to S$ is surjective)
+</Theorem>
+
+<Example id="flat-base-change" title="Flat Base Change">
+Consider the family $\mathcal{X} = \mathrm{Spec}(k[t][x]/(x^2 - t)) \to \mathrm{Spec}(k[t]) = S$. This is a flat family: the fiber over $t = a \neq 0$ is two points, while the fiber over $t = 0$ is a double point.
+
+For any morphism $T \to S$, the base change $\mathcal{X}_T \to T$ remains flat. For instance, if $T = \mathrm{Spec}(k[s])$ and $T \to S$ is given by $t \mapsto s^2$, then:
+$$
+\mathcal{X}_T = \mathrm{Spec}\left(k[s][x] \otimes_{k[t]} k[t]/(x^2-t)\right) = \mathrm{Spec}\left(\frac{k[s][x]}{(x^2-s^2)}\right)
+$$
+
+This is still flat over $T$.
+</Example>
+
+<Example id="proper-base-change" title="Base Change Theorem for Proper Morphisms">
+Let $f: X \to S$ be proper and $T \to S$ any morphism. Then $f_T: X_T \to T$ is proper.
+
+For example, if $X = \mathbb{P}^n_k$ over $S = \mathrm{Spec}(k)$, then for any extension $K/k$:
+$$
+(\mathbb{P}^n_k)_K = \mathbb{P}^n_K
+$$
+is proper over $\mathrm{Spec}(K)$.
+</Example>
+
+## Geometric Fibers vs Scheme-Theoretic Fibers
+
+<Definition title="Geometric Fiber">
+Let $f: X \to Y$ be a morphism and $y \in Y$ a point. The **geometric fiber** over $y$ is:
+$$
+X_{\bar{y}} := X \times_Y \mathrm{Spec}(\overline{\kappa(y)})
+$$
+where $\overline{\kappa(y)}$ is an algebraic closure of the residue field.
+</Definition>
+
+<Example id="geometric-vs-schematic" title="Comparing Geometric and Scheme-Theoretic Fibers">
+Consider $X = \mathrm{Spec}(\mathbb{Q}[x]/(x^2-2)) \to \mathrm{Spec}(\mathbb{Q})$.
+
+The scheme-theoretic fiber over the unique point is $X$ itself, which is connected (it's the spectrum of a field).
+
+The geometric fiber is:
+$$
+X_{\overline{\mathbb{Q}}} = \mathrm{Spec}\left(\frac{\mathbb{Q}[x]}{(x^2-2)} \otimes_\mathbb{Q} \overline{\mathbb{Q}}\right) = \mathrm{Spec}\left(\overline{\mathbb{Q}} \times \overline{\mathbb{Q}}\right)
+$$
+
+This consists of two points (corresponding to $x = \pm\sqrt{2}$), which are the geometric realizations of the scheme-theoretic point.
+</Example>
+
+<Example id="inseparable-extension" title="Inseparable Extension">
+Let $k = \mathbb{F}_p(t)$ and $K = k[x]/(x^p - t)$. Consider $X = \mathrm{Spec}(K) \to \mathrm{Spec}(k)$.
+
+The scheme-theoretic fiber is $X$ itself. However:
+$$
+X_{\bar{k}} = \mathrm{Spec}\left(\frac{k[x]}{(x^p-t)} \otimes_k \bar{k}\right)
+$$
+
+Since $t$ has a $p$-th root $\alpha$ in $\bar{k}$, we have $x^p - t = (x - \alpha)^p$ in $\bar{k}[x]$, so:
+$$
+X_{\bar{k}} = \mathrm{Spec}\left(\frac{\bar{k}[x]}{(x-\alpha)^p}\right)
+$$
+
+This is a non-reduced point of length $p$, reflecting the inseparability of the extension.
+</Example>
+
+<Example id="arithmetic-fibers" title="Arithmetic Fibers">
+Consider the scheme $X = \mathrm{Spec}(\mathbb{Z}[i]) \to \mathrm{Spec}(\mathbb{Z})$.
+
+Over the generic point $\eta = (0)$, the fiber is:
+$$
+X_\eta = \mathrm{Spec}(\mathbb{Q}(i))
+$$
+
+Over a prime $p$, the fiber is:
+$$
+X_p = \mathrm{Spec}\left(\mathbb{Z}[i] \otimes_\mathbb{Z} \mathbb{F}_p\right) = \mathrm{Spec}\left(\frac{\mathbb{F}_p[x]}{(x^2+1)}\right)
+$$
+
+The structure depends on $p$:
+- If $p \equiv 1 \pmod{4}$, then $x^2 + 1$ splits: $X_p \cong \mathrm{Spec}(\mathbb{F}_p \times \mathbb{F}_p)$ (two points)
+- If $p \equiv 3 \pmod{4}$, then $x^2 + 1$ is irreducible: $X_p = \mathrm{Spec}(\mathbb{F}_{p^2})$ (one point)
+- If $p = 2$, then $x^2 + 1 = (x+1)^2$: $X_2 = \mathrm{Spec}(\mathbb{F}_2[x]/(x+1)^2)$ (a double point)
+</Example>
+
+<Example id="base-change-commutes-fiber" title="Base Change Commutes with Further Base Change">
+Given morphisms $X \to S$, $T \to S$, and $T' \to T$, there is a canonical isomorphism:
+$$
+(X_T)_{T'} \cong X_{T'}
+$$
+
+For example, if $X$ is a variety over $\mathbb{Q}$, $T = \mathrm{Spec}(\mathbb{R})$, and $T' = \mathrm{Spec}(\mathbb{C})$, then:
+$$
+(X_\mathbb{R})_\mathbb{C} \cong X_\mathbb{C}
+$$
+
+This reflects the fact that we can extend scalars in one step or in stages.
+</Example>
+
+## Advanced Examples
+
+<Example id="fiber-product-non-affine" title="Fiber Product of Non-Affine Schemes">
+Consider $\mathbb{P}^1_k \times_k \mathbb{P}^1_k$. This cannot be computed directly as a spectrum, but we can cover it with affine opens.
+
+If $\mathbb{P}^1_k = U_0 \cup U_1$ where $U_0 = \mathrm{Spec}(k[x])$ and $U_1 = \mathrm{Spec}(k[x^{-1}])$, then:
+$$
+\mathbb{P}^1_k \times_k \mathbb{P}^1_k = \bigcup_{i,j} U_i \times_k U_j
+$$
+
+For instance:
+$$
+U_0 \times_k U_0 = \mathrm{Spec}(k[x] \otimes_k k[y]) = \mathrm{Spec}(k[x,y]) = \mathbb{A}^2_k
+$$
+
+The result is a surface with four affine charts, which is the product $\mathbb{P}^1 \times \mathbb{P}^1$, also known as a quadric surface in $\mathbb{P}^3$ via the Segre embedding.
+</Example>
+
+<Example id="nodal-cubic-fiber" title="Family of Nodal Cubics">
+Consider the family of plane cubics:
+$$
+y^2 = x^3 + tx^2
+$$
+over $\mathrm{Spec}(k[t])$. This gives a morphism $\mathcal{C} \to \mathbb{A}^1_k$.
+
+For $t \neq 0$, the fiber is a nodal cubic (with a node at the origin). For $t = 0$, the fiber is:
+$$
+\mathcal{C}_0 = V(y^2 - x^3) \subseteq \mathbb{A}^2_k
+$$
+a cuspidal cubic. The fiber product describes how the geometry varies in the family.
+</Example>
+
+<Example id="blowup-exceptional-divisor" title="Exceptional Divisor via Fiber Product">
+The blowup of $\mathbb{A}^2_k$ at the origin can be described using fiber products. Consider:
+$$
+\mathrm{Bl}_0(\mathbb{A}^2_k) \subseteq \mathbb{A}^2_k \times_k \mathbb{P}^1_k
+$$
+
+defined by the equation $xu_1 - yu_0 = 0$ where $(x,y)$ are coordinates on $\mathbb{A}^2_k$ and $[u_0:u_1]$ on $\mathbb{P}^1_k$.
+
+The exceptional divisor is the fiber over the origin:
+$$
+E = \mathrm{Bl}_0(\mathbb{A}^2_k) \times_{\mathbb{A}^2_k} \mathrm{Spec}(k[x,y]/(x,y)) \cong \mathbb{P}^1_k
+$$
+</Example>
+
+---
+
+The fiber product construction is foundational in scheme theory, providing a unified framework for:
+- Understanding intersections scheme-theoretically (with multiplicities)
+- Describing fibers of morphisms (both scheme-theoretic and geometric)
+- Performing base change and extension of scalars
+- Studying families and their specializations
+- Defining separatedness via the diagonal
+- Constructing products, graphs, and many other geometric objects
+
+The interplay between the categorical universal property and concrete computations via tensor products makes fiber products both conceptually elegant and computationally tractable.

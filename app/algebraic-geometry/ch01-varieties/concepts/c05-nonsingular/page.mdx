@@ -1,0 +1,478 @@
+export const metadata = {
+  title: 'Nonsingular Varieties — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Concept — Nonsingular Varieties" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Nonsingular Varieties
+
+A variety is **nonsingular** (or **smooth**) if it has a well-defined tangent space of the expected dimension at every point. Singularities — nodes, cusps, and worse — are the points where the geometry degenerates. Understanding where and how singularities arise is one of the central concerns of algebraic geometry.
+
+Throughout, $k$ denotes an algebraically closed field and varieties are as in Hartshorne, Chapter I.
+
+---
+
+## The Zariski tangent space
+
+<Definition title="Zariski tangent space" number="5.1">
+Let $Y$ be a variety over $k$ and let $P \in Y$ be a point. Let $\mathfrak{m}_P \subseteq \mathcal{O}_{Y,P}$ be the maximal ideal of the local ring at $P$. The **Zariski tangent space** of $Y$ at $P$ is the $k$-vector space
+
+$$T_P Y = (\mathfrak{m}_P / \mathfrak{m}_P^2)^*.$$
+
+Equivalently, $T_P Y = \operatorname{Der}_k(\mathcal{O}_{Y,P}, k)$, the space of $k$-derivations $\mathcal{O}_{Y,P} \to k$.
+</Definition>
+
+<Remark title="Intrinsic definition">
+The Zariski tangent space is defined intrinsically from the local ring, without reference to an embedding. This is crucial: it means the tangent space is an invariant of the variety, not of a particular presentation by equations.
+</Remark>
+
+<Example id="tangent-affine-n" title="Zariski tangent space of affine space">
+Let $Y = \mathbb{A}^n$ and $P = (a_1, \ldots, a_n)$. The local ring is $\mathcal{O}_{\mathbb{A}^n, P} = k[x_1, \ldots, x_n]_{\mathfrak{m}_P}$ where $\mathfrak{m}_P = (x_1 - a_1, \ldots, x_n - a_n)$. Then
+
+$$\mathfrak{m}_P / \mathfrak{m}_P^2 \cong \bigoplus_{i=1}^n k \cdot \overline{(x_i - a_i)},$$
+
+so $\dim_k T_P \mathbb{A}^n = n$. The tangent space at every point of $\mathbb{A}^n$ is $n$-dimensional, as expected.
+</Example>
+
+<Example id="tangent-embedded" title="Tangent space for an embedded variety">
+Let $Y = V(f_1, \ldots, f_r) \subseteq \mathbb{A}^n$ and $P \in Y$. For each $f_i$, consider the differential
+
+$$d_P f_i = \sum_{j=1}^n \frac{\partial f_i}{\partial x_j}(P) \cdot (x_j - a_j).$$
+
+These are linear forms on $k^n$. The Zariski tangent space is
+
+$$T_P Y = V(d_P f_1, \ldots, d_P f_r) = \left\{ v \in k^n \;\middle|\; \sum_{j=1}^n \frac{\partial f_i}{\partial x_j}(P) \cdot v_j = 0 \text{ for all } i \right\}.$$
+
+In other words, $T_P Y = \ker J(P)$ where $J$ is the Jacobian matrix. We always have $\dim T_P Y \geq \dim Y$, with equality characterizing nonsingularity.
+</Example>
+
+---
+
+## The Jacobian criterion
+
+<Definition title="Jacobian matrix" number="5.2">
+Let $Y = V(f_1, \ldots, f_r) \subseteq \mathbb{A}^n$. The **Jacobian matrix** of $Y$ at a point $P \in Y$ is the $r \times n$ matrix
+
+$$J(P) = \begin{pmatrix} \dfrac{\partial f_1}{\partial x_1}(P) & \cdots & \dfrac{\partial f_1}{\partial x_n}(P) \\[6pt] \vdots & \ddots & \vdots \\[6pt] \dfrac{\partial f_r}{\partial x_1}(P) & \cdots & \dfrac{\partial f_r}{\partial x_n}(P) \end{pmatrix}.$$
+</Definition>
+
+<Theorem title="Jacobian criterion for nonsingularity" number="5.1">
+Let $Y$ be a variety of dimension $d$ in $\mathbb{A}^n$, and write $Y = V(f_1, \ldots, f_r)$ where $(f_1, \ldots, f_r) = I(Y)$ (or any set of generators). A point $P \in Y$ is **nonsingular** if and only if
+
+$$\operatorname{rank} J(P) = n - d.$$
+
+Equivalently, $P$ is nonsingular iff $\dim_k T_P Y = d = \dim Y$.
+</Theorem>
+
+<Remark title="Independence of presentation">
+The rank condition $\operatorname{rank} J(P) = n - d$ does not depend on the choice of generators of $I(Y)$. If we add redundant generators, the Jacobian gets more rows but the rank at a nonsingular point remains $n - d$.
+</Remark>
+
+<Example id="jacobian-plane-curve" title="Jacobian criterion for a plane curve">
+Let $C = V(f) \subseteq \mathbb{A}^2$ be an irreducible plane curve ($\dim C = 1$). Here $n = 2$, $d = 1$, so the Jacobian criterion requires $\operatorname{rank} J(P) = 1$, i.e.,
+
+$$\left( \frac{\partial f}{\partial x}(P),\; \frac{\partial f}{\partial y}(P) \right) \neq (0, 0).$$
+
+A point $P$ is singular iff $f(P) = 0$ and both partial derivatives vanish at $P$.
+</Example>
+
+<Example id="jacobian-circle" title="The circle is smooth">
+Let $C = V(x^2 + y^2 - 1) \subseteq \mathbb{A}^2$ over $k$ with $\operatorname{char}(k) \neq 2$. The Jacobian is
+
+$$J = \begin{pmatrix} 2x & 2y \end{pmatrix}.$$
+
+At a point $P = (a, b)$ on $C$: $J(P) = (2a,\; 2b)$. This vanishes iff $a = b = 0$, but $(0, 0)$ does not lie on $C$ (since $0 + 0 - 1 \neq 0$). So $C$ is nonsingular at every point.
+</Example>
+
+<Example id="jacobian-surface" title="Jacobian for a surface in A³">
+Let $S = V(x^2 + y^2 + z^2 - 1) \subseteq \mathbb{A}^3$. Here $n = 3$, $d = 2$, so we need $\operatorname{rank} J(P) = 1$. The Jacobian is
+
+$$J = \begin{pmatrix} 2x & 2y & 2z \end{pmatrix}.$$
+
+This has rank 0 only at the origin, which does not lie on $S$. Hence $S$ is smooth (when $\operatorname{char}(k) \neq 2$).
+</Example>
+
+---
+
+## Singular vs. nonsingular points
+
+<Definition title="Nonsingular point, singular point" number="5.3">
+Let $Y$ be a variety of dimension $d$. A point $P \in Y$ is **nonsingular** (or **smooth**) if $\dim_k T_P Y = d$. Otherwise ($\dim_k T_P Y > d$), $P$ is a **singular point** of $Y$.
+
+A variety is **nonsingular** (or **smooth**) if every point is nonsingular.
+</Definition>
+
+<Example id="node" title="The node: y² = x²(x+1)">
+Let $C = V(y^2 - x^2(x+1)) = V(y^2 - x^3 - x^2) \subseteq \mathbb{A}^2$. Set $f = y^2 - x^3 - x^2$. The partial derivatives are
+
+$$\frac{\partial f}{\partial x} = -3x^2 - 2x, \qquad \frac{\partial f}{\partial y} = 2y.$$
+
+At the origin $P = (0, 0)$: $f(0,0) = 0$, $\frac{\partial f}{\partial x}(0,0) = 0$, $\frac{\partial f}{\partial y}(0,0) = 0$. Both partial derivatives vanish, so **the origin is a singular point** (a node).
+
+The tangent space is $T_{(0,0)} C = \ker(0, 0) = k^2$, which is $2$-dimensional -- strictly larger than $\dim C = 1$.
+
+At a generic point, say $P = (0, -1)$: we check $f(0, -1) = 1 - 0 - 0 = 1 \neq 0$, so this point is not on $C$. Try $P = (3, 6)$: $f(3, 6) = 36 - 27 - 9 = 0$ and $\frac{\partial f}{\partial x}(3, 6) = -27 - 6 = -33 \neq 0$. So $(3, 6)$ is a smooth point.
+</Example>
+
+<Example id="cusp" title="The cusp: y² = x³">
+Let $C = V(y^2 - x^3) \subseteq \mathbb{A}^2$. Set $f = y^2 - x^3$.
+
+$$\frac{\partial f}{\partial x} = -3x^2, \qquad \frac{\partial f}{\partial y} = 2y.$$
+
+At $P = (0, 0)$: $f = 0$, $\frac{\partial f}{\partial x} = 0$, $\frac{\partial f}{\partial y} = 0$. The origin is singular.
+
+At $P = (1, 1)$: $f = 0$, $\frac{\partial f}{\partial x} = -3 \neq 0$. So $(1, 1)$ is smooth. In fact, the origin is the **only** singular point.
+
+The cusp is "worse" than the node: the local ring $\mathcal{O}_{C, 0}$ has $\mathfrak{m}/\mathfrak{m}^2$ two-dimensional (same as the node), but the tangent cone is different (see below).
+</Example>
+
+<Example id="tacnode" title="The tacnode: y² = x⁴">
+Let $C = V(y^2 - x^4) \subseteq \mathbb{A}^2$. Set $f = y^2 - x^4$.
+
+$$\frac{\partial f}{\partial x} = -4x^3, \qquad \frac{\partial f}{\partial y} = 2y.$$
+
+At $P = (0, 0)$: both vanish, so the origin is singular. The curve factors as $(y - x^2)(y + x^2) = 0$, giving two smooth branches (the parabolas $y = x^2$ and $y = -x^2$) that are **tangent** to each other at the origin. This is a **tacnode**: the two branches share the same tangent line $y = 0$ (with contact of order 2).
+
+Compare with the node $y^2 = x^2(x+1)$, where the two branches have **distinct** tangent directions at the singular point.
+</Example>
+
+<Example id="ordinary-multiple-point" title="Ordinary multiple point: x³ + y³ = 0 and higher">
+Consider $C = V(x^3 + y^3) \subseteq \mathbb{A}^2$ (over a field where $\operatorname{char}(k) \neq 3$). Since $x^3 + y^3 = (x + y)(x + \omega y)(x + \omega^2 y)$ where $\omega$ is a primitive cube root of unity, the curve is actually reducible -- three lines through the origin.
+
+For a genuinely irreducible example, take $C = V(x^4 + y^4 + x^2 y^2 - x^2 - y^2)$. The origin need not be singular here. Instead, consider the curve germ $y^3 = x^3(x+1)$ at the origin. Set $f = y^3 - x^3(x+1)$:
+
+$$\frac{\partial f}{\partial x}(0,0) = 0, \qquad \frac{\partial f}{\partial y}(0,0) = 0.$$
+
+The origin is a singular point. The lowest-degree terms are $y^3 - x^3 = (y - x)(y - \omega x)(y - \omega^2 x)$, giving **three distinct tangent lines**. This is an **ordinary triple point** (or ordinary 3-fold point): a point of multiplicity 3 with 3 distinct tangent directions.
+
+More generally, a singular point of multiplicity $m$ with $m$ distinct tangent directions is called an **ordinary $m$-fold point**.
+</Example>
+
+---
+
+## The singular locus
+
+<Theorem title="The singular locus is closed" number="5.2">
+Let $Y$ be a variety. The **singular locus**
+
+$$\operatorname{Sing}(Y) = \{ P \in Y \mid P \text{ is singular} \}$$
+
+is a proper closed subset of $Y$. In particular, the set of nonsingular points is a dense open subset.
+</Theorem>
+
+<Example id="sing-locus-node" title="Singular locus of the nodal cubic">
+For $C = V(y^2 - x^3 - x^2) \subseteq \mathbb{A}^2$, we computed that $\operatorname{Sing}(C)$ is determined by
+
+$$f = 0, \quad \frac{\partial f}{\partial x} = -3x^2 - 2x = 0, \quad \frac{\partial f}{\partial y} = 2y = 0.$$
+
+From the partials: $y = 0$ and $x(3x + 2) = 0$, so $x = 0$ or $x = -2/3$. Check on $C$: $(0, 0)$ gives $f = 0$ (singular); $(-2/3, 0)$ gives $f = -4/27 + 4/9 = 8/27 \neq 0$ (not on $C$). Thus $\operatorname{Sing}(C) = \{(0,0)\}$, a single point -- a proper closed subset of $C$.
+</Example>
+
+<Example id="sing-locus-whitney" title="Singular locus of the Whitney umbrella">
+Let $S = V(x^2 - y^2 z) \subseteq \mathbb{A}^3$ (the **Whitney umbrella**). Set $f = x^2 - y^2 z$:
+
+$$\frac{\partial f}{\partial x} = 2x, \quad \frac{\partial f}{\partial y} = -2yz, \quad \frac{\partial f}{\partial z} = -y^2.$$
+
+The singular locus is $\{f = 0,\; 2x = 0,\; -2yz = 0,\; -y^2 = 0\}$, which gives $x = 0$, $y = 0$, and then $f = 0$ is automatic. So $\operatorname{Sing}(S) = V(x, y) = \{(0, 0, t) \mid t \in k\}$, the entire $z$-axis.
+
+Here the singular locus is a line sitting inside a surface -- a closed subset of dimension 1 inside a variety of dimension 2.
+</Example>
+
+---
+
+## Smooth varieties
+
+<Definition title="Smooth (nonsingular) variety" number="5.4">
+A variety $Y$ is **smooth** (or **nonsingular**) if $\operatorname{Sing}(Y) = \varnothing$, i.e., every point of $Y$ is nonsingular.
+</Definition>
+
+<Example id="affine-space-smooth" title="Affine and projective spaces are smooth">
+$\mathbb{A}^n$ is smooth: the local ring at every point is $k[x_1, \ldots, x_n]_{\mathfrak{m}}$, which is a regular local ring of dimension $n$, and $\dim T_P \mathbb{A}^n = n = \dim \mathbb{A}^n$.
+
+$\mathbb{P}^n$ is smooth: it is covered by affine charts $U_i \cong \mathbb{A}^n$, each of which is smooth. Smoothness is a local property, so $\mathbb{P}^n$ is smooth.
+</Example>
+
+<Example id="smooth-quadric" title="Smooth quadric hypersurface">
+Let $Q = V(x_0^2 + x_1^2 + \cdots + x_n^2) \subseteq \mathbb{P}^n$ (assuming $\operatorname{char}(k) \neq 2$). In the affine chart $x_0 = 1$, this is $V(1 + x_1^2 + \cdots + x_n^2)$, i.e., $V(x_1^2 + \cdots + x_n^2 + 1)$. The Jacobian is $(2x_1, \ldots, 2x_n)$, which vanishes only at the origin, but $0 + \cdots + 0 + 1 \neq 0$, so no singular point exists in this chart. By symmetry, the same holds in every chart. So $Q$ is **smooth**.
+
+More generally, a quadric $V(\sum a_{ij} x_i x_j)$ in $\mathbb{P}^n$ is smooth if and only if the associated symmetric matrix $(a_{ij})$ is nonsingular (i.e., has nonzero determinant).
+</Example>
+
+<Example id="smooth-cubic-surface" title="Smooth cubic surface in P³">
+The **Fermat cubic surface** $S = V(x_0^3 + x_1^3 + x_2^3 + x_3^3) \subseteq \mathbb{P}^3$ (with $\operatorname{char}(k) \neq 3$). In the chart $x_0 = 1$:
+
+$$f = 1 + x_1^3 + x_2^3 + x_3^3, \quad J = (3x_1^2,\; 3x_2^2,\; 3x_3^2).$$
+
+$J = 0$ requires $x_1 = x_2 = x_3 = 0$, but then $f = 1 \neq 0$. By symmetry, all charts give the same conclusion: $S$ is smooth.
+
+A classical result: every smooth cubic surface over $\mathbb{C}$ contains exactly **27 lines**. This is one of the most famous theorems in 19th-century algebraic geometry (Cayley-Salmon theorem, 1849).
+</Example>
+
+<Example id="smooth-cubic-curve" title="Smooth cubic curve (elliptic curve)">
+Let $E = V(y^2 - x^3 - ax - b) \subseteq \mathbb{A}^2$ where $4a^3 + 27b^2 \neq 0$ (the discriminant condition). Set $f = y^2 - x^3 - ax - b$:
+
+$$\frac{\partial f}{\partial x} = -3x^2 - a, \qquad \frac{\partial f}{\partial y} = 2y.$$
+
+A singular point requires $2y = 0$ (so $y = 0$) and $3x^2 + a = 0$ and $x^3 + ax + b = 0$. From $3x^2 = -a$, substitute into $x^3 + ax + b = 0$: one can show this system has a solution iff $4a^3 + 27b^2 = 0$. So the condition $4a^3 + 27b^2 \neq 0$ is precisely what ensures smoothness.
+
+For instance, $y^2 = x^3 - x$ (where $a = -1$, $b = 0$, discriminant $= -4 + 0 = -4 \neq 0$) is smooth. But $y^2 = x^3$ (where $a = 0$, $b = 0$, discriminant $= 0$) has a cusp at the origin.
+</Example>
+
+<Example id="grassmannian-smooth" title="Grassmannians are smooth">
+The Grassmannian $\mathbb{G}(r, n)$ is smooth. This can be seen from its local description: around any point $W \in \mathbb{G}(r, n)$, choose a complementary subspace $W'$ of dimension $n - r$. Then the open set $\{U \in \mathbb{G}(r, n) \mid U \cap W' = 0\}$ is isomorphic to $\mathbb{A}^{r(n-r)}$ (the space of $r \times (n-r)$ matrices, representing $U$ as the graph of a linear map $W \to W'$). Since $\mathbb{A}^{r(n-r)}$ is smooth and smoothness is local, $\mathbb{G}(r, n)$ is smooth.
+</Example>
+
+---
+
+## The tangent cone
+
+<Definition title="Tangent cone" number="5.5">
+Let $Y = V(f) \subseteq \mathbb{A}^n$ be a hypersurface and $P \in Y$. Write $f = f_m + f_{m+1} + \cdots$ where $f_i$ is the homogeneous component of degree $i$ (in the variables $x_j - a_j$, centered at $P$) and $f_m \neq 0$. The **tangent cone** to $Y$ at $P$ is
+
+$$C_P Y = V(f_m) \subseteq \mathbb{A}^n,$$
+
+the zero set of the leading form $f_m$. The integer $m$ is the **multiplicity** of $Y$ at $P$, denoted $\operatorname{mult}_P(Y)$.
+</Definition>
+
+<Remark title="Tangent cone vs. tangent space">
+If $P$ is a smooth point (multiplicity 1), then $f_1 = d_P f$ is a nonzero linear form, and the tangent cone $V(f_1)$ is a hyperplane -- this is the tangent space. For singular points, the tangent cone carries more refined information than the tangent space. The tangent space is always a linear subspace; the tangent cone is a (possibly reducible) cone.
+</Remark>
+
+<Example id="tangent-cone-node" title="Tangent cone of the node">
+For $C = V(y^2 - x^3 - x^2)$, the lowest-degree terms at the origin are $y^2 - x^2 = (y - x)(y + x)$. So
+
+$$C_{(0,0)} C = V(y^2 - x^2) = V(y - x) \cup V(y + x),$$
+
+two distinct lines through the origin. The multiplicity is $\operatorname{mult}_{(0,0)}(C) = 2$.
+
+Geometrically, the two lines $y = x$ and $y = -x$ are the two tangent directions of the two branches of the curve at the node.
+</Example>
+
+<Example id="tangent-cone-cusp" title="Tangent cone of the cusp">
+For $C = V(y^2 - x^3)$, the lowest-degree terms at the origin are $y^2$ (degree 2). So
+
+$$C_{(0,0)} C = V(y^2),$$
+
+a "double line" along the $x$-axis. The multiplicity is $\operatorname{mult}_{(0,0)}(C) = 2$.
+
+Although the cusp and the node both have multiplicity 2, their tangent cones differ: the node has two distinct tangent lines, while the cusp has a single tangent line with multiplicity 2. The cusp is "more singular" in this sense.
+</Example>
+
+<Example id="tangent-cone-tacnode" title="Tangent cone of the tacnode">
+For $C = V(y^2 - x^4)$, the lowest-degree terms at the origin are $y^2$ (degree 2, since $x^4$ has degree 4). So
+
+$$C_{(0,0)} C = V(y^2),$$
+
+the same double line as the cusp. The multiplicity is 2. But the tacnode and the cusp are genuinely different singularities (the tacnode is analytically equivalent to two smooth branches tangent to each other; the cusp is an irreducible singular germ). Distinguishing them requires looking beyond the tangent cone, e.g., at higher-order jet spaces or the resolution.
+</Example>
+
+---
+
+## Multiplicity of a point
+
+<Definition title="Multiplicity" number="5.6">
+Let $Y$ be a variety and $P \in Y$. The **multiplicity** $\operatorname{mult}_P(Y)$ is defined as follows. If $Y = V(f)$ is a hypersurface, it is the order of vanishing of $f$ at $P$, i.e., the degree of the leading form in the Taylor expansion at $P$.
+
+More generally, if $\mathfrak{m} = \mathfrak{m}_P$ is the maximal ideal of $\mathcal{O}_{Y,P}$ and $d = \dim \mathcal{O}_{Y,P}$, the **Hilbert-Samuel multiplicity** is
+
+$$e(\mathcal{O}_{Y,P}) = d! \cdot \lim_{n \to \infty} \frac{\ell(\mathcal{O}_{Y,P}/\mathfrak{m}^n)}{n^d}$$
+
+where $\ell$ denotes the length. For a hypersurface, this agrees with the order of vanishing.
+</Definition>
+
+<Example id="multiplicity-examples" title="Multiplicities of plane curve singularities">
+| Curve | Equation | $\operatorname{mult}_{(0,0)}$ | Tangent cone |
+|---|---|---|---|
+| Smooth point | $y = x^2$ (at origin: not on curve) | -- | -- |
+| Node | $y^2 = x^3 + x^2$ | 2 | $y^2 - x^2$: two lines |
+| Cusp | $y^2 = x^3$ | 2 | $y^2$: double line |
+| Tacnode | $y^2 = x^4$ | 2 | $y^2$: double line |
+| Triple point | $y^3 = x^3(x+1)$ | 3 | $y^3 - x^3$: three lines |
+| $A_4$ singularity | $y^2 = x^5$ | 2 | $y^2$: double line |
+
+The multiplicity determines the "order" of the singularity, while the tangent cone captures the tangent geometry. Two singularities can have the same multiplicity and tangent cone (cusp vs. tacnode) but be analytically different.
+</Example>
+
+---
+
+## Regular local rings
+
+<Definition title="Regular local ring" number="5.7">
+A Noetherian local ring $(R, \mathfrak{m}, k)$ is **regular** if
+
+$$\dim_k(\mathfrak{m}/\mathfrak{m}^2) = \dim R$$
+
+where $\dim R$ is the Krull dimension. In general, $\dim_k(\mathfrak{m}/\mathfrak{m}^2) \geq \dim R$ (this is a consequence of the Krull principal ideal theorem). Equality is the condition of regularity.
+</Definition>
+
+<Theorem title="Characterization of nonsingularity" number="5.3">
+Let $Y$ be a variety and $P \in Y$. The following are equivalent:
+
+1. $P$ is a nonsingular point of $Y$.
+2. $\dim_k T_P Y = \dim Y$.
+3. The local ring $\mathcal{O}_{Y,P}$ is a **regular local ring**.
+4. (For $Y = V(f_1, \ldots, f_r) \subseteq \mathbb{A}^n$) The Jacobian matrix $J(P)$ has rank $n - \dim Y$.
+
+Moreover, every regular local ring is an integral domain, a UFD (Auslander-Buchsbaum theorem), and in particular is normal (integrally closed).
+</Theorem>
+
+<Example id="regular-local-ring-cusp" title="The local ring at a cusp is not regular">
+For $C = V(y^2 - x^3)$ and $P = (0,0)$:
+
+$$\mathcal{O}_{C, P} = (k[x, y]/(y^2 - x^3))_{(x, y)} = k[t^2, t^3]_{(t^2, t^3)}.$$
+
+The maximal ideal $\mathfrak{m} = (t^2, t^3)$ satisfies $\mathfrak{m}/\mathfrak{m}^2 = k \cdot \bar{t}^2 \oplus k \cdot \bar{t}^3$ (2-dimensional), but $\dim \mathcal{O}_{C, P} = 1$ (since $C$ is a curve). Since $2 \neq 1$, the local ring is **not regular**, confirming that the origin is a singular point.
+
+Furthermore, $\mathcal{O}_{C, P}$ is not a UFD: the element $t^2$ is irreducible but not prime (since $t^2 \cdot t^2 = t^4 = t \cdot t^3$, and $t \notin k[t^2, t^3]$). It is also not integrally closed: $t = t^3/t^2$ is integral over $k[t^2, t^3]$ but not in it.
+</Example>
+
+<Example id="regular-local-ring-smooth-curve" title="Regular local ring of a smooth curve">
+For $C = V(y - x^2) \subseteq \mathbb{A}^2$ and $P = (0, 0)$:
+
+$$\mathcal{O}_{C, P} = (k[x, y]/(y - x^2))_{(x, y)} \cong k[x]_{(x)}.$$
+
+The maximal ideal is $(x)$, which is principal: $\mathfrak{m}/\mathfrak{m}^2 \cong k$ (1-dimensional), and $\dim \mathcal{O}_{C, P} = 1$. Since $1 = 1$, this is a regular local ring -- a **discrete valuation ring** (DVR). Every smooth curve has DVRs as its local rings.
+</Example>
+
+---
+
+## Normalization and resolution of singularities
+
+<Remark title="Normalization">
+The **normalization** of a variety $Y$ is the unique (up to isomorphism) normal variety $\tilde{Y}$ with a finite birational morphism $\nu: \tilde{Y} \to Y$. For curves, normalization resolves all singularities:
+
+- The normalization of the cuspidal cubic $V(y^2 - x^3)$ is $\mathbb{A}^1$, via $t \mapsto (t^2, t^3)$.
+- The normalization of the nodal cubic $V(y^2 - x^2(x+1))$ is $\mathbb{A}^1$, via $t \mapsto (t^2 - 1, t(t^2 - 1))$.
+
+In both cases, the normalization "unravels" the singularity by pulling apart branches (node) or "smoothing" the parametrization (cusp). For higher-dimensional varieties, normalization resolves singularities in codimension 1 but may leave higher-codimension singularities.
+</Remark>
+
+<Remark title="Resolution of singularities">
+A **resolution of singularities** of a variety $Y$ is a proper birational morphism $\pi: \tilde{Y} \to Y$ where $\tilde{Y}$ is smooth. Hironaka's celebrated theorem (1964) guarantees that resolutions exist for varieties over fields of characteristic zero.
+
+Resolution is typically achieved by **blowing up** along the singular locus (or subvarieties thereof), repeatedly, until the result is smooth.
+</Remark>
+
+---
+
+## Blowing up singularities
+
+<Example id="blowup-node" title="Blowing up the node">
+Consider $C = V(y^2 - x^2 - x^3) \subseteq \mathbb{A}^2$ with a node at the origin. The **blowup** of $\mathbb{A}^2$ at the origin replaces $(0,0)$ by a $\mathbb{P}^1$ (the exceptional divisor $E$). In local coordinates:
+
+**Chart 1** ($y = tx$): Substituting $y = tx$ into $f = y^2 - x^2 - x^3$:
+
+$$t^2 x^2 - x^2 - x^3 = x^2(t^2 - 1 - x).$$
+
+The factor $x^2$ corresponds to the exceptional divisor (with multiplicity 2). The **strict transform** is $\tilde{C}_1 = V(t^2 - 1 - x)$, a smooth curve. On $E$ (where $x = 0$), the strict transform meets $E$ at $t^2 = 1$, i.e., $t = \pm 1$. These are **two distinct points**, corresponding to the two tangent directions of the node.
+
+**Chart 2** ($x = sy$): Substituting $x = sy$ into $f$:
+
+$$y^2 - s^2 y^2 - s^3 y^3 = y^2(1 - s^2 - s^3 y).$$
+
+The strict transform is $V(1 - s^2 - s^3 y)$, also smooth.
+
+The blowup resolves the node in a single step: the strict transform $\tilde{C}$ is smooth, and $\pi: \tilde{C} \to C$ is an isomorphism away from the origin. Above the origin, $\tilde{C}$ has two points (the two branches are separated).
+</Example>
+
+<Example id="blowup-cusp" title="Blowing up the cusp">
+Consider $C = V(y^2 - x^3) \subseteq \mathbb{A}^2$ with a cusp at the origin.
+
+**First blowup** (chart $y = tx$): Substitute into $f = y^2 - x^3$:
+
+$$t^2 x^2 - x^3 = x^2(t^2 - x).$$
+
+The strict transform $\tilde{C}_1 = V(t^2 - x)$ is smooth (it is a parabola in the $(x, t)$-plane). On the exceptional divisor ($x = 0$): $t^2 = 0$, so $t = 0$. The strict transform meets $E$ at a **single point** with multiplicity 2 (tangency).
+
+But wait -- $\tilde{C}_1 = V(t^2 - x)$ is actually smooth. The intersection with $E$ is transverse after a coordinate change: set $u = t$, then $x = u^2$, and $\tilde{C}_1 \cong \mathbb{A}^1$ via $u \mapsto (u^2, u)$. The cusp **is resolved after a single blowup**.
+
+However, note that the strict transform meets the exceptional divisor with contact order 2, not transversally. If we want normal crossings (for the purpose of embedded resolution), we would need a second blowup. For the abstract resolution of $C$ alone, one blowup suffices.
+</Example>
+
+<Example id="blowup-comparison" title="Comparing node and cusp blowups">
+| Singularity | Blowups needed | Strict transform meets $E$ at | Behavior |
+|---|---|---|---|
+| Node $y^2 = x^2(x+1)$ | 1 | 2 distinct points | Two branches separated |
+| Cusp $y^2 = x^3$ | 1 | 1 point (tangent to $E$) | Branch smoothed |
+| Tacnode $y^2 = x^4$ | 2 | After 1st: cusp; after 2nd: smooth | Two tangent branches separated |
+| $A_4$: $y^2 = x^5$ | 2 | Successive blowups resolve | Higher-order contact resolved iteratively |
+</Example>
+
+---
+
+## Nonsingularity in the projective setting
+
+<Example id="projective-smoothness" title="Smoothness check for projective hypersurfaces">
+For a projective hypersurface $Y = V(F) \subseteq \mathbb{P}^n$ with $F$ homogeneous of degree $d$, the singular points are
+
+$$\operatorname{Sing}(Y) = V\!\left(F,\; \frac{\partial F}{\partial x_0},\; \ldots,\; \frac{\partial F}{\partial x_n}\right) \subseteq \mathbb{P}^n.$$
+
+By Euler's formula for homogeneous polynomials ($\sum x_i \frac{\partial F}{\partial x_i} = d \cdot F$), the condition $F = 0$ is redundant when $\operatorname{char}(k) \nmid d$: it follows from the vanishing of all partials at a point of $\mathbb{P}^n$.
+
+**Concretely**: the Klein quartic $V(x^3 y + y^3 z + z^3 x) \subseteq \mathbb{P}^2$ (over $\mathbb{C}$) is smooth. Its partials are:
+
+$$\frac{\partial F}{\partial x} = 3x^2 y + z^3, \quad \frac{\partial F}{\partial y} = x^3 + 3y^2 z, \quad \frac{\partial F}{\partial z} = y^3 + 3z^2 x.$$
+
+One can verify (e.g., by Grobner basis or direct computation) that the system $F = \frac{\partial F}{\partial x} = \frac{\partial F}{\partial y} = \frac{\partial F}{\partial z} = 0$ has no solution in $\mathbb{P}^2$. The Klein quartic is a smooth curve of genus 3, and it has the largest automorphism group (168 elements) among genus-3 curves.
+</Example>
+
+<Example id="generic-smoothness" title="Generic hypersurfaces are smooth">
+For "most" choices of coefficients, a degree-$d$ hypersurface in $\mathbb{P}^n$ is smooth. More precisely, the locus of singular hypersurfaces in the parameter space $\mathbb{P}^N$ (where $N = \binom{n+d}{d} - 1$) is a proper closed subset -- the **discriminant hypersurface** $\Delta$.
+
+For plane curves ($n = 2$):
+- Degree 1 (lines): always smooth. $\Delta = \varnothing$.
+- Degree 2 (conics): singular iff the $3 \times 3$ matrix has $\det = 0$. $\Delta$ is a degree-3 hypersurface in $\mathbb{P}^5$.
+- Degree 3 (cubics): the discriminant $\Delta \subseteq \mathbb{P}^9$ has degree 12.
+
+This is a manifestation of Bertini's theorem: a "general" member of a linear system is smooth.
+</Example>
+
+---
+
+## Summary: a taxonomy of plane curve singularities
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Name</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Equation</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Mult.</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Tangent cone</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">$\delta$-invariant</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Blowups</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100">$A_1$ (node)</td><td className="px-4 py-2 border-b border-gray-100">$y^2 = x^2 + x^3$</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">Two distinct lines</td><td className="px-4 py-2 border-b border-gray-100">1</td><td className="px-4 py-2 border-b border-gray-100">1</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$A_2$ (cusp)</td><td className="px-4 py-2 border-b border-gray-100">$y^2 = x^3$</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">Double line</td><td className="px-4 py-2 border-b border-gray-100">1</td><td className="px-4 py-2 border-b border-gray-100">1</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$A_3$ (tacnode)</td><td className="px-4 py-2 border-b border-gray-100">$y^2 = x^4$</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">Double line</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">2</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$A_4$</td><td className="px-4 py-2 border-b border-gray-100">$y^2 = x^5$</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">Double line</td><td className="px-4 py-2 border-b border-gray-100">2</td><td className="px-4 py-2 border-b border-gray-100">2</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$D_4$ (ordinary triple pt)</td><td className="px-4 py-2 border-b border-gray-100">$x^3 + y^3 = 0$</td><td className="px-4 py-2 border-b border-gray-100">3</td><td className="px-4 py-2 border-b border-gray-100">Three distinct lines</td><td className="px-4 py-2 border-b border-gray-100">3</td><td className="px-4 py-2 border-b border-gray-100">1</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$E_6$</td><td className="px-4 py-2 border-b border-gray-100">$y^3 = x^4$</td><td className="px-4 py-2 border-b border-gray-100">3</td><td className="px-4 py-2 border-b border-gray-100">Triple line</td><td className="px-4 py-2 border-b border-gray-100">3</td><td className="px-4 py-2 border-b border-gray-100">3</td></tr>
+</tbody>
+</table>
+</div>
+
+The ADE classification of simple curve singularities (du Val singularities for surfaces) connects algebraic geometry to Lie theory, representation theory, and mathematical physics via the McKay correspondence.
+
+<Remark title="Looking ahead">
+Nonsingularity is preserved by many natural operations: smooth subvarieties of smooth varieties are smooth, products of smooth varieties are smooth, and a general hyperplane section of a smooth projective variety is smooth (Bertini's theorem). The theory of nonsingular varieties is the foundation for intersection theory, differential forms, sheaf cohomology, and the Riemann-Roch theorem in later chapters.
+
+For a more general framework that handles singularities on equal footing -- including nilpotent elements, non-reduced structures, and arithmetic geometry -- one passes to the language of [schemes](/algebraic-geometry/ch02-schemes/concepts/c04-scheme) and the notion of **regular schemes**.
+</Remark>

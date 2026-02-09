@@ -1,0 +1,133 @@
+export const metadata = {
+  title: 'Yoneda Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Theorem — Yoneda Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Yoneda Lemma
+
+The Yoneda Lemma is arguably the most important result in category theory. It tells us that an object is completely determined by its relationships to all other objects — that is, by its representable functor.
+
+## Setup
+
+Throughout, let $\mathcal{C}$ be a locally small category. For each object $A \in \mathcal{C}$, we have the **representable functor** (also called the Yoneda embedding on objects):
+
+$$h^A = \mathrm{Hom}_{\mathcal{C}}(-, A) : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$$
+
+which sends an object $X$ to the set $\mathrm{Hom}(X, A)$ and a morphism $f: X \to Y$ to the precomposition map $f^* : \mathrm{Hom}(Y, A) \to \mathrm{Hom}(X, A)$ given by $g \mapsto g \circ f$.
+
+<Theorem title="Yoneda Lemma" number="1.1">
+Let $\mathcal{C}$ be a locally small category, $A$ an object of $\mathcal{C}$, and $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ a functor. Then there is a bijection
+
+$$\Phi : \mathrm{Nat}(h^A, F) \xrightarrow{\;\sim\;} F(A)$$
+
+given by $\Phi(\alpha) = \alpha_A(\mathrm{id}_A)$, where $\mathrm{Nat}(h^A, F)$ denotes the set of natural transformations from $h^A$ to $F$.
+
+Moreover, this bijection is natural in both $A$ and $F$.
+</Theorem>
+
+<Proof title="Proof of the Yoneda Lemma">
+**Step 1. Define the map.** Given a natural transformation $\alpha : h^A \Rightarrow F$, we define
+
+$$\Phi(\alpha) = \alpha_A(\mathrm{id}_A) \in F(A)$$
+
+**Step 2. Construct the inverse.** Given an element $x \in F(A)$, we define a natural transformation $\Psi(x) : h^A \Rightarrow F$ as follows. For each object $X \in \mathcal{C}$, define
+
+$$\Psi(x)_X : \mathrm{Hom}(X, A) \to F(X), \qquad f \mapsto F(f)(x)$$
+
+We must check that $\Psi(x)$ is natural: for any morphism $g : X \to Y$, the diagram
+
+$$
+\begin{array}{ccc}
+\mathrm{Hom}(Y, A) & \xrightarrow{\Psi(x)_Y} & F(Y) \\[6pt]
+\downarrow\scriptstyle{g^*} & & \downarrow\scriptstyle{F(g)} \\[6pt]
+\mathrm{Hom}(X, A) & \xrightarrow{\Psi(x)_X} & F(X)
+\end{array}
+$$
+
+must commute. Indeed, for $f \in \mathrm{Hom}(Y, A)$:
+
+- Going right then down: $F(g)(\Psi(x)_Y(f)) = F(g)(F(f)(x)) = F(f \circ g)(x)$
+- Going down then right: $\Psi(x)_X(g^*(f)) = \Psi(x)_X(f \circ g) = F(f \circ g)(x)$
+
+These are equal since $F$ is a (contravariant) functor.
+
+**Step 3. Verify $\Phi$ and $\Psi$ are inverses.**
+
+$\Phi \circ \Psi$: For $x \in F(A)$,
+$$\Phi(\Psi(x)) = \Psi(x)_A(\mathrm{id}_A) = F(\mathrm{id}_A)(x) = \mathrm{id}_{F(A)}(x) = x$$
+
+$\Psi \circ \Phi$: For $\alpha : h^A \Rightarrow F$ and any $f : X \to A$,
+$$\Psi(\Phi(\alpha))_X(f) = F(f)(\alpha_A(\mathrm{id}_A))$$
+
+By naturality of $\alpha$ at $f : X \to A$:
+
+$$
+\alpha_X(f^*(\mathrm{id}_A)) = F(f)(\alpha_A(\mathrm{id}_A))
+$$
+
+Since $f^*(\mathrm{id}_A) = \mathrm{id}_A \circ f = f$, we get $\alpha_X(f) = F(f)(\alpha_A(\mathrm{id}_A))$. Thus $\Psi(\Phi(\alpha)) = \alpha$.
+</Proof>
+
+## The Yoneda Embedding
+
+An immediate corollary is:
+
+<Theorem title="Yoneda Embedding" number="1.2">
+The functor
+
+$$\mathbf{y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}], \qquad A \mapsto h^A$$
+
+is **fully faithful**. That is, for all $A, B \in \mathcal{C}$:
+
+$$\mathrm{Hom}_{\mathcal{C}}(A, B) \cong \mathrm{Nat}(h^A, h^B)$$
+</Theorem>
+
+<Proof>
+Apply the Yoneda Lemma with $F = h^B$:
+
+$$\mathrm{Nat}(h^A, h^B) \cong h^B(A) = \mathrm{Hom}(A, B)$$
+</Proof>
+
+<Remark title="Why this matters">
+The Yoneda Lemma has several profound consequences:
+
+1. **Objects are determined by their morphisms.** Two objects $A \cong B$ if and only if $h^A \cong h^B$ as functors. You can "know" an object entirely by knowing all maps into it.
+
+2. **The functor category is "big enough."** $\mathcal{C}$ embeds fully faithfully into $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$, which always has all limits and colimits (even if $\mathcal{C}$ does not).
+
+3. **Universal properties are representability.** A universal property for an object $A$ is precisely the data of a natural isomorphism $F \cong h^A$ for some functor $F$. The Yoneda Lemma guarantees such an $A$ is unique up to unique isomorphism.
+
+4. **Foundation for derived categories.** In the Gelfand-Manin approach, the Yoneda embedding is the prototype for the more sophisticated embeddings that arise when constructing derived categories: the idea that objects can be "replaced" by functorial data.
+</Remark>
+
+<Example title="Cayley's Theorem as Yoneda">
+For a group $G$ viewed as a one-object category $\mathbf{B}G$, the Yoneda embedding gives
+
+$$\mathbf{B}G \hookrightarrow [\mathbf{B}G^{\mathrm{op}}, \mathbf{Set}] \cong G\text{-}\mathbf{Set}$$
+
+The unique object maps to $G$ acting on itself by left multiplication. This is exactly **Cayley's theorem**: every group embeds into a symmetric group.
+</Example>
+
+<Example title="Yoneda in the category of modules">
+Let $R$ be a ring and $\mathcal{C} = R\text{-}\mathbf{Mod}$. For a left $R$-module $M$, the representable functor $h^M = \mathrm{Hom}_R(-, M)$ is a contravariant additive functor. The Yoneda Lemma gives:
+
+$$\mathrm{Nat}(\mathrm{Hom}_R(-, M), F) \cong F(M)$$
+
+When $F = \mathrm{Hom}_R(-, N)$, this recovers $\mathrm{Hom}_R(M, N)$, i.e., module homomorphisms are precisely natural transformations between $\mathrm{Hom}$ functors.
+</Example>

@@ -1,0 +1,341 @@
+export const metadata = {
+  title: 'Spectrum of a Ring — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Concept — Spec A" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The Spectrum of a Ring
+
+The **spectrum** $\operatorname{Spec} A$ is the fundamental construction bridging commutative algebra and geometry. It turns any commutative ring into a topological space with a structure sheaf, making it the basic building block of scheme theory.
+
+---
+
+## Definition and points
+
+<Definition title="Spectrum of a ring" number="2.5">
+Let $A$ be a commutative ring with $1$. The **spectrum** of $A$ is
+
+$$\operatorname{Spec} A = \{\mathfrak{p} \subseteq A \mid \mathfrak{p} \text{ is a prime ideal}\}$$
+
+as a set. Each prime ideal $\mathfrak{p}$ is a **point** of $\operatorname{Spec} A$. The **residue field** at $\mathfrak{p}$ is $\kappa(\mathfrak{p}) = \operatorname{Frac}(A/\mathfrak{p})$.
+</Definition>
+
+<Example id="spec-Z" title="Spec ℤ">
+$\operatorname{Spec} \mathbb{Z} = \{(0), (2), (3), (5), (7), (11), \ldots\}.$
+
+- The **closed points** are $(p)$ for primes $p$, with residue field $\kappa((p)) = \mathbb{F}_p$.
+- The **generic point** $(0)$ has residue field $\kappa((0)) = \mathbb{Q}$.
+
+The closure $\overline{\{(0)\}} = \operatorname{Spec} \mathbb{Z}$ (the generic point is dense). Think of $\operatorname{Spec} \mathbb{Z}$ as a "curve" whose points are the primes, with a fat generic point spread over the whole space.
+</Example>
+
+<Example id="spec-k" title="Spec k (a field)">
+If $k$ is a field, then $\operatorname{Spec} k = \{(0)\}$: a single point. This is the terminal object in the category of affine schemes (over $k$, $\operatorname{Spec} k$ plays the role of a point).
+</Example>
+
+<Example id="spec-polynomial" title="Spec k[x] — the affine line">
+$\operatorname{Spec} k[x]$ for $k$ algebraically closed:
+
+- **Closed points**: $(x - a)$ for each $a \in k$, with $\kappa = k$. These correspond to the "classical" points of $\mathbb{A}^1$.
+- **Generic point**: $(0)$, with $\kappa = k(x)$ (the function field).
+
+So $\operatorname{Spec} k[x] = \mathbb{A}^1 \cup \{\text{generic point}\}$. The generic point is dense; its closure is the entire space.
+
+For $k = \mathbb{R}$ (not algebraically closed): $\operatorname{Spec} \mathbb{R}[x]$ has additional closed points like $(x^2 + 1)$ with residue field $\mathbb{C}$. These "non-rational points" correspond to conjugate pairs $\pm i$.
+</Example>
+
+<Example id="spec-polynomial-2" title="Spec k[x, y] — the affine plane">
+$\operatorname{Spec} k[x, y]$ for $k = \bar{k}$ has three types of points:
+
+| Type | Prime ideal | Residue field | Dimension |
+|---|---|---|---|
+| Closed points | $(x - a, y - b)$ | $k$ | $0$ |
+| Generic points of curves | $(f(x,y))$, $f$ irred. | $k(x,y)/(f) = k(C)$ | $1$ |
+| Generic point | $(0)$ | $k(x,y)$ | $2$ |
+
+The point $(y - x^2)$ is the "generic point of the parabola" — its closure $\overline{\{(y-x^2)\}} = V(y - x^2)$ is the parabola. Every irreducible subvariety has a unique generic point.
+</Example>
+
+<Example id="spec-dual-numbers" title="Spec k[ε]/(ε²) — the dual numbers">
+$\operatorname{Spec} k[\varepsilon]/(\varepsilon^2)$ has a **single point** $({\varepsilon})$, but the ring is not a field: it has a nilpotent element $\varepsilon \neq 0$ with $\varepsilon^2 = 0$.
+
+This is a "fat point" or "point with tangent direction." A morphism $\operatorname{Spec} k[\varepsilon]/(\varepsilon^2) \to X$ corresponds to a point $p \in X$ together with a tangent vector at $p$. This is why scheme theory is more flexible than classical algebraic geometry: **nilpotents carry infinitesimal information**.
+</Example>
+
+<Example id="spec-local" title="Spec of a local ring">
+For a local ring $(R, \mathfrak{m})$, $\operatorname{Spec} R$ has a **unique closed point** $\mathfrak{m}$. Examples:
+
+- $\operatorname{Spec} k[[x]]$ has two points: the closed point $(x)$ and the generic point $(0)$. Think of it as a "formal neighborhood of a point on a curve."
+- $\operatorname{Spec} \mathbb{Z}_{(p)}$ has two points: $(p)$ (closed) and $(0)$ (generic). This is the "local picture of $\operatorname{Spec} \mathbb{Z}$ at the prime $p$."
+- $\operatorname{Spec} k$ is the special case where $\mathfrak{m} = (0)$.
+</Example>
+
+<Example id="spec-product" title="Spec of a product ring">
+$\operatorname{Spec}(A \times B) \cong \operatorname{Spec} A \sqcup \operatorname{Spec} B$ (disjoint union). For example:
+
+$$\operatorname{Spec}(k \times k) = \{(1,0), (0,1)\} = \text{two points}.$$
+
+More interesting: by CRT, $\operatorname{Spec} \mathbb{Z}/6\mathbb{Z} \cong \operatorname{Spec}(\mathbb{Z}/2 \times \mathbb{Z}/3) = \{(2), (3)\}$, two points.
+
+But $\operatorname{Spec} \mathbb{Z}/4\mathbb{Z}$ is a single point $(2)$ with nilpotent structure ($\bar{2}^2 = \bar{0}$). Topologically it's the same as $\operatorname{Spec} \mathbb{F}_2$, but the scheme structure remembers the multiplicity.
+</Example>
+
+---
+
+## The Zariski topology
+
+<Definition title="Zariski topology on Spec A" number="2.6">
+For an ideal $I \subseteq A$, define the **vanishing set**
+
+$$V(I) = \{\mathfrak{p} \in \operatorname{Spec} A \mid \mathfrak{p} \supseteq I\}.$$
+
+The sets $V(I)$ are the **closed sets** of the **Zariski topology** on $\operatorname{Spec} A$. Properties:
+
+- $V(A) = \emptyset$, $V(0) = \operatorname{Spec} A$.
+- $V(I) \cup V(J) = V(IJ) = V(I \cap J)$.
+- $\bigcap_\alpha V(I_\alpha) = V(\sum_\alpha I_\alpha)$.
+
+The **distinguished (basic) open sets** $D(f) = \operatorname{Spec} A \setminus V(f) = \{\mathfrak{p} \mid f \notin \mathfrak{p}\}$ for $f \in A$ form a basis for the topology.
+</Definition>
+
+<Example id="zariski-A1" title="Zariski topology on 𝔸¹">
+$\operatorname{Spec} k[x]$: the closed sets are $V(f(x))$ for $f \in k[x]$. Since $k[x]$ is a PID, every closed set is either all of $\operatorname{Spec} k[x]$ or a **finite set** of closed points. So the topology is the **cofinite topology** on the closed points, plus the generic point whose closure is everything.
+
+This is highly non-Hausdorff: any two nonempty open sets intersect.
+</Example>
+
+<Example id="zariski-spec-Z" title="Topology of Spec ℤ">
+The closed sets of $\operatorname{Spec} \mathbb{Z}$ are: $\emptyset$, $\operatorname{Spec} \mathbb{Z}$, and finite sets of closed points $\{(p_1), \ldots, (p_n)\} = V(p_1 \cdots p_n)$. Same cofinite topology on the closed points.
+
+The open set $D(6) = \operatorname{Spec} \mathbb{Z} \setminus \{(2), (3)\}$ consists of primes $p \neq 2, 3$ plus the generic point. As a scheme: $D(6) \cong \operatorname{Spec} \mathbb{Z}[1/6]$.
+</Example>
+
+<Example id="zariski-A2" title="Zariski topology on 𝔸²">
+$\operatorname{Spec} k[x,y]$: closed sets include $V(f)$ for irreducible $f$ (curves), $V(x-a, y-b)$ (points), and intersections/unions. The topology is much richer than in dimension 1:
+- $V(y - x^2)$ is a closed parabola.
+- $V(xy)$ is the union of the two axes.
+- $V(x - a, y - b) = \{(a,b)\}$ is a closed point.
+
+The generic point of $V(y - x^2)$ is the prime $(y - x^2)$; its closure is the parabola. The generic point $(0)$ is dense in everything.
+</Example>
+
+---
+
+## The structure sheaf
+
+<Definition title="Structure sheaf" number="2.7">
+On $\operatorname{Spec} A$, the **structure sheaf** $\mathcal{O}_{\operatorname{Spec} A}$ is defined on the basis of distinguished opens by:
+
+$$\mathcal{O}(D(f)) = A_f \quad (\text{localization of } A \text{ at } f).$$
+
+In particular, $\mathcal{O}(\operatorname{Spec} A) = A$ (global sections recover the ring).
+
+The stalk at a prime $\mathfrak{p}$ is the local ring:
+
+$$\mathcal{O}_{\operatorname{Spec} A, \mathfrak{p}} = A_\mathfrak{p} = \left\{\frac{a}{s} \mid a \in A, \ s \notin \mathfrak{p}\right\}.$$
+
+The pair $(\operatorname{Spec} A, \mathcal{O}_{\operatorname{Spec} A})$ is an **affine scheme**.
+</Definition>
+
+<Example id="structure-sheaf-Z" title="Structure sheaf of Spec ℤ">
+- $\mathcal{O}(\operatorname{Spec} \mathbb{Z}) = \mathbb{Z}$ (global sections).
+- $\mathcal{O}(D(p)) = \mathbb{Z}[1/p]$ (integers with $p$ inverted).
+- $\mathcal{O}(D(6)) = \mathbb{Z}[1/6] = \mathbb{Z}[1/2, 1/3]$.
+- Stalk at $(p)$: $\mathcal{O}_{\operatorname{Spec}\mathbb{Z}, (p)} = \mathbb{Z}_{(p)}$ (integers localized at $p$).
+- Stalk at $(0)$: $\mathcal{O}_{\operatorname{Spec}\mathbb{Z}, (0)} = \mathbb{Q}$ (the function field).
+</Example>
+
+<Example id="structure-sheaf-A1" title="Structure sheaf of 𝔸¹">
+For $k[x]$:
+- $\mathcal{O}(\mathbb{A}^1) = k[x]$.
+- $\mathcal{O}(D(x)) = k[x, 1/x]$ — polynomials in $x$ and $1/x$.
+- $\mathcal{O}(D(x(x-1))) = k[x, 1/(x(x-1))]$ — rational functions regular away from $0$ and $1$.
+- $\mathcal{O}_{\mathbb{A}^1, (x-a)} = k[x]_{(x-a)}$ — rational functions regular at $a$.
+</Example>
+
+<Example id="structure-sheaf-node" title="Structure sheaf of a nodal curve">
+Let $A = k[x,y]/(y^2 - x^2(x+1))$ (nodal cubic). Then $\operatorname{Spec} A$ is the affine nodal curve. At the node $\mathfrak{m} = (x, y)$:
+
+$$\mathcal{O}_{\operatorname{Spec} A, \mathfrak{m}} = A_\mathfrak{m}$$
+
+is a local ring that is **not** a domain (the completion $\hat{A}_\mathfrak{m} \cong k[[u,v]]/(uv)$, two branches). The local ring detects the singularity: $\dim_k \mathfrak{m}/\mathfrak{m}^2 = 2 > \dim = 1$, so the point is singular.
+</Example>
+
+---
+
+## Functoriality: ring homomorphisms become continuous maps
+
+<Definition title="Induced map on spectra" number="2.8">
+A ring homomorphism $\varphi : A \to B$ induces a continuous map
+
+$$\varphi^* = {}^a\varphi : \operatorname{Spec} B \to \operatorname{Spec} A, \quad \mathfrak{q} \mapsto \varphi^{-1}(\mathfrak{q}).$$
+
+(The preimage of a prime ideal is prime.) This gives a **contravariant functor** $\operatorname{Spec} : \mathbf{CRing}^{\mathrm{op}} \to \mathbf{Top}$.
+
+Moreover, $\varphi$ induces a morphism of structure sheaves $\varphi^\# : \mathcal{O}_{\operatorname{Spec} A} \to (\varphi^*)_*\mathcal{O}_{\operatorname{Spec} B}$, making $(\varphi^*, \varphi^\#)$ a **morphism of locally ringed spaces**.
+</Definition>
+
+<Example id="inclusion-map" title="Surjection → closed immersion">
+The surjection $k[x,y] \twoheadrightarrow k[x,y]/(y - x^2) \cong k[x]$ induces
+
+$$\operatorname{Spec} k[x] \hookrightarrow \operatorname{Spec} k[x,y] = \mathbb{A}^2$$
+
+which is the **inclusion of the parabola** $y = x^2$ into the plane. In general, surjections $A \twoheadrightarrow A/I$ correspond to **closed immersions** $V(I) \hookrightarrow \operatorname{Spec} A$.
+</Example>
+
+<Example id="localization-map" title="Localization → open immersion">
+The localization $k[x] \to k[x, 1/x]$ induces
+
+$$\operatorname{Spec} k[x, 1/x] \hookrightarrow \operatorname{Spec} k[x] = \mathbb{A}^1$$
+
+which is the inclusion of $D(x) = \mathbb{A}^1 \setminus \{0\}$. Localization maps $A \to S^{-1}A$ correspond to **open immersions** into distinguished opens.
+</Example>
+
+<Example id="frobenius-map" title="Frobenius in characteristic p">
+In characteristic $p > 0$, the **Frobenius** $\varphi : A \to A$, $a \mapsto a^p$ induces $\operatorname{Spec} A \to \operatorname{Spec} A$. On $\mathbb{A}^1 = \operatorname{Spec} \mathbb{F}_p[x]$:
+
+$$\varphi^* : \operatorname{Spec} \mathbb{F}_p[x] \to \operatorname{Spec} \mathbb{F}_p[x], \quad (x - a) \mapsto (x - a^p) = (x - a)$$
+
+since $a^p = a$ in $\mathbb{F}_p$ (Fermat's little theorem). So on $\mathbb{F}_p$-points, the Frobenius is the **identity**! But on the scheme level it's a nontrivial degree-$p$ morphism. The **fixed points** of Frobenius on $\overline{\mathbb{F}_p}$-points are exactly the $\mathbb{F}_p$-rational points — this is the foundation of the Weil conjectures.
+</Example>
+
+<Example id="spec-Z-to-spec-Fp" title="Spec 𝔽ₚ → Spec ℤ — a fiber of the arithmetic curve">
+The quotient $\mathbb{Z} \twoheadrightarrow \mathbb{F}_p$ induces $\operatorname{Spec} \mathbb{F}_p \hookrightarrow \operatorname{Spec} \mathbb{Z}$, the inclusion of the closed point $(p)$. Think of this as the **fiber** of the "arithmetic curve" $\operatorname{Spec} \mathbb{Z}$ over the "prime $p$." The inclusion $\mathbb{Z} \hookrightarrow \mathbb{Q}$ gives $\operatorname{Spec} \mathbb{Q} \hookrightarrow \operatorname{Spec} \mathbb{Z}$: the **generic fiber**.
+
+An equation like $y^2 = x^3 - x$ over $\mathbb{Z}$ gives a scheme over $\operatorname{Spec} \mathbb{Z}$ whose fibers are:
+- Over $(0)$: the elliptic curve $E/\mathbb{Q}$.
+- Over $(p)$: the reduction $E/\mathbb{F}_p$ (smooth for $p \neq 2$, singular at $p = 2$).
+
+This "spreading out" perspective is central to arithmetic geometry.
+</Example>
+
+---
+
+## Generic points and specialization
+
+<Definition title="Generic point" number="2.9">
+A point $\eta \in X$ is a **generic point** of an irreducible closed subset $Z$ if $\overline{\{\eta\}} = Z$. In $\operatorname{Spec} A$, every irreducible closed subset $V(\mathfrak{p})$ has a unique generic point, namely $\mathfrak{p}$ itself:
+
+$$\overline{\{\mathfrak{p}\}} = V(\mathfrak{p}).$$
+
+We say $\mathfrak{p}$ **specializes** to $\mathfrak{q}$ (written $\mathfrak{p} \leadsto \mathfrak{q}$) if $\mathfrak{q} \in \overline{\{\mathfrak{p}\}}$, i.e., $\mathfrak{p} \subseteq \mathfrak{q}$.
+</Definition>
+
+<Example id="specialization-A2" title="Specialization in 𝔸²">
+In $\operatorname{Spec} k[x,y]$:
+
+$$(0) \leadsto (y - x^2) \leadsto (x - 1, y - 1)$$
+
+The generic point $(0)$ specializes to the generic point of the parabola, which specializes to the point $(1,1)$ on the parabola. This chain corresponds to the inclusion of primes:
+
+$$(0) \subset (y - x^2) \subset (x-1, y-1).$$
+
+The chain length is $2 = \dim \mathbb{A}^2$, illustrating that the Krull dimension equals the maximal chain length.
+</Example>
+
+<Example id="generic-point-geometric" title="Geometric meaning of the generic point">
+The generic point $\eta = (0) \in \operatorname{Spec} k[x]$ is the "point in general position." Evaluating a polynomial $f(x)$ at $\eta$ gives $f$ itself in $k(x)$. So:
+
+- $f(\eta) = 0$ in $\kappa(\eta) = k(x)$ $\iff$ $f = 0$ as a polynomial $\iff$ $f$ vanishes **everywhere**.
+- $f(\eta) \neq 0$ $\iff$ $f \neq 0$ $\iff$ $f$ vanishes on only **finitely many** closed points.
+
+A property holds "at the generic point" iff it holds "on a dense open set." This is the scheme-theoretic formulation of "a general polynomial of degree $d$ has $d$ distinct roots."
+</Example>
+
+---
+
+## Spec and classical varieties
+
+<Remark title="From varieties to schemes">
+For $k$ algebraically closed, the **closed points** of $\operatorname{Spec} k[x_1, \ldots, x_n]/I$ are in bijection with $V(I) \subseteq \mathbb{A}^n$ (by the Nullstellensatz: maximal ideals $= (x_1 - a_1, \ldots, x_n - a_n)$ with $(a_1, \ldots, a_n) \in V(I)$).
+
+So $\operatorname{Spec}$ **extends** classical algebraic geometry by adding:
+1. **Generic points** of irreducible subvarieties (one for each prime ideal).
+2. **Non-closed-field points** (primes with residue field $\neq k$, relevant over non-algebraically-closed fields).
+3. **Nilpotent structure** (e.g., $\operatorname{Spec} k[x]/(x^2)$ vs. $\operatorname{Spec} k$).
+</Remark>
+
+<Example id="spec-non-reduced" title="Spec of a non-reduced ring: double point">
+$\operatorname{Spec} k[x]/(x^2)$ and $\operatorname{Spec} k[x]/(x)$ have the **same underlying topological space** (a single point $(x)$). But as schemes they differ:
+- $\operatorname{Spec} k$ has ring $k$ (reduced).
+- $\operatorname{Spec} k[x]/(x^2)$ has ring $k[\varepsilon]$ with $\varepsilon^2 = 0$ (non-reduced, "double point").
+
+The scheme $V(x^2) \subseteq \mathbb{A}^1$ remembers that the origin has **multiplicity 2**. Similarly, $V(x^n) = \operatorname{Spec} k[x]/(x^n)$ is the origin with multiplicity $n$.
+</Example>
+
+<Example id="spec-intersection-multiplicity" title="Intersection multiplicity via Spec">
+In $\mathbb{A}^2$, consider the intersection of $y = 0$ and $y = x^2$:
+
+$$\operatorname{Spec} k[x,y]/(y, y - x^2) = \operatorname{Spec} k[x]/(x^2).$$
+
+This is a **double point** — the intersection has multiplicity $2$ at the origin because the parabola is tangent to the $x$-axis. Compare with $y = 0 \cap y = x$:
+
+$$\operatorname{Spec} k[x,y]/(y, y - x) = \operatorname{Spec} k[x]/(x) = \operatorname{Spec} k.$$
+
+A simple (reduced) point — transverse intersection has multiplicity $1$. Scheme theory naturally computes intersection multiplicities via the tensor product of rings.
+</Example>
+
+---
+
+## Key properties of Spec
+
+<Remark title="Properties">
+$\operatorname{Spec} A$ satisfies:
+
+1. **Quasi-compact**: Every open cover has a finite subcover ($\operatorname{Spec} A = \bigcup D(f_i) \implies (f_1, \ldots, f_n) = A$).
+2. **Sober**: Every irreducible closed subset has a unique generic point.
+3. **$T_0$ but not $T_1$**: Points can be distinguished by open sets, but not every singleton is closed.
+4. **Connected $\iff$ $A$ has no nontrivial idempotents**.
+5. **Irreducible $\iff$ $\operatorname{nil}(A)$ is prime** ($\iff$ $A_{\mathrm{red}}$ is a domain).
+6. **Noetherian $\iff$ $A$ is Noetherian** (= every open is quasi-compact).
+
+The functor $\operatorname{Spec} : \mathbf{CRing}^{\mathrm{op}} \to \mathbf{AffSch}$ is an **equivalence of categories** (with quasi-inverse $\Gamma$: global sections). This is the affine analogue of the equivalence between affine varieties and finitely generated reduced $k$-algebras — but now with no restrictions on the ring.
+</Remark>
+
+---
+
+## Summary: dictionary Algebra ↔ Geometry
+
+<Remark title="The algebra-geometry dictionary for Spec">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Algebra ($A$)</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Geometry ($\operatorname{Spec} A$)</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">Prime ideal $\mathfrak{p}$</td><td className="border border-gray-200 px-3 py-2">Point of $\operatorname{Spec} A$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Maximal ideal $\mathfrak{m}$</td><td className="border border-gray-200 px-3 py-2">Closed point</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Minimal prime</td><td className="border border-gray-200 px-3 py-2">Generic point of irreducible component</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\mathfrak{p} \subseteq \mathfrak{q}$</td><td className="border border-gray-200 px-3 py-2">$\mathfrak{p}$ specializes to $\mathfrak{q}$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Quotient $A \twoheadrightarrow A/I$</td><td className="border border-gray-200 px-3 py-2">Closed subscheme $V(I) \hookrightarrow \operatorname{Spec} A$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Localization $A \to A_f$</td><td className="border border-gray-200 px-3 py-2">Open immersion $D(f) \hookrightarrow \operatorname{Spec} A$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A$ reduced ($\operatorname{nil}(A) = 0$)</td><td className="border border-gray-200 px-3 py-2">No embedded nilpotent structure</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A$ domain</td><td className="border border-gray-200 px-3 py-2">$\operatorname{Spec} A$ irreducible</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A$ local</td><td className="border border-gray-200 px-3 py-2">Unique closed point</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A$ field</td><td className="border border-gray-200 px-3 py-2">Single point (reduced)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A$ Noetherian</td><td className="border border-gray-200 px-3 py-2">Noetherian topological space</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\operatorname{Krull\,dim} A$</td><td className="border border-gray-200 px-3 py-2">$\dim \operatorname{Spec} A$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A \otimes_k B$</td><td className="border border-gray-200 px-3 py-2">$\operatorname{Spec} A \times_k \operatorname{Spec} B$ (fiber product)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$A_\mathfrak{p}$ regular local</td><td className="border border-gray-200 px-3 py-2">$\operatorname{Spec} A$ smooth at $\mathfrak{p}$</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>

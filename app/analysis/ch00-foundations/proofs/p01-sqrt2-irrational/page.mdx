@@ -1,0 +1,54 @@
+export const metadata = {
+  title: '√2의 무리수 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "증명 - √2의 무리수 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# √2의 무리수 증명
+
+귀류법의 대표적인 예시이자, 수학사에서 가장 유명한 증명 중 하나이다.
+
+<Theorem title="√2는 무리수이다">
+$\sqrt{2} \notin \mathbb{Q}$, 즉 $\sqrt{2}$를 두 정수의 비로 나타낼 수 없다.
+</Theorem>
+
+<Proof>
+귀류법을 사용한다. $\sqrt{2} \in \mathbb{Q}$라 가정하자.
+
+그러면 서로소인 정수 $p, q$ ($q \neq 0$)가 존재하여
+
+$$\sqrt{2} = \frac{p}{q}$$
+
+양변을 제곱하면
+
+$$2 = \frac{p^2}{q^2} \quad \Longrightarrow \quad p^2 = 2q^2$$
+
+따라서 $p^2$은 짝수이고, $p$도 짝수이다. $p = 2k$로 놓으면
+
+$$(2k)^2 = 2q^2 \quad \Longrightarrow \quad 4k^2 = 2q^2 \quad \Longrightarrow \quad q^2 = 2k^2$$
+
+따라서 $q^2$도 짝수이고, $q$도 짝수이다.
+
+$p$와 $q$가 모두 짝수이면 서로소라는 가정에 모순이다.
+</Proof>
+
+<Remark>
+이 증명은 [증명 방법론](/analysis/ch00-foundations/concepts/c02-proof-methods)에서 소개한 **귀류법**의 전형적인 적용이다. "$\sqrt{2}$가 유리수"라는 가정에서 출발하여 "서로소"라는 조건과 모순을 이끌어낸다.
+
+같은 방법으로 $\sqrt{3}$, $\sqrt{5}$ 등 소수의 제곱근이 무리수임을 보일 수 있다. 이는 [완비성 공리](/analysis/ch01-real-numbers/concepts/c02-completeness)에서 "유리수에는 빈틈이 있다"는 것을 구체적으로 보여준다.
+</Remark>

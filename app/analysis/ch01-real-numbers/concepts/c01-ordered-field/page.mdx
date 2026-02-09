@@ -1,0 +1,53 @@
+export const metadata = {
+  title: '순서체 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "1. 실수의 체계", href: "/analysis/ch01-real-numbers" },
+  { label: "개념 - 순서체" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 순서체 (Ordered Field)
+
+<Definition title="체" number="1.1">
+집합 $F$에 두 연산 덧셈(+)과 곱셈($\cdot$)이 정의되어 다음 공리들을 만족할 때, $F$를 **체**(field)라 한다.
+
+**덧셈 공리**: 교환법칙, 결합법칙, 항등원 $0$의 존재, 역원 $-a$의 존재
+
+**곱셈 공리**: 교환법칙, 결합법칙, 항등원 $1 \neq 0$의 존재, $a \neq 0$일 때 역원 $a^{-1}$의 존재
+
+**분배법칙**: $a \cdot (b + c) = a \cdot b + a \cdot c$
+</Definition>
+
+<Definition title="순서체" number="1.2">
+체 $F$에 순서 $\leq$가 정의되어 다음을 만족할 때, $F$를 **순서체**(ordered field)라 한다.
+
+1. 임의의 $a, b \in F$에 대해, $a \leq b$ 또는 $b \leq a$
+2. $a \leq b$이고 $b \leq a$이면 $a = b$
+3. $a \leq b$이고 $b \leq c$이면 $a \leq c$
+4. $a \leq b$이면 $a + c \leq b + c$
+5. $0 \leq a$이고 $0 \leq b$이면 $0 \leq ab$
+</Definition>
+
+<Example title="순서체의 예">
+유리수 $\mathbb{Q}$와 실수 $\mathbb{R}$은 순서체이다.
+
+복소수 $\mathbb{C}$는 체이지만 순서체가 아니다 — $i > 0$이면 $i^2 = -1 > 0$이어야 하고, $i < 0$이면 $(-i)^2 = -1 > 0$이어야 하는데, 둘 다 모순이다.
+</Example>
+
+<Remark>
+실수 $\mathbb{R}$은 **완비순서체**(complete ordered field)이다. 완비성 공리가 추가됨으로써 유리수와 구별된다.
+자세한 내용은 [완비성 공리](/analysis/ch01-real-numbers/concepts/c02-completeness)를 참조하라.
+</Remark>

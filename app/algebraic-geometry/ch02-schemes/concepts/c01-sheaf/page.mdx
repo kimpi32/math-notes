@@ -1,0 +1,389 @@
+export const metadata = {
+  title: 'Sheaves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Concept — Sheaves" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sheaves on a Topological Space
+
+Sheaves are the fundamental tool for keeping track of local-to-global data in algebraic geometry. A sheaf assigns algebraic data (rings, modules, groups) to each open set of a space, with compatibility conditions ensuring that local information glues together consistently.
+
+---
+
+## Presheaves
+
+<Definition title="Presheaf" number="2.1">
+A **presheaf** $\mathcal{F}$ of abelian groups (or rings, sets, ...) on a topological space $X$ consists of:
+
+1. For each open set $U \subseteq X$, an abelian group $\mathcal{F}(U)$ (the **sections** of $\mathcal{F}$ over $U$).
+2. For each inclusion $V \subseteq U$ of open sets, a **restriction map** $\operatorname{res}_{U,V} : \mathcal{F}(U) \to \mathcal{F}(V)$, written $s \mapsto s|_V$.
+
+These satisfy:
+- $\operatorname{res}_{U,U} = \operatorname{id}$ for all $U$.
+- $\operatorname{res}_{V,W} \circ \operatorname{res}_{U,V} = \operatorname{res}_{U,W}$ for $W \subseteq V \subseteq U$.
+
+Equivalently, a presheaf is a **contravariant functor** from the category $\operatorname{Open}(X)$ (with inclusions as morphisms) to $\mathbf{Ab}$ (or $\mathbf{Ring}$, $\mathbf{Set}$, ...).
+</Definition>
+
+<Example id="constant-presheaf" title="Constant presheaf">
+Fix an abelian group $A$. Define $\mathcal{F}^{\mathrm{pre}}(U) = A$ for every nonempty open $U$, with all restriction maps $\operatorname{id}_A$. This is a presheaf but **not** a sheaf in general (it fails gluing when $U$ is disconnected).
+</Example>
+
+<Example id="continuous-functions" title="Continuous functions">
+Let $X$ be a topological space. Define $\mathcal{C}(U) = \{f : U \to \mathbb{R} \mid f \text{ continuous}\}$, with restriction maps being literal restriction of functions. This is a presheaf (in fact a sheaf, as we'll verify shortly).
+</Example>
+
+<Example id="bounded-functions" title="Bounded functions (a non-sheaf presheaf)">
+Let $X = \mathbb{R}$. Define $\mathcal{F}(U) = \{f : U \to \mathbb{R} \mid f \text{ continuous and bounded}\}$. This is a presheaf under restriction. But it is **not** a sheaf: the function $f(x) = x$ is locally bounded on every bounded open interval, but not globally bounded on $\mathbb{R}$. So gluing fails.
+</Example>
+
+---
+
+## The sheaf axioms
+
+<Definition title="Sheaf" number="2.2">
+A presheaf $\mathcal{F}$ on $X$ is a **sheaf** if for every open set $U$ and every open cover $\{U_i\}$ of $U$, the following hold:
+
+**(Identity/Locality):** If $s, t \in \mathcal{F}(U)$ satisfy $s|_{U_i} = t|_{U_i}$ for all $i$, then $s = t$.
+
+**(Gluing):** If $s_i \in \mathcal{F}(U_i)$ satisfy $s_i|_{U_i \cap U_j} = s_j|_{U_i \cap U_j}$ for all $i, j$, then there exists $s \in \mathcal{F}(U)$ with $s|_{U_i} = s_i$.
+
+Equivalently, for every open cover $\{U_i\}$ of $U$, the sequence
+
+$$0 \to \mathcal{F}(U) \xrightarrow{\operatorname{res}} \prod_i \mathcal{F}(U_i) \rightrightarrows \prod_{i,j} \mathcal{F}(U_i \cap U_j)$$
+
+is an **equalizer** (exact at the first two terms).
+</Definition>
+
+<Example id="sheaf-of-continuous" title="Continuous functions form a sheaf">
+$\mathcal{C}(U) = C^0(U, \mathbb{R})$ is a sheaf on any topological space $X$:
+
+- **Identity**: If $f|_{U_i} = g|_{U_i}$ for all $i$, then $f(x) = g(x)$ for all $x \in U$ since the $U_i$ cover $U$.
+- **Gluing**: Given compatible $f_i \in C^0(U_i)$, define $f(x) = f_i(x)$ for $x \in U_i$. Compatibility ensures this is well-defined, and the pasting lemma gives continuity.
+</Example>
+
+<Example id="sheaf-of-smooth" title="Smooth functions">
+On a smooth manifold $M$, define $C^\infty(U) = \{f : U \to \mathbb{R} \mid f \text{ smooth}\}$. This is a sheaf of $\mathbb{R}$-algebras. Similarly for $C^\omega$ (real-analytic), holomorphic functions $\mathcal{O}$ on a complex manifold, etc.
+</Example>
+
+<Example id="sheaf-of-regular" title="Regular functions on a variety (the structure sheaf)">
+Let $X$ be an algebraic variety. The **structure sheaf** $\mathcal{O}_X$ assigns to each open $U \subseteq X$ the ring of regular functions:
+
+$$\mathcal{O}_X(U) = \{f : U \to k \mid f \text{ is regular}\}.$$
+
+For an affine variety $X = V(I) \subseteq \mathbb{A}^n$, a function $f$ is regular on $U$ if it is locally a ratio $g/h$ of polynomials with $h \neq 0$. This is the central sheaf of classical algebraic geometry.
+</Example>
+
+<Example id="constant-sheaf" title="Constant sheaf">
+The **constant sheaf** $\underline{A}$ on $X$ assigns to each open $U$:
+
+$$\underline{A}(U) = \{f : U \to A \mid f \text{ locally constant}\} = A^{\pi_0(U)}$$
+
+where $\pi_0(U)$ is the set of connected components of $U$. Unlike the constant presheaf, this is a genuine sheaf: if $U = U_1 \sqcup U_2$ is disconnected, then $\underline{A}(U) = A \times A$, not $A$.
+
+Over an irreducible variety (where every open is connected), $\underline{A}(U) = A$ for all nonempty $U$, so the constant presheaf and constant sheaf coincide.
+</Example>
+
+<Example id="skyscraper-sheaf" title="Skyscraper sheaf">
+Fix a point $p \in X$ and an abelian group $A$. The **skyscraper sheaf** $i_{p*}A$ is defined by:
+
+$$i_{p*}A(U) = \begin{cases} A & \text{if } p \in U, \\ 0 & \text{if } p \notin U. \end{cases}$$
+
+This is a sheaf (check!). It is supported at the single point $p$. In the derived category, skyscraper sheaves generate a useful class of objects.
+</Example>
+
+---
+
+## Stalks
+
+<Definition title="Stalk" number="2.3">
+The **stalk** of a presheaf $\mathcal{F}$ at a point $p \in X$ is the direct limit (colimit)
+
+$$\mathcal{F}_p = \varinjlim_{U \ni p} \mathcal{F}(U)$$
+
+over all open neighborhoods $U$ of $p$. An element of $\mathcal{F}_p$ is a **germ**: an equivalence class of pairs $(U, s)$ where $s \in \mathcal{F}(U)$ and $U \ni p$, with $(U, s) \sim (V, t)$ if $s|_W = t|_W$ for some open $W \subseteq U \cap V$ containing $p$.
+</Definition>
+
+<Example id="stalk-continuous" title="Stalks of continuous functions">
+For the sheaf $\mathcal{C}$ of continuous functions on $\mathbb{R}$, the stalk $\mathcal{C}_p$ is the ring of **germs of continuous functions at $p$**. Two functions $f$ and $g$ represent the same germ at $p$ if they agree on some neighborhood of $p$.
+
+The germ of $|x|$ at $0$ is different from the germ of $x$ at $0$ (they differ on every punctured neighborhood), but the germ of $|x|$ at $1$ equals the germ of $x$ at $1$.
+</Example>
+
+<Example id="stalk-regular" title="Stalks of the structure sheaf">
+For an affine variety $X$ with coordinate ring $A = k[X]$, the stalk of $\mathcal{O}_X$ at a point $p$ (corresponding to the maximal ideal $\mathfrak{m}_p$) is the **local ring**:
+
+$$\mathcal{O}_{X,p} = A_{\mathfrak{m}_p} = \left\{\frac{f}{g} \mid f, g \in A, \ g(p) \neq 0\right\}.$$
+
+This is a local ring with maximal ideal $\mathfrak{m}_p A_{\mathfrak{m}_p}$ and residue field $k$. For $X = \mathbb{A}^1$, the stalk at $p = a$ is $k[x]_{(x-a)}$, the ring of rational functions regular at $a$.
+</Example>
+
+<Example id="stalk-constant" title="Stalks of the constant sheaf">
+For the constant sheaf $\underline{A}$, the stalk at every point is $\underline{A}_p = A$. For the skyscraper sheaf $i_{p*}A$:
+
+$$(i_{p*}A)_q = \begin{cases} A & \text{if } q \in \overline{\{p\}}, \\ 0 & \text{otherwise}. \end{cases}$$
+
+In a $T_1$ space (e.g., a Hausdorff space), $\overline{\{p\}} = \{p\}$, so the stalk is $A$ only at $p$ itself. But in the Zariski topology, $\overline{\{p\}}$ can be much larger (the whole space if $p$ is the generic point!).
+</Example>
+
+<Remark title="Stalks detect sheaf properties">
+A morphism $\varphi : \mathcal{F} \to \mathcal{G}$ of sheaves is:
+- **injective** $\iff$ $\varphi_p : \mathcal{F}_p \to \mathcal{G}_p$ is injective for all $p$,
+- **surjective** $\iff$ $\varphi_p$ is surjective for all $p$,
+- an **isomorphism** $\iff$ $\varphi_p$ is an isomorphism for all $p$.
+
+**Warning**: Surjectivity on stalks does **not** imply surjectivity on sections! The exponential sequence $0 \to \underline{2\pi i\mathbb{Z}} \to \mathcal{O} \xrightarrow{\exp} \mathcal{O}^* \to 0$ on $\mathbb{C}^*$ is exact on stalks, but $\exp : \mathcal{O}(\mathbb{C}^*) \to \mathcal{O}^*(\mathbb{C}^*)$ is not surjective (the identity function $z$ has no global logarithm). This failure is measured by sheaf cohomology $H^1$.
+</Remark>
+
+---
+
+## Sheafification
+
+<Definition title="Sheafification" number="2.4">
+Every presheaf $\mathcal{F}$ has a **sheafification** $\mathcal{F}^+ = \mathcal{F}^{\mathrm{sh}}$, a sheaf together with a morphism $\theta : \mathcal{F} \to \mathcal{F}^+$ that is universal: any morphism from $\mathcal{F}$ to a sheaf factors uniquely through $\theta$.
+
+Concretely, $\mathcal{F}^+(U)$ consists of functions $s : U \to \coprod_{p \in U} \mathcal{F}_p$ (where $s(p) \in \mathcal{F}_p$) that are **locally induced by sections**: for each $p \in U$, there exists an open $V \ni p$ and $t \in \mathcal{F}(V)$ such that $s(q) = t_q$ (the germ of $t$ at $q$) for all $q \in V$.
+
+The key property: $\mathcal{F}^+$ has the **same stalks** as $\mathcal{F}$, i.e., $\mathcal{F}^+_p \cong \mathcal{F}_p$ for all $p$.
+</Definition>
+
+<Example id="sheafification-constant" title="Sheafification of the constant presheaf">
+The sheafification of the constant presheaf $U \mapsto A$ is the constant sheaf $\underline{A}$ (locally constant functions to $A$). On a connected space, they agree on sections over connected opens, but differ on disconnected opens: $A^{\mathrm{pre}}(U_1 \sqcup U_2) = A$ while $\underline{A}(U_1 \sqcup U_2) = A \times A$.
+</Example>
+
+<Example id="sheafification-bounded" title="Sheafification of bounded functions">
+The sheafification of the presheaf of bounded continuous functions on $\mathbb{R}$ is the sheaf of **all** continuous functions, since every continuous function is locally bounded.
+</Example>
+
+---
+
+## Morphisms of sheaves
+
+<Definition title="Morphism of sheaves" number="2.5">
+A **morphism** $\varphi : \mathcal{F} \to \mathcal{G}$ of sheaves on $X$ is a collection of homomorphisms $\varphi(U) : \mathcal{F}(U) \to \mathcal{G}(U)$ for each open $U$, compatible with restrictions:
+
+$$\varphi(V) \circ \operatorname{res}^{\mathcal{F}}_{U,V} = \operatorname{res}^{\mathcal{G}}_{U,V} \circ \varphi(U).$$
+
+This is a natural transformation of functors. The sheaves on $X$ form an **abelian category** $\mathbf{Sh}(X)$.
+</Definition>
+
+<Example id="differentiation-morphism" title="Differentiation as a sheaf morphism">
+On a smooth manifold $M$, differentiation $d : C^\infty \to \Omega^1$ is a morphism of sheaves: for each open $U$, $d_U : C^\infty(U) \to \Omega^1(U)$ sends $f \mapsto df$, and this commutes with restriction (differentiation is a local operation).
+
+The kernel sheaf is $\ker(d) = \underline{\mathbb{R}}$ (locally constant functions). The image presheaf (exact $1$-forms) is already a sheaf. This is the beginning of the **de Rham complex** $0 \to \underline{\mathbb{R}} \to C^\infty \xrightarrow{d} \Omega^1 \xrightarrow{d} \Omega^2 \to \cdots$.
+</Example>
+
+<Example id="exponential-morphism" title="The exponential morphism">
+On a complex manifold $X$, the **exponential sequence** is an exact sequence of sheaves:
+
+$$0 \to \underline{2\pi i\mathbb{Z}} \hookrightarrow \mathcal{O}_X \xrightarrow{\exp} \mathcal{O}_X^* \to 0$$
+
+where $\mathcal{O}_X^*$ is the sheaf of nowhere-vanishing holomorphic functions. This is exact on stalks (every nonzero germ has a local logarithm). The long exact sequence in cohomology gives:
+
+$$\cdots \to H^1(X, \mathcal{O}_X) \to H^1(X, \mathcal{O}_X^*) \xrightarrow{c_1} H^2(X, \mathbb{Z}) \to \cdots$$
+
+Here $H^1(X, \mathcal{O}_X^*) \cong \operatorname{Pic}(X)$ (the Picard group of line bundles) and $c_1$ is the first Chern class. For $X = \mathbb{P}^1(\mathbb{C})$: $\operatorname{Pic}(\mathbb{P}^1) \cong \mathbb{Z}$, generated by $\mathcal{O}(1)$.
+</Example>
+
+---
+
+## Kernel, image, and exact sequences
+
+<Definition title="Kernel and image sheaves" number="2.6">
+For a morphism $\varphi : \mathcal{F} \to \mathcal{G}$:
+
+- The **kernel** $\ker(\varphi)$ is the sheaf $U \mapsto \ker(\varphi(U))$. (This is automatically a sheaf.)
+- The **image presheaf** $U \mapsto \operatorname{im}(\varphi(U))$ may **not** be a sheaf! The **image sheaf** $\operatorname{im}(\varphi)$ is its sheafification.
+- The **cokernel** $\operatorname{coker}(\varphi)$ is the sheafification of $U \mapsto \mathcal{G}(U)/\operatorname{im}(\varphi(U))$.
+
+A sequence $\mathcal{F} \xrightarrow{\varphi} \mathcal{G} \xrightarrow{\psi} \mathcal{H}$ is **exact** if $\operatorname{im}(\varphi) = \ker(\psi)$, or equivalently, if it is exact on all stalks.
+</Definition>
+
+<Example id="non-sheaf-image" title="Image presheaf that is not a sheaf">
+On $X = \mathbb{C}^*$, consider $\exp : \mathcal{O} \to \mathcal{O}^*$. On small discs $U$, the exponential map is surjective onto $\mathcal{O}^*(U)$ (every nonvanishing holomorphic function on a disc has a logarithm). But $\exp : \mathcal{O}(\mathbb{C}^*) \to \mathcal{O}^*(\mathbb{C}^*)$ is not surjective: $z \in \mathcal{O}^*(\mathbb{C}^*)$ has no global logarithm. The image presheaf assigns $\mathcal{O}^*(U)$ to small discs but not to $\mathbb{C}^*$ itself — this fails the gluing axiom.
+</Example>
+
+---
+
+## Direct and inverse image
+
+<Definition title="Direct and inverse image" number="2.7">
+Let $f : X \to Y$ be a continuous map.
+
+The **direct image** (pushforward) $f_*\mathcal{F}$ of a sheaf $\mathcal{F}$ on $X$ is the sheaf on $Y$:
+
+$$(f_*\mathcal{F})(V) = \mathcal{F}(f^{-1}(V))$$
+
+for open $V \subseteq Y$.
+
+The **inverse image** (pullback) $f^{-1}\mathcal{G}$ of a sheaf $\mathcal{G}$ on $Y$ is the sheafification of the presheaf:
+
+$$U \mapsto \varinjlim_{V \supseteq f(U)} \mathcal{G}(V)$$
+
+for open $U \subseteq X$. The stalk satisfies $(f^{-1}\mathcal{G})_p = \mathcal{G}_{f(p)}$.
+
+$(f^{-1}, f_*)$ form an **adjoint pair**: $\operatorname{Hom}_X(f^{-1}\mathcal{G}, \mathcal{F}) \cong \operatorname{Hom}_Y(\mathcal{G}, f_*\mathcal{F})$.
+</Definition>
+
+<Example id="pushforward-inclusion" title="Pushforward via inclusion">
+Let $j : U \hookrightarrow X$ be an open inclusion and $\mathcal{F}$ a sheaf on $U$. Then $j_*\mathcal{F}$ is the **extension by zero outside $U$**... almost. Actually:
+
+$$(j_*\mathcal{F})(V) = \mathcal{F}(V \cap U).$$
+
+This extends $\mathcal{F}$ to all of $X$, but the stalks at points outside $U$ may be nonzero: $(j_*\mathcal{F})_p = \mathcal{F}_p$ if $p \in U$, but for $p \in \overline{U} \setminus U$, the stalk picks up "boundary behavior."
+
+The true **extension by zero** $j_!\mathcal{F}$ has stalks $\mathcal{F}_p$ for $p \in U$ and $0$ otherwise.
+</Example>
+
+<Example id="pushforward-skyscraper" title="Skyscraper as pushforward">
+Let $i : \{p\} \hookrightarrow X$ be the inclusion of a point. Then $i_*A = $ the skyscraper sheaf at $p$ with stalk $A$. This gives a conceptual explanation of skyscraper sheaves.
+</Example>
+
+<Example id="inverse-image-fiber" title="Inverse image and fibers">
+Let $f : X \to Y$ and $y \in Y$. The inclusion $i : \{y\} \hookrightarrow Y$ gives $i^{-1}\mathcal{G} = \mathcal{G}_y$ (the stalk). More generally, for the fiber $X_y = f^{-1}(y)$ with inclusion $i_y : X_y \hookrightarrow X$:
+
+$$i_y^{-1}\mathcal{F} = \mathcal{F}|_{X_y}$$
+
+is the restriction of $\mathcal{F}$ to the fiber. This is how sheaf cohomology varies in families.
+</Example>
+
+---
+
+## Sheaves on a basis
+
+<Remark title="Sheaves on a basis">
+Often we don't need to specify $\mathcal{F}(U)$ for **every** open set — it suffices to define it on a **basis** for the topology. If $\mathcal{B}$ is a basis for $X$, a **sheaf on the basis** $\mathcal{B}$ specifies:
+- $\mathcal{F}(B)$ for each $B \in \mathcal{B}$,
+- restriction maps $\mathcal{F}(B) \to \mathcal{F}(B')$ for $B' \subseteq B$,
+- satisfying the sheaf axioms for covers by basis elements.
+
+Such a sheaf on $\mathcal{B}$ extends **uniquely** to a sheaf on $X$.
+
+This is crucial for scheme theory: the **structure sheaf** $\mathcal{O}_{\operatorname{Spec} A}$ is defined on the basis of distinguished open sets $D(f)$, where $\mathcal{O}(D(f)) = A_f$.
+</Remark>
+
+<Example id="sheaf-on-basis-spec" title="Structure sheaf via basis">
+For $A = k[x, y]$ and $X = \operatorname{Spec} A = \mathbb{A}^2$, the distinguished opens $D(f) = \{\mathfrak{p} \mid f \notin \mathfrak{p}\}$ form a basis. We define:
+
+$$\mathcal{O}_X(D(f)) = A_f = k[x, y, 1/f].$$
+
+For example:
+- $\mathcal{O}_X(D(x)) = k[x, y, 1/x]$ — functions that can have poles along $\{x = 0\}$.
+- $\mathcal{O}_X(D(xy)) = k[x, y, 1/(xy)]$ — functions with poles along $\{x = 0\} \cup \{y = 0\}$.
+- $\mathcal{O}_X(X) = \mathcal{O}_X(D(1)) = A$ — global regular functions.
+
+The restriction $\mathcal{O}_X(D(f)) \to \mathcal{O}_X(D(fg))$ is the natural localization map $A_f \to A_{fg}$.
+</Example>
+
+---
+
+## Locally free sheaves and vector bundles
+
+<Definition title="Locally free sheaf" number="2.8">
+A sheaf $\mathcal{E}$ of $\mathcal{O}_X$-modules is **locally free of rank $r$** if there exists an open cover $\{U_i\}$ of $X$ with $\mathcal{E}|_{U_i} \cong \mathcal{O}_{U_i}^r$ for each $i$.
+
+- Rank 1: **invertible sheaf** (= line bundle).
+- Rank $r$: corresponds to a **vector bundle** of rank $r$.
+
+The **Picard group** $\operatorname{Pic}(X)$ is the group of invertible sheaves under $\otimes$, with inverse $\mathcal{L}^{-1} = \mathcal{H}om(\mathcal{L}, \mathcal{O}_X)$.
+</Definition>
+
+<Example id="line-bundle-pn" title="Line bundles on projective space">
+On $\mathbb{P}^n$, the **twisting sheaf** $\mathcal{O}(1)$ is the tautological line bundle dual. Its sections over the standard open $U_i = \{x_i \neq 0\}$ are fractions of degree $1$. The global sections are:
+
+$$\Gamma(\mathbb{P}^n, \mathcal{O}(d)) = \begin{cases} k[x_0, \ldots, x_n]_d & \text{if } d \geq 0, \\ 0 & \text{if } d < 0, \end{cases}$$
+
+where $k[x_0,\ldots,x_n]_d$ is the space of homogeneous polynomials of degree $d$. In particular:
+- $\dim \Gamma(\mathbb{P}^n, \mathcal{O}(d)) = \binom{n+d}{d}$ for $d \geq 0$.
+- $\Gamma(\mathbb{P}^n, \mathcal{O}(0)) = k$ (global regular functions are constant).
+- $\operatorname{Pic}(\mathbb{P}^n) \cong \mathbb{Z}$, generated by $\mathcal{O}(1)$.
+</Example>
+
+<Example id="cotangent-sheaf" title="The cotangent sheaf">
+On a smooth variety $X$ of dimension $n$, the **cotangent sheaf** (or sheaf of Kähler differentials) $\Omega^1_{X/k}$ is a locally free sheaf of rank $n$. Its top exterior power is the **canonical sheaf**:
+
+$$\omega_X = \bigwedge^n \Omega^1_{X/k}.$$
+
+For $\mathbb{P}^n$, the **Euler sequence** $0 \to \Omega^1_{\mathbb{P}^n} \to \mathcal{O}(-1)^{n+1} \to \mathcal{O} \to 0$ gives $\omega_{\mathbb{P}^n} = \mathcal{O}(-(n+1))$.
+
+For a smooth hypersurface $X = V(f) \subseteq \mathbb{P}^n$ of degree $d$: $\omega_X = \mathcal{O}_X(d - n - 1)$ (adjunction formula).
+</Example>
+
+<Example id="tangent-sheaf-p1" title="The tangent sheaf of P¹">
+On $\mathbb{P}^1$, the tangent sheaf $\mathcal{T}_{\mathbb{P}^1} = (\Omega^1)^\vee \cong \mathcal{O}(2)$. So $\dim \Gamma(\mathbb{P}^1, \mathcal{T}) = 3$, corresponding to the $3$-dimensional Lie algebra $\mathfrak{sl}_2$ (infinitesimal automorphisms). Indeed $\operatorname{Aut}(\mathbb{P}^1) = PGL(2)$ has dimension $3$.
+
+For genus $g \geq 2$ curves: $\deg \mathcal{T}_C = 2 - 2g < 0$, so $\Gamma(C, \mathcal{T}_C) = 0$ — the automorphism group is finite!
+</Example>
+
+---
+
+## Sheaves in other contexts
+
+<Example id="sheaf-on-site" title="Sheaves beyond topology: Grothendieck topologies">
+Grothendieck generalized sheaves to work with **sites** (categories with a Grothendieck topology). Key examples:
+
+- **Étale site** $X_{\mathrm{ét}}$: covers are surjective families of étale morphisms. Sheaves on this site give **étale cohomology** $H^i_{\mathrm{ét}}(X, \mathcal{F})$, which works in characteristic $p$ (unlike singular cohomology). Deligne's proof of the Weil conjectures uses étale cohomology.
+
+- **fppf site**: covers are faithfully flat, finitely presented morphisms. Needed for non-smooth group schemes.
+
+- **Zariski site**: the usual Zariski topology. Coarsest but most accessible.
+
+The relationship: Zariski $\subseteq$ Nisnevich $\subseteq$ étale $\subseteq$ fppf $\subseteq$ fpqc. Finer topologies see more information but are harder to compute with.
+</Example>
+
+<Example id="sheaf-differential-geometry" title="Sheaves in differential geometry">
+On a smooth manifold $M$:
+
+| Sheaf | Sections over $U$ | Type |
+|---|---|---|
+| $C^\infty$ | smooth functions $U \to \mathbb{R}$ | sheaf of $\mathbb{R}$-algebras |
+| $\Omega^p$ | smooth $p$-forms on $U$ | sheaf of $C^\infty$-modules |
+| $\mathcal{E}$ (vector bundle) | smooth sections of $E|_U$ | locally free $C^\infty$-module |
+| $\underline{\mathbb{R}}$ | locally constant functions | constant sheaf |
+
+The de Rham theorem: $H^i_{\mathrm{dR}}(M) \cong H^i(M, \underline{\mathbb{R}})$ — de Rham cohomology equals sheaf cohomology of the constant sheaf. This is a consequence of the **Poincaré lemma** (the de Rham complex is a resolution of $\underline{\mathbb{R}}$).
+</Example>
+
+---
+
+## Summary: the zoo of sheaves
+
+<Remark title="Summary table">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Sheaf</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Space</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Sections over $U$</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Stalk at $p$</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">$\mathcal{O}_X$ (structure)</td><td className="border border-gray-200 px-3 py-2">variety / scheme</td><td className="border border-gray-200 px-3 py-2">regular functions</td><td className="border border-gray-200 px-3 py-2">local ring $\mathcal{O}_{X,p}$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\underline{A}$ (constant)</td><td className="border border-gray-200 px-3 py-2">any</td><td className="border border-gray-200 px-3 py-2">locally constant $\to A$</td><td className="border border-gray-200 px-3 py-2">$A$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$i_{p*}A$ (skyscraper)</td><td className="border border-gray-200 px-3 py-2">any</td><td className="border border-gray-200 px-3 py-2">$A$ if $p \in U$, else $0$</td><td className="border border-gray-200 px-3 py-2">$A$ at $p$, $0$ elsewhere</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(d)$ (twisting)</td><td className="border border-gray-200 px-3 py-2">$\mathbb{P}^n$</td><td className="border border-gray-200 px-3 py-2">degree-$d$ rational fns</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}_{\mathbb{P}^n, p}$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\Omega^1_{X/k}$ (cotangent)</td><td className="border border-gray-200 px-3 py-2">smooth variety</td><td className="border border-gray-200 px-3 py-2">Kähler differentials</td><td className="border border-gray-200 px-3 py-2">$\Omega^1_{\mathcal{O}_{X,p}/k}$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\omega_X$ (canonical)</td><td className="border border-gray-200 px-3 py-2">smooth variety</td><td className="border border-gray-200 px-3 py-2">top forms</td><td className="border border-gray-200 px-3 py-2">$\bigwedge^n \Omega^1_p$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$C^\infty$ (smooth)</td><td className="border border-gray-200 px-3 py-2">manifold</td><td className="border border-gray-200 px-3 py-2">smooth functions</td><td className="border border-gray-200 px-3 py-2">germs of smooth fns</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\mathcal{O}_X$ (holomorphic)</td><td className="border border-gray-200 px-3 py-2">complex mfd</td><td className="border border-gray-200 px-3 py-2">holomorphic functions</td><td className="border border-gray-200 px-3 py-2">convergent power series</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>

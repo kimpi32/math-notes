@@ -1,0 +1,759 @@
+import { Subject } from "./types";
+
+export const subjects: Subject[] = [
+  {
+    id: "analysis",
+    titleKo: "해석학",
+    titleEn: "Real Analysis",
+    description: "실수의 성질로부터 시작하여 수열, 연속, 미분, 적분의 엄밀한 이론을 다룹니다.",
+    color: "blue",
+    chapters: [
+      {
+        id: "ch00-foundations",
+        number: 0,
+        titleKo: "기초와 표기법",
+        titleEn: "Foundations and Notation",
+        description: "증명 방법론, 집합론 기초, 논리 기호 — 해석학 전반에서 반복적으로 사용되는 도구들",
+        concepts: [
+          { id: "c01-logic", type: "concept", titleKo: "논리와 명제", titleEn: "Logic and Propositions", status: "skeleton" },
+          { id: "c02-proof-methods", type: "concept", titleKo: "증명 방법론", titleEn: "Proof Techniques", status: "skeleton" },
+          { id: "c03-set-theory", type: "concept", titleKo: "집합론 기본", titleEn: "Basic Set Theory", status: "skeleton" },
+          { id: "c04-functions", type: "concept", titleKo: "함수", titleEn: "Functions", status: "skeleton" },
+          { id: "c05-countability", type: "concept", titleKo: "가산성과 비가산성", titleEn: "Countability", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-de-morgan", type: "theorem", titleKo: "드모르간 법칙", titleEn: "De Morgan's Laws", status: "skeleton" },
+          { id: "t02-cantor-diagonal", type: "theorem", titleKo: "칸토어 대각선 논법", titleEn: "Cantor's Diagonal Argument", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-sqrt2-irrational", type: "proof", titleKo: "√2의 무리수 증명", titleEn: "Irrationality of √2", status: "skeleton" },
+          { id: "p02-cantor-diagonal-proof", type: "proof", titleKo: "실수의 비가산성 증명", titleEn: "Uncountability of Reals", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch01-real-numbers",
+        number: 1,
+        titleKo: "실수의 체계",
+        titleEn: "The Real Number System",
+        description: "실수의 공리적 정의와 완비성",
+        concepts: [
+          { id: "c01-ordered-field", type: "concept", titleKo: "순서체", titleEn: "Ordered Field", status: "skeleton" },
+          { id: "c02-completeness", type: "concept", titleKo: "완비성 공리", titleEn: "Completeness Axiom", status: "skeleton" },
+          { id: "c03-supremum-infimum", type: "concept", titleKo: "상한과 하한", titleEn: "Supremum and Infimum", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-archimedean", type: "theorem", titleKo: "아르키메데스 성질", titleEn: "Archimedean Property", status: "skeleton" },
+          { id: "t02-density-of-rationals", type: "theorem", titleKo: "유리수의 조밀성", titleEn: "Density of Rationals", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-archimedean-proof", type: "proof", titleKo: "아르키메데스 성질의 증명", titleEn: "Proof of Archimedean Property", status: "skeleton" },
+          { id: "p02-density-proof", type: "proof", titleKo: "유리수 조밀성의 증명", titleEn: "Proof of Density of Rationals", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch02-sequences",
+        number: 2,
+        titleKo: "수열과 극한",
+        titleEn: "Sequences and Limits",
+        description: "수열의 수렴, 코시 수열, 상극한과 하극한",
+        concepts: [
+          { id: "c01-sequence", type: "concept", titleKo: "수열", titleEn: "Sequence", status: "skeleton" },
+          { id: "c02-convergence", type: "concept", titleKo: "수렴과 발산", titleEn: "Convergence and Divergence", status: "skeleton" },
+          { id: "c03-subsequence", type: "concept", titleKo: "부분수열", titleEn: "Subsequence", status: "skeleton" },
+          { id: "c04-cauchy-sequence", type: "concept", titleKo: "코시 수열", titleEn: "Cauchy Sequence", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-monotone-convergence", type: "theorem", titleKo: "단조수렴정리", titleEn: "Monotone Convergence Theorem", status: "skeleton" },
+          { id: "t02-bolzano-weierstrass", type: "theorem", titleKo: "볼차노-바이어슈트라스 정리", titleEn: "Bolzano-Weierstrass Theorem", status: "skeleton" },
+          { id: "t03-cauchy-criterion", type: "theorem", titleKo: "코시 수렴판정법", titleEn: "Cauchy Convergence Criterion", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-monotone-convergence-proof", type: "proof", titleKo: "단조수렴정리의 증명", titleEn: "Proof of Monotone Convergence", status: "skeleton" },
+          { id: "p02-bolzano-weierstrass-proof", type: "proof", titleKo: "볼차노-바이어슈트라스의 증명", titleEn: "Proof of Bolzano-Weierstrass", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch03-limits",
+        number: 3,
+        titleKo: "함수의 극한",
+        titleEn: "Limits of Functions",
+        description: "엡실론-델타 정의와 극한의 성질",
+        concepts: [
+          { id: "c01-limit-of-function", type: "concept", titleKo: "함수의 극한", titleEn: "Limit of a Function", status: "skeleton" },
+          { id: "c02-epsilon-delta", type: "concept", titleKo: "엡실론-델타 정의", titleEn: "Epsilon-Delta Definition", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-uniqueness-of-limits", type: "theorem", titleKo: "극한의 유일성", titleEn: "Uniqueness of Limits", status: "skeleton" },
+          { id: "t02-squeeze-theorem", type: "theorem", titleKo: "조임 정리", titleEn: "Squeeze Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-squeeze-proof", type: "proof", titleKo: "조임 정리의 증명", titleEn: "Proof of Squeeze Theorem", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch04-continuity",
+        number: 4,
+        titleKo: "연속성",
+        titleEn: "Continuity",
+        description: "연속함수의 성질과 균등연속",
+        concepts: [
+          { id: "c01-continuous-function", type: "concept", titleKo: "연속함수", titleEn: "Continuous Function", status: "skeleton" },
+          { id: "c02-uniform-continuity", type: "concept", titleKo: "균등연속", titleEn: "Uniform Continuity", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-ivt", type: "theorem", titleKo: "중간값 정리", titleEn: "Intermediate Value Theorem", status: "skeleton" },
+          { id: "t02-evt", type: "theorem", titleKo: "최대최소 정리", titleEn: "Extreme Value Theorem", status: "skeleton" },
+          { id: "t03-heine-cantor", type: "theorem", titleKo: "하이네-칸토어 정리", titleEn: "Heine-Cantor Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-ivt-proof", type: "proof", titleKo: "중간값 정리의 증명", titleEn: "Proof of IVT", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch05-differentiation",
+        number: 5,
+        titleKo: "미분",
+        titleEn: "Differentiation",
+        description: "도함수, 평균값 정리, 테일러 정리",
+        concepts: [
+          { id: "c01-derivative", type: "concept", titleKo: "도함수", titleEn: "Derivative", status: "skeleton" },
+          { id: "c02-differentiability", type: "concept", titleKo: "미분가능성", titleEn: "Differentiability", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-rolle", type: "theorem", titleKo: "롤의 정리", titleEn: "Rolle's Theorem", status: "skeleton" },
+          { id: "t02-mvt", type: "theorem", titleKo: "평균값 정리", titleEn: "Mean Value Theorem", status: "skeleton" },
+          { id: "t03-taylor", type: "theorem", titleKo: "테일러 정리", titleEn: "Taylor's Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-mvt-proof", type: "proof", titleKo: "평균값 정리의 증명", titleEn: "Proof of MVT", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch06-integration",
+        number: 6,
+        titleKo: "리만 적분",
+        titleEn: "Riemann Integration",
+        description: "리만 적분의 정의와 미적분학의 기본정리",
+        concepts: [
+          { id: "c01-partition", type: "concept", titleKo: "분할과 상합/하합", titleEn: "Partition and Upper/Lower Sums", status: "skeleton" },
+          { id: "c02-riemann-integral", type: "concept", titleKo: "리만 적분", titleEn: "Riemann Integral", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-ftc", type: "theorem", titleKo: "미적분학의 기본정리", titleEn: "Fundamental Theorem of Calculus", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-ftc-proof", type: "proof", titleKo: "미적분학의 기본정리의 증명", titleEn: "Proof of FTC", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch07-series",
+        number: 7,
+        titleKo: "급수",
+        titleEn: "Series",
+        description: "급수의 수렴판정법과 멱급수",
+        concepts: [
+          { id: "c01-series-convergence", type: "concept", titleKo: "급수의 수렴", titleEn: "Convergence of Series", status: "skeleton" },
+          { id: "c02-absolute-convergence", type: "concept", titleKo: "절대수렴과 조건부수렴", titleEn: "Absolute vs Conditional Convergence", status: "skeleton" },
+          { id: "c03-power-series", type: "concept", titleKo: "멱급수", titleEn: "Power Series", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-comparison-test", type: "theorem", titleKo: "비교판정법", titleEn: "Comparison Test", status: "skeleton" },
+          { id: "t02-ratio-test", type: "theorem", titleKo: "비율판정법", titleEn: "Ratio Test", status: "skeleton" },
+          { id: "t03-root-test", type: "theorem", titleKo: "근판정법", titleEn: "Root Test", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch08-sequences-of-functions",
+        number: 8,
+        titleKo: "함수열과 함수급수",
+        titleEn: "Sequences and Series of Functions",
+        description: "점별수렴, 균등수렴과 그 성질",
+        concepts: [
+          { id: "c01-pointwise-convergence", type: "concept", titleKo: "점별수렴", titleEn: "Pointwise Convergence", status: "skeleton" },
+          { id: "c02-uniform-convergence", type: "concept", titleKo: "균등수렴", titleEn: "Uniform Convergence", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-weierstrass-m-test", type: "theorem", titleKo: "바이어슈트라스 M-판정법", titleEn: "Weierstrass M-test", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch09-metric-spaces",
+        number: 9,
+        titleKo: "거리공간",
+        titleEn: "Metric Spaces",
+        description: "거리공간의 위상적 성질, 컴팩트성, 연결성",
+        concepts: [
+          { id: "c01-metric", type: "concept", titleKo: "거리함수", titleEn: "Metric", status: "skeleton" },
+          { id: "c02-open-closed-sets", type: "concept", titleKo: "열린집합과 닫힌집합", titleEn: "Open and Closed Sets", status: "skeleton" },
+          { id: "c03-compactness", type: "concept", titleKo: "컴팩트성", titleEn: "Compactness", status: "skeleton" },
+          { id: "c04-connectedness", type: "concept", titleKo: "연결성", titleEn: "Connectedness", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-heine-borel", type: "theorem", titleKo: "하이네-보렐 정리", titleEn: "Heine-Borel Theorem", status: "skeleton" },
+          { id: "t02-contraction-mapping", type: "theorem", titleKo: "축소사상 정리", titleEn: "Contraction Mapping Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-heine-borel-proof", type: "proof", titleKo: "하이네-보렐 정리의 증명", titleEn: "Proof of Heine-Borel", status: "skeleton" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "linear-algebra",
+    titleKo: "선형대수",
+    titleEn: "Linear Algebra",
+    description: "벡터공간, 선형변환, 행렬, 고유값 등 선형대수학의 핵심 이론을 다룹니다.",
+    color: "emerald",
+    chapters: [
+      {
+        id: "ch01-vector-spaces",
+        number: 1,
+        titleKo: "벡터공간",
+        titleEn: "Vector Spaces",
+        description: "벡터공간의 정의와 부분공간, 기저와 차원",
+        concepts: [
+          { id: "c01-vector-space", type: "concept", titleKo: "벡터공간", titleEn: "Vector Space", status: "skeleton" },
+          { id: "c02-subspace", type: "concept", titleKo: "부분공간", titleEn: "Subspace", status: "skeleton" },
+          { id: "c03-linear-combination", type: "concept", titleKo: "일차결합", titleEn: "Linear Combination", status: "skeleton" },
+          { id: "c04-linear-independence", type: "concept", titleKo: "일차독립", titleEn: "Linear Independence", status: "skeleton" },
+          { id: "c05-basis-dimension", type: "concept", titleKo: "기저와 차원", titleEn: "Basis and Dimension", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-replacement", type: "theorem", titleKo: "대체정리", titleEn: "Replacement Theorem", status: "skeleton" },
+          { id: "t02-dimension", type: "theorem", titleKo: "차원정리", titleEn: "Dimension Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-replacement-proof", type: "proof", titleKo: "대체정리의 증명", titleEn: "Proof of Replacement Theorem", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch02-linear-transformations",
+        number: 2,
+        titleKo: "선형변환",
+        titleEn: "Linear Transformations",
+        description: "선형변환의 정의, 핵과 상, 차원정리",
+        concepts: [
+          { id: "c01-linear-map", type: "concept", titleKo: "선형변환", titleEn: "Linear Transformation", status: "skeleton" },
+          { id: "c02-kernel-image", type: "concept", titleKo: "핵과 상", titleEn: "Kernel and Image", status: "skeleton" },
+          { id: "c03-isomorphism", type: "concept", titleKo: "동형사상", titleEn: "Isomorphism", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-rank-nullity", type: "theorem", titleKo: "차원정리", titleEn: "Rank-Nullity Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-rank-nullity-proof", type: "proof", titleKo: "차원정리의 증명", titleEn: "Proof of Rank-Nullity", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch03-matrices",
+        number: 3,
+        titleKo: "행렬",
+        titleEn: "Matrices",
+        description: "행렬 연산, 역행렬, 기본행연산",
+        concepts: [
+          { id: "c01-matrix-operations", type: "concept", titleKo: "행렬연산", titleEn: "Matrix Operations", status: "skeleton" },
+          { id: "c02-inverse-matrix", type: "concept", titleKo: "역행렬", titleEn: "Inverse Matrix", status: "skeleton" },
+          { id: "c03-row-echelon", type: "concept", titleKo: "행사다리꼴", titleEn: "Row Echelon Form", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-invertible-matrix", type: "theorem", titleKo: "가역행렬 판정", titleEn: "Invertible Matrix Theorem", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch04-determinants",
+        number: 4,
+        titleKo: "행렬식",
+        titleEn: "Determinants",
+        description: "행렬식의 정의와 성질",
+        concepts: [
+          { id: "c01-determinant", type: "concept", titleKo: "행렬식의 정의", titleEn: "Determinant", status: "skeleton" },
+          { id: "c02-cofactor-expansion", type: "concept", titleKo: "여인수 전개", titleEn: "Cofactor Expansion", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-det-invertibility", type: "theorem", titleKo: "행렬식과 가역성", titleEn: "Determinant and Invertibility", status: "skeleton" },
+          { id: "t02-cramers-rule", type: "theorem", titleKo: "크라머 공식", titleEn: "Cramer's Rule", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch05-eigenvalues",
+        number: 5,
+        titleKo: "고유값과 고유벡터",
+        titleEn: "Eigenvalues and Eigenvectors",
+        description: "고유값, 특성다항식, 대각화",
+        concepts: [
+          { id: "c01-eigenvalue", type: "concept", titleKo: "고유값과 고유벡터", titleEn: "Eigenvalue and Eigenvector", status: "skeleton" },
+          { id: "c02-characteristic-polynomial", type: "concept", titleKo: "특성다항식", titleEn: "Characteristic Polynomial", status: "skeleton" },
+          { id: "c03-diagonalization", type: "concept", titleKo: "대각화", titleEn: "Diagonalization", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-cayley-hamilton", type: "theorem", titleKo: "케일리-해밀턴 정리", titleEn: "Cayley-Hamilton Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-cayley-hamilton-proof", type: "proof", titleKo: "케일리-해밀턴의 증명", titleEn: "Proof of Cayley-Hamilton", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch06-inner-product-spaces",
+        number: 6,
+        titleKo: "내적공간",
+        titleEn: "Inner Product Spaces",
+        description: "내적, 직교성, 그람-슈미트 과정",
+        concepts: [
+          { id: "c01-inner-product", type: "concept", titleKo: "내적", titleEn: "Inner Product", status: "skeleton" },
+          { id: "c02-orthogonality", type: "concept", titleKo: "직교성", titleEn: "Orthogonality", status: "skeleton" },
+          { id: "c03-orthonormal-basis", type: "concept", titleKo: "정규직교기저", titleEn: "Orthonormal Basis", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-gram-schmidt", type: "theorem", titleKo: "그람-슈미트 과정", titleEn: "Gram-Schmidt Process", status: "skeleton" },
+          { id: "t02-cauchy-schwarz", type: "theorem", titleKo: "코시-슈바르츠 부등식", titleEn: "Cauchy-Schwarz Inequality", status: "skeleton" },
+          { id: "t03-projection", type: "theorem", titleKo: "정사영 정리", titleEn: "Projection Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-cauchy-schwarz-proof", type: "proof", titleKo: "코시-슈바르츠의 증명", titleEn: "Proof of Cauchy-Schwarz", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch07-canonical-forms",
+        number: 7,
+        titleKo: "표준형",
+        titleEn: "Canonical Forms",
+        description: "조르당 표준형과 최소다항식",
+        concepts: [
+          { id: "c01-jordan-form", type: "concept", titleKo: "조르당 표준형", titleEn: "Jordan Normal Form", status: "skeleton" },
+          { id: "c02-minimal-polynomial", type: "concept", titleKo: "최소다항식", titleEn: "Minimal Polynomial", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-jordan-decomposition", type: "theorem", titleKo: "조르당 분해 정리", titleEn: "Jordan Decomposition Theorem", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch08-bilinear-forms",
+        number: 8,
+        titleKo: "쌍선형형식",
+        titleEn: "Bilinear Forms",
+        description: "쌍선형형식, 이차형식, 스펙트럼 정리",
+        concepts: [
+          { id: "c01-bilinear-form", type: "concept", titleKo: "쌍선형형식", titleEn: "Bilinear Form", status: "skeleton" },
+          { id: "c02-quadratic-form", type: "concept", titleKo: "이차형식", titleEn: "Quadratic Form", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-sylvester", type: "theorem", titleKo: "실베스터 관성법칙", titleEn: "Sylvester's Law of Inertia", status: "skeleton" },
+          { id: "t02-spectral", type: "theorem", titleKo: "스펙트럼 정리", titleEn: "Spectral Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-spectral-proof", type: "proof", titleKo: "스펙트럼 정리의 증명", titleEn: "Proof of Spectral Theorem", status: "skeleton" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "category-theory",
+    titleKo: "범주론",
+    titleEn: "Category Theory",
+    description: "Gelfand-Manin 스타일로 범주, 함자, 아벨 범주에서 유도 범주와 유도 함자까지.",
+    color: "rose",
+    chapters: [
+      {
+        id: "ch01-categories-functors",
+        number: 1,
+        titleKo: "범주와 함자",
+        titleEn: "Categories and Functors",
+        description: "범주의 정의, 사상, 함자, 자연변환 — 모든 것의 출발점",
+        concepts: [
+          { id: "c01-category", type: "concept", titleKo: "범주", titleEn: "Category", status: "complete" },
+          { id: "c02-morphism", type: "concept", titleKo: "사상과 동형사상", titleEn: "Morphisms and Isomorphisms", status: "skeleton" },
+          { id: "c03-functor", type: "concept", titleKo: "함자", titleEn: "Functor", status: "skeleton" },
+          { id: "c04-natural-transformation", type: "concept", titleKo: "자연변환", titleEn: "Natural Transformation", status: "skeleton" },
+          { id: "c05-equivalence", type: "concept", titleKo: "범주의 동치", titleEn: "Equivalence of Categories", status: "skeleton" },
+          { id: "c06-representable", type: "concept", titleKo: "표현가능 함자", titleEn: "Representable Functor", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-yoneda", type: "theorem", titleKo: "요네다 보조정리", titleEn: "Yoneda Lemma", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-yoneda-proof", type: "proof", titleKo: "요네다 보조정리의 증명", titleEn: "Proof of Yoneda Lemma", status: "complete" },
+        ],
+      },
+      {
+        id: "ch02-limits-colimits",
+        number: 2,
+        titleKo: "극한과 쌍대극한",
+        titleEn: "Limits and Colimits",
+        description: "보편 성질, 곱과 쌍곱, 당김과 밂, 수반 함자",
+        concepts: [
+          { id: "c01-universal-property", type: "concept", titleKo: "보편 성질", titleEn: "Universal Property", status: "skeleton" },
+          { id: "c02-product-coproduct", type: "concept", titleKo: "곱과 쌍곱", titleEn: "Product and Coproduct", status: "skeleton" },
+          { id: "c03-pullback-pushout", type: "concept", titleKo: "당김과 밂", titleEn: "Pullback and Pushout", status: "skeleton" },
+          { id: "c04-limit-colimit", type: "concept", titleKo: "극한과 쌍대극한", titleEn: "Limit and Colimit", status: "skeleton" },
+          { id: "c05-adjunction", type: "concept", titleKo: "수반 함자", titleEn: "Adjoint Functors", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-freyd-adjoint", type: "theorem", titleKo: "프레이드 수반 함자 정리", titleEn: "Freyd Adjoint Functor Theorem", status: "skeleton" },
+          { id: "t02-limits-via-products-equalizers", type: "theorem", titleKo: "곱과 이퀄라이저로의 극한 구성", titleEn: "Limits from Products and Equalizers", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch03-abelian-categories",
+        number: 3,
+        titleKo: "아벨 범주",
+        titleEn: "Abelian Categories",
+        description: "가법 범주에서 아벨 범주로, 완전열과 도표 보조정리들",
+        concepts: [
+          { id: "c01-additive-category", type: "concept", titleKo: "가법 범주", titleEn: "Additive Category", status: "skeleton" },
+          { id: "c02-abelian-category", type: "concept", titleKo: "아벨 범주", titleEn: "Abelian Category", status: "skeleton" },
+          { id: "c03-kernel-cokernel", type: "concept", titleKo: "핵과 여핵", titleEn: "Kernel and Cokernel", status: "skeleton" },
+          { id: "c04-exact-sequence", type: "concept", titleKo: "완전열", titleEn: "Exact Sequence", status: "skeleton" },
+          { id: "c05-short-exact-sequence", type: "concept", titleKo: "짧은 완전열", titleEn: "Short Exact Sequence", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-snake-lemma", type: "theorem", titleKo: "뱀 보조정리", titleEn: "Snake Lemma", status: "skeleton" },
+          { id: "t02-five-lemma", type: "theorem", titleKo: "5-보조정리", titleEn: "Five Lemma", status: "skeleton" },
+          { id: "t03-freyd-mitchell", type: "theorem", titleKo: "프레이드-미첼 매장 정리", titleEn: "Freyd-Mitchell Embedding Theorem", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-snake-lemma-proof", type: "proof", titleKo: "뱀 보조정리의 증명", titleEn: "Proof of Snake Lemma", status: "skeleton" },
+          { id: "p02-five-lemma-proof", type: "proof", titleKo: "5-보조정리의 증명", titleEn: "Proof of Five Lemma", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch04-complexes-cohomology",
+        number: 4,
+        titleKo: "복체와 코호몰로지",
+        titleEn: "Complexes and Cohomology",
+        description: "사슬 복체, 코호몰로지, 호모토피, 긴 완전열",
+        concepts: [
+          { id: "c01-chain-complex", type: "concept", titleKo: "사슬 복체", titleEn: "Chain Complex", status: "skeleton" },
+          { id: "c02-cohomology", type: "concept", titleKo: "코호몰로지", titleEn: "Cohomology", status: "skeleton" },
+          { id: "c03-chain-homotopy", type: "concept", titleKo: "사슬 호모토피", titleEn: "Chain Homotopy", status: "skeleton" },
+          { id: "c04-quasi-isomorphism", type: "concept", titleKo: "준동형사상", titleEn: "Quasi-isomorphism", status: "skeleton" },
+          { id: "c05-homotopy-category", type: "concept", titleKo: "호모토피 범주", titleEn: "Homotopy Category K(A)", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-long-exact-sequence", type: "theorem", titleKo: "코호몰로지의 긴 완전열", titleEn: "Long Exact Sequence in Cohomology", status: "skeleton" },
+          { id: "t02-homotopy-invariance", type: "theorem", titleKo: "호모토피 불변성", titleEn: "Homotopy Invariance of Cohomology", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-long-exact-seq-proof", type: "proof", titleKo: "긴 완전열의 증명 (뱀 보조정리 적용)", titleEn: "Proof via Snake Lemma", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch05-triangulated-categories",
+        number: 5,
+        titleKo: "삼각 범주",
+        titleEn: "Triangulated Categories",
+        description: "구별삼각, 삼각 범주의 공리, 코호몰로지적 함자",
+        concepts: [
+          { id: "c01-triangulated-category", type: "concept", titleKo: "삼각 범주", titleEn: "Triangulated Category", status: "skeleton" },
+          { id: "c02-distinguished-triangle", type: "concept", titleKo: "구별삼각", titleEn: "Distinguished Triangle", status: "skeleton" },
+          { id: "c03-shift-functor", type: "concept", titleKo: "이동 함자", titleEn: "Shift Functor [1]", status: "skeleton" },
+          { id: "c04-cohomological-functor", type: "concept", titleKo: "코호몰로지적 함자", titleEn: "Cohomological Functor", status: "skeleton" },
+          { id: "c05-localization", type: "concept", titleKo: "국소화", titleEn: "Localization of Categories", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-octahedral-axiom", type: "theorem", titleKo: "팔면체 공리", titleEn: "Octahedral Axiom", status: "skeleton" },
+          { id: "t02-verdier-localization", type: "theorem", titleKo: "베르디에 국소화", titleEn: "Verdier Localization", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch06-derived-categories",
+        number: 6,
+        titleKo: "유도 범주",
+        titleEn: "Derived Categories",
+        description: "준동형사상의 국소화로서의 유도 범주, 유계 유도 범주",
+        concepts: [
+          { id: "c01-derived-category", type: "concept", titleKo: "유도 범주 D(A)", titleEn: "Derived Category D(A)", status: "skeleton" },
+          { id: "c02-bounded-derived", type: "concept", titleKo: "유계 유도 범주", titleEn: "Bounded Derived Categories D^b, D^+, D^-", status: "skeleton" },
+          { id: "c03-t-structure", type: "concept", titleKo: "t-구조", titleEn: "t-structure", status: "skeleton" },
+          { id: "c04-heart", type: "concept", titleKo: "t-구조의 핵심", titleEn: "Heart of a t-structure", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-standard-t-structure", type: "theorem", titleKo: "표준 t-구조", titleEn: "Standard t-structure", status: "skeleton" },
+          { id: "t02-heart-is-abelian", type: "theorem", titleKo: "핵심은 아벨 범주", titleEn: "Heart is Abelian", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch07-derived-functors",
+        number: 7,
+        titleKo: "유도 함자",
+        titleEn: "Derived Functors",
+        description: "고전적 유도 함자(Ext, Tor)와 전체 유도 함자, 그로텐디크 스펙트럴 열",
+        concepts: [
+          { id: "c01-injective-projective-resolution", type: "concept", titleKo: "단사/사영 분해", titleEn: "Injective/Projective Resolution", status: "skeleton" },
+          { id: "c02-classical-derived", type: "concept", titleKo: "고전적 유도 함자", titleEn: "Classical Derived Functors (R^nF, L_nF)", status: "skeleton" },
+          { id: "c03-ext", type: "concept", titleKo: "Ext 함자", titleEn: "Ext Functor", status: "skeleton" },
+          { id: "c04-tor", type: "concept", titleKo: "Tor 함자", titleEn: "Tor Functor", status: "skeleton" },
+          { id: "c05-total-derived", type: "concept", titleKo: "전체 유도 함자", titleEn: "Total Derived Functor RF, LF", status: "skeleton" },
+          { id: "c06-spectral-sequence", type: "concept", titleKo: "스펙트럴 열", titleEn: "Spectral Sequence", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-enough-injectives", type: "theorem", titleKo: "충분한 단사 대상", titleEn: "Enough Injectives", status: "skeleton" },
+          { id: "t02-grothendieck-spectral", type: "theorem", titleKo: "그로텐디크 스펙트럴 열", titleEn: "Grothendieck Spectral Sequence", status: "skeleton" },
+          { id: "t03-ext-ses", type: "theorem", titleKo: "Ext의 긴 완전열", titleEn: "Long Exact Sequence for Ext", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-ext-les-proof", type: "proof", titleKo: "Ext 긴 완전열의 증명", titleEn: "Proof of Ext Long Exact Sequence", status: "skeleton" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "higher-category-theory",
+    titleKo: "고차 범주론",
+    titleEn: "Higher Category Theory",
+    description: "∞-categories, simplicial sets, model categories, and the homotopical foundations of modern mathematics.",
+    color: "violet",
+    chapters: [
+      {
+        id: "ch01-simplicial-sets",
+        number: 1,
+        titleKo: "단체집합",
+        titleEn: "Simplicial Sets",
+        description: "The combinatorial foundation: simplicial sets, nerves, and geometric realization",
+        concepts: [
+          { id: "c01-simplicial-set", type: "concept", titleKo: "단체집합", titleEn: "Simplicial Set", status: "skeleton" },
+          { id: "c02-nerve", type: "concept", titleKo: "범주의 신경", titleEn: "Nerve of a Category", status: "skeleton" },
+          { id: "c03-geometric-realization", type: "concept", titleKo: "기하학적 실현", titleEn: "Geometric Realization", status: "skeleton" },
+          { id: "c04-kan-complex", type: "concept", titleKo: "칸 복체", titleEn: "Kan Complex", status: "skeleton" },
+          { id: "c05-horn-fillers", type: "concept", titleKo: "뿔 채움", titleEn: "Horn Fillers and Extension Conditions", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-nerve-characterization", type: "theorem", titleKo: "신경의 특성화", titleEn: "Characterization of Nerves", status: "skeleton" },
+          { id: "t02-quillen-equivalence-sset-top", type: "theorem", titleKo: "단체집합과 위상공간의 퀼렌 동치", titleEn: "Quillen Equivalence sSet ↔ Top", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch02-model-categories",
+        number: 2,
+        titleKo: "모형 범주",
+        titleEn: "Model Categories",
+        description: "Quillen's framework: weak equivalences, fibrations, cofibrations, and homotopy categories",
+        concepts: [
+          { id: "c01-model-category", type: "concept", titleKo: "모형 범주", titleEn: "Model Category", status: "skeleton" },
+          { id: "c02-weak-equivalence", type: "concept", titleKo: "약한 동치", titleEn: "Weak Equivalence", status: "skeleton" },
+          { id: "c03-fibration-cofibration", type: "concept", titleKo: "올뭉치와 여올뭉치", titleEn: "Fibration and Cofibration", status: "skeleton" },
+          { id: "c04-homotopy-category", type: "concept", titleKo: "호모토피 범주", titleEn: "Homotopy Category Ho(M)", status: "skeleton" },
+          { id: "c05-quillen-adjunction", type: "concept", titleKo: "퀼렌 수반", titleEn: "Quillen Adjunction and Equivalence", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-ken-brown-lemma", type: "theorem", titleKo: "켄 브라운 보조정리", titleEn: "Ken Brown's Lemma", status: "skeleton" },
+          { id: "t02-quillen-model-structure-sset", type: "theorem", titleKo: "단체집합의 모형 구조", titleEn: "Kan–Quillen Model Structure on sSet", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch03-quasi-categories",
+        number: 3,
+        titleKo: "준범주",
+        titleEn: "Quasi-categories (∞-categories)",
+        description: "Joyal and Lurie's framework: quasi-categories as ∞-categories",
+        concepts: [
+          { id: "c01-quasi-category", type: "concept", titleKo: "준범주", titleEn: "Quasi-category (∞-category)", status: "skeleton" },
+          { id: "c02-mapping-space", type: "concept", titleKo: "사상 공간", titleEn: "Mapping Space", status: "skeleton" },
+          { id: "c03-equivalence-in-qcat", type: "concept", titleKo: "준범주에서의 동치", titleEn: "Equivalences in Quasi-categories", status: "skeleton" },
+          { id: "c04-joyal-model-structure", type: "concept", titleKo: "조얄 모형 구조", titleEn: "Joyal Model Structure", status: "skeleton" },
+          { id: "c05-infinity-groupoid", type: "concept", titleKo: "∞-그루포이드", titleEn: "∞-Groupoid (Kan complex)", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-homotopy-hypothesis", type: "theorem", titleKo: "호모토피 가설", titleEn: "Homotopy Hypothesis", status: "skeleton" },
+          { id: "t02-joyal-lifting", type: "theorem", titleKo: "조얄 들어올림 정리", titleEn: "Joyal Lifting Theorem", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch04-limits-colimits-infinity",
+        number: 4,
+        titleKo: "∞-극한과 수반",
+        titleEn: "∞-Limits, Colimits, and Adjunctions",
+        description: "Homotopy limits, ∞-adjunctions, and presentable ∞-categories",
+        concepts: [
+          { id: "c01-homotopy-limit", type: "concept", titleKo: "호모토피 극한", titleEn: "Homotopy Limit and Colimit", status: "skeleton" },
+          { id: "c02-infinity-adjunction", type: "concept", titleKo: "∞-수반", titleEn: "∞-Adjunction", status: "skeleton" },
+          { id: "c03-presentable", type: "concept", titleKo: "표현가능 ∞-범주", titleEn: "Presentable ∞-Category", status: "skeleton" },
+          { id: "c04-infinity-topos", type: "concept", titleKo: "∞-토포스", titleEn: "∞-Topos", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-adjoint-functor-infinity", type: "theorem", titleKo: "∞-수반 함자 정리", titleEn: "Adjoint Functor Theorem for ∞-Categories", status: "skeleton" },
+          { id: "t02-lurie-htt", type: "theorem", titleKo: "루리의 표현가능성 정리", titleEn: "Lurie's Representability Theorem", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch05-stable-infinity",
+        number: 5,
+        titleKo: "안정 ∞-범주",
+        titleEn: "Stable ∞-Categories",
+        description: "The ∞-categorical enhancement of triangulated categories",
+        concepts: [
+          { id: "c01-stable-infinity-category", type: "concept", titleKo: "안정 ∞-범주", titleEn: "Stable ∞-Category", status: "skeleton" },
+          { id: "c02-spectrum", type: "concept", titleKo: "스펙트럼", titleEn: "Spectrum (in the sense of stable homotopy)", status: "skeleton" },
+          { id: "c03-t-structure-infinity", type: "concept", titleKo: "∞-범주의 t-구조", titleEn: "t-Structures on Stable ∞-Categories", status: "skeleton" },
+          { id: "c04-derived-infinity", type: "concept", titleKo: "유도 ∞-범주", titleEn: "Derived ∞-Category", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-triangulated-shadow", type: "theorem", titleKo: "삼각 범주는 그림자", titleEn: "Triangulated Category as Shadow of Stable ∞-Category", status: "skeleton" },
+          { id: "t02-universal-property-stabilization", type: "theorem", titleKo: "안정화의 보편 성질", titleEn: "Universal Property of Stabilization", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch06-dg-and-a-infinity",
+        number: 6,
+        titleKo: "DG 범주와 A∞ 범주",
+        titleEn: "DG Categories and A∞-Categories",
+        description: "Algebraic models for ∞-categories: DG categories, A∞-structures, and enhancements",
+        concepts: [
+          { id: "c01-dg-category", type: "concept", titleKo: "DG 범주", titleEn: "DG Category", status: "skeleton" },
+          { id: "c02-a-infinity-category", type: "concept", titleKo: "A∞ 범주", titleEn: "A∞-Category", status: "skeleton" },
+          { id: "c03-dg-enhancement", type: "concept", titleKo: "DG 증강", titleEn: "DG Enhancement of Triangulated Categories", status: "skeleton" },
+          { id: "c04-pretriangulated", type: "concept", titleKo: "준삼각 DG 범주", titleEn: "Pretriangulated DG Category", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-dg-nerve", type: "theorem", titleKo: "DG 신경 정리", titleEn: "DG Nerve Theorem", status: "skeleton" },
+          { id: "t02-bondal-kapranov", type: "theorem", titleKo: "본달-카프라노프", titleEn: "Bondal–Kapranov Enhancement", status: "skeleton" },
+        ],
+        proofs: [],
+      },
+    ],
+  },
+  {
+    id: "algebraic-geometry",
+    titleKo: "대수기하학",
+    titleEn: "Algebraic Geometry",
+    description: "Hartshorne's approach: varieties, schemes, sheaves, cohomology, curves, and surfaces.",
+    color: "orange",
+    chapters: [
+      {
+        id: "ch01-varieties",
+        number: 1,
+        titleKo: "대수다양체",
+        titleEn: "Varieties",
+        description: "Affine and projective varieties, morphisms, dimension, and nonsingularity",
+        concepts: [
+          { id: "c01-affine-variety", type: "concept", titleKo: "아핀 다양체", titleEn: "Affine Algebraic Variety", status: "complete" },
+          { id: "c02-projective-variety", type: "concept", titleKo: "사영 다양체", titleEn: "Projective Variety", status: "complete" },
+          { id: "c03-morphism-of-varieties", type: "concept", titleKo: "다양체의 사상", titleEn: "Morphisms of Varieties", status: "complete" },
+          { id: "c04-dimension", type: "concept", titleKo: "차원", titleEn: "Dimension", status: "complete" },
+          { id: "c05-nonsingular", type: "concept", titleKo: "비특이점", titleEn: "Nonsingular Varieties", status: "complete" },
+          { id: "c06-rational-map", type: "concept", titleKo: "유리 사상", titleEn: "Rational Maps and Birational Equivalence", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-hilbert-nullstellensatz", type: "theorem", titleKo: "힐베르트 영점정리", titleEn: "Hilbert's Nullstellensatz", status: "complete" },
+          { id: "t02-bezout", type: "theorem", titleKo: "베주 정리", titleEn: "Bézout's Theorem", status: "complete" },
+          { id: "t03-bertini", type: "theorem", titleKo: "베르티니 정리", titleEn: "Bertini's Theorem", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-nullstellensatz-proof", type: "proof", titleKo: "영점정리의 증명", titleEn: "Proof of Nullstellensatz", status: "complete" },
+        ],
+      },
+      {
+        id: "ch02-schemes",
+        number: 2,
+        titleKo: "스킴",
+        titleEn: "Schemes",
+        description: "Sheaves, schemes, morphisms, and the language of modern algebraic geometry",
+        concepts: [
+          { id: "c01-sheaf", type: "concept", titleKo: "층", titleEn: "Sheaf on a Topological Space", status: "complete" },
+          { id: "c02-ringed-space", type: "concept", titleKo: "환 붙은 공간", titleEn: "Ringed Space and Locally Ringed Space", status: "complete" },
+          { id: "c03-spectrum", type: "concept", titleKo: "Spec", titleEn: "Spectrum of a Ring (Spec A)", status: "complete" },
+          { id: "c04-scheme", type: "concept", titleKo: "스킴", titleEn: "Scheme", status: "complete" },
+          { id: "c05-morphism-of-schemes", type: "concept", titleKo: "스킴의 사상", titleEn: "Morphisms of Schemes", status: "complete" },
+          { id: "c06-fiber-product", type: "concept", titleKo: "올곱", titleEn: "Fiber Product and Base Change", status: "complete" },
+          { id: "c07-separated-proper", type: "concept", titleKo: "분리 사상과 고유 사상", titleEn: "Separated and Proper Morphisms", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-affine-communication", type: "theorem", titleKo: "아핀 소통 보조정리", titleEn: "Affine Communication Lemma", status: "complete" },
+          { id: "t02-valuative-criteria", type: "theorem", titleKo: "부치 판정법", titleEn: "Valuative Criteria (Separated, Proper)", status: "complete" },
+        ],
+        proofs: [],
+      },
+      {
+        id: "ch03-cohomology",
+        number: 3,
+        titleKo: "코호몰로지",
+        titleEn: "Cohomology",
+        description: "Sheaf cohomology, Čech cohomology, Serre duality, and vanishing theorems",
+        concepts: [
+          { id: "c01-coherent-sheaf", type: "concept", titleKo: "연접층", titleEn: "Coherent Sheaf and Quasi-coherent Sheaf", status: "complete" },
+          { id: "c02-sheaf-cohomology", type: "concept", titleKo: "층 코호몰로지", titleEn: "Sheaf Cohomology H^i(X, F)", status: "complete" },
+          { id: "c03-cech-cohomology", type: "concept", titleKo: "체흐 코호몰로지", titleEn: "Čech Cohomology", status: "complete" },
+          { id: "c04-ext-sheaf", type: "concept", titleKo: "Ext 층", titleEn: "Ext Sheaves and Local-to-Global", status: "complete" },
+          { id: "c05-dualizing-sheaf", type: "concept", titleKo: "이중화층", titleEn: "Dualizing Sheaf ω_X", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-serre-vanishing", type: "theorem", titleKo: "세르 소멸정리", titleEn: "Serre's Vanishing Theorem", status: "complete" },
+          { id: "t02-serre-duality", type: "theorem", titleKo: "세르 쌍대성", titleEn: "Serre Duality", status: "complete" },
+          { id: "t03-riemann-roch", type: "theorem", titleKo: "리만-로흐 정리", titleEn: "Riemann–Roch Theorem", status: "complete" },
+          { id: "t04-cohomology-of-pn", type: "theorem", titleKo: "사영공간의 코호몰로지", titleEn: "Cohomology of Projective Space", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-serre-duality-proof", type: "proof", titleKo: "세르 쌍대성의 증명", titleEn: "Proof of Serre Duality", status: "complete" },
+        ],
+      },
+      {
+        id: "ch04-curves",
+        number: 4,
+        titleKo: "곡선",
+        titleEn: "Curves",
+        description: "The theory of algebraic curves: Riemann–Roch, Hurwitz, embeddings, and classification",
+        concepts: [
+          { id: "c01-divisor", type: "concept", titleKo: "인자", titleEn: "Divisors on Curves", status: "skeleton" },
+          { id: "c02-linear-system", type: "concept", titleKo: "선형계", titleEn: "Linear Systems |D|", status: "skeleton" },
+          { id: "c03-genus", type: "concept", titleKo: "종수", titleEn: "Genus", status: "skeleton" },
+          { id: "c04-ramification", type: "concept", titleKo: "분기", titleEn: "Ramification", status: "skeleton" },
+          { id: "c05-elliptic-curve", type: "concept", titleKo: "타원곡선", titleEn: "Elliptic Curves", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-riemann-roch-curve", type: "theorem", titleKo: "곡선의 리만-로흐", titleEn: "Riemann–Roch for Curves", status: "skeleton" },
+          { id: "t02-hurwitz", type: "theorem", titleKo: "후르비츠 공식", titleEn: "Hurwitz Formula", status: "skeleton" },
+          { id: "t03-clifford", type: "theorem", titleKo: "클리포드 정리", titleEn: "Clifford's Theorem", status: "skeleton" },
+          { id: "t04-castelnuovo", type: "theorem", titleKo: "카스텔누오보 부등식", titleEn: "Castelnuovo's Bound", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-riemann-roch-proof", type: "proof", titleKo: "리만-로흐의 증명", titleEn: "Proof of Riemann–Roch for Curves", status: "skeleton" },
+          { id: "p02-hurwitz-proof", type: "proof", titleKo: "후르비츠 공식의 증명", titleEn: "Proof of Hurwitz Formula", status: "skeleton" },
+        ],
+      },
+      {
+        id: "ch05-surfaces",
+        number: 5,
+        titleKo: "곡면",
+        titleEn: "Surfaces",
+        description: "Intersection theory, ruled surfaces, blowups, and the beginnings of classification",
+        concepts: [
+          { id: "c01-intersection-theory", type: "concept", titleKo: "교차 이론", titleEn: "Intersection Theory on Surfaces", status: "skeleton" },
+          { id: "c02-blowup", type: "concept", titleKo: "블로업", titleEn: "Blowing Up", status: "skeleton" },
+          { id: "c03-ruled-surface", type: "concept", titleKo: "직선 곡면", titleEn: "Ruled Surfaces", status: "skeleton" },
+          { id: "c04-canonical-class", type: "concept", titleKo: "표준류", titleEn: "Canonical Class K_X", status: "skeleton" },
+          { id: "c05-birational-geometry", type: "concept", titleKo: "쌍유리 기하", titleEn: "Birational Geometry of Surfaces", status: "skeleton" },
+        ],
+        theorems: [
+          { id: "t01-hodge-index", type: "theorem", titleKo: "호지 지수 정리", titleEn: "Hodge Index Theorem", status: "skeleton" },
+          { id: "t02-castelnuovo-rationality", type: "theorem", titleKo: "카스텔누오보 유리성 판정", titleEn: "Castelnuovo's Rationality Criterion", status: "skeleton" },
+          { id: "t03-noether-formula", type: "theorem", titleKo: "뇌터 공식", titleEn: "Noether's Formula", status: "skeleton" },
+          { id: "t04-riemann-roch-surface", type: "theorem", titleKo: "곡면의 리만-로흐", titleEn: "Riemann–Roch for Surfaces", status: "skeleton" },
+        ],
+        proofs: [
+          { id: "p01-hodge-index-proof", type: "proof", titleKo: "호지 지수 정리의 증명", titleEn: "Proof of Hodge Index Theorem", status: "skeleton" },
+        ],
+      },
+    ],
+  },
+];
+
+export function getSubject(id: string): Subject | undefined {
+  return subjects.find((s) => s.id === id);
+}
+
+export function getChapter(subjectId: string, chapterId: string) {
+  const subject = getSubject(subjectId);
+  return subject?.chapters.find((c) => c.id === chapterId);
+}

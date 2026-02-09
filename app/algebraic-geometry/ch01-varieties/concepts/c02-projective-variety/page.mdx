@@ -1,0 +1,177 @@
+export const metadata = {
+  title: 'Projective Variety — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "1. 대수다양체", href: "/algebraic-geometry/ch01-varieties" },
+  { label: "Concept — Projective Variety" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Projective Varieties
+
+Projective space is the natural home for algebraic geometry: it "completes" affine space by adding points at infinity, and projective varieties enjoy far better properties than affine ones (compactness, Bézout's theorem, etc.).
+
+---
+
+## Projective space
+
+<Definition title="Projective n-space" number="1.6">
+**Projective $n$-space** over $k$ is the set of equivalence classes
+
+$$\mathbb{P}^n = \mathbb{P}^n_k = (k^{n+1} \setminus \{0\}) / {\sim}$$
+
+where $(a_0, \ldots, a_n) \sim (\lambda a_0, \ldots, \lambda a_n)$ for all $\lambda \in k^*$. The equivalence class of $(a_0, \ldots, a_n)$ is written $[a_0 : \cdots : a_n]$ (homogeneous coordinates).
+</Definition>
+
+<Example id="p1" title="The projective line P¹">
+$\mathbb{P}^1 = \{[a_0 : a_1]\}$. The standard open cover:
+
+- $U_0 = \{a_0 \neq 0\} = \{[1:t] \mid t \in k\} \cong \mathbb{A}^1$, where $t = a_1/a_0$.
+- $U_1 = \{a_1 \neq 0\} = \{[s:1] \mid s \in k\} \cong \mathbb{A}^1$, where $s = a_0/a_1$.
+
+$\mathbb{P}^1 = U_0 \cup U_1$ with overlap $U_0 \cap U_1 = \{t \neq 0\} = \{s \neq 0\}$ and transition $s = 1/t$. The "extra" point $[0:1] \in U_1 \setminus U_0$ is the **point at infinity** (where $t \to \infty$). Think of $\mathbb{P}^1$ as $\mathbb{A}^1 \cup \{\infty\}$, the one-point compactification.
+
+Over $\mathbb{C}$, $\mathbb{P}^1(\mathbb{C})$ is the **Riemann sphere** $\mathbb{C} \cup \{\infty\} \cong S^2$.
+</Example>
+
+<Example id="p2" title="The projective plane P²">
+$\mathbb{P}^2 = \{[x:y:z]\}$ with three standard charts:
+
+- $U_x = \{x \neq 0\} \cong \mathbb{A}^2$ via $[1:s:t]$.
+- $U_y = \{y \neq 0\} \cong \mathbb{A}^2$ via $[u:1:v]$.
+- $U_z = \{z \neq 0\} \cong \mathbb{A}^2$ via $[a:b:1]$.
+
+The "line at infinity" relative to $U_z$ is $\{z = 0\} \cong \mathbb{P}^1$.
+</Example>
+
+---
+
+## Projective algebraic sets
+
+<Definition title="Projective algebraic set" number="1.7">
+A polynomial $f \in k[x_0, \ldots, x_n]$ is **homogeneous** of degree $d$ if $f(\lambda x_0, \ldots, \lambda x_n) = \lambda^d f(x_0,\ldots,x_n)$. For a homogeneous polynomial, the condition $f(P) = 0$ is well-defined on $\mathbb{P}^n$ (since $f(\lambda P) = \lambda^d f(P)$).
+
+For a set $T$ of homogeneous polynomials, the **projective algebraic set** is
+
+$$V(T) = \{P \in \mathbb{P}^n \mid f(P) = 0 \text{ for all } f \in T\}.$$
+
+A **projective variety** is an irreducible projective algebraic set.
+</Definition>
+
+<Example id="proj-line-in-p2" title="A line in P²">
+$V(ax + by + cz) \subseteq \mathbb{P}^2$ is a **projective line**, isomorphic to $\mathbb{P}^1$. In the affine chart $z \neq 0$, this becomes the affine line $V(aX + bY + c) \subseteq \mathbb{A}^2$ (where $X = x/z$, $Y = y/z$). The projective line adds one "point at infinity" in the direction of the line.
+
+**Any two distinct lines in $\mathbb{P}^2$ meet in exactly one point** — this is why projective geometry is more natural than affine geometry.
+</Example>
+
+<Example id="proj-conic" title="Projective conics">
+$V(x^2 + y^2 - z^2) \subseteq \mathbb{P}^2$. In the chart $z = 1$, this is the affine circle $x^2 + y^2 = 1$. The "points at infinity" are $[x:y:0]$ with $x^2 + y^2 = 0$, i.e., $[1:i:0]$ and $[1:-i:0]$ over $\mathbb{C}$.
+
+Over $\mathbb{C}$, all smooth conics in $\mathbb{P}^2$ are isomorphic to $\mathbb{P}^1$ (via the parametrization $[s:t] \mapsto [s^2 - t^2 : 2st : s^2 + t^2]$).
+</Example>
+
+<Example id="elliptic" title="An elliptic curve in P²">
+The homogenization of $y^2 = x^3 - x$ is $Y^2 Z = X^3 - XZ^2$. The projective curve
+
+$$E = V(Y^2 Z - X^3 + XZ^2) \subseteq \mathbb{P}^2$$
+
+is an **elliptic curve**. It has a single point at infinity $[0:1:0]$ (set $Z = 0$: $0 = X^3$, so $X = 0$, giving $[0:1:0]$). This point serves as the identity element for the **group law** on $E$.
+
+Over $\mathbb{C}$, $E(\mathbb{C}) \cong \mathbb{C}/\Lambda$ as a complex manifold (a torus), where $\Lambda$ is a lattice. This is **not** rational — it has genus 1.
+</Example>
+
+<Example id="fermat" title="Fermat curves">
+The **Fermat curve** of degree $d$ is
+
+$$F_d = V(x^d + y^d - z^d) \subseteq \mathbb{P}^2.$$
+
+- $d = 1$: a line ($\cong \mathbb{P}^1$, genus 0).
+- $d = 2$: a conic ($\cong \mathbb{P}^1$, genus 0).
+- $d = 3$: an elliptic curve (genus 1). The integer points on $F_3$ are related to Fermat's Last Theorem for $n=3$.
+- $d \geq 4$: a curve of genus $g = \frac{(d-1)(d-2)}{2} \geq 3$. By Faltings' theorem (Mordell conjecture), $F_d(\mathbb{Q})$ is finite for $d \geq 4$.
+</Example>
+
+---
+
+## Classical constructions
+
+<Example id="veronese" title="The Veronese embedding">
+The **Veronese embedding** of degree $d$ is
+
+$$\nu_d : \mathbb{P}^n \hookrightarrow \mathbb{P}^N, \quad N = \binom{n+d}{d} - 1$$
+
+sending $[x_0:\cdots:x_n]$ to all monomials of degree $d$. For $n = 1$, $d = 2$:
+
+$$\nu_2 : \mathbb{P}^1 \to \mathbb{P}^2, \quad [s:t] \mapsto [s^2 : st : t^2].$$
+
+The image is the conic $V(xz - y^2)$. This shows that **every smooth conic is isomorphic to $\mathbb{P}^1$**.
+
+For $n = 1$, $d = 3$: the image $\nu_3(\mathbb{P}^1) \subseteq \mathbb{P}^3$ is the **rational normal curve** of degree 3 (the projective closure of the twisted cubic).
+
+The key property: the Veronese embedding converts degree-$d$ hypersurfaces in $\mathbb{P}^n$ into **hyperplane** sections in $\mathbb{P}^N$. This linearizes the problem of studying high-degree varieties.
+</Example>
+
+<Example id="segre" title="The Segre embedding">
+The **Segre embedding** is
+
+$$\sigma : \mathbb{P}^m \times \mathbb{P}^n \hookrightarrow \mathbb{P}^{(m+1)(n+1)-1}$$
+
+sending $([x_0:\cdots:x_m], [y_0:\cdots:y_n]) \mapsto [x_i y_j]_{0 \leq i \leq m, 0 \leq j \leq n}$.
+
+For $m = n = 1$:
+
+$$\sigma : \mathbb{P}^1 \times \mathbb{P}^1 \hookrightarrow \mathbb{P}^3, \quad ([s:t],[u:v]) \mapsto [su:sv:tu:tv].$$
+
+The image is $V(xw - yz) \subseteq \mathbb{P}^3$, a smooth **quadric surface**. This quadric is ruled by two families of lines:
+
+- Fix $[s:t]$, vary $[u:v]$: a line on the quadric.
+- Fix $[u:v]$, vary $[s:t]$: another line.
+
+Every smooth quadric surface in $\mathbb{P}^3$ is isomorphic to $\mathbb{P}^1 \times \mathbb{P}^1$.
+</Example>
+
+<Example id="grassmannian" title="The Grassmannian">
+The **Grassmannian** $\mathbb{G}(r, n)$ parametrizes $r$-dimensional linear subspaces of $k^n$ (equivalently, $(r-1)$-planes in $\mathbb{P}^{n-1}$). It is a projective variety via the **Plücker embedding**:
+
+$$\mathbb{G}(r, n) \hookrightarrow \mathbb{P}^{\binom{n}{r}-1}, \quad W \mapsto [\text{Plücker coordinates}].$$
+
+For example, $\mathbb{G}(2, 4)$ parametrizes lines in $\mathbb{P}^3$. The Plücker embedding sends it to $\mathbb{P}^5$, where the image is the smooth quadric hypersurface $V(p_{01}p_{23} - p_{02}p_{13} + p_{03}p_{12})$.
+
+$\dim \mathbb{G}(r,n) = r(n-r)$. So $\dim \mathbb{G}(2,4) = 4$ — the space of lines in $\mathbb{P}^3$ is 4-dimensional.
+</Example>
+
+---
+
+## Projective vs. affine
+
+<Remark title="Why projective?">
+Projective varieties enjoy properties that affine varieties lack:
+
+1. **Compactness**: $\mathbb{P}^n$ is a complete variety (= "compact" in algebraic geometry). A regular function on a connected projective variety is constant (no interesting global functions — the opposite of the affine world).
+
+2. **Bézout's theorem**: Two curves of degrees $d$ and $e$ in $\mathbb{P}^2$ meet in exactly $de$ points (counted with multiplicity). In $\mathbb{A}^2$, parallel lines don't meet; in $\mathbb{P}^2$, they meet at infinity.
+
+3. **Better intersection theory**: In $\mathbb{P}^n$, any two subvarieties of complementary dimension intersect. There are no "missing" intersection points.
+
+4. **Classification**: Projective curves have a well-defined genus. The classification of projective varieties (birational geometry, minimal model program) is the central problem of algebraic geometry.
+</Remark>
+
+<Example id="affine-vs-proj" title="Completing an affine curve">
+The affine hyperbola $V(xy - 1) \subseteq \mathbb{A}^2$ "looks" like two separate branches. Homogenize: $XY - Z^2 = 0$ in $\mathbb{P}^2$. The points at infinity ($Z = 0$) are $[1:0:0]$ and $[0:1:0]$ — the two branches of the hyperbola "meet at infinity." The projective curve is a smooth conic $\cong \mathbb{P}^1$.
+
+Similarly, the parabola $V(y - x^2)$ becomes $YZ - X^2 = 0$, which has one point at infinity $[0:0:1]$ (actually $[0:1:0]$). The projective closure is again a smooth conic $\cong \mathbb{P}^1$.
+
+**All smooth conics are projectively equivalent** — the distinction between ellipse, parabola, hyperbola is purely affine.
+</Example>

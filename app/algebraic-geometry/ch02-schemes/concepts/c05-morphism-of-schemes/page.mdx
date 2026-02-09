@@ -1,0 +1,498 @@
+export const metadata = {
+  title: 'Morphisms of Schemes — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Concept — Morphisms of Schemes" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Morphisms of Schemes
+
+Morphisms of schemes are the structure-preserving maps in the category of schemes. They generalize the notion of regular functions between varieties and provide the foundation for studying geometric properties in algebraic geometry.
+
+## Basic Definitions
+
+<Definition title="Morphism of Schemes">
+A **morphism of schemes** $f: X \to Y$ is a morphism of locally ringed spaces, consisting of:
+1. A continuous map $f: |X| \to |Y|$ of underlying topological spaces
+2. A morphism of sheaves of rings $f^\sharp: \mathcal{O}_Y \to f_*\mathcal{O}_X$
+
+such that for every point $x \in X$, the induced map on stalks
+$$f_x^\sharp: \mathcal{O}_{Y,f(x)} \to \mathcal{O}_{X,x}$$
+is a local homomorphism of local rings (i.e., $f_x^\sharp(\mathfrak{m}_{Y,f(x)}) \subseteq \mathfrak{m}_{X,x}$).
+</Definition>
+
+<Remark>
+The local ring condition is automatic when both schemes are locally of finite type over a field, but crucial in general. It ensures that the map respects the "geometric" nature of the spaces.
+</Remark>
+
+## Morphisms of Affine Schemes
+
+The key insight connecting scheme theory to commutative algebra is the contravariant equivalence between affine schemes and rings.
+
+<Theorem title="Morphisms of Affine Schemes">
+Let $A$ and $B$ be rings. There is a natural bijection
+$$\text{Hom}_{\text{Sch}}(\text{Spec } B, \text{Spec } A) \cong \text{Hom}_{\text{Ring}}(A, B)$$
+given by sending a morphism $f: \text{Spec } B \to \text{Spec } A$ to the ring homomorphism $f^\sharp: A \to B$.
+
+The correspondence is contravariant: a ring homomorphism $\phi: A \to B$ induces:
+- On points: $\mathfrak{q} \mapsto \phi^{-1}(\mathfrak{q})$ for prime ideals $\mathfrak{q} \subseteq B$
+- On functions: $a \mapsto \phi(a)$ for $a \in A$
+</Theorem>
+
+<Proof>
+Given $\phi: A \to B$, we construct $f: \text{Spec } B \to \text{Spec } A$:
+
+**Continuous map**: For $\mathfrak{q} \in \text{Spec } B$, define $f(\mathfrak{q}) = \phi^{-1}(\mathfrak{q})$. This is prime since $\phi^{-1}$ preserves ideal operations. For $I \subseteq A$, we have
+$$f^{-1}(V(I)) = \{\mathfrak{q} : \phi^{-1}(\mathfrak{q}) \supseteq I\} = \{\mathfrak{q} : \mathfrak{q} \supseteq \phi(I)\} = V(\phi(I)B)$$
+which is closed, so $f$ is continuous.
+
+**Sheaf map**: For $U = D(g) \subseteq \text{Spec } A$, we have $f^{-1}(U) = D(\phi(g))$. Define
+$$\phi_U: A_g \to B_{\phi(g)}, \quad \frac{a}{g^n} \mapsto \frac{\phi(a)}{\phi(g)^n}$$
+These maps are compatible and define $f^\sharp: \mathcal{O}_{\text{Spec } A} \to f_*\mathcal{O}_{\text{Spec } B}$.
+
+**Local ring condition**: At $\mathfrak{q} \in \text{Spec } B$, the stalk map is
+$$A_{\phi^{-1}(\mathfrak{q})} \to B_\mathfrak{q}$$
+If $a/s \in A_{\phi^{-1}(\mathfrak{q})}$ with $s \notin \phi^{-1}(\mathfrak{q})$, then $\phi(s) \notin \mathfrak{q}$, so the map sends non-units to non-units, hence is local.
+
+Conversely, given $f: \text{Spec } B \to \text{Spec } A$, the global sections $f^\sharp: A \to B$ define the corresponding ring homomorphism.
+</Proof>
+
+<Example id="projection" title="Projection Maps">
+Consider $\phi: k[x] \to k[x,y]$, the inclusion. This induces
+$$f: \mathbb{A}^2_k = \text{Spec } k[x,y] \to \mathbb{A}^1_k = \text{Spec } k[x]$$
+the projection $(x,y) \mapsto x$. On prime ideals:
+- The zero ideal $(0) \mapsto (0)$ (generic point to generic point)
+- Maximal ideal $(x-a, y-b) \mapsto (x-a)$ (closed point to closed point)
+- Principal prime $(f(x,y)) \mapsto (0)$ or $(x-a)$ depending on whether $f$ depends on both variables
+
+This is the prototypical example of a dominant morphism.
+</Example>
+
+<Example id="closed-embedding" title="Closed Embedding via Quotient">
+Let $\phi: k[x,y] \to k[x,y]/(y^2 - x^3)$. This induces
+$$f: V(y^2 - x^3) \hookrightarrow \mathbb{A}^2_k$$
+The morphism is:
+- On topological spaces: inclusion of the closed subset $V(y^2-x^3)$
+- On structure sheaves: the quotient map restricted to open sets
+
+This is a closed immersion, the scheme-theoretic generalization of a closed subvariety.
+</Example>
+
+<Example id="self-map" title="Frobenius Endomorphism">
+In characteristic $p > 0$, consider $\phi: k[x] \to k[x]$ given by $x \mapsto x^p$ (assuming $k$ is perfect). This induces the **Frobenius morphism**
+$$F: \mathbb{A}^1_k \to \mathbb{A}^1_k$$
+On points, if $\mathfrak{m} = (x-a)$ for $a \in k$, then
+$$F(\mathfrak{m}) = \phi^{-1}(x-a) = (x - a^{1/p})$$
+So $F$ is bijective on $k$-rational points (when $k$ is algebraically closed) but not an isomorphism of schemes! The induced map on structure sheaves is not an isomorphism.
+</Example>
+
+## General Morphisms and Gluing
+
+For general schemes, morphisms are defined by gluing affine pieces.
+
+<Theorem title="Morphisms by Gluing">
+Let $X = \bigcup U_i$ and $Y = \bigcup V_j$ be open covers by affine schemes. A morphism $f: X \to Y$ is determined by:
+1. For each $i$, an index $j(i)$ such that $f(U_i) \subseteq V_{j(i)}$
+2. Morphisms $f_i: U_i \to V_{j(i)}$
+3. Compatibility on overlaps: $f_i|_{U_i \cap U_{i'}} = f_{i'}|_{U_i \cap U_{i'}}$
+</Theorem>
+
+<Example id="projective-variety" title="Morphism from Projective Space">
+Consider the map $\mathbb{P}^1_k \to \mathbb{A}^1_k$ defined by $[x:y] \mapsto x/y$ where $y \neq 0$. On affine charts:
+- On $U_0 = \text{Spec } k[t]$ (where $t = y/x$): we get the map $k[u] \to k[t]$ sending $u \mapsto 1/t$
+- On $U_1 = \text{Spec } k[s]$ (where $s = x/y$): we get the map $k[u] \to k[s]$ sending $u \mapsto s$
+
+On the overlap $U_0 \cap U_1 = \text{Spec } k[t, t^{-1}]$, both maps agree: $u \mapsto 1/t = s$.
+
+This morphism is not defined at $[1:0]$, showing that not all rational maps extend to morphisms of schemes.
+</Example>
+
+<Example id="blow-up" title="Blowing Up the Origin">
+The blow-up of $\mathbb{A}^2$ at the origin is $\text{Bl}_0 \mathbb{A}^2 \subseteq \mathbb{A}^2 \times \mathbb{P}^1$, defined by the equation $x_1 y_0 = x_0 y_1$ where $(x_0, x_1) \in \mathbb{A}^2$ and $[y_0:y_1] \in \mathbb{P}^1$.
+
+The blow-up map $\pi: \text{Bl}_0 \mathbb{A}^2 \to \mathbb{A}^2$ is the projection. On the chart $y_0 \neq 0$:
+- $\text{Spec } k[x_0, x_1, t]/(x_1 - x_0 t) \cong \text{Spec } k[x_0, t]$
+- The map is $k[x_0, x_1] \to k[x_0, t]$ sending $x_0 \mapsto x_0, x_1 \mapsto x_0 t$
+
+The exceptional divisor $E = \pi^{-1}(0) \cong \mathbb{P}^1$ is the fiber over the origin.
+</Example>
+
+## The Functor of Points
+
+An important perspective views schemes through their morphisms from other schemes.
+
+<Definition title="Functor of Points">
+For a scheme $X$, the **functor of points** is
+$$h_X: \text{Sch}^{\text{op}} \to \text{Set}, \quad T \mapsto \text{Hom}(T, X) =: X(T)$$
+A morphism $f: X \to Y$ induces a natural transformation $h_X \to h_Y$ by composition.
+</Definition>
+
+<Remark>
+By Yoneda's lemma, $X$ is determined up to isomorphism by the functor $h_X$. This perspective is fundamental in modern algebraic geometry, especially for moduli problems.
+</Remark>
+
+<Example id="functor-affine-space" title="Functor of Points of Affine Space">
+For $\mathbb{A}^n_k = \text{Spec } k[x_1, \ldots, x_n]$, we have
+$$\mathbb{A}^n_k(T) = \text{Hom}(T, \mathbb{A}^n_k)$$
+When $T = \text{Spec } R$ is affine, this equals
+$$\text{Hom}(k[x_1,\ldots,x_n], R) \cong R^n$$
+So $\mathbb{A}^n_k(T)$ is the set of $n$-tuples of global sections of $\mathcal{O}_T$.
+
+For instance, $\mathbb{A}^1_k(\mathbb{A}^1_k) = k[x]$ consists of all polynomial functions $\mathbb{A}^1 \to \mathbb{A}^1$.
+</Example>
+
+<Example id="functor-projective" title="Functor of Points of Projective Space">
+For $\mathbb{P}^n_k$, the set $\mathbb{P}^n_k(T)$ consists of line bundles $\mathcal{L}$ on $T$ together with $(n+1)$ global sections $s_0, \ldots, s_n \in \Gamma(T, \mathcal{L})$ that generate $\mathcal{L}$ at every point.
+
+When $T = \text{Spec } k$ is a point, this reduces to $k^{n+1} \setminus \{0\}$ modulo scalars, recovering classical projective space.
+</Example>
+
+## Types of Morphisms
+
+Morphisms are classified by various properties that generalize geometric concepts from classical varieties.
+
+### Open and Closed Immersions
+
+<Definition title="Open Immersion">
+A morphism $f: X \to Y$ is an **open immersion** if:
+1. $f$ is a homeomorphism onto an open subset $U \subseteq Y$
+2. $f^\sharp: \mathcal{O}_Y|_U \to f_*\mathcal{O}_X$ is an isomorphism
+
+An open immersion identifies $X$ with an open subscheme of $Y$.
+</Definition>
+
+<Definition title="Closed Immersion">
+A morphism $f: X \to Y$ is a **closed immersion** if:
+1. $f$ is a homeomorphism onto a closed subset $Z \subseteq Y$
+2. $f^\sharp: \mathcal{O}_Y \to f_*\mathcal{O}_X$ is surjective
+
+Equivalently, $f$ is a closed immersion if locally on $Y = \text{Spec } A$, we have $X = \text{Spec } A/I$ for some ideal $I \subseteq A$.
+</Definition>
+
+<Theorem title="Closed Immersions and Ideal Sheaves">
+A closed immersion $i: Z \hookrightarrow X$ corresponds to a quasi-coherent sheaf of ideals $\mathcal{I} \subseteq \mathcal{O}_X$ such that:
+1. $Z$ has the reduced induced scheme structure if $\mathcal{I}$ is radical
+2. The structure sheaf of $Z$ is $\mathcal{O}_Z = \mathcal{O}_X/\mathcal{I}$
+
+On affine opens $U = \text{Spec } A \subseteq X$, we have $i^{-1}(U) = \text{Spec } A/I$ where $I = \mathcal{I}(U)$.
+</Theorem>
+
+<Example id="subschemes" title="Multiple Scheme Structures">
+Consider the line $x = 0$ in $\mathbb{A}^2_k$. There are multiple closed subschemes with the same underlying space:
+- $\text{Spec } k[x,y]/(x)$: the reduced line (simple line)
+- $\text{Spec } k[x,y]/(x^2)$: the doubled line (fat line)
+- $\text{Spec } k[x,y]/(x^n)$: the $n$-fold thickened line
+
+Each gives a different closed immersion into $\mathbb{A}^2_k$, corresponding to ideals $(x), (x^2), (x^n)$.
+</Example>
+
+<Example id="intersection" title="Scheme-Theoretic Intersection">
+In $\mathbb{A}^2_k$, consider the curves $C_1: y = x^2$ and $C_2: y = 0$. Their scheme-theoretic intersection is
+$$C_1 \cap C_2 = \text{Spec } k[x,y]/(x^2, y) = \text{Spec } k[x]/(x^2)$$
+which is a non-reduced scheme supported at the origin. This captures the tangency: the curves meet with multiplicity 2.
+
+In contrast, the set-theoretic intersection is just the origin as a reduced point.
+</Example>
+
+### Finiteness Conditions
+
+<Definition title="Locally of Finite Type">
+A morphism $f: X \to Y$ is **locally of finite type** if there exists an open affine cover $Y = \bigcup V_i$ with $V_i = \text{Spec } A_i$ such that for each $i$, we can cover $f^{-1}(V_i)$ by open affines $U_{ij} = \text{Spec } B_{ij}$ where each $B_{ij}$ is a finitely generated $A_i$-algebra.
+</Definition>
+
+<Definition title="Finite Type">
+A morphism $f: X \to Y$ is of **finite type** if it is locally of finite type and quasi-compact.
+</Definition>
+
+<Definition title="Finite Morphism">
+A morphism $f: X \to Y$ is **finite** if there exists an open affine cover $Y = \bigcup V_i$ with $V_i = \text{Spec } A_i$ such that $f^{-1}(V_i) = \text{Spec } B_i$ where each $B_i$ is a finitely generated $A_i$-module.
+
+Equivalently, $f$ is affine and the induced map on global sections makes $\mathcal{O}_X$ into a coherent $\mathcal{O}_Y$-module.
+</Definition>
+
+<Example id="finite-morphism" title="Normalization Map">
+Let $k$ be a field and consider
+$$f: \text{Spec } k[t] \to \text{Spec } k[x,y]/(y^2 - x^3)$$
+induced by $x \mapsto t^2, y \mapsto t^3$. This is the normalization morphism.
+
+Check finiteness:
+- $k[t]$ is finitely generated as a $k[x,y]/(y^2-x^3)$-algebra (generator: $t$)
+- Is $k[t]$ finitely generated as a module? The subring $k[t^2, t^3] \subseteq k[t]$ has $[k[t] : k[t^2,t^3]] = \infty$ as a module
+
+So $f$ is of finite type but NOT finite. The normalization is finite for curves, but this requires proving integrality.
+</Example>
+
+<Example id="finite-extension" title="Finite Field Extension">
+Let $k \subseteq L$ be a finite field extension. Then
+$$f: \text{Spec } L \to \text{Spec } k$$
+is a finite morphism. Indeed, $L$ is a finite-dimensional $k$-vector space, hence a finitely generated $k$-module.
+
+The map is surjective on points (the unique point of $\text{Spec } L$ maps to the unique point of $\text{Spec } k$) but can have degree $> 1$ in the sense of extension degree $[L:k]$.
+</Example>
+
+<Example id="finite-flat" title="Cyclic Cover">
+Consider the morphism
+$$f: \mathbb{A}^1_k \to \mathbb{A}^1_k$$
+induced by $k[x] \to k[y]$ sending $x \mapsto y^n$. This is the $n$-th power map, a finite flat morphism of degree $n$.
+
+Finiteness: $k[y]$ is a free $k[x]$-module with basis $\{1, y, \ldots, y^{n-1}\}$ via $x = y^n$.
+
+The fiber over $x = a \neq 0$ consists of $n$ points (the $n$-th roots of $a$), while the fiber over $x = 0$ is a single reduced point.
+</Example>
+
+### Affine Morphisms
+
+<Definition title="Affine Morphism">
+A morphism $f: X \to Y$ is **affine** if for every open affine $V \subseteq Y$, the preimage $f^{-1}(V)$ is affine.
+</Definition>
+
+<Theorem title="Characterization of Affine Morphisms">
+A morphism $f: X \to Y$ is affine if and only if for some (equivalently, every) open affine cover $\{V_i\}$ of $Y$, each $f^{-1}(V_i)$ is affine.
+
+For affine $f: X \to Y$, we have $X = \text{Spec}_Y \mathcal{A}$ where $\mathcal{A} = f_*\mathcal{O}_X$ is a quasi-coherent $\mathcal{O}_Y$-algebra.
+</Theorem>
+
+<Example id="vector-bundle" title="Line Bundle as Affine Morphism">
+A line bundle $\mathcal{L}$ on $X$ gives an affine morphism
+$$\mathbb{V}(\mathcal{L}) = \text{Spec}_X \text{Sym}(\mathcal{L}) \to X$$
+This is the total space of the line bundle viewed as a scheme.
+
+For $\mathcal{L} = \mathcal{O}_X$, we get $\mathbb{A}^1_X = X \times \mathbb{A}^1 \to X$, the projection from the affine line bundle.
+</Example>
+
+<Example id="spectrum-sheaf" title="Spec of a Sheaf of Algebras">
+Let $X = \mathbb{P}^1_k$ and $\mathcal{A} = \mathcal{O}_{\mathbb{P}^1} \oplus \mathcal{O}_{\mathbb{P}^1}(-1)$ with the natural algebra structure. Then
+$$\text{Spec}_{\mathbb{P}^1} \mathcal{A} \to \mathbb{P}^1$$
+is an affine morphism whose fibers are varying: over $\mathbb{P}^1 \setminus \{[0:1]\}$, the fiber is $\mathbb{A}^2$, but the total space is not a vector bundle.
+</Example>
+
+### Dominant Morphisms
+
+<Definition title="Dominant Morphism">
+A morphism $f: X \to Y$ is **dominant** if the image $f(X)$ is dense in $Y$, or equivalently, if the generic point of $Y$ is in the image of $f$.
+</Definition>
+
+<Remark>
+For irreducible schemes, dominance means the generic point of $Y$ is in the image. For affine schemes $f: \text{Spec } B \to \text{Spec } A$ induced by $\phi: A \to B$, dominance is equivalent to $\phi$ being injective.
+</Remark>
+
+<Example id="dominant-projection" title="Projection is Dominant">
+The projection $\mathbb{A}^2_k \to \mathbb{A}^1_k$ given by $(x,y) \mapsto x$ is dominant. The generic point $(0) \in \text{Spec } k[x]$ pulls back to $(0) \in \text{Spec } k[x,y]$.
+
+In classical terms, the image of the projection map contains a dense open subset.
+</Example>
+
+<Example id="not-dominant" title="Closed Embedding is Not Dominant">
+A proper closed immersion is never dominant. For instance,
+$$V(x) \hookrightarrow \mathbb{A}^2_k$$
+has image the closed set $V(x)$, which is not dense. The generic point $(0)$ of $\mathbb{A}^2$ is not in $V(x)$.
+</Example>
+
+### Separated and Proper Morphisms
+
+<Definition title="Separated Morphism">
+A morphism $f: X \to Y$ is **separated** if the diagonal morphism
+$$\Delta: X \to X \times_Y X$$
+is a closed immersion.
+</Definition>
+
+<Definition title="Proper Morphism">
+A morphism $f: X \to Y$ is **proper** if it is separated, of finite type, and universally closed (closed under any base change).
+</Definition>
+
+<Example id="proper-projective" title="Projective Morphisms are Proper">
+For any scheme $Y$, the projection $\mathbb{P}^n_Y \to Y$ is proper. This is the fundamental example of a proper morphism.
+
+In particular, $\mathbb{P}^n_k \to \text{Spec } k$ is proper, generalizing the compactness of projective space.
+</Example>
+
+<Example id="affine-line" title="Affine Line is Not Proper">
+The structure morphism $\mathbb{A}^1_k \to \text{Spec } k$ is not proper (though it is separated and of finite type). The closed subset $V(x-t) \subseteq \mathbb{A}^1_k \times \text{Spec } k[\epsilon]/(\epsilon^2)$ projects to the open point $(0) \in \text{Spec } k[\epsilon]/(\epsilon^2)$, which is not closed.
+
+Geometrically, $\mathbb{A}^1$ is not compact.
+</Example>
+
+## Special Morphisms
+
+### Structure Morphism
+
+<Definition title="Structure Morphism">
+Every scheme $X$ over a base scheme $S$ (or ring $R$) comes with a distinguished morphism $\pi: X \to S$ (or $X \to \text{Spec } R$) called the **structure morphism**.
+
+For schemes over a field $k$, this is the unique morphism $X \to \text{Spec } k$.
+</Definition>
+
+<Example id="structure-variety" title="Structure Morphism of a Variety">
+For a variety $X$ over $k$, the structure morphism $X \to \text{Spec } k$ encodes how $X$ is defined over $k$. The $k$-rational points of $X$ are the sections of this morphism:
+$$X(k) = \text{Hom}_k(\text{Spec } k, X)$$
+</Example>
+
+### Frobenius Morphism
+
+<Example id="frobenius-detailed" title="Absolute Frobenius">
+In characteristic $p > 0$, the **absolute Frobenius** $F: X \to X$ is defined by:
+- Identity on topological spaces
+- On structure sheaves: $a \mapsto a^p$
+
+For $X = \text{Spec } A$, this comes from the ring homomorphism $A \to A, a \mapsto a^p$ (which is a homomorphism since $(a+b)^p = a^p + b^p$ in characteristic $p$).
+
+Properties:
+- $F$ is a homeomorphism but not an isomorphism of schemes
+- $F$ is purely inseparable of degree $p^{\dim X}$
+- The differential $dF = 0$ (Frobenius kills all differentials)
+</Example>
+
+<Example id="frobenius-relative" title="Relative Frobenius">
+For a scheme $X$ over $\mathbb{F}_p$, the **relative Frobenius** is the unique morphism $F_{X/\mathbb{F}_p}: X \to X^{(p)}$ factoring the absolute Frobenius $F_{\mathrm{abs}} : X \to X$ through the base change $X^{(p)} \to X$, where $X^{(p)} = X \times_{\operatorname{Spec} \mathbb{F}_p, F} \operatorname{Spec} \mathbb{F}_p$ is the Frobenius twist.
+
+The relative Frobenius is a morphism over $\mathbb{F}_p$ (unlike the absolute Frobenius, which is not). For an elliptic curve $E / \mathbb{F}_p$, the degree of $F_{E/\mathbb{F}_p}$ is $p$, and $\#E(\mathbb{F}_p) = \deg(1 - F)$.
+</Example>
+
+### Finite Integral Extensions
+
+<Theorem title="Finite Morphisms and Integrality">
+Let $f: X \to Y$ be a finite morphism of schemes. Then:
+1. $f$ is closed
+2. $f$ is surjective if and only if the induced map on global sections is injective (for irreducible schemes)
+3. The fibers of $f$ are finite sets (as topological spaces)
+4. $f$ satisfies the going-up and going-down theorems from commutative algebra
+</Theorem>
+
+<Example id="integral-closure" title="Normalization of a Curve">
+Let $X = V(y^2 - x^2(x+1)) \subseteq \mathbb{A}^2_k$ be the node curve. The normalization is
+$$\nu: \tilde{X} = \mathbb{A}^1_k \to X$$
+given by $t \mapsto (t^2-1, t(t^2-1))$.
+
+On the ring level: $k[x,y]/(y^2 - x^2(x+1)) \subseteq k[t]$ where the left side is the coordinate ring of $X$. The map is finite since $k[t]$ is integral over the coordinate ring (both $x$ and $y$ satisfy monic polynomial relations).
+
+The normalization is bijective on underlying sets except at the node, where the two branches separate.
+</Example>
+
+## Summary Table of Morphism Types
+
+| Type | Topological Condition | Ring-Theoretic Condition | Example |
+|------|----------------------|--------------------------|---------|
+| **Open immersion** | Homeomorphism to open subset | $f^\sharp$ is isomorphism on image | $\text{Spec } k[x,x^{-1}] \to \text{Spec } k[x]$ |
+| **Closed immersion** | Homeomorphism to closed subset | $f^\sharp$ is surjective | $V(I) \hookrightarrow \text{Spec } A$ |
+| **Finite type** | Quasi-compact | Finitely generated algebra | Varieties over $k$ |
+| **Finite** | Closed with finite fibers | Finitely generated module | Finite field extension |
+| **Affine** | Affine preimages | Corresponds to sheaf of algebras | Vector bundle total space |
+| **Dominant** | Dense image | Injective on functions | Projection $\mathbb{A}^2 \to \mathbb{A}^1$ |
+| **Separated** | Diagonal is closed | "Hausdorff-like" | Affine and projective schemes |
+| **Proper** | Universally closed | Projective-like | $\mathbb{P}^n \to \text{Spec } k$ |
+| **Flat** | Continuous in families | Flat modules | Smooth families |
+| **Smooth** | Submersive | Regular sequence | $\mathbb{A}^n \to \text{Spec } k$ |
+
+## Composition and Base Change
+
+<Theorem title="Properties Stable Under Composition">
+The following properties of morphisms are stable under composition:
+- Open/closed immersions
+- Finite type, finite, affine
+- Separated, proper
+- Flat, smooth, étale
+
+If $f: X \to Y$ and $g: Y \to Z$ have property $\mathcal{P}$ (from the list above), then $g \circ f: X \to Z$ also has property $\mathcal{P}$.
+</Theorem>
+
+<Theorem title="Base Change">
+Given a morphism $f: X \to Y$ and a base change $g: Y' \to Y$, form the fiber product $X' = X \times_Y Y'$ with projections $f': X' \to Y'$ and $g': X' \to X$.
+
+Many properties are preserved by base change:
+- Open/closed immersions
+- Finite type, finite, affine
+- Separated (proper is universally closed by definition)
+- Flat (crucial for families)
+</Theorem>
+
+<Example id="base-change-example" title="Base Change of Affine Space">
+Consider $\mathbb{A}^n_k \to \text{Spec } k$ and base change by $\text{Spec } L \to \text{Spec } k$ for a field extension $L/k$. The fiber product is
+$$\mathbb{A}^n_k \times_{\text{Spec } k} \text{Spec } L = \mathbb{A}^n_L$$
+which is affine $n$-space over $L$. This is the process of extending scalars.
+</Example>
+
+<Example id="fiber-over-point" title="Fiber Over a Point">
+For $f: X \to Y$ and a point $y \in Y$ corresponding to $\text{Spec } k(y) \to Y$, the fiber is
+$$X_y = X \times_Y \text{Spec } k(y)$$
+This is the scheme-theoretic fiber, generalizing the classical fiber of a map.
+
+For $\mathbb{A}^2_k \to \mathbb{A}^1_k$ projecting $(x,y) \mapsto x$, the fiber over $a \in k$ is
+$$\mathbb{A}^2_k \times_{\mathbb{A}^1_k} \text{Spec } k = V(x-a) \cong \mathbb{A}^1_k$$
+the vertical line through $x = a$.
+</Example>
+
+## Isomorphisms and Automorphisms
+
+<Definition title="Isomorphism of Schemes">
+A morphism $f: X \to Y$ is an **isomorphism** if there exists a morphism $g: Y \to X$ such that $g \circ f = \text{id}_X$ and $f \circ g = \text{id}_Y$.
+
+Equivalently, $f$ is a homeomorphism and $f^\sharp: \mathcal{O}_Y \to f_*\mathcal{O}_X$ is an isomorphism of sheaves.
+</Definition>
+
+<Example id="automorphism-affine" title="Automorphisms of Affine Space">
+The automorphism group $\text{Aut}(\mathbb{A}^1_k)$ consists of affine transformations $x \mapsto ax + b$ with $a \in k^*$ and $b \in k$.
+
+For $\mathbb{A}^2_k$, the automorphism group is much larger and includes the group of tame automorphisms (generated by affine and triangular maps) and the wild automorphisms (e.g., the Nagata automorphism).
+</Example>
+
+<Example id="projective-automorphism" title="Automorphisms of Projective Space">
+The automorphism group $\text{Aut}(\mathbb{P}^n_k) \cong \text{PGL}_{n+1}(k)$ consists of projectivized linear transformations:
+$$[x_0 : \cdots : x_n] \mapsto [a_{00}x_0 + \cdots + a_{0n}x_n : \cdots : a_{n0}x_0 + \cdots + a_{nn}x_n]$$
+where $(a_{ij}) \in \text{GL}_{n+1}(k)$, considered up to scalar multiplication.
+</Example>
+
+## Rational Maps
+
+<Remark>
+While morphisms are everywhere defined, in classical algebraic geometry we also consider rational maps, which are only defined on an open dense subset.
+</Remark>
+
+<Definition title="Rational Map">
+A **rational map** $f: X \dashrightarrow Y$ is an equivalence class of pairs $(U, f_U)$ where $U \subseteq X$ is open dense and $f_U: U \to Y$ is a morphism. Two pairs $(U, f_U)$ and $(V, f_V)$ are equivalent if $f_U = f_V$ on $U \cap V$.
+
+A rational map is **dominant** if the image of $f_U$ is dense in $Y$ for some (equivalently, every) representative.
+</Definition>
+
+<Example id="rational-map-example" title="Projection from a Point">
+Consider the projection from the point $p = [0:0:1] \in \mathbb{P}^2_k$ to a line $\ell \cong \mathbb{P}^1_k$. This gives a rational map
+$$\pi: \mathbb{P}^2_k \dashrightarrow \mathbb{P}^1_k$$
+defined everywhere except at $p$. On the affine chart $z \neq 0$, this is given by $(x,y) \mapsto x/y$ or similar.
+
+This is a classical example of a birational map that is not a morphism.
+</Example>
+
+## Applications and Further Topics
+
+Morphisms of schemes provide the language for:
+
+1. **Moduli problems**: Classifying geometric objects by representing them as morphisms to a moduli space
+2. **Families of varieties**: A morphism $X \to T$ can be viewed as a family of varieties parametrized by $T$
+3. **Intersection theory**: Proper intersections are defined using fiber products
+4. **Cohomology**: Many cohomological constructions (pushforward, pullback) depend on morphisms
+5. **Étale topology**: Étale morphisms form the covering systems for the étale site
+
+The theory of morphisms extends naturally to:
+- Morphisms of stacks (for moduli problems with automorphisms)
+- Morphisms in derived algebraic geometry (accounting for higher homotopical information)
+- Rigid analytic geometry (analytic morphisms over non-archimedean fields)
+
+## References
+
+- Hartshorne, *Algebraic Geometry*, Chapter II, Section 2-4
+- Vakil, *The Rising Sea*, Chapters 7-10
+- EGA II, Grothendieck-Dieudonné
+- Liu, *Algebraic Geometry and Arithmetic Curves*, Chapter 3

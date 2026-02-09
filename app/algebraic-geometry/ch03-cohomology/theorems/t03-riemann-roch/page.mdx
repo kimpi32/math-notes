@@ -1,0 +1,235 @@
+export const metadata = {
+  title: 'Riemann–Roch Theorem — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "3. 코호몰로지", href: "/algebraic-geometry/ch03-cohomology" },
+  { label: "Theorem — Riemann–Roch" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The Riemann–Roch Theorem
+
+The Riemann–Roch theorem is the central result connecting the algebra (cohomology) and geometry (divisors, genus) of algebraic curves. It computes the dimension of the space of meromorphic functions with prescribed poles and zeros.
+
+---
+
+## Divisors on curves
+
+<Definition title="Divisor" number="3.10">
+A **divisor** on a smooth projective curve $C$ is a formal sum
+
+$$D = \sum_{P \in C} n_P \cdot P, \quad n_P \in \mathbb{Z}, \text{ almost all } n_P = 0.$$
+
+The **degree** is $\deg D = \sum n_P$. The **divisor group** $\operatorname{Div}(C)$ is the free abelian group on closed points.
+
+For $f \in k(C)^*$ a nonzero rational function, the **principal divisor** is $\operatorname{div}(f) = \sum_P v_P(f) \cdot P$ where $v_P$ is the valuation at $P$. We always have $\deg(\operatorname{div}(f)) = 0$.
+
+Two divisors are **linearly equivalent** ($D \sim D'$) if $D - D' = \operatorname{div}(f)$. The **Picard group** is $\operatorname{Pic}(C) = \operatorname{Div}(C) / \sim$.
+</Definition>
+
+<Definition title="Riemann–Roch space" number="3.11">
+For a divisor $D$ on $C$, the **Riemann–Roch space** (or **linear system**) is
+
+$$L(D) = H^0(C, \mathcal{O}(D)) = \{f \in k(C)^* \mid \operatorname{div}(f) + D \geq 0\} \cup \{0\}.$$
+
+This is the space of rational functions whose poles are "bounded by $D$." We write $\ell(D) = \dim_k L(D)$.
+</Definition>
+
+<Example id="rr-space-P1" title="Riemann–Roch spaces on ℙ¹">
+On $\mathbb{P}^1$ with coordinate $t$:
+
+- $L(0) = k$ (constant functions): $\ell(0) = 1$.
+- $L(P_\infty) = k + k \cdot t$ (functions with at most a simple pole at $\infty$): $\ell(P_\infty) = 2$.
+- $L(n \cdot P_\infty) = k + kt + \cdots + kt^n$: $\ell(nP_\infty) = n + 1$.
+- $L(-P_0) = 0$ (functions with a zero at $0$ and no poles — only $0$): $\ell(-P_0) = 0$.
+</Example>
+
+---
+
+## Statement of Riemann–Roch
+
+<Theorem title="Riemann–Roch for curves">
+Let $C$ be a smooth projective curve of genus $g$ over $k$, and $D$ a divisor on $C$. Then
+
+$$\ell(D) - \ell(K - D) = \deg D - g + 1$$
+
+where $K$ is a canonical divisor ($\mathcal{O}(K) = \omega_C$, the canonical sheaf) with $\deg K = 2g - 2$.
+
+In sheaf-theoretic notation:
+
+$$h^0(\mathcal{O}(D)) - h^0(\omega_C \otimes \mathcal{O}(-D)) = \deg D - g + 1$$
+
+or equivalently (by Serre duality $H^1(\mathcal{O}(D)) \cong H^0(\omega_C(-D))^\vee$):
+
+$$h^0(\mathcal{O}(D)) - h^1(\mathcal{O}(D)) = \deg D - g + 1 = \chi(\mathcal{O}(D)).$$
+</Theorem>
+
+<Remark title="The three forms of Riemann–Roch">
+1. **Classical** (Riemann, 1857): $\ell(D) \geq \deg D - g + 1$ (Riemann's inequality, with $\ell(K-D)$ as the "defect").
+2. **With Serre duality** (Roch, 1865): $\ell(D) - \ell(K - D) = \deg D - g + 1$.
+3. **Euler characteristic**: $\chi(\mathcal{O}(D)) = \deg D + 1 - g$.
+
+The third form shows that the Euler characteristic depends **only on the degree**, not on the specific divisor $D$.
+</Remark>
+
+---
+
+## Applications of Riemann–Roch
+
+<Example id="rr-genus-0" title="Genus 0: rational curves">
+If $g = 0$ and $P$ is any point on $C$: $\ell(P) - \ell(K - P) = 1 - 0 + 1 = 2$. Since $\deg K = -2$ and $\deg(K - P) = -3 < 0$, we have $\ell(K - P) = 0$, so $\ell(P) = 2$.
+
+This means there exists a nonconstant function $f$ with a single simple pole at $P$ — equivalently, $f : C \to \mathbb{P}^1$ is an isomorphism. So **every genus-0 curve with a rational point is isomorphic to $\mathbb{P}^1$**.
+</Example>
+
+<Example id="rr-genus-1" title="Genus 1: elliptic curves">
+Let $E$ be an elliptic curve ($g = 1$) with origin $O$. By Riemann–Roch, $\ell(nO) = n$ for $n \geq 1$ (since $\deg K = 0$ and $K \sim 0$):
+
+| $n$ | $\ell(nO)$ | Basis | New function |
+|-----|------------|-------|-------------|
+| 1 | 1 | $\{1\}$ | — |
+| 2 | 2 | $\{1, x\}$ | $x$ has a double pole at $O$ |
+| 3 | 3 | $\{1, x, y\}$ | $y$ has a triple pole at $O$ |
+| 4 | 4 | $\{1, x, y, x^2\}$ | — |
+| 5 | 5 | $\{1, x, y, x^2, xy\}$ | — |
+| 6 | 6 | $\{1, x, y, x^2, xy, x^3\}$ | — |
+
+In degree 6, $y^2$ and $x^3$ both have a pole of order 6, so they must be linearly dependent modulo lower-order terms. This gives the **Weierstrass equation**:
+
+$$y^2 + a_1 xy + a_3 y = x^3 + a_2 x^2 + a_4 x + a_6.$$
+</Example>
+
+<Example id="rr-canonical" title="The canonical embedding">
+For a genus-$g$ curve $C$ with $g \geq 2$, the canonical divisor $K$ has $\deg K = 2g - 2$ and $\ell(K) = g$ (by RR: $\ell(K) - \ell(0) = (2g-2) - g + 1 = g - 1$, so $\ell(K) = g$).
+
+If $C$ is not hyperelliptic, the canonical linear system $|K|$ gives an embedding:
+
+$$\phi_K : C \hookrightarrow \mathbb{P}^{g-1}.$$
+
+This is the **canonical embedding**. For $g = 3$: $C \hookrightarrow \mathbb{P}^2$ as a smooth quartic curve. For $g = 4$: $C \hookrightarrow \mathbb{P}^3$ as the intersection of a quadric and a cubic.
+</Example>
+
+<Example id="rr-very-ample" title="Very ampleness criterion">
+A divisor $D$ on a genus-$g$ curve $C$ gives an embedding $C \hookrightarrow \mathbb{P}^{\ell(D)-1}$ if and only if:
+- $\ell(D - P) = \ell(D) - 1$ for all $P$ (separates points from tangent vectors), and
+- $\ell(D - P - Q) = \ell(D) - 2$ for all $P, Q$ (separates points).
+
+By Riemann–Roch: if $\deg D \geq 2g + 1$, then $D$ is very ample ($\ell(K - D + P + Q) = 0$ since $\deg(K - D + P + Q) < 0$). So every curve of genus $g$ embeds in $\mathbb{P}^{g+1}$ via a divisor of degree $2g + 1$.
+</Example>
+
+<Example id="rr-hyperelliptic" title="Hyperelliptic curves">
+A curve $C$ of genus $g \geq 2$ is **hyperelliptic** if there exists a degree-2 map $f : C \to \mathbb{P}^1$ (equivalently, $\ell(D) \geq 2$ for some divisor of degree 2).
+
+By Riemann–Roch: $\ell(D) - \ell(K - D) = 2 - g + 1 = 3 - g$. For $g \geq 3$, $\ell(K - D) \geq g - 3 + \ell(D) \geq g - 1$, so such a $D$ imposes nontrivial conditions.
+
+- $g = 2$: **every** genus-2 curve is hyperelliptic (since $\ell(K) = 2$ and $\deg K = 2$).
+- $g = 3$: a curve is hyperelliptic $\iff$ it is not a smooth plane quartic.
+- $g \geq 3$: the hyperelliptic locus is a proper subvariety of the moduli space $\mathcal{M}_g$.
+</Example>
+
+---
+
+## Riemann–Roch for surfaces
+
+<Theorem title="Riemann–Roch for surfaces (Noether's formula)">
+For a smooth projective surface $S$ and a divisor $D$:
+
+$$\chi(\mathcal{O}_S(D)) = \chi(\mathcal{O}_S) + \frac{1}{2}(D^2 - D \cdot K_S)$$
+
+where $D^2$ and $D \cdot K_S$ are intersection numbers. The **Noether formula** for the structure sheaf:
+
+$$\chi(\mathcal{O}_S) = \frac{1}{12}(K_S^2 + e(S))$$
+
+where $e(S)$ is the topological Euler characteristic.
+</Theorem>
+
+<Example id="rr-surface-P2" title="RR on ℙ²">
+On $\mathbb{P}^2$: $K = -3H$ (where $H$ is a line), $\chi(\mathcal{O}) = 1$, $H^2 = 1$. For $D = dH$:
+
+$$\chi(\mathcal{O}(d)) = 1 + \frac{1}{2}(d^2 + 3d) = \frac{(d+1)(d+2)}{2} = \binom{d+2}{2}.$$
+
+This matches $h^0(\mathcal{O}(d)) = \binom{d+2}{2}$ for $d \geq 0$ (and higher cohomology vanishes).
+</Example>
+
+<Example id="rr-surface-K3" title="RR on a K3 surface">
+A K3 surface $S$ has $K_S = 0$ and $\chi(\mathcal{O}_S) = 2$. For a divisor $D$:
+
+$$\chi(\mathcal{O}_S(D)) = 2 + \frac{D^2}{2}.$$
+
+If $D$ is effective with $D^2 = 2d - 2$ (e.g., a genus-$d$ curve), then $\chi = d + 1$. For a smooth curve $C \in |D|$ of genus $g = d$, Riemann–Roch on $S$ gives $h^0(\mathcal{O}_S(C)) \geq d + 1$ — a $(d+1)$-dimensional linear system of curves.
+</Example>
+
+---
+
+## Hirzebruch–Riemann–Roch and Grothendieck–Riemann–Roch
+
+<Theorem title="Hirzebruch–Riemann–Roch">
+For a smooth projective variety $X$ of dimension $n$ and a vector bundle $\mathcal{E}$:
+
+$$\chi(X, \mathcal{E}) = \int_X \operatorname{ch}(\mathcal{E}) \cdot \operatorname{td}(T_X)$$
+
+where $\operatorname{ch}(\mathcal{E}) = \operatorname{rk}(\mathcal{E}) + c_1(\mathcal{E}) + \frac{1}{2}(c_1^2 - 2c_2) + \cdots$ is the **Chern character** and $\operatorname{td}(T_X) = 1 + \frac{1}{2}c_1 + \frac{1}{12}(c_1^2 + c_2) + \cdots$ is the **Todd class**.
+</Theorem>
+
+<Example id="hrr-curve" title="HRR recovers classical RR for curves">
+For a curve $C$ and a line bundle $\mathcal{L}$ of degree $d$:
+- $\operatorname{ch}(\mathcal{L}) = 1 + c_1(\mathcal{L}) = 1 + d \cdot [\mathrm{pt}]$.
+- $\operatorname{td}(T_C) = 1 + \frac{1}{2}c_1(T_C) = 1 + (1 - g)[\mathrm{pt}]$.
+
+$$\chi(\mathcal{L}) = \int_C (1 + d[\mathrm{pt}])(1 + (1-g)[\mathrm{pt}]) = d + 1 - g. \quad \checkmark$$
+</Example>
+
+<Theorem title="Grothendieck–Riemann–Roch (GRR)">
+For a proper morphism $f: X \to Y$ and a coherent sheaf $\mathcal{F}$ on $X$:
+
+$$\operatorname{ch}(f_! \mathcal{F}) = f_*(\operatorname{ch}(\mathcal{F}) \cdot \operatorname{td}(T_{X/Y}))$$
+
+in the Chow ring $A^*(Y)_\mathbb{Q}$, where $f_! \mathcal{F} = \sum (-1)^i [R^i f_* \mathcal{F}]$ in $K_0(Y)$.
+
+GRR specializes to HRR when $Y = \operatorname{Spec} k$ (a point), and to the classical Riemann–Roch when $X$ is a curve.
+</Theorem>
+
+<Example id="grr-family" title="GRR for a family of curves">
+For a flat family $f: \mathcal{C} \to B$ of genus-$g$ curves, GRR computes the Chern classes of the **Hodge bundle** $\mathbb{E} = f_*\omega_{\mathcal{C}/B}$ (a rank-$g$ vector bundle on $B$):
+
+$$c_1(\mathbb{E}) = f_*\left(\frac{c_1(\omega_{\mathcal{C}/B})^2}{2} + \frac{c_1(\omega_{\mathcal{C}/B})c_1(\Omega^1_f)}{12}\right).$$
+
+This leads to the **Mumford formula** and is foundational for intersection theory on the moduli space $\overline{\mathcal{M}}_g$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Riemann–Roch across dimensions">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Dimension</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Formula</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Name</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">Curve ($n=1$)</td><td className="border border-gray-200 px-3 py-2">$\chi(\mathcal{L}) = \deg \mathcal{L} + 1 - g$</td><td className="border border-gray-200 px-3 py-2">Riemann–Roch</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Surface ($n=2$)</td><td className="border border-gray-200 px-3 py-2">$\chi(\mathcal{L}) = \chi(\mathcal{O}) + \frac{1}{2}(D^2 - D \cdot K)$</td><td className="border border-gray-200 px-3 py-2">Noether</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Any $n$</td><td className="border border-gray-200 px-3 py-2">$\chi(\mathcal{E}) = \int \operatorname{ch}(\mathcal{E}) \cdot \operatorname{td}(T_X)$</td><td className="border border-gray-200 px-3 py-2">Hirzebruch–RR</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Relative</td><td className="border border-gray-200 px-3 py-2">$\operatorname{ch}(f_!\mathcal{F}) = f_*(\operatorname{ch} \cdot \operatorname{td})$</td><td className="border border-gray-200 px-3 py-2">Grothendieck–RR</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Arithmetic</td><td className="border border-gray-200 px-3 py-2">$\widehat{\operatorname{ch}}(f_!\overline{\mathcal{F}}) = f_*(\widehat{\operatorname{ch}} \cdot \widehat{\operatorname{td}})$</td><td className="border border-gray-200 px-3 py-2">Arithmetic RR (Faltings, Gillet–Soulé)</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>

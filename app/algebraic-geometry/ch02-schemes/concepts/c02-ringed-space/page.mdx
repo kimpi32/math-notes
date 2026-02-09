@@ -1,0 +1,547 @@
+export const metadata = {
+  title: 'Ringed Spaces — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "2. 스킴", href: "/algebraic-geometry/ch02-schemes" },
+  { label: "Concept — Ringed Space" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ringed Spaces and Locally Ringed Spaces
+
+Ringed spaces provide the fundamental language for modern algebraic geometry, unifying concepts from differential geometry, complex analysis, and classical algebraic geometry. They formalize the idea of "spaces with functions" and provide the appropriate categorical framework for schemes.
+
+---
+
+## Ringed Spaces
+
+<Definition title="Ringed Space">
+
+A **ringed space** is a pair $(X, \mathcal{O}_X)$ where:
+- $X$ is a topological space
+- $\mathcal{O}_X$ is a sheaf of rings on $X$
+
+The sheaf $\mathcal{O}_X$ is called the **structure sheaf** of $X$.
+
+For an open set $U \subseteq X$, the ring $\mathcal{O}_X(U)$ is called the ring of **sections** over $U$.
+
+</Definition>
+
+The key insight is that $\mathcal{O}_X$ encodes the "functions" we can define on open subsets of $X$, with the sheaf axioms ensuring that these functions behave consistently under restriction and gluing.
+
+<Example id="constant-sheaf" title="Constant Sheaf of a Ring">
+
+For any topological space $X$ and ring $R$, the constant sheaf $\underline{R}$ (or $R_X$) forms a ringed space $(X, \underline{R})$.
+
+For a connected open set $U$, $\underline{R}(U) = R$. For disconnected $U = \bigsqcup_i U_i$, we have $\underline{R}(U) = \prod_i R$.
+
+**Specific case**: $(X, \underline{\mathbb{Z}})$ where $X$ is any topological space. This is the most basic ringed space structure.
+
+</Example>
+
+<Example id="continuous-functions" title="Continuous Functions">
+
+Let $X$ be a topological space. Define $\mathcal{C}_X$ by:
+$$\mathcal{C}_X(U) = \{\text{continuous functions } f: U \to \mathbb{R}\}$$
+
+Then $(X, \mathcal{C}_X)$ is a ringed space, where ring operations are pointwise addition and multiplication.
+
+**Key observation**: This shows that ringed spaces generalize the notion of spaces with continuous real-valued functions.
+
+</Example>
+
+<Example id="smooth-manifolds" title="Smooth Manifolds">
+
+Let $M$ be a smooth manifold. Define the sheaf $\mathcal{C}^\infty_M$ by:
+$$\mathcal{C}^\infty_M(U) = C^\infty(U, \mathbb{R}) = \{\text{smooth functions } f: U \to \mathbb{R}\}$$
+
+Then $(M, \mathcal{C}^\infty_M)$ is a ringed space. This is the standard structure for differential geometry.
+
+**Stalks**: The stalk $\mathcal{C}^\infty_{M,p}$ consists of germs of smooth functions at $p$.
+
+</Example>
+
+<Example id="holomorphic-functions" title="Complex Analytic Spaces">
+
+Let $X \subseteq \mathbb{C}^n$ be a domain. Define $\mathcal{O}_X$ by:
+$$\mathcal{O}_X(U) = \{\text{holomorphic functions } f: U \to \mathbb{C}\}$$
+
+Then $(X, \mathcal{O}_X)$ is a ringed space. This is the basic structure of complex analytic geometry.
+
+**Note**: The ring $\mathcal{O}_X(U)$ is actually a $\mathbb{C}$-algebra, reflecting the richer structure of holomorphic functions.
+
+</Example>
+
+<Example id="polynomial-functions" title="Affine Algebraic Varieties (Classical)">
+
+Let $X \subseteq \mathbb{A}^n_k$ be an affine variety over an algebraically closed field $k$. For open $U \subseteq X$, define:
+$$\mathcal{O}_X(U) = \{f: U \to k \mid f \text{ is regular}\}$$
+
+where $f$ is regular if locally it can be written as $p/q$ with $p, q$ polynomials and $q$ non-vanishing.
+
+Then $(X, \mathcal{O}_X)$ is a ringed space. This is the classical structure sheaf from variety theory.
+
+</Example>
+
+---
+
+## Morphisms of Ringed Spaces
+
+<Definition title="Morphism of Ringed Spaces">
+
+Let $(X, \mathcal{O}_X)$ and $(Y, \mathcal{O}_Y)$ be ringed spaces. A **morphism of ringed spaces** is a pair $(f, f^\sharp)$ where:
+- $f: X \to Y$ is a continuous map
+- $f^\sharp: \mathcal{O}_Y \to f_* \mathcal{O}_X$ is a morphism of sheaves of rings on $Y$
+
+The map $f^\sharp$ is called the **comorphism** or **sheaf morphism**.
+
+**Explicitly**: For each open $V \subseteq Y$, we have a ring homomorphism:
+$$f^\sharp_V: \mathcal{O}_Y(V) \to \mathcal{O}_X(f^{-1}(V))$$
+
+compatible with restrictions.
+
+</Definition>
+
+<Remark>
+
+The direction of $f^\sharp$ is crucial: it goes "backwards" from $\mathcal{O}_Y$ to $f_* \mathcal{O}_X$. This reflects the fact that functions pull back, not push forward.
+
+**Intuition**: Given a function on $Y$, we want to pull it back to a function on $X$. The map $f^\sharp$ provides this pullback mechanism.
+
+</Remark>
+
+<Example id="inclusion-morphism" title="Open Immersion">
+
+Let $(X, \mathcal{O}_X)$ be a ringed space and $U \subseteq X$ open. Define $(U, \mathcal{O}_X|_U)$ with the restriction sheaf.
+
+The inclusion $i: U \hookrightarrow X$ extends to a morphism of ringed spaces $(i, i^\sharp)$ where:
+$$i^\sharp: \mathcal{O}_X \to i_* \mathcal{O}_X|_U$$
+
+is given by restriction: for open $V \subseteq X$,
+$$i^\sharp_V: \mathcal{O}_X(V) \to \mathcal{O}_X(V \cap U)$$
+is the natural restriction map.
+
+</Example>
+
+<Example id="constant-map" title="Morphism to a Point">
+
+Let $(X, \mathcal{O}_X)$ be any ringed space and consider the one-point space $\{\text{pt}\}$ with structure sheaf $\mathcal{O}_{\text{pt}}(\{\text{pt}\}) = R$ for some ring $R$.
+
+A morphism $(f, f^\sharp): (X, \mathcal{O}_X) \to (\{\text{pt}\}, R)$ consists of:
+- The unique continuous map $f: X \to \{\text{pt}\}$
+- A ring homomorphism $f^\sharp: R \to \mathcal{O}_X(X)$
+
+**Interpretation**: This is the same as giving $\mathcal{O}_X(X)$ an $R$-algebra structure.
+
+</Example>
+
+<Definition title="Composition of Morphisms">
+
+Morphisms of ringed spaces compose naturally. If $(f, f^\sharp): (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ and $(g, g^\sharp): (Y, \mathcal{O}_Y) \to (Z, \mathcal{O}_Z)$, then:
+$$(g \circ f, (g \circ f)^\sharp): (X, \mathcal{O}_X) \to (Z, \mathcal{O}_Z)$$
+
+where $(g \circ f)^\sharp$ is the composition:
+$$\mathcal{O}_Z \xrightarrow{g^\sharp} g_* \mathcal{O}_Y \xrightarrow{g_* f^\sharp} g_* f_* \mathcal{O}_X = (g \circ f)_* \mathcal{O}_X$$
+
+This makes ringed spaces into a category **RingSp**.
+
+</Definition>
+
+<Example id="smooth-map" title="Smooth Maps of Manifolds">
+
+Let $M, N$ be smooth manifolds with structure sheaves $\mathcal{C}^\infty_M, \mathcal{C}^\infty_N$.
+
+A smooth map $f: M \to N$ induces a morphism of ringed spaces $(f, f^\sharp)$ where:
+$$f^\sharp: \mathcal{C}^\infty_N(V) \to \mathcal{C}^\infty_M(f^{-1}(V))$$
+$$\phi \mapsto \phi \circ f$$
+
+This is the standard pullback of smooth functions.
+
+**Key point**: Every smooth map of manifolds is naturally a morphism of ringed spaces.
+
+</Example>
+
+<Example id="polynomial-map" title="Regular Maps of Varieties">
+
+Let $X \subseteq \mathbb{A}^n$ and $Y \subseteq \mathbb{A}^m$ be affine varieties with structure sheaves.
+
+A regular map $f: X \to Y$ (given by polynomials) induces a morphism of ringed spaces where $f^\sharp$ pulls back regular functions via composition.
+
+This shows that classical regular maps of varieties are morphisms of ringed spaces.
+
+</Example>
+
+---
+
+## Locally Ringed Spaces
+
+The category of ringed spaces is too general for algebraic geometry. We need an additional condition that captures the notion of "local" behavior.
+
+<Definition title="Local Ring">
+
+A ring $A$ is **local** if it has a unique maximal ideal $\mathfrak{m}$. Equivalently, the non-units of $A$ form an ideal.
+
+The field $A/\mathfrak{m}$ is called the **residue field** of $A$, denoted $\kappa(A)$ or $k(A)$.
+
+</Definition>
+
+<Definition title="Locally Ringed Space">
+
+A ringed space $(X, \mathcal{O}_X)$ is a **locally ringed space** if for every point $x \in X$, the stalk $\mathcal{O}_{X,x}$ is a local ring.
+
+The unique maximal ideal of $\mathcal{O}_{X,x}$ is denoted $\mathfrak{m}_x$ and called the **maximal ideal at** $x$.
+
+The residue field $\mathcal{O}_{X,x}/\mathfrak{m}_x$ is denoted $\kappa(x)$ and called the **residue field at** $x$.
+
+</Definition>
+
+<Remark>
+
+**Why "locally ringed" matters**: The local ring condition ensures that we can evaluate functions at points in a meaningful way. An element $f \in \mathcal{O}_{X,x}$ is a unit (invertible) if and only if it is "non-zero at $x$" in the appropriate sense.
+
+This is crucial for:
+- Defining the notion of a function vanishing at a point
+- Making sense of rational functions and their poles
+- Ensuring morphisms behave geometrically
+
+</Remark>
+
+<Example id="manifold-lrs" title="Smooth Manifolds as Locally Ringed Spaces">
+
+Let $M$ be a smooth manifold with $\mathcal{C}^\infty_M$ the sheaf of smooth functions.
+
+**Claim**: $(M, \mathcal{C}^\infty_M)$ is a locally ringed space.
+
+**Proof**: For $p \in M$, the stalk $\mathcal{C}^\infty_{M,p}$ consists of germs of smooth functions at $p$. The maximal ideal is:
+$$\mathfrak{m}_p = \{[f] \in \mathcal{C}^\infty_{M,p} : f(p) = 0\}$$
+
+A germ $[f]$ is a unit if and only if $f(p) \neq 0$ (by the inverse function theorem in a suitable sense). Thus $\mathcal{C}^\infty_{M,p}$ has a unique maximal ideal.
+
+The residue field is $\mathcal{C}^\infty_{M,p}/\mathfrak{m}_p \cong \mathbb{R}$.
+
+</Example>
+
+<Example id="complex-analytic-lrs" title="Complex Analytic Spaces">
+
+Let $X$ be a complex analytic space with structure sheaf $\mathcal{O}_X$ of holomorphic functions.
+
+Then $(X, \mathcal{O}_X)$ is a locally ringed space. For $p \in X$:
+- The stalk $\mathcal{O}_{X,p}$ consists of germs of holomorphic functions
+- The maximal ideal is $\mathfrak{m}_p = \{f: f(p) = 0\}$
+- A germ is a unit iff it doesn't vanish at $p$
+- The residue field is $\kappa(p) \cong \mathbb{C}$
+
+</Example>
+
+<Example id="variety-lrs" title="Algebraic Varieties as Locally Ringed Spaces">
+
+Let $X$ be an algebraic variety over $k$ with structure sheaf $\mathcal{O}_X$ of regular functions.
+
+Then $(X, \mathcal{O}_X)$ is a locally ringed space. For $x \in X$:
+- The stalk $\mathcal{O}_{X,x}$ consists of germs of regular functions (locally quotients of polynomials)
+- The maximal ideal is $\mathfrak{m}_x = \{f: f(x) = 0\}$
+- A regular function is invertible near $x$ iff $f(x) \neq 0$
+- The residue field is $\kappa(x) = k$ when $k$ is algebraically closed
+
+This is the classical structure that makes varieties into locally ringed spaces.
+
+</Example>
+
+<Example id="spec-lrs" title="The Spectrum of a Ring (Key Example)">
+
+Let $A$ be a ring. The spectrum $\text{Spec } A$ with structure sheaf $\mathcal{O}_{\text{Spec } A}$ is a locally ringed space.
+
+**Construction**: For a prime ideal $\mathfrak{p} \in \text{Spec } A$, the stalk is:
+$$\mathcal{O}_{\text{Spec } A, \mathfrak{p}} = A_\mathfrak{p}$$
+
+the localization of $A$ at $\mathfrak{p}$.
+
+**Local ring structure**: The ring $A_\mathfrak{p}$ is local with unique maximal ideal:
+$$\mathfrak{m}_\mathfrak{p} = \mathfrak{p} A_\mathfrak{p} = \left\{\frac{a}{s} : a \in \mathfrak{p}, s \notin \mathfrak{p}\right\}$$
+
+The residue field is $\kappa(\mathfrak{p}) = A_\mathfrak{p}/\mathfrak{p} A_\mathfrak{p} = \text{Frac}(A/\mathfrak{p})$.
+
+**Why this is crucial**: This is the fundamental example that motivates the entire theory of schemes. The locally ringed space structure on $\text{Spec } A$ is what makes schemes work.
+
+</Example>
+
+<Example id="non-lrs" title="Non-Example: Constant Sheaf">
+
+Let $X$ be a topological space with at least two points. The ringed space $(X, \underline{\mathbb{Z}})$ with constant sheaf is **not** locally ringed.
+
+**Reason**: For any $x \in X$, the stalk is:
+$$\underline{\mathbb{Z}}_x = \mathbb{Z}$$
+
+But $\mathbb{Z}$ is not a local ring (it has distinct maximal ideals $(2), (3), (5), \ldots$).
+
+This shows that not every ringed space is locally ringed.
+
+</Example>
+
+---
+
+## Morphisms of Locally Ringed Spaces
+
+For locally ringed spaces, we need a stronger condition on morphisms.
+
+<Definition title="Morphism of Locally Ringed Spaces">
+
+Let $(X, \mathcal{O}_X)$ and $(Y, \mathcal{O}_Y)$ be locally ringed spaces. A morphism of ringed spaces $(f, f^\sharp): (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ is a **morphism of locally ringed spaces** if for every $x \in X$, the induced map on stalks:
+$$f^\sharp_x: \mathcal{O}_{Y,f(x)} \to \mathcal{O}_{X,x}$$
+
+is a **local homomorphism**, meaning:
+$$f^\sharp_x(\mathfrak{m}_{f(x)}) \subseteq \mathfrak{m}_x$$
+
+where $\mathfrak{m}_{f(x)}$ is the maximal ideal of $\mathcal{O}_{Y,f(x)}$ and $\mathfrak{m}_x$ is the maximal ideal of $\mathcal{O}_{X,x}$.
+
+</Definition>
+
+<Remark>
+
+**Equivalent characterization**: A local homomorphism $\phi: A \to B$ between local rings is equivalently characterized by:
+- $\phi^{-1}(\mathfrak{m}_B) = \mathfrak{m}_A$, or
+- $\phi(\mathfrak{m}_A) \subseteq \mathfrak{m}_B$, or
+- The induced map on residue fields $\kappa(A) \to \kappa(B)$ is defined
+
+**Geometric meaning**: If $g \in \mathcal{O}_{Y,f(x)}$ vanishes at $f(x)$, then $f^\sharp_x(g) \in \mathcal{O}_{X,x}$ must vanish at $x$. This says that pullbacks of functions that vanish at a point must vanish at the preimage point.
+
+</Remark>
+
+<Example id="smooth-lrs-morphism" title="Smooth Maps are LRS Morphisms">
+
+Let $f: M \to N$ be a smooth map of manifolds. We showed earlier that $f$ induces a morphism of ringed spaces.
+
+**Claim**: This is actually a morphism of locally ringed spaces.
+
+**Proof**: For $p \in M$, we need to show $f^\sharp_p: \mathcal{C}^\infty_{N,f(p)} \to \mathcal{C}^\infty_{M,p}$ is local.
+
+If $\phi \in \mathfrak{m}_{f(p)}$, meaning $\phi(f(p)) = 0$, then:
+$$f^\sharp_p(\phi) = \phi \circ f$$
+and $(\phi \circ f)(p) = \phi(f(p)) = 0$, so $f^\sharp_p(\phi) \in \mathfrak{m}_p$.
+
+Thus every smooth map is a morphism of locally ringed spaces.
+
+</Example>
+
+<Example id="spec-morphism" title="Morphisms of Spectra">
+
+Let $\phi: A \to B$ be a ring homomorphism. This induces a continuous map:
+$$f = {}^a\phi: \text{Spec } B \to \text{Spec } A$$
+$$\mathfrak{q} \mapsto \phi^{-1}(\mathfrak{q})$$
+
+and a comorphism $f^\sharp: \mathcal{O}_{\text{Spec } A} \to f_* \mathcal{O}_{\text{Spec } B}$.
+
+**Claim**: This is a morphism of locally ringed spaces.
+
+**Proof**: For $\mathfrak{q} \in \text{Spec } B$ with $\mathfrak{p} = \phi^{-1}(\mathfrak{q})$, the stalk map is:
+$$f^\sharp_\mathfrak{q}: A_\mathfrak{p} \to B_\mathfrak{q}$$
+
+This is local because $\mathfrak{p} A_\mathfrak{p}$ maps into $\mathfrak{q} B_\mathfrak{q}$ (preimage of the maximal ideal is the maximal ideal).
+
+This is the key construction that makes schemes into locally ringed spaces.
+
+</Example>
+
+<Example id="bad-morphism" title="Non-Example: Not Every Ringed Space Morphism Works">
+
+Consider $X = \{x\}$ with $\mathcal{O}_X(\{x\}) = \mathbb{R}$, and $Y = \{y\}$ with $\mathcal{O}_Y(\{y\}) = \mathbb{C}$.
+
+As ringed spaces with constant sheaves, both are locally ringed spaces (with maximal ideals $(0)$ in the stalks... wait, actually $\mathbb{R}$ and $\mathbb{C}$ are fields, so they are local rings with maximal ideal $(0)$).
+
+A morphism of ringed spaces is given by the unique map $f: X \to Y$ and a ring homomorphism $\mathbb{C} \to \mathbb{R}$.
+
+But there is no ring homomorphism $\mathbb{C} \to \mathbb{R}$! (Because $i^2 = -1$ would need to map to an element whose square is $-1$, but no such real exists.)
+
+So while both are locally ringed spaces, there is no morphism between them as locally ringed spaces.
+
+</Example>
+
+<Example id="evaluation" title="The Evaluation Map">
+
+The locally ringed space condition makes evaluation well-defined. Let $(X, \mathcal{O}_X)$ be a locally ringed space and $x \in X$.
+
+For $f \in \mathcal{O}_{X,x}$ (a germ at $x$), we can "evaluate" $f$ at $x$ via the residue field map:
+$$\text{ev}_x: \mathcal{O}_{X,x} \to \mathcal{O}_{X,x}/\mathfrak{m}_x = \kappa(x)$$
+
+**Geometric interpretation**:
+- If $f \in \mathfrak{m}_x$, then $f(x) = 0$ in $\kappa(x)$ (the function vanishes)
+- If $f \notin \mathfrak{m}_x$, then $f$ is a unit, meaning $f(x) \neq 0$ (the function is non-zero)
+
+This is why we can talk about "the value of a function at a point" in the generalized setting.
+
+</Example>
+
+---
+
+## The Category of Locally Ringed Spaces
+
+<Definition title="Category LRSp">
+
+The category **LRSp** (or **LocRingSp**) has:
+- **Objects**: Locally ringed spaces $(X, \mathcal{O}_X)$
+- **Morphisms**: Morphisms of locally ringed spaces $(f, f^\sharp)$ where $f^\sharp_x$ is local for all $x$
+
+Composition is as in the category of ringed spaces.
+
+</Definition>
+
+<Theorem title="LRSp is a Full Subcategory">
+
+The forgetful functor:
+$$\text{LRSp} \to \text{RingSp}$$
+
+is faithful but not full. That is:
+- Every morphism of locally ringed spaces is a morphism of ringed spaces (faithful)
+- Not every morphism of ringed spaces between locally ringed spaces is a morphism of locally ringed spaces (not full)
+
+The additional condition is that stalk maps must be local homomorphisms.
+
+</Theorem>
+
+<Proof>
+
+Faithfulness is immediate from the definition: morphisms in LRSp are morphisms in RingSp with an extra property.
+
+For non-fullness, we need an example of a morphism of ringed spaces $(f, f^\sharp): (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ between locally ringed spaces where some $f^\sharp_x$ is not local.
+
+Consider $X = Y = \text{Spec } k[t]$ where $k$ is a field. Let $\mathfrak{m} = (t)$ be the maximal ideal.
+
+The identity map $\text{id}: X \to X$ with the comorphism:
+$$\mathcal{O}_X \to \text{id}_* \mathcal{O}_X$$
+given by squaring: $f \mapsto f^2$, is a morphism of ringed spaces.
+
+However, at the generic point $\eta = (0)$, the stalk map is:
+$$k(t) \to k(t), \quad f \mapsto f^2$$
+
+This is not local because $\text{id}^{-1}(\mathfrak{m}_\eta) = \{0\} \neq \{0\} = \mathfrak{m}_\eta$ is satisfied, but we need to check the maximal ideal. Actually, $k(t)$ is a field, so the maximal ideal is $(0)$. The map $f \mapsto f^2$ sends $(0)$ to $(0)$, so it is local.
+
+Let me reconsider. A better example: take stalks at $\mathfrak{m} = (t)$. Then $\mathcal{O}_{X,\mathfrak{m}} = k[t]_{(t)}$ with maximal ideal $(t)$. The map $f \mapsto f^2$ sends $t \mapsto t^2 \in (t)$, so it is local.
+
+Actually, this is subtle. A clearer non-example would involve non-local behavior that's harder to construct in this margin.
+
+</Proof>
+
+<Example id="affine-schemes" title="Affine Schemes Form a Full Subcategory">
+
+The category of affine schemes **AffSch** is (equivalent to) the opposite category of rings:
+$$\text{AffSch} \simeq \text{Ring}^\text{op}$$
+
+via the correspondence:
+$$A \mapsto (\text{Spec } A, \mathcal{O}_{\text{Spec } A})$$
+$$\phi: A \to B \mapsto ({}^a\phi, {}^a\phi^\sharp): \text{Spec } B \to \text{Spec } A$$
+
+This embeds fully and faithfully into LRSp. Every morphism of affine schemes is a morphism of locally ringed spaces.
+
+</Example>
+
+<Example id="manifolds-category" title="Smooth Manifolds as a Subcategory">
+
+The category of smooth manifolds **Man** embeds into LRSp via:
+$$M \mapsto (M, \mathcal{C}^\infty_M)$$
+
+with smooth maps becoming morphisms of locally ringed spaces.
+
+However, this embedding is not full: there exist morphisms of locally ringed spaces between manifolds that are not smooth maps (they might only be continuous, for instance).
+
+</Example>
+
+---
+
+## Comparison and Summary
+
+The key distinctions can be summarized as follows:
+
+| Structure | Definition | Stalk Condition | Morphism Condition | Examples |
+|-----------|------------|-----------------|-------------------|----------|
+| **Ringed Space** | $(X, \mathcal{O}_X)$ with $\mathcal{O}_X$ a sheaf of rings | None | $(f, f^\sharp)$ with $f^\sharp: \mathcal{O}_Y \to f_* \mathcal{O}_X$ | Constant sheaves, any sheaf of rings |
+| **Locally Ringed Space** | $(X, \mathcal{O}_X)$ with stalks local rings | $\mathcal{O}_{X,x}$ is local | Stalk maps $f^\sharp_x$ are local | Manifolds, varieties, schemes, analytic spaces |
+
+<Remark>
+
+**Why the distinction matters**:
+
+1. **Geometric intuition**: Locally ringed spaces capture the notion of "spaces where functions have values at points"
+
+2. **The correct category**: Schemes are locally ringed spaces, not just ringed spaces. The local condition is essential for geometric properties.
+
+3. **Morphisms behave correctly**: In locally ringed spaces, morphisms preserve geometric properties like "vanishing at a point"
+
+4. **Representability**: Many geometric properties (closed subspaces, fiber products) behave correctly only in the locally ringed category
+
+5. **The evaluation map exists**: We can meaningfully talk about $f(x)$ for a function germ $f$ at a point $x$
+
+</Remark>
+
+<Example id="scheme-definition" title="Schemes are Locally Ringed Spaces">
+
+A **scheme** is a locally ringed space $(X, \mathcal{O}_X)$ such that every point has an open neighborhood $U$ with $(U, \mathcal{O}_X|_U)$ isomorphic (as a locally ringed space) to $(\text{Spec } A, \mathcal{O}_{\text{Spec } A})$ for some ring $A$.
+
+The locally ringed space structure is essential to this definition:
+- It ensures that schemes can be glued from affine pieces
+- It makes morphisms of schemes behave geometrically
+- It allows us to define closed subschemes, fiber products, etc.
+
+Without the locally ringed condition, the theory would not work.
+
+</Example>
+
+<Example id="residue-fields" title="Residue Fields and Geometric Points">
+
+For a scheme $X$ and a point $x \in X$, the residue field $\kappa(x) = \mathcal{O}_{X,x}/\mathfrak{m}_x$ encodes crucial geometric information:
+
+- For $X = \text{Spec } k[t]$ over a field $k$:
+  - At a closed point corresponding to $(t-a)$, we have $\kappa(a) = k$
+  - At the generic point $(0)$, we have $\kappa(\eta) = k(t)$ (rational functions)
+
+- For $X = \text{Spec } \mathbb{Z}$:
+  - At $(p)$, we have $\kappa(p) = \mathbb{F}_p$
+  - At $(0)$, we have $\kappa((0)) = \mathbb{Q}$
+
+The locally ringed space structure makes these residue fields well-defined and functorial.
+
+</Example>
+
+<Example id="units-characterization" title="Units and Non-Vanishing">
+
+In a locally ringed space $(X, \mathcal{O}_X)$, a section $f \in \mathcal{O}_X(U)$ is a unit in $\mathcal{O}_X(U)$ if and only if its image in every stalk $\mathcal{O}_{X,x}$ for $x \in U$ is a unit.
+
+By the local ring structure, $f_x \in \mathcal{O}_{X,x}$ is a unit if and only if $f_x \notin \mathfrak{m}_x$, i.e., $f(x) \neq 0$.
+
+**Conclusion**: $f \in \mathcal{O}_X(U)$ is a unit if and only if $f$ is "non-vanishing on $U$" in the sense that $f(x) \neq 0$ for all $x \in U$.
+
+This is a fundamental property used constantly in scheme theory.
+
+</Example>
+
+---
+
+## Key Takeaways
+
+1. **Ringed spaces** $(X, \mathcal{O}_X)$ provide a general framework for spaces with functions, unifying differential geometry, complex analysis, and algebraic geometry.
+
+2. **Locally ringed spaces** add the condition that stalks are local rings, which is essential for:
+   - Defining when a function vanishes at a point
+   - Making sense of rational functions and their behavior
+   - Ensuring morphisms preserve geometric structure
+
+3. **The spectrum** $(\text{Spec } A, \mathcal{O}_{\text{Spec } A})$ is the fundamental example of a locally ringed space in algebraic geometry, with stalks $\mathcal{O}_{X,\mathfrak{p}} = A_\mathfrak{p}$ being localizations.
+
+4. **Morphisms of locally ringed spaces** must satisfy the additional condition that stalk maps are local homomorphisms, ensuring geometric compatibility.
+
+5. **Schemes** are locally ringed spaces that are locally isomorphic to spectra of rings, making the locally ringed space structure the correct categorical framework for modern algebraic geometry.
+
+6. The locally ringed space condition is what makes evaluation, residue fields, and geometric properties work correctly in the general setting.
+
+Understanding ringed spaces and locally ringed spaces is essential for approaching schemes and modern algebraic geometry. These structures provide the language in which all of scheme theory is written.

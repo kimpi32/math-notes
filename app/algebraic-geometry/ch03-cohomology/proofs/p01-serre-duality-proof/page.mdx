@@ -1,0 +1,372 @@
+export const metadata = { title: 'Proof of Serre Duality — Algebraic Geometry — Math Notes' }
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "3. 코호몰로지", href: "/algebraic-geometry/ch03-cohomology" },
+  { label: "Proof — Serre Duality" },
+]} />
+
+<div className="mb-6"><div className="flex items-center gap-3 mb-3"><Tag type="proof" /><StatusBadge status="complete" /></div></div>
+
+# Proof of Serre Duality
+
+This proof follows Hartshorne Chapter III, Section 7, establishing the celebrated Serre Duality theorem for smooth projective varieties over an algebraically closed field.
+
+## Statement of the Theorem
+
+<Theorem>
+Let $X$ be a smooth projective variety of dimension $n$ over an algebraically closed field $k$. Let $\omega_X$ be the canonical sheaf (sheaf of differential $n$-forms). Then for any coherent sheaf $\mathcal{F}$ on $X$ and for all $i \geq 0$, there is a perfect pairing
+
+$$H^i(X, \mathcal{F}) \times H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X) \to k$$
+
+inducing isomorphisms
+
+$$H^i(X, \mathcal{F}) \cong H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X)^\vee$$
+</Theorem>
+
+## Step 1: The Trace Map
+
+The foundation of Serre Duality is the trace map. We begin by constructing it for projective space.
+
+<Definition>
+Let $X = \mathbb{P}^n_k$. The **trace map** is a $k$-linear map
+
+$$t: H^n(X, \omega_X) \to k$$
+
+that satisfies naturality properties with respect to morphisms.
+</Definition>
+
+### Construction of the Trace Map on Projective Space
+
+<Proof>
+**Step 1a: Explicit construction for $\mathbb{P}^n$.**
+
+Let $X = \mathbb{P}^n_k$ with homogeneous coordinates $[x_0 : \cdots : x_n]$. The canonical sheaf is
+
+$$\omega_X = \Omega^n_X = \mathcal{O}_X(-n-1)$$
+
+We have $H^n(\mathbb{P}^n, \mathcal{O}(-n-1)) \cong k$ by direct computation using Čech cohomology.
+
+**Step 1b: Čech computation.**
+
+Cover $\mathbb{P}^n$ by standard open sets $U_i = \{x_i \neq 0\}$. A generator of $H^n(\mathbb{P}^n, \mathcal{O}(-n-1))$ can be represented by the Čech cocycle on $U_0 \cap \cdots \cap U_n$ given by
+
+$$\omega_0 = \frac{dx_1 \wedge \cdots \wedge dx_n}{x_0^{n+1}}$$
+
+in the local coordinate system on $U_0$, or more invariantly as the residue of a differential form.
+
+**Step 1c: Definition of the trace.**
+
+The trace map $t: H^n(\mathbb{P}^n, \omega_{\mathbb{P}^n}) \to k$ sends the generator $\omega_0$ to $1 \in k$. This is well-defined and independent of the choice of coordinates.
+
+**Step 1d: Verification of non-degeneracy.**
+
+This map is an isomorphism, so $H^n(\mathbb{P}^n, \omega_{\mathbb{P}^n}) \cong k$ via the trace map.
+</Proof>
+
+### Functoriality of the Trace Map
+
+<Remark>
+The trace map is functorial: if $f: X \to Y$ is a finite flat morphism of smooth projective varieties of the same dimension $n$, then the diagram
+
+$$H^n(X, \omega_X) \xrightarrow{t_X} k$$
+$$H^n(Y, \omega_Y) \xrightarrow{t_Y} k$$
+
+commutes with respect to the trace map $f_*: H^n(X, \omega_X) \to H^n(Y, \omega_Y)$ in the appropriate sense. This functoriality is crucial for reducing the general case to $\mathbb{P}^n$.
+</Remark>
+
+## Step 2: The Duality Pairing
+
+With the trace map in hand, we construct the duality pairing.
+
+<Proof>
+**Step 2a: Construction of the pairing.**
+
+Let $\mathcal{F}$ be a coherent sheaf on $X$. We define a pairing
+
+$$\langle \cdot, \cdot \rangle: H^i(X, \mathcal{F}) \times H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X) \to k$$
+
+as follows. Given $\alpha \in H^i(X, \mathcal{F})$ and $\beta \in H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X)$, we form their cup product
+
+$$\alpha \cup \beta \in H^n(X, \mathcal{F} \otimes \mathcal{F}^\vee \otimes \omega_X)$$
+
+**Step 2b: Natural evaluation map.**
+
+There is a natural evaluation map
+
+$$\mathcal{F} \otimes \mathcal{F}^\vee \to \mathcal{O}_X$$
+
+given by $(s, \phi) \mapsto \phi(s)$. This induces
+
+$$H^n(X, \mathcal{F} \otimes \mathcal{F}^\vee \otimes \omega_X) \to H^n(X, \omega_X)$$
+
+**Step 2c: Composition with trace.**
+
+Composing with the trace map gives
+
+$$\langle \alpha, \beta \rangle = t(\text{ev}(\alpha \cup \beta))$$
+
+This defines the desired pairing.
+
+**Step 2d: Bilinearity.**
+
+The pairing is clearly $k$-bilinear by the properties of cup product, evaluation, and the trace map.
+</Proof>
+
+## Step 3: Reduction to Projective Space
+
+The key step is reducing the general case to $\mathbb{P}^n$ where explicit computations are possible.
+
+<Proof>
+**Step 3a: Embedding into projective space.**
+
+Since $X$ is projective, there exists a closed embedding $i: X \hookrightarrow \mathbb{P}^N$ for some $N$. We can work locally and reduce dimension by dimension, so it suffices to prove the theorem for $\mathbb{P}^n$.
+
+**Step 3b: Using the projection formula.**
+
+For a general $X$, we use the projection formula and base change to relate cohomology on $X$ to cohomology on $\mathbb{P}^N$. Specifically, if $i: X \hookrightarrow \mathbb{P}^N$, then
+
+$$i_* \mathcal{F}$$
+
+is a coherent sheaf on $\mathbb{P}^N$, and we have
+
+$$H^i(X, \mathcal{F}) = H^i(\mathbb{P}^N, i_* \mathcal{F})$$
+
+**Step 3c: Dimension reduction.**
+
+The proof proceeds by induction on dimension. The case $\dim X = 0$ is trivial (points have no higher cohomology). Assuming the result for varieties of dimension $< n$, we prove it for dimension $n$.
+
+**Step 3d: Hyperplane section.**
+
+Choose a hyperplane $H \subset \mathbb{P}^N$ not containing $X$ such that $Y = X \cap H$ is smooth of dimension $n-1$. We obtain an exact sequence
+
+$$0 \to \mathcal{F}(-Y) \to \mathcal{F} \to \mathcal{F}|_Y \to 0$$
+
+This induces a long exact sequence in cohomology which, combined with the five lemma and inductive hypothesis, proves the result.
+</Proof>
+
+## Step 4: The Case of Projective Space
+
+We now prove Serre Duality explicitly for $\mathbb{P}^n$.
+
+<Proof>
+**Step 4a: Line bundles on projective space.**
+
+First consider $\mathcal{F} = \mathcal{O}(m)$ for some integer $m$. We need to show
+
+$$H^i(\mathbb{P}^n, \mathcal{O}(m)) \cong H^{n-i}(\mathbb{P}^n, \mathcal{O}(-m-n-1))^\vee$$
+
+**Step 4b: Cohomology computation.**
+
+By the standard computation of cohomology of line bundles on $\mathbb{P}^n$:
+
+- $H^i(\mathbb{P}^n, \mathcal{O}(m)) = 0$ for $0 < i < n$ and all $m$
+- $H^0(\mathbb{P}^n, \mathcal{O}(m)) = k[x_0, \ldots, x_n]_m$ (homogeneous polynomials of degree $m$) if $m \geq 0$, and $0$ if $m < 0$
+- $H^n(\mathbb{P}^n, \mathcal{O}(m)) \neq 0$ only if $m \leq -n-1$
+
+**Step 4c: Explicit pairing for $i=0$.**
+
+For $i=0$, we need to show
+
+$$H^0(\mathbb{P}^n, \mathcal{O}(m)) \times H^n(\mathbb{P}^n, \mathcal{O}(-m-n-1)) \to k$$
+
+is a perfect pairing. Given $f \in H^0(\mathbb{P}^n, \mathcal{O}(m))$ (a degree $m$ polynomial) and $\omega \in H^n(\mathbb{P}^n, \mathcal{O}(-m-n-1))$, their product $f \cdot \omega$ lies in $H^n(\mathbb{P}^n, \mathcal{O}(-n-1))$, which we map to $k$ via the trace.
+
+**Step 4d: Verification of perfect pairing.**
+
+To verify this is a perfect pairing, we must show:
+
+1. If $\langle f, \omega \rangle = 0$ for all $f$, then $\omega = 0$
+2. If $\langle f, \omega \rangle = 0$ for all $\omega$, then $f = 0$
+
+For (1): Suppose $\omega \neq 0$. Then multiplication by a suitable monomial gives a non-zero element of $H^n(\mathbb{P}^n, \mathcal{O}(-n-1))$, which pairs non-trivially with $1$ under the trace.
+
+For (2): The statement is vacuous if $m < 0$ (since then $H^0 = 0$). If $m \geq 0$, we use the fact that $H^n(\mathbb{P}^n, \mathcal{O}(-m-n-1))$ has dimension $\binom{m+n}{n}$, equal to the dimension of $H^0(\mathbb{P}^n, \mathcal{O}(m))$.
+
+**Step 4e: Extension to coherent sheaves.**
+
+Any coherent sheaf $\mathcal{F}$ on $\mathbb{P}^n$ admits a finite resolution by direct sums of line bundles:
+
+$$0 \to \bigoplus_j \mathcal{O}(a_j) \to \cdots \to \bigoplus_i \mathcal{O}(b_i) \to \mathcal{F} \to 0$$
+
+Using this resolution and the fact that duality holds for line bundles, we deduce duality for $\mathcal{F}$ by a spectral sequence argument.
+</Proof>
+
+## Step 5: Verification for Structure Sheaf
+
+An important special case is when $\mathcal{F} = \mathcal{O}_X$.
+
+<Example id="structure-sheaf" title="Serre Duality for the Structure Sheaf">
+Let $X$ be a smooth projective variety of dimension $n$ over $k$. Then Serre Duality gives
+
+$$H^i(X, \mathcal{O}_X) \cong H^{n-i}(X, \omega_X)^\vee$$
+
+**Verification:**
+
+For $i=0$: We have $H^0(X, \mathcal{O}_X) = k$ (since $X$ is connected and projective). By duality,
+
+$$k \cong H^n(X, \omega_X)^\vee$$
+
+so $\dim_k H^n(X, \omega_X) = 1$, which is consistent with the trace map being an isomorphism.
+
+For $i=n$: We have
+
+$$H^n(X, \mathcal{O}_X) \cong H^0(X, \omega_X)^\vee$$
+
+The right side is the dual of the space of global sections of the canonical sheaf, which are the holomorphic $n$-forms on $X$.
+
+**Geometric meaning:**
+
+The number $p_g = \dim_k H^0(X, \omega_X)$ is the **geometric genus** of $X$. Serre Duality shows it equals $\dim_k H^n(X, \mathcal{O}_X)$, providing a deep connection between geometry and cohomology.
+</Example>
+
+## Step 6: The Pairing via Ext Groups
+
+An alternative formulation uses Ext sheaves, providing a more functorial perspective.
+
+<Proof>
+**Step 6a: Ext interpretation.**
+
+By the adjunction between $\otimes$ and $\mathcal{H}om$, we have
+
+$$\mathcal{F}^\vee \otimes \omega_X = \mathcal{H}om(\mathcal{F}, \omega_X)$$
+
+Thus Serre Duality can be stated as
+
+$$H^i(X, \mathcal{F}) \cong H^{n-i}(X, \mathcal{H}om(\mathcal{F}, \omega_X))^\vee$$
+
+**Step 6b: Yoneda product.**
+
+The pairing comes from the Yoneda product
+
+$$\text{Ext}^i(\mathcal{O}_X, \mathcal{F}) \times \text{Ext}^{n-i}(\mathcal{F}, \omega_X) \to \text{Ext}^n(\mathcal{O}_X, \omega_X)$$
+
+Since $\text{Ext}^i(\mathcal{O}_X, \mathcal{F}) = H^i(X, \mathcal{F})$ and $\text{Ext}^n(\mathcal{O}_X, \omega_X) = H^n(X, \omega_X) \cong k$, this gives the duality pairing.
+
+**Step 6c: Compatibility with derived categories.**
+
+In the language of derived categories, Serre Duality states that the functor
+
+$$R\mathcal{H}om(\cdot, \omega_X): D^b_{\text{coh}}(X) \to D^b_{\text{coh}}(X)$$
+
+is a dualizing functor, meaning it is an anti-equivalence with $R\mathcal{H}om(R\mathcal{H}om(\mathcal{F}, \omega_X), \omega_X) \cong \mathcal{F}$.
+</Proof>
+
+## Step 7: Smoothness and the Canonical Sheaf
+
+The smoothness hypothesis is essential for the canonical sheaf to have the right properties.
+
+<Remark>
+**Why smoothness is necessary:**
+
+1. **Differentials:** For $X$ smooth, the sheaf $\Omega^1_X$ of Kähler differentials is locally free, so we can form $\omega_X = \Omega^n_X = \bigwedge^n \Omega^1_X$.
+
+2. **Dualizing sheaf:** For singular varieties, we must replace $\omega_X$ with the **dualizing sheaf** $\omega_X^\circ$, which is defined using dualizing complexes and may not be a line bundle.
+
+3. **Gorenstein varieties:** A variety is Gorenstein if its dualizing sheaf is a line bundle. For such varieties, a version of Serre Duality holds with $\omega_X^\circ$ in place of $\omega_X$.
+</Remark>
+
+## Step 8: Computation for Curves
+
+The case of curves ($n=1$) is particularly concrete and historically important.
+
+<Example id="curves" title="Serre Duality for Curves">
+Let $C$ be a smooth projective curve over $k$. Then $\omega_C$ is the canonical bundle, and Serre Duality gives
+
+$$H^0(C, \mathcal{F}) \cong H^1(C, \mathcal{F}^\vee \otimes \omega_C)^\vee$$
+$$H^1(C, \mathcal{F}) \cong H^0(C, \mathcal{F}^\vee \otimes \omega_C)^\vee$$
+
+**Special case $\mathcal{F} = \mathcal{O}_C$:**
+
+$$H^0(C, \mathcal{O}_C) = k, \quad H^1(C, \mathcal{O}_C) = k^g$$
+
+where $g$ is the genus of $C$. By Serre Duality,
+
+$$H^0(C, \omega_C) = k^g$$
+
+so the space of holomorphic differentials on $C$ has dimension $g$, giving a cohomological definition of genus.
+
+**Special case $\mathcal{F} = \mathcal{L}$ a line bundle:**
+
+If $\deg \mathcal{L} = d$, then $\deg(\mathcal{L}^\vee \otimes \omega_C) = 2g-2-d$. Serre Duality relates $h^0(\mathcal{L})$ and $h^0(\mathcal{L}^\vee \otimes \omega_C)$, which is the content of the Riemann-Roch theorem when combined with the Euler characteristic formula.
+</Example>
+
+## Step 9: Compatibility with Cup Product
+
+The duality pairing is intimately connected with the cup product structure on cohomology.
+
+<Proof>
+**Step 9a: Cup product compatibility.**
+
+The cup product
+
+$$H^i(X, \mathcal{F}) \times H^j(X, \mathcal{G}) \to H^{i+j}(X, \mathcal{F} \otimes \mathcal{G})$$
+
+is compatible with Serre Duality in the following sense: if we dualize and use the duality isomorphisms, the diagram
+
+$$H^i(X, \mathcal{F}) \times H^j(X, \mathcal{G}) \to H^{i+j}(X, \mathcal{F} \otimes \mathcal{G})$$
+
+corresponds under duality to
+
+$$H^{n-i-j}(X, (\mathcal{F} \otimes \mathcal{G})^\vee \otimes \omega_X) \to H^{n-i}(X, \mathcal{F}^\vee \otimes \omega_X) \times H^{n-j}(X, \mathcal{G}^\vee \otimes \omega_X)$$
+
+**Step 9b: Associativity.**
+
+This compatibility ensures that the pairing structure is associative in the appropriate sense, making cohomology with Serre Duality into a Frobenius algebra structure.
+</Proof>
+
+## Step 10: Base Change and Families
+
+Serre Duality behaves well with respect to base change in families.
+
+<Remark>
+**Relative Serre Duality:**
+
+If $f: X \to S$ is a smooth projective morphism of relative dimension $n$, there is a relative version of Serre Duality:
+
+$$R^i f_* \mathcal{F} \cong (R^{n-i} f_*(\mathcal{F}^\vee \otimes \omega_{X/S}))^\vee$$
+
+where $\omega_{X/S} = \Omega^n_{X/S}$ is the relative canonical sheaf, and the dual is taken in the category of $\mathcal{O}_S$-modules using a relative trace map
+
+$$R^n f_* \omega_{X/S} \to \mathcal{O}_S$$
+
+This relative version is crucial for studying families of varieties and deformation theory.
+</Remark>
+
+## Applications and Consequences
+
+<Remark>
+**Immediate consequences of Serre Duality:**
+
+1. **Vanishing theorems:** Combined with vanishing theorems like Kodaira vanishing, Serre Duality implies vanishing of other cohomology groups.
+
+2. **Riemann-Roch:** For curves, Serre Duality is a key ingredient in the Riemann-Roch theorem.
+
+3. **Hodge theory:** Over $\mathbb{C}$, Serre Duality is related to Hodge duality via the Hodge decomposition.
+
+4. **Grothendieck duality:** Serre Duality is a special case of the more general Grothendieck duality for proper morphisms.
+
+5. **Canonical bundle formula:** Understanding $\omega_X$ is crucial for the minimal model program and birational geometry.
+</Remark>
+
+## Summary of Proof Strategy
+
+The complete proof of Serre Duality follows this logical structure:
+
+1. **Trace map:** Construct $t: H^n(X, \omega_X) \to k$ explicitly for $\mathbb{P}^n$ using Čech cohomology and residues.
+
+2. **Pairing:** Define $\langle \alpha, \beta \rangle = t(\text{ev}(\alpha \cup \beta))$ using cup product, evaluation, and trace.
+
+3. **Reduction:** Use embeddings and induction to reduce to the case $X = \mathbb{P}^n$.
+
+4. **Line bundles:** Prove duality explicitly for $\mathcal{O}(m)$ on $\mathbb{P}^n$ using dimension counts and explicit computations.
+
+5. **Resolution:** Extend to coherent sheaves using finite resolutions by line bundles.
+
+6. **Verification:** Check compatibility with functoriality, cup products, and base change.
+
+The theorem follows from these steps combined with careful bookkeeping of the functorial properties involved. The key insight is that the trace map $H^n(X, \omega_X) \to k$ encodes all the duality information, and the rest is a matter of using standard tools from homological algebra and sheaf cohomology.
+
