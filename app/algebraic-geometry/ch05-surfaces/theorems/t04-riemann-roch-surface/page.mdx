@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Riemann–Roch for Surfaces — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Theorem — Riemann–Roch for Surfaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Riemann–Roch for Surfaces
+
+The Riemann–Roch theorem for surfaces expresses the Euler characteristic of a line bundle in terms of intersection numbers. Combined with vanishing theorems, it becomes a powerful tool for computing dimensions of linear systems.
+
+---
+
+## Statement
+
+<Theorem title="Riemann–Roch for surfaces" number="5.1">
+Let $X$ be a smooth projective surface over an algebraically closed field, and let $D$ be a divisor on $X$. Then:
+
+$$\chi(\mathcal{O}_X(D)) = \frac{1}{2}D \cdot (D - K_X) + \chi(\mathcal{O}_X),$$
+
+where $K_X$ is the canonical divisor and $\chi(\mathcal{O}_X) = 1 - q + p_g$ with $q = h^1(\mathcal{O}_X)$ (the irregularity) and $p_g = h^0(K_X)$ (the geometric genus).
+
+Expanding: $\chi(\mathcal{O}_X(D)) = \frac{1}{2}(D^2 - D \cdot K_X) + \chi(\mathcal{O}_X)$.
+</Theorem>
+
+<Remark title="Relation to Hirzebruch–Riemann–Roch">
+This is the Hirzebruch–Riemann–Roch theorem for surfaces: $\chi(\mathcal{L}) = \int_X \operatorname{ch}(\mathcal{L}) \cdot \operatorname{td}(T_X)$.
+
+Writing $\mathcal{L} = \mathcal{O}(D)$: $\operatorname{ch}(\mathcal{L}) = 1 + c_1(D) + \frac{1}{2}c_1(D)^2$ and $\operatorname{td}(T_X) = 1 + \frac{1}{2}c_1(T_X) + \frac{1}{12}(c_1(T_X)^2 + c_2(T_X))$.
+
+Multiplying and integrating over $X$:
+$$\chi(\mathcal{O}(D)) = \frac{1}{2}D^2 + \frac{1}{2}D \cdot c_1(T_X) + \frac{1}{12}(c_1^2 + c_2).$$
+
+Since $c_1(T_X) = -K_X$ and $\chi(\mathcal{O}_X) = \frac{1}{12}(K_X^2 + c_2(X))$ (Noether's formula), this gives $\chi(\mathcal{O}(D)) = \frac{1}{2}D^2 - \frac{1}{2}D \cdot K_X + \chi(\mathcal{O}_X)$ ✓.
+</Remark>
+
+---
+
+## Verification: basic cases
+
+<Example id="rr-d-zero" title="D = 0">
+$\chi(\mathcal{O}_X(0)) = \frac{1}{2} \cdot 0 \cdot (0 - K_X) + \chi(\mathcal{O}_X) = \chi(\mathcal{O}_X)$ ✓. The formula is consistent.
+</Example>
+
+<Example id="rr-d-canonical" title="D = K_X">
+$\chi(\mathcal{O}(K_X)) = \frac{1}{2}K_X \cdot (K_X - K_X) + \chi(\mathcal{O}_X) = 0 + \chi(\mathcal{O}_X) = \chi(\mathcal{O}_X)$.
+
+By Serre duality, $\chi(\omega_X) = \chi(\mathcal{O}_X)$ (since $h^i(\omega_X) = h^{2-i}(\mathcal{O}_X)$, the alternating sum is preserved). ✓
+</Example>
+
+<Example id="rr-minus-d" title="Symmetry: D ↔ K - D">
+The Serre duality pairing gives $h^i(\mathcal{O}(D)) = h^{2-i}(\mathcal{O}(K - D))$, so $\chi(\mathcal{O}(D)) = \chi(\mathcal{O}(K - D))$.
+
+From the formula: $\frac{1}{2}D(D - K) + \chi(\mathcal{O}_X)$ vs. $\frac{1}{2}(K-D)(K-D-K) + \chi(\mathcal{O}_X) = \frac{1}{2}(K-D)(-D) + \chi(\mathcal{O}_X) = -\frac{1}{2}KD + \frac{1}{2}D^2 + \chi(\mathcal{O}_X)$.
+
+Both equal $\frac{1}{2}(D^2 - KD) + \chi(\mathcal{O}_X)$ ✓. The formula is automatically compatible with Serre duality.
+</Example>
+
+---
+
+## Applications to ℙ²
+
+<Example id="rr-P2" title="Line bundles on ℙ²">
+On $\mathbb{P}^2$: $K = -3H$, $\chi(\mathcal{O}) = 1$ (since $q = p_g = 0$). For $D = dH$:
+
+$$\chi(\mathcal{O}(d)) = \frac{1}{2}d(d + 3) + 1 = \frac{d^2 + 3d + 2}{2} = \frac{(d+1)(d+2)}{2} = \binom{d+2}{2}.$$
+
+This recovers:
+- $d = 0$: $\chi = 1 = h^0(\mathcal{O}) = 1$ ✓.
+- $d = 1$: $\chi = 3 = h^0(\mathcal{O}(1)) = 3$ (linear forms $x, y, z$) ✓.
+- $d = 2$: $\chi = 6$ (monomials $x^2, xy, xz, y^2, yz, z^2$) ✓.
+- $d = -1$: $\chi = 0$. Indeed $h^0(\mathcal{O}(-1)) = 0$, $h^1(\mathcal{O}(-1)) = 0$, $h^2(\mathcal{O}(-1)) = 0$ ✓.
+- $d = -2$: $\chi = 0$. Same vanishing ✓.
+- $d = -3$: $\chi = 1$. We have $\mathcal{O}(-3) = \omega_{\mathbb{P}^2}$, so $h^2(\mathcal{O}(-3)) = h^0(\mathcal{O}) = 1$, $h^0 = h^1 = 0$, giving $\chi = 0 - 0 + 1 = 1$ ✓.
+- $d = -4$: $\chi = 3$. $h^2(\mathcal{O}(-4)) = h^0(\mathcal{O}(1)) = 3$ ✓.
+</Example>
+
+---
+
+## Applications to ruled surfaces
+
+<Example id="rr-hirzebruch" title="Hirzebruch surfaces 𝔽ₙ">
+The Hirzebruch surface $\mathbb{F}_n = \mathbb{P}(\mathcal{O}_{\mathbb{P}^1} \oplus \mathcal{O}_{\mathbb{P}^1}(-n))$ has:
+- $\operatorname{Pic}(\mathbb{F}_n) = \mathbb{Z} C_0 \oplus \mathbb{Z} F$ where $C_0$ is the negative section ($C_0^2 = -n$) and $F$ is a fiber ($F^2 = 0$, $C_0 \cdot F = 1$).
+- $K_{\mathbb{F}_n} \sim -2C_0 - (n + 2)F$.
+- $\chi(\mathcal{O}_{\mathbb{F}_n}) = 1$ (rational surface, so $q = p_g = 0$).
+
+For $D \sim aC_0 + bF$: $D^2 = -na^2 + 2ab$, $D \cdot K = 2na - 2b - (n+2)a = (n-2)a - 2b$. So:
+
+$$\chi(\mathcal{O}(D)) = \frac{1}{2}(-na^2 + 2ab - (n-2)a + 2b) + 1.$$
+
+**Check**: $D = C_0$ ($a = 1, b = 0$): $\chi = \frac{1}{2}(-n - n + 2) + 1 = \frac{1}{2}(2 - 2n) + 1 = 2 - n$. For $n = 0$ ($\mathbb{P}^1 \times \mathbb{P}^1$): $\chi(\mathcal{O}(C_0)) = 2$, and $h^0(\mathcal{O}(1,0)) = 2$ ✓.
+</Example>
+
+---
+
+## Applications to K3 surfaces
+
+<Example id="rr-K3" title="K3 surfaces">
+A K3 surface has $K_X = 0$, $\chi(\mathcal{O}_X) = 2$ (since $h^0 = 1$, $h^1 = 0$, $h^2 = 1$). Riemann–Roch gives:
+
+$$\chi(\mathcal{O}(D)) = \frac{1}{2}D^2 + 2.$$
+
+- If $D$ is a primitive ample class with $D^2 = 2d$, then $\chi(\mathcal{O}(D)) = d + 2$. By Kodaira vanishing, $h^1 = h^2 = 0$ for ample $D$, so $h^0(D) = d + 2$. The linear system $|D|$ has dimension $d + 1$.
+
+- **Degree-$2$ K3** ($D^2 = 2$): $h^0(D) = 3$, so $|D|$ is a pencil in $\mathbb{P}^2$... rather, $|D|$ gives a $2:1$ map to $\mathbb{P}^2$.
+- **Degree-$4$ K3** ($D^2 = 4$): $h^0(D) = 4$, embedding as quartic in $\mathbb{P}^3$.
+- **Degree-$6$ K3** ($D^2 = 6$): $h^0(D) = 5$, complete intersection of a quadric and cubic in $\mathbb{P}^4$.
+- **Degree-$8$ K3** ($D^2 = 8$): $h^0(D) = 6$, complete intersection of three quadrics in $\mathbb{P}^5$.
+</Example>
+
+---
+
+## Applications to surfaces of general type
+
+<Example id="rr-general-type" title="Surfaces of general type">
+For a minimal surface of general type ($K_X$ nef and big, $K_X^2 > 0$):
+
+$$\chi(\mathcal{O}(nK_X)) = \frac{n(n-1)}{2}K_X^2 + \chi(\mathcal{O}_X).$$
+
+**Pluricanonical dimensions**:
+- $n = 1$: $\chi(\omega_X) = \chi(\mathcal{O}_X) = 1 + p_g - q$.
+- $n = 2$: $\chi(\mathcal{O}(2K)) = K^2 + \chi(\mathcal{O}_X)$. By Kawamata–Viehweg vanishing ($2K - K = K$ is nef and big), $h^i(\mathcal{O}(2K)) = 0$ for $i > 0$, so $P_2 = h^0(2K) = K^2 + \chi(\mathcal{O}_X)$.
+- $n = 3$: $P_3 = 3K^2 + \chi(\mathcal{O}_X)$.
+- $n \to \infty$: $P_n \sim \frac{1}{2}n^2 K^2$ (quadratic growth — this is the hallmark of a surface of general type).
+
+**Bombieri's theorem**: $|5K_X|$ gives a birational map for all surfaces of general type.
+</Example>
+
+---
+
+## Applications to abelian surfaces
+
+<Example id="rr-abelian" title="Abelian surfaces">
+An abelian surface $A$ has $K_A = 0$, $\chi(\mathcal{O}_A) = 0$ (since $h^0 = 1$, $h^1 = 2$, $h^2 = 1$). So:
+
+$$\chi(\mathcal{O}(D)) = \frac{1}{2}D^2.$$
+
+For an ample $D$ with $D^2 = 2d$: $\chi(\mathcal{O}(D)) = d$. By the Mumford vanishing theorem, $h^i(D) = 0$ for $i > 0$ when $D$ is ample, so $h^0(D) = d$.
+
+- **Principal polarization** ($D^2 = 2$): $h^0(D) = 1$. The theta divisor $\Theta$ has a unique section.
+- **$(1,2)$-polarization** ($D^2 = 4$): $h^0(D) = 2$, giving a $2:1$ map $A \to \mathbb{P}^1$... actually, $|D|$ maps to $\mathbb{P}^1$ — but abelian surfaces don't admit maps to $\mathbb{P}^1$ (no rational curves). More precisely, $|D|$ has base locus and $\phi_D$ maps $A$ to $\mathbb{P}^1$ as a genus-$2$ fibration after resolving.
+- **$(1,3)$-polarization** ($D^2 = 6$): $h^0(D) = 3$. Maps $A \to \mathbb{P}^2$ as $3:1$.
+</Example>
+
+---
+
+## The inequality $h^0(D) \geq \chi(D)$ and effective bounds
+
+<Theorem title="Lower bound from Riemann–Roch">
+For any nef divisor $D$ on a surface:
+
+$$h^0(D) \geq \chi(\mathcal{O}(D)) = \frac{1}{2}D \cdot (D - K) + \chi(\mathcal{O}_X),$$
+
+since $h^1(\mathcal{O}(D))$ appears with a minus sign in $\chi$ and $h^2(\mathcal{O}(D)) = h^0(K - D) \geq 0$.
+
+When $D$ is ample (or nef and big) and satisfies certain positivity conditions, **Kodaira vanishing** ($H^i(X, \mathcal{O}(D + K)) = 0$ for $i > 0$ and $D$ ample) or **Kawamata–Viehweg vanishing** gives:
+
+$$h^0(D) = \chi(\mathcal{O}(D)) \quad \text{(exact computation, no correction terms)}.$$
+</Theorem>
+
+<Example id="effective-computations" title="When Riemann–Roch gives exact answers">
+**Complete list of common vanishing situations:**
+
+- $D$ ample on $\mathbb{P}^2$: $h^i(\mathcal{O}(d)) = 0$ for $0 < i < 2$ and $d \geq -2$ (from the explicit computation of cohomology of $\mathbb{P}^n$).
+- $D$ ample on K3: $h^1 = h^2 = 0$ by Kodaira vanishing (since $D = (D - K) + K = D + 0$, and $D$ ample implies vanishing). So $h^0(D) = \frac{1}{2}D^2 + 2$.
+- $D$ ample on an Enriques surface ($K^2 = 0$, $\chi(\mathcal{O}) = 1$, $2K \sim 0$): $h^0(D) = \frac{1}{2}D^2 + 1$.
+- $nK_X$ with $n \geq 2$ on a surface of general type: $h^0(nK) = \frac{n(n-1)}{2}K^2 + \chi(\mathcal{O}_X)$.
+</Example>
+
+---
+
+## Riemann–Roch and curve counting
+
+<Example id="curve-counting" title="Counting curves on surfaces">
+Riemann–Roch determines the expected dimension of families of curves:
+
+- **Curves of degree $d$ in $\mathbb{P}^2$**: The linear system $|dH|$ has dimension $\binom{d+2}{2} - 1$. A curve passes through $n$ general points iff $\binom{d+2}{2} - 1 \geq n$. Through $\binom{d+2}{2} - 1$ general points, there is a unique degree-$d$ curve.
+
+- **Lines through 2 points**: $\binom{3}{2} - 1 = 2$; imposing $2$ points gives $0$-dimensional family, i.e., a unique line. ✓
+
+- **Conics through 5 points**: $\binom{4}{2} - 1 = 5$; imposing $5$ conditions gives a unique conic. ✓
+
+- **Cubics through 9 points**: $\binom{5}{2} - 1 = 9$; but $9$ points may not impose independent conditions. Cayley–Bacharach: if $8$ of the $9$ base points of two cubics are specified, the $9$th is determined.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The power of Riemann–Roch for surfaces">
+Riemann–Roch for surfaces:
+
+$$\chi(\mathcal{O}(D)) = \frac{1}{2}D \cdot (D - K) + \chi(\mathcal{O}_X)$$
+
+is the starting point for all dimension computations on surfaces. Combined with:
+- **Serre duality** ($h^2(\mathcal{O}(D)) = h^0(K - D)$): reduces to bounding $h^1$.
+- **Kodaira/Kawamata–Viehweg vanishing**: often kills $h^1$ and $h^2$, giving exact formulas.
+- **Noether's formula** ($\chi(\mathcal{O}_X) = \frac{1}{12}(K^2 + e(X))$): constrains the invariants of $X$ itself.
+
+It is a special case of the Hirzebruch–Riemann–Roch theorem and generalizes the classical Riemann–Roch for curves.
+</Remark>

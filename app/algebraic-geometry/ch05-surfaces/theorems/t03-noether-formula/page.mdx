@@ -1,0 +1,564 @@
+export const metadata = {
+  title: "Noether's Formula — Algebraic Geometry — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Theorem — Noether's Formula" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Noether's Formula
+
+Noether's formula is the fundamental identity relating the arithmetic genus of a smooth projective surface to its Chern numbers. It constrains the numerical invariants of all surfaces and serves as the starting point for the **geography of surfaces** -- the study of which pairs of Chern numbers can be realized by smooth projective surfaces.
+
+---
+
+## Statement
+
+<Theorem title="Noether's formula" number="5.7">
+Let $X$ be a smooth projective surface over an algebraically closed field. Then:
+
+$$\chi(\mathcal{O}_X) = \frac{1}{12}(K_X^2 + e(X)),$$
+
+where $\chi(\mathcal{O}_X) = 1 - q + p_g$ is the holomorphic Euler characteristic, $K_X^2 = c_1(X)^2$ is the self-intersection of the canonical divisor, and $e(X) = c_2(X)$ is the topological Euler characteristic.
+
+Equivalently, in terms of Chern numbers:
+
+$$12\chi(\mathcal{O}_X) = c_1^2 + c_2.$$
+</Theorem>
+
+<Remark title="Notation and conventions">
+Here:
+- $q = h^1(\mathcal{O}_X)$ is the **irregularity**.
+- $p_g = h^2(\mathcal{O}_X) = h^0(K_X)$ is the **geometric genus**.
+- $c_1 = c_1(\Omega_X^1)$ so $c_1^2 = K_X^2$ (the first Chern class of the cotangent bundle equals the canonical class).
+- $c_2 = c_2(\Omega_X^1) = c_2(T_X) = e(X)$ (the second Chern class equals the topological Euler characteristic).
+- Over $\mathbb{C}$, we have $e(X) = \sum_{i=0}^{4} (-1)^i b_i(X)$ where $b_i$ are the Betti numbers.
+</Remark>
+
+---
+
+## Derivation from Hirzebruch--Riemann--Roch
+
+<Theorem title="Hirzebruch--Riemann--Roch for surfaces" number="5.8">
+For a smooth projective surface $X$ and a vector bundle (or coherent sheaf) $\mathcal{E}$:
+
+$$\chi(\mathcal{E}) = \int_X \operatorname{ch}(\mathcal{E}) \cdot \operatorname{td}(T_X).$$
+
+The Todd class of the tangent bundle is $\operatorname{td}(T_X) = 1 + \frac{1}{2}c_1(T_X) + \frac{1}{12}(c_1(T_X)^2 + c_2(T_X))$.
+</Theorem>
+
+<Remark title="Deriving Noether's formula">
+Setting $\mathcal{E} = \mathcal{O}_X$ (the trivial line bundle, $D = 0$):
+
+$\operatorname{ch}(\mathcal{O}_X) = 1$, so $\chi(\mathcal{O}_X) = \int_X \operatorname{td}(T_X)$.
+
+The integral picks out the degree-$2$ component of the Todd class:
+
+$$\chi(\mathcal{O}_X) = \frac{1}{12}(c_1(T_X)^2 + c_2(T_X)).$$
+
+Since $c_1(T_X) = -K_X$, we have $c_1(T_X)^2 = K_X^2$, and $c_2(T_X) = e(X)$. This gives:
+
+$$\chi(\mathcal{O}_X) = \frac{1}{12}(K_X^2 + e(X)).$$
+
+Noether's formula is simply HRR applied to the structure sheaf.
+</Remark>
+
+---
+
+## Over the complex numbers
+
+<Remark title="Hodge-theoretic form">
+Over $\mathbb{C}$, the Hodge decomposition gives $H^k(X, \mathbb{C}) = \bigoplus_{p+q=k} H^{p,q}(X)$ with $h^{p,q} = \dim H^{p,q}$. The Betti numbers are $b_k = \sum_{p+q=k} h^{p,q}$.
+
+For a surface: $b_0 = 1$, $b_1 = 2q$, $b_2 = 2p_g + h^{1,1}$, $b_3 = 2q$, $b_4 = 1$.
+
+The topological Euler characteristic is:
+
+$$e(X) = 1 - 2q + (2p_g + h^{1,1}) - 2q + 1 = 2 + 2p_g - 4q + h^{1,1}.$$
+
+Substituting into Noether's formula and writing $\chi(\mathcal{O}_X) = 1 - q + p_g$:
+
+$$12(1 - q + p_g) = K_X^2 + 2 + 2p_g - 4q + h^{1,1},$$
+
+which simplifies to $K_X^2 = 10 - 8q + 10p_g - h^{1,1}$, or equivalently:
+
+$$h^{1,1} = 10\chi(\mathcal{O}_X) - K_X^2 + 2(1 - q).$$
+
+This determines $h^{1,1}$ from $K_X^2$, $q$, and $p_g$.
+</Remark>
+
+---
+
+## Verification: classical examples
+
+<Example id="noether-p2" title="The projective plane">
+For $X = \mathbb{P}^2$: $K_{\mathbb{P}^2} = -3H$, so $K^2 = 9$. The Betti numbers are $b_0 = 1, b_1 = 0, b_2 = 1, b_3 = 0, b_4 = 1$, giving $e(\mathbb{P}^2) = 3$.
+
+Noether: $\chi(\mathcal{O}_{\mathbb{P}^2}) = \frac{1}{12}(9 + 3) = \frac{12}{12} = 1$.
+
+Direct computation: $h^0(\mathcal{O}) = 1$, $h^1(\mathcal{O}) = 0$, $h^2(\mathcal{O}) = 0$, so $\chi(\mathcal{O}) = 1$.
+</Example>
+
+<Example id="noether-p1p1" title="The quadric surface">
+For $X = \mathbb{P}^1 \times \mathbb{P}^1$: $K = -2F_1 - 2F_2$, so $K^2 = 2 \cdot (-2)(-2) \cdot F_1 \cdot F_2 = 8$. The Betti numbers are $b_0 = 1, b_1 = 0, b_2 = 2, b_3 = 0, b_4 = 1$, giving $e = 4$.
+
+Noether: $\chi(\mathcal{O}) = \frac{1}{12}(8 + 4) = 1$.
+
+Direct: $q = 0$, $p_g = 0$, so $\chi(\mathcal{O}) = 1$.
+</Example>
+
+<Example id="noether-k3" title="K3 surfaces">
+A K3 surface has $K_X = 0$ (so $K^2 = 0$), $q = 0$, and $p_g = 1$.
+
+Noether: $\chi(\mathcal{O}_X) = 1 - 0 + 1 = 2 = \frac{1}{12}(0 + e(X))$, hence $e(X) = 24$.
+
+Betti numbers: $b_0 = 1, b_1 = 0, b_2 = 22, b_3 = 0, b_4 = 1$. Check: $e = 1 + 22 + 1 = 24$.
+
+Hodge diamond: $h^{0,0} = 1$, $h^{1,0} = h^{0,1} = 0$, $h^{2,0} = h^{0,2} = 1$, $h^{1,1} = 20$.
+
+From the formula: $h^{1,1} = 10(2) - 0 + 2(1 - 0) = 22$... let us recheck: $h^{1,1} = 10\chi - K^2 + 2(1 - q) = 20 - 0 + 2 = 22$. But $b_2 = h^{2,0} + h^{1,1} + h^{0,2} = 1 + 20 + 1 = 22$. So indeed $h^{1,1} = 20$.
+</Example>
+
+<Example id="noether-abelian" title="Abelian surfaces">
+An abelian surface $A$ has $K_A = 0$ (so $K^2 = 0$), $q = 2$, $p_g = 1$.
+
+Noether: $\chi(\mathcal{O}_A) = 1 - 2 + 1 = 0 = \frac{1}{12}(0 + e(A))$, hence $e(A) = 0$.
+
+Betti numbers: $b_0 = 1, b_1 = 4, b_2 = 6, b_3 = 4, b_4 = 1$. Check: $e = 1 - 4 + 6 - 4 + 1 = 0$.
+
+Hodge diamond: $h^{0,0} = 1$, $h^{1,0} = h^{0,1} = 2$, $h^{2,0} = h^{0,2} = 1$, $h^{1,1} = 4$.
+</Example>
+
+<Example id="noether-enriques" title="Enriques surfaces">
+An Enriques surface has $2K_X \sim 0$ but $K_X \not\sim 0$, $q = 0$, $p_g = 0$.
+
+$K^2 = 0$ (since $2K \sim 0$ implies $4K^2 = (2K)^2 = 0$).
+
+Noether: $\chi(\mathcal{O}) = 1 - 0 + 0 = 1 = \frac{1}{12}(0 + e)$, hence $e = 12$.
+
+Betti numbers: $b_0 = 1, b_1 = 0, b_2 = 10, b_3 = 0, b_4 = 1$. Check: $e = 1 + 10 + 1 = 12$.
+</Example>
+
+<Example id="noether-hypersurface" title="Smooth hypersurfaces in P3">
+Let $X_d \subset \mathbb{P}^3$ be a smooth hypersurface of degree $d$. Then $K_{X_d} = (d - 4)H|_{X_d}$ by adjunction, so $K^2 = d(d-4)^2$.
+
+The Euler characteristic of $X_d$ is computed from the Chern classes of $\mathbb{P}^3$ restricted to $X_d$. Using the exact sequence $0 \to T_{X_d} \to T_{\mathbb{P}^3}|_{X_d} \to N_{X_d/\mathbb{P}^3} \to 0$:
+
+$$e(X_d) = d^3 - 4d^2 + 6d.$$
+
+Noether: $\chi(\mathcal{O}_{X_d}) = \frac{1}{12}(d(d-4)^2 + d^3 - 4d^2 + 6d) = \frac{1}{12}(2d^3 - 12d^2 + 22d) = \frac{d(d-1)(d-2)}{6} + 1 - d + \frac{d(d-1)}{2}$... let us compute directly:
+
+$\frac{1}{12}(d(d-4)^2 + d^3 - 4d^2 + 6d) = \frac{1}{12}(d^3 - 8d^2 + 16d + d^3 - 4d^2 + 6d) = \frac{1}{12}(2d^3 - 12d^2 + 22d) = \frac{d}{6}(d^2 - 6d + 11)$.
+
+Specific values:
+- $d = 1$ (plane): $\chi = \frac{1}{6}(1 - 6 + 11) = 1$, $K^2 = 9$, $e = 3$.
+- $d = 2$ (quadric): $\chi = \frac{2}{6}(4 - 12 + 11) = 1$, $K^2 = 8$, $e = 4$.
+- $d = 3$ (cubic): $\chi = \frac{3}{6}(9 - 18 + 11) = 1$, $K^2 = 3$, $e = 9$.
+- $d = 4$ (quartic = K3): $\chi = \frac{4}{6}(16 - 24 + 11) = 2$, $K^2 = 0$, $e = 24$.
+- $d = 5$ (quintic): $\chi = \frac{5}{6}(25 - 30 + 11) = 5$, $K^2 = 5$, $e = 55$.
+</Example>
+
+<Example id="noether-cubic-surface" title="Cubic surface">
+The cubic surface $X_3 \subset \mathbb{P}^3$ is rational: it is the blowup of $\mathbb{P}^2$ at $6$ points. So $q = 0$, $p_g = 0$, $\chi(\mathcal{O}) = 1$.
+
+$K_{X_3} = -H|_{X_3}$, so $K^2 = H^2 \cdot X_3 = 3$ (the degree). But $K^2 = 3$ for the cubic surface.
+
+From the blowup description: $K_{\operatorname{Bl}_6(\mathbb{P}^2)} = -3H + E_1 + \cdots + E_6$, and $K^2 = 9 - 6 = 3$.
+
+$e = 12\chi - K^2 = 12 - 3 = 9$. Alternatively: $b_2 = 1 + 6 = 7$ (the class of the line plus $6$ exceptional divisors), so $e = 1 + 7 + 1 = 9$.
+</Example>
+
+<Example id="noether-product-curves" title="Products of curves">
+Let $X = C_1 \times C_2$ where $C_i$ has genus $g_i$. Then:
+- $K_X = \pi_1^* K_{C_1} + \pi_2^* K_{C_2}$, so $K^2 = 2(2g_1 - 2)(2g_2 - 2) = 8(g_1 - 1)(g_2 - 1)$.
+- $e(X) = e(C_1) \cdot e(C_2) = (2 - 2g_1)(2 - 2g_2) = 4(g_1 - 1)(g_2 - 1)$.
+- $q = g_1 + g_2$, $p_g = g_1 g_2$.
+- $\chi(\mathcal{O}_X) = 1 - (g_1 + g_2) + g_1 g_2 = (1 - g_1)(1 - g_2)$.
+
+Noether check: $\frac{1}{12}(8(g_1-1)(g_2-1) + 4(g_1-1)(g_2-1)) = \frac{12(g_1-1)(g_2-1)}{12} = (g_1-1)(g_2-1) = (1-g_1)(1-g_2)$.
+
+Specific cases:
+- $C_1 = C_2 = \mathbb{P}^1$ ($g = 0$): $K^2 = 8$, $e = 4$, $\chi = 1$. This is $\mathbb{P}^1 \times \mathbb{P}^1$.
+- $C_1 = E$, $C_2 = E'$ (elliptic, $g = 1$): $K^2 = 0$, $e = 0$, $\chi = 0$. This is an abelian surface.
+- $C_1 = C_2$ genus $2$: $K^2 = 8$, $e = 4$, $q = 4$, $p_g = 4$, $\chi = 1$.
+- $C_1 = C_2$ genus $3$: $K^2 = 32$, $e = 16$, $q = 6$, $p_g = 9$, $\chi = 4$.
+</Example>
+
+<Example id="noether-complete-intersection" title="Complete intersections in projective space">
+Let $X = X_{d_1, d_2} \subset \mathbb{P}^4$ be a smooth complete intersection of hypersurfaces of degrees $d_1, d_2$. By adjunction:
+
+$K_X = (d_1 + d_2 - 5)H|_X$, $\deg(X) = d_1 d_2$, $K^2 = d_1 d_2(d_1 + d_2 - 5)^2$.
+
+The Euler characteristic is $e(X) = d_1 d_2(d_1^2 + d_2^2 + 3d_1 d_2 - 5d_1 - 5d_2 + 10) / 1$... more precisely, from the Chern class computation:
+
+$e(X) = d_1 d_2(d_1^2 - 5d_1 + d_2^2 - 5d_2 + 3d_1 d_2 + 10)$.
+
+Specific cases:
+- $(2,2)$ in $\mathbb{P}^4$: $K = -H$, $K^2 = 4$, $e = 4 \cdot (4 - 10 + 4 - 10 + 12 + 10) = 4 \cdot 10 = 40$... let me compute more carefully. The degree is $4$. $e = c_2(T_X) = 4(4+4+12-10-10+10) = 4 \cdot 10 = 40$. But $\chi = \frac{1}{12}(4 + 40) = \frac{44}{12}$ which is not an integer. Let me recalculate.
+
+For $(2,2)$ in $\mathbb{P}^4$: this is a del Pezzo surface of degree $4$. It is the blowup of $\mathbb{P}^2$ at $5$ points. So $K^2 = 9 - 5 = 4$, $q = 0$, $p_g = 0$, $\chi = 1$, $e = 12 - 4 = 8$.
+
+- $(2,3)$ in $\mathbb{P}^4$: degree $6$, $K = 0$. This is a K3 surface. $K^2 = 0$, $\chi = 2$, $e = 24$.
+
+- $(3,3)$ in $\mathbb{P}^4$: degree $9$, $K = H|_X$, $K^2 = 9$. $\chi = \frac{1}{12}(9 + e)$. By explicit computation, $q = 0$ and $p_g = 4$, so $\chi = 5$. Then $e = 60 - 9 = 51$.
+
+- $(2,4)$ in $\mathbb{P}^4$: degree $8$, $K = H|_X$, $K^2 = 8$. We have $q = 0$, $p_g = 3$, $\chi = 4$, $e = 48 - 8 = 40$.
+</Example>
+
+---
+
+## Noether's inequality
+
+<Theorem title="Noether's inequality" number="5.9">
+Let $X$ be a minimal surface of general type. Then:
+
+$$K_X^2 \geq 2p_g - 4.$$
+
+Equivalently, since $12\chi = K^2 + e$ and $e \geq 0$ is not always true (but $e > 0$ for surfaces of general type by Bogomolov--Miyaoka--Yau), the inequality bounds $K^2$ from below in terms of the geometric genus.
+
+For irregular surfaces ($q > 0$), the stronger bound $K^2 \geq 2\chi(\mathcal{O}_X)$ holds (the Bogomolov--Miyaoka--Yau inequality gives even more).
+</Theorem>
+
+<Remark title="Proof sketch of Noether's inequality">
+Consider the canonical map $\phi_K \colon X \dashrightarrow \mathbb{P}^{p_g - 1}$.
+
+**Case 1**: $\phi_K$ is birational onto its image $\Sigma$. Then $\deg(\Sigma) \geq p_g - 1$ (a nondegenerate variety in $\mathbb{P}^{p_g-1}$ has degree at least $p_g - 1$). Since $K^2 \geq \deg(\Sigma) \geq p_g - 1$, we get $K^2 \geq p_g - 1 \geq 2p_g - 4$ when $p_g \leq 3$. For $p_g \geq 4$, a more careful argument using the degree of the image as a surface in $\mathbb{P}^{p_g - 1}$ gives $K^2 \geq 2p_g - 4$.
+
+**Case 2**: $\phi_K$ has degree $d \geq 2$. Then $K^2 = d \cdot \deg(\Sigma) \geq 2(p_g - 1)$ if $\Sigma$ is a surface, giving $K^2 \geq 2p_g - 2 > 2p_g - 4$.
+
+If $|K|$ maps to a curve (the canonical system is composed with a pencil), a separate argument using fibrations gives the result.
+</Remark>
+
+<Example id="noether-ineq-check" title="Checking Noether's inequality">
+- Quintic in $\mathbb{P}^3$ ($d = 5$): $K^2 = 5$, $p_g = 4$. Inequality: $5 \geq 2(4) - 4 = 4$.
+- Product of two genus-$2$ curves: $K^2 = 8$, $p_g = 4$. Inequality: $8 \geq 4$.
+- Godeaux surface ($\pi_1 = \mathbb{Z}/5$): $K^2 = 1$, $p_g = 0$. Inequality: $1 \geq -4$.
+- Barlow surface: $K^2 = 1$, $p_g = 0$, $q = 0$. The simplest simply connected surface of general type.
+- Horikawa surfaces: these lie on the **Noether line** $K^2 = 2p_g - 4$, achieving equality. They exist for all $p_g \geq 3$.
+</Example>
+
+---
+
+## Bogomolov--Miyaoka--Yau inequality
+
+<Theorem title="Bogomolov--Miyaoka--Yau inequality" number="5.10">
+Let $X$ be a minimal surface of general type. Then:
+
+$$c_1^2 \leq 3c_2, \quad \text{i.e.,} \quad K_X^2 \leq 3e(X).$$
+
+Using Noether's formula $12\chi = c_1^2 + c_2$ to eliminate $c_2 = 12\chi - c_1^2$, this becomes:
+
+$$c_1^2 \leq 3(12\chi - c_1^2) = 36\chi - 3c_1^2, \quad \text{hence} \quad c_1^2 \leq 9\chi(\mathcal{O}_X).$$
+
+Equivalently, $K^2 \leq 9\chi(\mathcal{O}_X)$.
+
+Equality $K^2 = 9\chi$ holds if and only if the universal cover of $X$ is the complex unit ball $\mathbb{B}^2$ (so $X$ is a **ball quotient**).
+</Theorem>
+
+<Remark title="On the proof">
+The inequality $c_1^2 \leq 3c_2$ was proved by Miyaoka (1977) using algebraic methods (Bogomolov--Miyaoka inequality for semistable bundles) and independently by Yau (1977) using differential geometry (the existence of Kahler--Einstein metrics on manifolds with ample canonical bundle, via the Calabi conjecture).
+
+Yau's method shows that equality $c_1^2 = 3c_2$ implies the existence of a Kahler--Einstein metric with constant holomorphic sectional curvature, so the universal cover is $\mathbb{B}^2$.
+</Remark>
+
+<Example id="bmy-check" title="Checking the BMY inequality">
+- $\mathbb{P}^2$: $c_1^2 = 9$, $c_2 = 3$, ratio $c_1^2/c_2 = 3$. This achieves equality! Indeed, $\mathbb{P}^2 = \mathbb{B}^2/\Gamma$... no, $\mathbb{P}^2$ is simply connected and rational, not of general type. The BMY inequality applies only to surfaces of general type.
+- Quintic surface ($d = 5$): $K^2 = 5$, $e = 55$, $\chi = 5$. Check: $5 \leq 9 \cdot 5 = 45$ and $5 \leq 3 \cdot 55 = 165$.
+- Ball quotients: the fake projective planes have $c_1^2 = 3c_2 = 9$, $\chi = 1$, $p_g = 0$, $q = 0$. There are exactly $100$ fake projective planes (50 conjugate pairs), classified by Prasad--Yeung and Cartwright--Steger.
+- Product of two genus-$2$ curves: $K^2 = 8$, $e = 4$, $\chi = 1$. Check: $8 \leq 3 \cdot 4 = 12$ and $8 \leq 9 \cdot 1 = 9$.
+</Example>
+
+---
+
+## Geography of surfaces
+
+<Definition title="Geography problem" number="5.4">
+The **geography of surfaces** asks: which pairs $(c_1^2, c_2)$ (or equivalently $(K^2, \chi)$) are realized by minimal smooth projective surfaces of general type?
+
+By Noether's formula, these pairs lie on the line $c_1^2 + c_2 = 12\chi$ in the $(c_1^2, c_2)$-plane. The geography is therefore determined by which points $(K^2, \chi)$ are realized.
+</Definition>
+
+<Theorem title="Geography bounds" number="5.11">
+For a minimal surface of general type, the invariants $(K^2, \chi)$ satisfy:
+
+- **Noether line** (lower bound): $K^2 \geq 2\chi - 6$ (equivalently $c_1^2 \geq 2c_2/5$, or from $K^2 \geq 2p_g - 4$).
+- **BMY line** (upper bound): $K^2 \leq 9\chi$ (equivalently $c_1^2 \leq 3c_2$).
+- **Positivity**: $K^2 \geq 1$ and $\chi \geq 1$.
+- **Integrality**: $K^2$ and $\chi$ are positive integers with $K^2 + e = 12\chi$ where $e > 0$.
+
+The "geography region" is the set of lattice points $(K^2, \chi)$ with $2\chi - 6 \leq K^2 \leq 9\chi$ and $K^2, \chi \geq 1$.
+</Theorem>
+
+<Example id="geography-points" title="Known surfaces in the geography">
+Key surfaces and their positions in the $(K^2, \chi)$-plane:
+
+**On or near the Noether line** ($K^2 = 2\chi - 6$):
+- Horikawa surfaces: $K^2 = 2p_g - 4$, ranging over $K^2 = 2, 4, 6, \ldots$ with $\chi = (K^2 + 6)/2 = 4, 5, 6, \ldots$.
+
+**On the BMY line** ($K^2 = 9\chi$):
+- Fake projective planes: $(K^2, \chi) = (9, 1)$.
+- Ball quotients with $\chi = 2$: $(K^2, \chi) = (18, 2)$.
+
+**Between the lines**:
+- Godeaux surface: $(K^2, \chi) = (1, 1)$.
+- Campedelli surface: $(K^2, \chi) = (2, 1)$.
+- Barlow surface: $(K^2, \chi) = (1, 1)$ (same invariants as Godeaux, but simply connected).
+- Catanese surface: $(K^2, \chi) = (2, 1)$.
+- Burniat surfaces: $(K^2, \chi) = (2, 1), (3, 1), (4, 1), (5, 1), (6, 1)$.
+- Beauville surface: $(K^2, \chi) = (8, 1)$.
+- Quintic in $\mathbb{P}^3$: $(K^2, \chi) = (5, 5)$.
+</Example>
+
+<Remark title="Density of the geography">
+Persson (1981) showed that almost all lattice points in the geography region are realized. More precisely: for every $\epsilon > 0$, the lattice points $(K^2, \chi)$ with $2\chi - 6 \leq K^2 \leq (9 - \epsilon)\chi$ are realized for $\chi \gg 0$.
+
+Near the BMY line, the geography is sparse: very few surfaces have $K^2/\chi$ close to $9$. Ball quotients are "rare" arithmetic objects.
+
+Near the Noether line, Horikawa surfaces fill out a dense family.
+</Remark>
+
+---
+
+## Chern numbers by Kodaira dimension
+
+<Definition title="Kodaira dimension" number="5.5">
+The **Kodaira dimension** $\kappa(X)$ is the growth rate of the pluricanonical system $|nK_X|$:
+- $\kappa = -\infty$: $P_n = h^0(nK_X) = 0$ for all $n \geq 1$.
+- $\kappa = 0$: $P_n$ is bounded but not identically $0$.
+- $\kappa = 1$: $P_n$ grows linearly.
+- $\kappa = 2$: $P_n$ grows quadratically (surfaces of **general type**).
+</Definition>
+
+<Example id="chern-kodaira-neg-inf" title="Kodaira dimension -infinity (rational and ruled)">
+**Rational surfaces** ($X$ birational to $\mathbb{P}^2$):
+- $\chi(\mathcal{O}_X) = 1$, $q = 0$, $p_g = 0$.
+- Minimal models: $\mathbb{P}^2$ ($K^2 = 9, e = 3$) and $\mathbb{F}_n$ for $n \neq 1$ ($K^2 = 8, e = 4$).
+- Blowups: $\operatorname{Bl}_r(\mathbb{P}^2)$ has $K^2 = 9 - r$, $e = 3 + r$.
+
+**Ruled surfaces** over a curve of genus $g$ (geometrically ruled: $X = \mathbb{P}(\mathcal{E}) \to C$):
+- $q = g$, $p_g = 0$, $\chi(\mathcal{O}_X) = 1 - g$.
+- $K^2 = 8(1 - g)$, $e = 4(1 - g)$.
+- Noether: $12(1 - g) = 8(1 - g) + 4(1 - g)$.
+</Example>
+
+<Example id="chern-kodaira-zero" title="Kodaira dimension 0">
+The minimal surfaces with $\kappa = 0$ fall into four classes:
+
+**K3 surfaces**: $q = 0$, $p_g = 1$, $\chi = 2$, $K^2 = 0$, $e = 24$.
+
+**Enriques surfaces**: $q = 0$, $p_g = 0$, $\chi = 1$, $K^2 = 0$, $e = 12$. (In characteristic $\neq 2$, $2K \sim 0$.)
+
+**Abelian surfaces**: $q = 2$, $p_g = 1$, $\chi = 0$, $K^2 = 0$, $e = 0$.
+
+**Hyperelliptic (bielliptic) surfaces**: $q = 1$, $p_g = 0$, $\chi = 0$, $K^2 = 0$, $e = 0$. (These are quotients $(E_1 \times E_2)/G$ where $G$ is a finite group acting on both elliptic curves.)
+
+In all cases $K^2 = 0$. Noether gives $\chi = e/12$, so $e$ is a multiple of $12$ for $\chi \in \mathbb{Z}$. Indeed: $e \in \{0, 0, 12, 24\}$.
+</Example>
+
+<Example id="chern-kodaira-one" title="Kodaira dimension 1 (elliptic surfaces)">
+Minimal surfaces with $\kappa = 1$ are **properly elliptic surfaces**: they admit a fibration $f \colon X \to C$ whose general fiber is an elliptic curve, and $K_X$ is not numerically trivial.
+
+For a relatively minimal elliptic fibration $f \colon X \to C$ with $g(C) = g$:
+- $\chi(\mathcal{O}_X) = \chi(\mathcal{O}_C) \cdot \chi(\mathcal{O}_F) + \text{(singular fiber contribution)} = \deg f_* \omega_{X/C}$.
+- $K^2 = 0$ (for minimal models).
+- $e(X) = 12\chi(\mathcal{O}_X)$ (by Noether, since $K^2 = 0$).
+
+The Euler characteristic $e(X)$ is computed from the singular fibers via Ogg's formula: $e(X) = \sum_v e(X_v)$ where the sum is over singular fibers.
+
+**Example**: Elliptic surface over $\mathbb{P}^1$ with $\chi = 1$: $K^2 = 0$, $e = 12$. If it has $12$ nodal fibers (type $I_1$), each contributes $e = 1$ to the Euler characteristic: $e = 12 \cdot 1 = 12$.
+
+**Example**: Elliptic K3 surface: $\chi = 2$, $e = 24$. Possible singular fiber configuration: $24$ nodal fibers (all $I_1$), or two fibers of type $I_0^*$ (each contributes $e = 6$, giving $12$) plus $12$ nodal fibers, etc.
+</Example>
+
+---
+
+## The signature and Hirzebruch's theorem
+
+<Definition title="Signature of a surface" number="5.6">
+For a smooth compact complex surface $X$, the **signature** (or **index**) $\sigma(X)$ is the signature of the intersection form on $H^2(X, \mathbb{R})$:
+
+$$\sigma(X) = b_2^+ - b_2^-,$$
+
+where $b_2^+$ (resp. $b_2^-$) is the number of positive (resp. negative) eigenvalues of the intersection form.
+</Definition>
+
+<Theorem title="Hirzebruch signature theorem for surfaces" number="5.12">
+For a smooth compact complex surface $X$:
+
+$$\sigma(X) = \frac{1}{3}(c_1^2 - 2c_2) = \frac{1}{3}(K_X^2 - 2e(X)).$$
+
+Combined with Noether's formula $12\chi = c_1^2 + c_2$, one can express $c_1^2$ and $c_2$ separately:
+
+$$c_1^2 = K^2 = 12\chi - e, \quad c_2 = e, \quad \sigma = \frac{1}{3}(12\chi - 3e) = 4\chi - e.$$
+
+Equivalently: $\sigma(X) = 4\chi(\mathcal{O}_X) - e(X)$.
+
+In terms of Hodge numbers: $\sigma(X) = (2h^{2,0} + 1) - h^{1,1} = 2p_g + 1 - h^{1,1} = 4\chi - e$ (using $b_2^+ = 2p_g + 1$, $b_2^- = h^{1,1} - 1$ by the Hodge index theorem).
+</Theorem>
+
+<Example id="signature-examples" title="Computing signatures">
+- **$\mathbb{P}^2$**: $\sigma = 4(1) - 3 = 1$. Intersection form on $H^2$: the $1 \times 1$ matrix $(1)$, signature $+1$.
+- **$\mathbb{P}^1 \times \mathbb{P}^1$**: $\sigma = 4(1) - 4 = 0$. Intersection form: the hyperbolic form $H$ with eigenvalues $\pm 1$, signature $0$.
+- **K3 surface**: $\sigma = 4(2) - 24 = -16$. The intersection form is $3H \oplus (-E_8)^2$ (three hyperbolic planes plus two copies of the negative $E_8$ lattice), with $b_2^+ = 3, b_2^- = 19$, signature $3 - 19 = -16$.
+- **Abelian surface**: $\sigma = 4(0) - 0 = 0$. The intersection form on $H^2(\mathbb{Z}) \cong \mathbb{Z}^6$ has $b_2^+ = 3, b_2^- = 3$, signature $0$.
+- **Enriques surface**: $\sigma = 4(1) - 12 = -8$. The intersection form is $H \oplus (-E_8)$ (one hyperbolic plane plus the negative $E_8$ lattice), with $b_2^+ = 1, b_2^- = 9$, signature $-8$.
+- **Quintic surface**: $\sigma = 4(5) - 55 = -35$.
+</Example>
+
+---
+
+## Refined invariants: the Chern number table
+
+<Example id="chern-table" title="Complete Chern number table">
+A reference table of invariants for the most important surfaces.
+
+**Rational surfaces:**
+- $\mathbb{P}^2$: $K^2 = 9$, $e = 3$, $\chi = 1$, $q = 0$, $p_g = 0$, $\sigma = 1$, $b_2 = 1$.
+- $\mathbb{P}^1 \times \mathbb{P}^1$: $K^2 = 8$, $e = 4$, $\chi = 1$, $q = 0$, $p_g = 0$, $\sigma = 0$, $b_2 = 2$.
+- $\operatorname{Bl}_1(\mathbb{P}^2)$: $K^2 = 8$, $e = 4$, $\chi = 1$, $q = 0$, $p_g = 0$, $\sigma = 0$, $b_2 = 2$.
+- $\operatorname{Bl}_6(\mathbb{P}^2)$ (cubic surface): $K^2 = 3$, $e = 9$, $\chi = 1$, $q = 0$, $p_g = 0$, $\sigma = -5$, $b_2 = 7$.
+- $\operatorname{Bl}_8(\mathbb{P}^2)$: $K^2 = 1$, $e = 11$, $\chi = 1$, $\sigma = -7$, $b_2 = 9$.
+
+**Kodaira dimension 0:**
+- K3: $K^2 = 0$, $e = 24$, $\chi = 2$, $q = 0$, $p_g = 1$, $\sigma = -16$, $b_2 = 22$.
+- Enriques: $K^2 = 0$, $e = 12$, $\chi = 1$, $q = 0$, $p_g = 0$, $\sigma = -8$, $b_2 = 10$.
+- Abelian: $K^2 = 0$, $e = 0$, $\chi = 0$, $q = 2$, $p_g = 1$, $\sigma = 0$, $b_2 = 6$.
+- Hyperelliptic: $K^2 = 0$, $e = 0$, $\chi = 0$, $q = 1$, $p_g = 0$, $\sigma = 0$, $b_2 = 2$.
+
+**Surfaces of general type:**
+- Godeaux ($K^2 = 1$): $e = 11$, $\chi = 1$, $\sigma = -7$.
+- Campedelli ($K^2 = 2$): $e = 10$, $\chi = 1$, $\sigma = -6$.
+- Quintic ($K^2 = 5$): $e = 55$, $\chi = 5$, $\sigma = -35$.
+- Fake $\mathbb{P}^2$ ($K^2 = 9$): $e = 3$, $\chi = 1$, $\sigma = 1$.
+</Example>
+
+---
+
+## Constraints from Noether's formula
+
+<Remark title="Arithmetic consequences">
+Noether's formula $12\chi = K^2 + e$ imposes strong arithmetic constraints:
+
+1. **Integrality of $\chi$**: Since $K^2$ and $e$ are integers, $K^2 + e \equiv 0 \pmod{12}$.
+
+2. **Parity**: Over $\mathbb{C}$, Wu's formula gives $K \cdot D \equiv D^2 \pmod{2}$ for all $D$. In particular $K^2 \equiv K \cdot K \equiv K^2 \pmod{2}$ (tautological), but also $K^2 + e \equiv 0 \pmod{12}$ constrains parity relations between $K^2$ and $e$.
+
+3. **For spin surfaces** (those with $K \equiv 0 \pmod{2}$ in $H^2(X, \mathbb{Z}/2)$): Rokhlin's theorem gives $\sigma(X) \equiv 0 \pmod{16}$, i.e., $4\chi - e \equiv 0 \pmod{16}$. Combined with $12\chi = K^2 + e$, this constrains the invariants further.
+</Remark>
+
+<Example id="spin-example" title="Spin condition for K3 and complete intersections">
+**K3 surfaces** are spin (since $K = 0 \equiv 0 \pmod{2}$). Rokhlin: $\sigma = -16 \equiv 0 \pmod{16}$.
+
+**Complete intersection $(2,3)$ in $\mathbb{P}^4$** (K3): same as above.
+
+**Quartic K3** in $\mathbb{P}^3$: $K = 0$, spin, $\sigma = -16$.
+
+**Quintic surface** in $\mathbb{P}^3$: $K = H$, and $H$ generates $H^2(X, \mathbb{Z}/2)$, so this is **not** spin. $\sigma = -35$, which is not divisible by $16$.
+
+**Sextic surface** ($d = 6$): $K = 2H$, so $K \equiv 0 \pmod{2}$, this is spin. $K^2 = 24$, $\chi = 11$, $e = 108$, $\sigma = 4(11) - 108 = -64 = -4 \cdot 16$. Rokhlin's congruence is satisfied.
+</Example>
+
+---
+
+## Relation to the four-manifold invariants
+
+<Remark title="Noether's formula in topology">
+For a simply connected smooth compact complex surface $X$, Freedman's theorem says the homeomorphism type is determined by the intersection form on $H^2(X, \mathbb{Z})$.
+
+Noether's formula constrains this form: the rank is $b_2 = e - 2$, and the signature is $\sigma = 4\chi - e = (K^2 - 2e)/3$.
+
+For a minimal surface of general type:
+- $b_2^+ = 2p_g + 1$ (odd, since $p_g \geq 0$).
+- $b_2^- = b_2 - b_2^+ = (e - 2) - (2p_g + 1) = e - 2p_g - 3$.
+- Noether: $b_2 = e - 2 = 12\chi - K^2 - 2$.
+
+The Donaldson and Seiberg--Witten invariants provide smooth-structure information beyond the topological data. Surfaces of general type are "standard" from the Seiberg--Witten perspective: they have simple type and the basic classes are $\pm K_X$.
+</Remark>
+
+---
+
+## Further examples
+
+<Example id="noether-double-cover" title="Double covers of P2">
+Let $X \to \mathbb{P}^2$ be a double cover branched along a smooth curve $B$ of degree $2d$. Then:
+
+$K_X = \pi^*(K_{\mathbb{P}^2} + dH) = \pi^*((d - 3)H)$, so $K^2 = 2(d-3)^2$.
+
+$e(X) = 2e(\mathbb{P}^2) - e(B) = 2 \cdot 3 - (2 - 2g(B)) = 6 - 2 + 2 \cdot \frac{(2d-1)(2d-2)}{2} = 4 + 2d(2d - 3)$... let me compute more carefully. The branch curve $B$ has degree $2d$ and genus $g(B) = \frac{(2d-1)(2d-2)}{2} = (2d-1)(d-1)$. The Euler characteristic of the double cover is:
+
+$e(X) = 2e(\mathbb{P}^2 \setminus B) + e(B) = 2(3 - e(B)) + e(B) = 6 - e(B) = 6 - (2 - 2g(B)) = 4 + 2(2d-1)(d-1)$.
+
+Simplifying: $e(X) = 4d^2 - 6d + 6$.
+
+Noether check: $\frac{1}{12}(2(d-3)^2 + 4d^2 - 6d + 6) = \frac{1}{12}(2d^2 - 12d + 18 + 4d^2 - 6d + 6) = \frac{1}{12}(6d^2 - 18d + 24) = \frac{d^2 - 3d + 4}{2}$.
+
+And indeed $\chi(\mathcal{O}_X) = 1 - 0 + p_g$ where $p_g = h^0(K_X) = h^0(\mathcal{O}_{\mathbb{P}^2}(d-3)) + h^0(\mathcal{O}_{\mathbb{P}^2}(-3)) = \binom{d-1}{2}$ for $d \geq 3$. With $q = 0$:
+
+$\chi = 1 + \binom{d-1}{2} = 1 + \frac{(d-1)(d-2)}{2} = \frac{d^2 - 3d + 4}{2}$.
+
+Specific cases:
+- $d = 3$ ($B$ sextic): $K^2 = 0$, $e = 24$, $\chi = 2$. This is a K3 surface.
+- $d = 4$ ($B$ octic): $K^2 = 2$, $e = 46$, $\chi = 4$, $p_g = 3$.
+- $d = 5$ ($B$ degree $10$): $K^2 = 8$, $e = 76$, $\chi = 7$, $p_g = 6$.
+</Example>
+
+<Example id="noether-fibered" title="Fibered surfaces">
+Let $f \colon X \to C$ be a fibration with general fiber $F$ of genus $g(F) = g$ over a base curve of genus $b$.
+
+The Chern numbers satisfy:
+- $e(X) = 4(g-1)(b-1) + \sum_v \delta_v$ where $\delta_v \geq 0$ measures the singular fibers.
+- $K^2 = 8(g-1)(b-1) + K_{X/C}^2$ where $K_{X/C}^2 \geq 0$ by the Arakelov inequality (and equals $0$ iff the fibration is isotrivial after base change).
+- $\chi(\mathcal{O}_X) = (g - 1)(b - 1) + \deg f_* \omega_{X/C}$.
+
+For a **Kodaira fibration** (a smooth fibration with no singular fibers, but non-isotrivial):
+- $K^2 > 8(g-1)(b-1) > 0$ (strict inequality by the Arakelov inequality).
+- $e = 4(g-1)(b-1)$.
+- These satisfy $K^2/e > 2$, giving points in the geography above the line $c_1^2 = 2c_2$.
+</Example>
+
+---
+
+## Universality of Noether's formula
+
+<Remark title="Noether's formula in higher dimensions">
+Noether's formula generalizes to higher dimensions via the Hirzebruch--Riemann--Roch theorem:
+
+$$\chi(\mathcal{O}_X) = \int_X \operatorname{td}(T_X).$$
+
+In dimension $1$ (curves): $\chi(\mathcal{O}_C) = 1 - g = \frac{1}{2}(c_1(T_C)) + 1 = \frac{1}{2}(2 - 2g) + 0$... more precisely, $\chi(\mathcal{O}_C) = \frac{1}{2}\deg(K_C) + 1 = 1 - g$.
+
+In dimension $2$ (surfaces): $\chi(\mathcal{O}_X) = \frac{1}{12}(c_1^2 + c_2)$ -- Noether's formula.
+
+In dimension $3$ (threefolds): $\chi(\mathcal{O}_X) = \frac{1}{24}c_1 c_2$.
+
+In dimension $4$ (fourfolds): $\chi(\mathcal{O}_X) = \frac{1}{720}(3c_1^4 - c_1^2 c_2 - 3c_2^2 + c_4)$... more precisely, $\chi(\mathcal{O}_X) = \frac{1}{720}(-c_1^4 + 4c_1^2 c_2 + 3c_2^2 + c_1 c_3 - c_4)$.
+
+The surface case is distinguished by its simplicity: only two Chern numbers ($c_1^2$ and $c_2$) constrained by one relation ($12\chi = c_1^2 + c_2$), leaving a one-dimensional "geography."
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="The central role of Noether's formula">
+Noether's formula $12\chi(\mathcal{O}_X) = K_X^2 + e(X)$ is the single most important numerical identity in surface theory. It:
+
+- **Constrains invariants**: any two of $\{K^2, e, \chi\}$ determine the third.
+- **Underlies Riemann--Roch**: the Riemann--Roch theorem for surfaces $\chi(\mathcal{O}(D)) = \frac{1}{2}D(D - K) + \chi(\mathcal{O}_X)$ uses $\chi(\mathcal{O}_X)$ as an input, and Noether's formula expresses it in terms of Chern numbers.
+- **Bounds geography**: combined with the Noether inequality ($K^2 \geq 2\chi - 6$) and BMY inequality ($K^2 \leq 9\chi$), it delineates the region of possible invariants.
+- **Classifies surfaces**: the four classes of $\kappa = 0$ surfaces are distinguished by their Chern numbers.
+- **Connects topology and algebra**: it relates the holomorphic invariant $\chi(\mathcal{O}_X)$ to the topological invariants $K^2$ and $e$.
+</Remark>

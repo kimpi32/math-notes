@@ -1,0 +1,374 @@
+export const metadata = {
+  title: 'Hodge Index Theorem — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Theorem — Hodge Index Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Hodge Index Theorem
+
+The Hodge Index Theorem determines the signature of the intersection form on the Neron--Severi group of a smooth projective surface. It is the single most important constraint on the arithmetic of divisors: the intersection pairing is **hyperbolic**, having exactly one positive eigenvalue. This gives rise to the Hodge inequality, Zariski's lemma, the negativity lemma, and an interpretation of $\operatorname{NS}(X) \otimes \mathbb{R}$ as hyperbolic space.
+
+---
+
+## Statement
+
+<Theorem title="Hodge Index Theorem" number="5.2">
+Let $X$ be a smooth projective surface over an algebraically closed field. Let $\operatorname{NS}(X)$ be the Neron--Severi group of $X$ with the intersection pairing, and let $\rho = \operatorname{rk} \operatorname{NS}(X)$ be the Picard number. Then the intersection form on $\operatorname{NS}(X) \otimes \mathbb{R}$ has **signature** $(1, \rho - 1)$.
+
+That is, there exists a basis of $\operatorname{NS}(X) \otimes \mathbb{R}$ in which the intersection matrix is $\operatorname{diag}(1, -1, -1, \ldots, -1)$.
+</Theorem>
+
+<Theorem title="Hodge Index Theorem (equivalent formulation)" number="5.3">
+Let $X$ be a smooth projective surface and $H$ an ample divisor on $X$. If $D$ is a divisor with $D \cdot H = 0$, then $D^2 \leq 0$, with equality if and only if $D \equiv 0$ (numerically trivial).
+
+In other words, the orthogonal complement $H^{\perp} \subset \operatorname{NS}(X) \otimes \mathbb{R}$ is **negative definite**.
+</Theorem>
+
+<Remark title="Why the two formulations are equivalent">
+The intersection form has at least one positive direction: if $H$ is ample, then $H^2 > 0$ by the Nakai--Moishezon criterion. Theorem 5.3 says $H^{\perp}$ is negative definite, so there is exactly one positive direction. This means the signature is $(1, \rho - 1)$, recovering Theorem 5.2. Conversely, signature $(1, \rho - 1)$ means the orthogonal complement of any vector with positive self-intersection is negative definite by Sylvester's law of inertia.
+</Remark>
+
+---
+
+## Proof sketch
+
+<Proof title="Proof of the Hodge Index Theorem">
+We prove Theorem 5.3. Let $H$ be ample and $D$ a divisor with $D \cdot H = 0$. We must show $D^2 \leq 0$.
+
+**Step 1: Riemann--Roch.** For any integer $n$, Riemann--Roch gives:
+
+$$\chi(\mathcal{O}_X(nD)) = \frac{1}{2}nD \cdot (nD - K_X) + \chi(\mathcal{O}_X) = \frac{n^2}{2}D^2 - \frac{n}{2}D \cdot K_X + \chi(\mathcal{O}_X).$$
+
+**Step 2: Serre duality bound.** We have $h^0(nD) + h^0(K_X - nD) \geq \chi(\mathcal{O}_X(nD))$ since $h^2(nD) = h^0(K_X - nD)$ by Serre duality and $h^1(nD) \geq 0$.
+
+**Step 3: Ampleness constraint.** Since $H$ is ample and $D \cdot H = 0$, we get $(nD) \cdot H = 0$ for all $n$. An effective divisor $E$ satisfies $E \cdot H > 0$ (since $H$ is ample and $E$ is a nontrivial effective cycle), unless $E = 0$. Therefore:
+
+- If $h^0(nD) > 0$ for some $n > 0$, then $nD$ is linearly equivalent to an effective divisor $E$ with $E \cdot H = 0$, forcing $E = 0$, so $nD \sim 0$.
+- Similarly, $h^0(K_X - nD) > 0$ forces $K_X - nD$ to be effective with $(K_X - nD) \cdot H = K_X \cdot H > 0$, which is fine -- but for $|n|$ large enough, at most one of $h^0(nD)$ and $h^0(K_X - nD)$ can be nonzero.
+
+**Step 4: Conclusion.** Suppose $D^2 > 0$. Then $\chi(\mathcal{O}_X(nD)) \sim \frac{n^2}{2}D^2 \to +\infty$ as $|n| \to \infty$. So for $|n| \gg 0$, either $h^0(nD)$ or $h^0(K_X - nD)$ grows quadratically. Choose the sign of $n$ so that $h^0(nD) \to \infty$. Then for large $n$, $nD$ is linearly equivalent to an effective divisor, but $nD \cdot H = 0$ forces $nD \sim 0$, contradicting $D^2 > 0$.
+
+Therefore $D^2 \leq 0$. If $D^2 = 0$, a similar but more delicate argument shows $D \equiv 0$.
+</Proof>
+
+<Remark title="Characteristic zero vs. positive characteristic">
+Over $\mathbb{C}$, the Hodge Index Theorem follows from the Hodge decomposition and the Lefschetz theorem on $(1,1)$-classes. In positive characteristic, the algebraic proof via Riemann--Roch (as above) works uniformly, which is essential since the Hodge decomposition may fail.
+</Remark>
+
+---
+
+## The Hodge inequality
+
+<Theorem title="Hodge inequality (Cauchy--Schwarz for intersection form)" number="5.4">
+Let $X$ be a smooth projective surface and let $C, D$ be divisors on $X$ with $C^2 > 0$. Then:
+
+$$(C \cdot D)^2 \geq C^2 \cdot D^2,$$
+
+with equality if and only if $D$ is numerically proportional to $C$, i.e., there exists $\lambda \in \mathbb{Q}$ such that $D \equiv \lambda C$.
+</Theorem>
+
+<Proof title="Proof of the Hodge inequality">
+Since $C^2 > 0$, we can write $D = \frac{C \cdot D}{C^2} C + D'$ where $D' = D - \frac{C \cdot D}{C^2}C$ satisfies $D' \cdot C = 0$. By the Hodge Index Theorem (Theorem 5.3, applied with $C$ playing the role of an ample-like class), $D'^2 \leq 0$. Computing:
+
+$$D^2 = \frac{(C \cdot D)^2}{C^2} + D'^2 \leq \frac{(C \cdot D)^2}{C^2},$$
+
+so $(C \cdot D)^2 \geq C^2 \cdot D^2$. Equality holds iff $D'^2 = 0$, which by Hodge Index means $D' \equiv 0$, i.e., $D \equiv \frac{C \cdot D}{C^2} C$.
+</Proof>
+
+<Remark title="Reversed Cauchy--Schwarz">
+The Hodge inequality looks like the Cauchy--Schwarz inequality but with the inequality **reversed**: in a positive-definite inner product space, Cauchy--Schwarz gives $(u \cdot v)^2 \leq |u|^2 |v|^2$. The reversal occurs because the intersection form has signature $(1, \rho - 1)$, not $(\rho, 0)$. This is exactly the Cauchy--Schwarz inequality for the Minkowski metric of signature $(1, n-1)$.
+</Remark>
+
+---
+
+## Examples: intersection forms on classical surfaces
+
+<Example id="hodge-P2" title="Intersection form on P^2">
+$\operatorname{NS}(\mathbb{P}^2) = \mathbb{Z} \cdot H$ with $H^2 = 1$. The intersection form is the $1 \times 1$ matrix $(1)$, which has signature $(1, 0)$ since $\rho = 1$. The Hodge Index Theorem is vacuous: $H^{\perp} = 0$.
+
+The Hodge inequality gives: for any curve $C$ of degree $d$ and any curve $D$ of degree $e$, $(de)^2 \geq d^2 \cdot e^2$. This is just $d^2 e^2 \geq d^2 e^2$, an equality. Since $\rho = 1$, every divisor is proportional to $H$.
+</Example>
+
+<Example id="hodge-P1P1" title="Intersection form on P^1 x P^1">
+$\operatorname{NS}(\mathbb{P}^1 \times \mathbb{P}^1) = \mathbb{Z} F_1 \oplus \mathbb{Z} F_2$ with $F_1^2 = F_2^2 = 0$ and $F_1 \cdot F_2 = 1$. The intersection matrix in the basis $\{F_1, F_2\}$ has entries $Q_{11} = Q_{22} = 0$ and $Q_{12} = Q_{21} = 1$.
+
+The eigenvalues are $+1$ and $-1$ (eigenvectors $F_1 + F_2$ and $F_1 - F_2$), confirming signature $(1, 1)$.
+
+**Hodge inequality check**: Take $C = F_1 + F_2$ (the diagonal, with $C^2 = 2 > 0$) and $D = aF_1 + bF_2$. Then $(C \cdot D)^2 = (a + b)^2$ and $C^2 \cdot D^2 = 2 \cdot 2ab = 4ab$. The inequality $(a+b)^2 \geq 4ab$ is equivalent to $(a - b)^2 \geq 0$ ✓.
+</Example>
+
+<Example id="hodge-blowup" title="Intersection form on Bl_p(P^2)">
+$\operatorname{NS}(\operatorname{Bl}_P(\mathbb{P}^2)) = \mathbb{Z} H \oplus \mathbb{Z} E$ with $H^2 = 1$, $E^2 = -1$, $H \cdot E = 0$. The intersection matrix is $\operatorname{diag}(1, -1)$, which has signature $(1, 1)$ directly.
+
+Let $D = aH - bE$. Then $D \cdot H = a$ and $D^2 = a^2 - b^2$. If $D \cdot H = 0$, then $a = 0$ and $D^2 = -b^2 \leq 0$, with equality iff $b = 0$ ✓.
+</Example>
+
+<Example id="hodge-blowup-n" title="Intersection form on Bl_{p_1,...,p_n}(P^2)">
+Blowing up $\mathbb{P}^2$ at $n$ points in general position gives $\operatorname{NS}(X) = \mathbb{Z} H \oplus \mathbb{Z} E_1 \oplus \cdots \oplus \mathbb{Z} E_n$ with $H^2 = 1$, $E_i^2 = -1$, $H \cdot E_i = 0$, $E_i \cdot E_j = 0$ for $i \neq j$. The intersection matrix is $\operatorname{diag}(1, -1, -1, \ldots, -1)$, directly exhibiting signature $(1, n)$.
+
+For $n = 6$: the del Pezzo surface of degree $3$ (a cubic surface in $\mathbb{P}^3$) has $\rho = 7$, intersection form $\operatorname{diag}(1, -1, -1, -1, -1, -1, -1)$, and contains the famous $27$ lines.
+
+For $n = 8$: the del Pezzo surface of degree $1$ has $\rho = 9$, and the anti-canonical class $-K = 3H - E_1 - \cdots - E_8$ satisfies $(-K)^2 = 9 - 8 = 1$.
+</Example>
+
+<Example id="hodge-K3" title="Intersection form on K3 surfaces">
+A K3 surface over $\mathbb{C}$ has $H^2(X, \mathbb{Z}) \cong \Lambda_{K3}$, the K3 lattice, which is isometric to $U^3 \oplus E_8(-1)^2$, a unimodular lattice of rank $22$ and signature $(3, 19)$.
+
+The Neron--Severi group $\operatorname{NS}(X) = H^{1,1}(X) \cap H^2(X, \mathbb{Z})$ has rank $\rho$ with $1 \leq \rho \leq 20$. By the Hodge Index Theorem, the intersection form on $\operatorname{NS}(X)$ has signature $(1, \rho - 1)$.
+
+- **Generic K3** ($\rho = 1$): $\operatorname{NS}(X) = \mathbb{Z} H$ with $H^2 = 2d$ for some $d \geq 1$.
+- **$\rho = 2$ example**: The Kummer surface of a generic abelian surface has $\rho = 17$ (not $2$!). A K3 with $\rho = 2$ could have NS lattice with Gram matrix having entries $2d, a$ on the first row and $a, -2e$ on the second, for appropriate $d, e, a$.
+- **$\rho = 20$ (singular K3)**: The Fermat quartic $x^4 + y^4 + z^4 + w^4 = 0$ over $\overline{\mathbb{F}_3}$ achieves $\rho = 22$ (the Tate conjecture), but over $\mathbb{C}$ the maximum is $\rho = 20$.
+</Example>
+
+<Example id="hodge-hirzebruch" title="Intersection form on Hirzebruch surfaces">
+The Hirzebruch surface $\mathbb{F}_n$ has $\operatorname{NS}(\mathbb{F}_n) = \mathbb{Z} C_0 \oplus \mathbb{Z} F$ with $C_0^2 = -n$, $F^2 = 0$, $C_0 \cdot F = 1$.
+
+The intersection matrix has $Q_{11} = -n$, $Q_{12} = Q_{21} = 1$, $Q_{22} = 0$, with $\det(Q) = -1$ and eigenvalues $\frac{-n \pm \sqrt{n^2 + 4}}{2}$. One eigenvalue is positive, one is negative, confirming signature $(1, 1)$.
+
+In the basis $H = C_0 + nF$ (which is nef with $H^2 = n$) and $F$: the matrix entries become $n, 1, 1, 0$ respectively, still with one positive and one negative eigenvalue.
+
+**Hodge inequality check**: $C_0^2 = -n < 0$, so we cannot apply the Hodge inequality with $C = C_0$. Taking $C = C_0 + nF$ (with $C^2 = n > 0$ for $n \geq 1$) and $D = F$: $(C \cdot D)^2 = 1$ and $C^2 \cdot D^2 = n \cdot 0 = 0$, so $1 \geq 0$ ✓.
+</Example>
+
+---
+
+## Zariski's lemma
+
+<Theorem title="Zariski's lemma" number="5.5">
+Let $f: X \to B$ be a fibration from a smooth projective surface to a smooth curve, and let $F = \sum_i a_i C_i$ be a fiber of $f$ (so $F$ is connected). For any divisor $D = \sum_i d_i C_i$ supported on the fiber:
+
+- $D^2 \leq 0$.
+- $D^2 = 0$ if and only if $D$ is a rational multiple of $F$.
+
+Equivalently, the intersection matrix $(C_i \cdot C_j)$ restricted to the irreducible components of a fiber is **negative semi-definite**, with kernel spanned by $F$.
+</Theorem>
+
+<Proof title="Proof via the Hodge Index Theorem">
+Let $H$ be an ample divisor on $X$. Since $F$ is a fiber of $f$, all fibers are numerically equivalent, so $F \equiv F'$ for any other fiber $F'$. Hence $F^2 = F \cdot F' = 0$ (distinct fibers are disjoint).
+
+For $D$ supported on $F$, write $D = \lambda F + D'$ where $\lambda = \frac{D \cdot H}{F \cdot H}$ (this makes $D' \cdot H = 0$). By the Hodge Index Theorem, $D'^2 \leq 0$ with equality iff $D' \equiv 0$, i.e., $D \equiv \lambda F$.
+
+Since $D^2 = \lambda^2 F^2 + 2\lambda F \cdot D' + D'^2 = 0 + 0 + D'^2$ (because $F \cdot D' = 0$, as $D'$ is supported on $F$ and $F \cdot C_i = 0$ for components $C_i$ of $F$), we get $D^2 = D'^2 \leq 0$.
+</Proof>
+
+<Example id="zariski-elliptic" title="Zariski's lemma for elliptic fibrations">
+Let $f: X \to \mathbb{P}^1$ be an elliptic fibration with a singular fiber of Kodaira type $I_n$ (a cycle of $n$ rational curves $C_1, \ldots, C_n$, each with $C_i^2 = -2$, meeting in a cycle: $C_i \cdot C_{i+1} = 1$ for indices mod $n$).
+
+The fiber is $F = C_1 + C_2 + \cdots + C_n$ with $F^2 = \sum_i C_i^2 + 2\sum_{i} C_i \cdot C_{i+1} = -2n + 2n = 0$ ✓.
+
+The intersection matrix of the $C_i$ is the negative of the Cartan matrix of type $\tilde{A}_{n-1}$, which is negative semi-definite with $1$-dimensional kernel spanned by $(1, 1, \ldots, 1)$, confirming Zariski's lemma.
+
+For a type $I_1$ fiber (a nodal rational curve $C$ with $C^2 = -1$... actually, $C^2 = 0$ since it is the entire fiber): a single irreducible fiber has $F = C$ with $C^2 = 0$.
+</Example>
+
+<Example id="zariski-type-In" title="Checking Zariski on type IV* fiber">
+Consider a Kodaira type $IV^*$ fiber ($\tilde{E}_6$): the fiber $F = C_0 + 2C_1 + 3C_2 + 2C_3 + C_4 + 2C_5 + C_6$ where all $C_i^2 = -2$. The intersection matrix of $C_0, \ldots, C_6$ is the negative of the extended Cartan matrix of $E_6$, which is negative semi-definite with kernel spanned by the coefficients $(1, 2, 3, 2, 1, 2, 1)$. One verifies $F^2 = 0$, and any proper sub-combination $D = \sum d_i C_i$ not proportional to $F$ satisfies $D^2 < 0$.
+</Example>
+
+---
+
+## Negativity lemma
+
+<Theorem title="Negativity lemma" number="5.6">
+Let $f: Y \to X$ be a birational morphism of smooth projective surfaces, and let $E = \sum_i a_i E_i$ be an effective divisor supported on the exceptional locus of $f$ (i.e., each $E_i$ is an exceptional curve contracted by $f$). If $E$ is $f$-numerically trivial (meaning $E \cdot C = 0$ for every curve $C$ contracted by $f$), then $E = 0$.
+
+More generally, if $E \cdot E_i \leq 0$ for all $i$, then $E$ is effective (all $a_i \geq 0$) or $E = 0$. And if $E$ is effective and nonzero, then $E^2 < 0$.
+</Theorem>
+
+<Remark title="Why this follows from Hodge Index">
+The exceptional curves $E_1, \ldots, E_n$ of a birational morphism $f: Y \to X$ are contracted to points, so they behave like components of fibers. The intersection matrix $(E_i \cdot E_j)$ is **negative definite** (not just semi-definite, since the exceptional locus is not a complete fiber). This is a consequence of the Hodge Index Theorem: the $E_i$ all satisfy $E_i \cdot H = 0$ for $H = f^*A$ with $A$ ample on $X$, and they are independent in $\operatorname{NS}(Y)$, so the restriction of the intersection form to $\operatorname{span}(E_i)$ lies in $H^{\perp}$, which is negative definite.
+</Remark>
+
+<Example id="negativity-blowup" title="Negativity for a single blowup">
+Let $f: \operatorname{Bl}_P(X) \to X$ with exceptional divisor $E$. Then $E^2 = -1 < 0$. Any effective divisor $D = aE$ ($a > 0$) supported on the exceptional locus has $D^2 = -a^2 < 0$ ✓.
+
+After blowing up two points, the exceptional locus is $E_1 \cup E_2$ with $E_1^2 = E_2^2 = -1$ and $E_1 \cdot E_2 = 0$. The intersection matrix $\operatorname{diag}(-1, -1)$ is negative definite ✓.
+</Example>
+
+<Example id="negativity-resolution" title="Negativity for resolution of an A_n singularity">
+Resolving an $A_n$ surface singularity (locally $xy = z^{n+1}$) produces a chain of $n$ exceptional curves $E_1, \ldots, E_n$ with $E_i^2 = -2$ and $E_i \cdot E_{i+1} = 1$. The intersection matrix is the negative of the Cartan matrix of $A_n$, which has eigenvalues $-2 + 2\cos(\pi k/(n+1))$ for $k = 1, \ldots, n$. All eigenvalues are negative, confirming negative definiteness.
+
+For $n = 1$: a single $(-2)$-curve. For $n = 2$: the matrix has diagonal entries $-2, -2$ and off-diagonal entries $1, 1$, with eigenvalues $-1$ and $-3$.
+</Example>
+
+---
+
+## Light cone and hyperbolic geometry
+
+<Definition title="Light cone and positive cone" number="5.4">
+In $V = \operatorname{NS}(X) \otimes \mathbb{R}$, the **light cone** is:
+
+$$\mathcal{L} = \{ D \in V : D^2 = 0 \}.$$
+
+The **positive cone** is one of the two connected components of $\{ D \in V : D^2 > 0 \}$; we choose the component $\mathcal{C}^+$ containing an ample class. The **ample cone** $\operatorname{Amp}(X) \subset \mathcal{C}^+$ and the **nef cone** $\overline{\operatorname{Amp}(X)} = \operatorname{Nef}(X) \subset \overline{\mathcal{C}^+}$ sit inside the positive cone.
+</Definition>
+
+<Remark title="Hyperbolic geometry of NS(X) tensor R">
+Since the intersection form on $V = \operatorname{NS}(X) \otimes \mathbb{R}$ has signature $(1, \rho - 1)$, the projectivization of the positive cone:
+
+$$\mathbb{H}^{\rho - 1} = \{ [D] \in \mathbb{P}(V) : D^2 > 0 \} / \mathbb{R}_{>0}$$
+
+is a model of **hyperbolic $(\rho - 1)$-space**. The intersection form induces the hyperbolic metric:
+
+$$\cosh d([C], [D]) = \frac{|C \cdot D|}{\sqrt{C^2} \cdot \sqrt{D^2}}$$
+
+for classes $C, D$ in the positive cone.
+
+The Hodge inequality $(C \cdot D)^2 \geq C^2 \cdot D^2$ ensures $\cosh d \geq 1$, which is exactly the condition for the hyperbolic distance to be well-defined. Equality (i.e., $d = 0$) occurs iff $C$ and $D$ are proportional.
+</Remark>
+
+<Example id="hyperbolic-P1P1" title="Hyperbolic line for P^1 x P^1">
+For $\mathbb{P}^1 \times \mathbb{P}^1$, $V = \mathbb{R}^2$ with the form $Q(a,b) = 2ab$. The positive cone is $\{(a,b) : ab > 0\}$, which has two components; the one containing $(1,1)$ is $\{a > 0, b > 0\}$. The projectivization $\mathbb{H}^1$ is parametrized by $t = a/b \in (0, \infty)$, a copy of the real line (the hyperbolic line).
+
+The ample cone is $\{a > 0, b > 0\}$ (divisors of bidegree $(a,b)$ with $a, b > 0$), and the nef cone boundary consists of the rays $\mathbb{R}_{\geq 0} F_1$ and $\mathbb{R}_{\geq 0} F_2$ (the two rulings), which lie on the light cone.
+</Example>
+
+<Example id="hyperbolic-K3" title="Hyperbolic space for K3 surfaces">
+For a K3 surface with $\rho = 2$ and NS lattice generated by $H, C$ with $H^2 = 4$, $C^2 = -2$, $H \cdot C = 1$: the positive cone in $\mathbb{R}^2$ is given by $(aH + bC)^2 = 4a^2 - 2b^2 + 2ab > 0$.
+
+The ample cone is cut out by requiring additionally $D \cdot C > 0$ (i.e., $-2b + a > 0$) for the $(-2)$-curve $C$. So the ample cone is $\{4a^2 - 2b^2 + 2ab > 0\} \cap \{a - 2b > 0\}$.
+
+In hyperbolic $1$-space $\mathbb{H}^1$, the ample cone corresponds to a half-line, bounded by the "wall" defined by the $(-2)$-curve $C$. Reflection across this wall is the Picard--Lefschetz reflection $s_C: D \mapsto D + (D \cdot C) C$.
+</Example>
+
+---
+
+## Application to arithmetic: Faltings height pairing
+
+<Theorem title="Arithmetic Hodge Index (Faltings--Hriljac)" number="5.7">
+Let $X$ be an arithmetic surface (a regular model of a curve $C$ over a number field $K$, fibered over $\operatorname{Spec}(\mathcal{O}_K)$). The Arakelov intersection pairing on the group of arithmetic divisors $\widehat{\operatorname{Div}}(X)$ has the Hodge index property:
+
+If $\widehat{D}$ is an arithmetic divisor with $\widehat{D} \cdot \widehat{\omega} = 0$ (where $\widehat{\omega}$ is the arithmetic canonical class), then $\widehat{D}^2 \leq 0$, with equality iff $\widehat{D}$ is numerically trivial.
+
+Equivalently, the Neron--Tate height pairing on the Jacobian $J(C)(\overline{K})$ is **negative definite** modulo torsion.
+</Theorem>
+
+<Example id="faltings-elliptic" title="Arithmetic Hodge index for elliptic curves">
+For an elliptic curve $E/\mathbb{Q}$, the Neron--Tate height $\hat{h}: E(\mathbb{Q}) \otimes \mathbb{R} \to \mathbb{R}$ is a positive-definite quadratic form (after accounting for torsion). The rank of $E(\mathbb{Q})$ is the dimension of this space.
+
+The arithmetic Hodge Index Theorem ensures that the height pairing matrix on a basis $P_1, \ldots, P_r$ of $E(\mathbb{Q})/\text{torsion}$ has $\det(\langle P_i, P_j \rangle) > 0$, which is the **regulator** of $E$. This appears in the BSD conjecture:
+
+$$L^{(r)}(E, 1) / r! = \Omega_E \cdot \operatorname{Reg}(E) \cdot \prod c_p \cdot |\text{III}| / |E(\mathbb{Q})_{\text{tors}}|^2.$$
+</Example>
+
+---
+
+## Algebraic vs. topological intersection form
+
+<Remark title="Topological intersection form over C">
+Over $\mathbb{C}$, a smooth projective surface $X$ has a topological intersection form on $H^2(X, \mathbb{Z})$, a unimodular symmetric bilinear form of rank $b_2 = \dim H^2(X, \mathbb{R})$. By the Hodge decomposition:
+
+$$H^2(X, \mathbb{C}) = H^{2,0} \oplus H^{1,1} \oplus H^{0,2},$$
+
+where $\dim H^{2,0} = p_g$, $\dim H^{1,1} = b_2 - 2p_g$, $\dim H^{0,2} = p_g$.
+
+The full intersection form on $H^2(X, \mathbb{R})$ has signature $(2p_g + 1, b_2 - 2p_g - 1)$ by the Hodge--Riemann bilinear relations. The algebraic part $\operatorname{NS}(X) \otimes \mathbb{R} \subset H^{1,1}_{\mathbb{R}}$ has signature $(1, \rho - 1)$ by the Hodge Index Theorem.
+
+The transcendental lattice $T(X) = \operatorname{NS}(X)^{\perp} \cap H^2(X, \mathbb{Z})$ carries the remaining signature $(2p_g, b_2 - 2p_g - \rho)$.
+</Remark>
+
+<Example id="topological-K3" title="Topological vs. algebraic for K3 surfaces">
+A K3 surface has $b_2 = 22$, $p_g = 1$, so the topological intersection form has signature $(3, 19)$ on $H^2(X, \mathbb{Z}) \cong U^3 \oplus E_8(-1)^2$.
+
+The algebraic part $\operatorname{NS}(X)$ has signature $(1, \rho - 1)$, and the transcendental lattice $T(X)$ has signature $(2, 20 - \rho)$.
+
+- For $\rho = 1$: $\operatorname{NS}(X) \cong \mathbb{Z}$ (signature $(1, 0)$) and $T(X)$ has signature $(2, 19)$.
+- For $\rho = 20$: $\operatorname{NS}(X)$ has signature $(1, 19)$ and $T(X)$ has signature $(2, 0)$, meaning $T(X)$ is a positive-definite lattice of rank $2$.
+</Example>
+
+<Example id="topological-general-type" title="Surfaces of general type and geography">
+For a minimal surface of general type, Noether's formula gives $\chi(\mathcal{O}_X) = \frac{1}{12}(K^2 + e(X))$ where $e(X) = 2 - 4q + b_2$ is the topological Euler characteristic. The Bogomolov--Miyaoka--Yau inequality gives $K^2 \leq 3 e(X)$ (equivalently $K^2 \leq 9 \chi(\mathcal{O}_X)$).
+
+The topological intersection form on $H^2$ has signature $(2p_g + 1, b_2 - 2p_g - 1)$. By Freedman's theorem, the homeomorphism type of the underlying $4$-manifold is determined by this form (plus $b_1$). But the smooth structure carries more information (Donaldson theory), and the algebraic structure even more.
+</Example>
+
+---
+
+## Further examples and applications
+
+<Example id="hodge-enriques" title="Intersection form on Enriques surfaces">
+An Enriques surface $Y$ has $K_Y \not\equiv 0$ but $2K_Y \sim 0$. Its Neron--Severi group has rank $\rho = 10$, and the intersection form is the even unimodular lattice $U \oplus E_8(-1)$ of signature $(1, 9)$.
+
+The Hodge Index Theorem gives: for $H$ ample on $Y$ and $D \cdot H = 0$, we have $D^2 \leq 0$. The lattice $U \oplus E_8(-1)$ is the unique even unimodular lattice of this signature, mirroring the uniqueness of the $E_8$ lattice.
+
+Any $(-2)$-curve $C$ on $Y$ satisfies $C^2 = -2$ and defines a reflection $s_C: D \mapsto D + (D \cdot C)C$ preserving the lattice. The Weyl group generated by these reflections acts on the ample cone.
+</Example>
+
+<Example id="hodge-abelian" title="Intersection form on abelian surfaces">
+An abelian surface $A$ has $\rho(A)$ ranging from $1$ to $4$ (over $\mathbb{C}$). The Neron--Severi group embeds into $\operatorname{End}(A)^{\text{sym}}$ via the Appell--Humbert theorem. The intersection form on $\operatorname{NS}(A)$ has signature $(1, \rho - 1)$.
+
+- **$\rho = 1$**: $\operatorname{NS}(A) = \mathbb{Z} L$ with $L^2 = 2d$ (a polarization of type $(1, d)$). Signature $(1, 0)$.
+- **$\rho = 2$** (generic principally polarized): $\operatorname{NS}(A) \cong \mathbb{Z}^2$ with signature $(1, 1)$.
+- **$\rho = 3$** ($A$ has real multiplication): the extra endomorphisms produce additional algebraic classes.
+- **$\rho = 4$** ($A \cong E_1 \times E_2$ with CM): $\operatorname{NS}(A)$ is rank $4$ with signature $(1, 3)$.
+</Example>
+
+<Example id="hodge-inequality-application" title="Hodge inequality bounds degrees of curves">
+Let $X = \mathbb{P}^2$ blown up at one point, with $\operatorname{NS}(X) = \mathbb{Z} H \oplus \mathbb{Z} E$. Let $C$ be an irreducible curve of class $aH - bE$ (degree $a$, multiplicity $b$ at the blown-up point). By irreducibility, $C$ is effective and:
+
+- $C \cdot H = a > 0$ and $C \cdot E = b \geq 0$.
+- $C^2 = a^2 - b^2 \geq -1$ (genus formula: $g = \frac{(a-1)(a-2)}{2} - \frac{b(b-1)}{2} \geq 0$).
+
+The Hodge inequality with $H$ (taking $H^2 = 1 > 0$, $D = C$): $(H \cdot C)^2 \geq H^2 \cdot C^2$, i.e., $a^2 \geq a^2 - b^2$, giving $b^2 \geq 0$, which is trivial. But applying with the ample class $A = 3H - E$ ($A^2 = 8$) and $C = aH - bE$: $(3a - b)^2 \cdot 1 \geq (a^2 - b^2) \cdot 1$... this requires more care.
+
+A more useful application: if $C, D$ are two distinct irreducible curves both passing through the blown-up point with multiplicities $b, d$, then by the Hodge inequality on the original $\mathbb{P}^2$: their intersection number satisfies $C \cdot D = ae - bd \cdot ... $. The cleanest use is: $(C \cdot D)^2 \geq C^2 \cdot D^2$ when $C^2 > 0$.
+</Example>
+
+<Example id="hodge-fibration" title="Hodge Index constrains fibration structure">
+Suppose a smooth projective surface $X$ has two divisors $F_1, F_2$ with $F_1^2 = F_2^2 = 0$ and $F_1 \cdot F_2 > 0$. Then $F_1$ and $F_2$ are independent in $\operatorname{NS}(X)$ and span a sublattice of signature $(1, 1)$ (the form $2(F_1 \cdot F_2) ab$ in coordinates $aF_1 + bF_2$ gives eigenvalues $\pm F_1 \cdot F_2$).
+
+By the Hodge Index Theorem, $\rho \geq 2$. Moreover, if $F_1$ is the class of a fiber of a fibration $f_1: X \to B_1$, then $F_1^2 = 0$ is automatic. Two independent fibrations $f_1, f_2$ force $\rho \geq 2$ and the sublattice $\mathbb{Z} F_1 \oplus \mathbb{Z} F_2$ has signature $(1, 1)$.
+
+This is realized by $\mathbb{P}^1 \times \mathbb{P}^1$: the two projections give fiber classes $F_1, F_2$ with $F_1 \cdot F_2 = 1$.
+</Example>
+
+---
+
+## Consequences for the cone structure
+
+<Remark title="The positive cone is round">
+The Hodge Index Theorem implies that the positive cone $\mathcal{C}^+ = \{D \in \operatorname{NS}(X) \otimes \mathbb{R} : D^2 > 0, D \cdot H > 0\}$ (for a fixed ample $H$) is a convex open cone. This convexity is a consequence of the Minkowski geometry: in signature $(1, n)$, the set of future-pointing timelike vectors is convex.
+
+In particular: if $C$ and $D$ are both in $\mathcal{C}^+$, then $C + D \in \mathcal{C}^+$, i.e., $(C + D)^2 > 0$. This follows from $(C + D)^2 = C^2 + 2C \cdot D + D^2 > 0$, since $C \cdot D > 0$ by the Hodge inequality (both $C^2 > 0$ and $D^2 > 0$ with $C, D$ in the same component, so $C \cdot D \geq \sqrt{C^2 \cdot D^2} > 0$).
+</Remark>
+
+<Example id="cone-blowup-6" title="Cone structure on cubic surface">
+The cubic surface $X = \operatorname{Bl}_{p_1, \ldots, p_6}(\mathbb{P}^2)$ has $\rho = 7$ and NS lattice $\mathbb{Z}^{1,6}$ (one positive, six negative directions). The $27$ lines on the cubic surface are the $(-1)$-curves, and the effective cone is generated by these $27$ classes.
+
+The ample cone is the interior of the dual of the effective cone of curves, cut out by the $27$ inequalities $D \cdot L_i > 0$ for each line $L_i$. In the hyperbolic $6$-space $\mathbb{H}^6$, this is a polytope bounded by $27$ hyperplanes.
+
+The Weyl group $W(E_6)$ of order $51840$ acts on the NS lattice, permuting the $27$ lines and preserving the intersection form.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Central role of the Hodge Index Theorem">
+The Hodge Index Theorem is the foundation for the arithmetic of divisors on surfaces:
+
+- **Signature** $(1, \rho - 1)$: the intersection form is hyperbolic, having exactly one positive direction.
+- **Hodge inequality**: $(C \cdot D)^2 \geq C^2 \cdot D^2$ when $C^2 > 0$, the reversed Cauchy--Schwarz for the Minkowski metric.
+- **Zariski's lemma**: fibers of fibrations have negative semi-definite intersection matrix.
+- **Negativity lemma**: exceptional divisors of birational morphisms have negative definite intersection matrix.
+- **Hyperbolic geometry**: $\operatorname{NS}(X) \otimes \mathbb{R}$ is a model of hyperbolic space, and ample/nef cones are convex subsets in this geometry.
+- **Arithmetic analogue**: the Faltings--Hriljac theorem extends the Hodge index property to Arakelov intersection theory, with the Neron--Tate height as the arithmetic intersection pairing.
+
+Every computation of linear systems, every ampleness criterion, and every birational geometry argument on surfaces ultimately relies on the definiteness properties guaranteed by this theorem.
+</Remark>

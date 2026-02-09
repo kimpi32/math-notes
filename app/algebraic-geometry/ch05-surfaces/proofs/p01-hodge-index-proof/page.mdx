@@ -1,0 +1,394 @@
+export const metadata = {
+  title: 'Proof of Hodge Index Theorem — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Proof — Hodge Index Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Hodge Index Theorem
+
+The Hodge Index Theorem constrains the signature of the intersection form on a smooth projective surface. It asserts that the intersection pairing on the orthogonal complement of an ample class is negative definite. This proof proceeds via Riemann--Roch and the ampleness properties of divisors, following the treatment in Hartshorne V.1.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Hodge Index Theorem" number="5.1">
+Let $X$ be a smooth projective surface over an algebraically closed field $k$, and let $H$ be an ample divisor on $X$. If $D$ is a divisor such that $D \cdot H = 0$, then $D^2 \leq 0$. Moreover, equality $D^2 = 0$ holds if and only if $D \equiv 0$ (i.e., $D$ is numerically trivial).
+
+Equivalently: the intersection pairing on $\operatorname{NS}(X) \otimes \mathbb{R}$ has signature $(1, \rho - 1)$, where $\rho$ is the Picard number.
+</Theorem>
+
+<Remark title="Geometric meaning">
+The theorem says that the intersection form on the Neron--Severi group is a Lorentzian form: it has exactly one positive eigenvalue. The "positive direction" is occupied by any ample class $H$, and every direction orthogonal to $H$ is negative semi-definite (and negative definite modulo numerical equivalence). This is the algebraic analogue of the Hodge--Riemann bilinear relations in complex geometry.
+</Remark>
+
+---
+
+## Step 1: Setup and Riemann--Roch
+
+<Proof title="Step 1 — Asymptotic behavior via Riemann--Roch">
+**Goal:** Show that if $D^2 > 0$ and $D \cdot H = 0$, we reach a contradiction.
+
+Assume $D$ is a divisor with $D \cdot H = 0$ and $D^2 > 0$. For any integer $n$, consider the divisor $nD$. By the Riemann--Roch theorem for surfaces:
+
+$$\chi(\mathcal{O}_X(nD)) = \frac{1}{2}(nD) \cdot (nD - K_X) + \chi(\mathcal{O}_X) = \frac{n^2}{2}D^2 - \frac{n}{2}D \cdot K_X + \chi(\mathcal{O}_X).$$
+
+Since $D^2 > 0$, the leading term $\frac{n^2}{2}D^2$ dominates for $|n|$ large. Therefore:
+
+$$\chi(\mathcal{O}_X(nD)) \to +\infty \quad \text{as } |n| \to \infty.$$
+
+Now recall that $\chi(\mathcal{O}_X(nD)) = h^0(nD) - h^1(nD) + h^2(nD)$. Since $h^1(nD) \geq 0$, we have:
+
+$$h^0(nD) + h^2(nD) \geq \chi(\mathcal{O}_X(nD)) \to +\infty.$$
+
+So at least one of $h^0(nD)$ or $h^2(nD)$ must grow without bound as $|n| \to \infty$.
+</Proof>
+
+<Example id="rr-quadratic-growth" title="Quadratic growth of chi on a K3 surface">
+On a K3 surface ($K_X = 0$, $\chi(\mathcal{O}_X) = 2$), take any divisor $D$ with $D^2 = 2d > 0$. Then:
+
+$$\chi(\mathcal{O}_X(nD)) = \frac{n^2}{2} \cdot 2d + 2 = dn^2 + 2.$$
+
+For $d = 1$, $D^2 = 2$: $\chi(\mathcal{O}(nD)) = n^2 + 2$. The values are $3, 6, 11, 18, \ldots$ for $n = 1, 2, 3, 4, \ldots$.
+
+If $D$ were orthogonal to an ample class, the Hodge Index Theorem says this cannot happen. Indeed, on a K3, if $D \cdot H = 0$ for ample $H$, then $D^2 \leq 0$.
+</Example>
+
+---
+
+## Step 2: Serre Duality and the Two Cases
+
+<Proof title="Step 2 — Ruling out large h^0 and h^2">
+By Serre duality, $h^2(\mathcal{O}_X(nD)) = h^0(\mathcal{O}_X(K_X - nD))$. So the conclusion of Step 1 says:
+
+For $|n|$ large, either $h^0(nD) \to \infty$ or $h^0(K_X - nD) \to \infty$.
+
+**Case A:** $h^0(nD) \geq 1$ for some $n > 0$. Then $nD$ is linearly equivalent to an effective divisor, say $nD \sim E \geq 0$. Since $H$ is ample and $E$ is effective, we have $E \cdot H > 0$ (an ample divisor has strictly positive intersection with every effective divisor). But $E \cdot H = nD \cdot H = n(D \cdot H) = 0$, a contradiction.
+
+**Case B:** $h^0(K_X - nD) \geq 1$ for some $n > 0$. Then $K_X - nD \sim F \geq 0$, so $F \cdot H > 0$ by ampleness. But $F \cdot H = (K_X - nD) \cdot H = K_X \cdot H - n(D \cdot H) = K_X \cdot H$. This is a fixed quantity (independent of $n$), so this does not yet give a contradiction for a single $n$.
+
+However, we can be more precise. Since $h^0(nD) + h^0(K_X - nD) \geq \chi(\mathcal{O}_X(nD)) \to +\infty$, and since $h^0(nD) = 0$ for all large $n$ (by Case A, any nonzero $h^0(nD)$ leads to contradiction), we must have $h^0(K_X - nD) \to \infty$. In particular, $h^0(K_X - nD) \geq 1$ for all sufficiently large $n$.
+
+Now apply the same argument to $-D$: since $D \cdot H = 0$ implies $(-D) \cdot H = 0$, and $(-D)^2 = D^2 > 0$, replace $D$ by $-D$. Then the same reasoning gives $h^0(-nD) = 0$ for all $n > 0$ (by Case A for $-D$), and $h^0(K_X + nD) \to \infty$.
+
+In particular, for $n$ large enough: $K_X - nD \sim F_n \geq 0$ and $K_X + nD \sim G_n \geq 0$. Adding: $2K_X \sim F_n + G_n \geq 0$, which is independent of $n$. But $F_n \cdot H = K_X \cdot H - nD \cdot H = K_X \cdot H$ and $G_n \cdot H = K_X \cdot H + nD \cdot H = K_X \cdot H$. So the effective decomposition $F_n + G_n \sim 2K_X$ has bounded degree with respect to $H$, yet $F_n$ and $G_n$ are both effective with $F_n + G_n$ fixed. Since effective divisors of bounded degree on a projective surface form a bounded family, there are only finitely many possibilities. But this must hold for infinitely many $n$, so $F_n = F_m$ and $G_n = G_m$ for some $n \neq m$. Then $(F_n - F_m) \sim (n - m)D \sim 0$ as effective divisors, which implies $nD - mD$ is principal, hence $(n-m)D \sim 0$ with $n \neq m$, contradicting $D^2 > 0$.
+
+This completes the proof that $D^2 > 0$ is impossible.
+</Proof>
+
+<Example id="ampleness-vs-effective" title="Why effective divisors must intersect H positively">
+On $\mathbb{P}^2$ with $H$ a line: every effective divisor is $E \sim dH$ with $d > 0$, so $E \cdot H = d > 0$.
+
+On $\operatorname{Bl}_P(\mathbb{P}^2)$: take $H = 3L - E$ (anticanonical, ample). The exceptional curve $E$ satisfies $E \cdot H = E \cdot (3L - E) = 0 + 1 = 1 > 0$. The strict transform $\tilde{L}$ of a line through $P$ gives $\tilde{L} \sim L - E$, and $\tilde{L} \cdot H = 3 - 1 = 2 > 0$.
+
+In general, for ample $H$ and effective $E \neq 0$: either $E$ is an irreducible curve (then $H \cdot E > 0$ by Nakai--Moishezon, since $H$ is ample), or $E = \sum a_i C_i$ with $a_i > 0$, and $H \cdot E = \sum a_i (H \cdot C_i) > 0$.
+</Example>
+
+---
+
+## Step 3: The Equality Case
+
+<Proof title="Step 3 — D^2 = 0 implies D numerically trivial">
+Now suppose $D \cdot H = 0$ and $D^2 = 0$, and $D \not\equiv 0$. We derive a contradiction.
+
+Since $D \not\equiv 0$, there exists a divisor $C$ with $D \cdot C \neq 0$. We may assume $D \cdot C > 0$ (replacing $D$ by $-D$ if necessary, which preserves $D \cdot H = 0$ and $D^2 = 0$).
+
+For integers $m, n$, consider the divisor $mH + nD$. Its self-intersection is:
+
+$(mH + nD)^2 = m^2 H^2 + 2mn(H \cdot D) + n^2 D^2 = m^2 H^2$
+
+since $H \cdot D = 0$ and $D^2 = 0$. Also:
+
+$(mH + nD) \cdot H = m H^2 + n(D \cdot H) = mH^2.$
+
+So for $m > 0$, the divisor $mH + nD$ has positive self-intersection $m^2 H^2 > 0$ and positive intersection $mH^2 > 0$ with the ample class $H$. By Riemann--Roch:
+
+$$\chi(\mathcal{O}(mH + nD)) = \frac{m^2 H^2}{2} - \frac{m(H \cdot K_X) + n(D \cdot K_X)}{2} + \chi(\mathcal{O}_X).$$
+
+For $m$ large and fixed $n$, by Serre's vanishing theorem (or asymptotic Riemann--Roch), $h^0(mH + nD) > 0$ for $m \gg 0$. So $mH + nD$ is linearly equivalent to an effective divisor for $m$ sufficiently large (depending on $n$).
+
+Write $mH + nD \sim E_{m,n} \geq 0$. Then:
+
+$E_{m,n} \cdot C = m(H \cdot C) + n(D \cdot C).$
+
+Since $H$ is ample and $C$ is a divisor, $H \cdot C$ is some fixed integer. By choosing $n$ negative with $|n|$ large and $m$ appropriately large (to ensure effectivity), we can make:
+
+$E_{m,n} \cdot C = m(H \cdot C) + n(D \cdot C) < 0.$
+
+But $E_{m,n}$ is effective, and if $C$ were also effective and ample, this would give a contradiction. More carefully: replace $C$ by a large multiple of $H$ plus a correction. Since $D \cdot C > 0$ and we can choose $n < 0$ with $|n|$ as large as we like (adjusting $m$ accordingly), the intersection $E_{m,n} \cdot C$ can be made arbitrarily negative.
+
+However, we can argue more directly. Apply the result from Steps 1--2 to the divisor $D' = mH + nD$ for a suitable pair $(m, n)$. Specifically, choose $n \neq 0$ and set $D' = nD$. Then $D' \cdot H = 0$ and $(D')^2 = n^2 D^2 = 0$. By Riemann--Roch:
+
+$$\chi(\mathcal{O}(nD)) = -\frac{n}{2} D \cdot K_X + \chi(\mathcal{O}_X).$$
+
+This is linear in $n$. If $D \cdot K_X \neq 0$, then for $n \to +\infty$ or $n \to -\infty$, $\chi(\mathcal{O}(nD)) \to +\infty$, and the same argument as in Step 2 produces a contradiction. If $D \cdot K_X = 0$, then $\chi(\mathcal{O}(nD)) = \chi(\mathcal{O}_X)$ for all $n$, and we use a refined argument with $mH + nD$ as above.
+
+For the refined argument with $D \cdot K_X = 0$: consider $D' = H + tD$ for large integer $t$. Then $D' \cdot H = H^2 > 0$, $(D')^2 = H^2 > 0$, and for $t$ large, $D' \cdot C = H \cdot C + t(D \cdot C)$. Since $D \cdot C > 0$, the divisor $D'$ behaves like an ample class. Apply the Hodge Index Theorem (the part we already proved: the strict inequality $D^2 \leq 0$ for $D \cdot H = 0$) to the divisor $D$ with respect to the "pseudo-ample" class $D'$. Formally: if $E \cdot D' = 0$ and $(D')^2 > 0$, then $E^2 \leq 0$. Taking $E = aD' - bD$ for appropriate $a, b$ to ensure $E \cdot D' = 0$ leads to $E^2 \leq 0$, which forces $D^2 \leq 0$. Since we assumed $D^2 = 0$, this is consistent but shows $D$ must be numerically proportional to any class it pairs nontrivially with, eventually forcing $D \equiv 0$.
+
+A cleaner approach: by the already-proved inequality $D^2 \leq 0$, the form restricted to $H^\perp$ is negative semi-definite. If $D^2 = 0$ and $D \cdot H = 0$, then for any divisor $C$, consider $D' = C - \frac{C \cdot H}{H^2} H$. Then $D' \cdot H = 0$, so $(D')^2 \leq 0$, i.e., $C^2 - \frac{(C \cdot H)^2}{H^2} \leq 0$. Now $D \cdot C = D \cdot D' + D \cdot \frac{C \cdot H}{H^2} H = D \cdot D'$. By the Cauchy--Schwarz inequality for the negative semi-definite form on $H^\perp$:
+
+$$(D \cdot D')^2 \geq (-D^2)(-D'^2) \quad \text{(with reversed sign, since the form is negative semi-definite)}.$$
+
+Wait -- for a negative semi-definite form $q$, the Cauchy--Schwarz inequality gives $q(x,y)^2 \leq q(x,x) \cdot q(y,y)$, i.e., $(D \cdot D')^2 \leq D^2 \cdot (D')^2$. But $D^2 = 0$, so $(D \cdot D')^2 \leq 0$, hence $D \cdot D' = 0$, hence $D \cdot C = 0$ for all $C$. This means $D \equiv 0$. $\blacksquare$
+</Proof>
+
+<Example id="equality-case-P1xP1" title="Equality case on P^1 x P^1">
+On $\mathbb{P}^1 \times \mathbb{P}^1$, take $H \sim F_1 + F_2$ (the diagonal class, which is ample with $H^2 = 2$). Consider $D = F_1 - F_2$. Then:
+
+- $D \cdot H = (F_1 - F_2) \cdot (F_1 + F_2) = 0 + 1 - 1 - 0 = 0$.
+- $D^2 = (F_1 - F_2)^2 = 0 - 1 - 1 + 0 = -2 < 0$.
+
+So $D^2 < 0$, consistent with the theorem. And $D \not\equiv 0$ since $D \cdot F_1 = 1 \neq 0$.
+
+The form on $H^\perp = \operatorname{span}(F_1 - F_2)$ is $\langle F_1 - F_2, F_1 - F_2 \rangle = -2 < 0$, confirming negative definiteness.
+</Example>
+
+---
+
+## Complete Self-Contained Proof
+
+<Proof title="Complete proof of the Hodge Index Theorem">
+**Theorem.** Let $X$ be a smooth projective surface, $H$ an ample divisor. If $D \cdot H = 0$, then $D^2 \leq 0$, with equality iff $D \equiv 0$.
+
+**Proof.** Suppose $D \cdot H = 0$.
+
+**(i) Proving $D^2 \leq 0$.** Assume for contradiction that $D^2 > 0$. By Riemann--Roch:
+
+$$\chi(\mathcal{O}_X(nD)) = \frac{n^2}{2} D^2 - \frac{n}{2} D \cdot K_X + \chi(\mathcal{O}_X) \to +\infty$$
+
+as $|n| \to \infty$, since the $n^2$ term dominates. So $h^0(nD) + h^0(K_X - nD) \geq \chi(\mathcal{O}_X(nD)) \to +\infty$.
+
+If $h^0(nD) \geq 1$ for some $n > 0$, then $nD$ is effective, so $nD \cdot H > 0$ by ampleness of $H$. But $nD \cdot H = 0$, contradiction.
+
+If $h^0(-nD) \geq 1$ for some $n > 0$, then $-nD$ is effective, so $(-nD) \cdot H > 0$, giving $-n(D \cdot H) > 0$, i.e., $0 > 0$, contradiction.
+
+Therefore $h^0(nD) = 0$ for all $n \neq 0$. Then $h^0(K_X - nD) \to \infty$, so $K_X - nD$ is effective for large $n > 0$, and $K_X + nD$ is effective for large $n > 0$. Adding: $F_n + G_n \sim 2K_X$ with $F_n = K_X - nD \geq 0$ and $G_n = K_X + nD \geq 0$. Since the set of effective decompositions of $2K_X$ is finite (bounded family), for large $n, m$ with $n \neq m$: $F_n = F_m$, giving $(n - m)D \sim 0$, so $D^2 = 0$, contradicting $D^2 > 0$.
+
+**(ii) Proving equality implies $D \equiv 0$.** Suppose $D \cdot H = 0$ and $D^2 = 0$. By part (i), the intersection form is negative semi-definite on $H^\perp$. For any divisor $C$, set $C' = C - \frac{C \cdot H}{H^2} H \in H^\perp \otimes \mathbb{Q}$. Then $D \cdot C = D \cdot C'$ (since $D \cdot H = 0$). By Cauchy--Schwarz for the negative semi-definite form:
+
+$$(D \cdot C')^2 \leq D^2 \cdot (C')^2 = 0 \cdot (C')^2 = 0.$$
+
+Hence $D \cdot C' = 0$, so $D \cdot C = 0$ for all divisors $C$. Therefore $D \equiv 0$. $\blacksquare$
+</Proof>
+
+---
+
+## Verification on Standard Surfaces
+
+<Example id="verify-P2" title="Verification on P^2">
+On $\mathbb{P}^2$: $\operatorname{NS}(\mathbb{P}^2) = \mathbb{Z} \cdot H$ with $H^2 = 1$, $\rho = 1$.
+
+The orthogonal complement $H^\perp$ in $\operatorname{NS}(\mathbb{P}^2) \otimes \mathbb{R}$ is $\{0\}$, since the lattice is rank $1$. So the theorem is vacuously true: the only divisor with $D \cdot H = 0$ is $D \equiv 0$, and indeed $0^2 = 0$. The signature is $(1, 0)$.
+</Example>
+
+<Example id="verify-blowup" title="Verification on Bl_P(P^2)">
+On $\operatorname{Bl}_P(\mathbb{P}^2)$ with $\operatorname{NS} = \mathbb{Z} L \oplus \mathbb{Z} E$, where $L^2 = 1$, $E^2 = -1$, $L \cdot E = 0$. The Picard number is $\rho = 2$.
+
+Take $H = 2L - E$ (ample, since $H^2 = 4 - 1 = 3 > 0$ and $H \cdot L = 2 > 0$, $H \cdot E = 1 > 0$).
+
+Find $D \in H^\perp$: $D = aL + bE$ with $D \cdot H = 2a - b = 0$, so $b = 2a$. Take $D = L + 2E$. Then:
+
+$D^2 = 1 + 4(-1) = -3 < 0$.
+
+The form on $H^\perp = \mathbb{R} \cdot (L + 2E)$ is $(L + 2E)^2 = -3 < 0$. Signature of full form: $(1, 1)$.
+</Example>
+
+<Example id="verify-ruled" title="Verification on Hirzebruch surfaces F_n">
+On $\mathbb{F}_n$ with $\operatorname{NS} = \mathbb{Z} C_0 \oplus \mathbb{Z} F$, $C_0^2 = -n$, $F^2 = 0$, $C_0 \cdot F = 1$.
+
+Take $H = C_0 + (n+1)F$ (ample for $n \geq 0$). Then $H^2 = -n + 2(n+1) = n + 2 > 0$.
+
+Find $D = aC_0 + bF$ with $D \cdot H = 0$: $a(-n + n + 1) + b(1) = a + b = 0$, so $b = -a$. Take $D = C_0 - F$. Then:
+
+$D^2 = (C_0 - F)^2 = -n - 2 < 0$ for all $n \geq 0$.
+
+On $H^\perp$: the restriction of the form is $-n - 2 < 0$. Signature: $(1, 1)$.
+
+For $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$: $D^2 = -2$. For $\mathbb{F}_1 = \operatorname{Bl}_P(\mathbb{P}^2)$: $D^2 = -3$. For $\mathbb{F}_2$: $D^2 = -4$.
+</Example>
+
+<Example id="verify-K3" title="Verification on a K3 surface with rho = 2">
+Consider a K3 surface with $\operatorname{NS}(X) \cong \mathbb{Z} H \oplus \mathbb{Z} D$ where $H^2 = 4$, $D^2 = -2$, $H \cdot D = 0$. (This arises, for example, from a quartic in $\mathbb{P}^3$ containing a line $D$.)
+
+Here $D$ is already in $H^\perp$, and $D^2 = -2 < 0$, confirming the theorem.
+
+The intersection matrix is $\operatorname{diag}(4, -2)$ with signature $(1, 1)$.
+
+The class $D$ is realized by a smooth rational $(-2)$-curve. It cannot be effective and satisfy $D \cdot H = 0$ simultaneously -- but wait, $D$ is effective (it is a line on the quartic) and $D \cdot H = 0$. This seems to contradict ampleness. The resolution: $H$ is not ample if $H \cdot D = 0$ for an effective curve $D$. The class $H$ here is nef but not ample. To apply the Hodge Index Theorem, we need $H$ genuinely ample, e.g., replace $H$ by $H' = H + \epsilon D'$ for some correction. In fact, on this K3, the ample cone excludes the boundary $H \cdot D = 0$. Taking $H' = H + D$ (not ample either, since $(H + D) \cdot D = -2 < 0$). Instead take $H' = 2H + D$: $(H')^2 = 16 - 2 = 14 > 0$, $H' \cdot D = -2 < 0$ (still not ample).
+
+Actually, the correct ample class should satisfy $H' \cdot C > 0$ for all effective curves. On this K3, the only $(-2)$-curve is $D$, so $H' = H + D$ gives $H' \cdot D = 0 - 2 < 0$: not ample. We need $H' \cdot D > 0$, so try $H' = H - \alpha D$ for $\alpha > 0$: $H' \cdot D = 2\alpha > 0$, $(H')^2 = 4 - 2\alpha^2$. For $\alpha = 1$: $(H')^2 = 2 > 0$, $H' \cdot D = 2 > 0$, so $H' = H - D$ is ample. Then $H'^\perp$: $aH + bD$ with $a(H \cdot H') + b(D \cdot H') = a \cdot 6 + b \cdot 2 = 0$, so $b = -3a$. Take $E = H - 3D$: $E^2 = 4 - 18 = -14 < 0$. Confirmed.
+</Example>
+
+---
+
+## Alternative Proof over C: Hodge Theory
+
+<Proof title="Analytic proof via Hodge decomposition (over C)">
+Over $\mathbb{C}$, a more conceptual proof uses the Hodge decomposition.
+
+**Setup.** Let $X$ be a smooth projective surface over $\mathbb{C}$. The second cohomology decomposes as:
+
+$$H^2(X, \mathbb{C}) = H^{2,0}(X) \oplus H^{1,1}(X) \oplus H^{0,2}(X).$$
+
+The intersection form is given by the cup product pairing on $H^2(X, \mathbb{Z})$.
+
+**The Hodge--Riemann bilinear relations.** Let $\omega \in H^{1,1}(X)$ be the class of a Kahler form (i.e., an ample class). Define the **primitive cohomology** $P^{1,1} = \ker(\omega \wedge -: H^{1,1} \to H^{3,3}) = (\omega)^\perp \cap H^{1,1}$. The Hodge--Riemann relations state:
+
+- The pairing is positive definite on $H^{2,0} \oplus H^{0,2}$ (after adjusting signs).
+- The pairing restricted to $\mathbb{R} \cdot \omega$ is positive definite (since $\omega^2 = \int_X \omega \wedge \omega > 0$).
+- The pairing restricted to $P^{1,1}_{\mathbb{R}} = \omega^\perp \cap H^{1,1}_{\mathbb{R}}$ is **negative definite**.
+
+**Deducing the algebraic statement.** The Neron--Severi group $\operatorname{NS}(X)$ embeds into $H^{1,1}(X) \cap H^2(X, \mathbb{Z})$. The ample class $H$ maps to a Kahler class $\omega$, and $D \cdot H = 0$ in the algebraic sense translates to $[D] \in P^{1,1}$. The negative definiteness of the pairing on $P^{1,1}$ gives $D^2 < 0$ for $[D] \neq 0$, and $D^2 = 0$ iff $[D] = 0$ in $H^{1,1}$.
+
+Since $\operatorname{NS}(X)$ injects into $H^{1,1}$ modulo torsion, $[D] = 0$ in $H^{1,1}$ iff $D \equiv 0$ numerically.
+</Proof>
+
+<Remark title="Comparison of the two proofs">
+The algebraic proof (Steps 1--3) works over any algebraically closed field and uses only Riemann--Roch plus basic properties of ample divisors. Its key insight is that if $D^2 > 0$ and $D \cdot H = 0$, then the Euler characteristic grows quadratically, forcing effective divisors orthogonal to $H$ to exist, which is impossible.
+
+The analytic proof over $\mathbb{C}$ is more conceptual: it derives the theorem from the definiteness properties of the Hodge--Riemann bilinear relations, which are themselves consequences of the Kahler identities and the Hard Lefschetz theorem. The analytic proof also immediately gives the signature of the full lattice $H^2(X, \mathbb{Z})$, not just the Neron--Severi group.
+</Remark>
+
+---
+
+## Consequence 1: The Hodge Inequality
+
+<Theorem title="Hodge inequality (algebraic form)">
+Let $X$ be a smooth projective surface, and let $C, D$ be divisors on $X$. Then:
+
+$$(C \cdot D)^2 \geq C^2 \cdot D^2,$$
+
+with equality if and only if $C$ and $D$ are numerically proportional (i.e., $aC \equiv bD$ for some integers $a, b$ not both zero).
+
+This is the Cauchy--Schwarz inequality for the intersection form, valid because the form has signature $(1, \rho - 1)$.
+</Theorem>
+
+<Proof title="Deriving the Hodge inequality from the index theorem">
+If $D^2 \leq 0$ or $C^2 \leq 0$, the right side is $\leq 0$ and the inequality is trivially satisfied (since $(C \cdot D)^2 \geq 0$).
+
+Suppose $C^2 > 0$. By Nakai--Moishezon, if also $C \cdot E > 0$ for all curves $E$, then $C$ is ample and we can use $C$ as the ample class. Set $D' = D - \frac{D \cdot C}{C^2} C$. Then:
+
+$$D' \cdot C = D \cdot C - \frac{D \cdot C}{C^2} \cdot C^2 = 0.$$
+
+By the Hodge Index Theorem applied with the ample class replaced by a suitable positive multiple of $C$:
+
+$$D'^2 \leq 0.$$
+
+Expanding: $D'^2 = D^2 - 2 \frac{D \cdot C}{C^2}(D \cdot C) + \frac{(D \cdot C)^2}{(C^2)^2} C^2 = D^2 - \frac{(D \cdot C)^2}{C^2} \leq 0.$
+
+Rearranging: $(C \cdot D)^2 \geq C^2 \cdot D^2$. Equality holds iff $D' \equiv 0$, iff $D \equiv \frac{D \cdot C}{C^2} C$, iff $C$ and $D$ are numerically proportional. $\blacksquare$
+</Proof>
+
+<Example id="hodge-inequality-P2" title="Hodge inequality on P^2">
+On $\mathbb{P}^2$ with $C \sim aH$, $D \sim bH$: $(C \cdot D)^2 = (ab)^2 = a^2 b^2 = C^2 \cdot D^2$. Equality holds because all divisors are numerically proportional (Picard number $\rho = 1$).
+</Example>
+
+<Example id="hodge-inequality-product" title="Hodge inequality on P^1 x P^1">
+On $\mathbb{P}^1 \times \mathbb{P}^1$: $C \sim (a, b)$ and $D \sim (c, d)$.
+
+$(C \cdot D)^2 = (ad + bc)^2$ and $C^2 \cdot D^2 = (2ab)(2cd) = 4abcd$.
+
+The inequality $(ad + bc)^2 \geq 4abcd$ is equivalent to $(ad - bc)^2 \geq 0$, which always holds. Equality iff $ad = bc$, i.e., $a/c = b/d$, i.e., $C$ and $D$ are numerically proportional.
+</Example>
+
+---
+
+## Consequence 2: Negative Definiteness of Exceptional Divisors
+
+<Theorem title="Negative definiteness of exceptional configurations">
+Let $f: X \to Y$ be a birational morphism of smooth projective surfaces, and let $E_1, \ldots, E_r$ be the irreducible components of the exceptional locus. Then the intersection matrix $(E_i \cdot E_j)_{1 \leq i,j \leq r}$ is negative definite.
+</Theorem>
+
+<Proof title="Proof using the Hodge Index Theorem">
+Let $H_Y$ be an ample divisor on $Y$, and let $H = f^* H_Y$. Then $H$ is nef and big on $X$ (it is the pullback of an ample divisor), and $H \cdot E_i = H_Y \cdot f_* E_i = 0$ for each $i$ (since $f_* E_i = 0$ as a cycle on $Y$, because $E_i$ is contracted by $f$).
+
+Any divisor $D = \sum a_i E_i$ supported on the exceptional locus satisfies $D \cdot H = \sum a_i (E_i \cdot H) = 0$. By the Hodge Index Theorem (extended to nef and big classes by a limit argument, or by perturbing $H$ to a nearby ample class $H + \epsilon A$):
+
+$$D^2 \leq 0, \quad \text{with equality iff } D \equiv 0.$$
+
+But on a smooth surface, $D = \sum a_i E_i \equiv 0$ with all $E_i$ exceptional implies all $a_i = 0$ (since the $E_i$ are linearly independent in $\operatorname{NS}(X)$). Therefore the quadratic form $D \mapsto D^2$ is strictly negative definite on $\bigoplus \mathbb{Z} E_i$. $\blacksquare$
+</Proof>
+
+<Example id="exceptional-blowup-two-points" title="Blowup of P^2 at two points">
+Let $X = \operatorname{Bl}_{P,Q}(\mathbb{P}^2)$ with exceptional divisors $E_1, E_2$. The intersection matrix $(E_i \cdot E_j)$ has entries:
+
+- $E_1^2 = -1$, $E_2^2 = -1$, $E_1 \cdot E_2 = 0$.
+
+So the matrix is $-I_2$ (the negative of the $2 \times 2$ identity), which is negative definite. The eigenvalues are both $-1$.
+</Example>
+
+<Example id="exceptional-resolution-An" title="Resolution of an A_n singularity">
+The minimal resolution of the $A_n$ surface singularity $x^2 + y^2 + z^{n+1} = 0$ has $n$ exceptional curves $E_1, \ldots, E_n$, each isomorphic to $\mathbb{P}^1$, forming a chain: $E_i \cdot E_j = 1$ if $|i - j| = 1$, $E_i^2 = -2$, and $E_i \cdot E_j = 0$ if $|i - j| \geq 2$.
+
+The intersection matrix is the negative of the Cartan matrix of type $A_n$:
+
+- $n = 1$: $(-2)$, eigenvalue $-2$.
+- $n = 2$: diagonal entries $-2$, off-diagonal $1$. Eigenvalues: $-2 \pm 1 = -1, -3$. Both negative.
+- $n = 3$: eigenvalues $-2 + 2\cos(k\pi/4)$ for $k = 1, 2, 3$, giving approximately $-0.59, -2, -3.41$. All negative.
+
+In general, the eigenvalues of the $A_n$ Cartan matrix are $2 - 2\cos(k\pi/(n+1))$ for $k = 1, \ldots, n$, all positive, so the intersection matrix (its negative) is negative definite.
+</Example>
+
+---
+
+## Consequence 3: Signature Constraints
+
+<Remark title="The signature (1, rho - 1)">
+The Hodge Index Theorem determines the signature of the intersection form on $\operatorname{NS}(X) \otimes \mathbb{R}$ completely: it is $(1, \rho - 1)$.
+
+**Proof of signature claim.** Let $H$ be ample. Then $H^2 > 0$, so the form has at least one positive eigenvalue. By the theorem, $H^\perp$ is negative definite, so there are no other positive eigenvalues. Since the form is non-degenerate on $\operatorname{NS}(X) / \text{torsion}$ (by definition of numerical equivalence), we get exactly one positive and $\rho - 1$ negative eigenvalues.
+
+This is a strong constraint: knowing $\rho$ and the lattice structure determines the intersection form up to finitely many possibilities (by the theory of indefinite lattices).
+</Remark>
+
+<Example id="signature-examples" title="Signatures for classical surfaces">
+- $\mathbb{P}^2$: $\rho = 1$, signature $(1, 0)$. Form: $(1)$.
+- $\mathbb{P}^1 \times \mathbb{P}^1$: $\rho = 2$, signature $(1, 1)$. Form: the hyperbolic plane $U$.
+- $\operatorname{Bl}_k(\mathbb{P}^2)$ ($k$ points blown up): $\rho = k + 1$, signature $(1, k)$. Form: $\langle 1 \rangle \oplus \langle -1 \rangle^k$.
+- K3 with $\rho = 1$: signature $(1, 0)$. The full lattice $H^2(X, \mathbb{Z})$ has signature $(3, 19)$ (from the Hodge decomposition: $h^{2,0} = h^{0,2} = 1$ contribute two more positive directions), but the Neron--Severi part has signature $(1, 0)$.
+- K3 with $\rho = 20$: signature $(1, 19)$ on $\operatorname{NS}$, and the transcendental lattice has signature $(2, 0)$.
+</Example>
+
+---
+
+## Application: Why Negative Curves are Rigid
+
+<Remark title="Rigidity of negative curves">
+The Hodge Index Theorem explains why curves with negative self-intersection are rigid (cannot be deformed):
+
+If $C$ is an irreducible curve with $C^2 < 0$, then $|C|$ has no other member: $h^0(\mathcal{O}(C)) = 1$. Indeed, if $D \sim C$ with $D \neq C$, then $D - C \sim 0$ but $D - C \neq 0$ as a divisor, meaning $D = C$ as divisor classes. More precisely, if $D \geq 0$, $D \sim C$, and $D \neq C$, then $C \leq D$ (since $C$ is irreducible and appears in $D$, or $C$ and $D$ share no component). In the latter case, $C \cdot D \geq 0$ (two effective divisors with no common component meet non-negatively), but $C \cdot D = C^2 < 0$, contradiction.
+
+This applies to:
+- $(-1)$-curves on blowups (exceptional divisors).
+- $(-2)$-curves on K3 surfaces and rational surfaces.
+- Negative sections $C_0$ on Hirzebruch surfaces $\mathbb{F}_n$ with $n > 0$.
+</Remark>
+
+---
+
+## Summary of the Proof Strategy
+
+<Remark title="Proof architecture">
+The proof of the Hodge Index Theorem has a clean two-part structure:
+
+**Part 1 ($D^2 \leq 0$):** Assume $D^2 > 0$ and $D \cdot H = 0$. Riemann--Roch gives quadratic growth of $\chi(\mathcal{O}(nD))$, forcing either $nD$ or $K_X - nD$ to be effective for large $n$. But effectivity contradicts $D \cdot H = 0$ and the ampleness of $H$ (ample divisors pair positively with effective divisors). A more delicate argument using the finiteness of decompositions of a fixed class handles the case where $K_X - nD$ is effective.
+
+**Part 2 ($D^2 = 0$ implies $D \equiv 0$):** Once negative semi-definiteness on $H^\perp$ is established, a Cauchy--Schwarz argument shows that any class $D$ with $D^2 = 0$ in $H^\perp$ pairs trivially with all other classes, hence is numerically trivial.
+
+The theorem is the algebraic counterpart of the Hodge--Riemann bilinear relations and is fundamental to the classification theory of algebraic surfaces.
+</Remark>

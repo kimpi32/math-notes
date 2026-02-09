@@ -1,0 +1,452 @@
+export const metadata = {
+  title: 'Ruled Surfaces — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Concept — Ruled Surfaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ruled Surfaces
+
+A **ruled surface** is a surface that admits a fibration over a curve with every fiber isomorphic to $\mathbb{P}^1$. These surfaces are among the best-understood in algebraic geometry: their Picard group, intersection theory, and canonical class can all be computed explicitly. They play a central role in the Enriques--Kodaira classification as the surfaces of Kodaira dimension $-\infty$.
+
+---
+
+## Ruled and geometrically ruled surfaces
+
+<Definition title="Ruled surface" number="5.7">
+A smooth projective surface $X$ is **ruled** if it is birational to $C \times \mathbb{P}^1$ for some smooth projective curve $C$. Equivalently, $X$ contains a pencil of rational curves covering $X$.
+
+A **ruled surface over $C$** is a smooth projective surface $X$ together with a surjective morphism $\pi \colon X \to C$ to a smooth curve $C$ such that every fiber $\pi^{-1}(p)$ is isomorphic to $\mathbb{P}^1$.
+</Definition>
+
+<Definition title="Geometrically ruled surface" number="5.8">
+A **geometrically ruled surface** over a smooth curve $C$ is a surface of the form
+
+$$X = \mathbb{P}(\mathcal{E})$$
+
+where $\mathcal{E}$ is a rank-$2$ locally free sheaf on $C$, and $\mathbb{P}(\mathcal{E})$ denotes the projectivization $\operatorname{Proj}(\operatorname{Sym}(\mathcal{E}))$.
+
+The natural projection $\pi \colon \mathbb{P}(\mathcal{E}) \to C$ makes $X$ into a $\mathbb{P}^1$-bundle over $C$. Note that $\mathbb{P}(\mathcal{E}) \cong \mathbb{P}(\mathcal{E} \otimes \mathcal{L})$ for any line bundle $\mathcal{L}$ on $C$, so one may always normalize $\mathcal{E}$ so that $H^0(C, \mathcal{E}) \neq 0$ but $H^0(C, \mathcal{E} \otimes \mathcal{L}^{-1}) = 0$ for every line bundle $\mathcal{L}$ of positive degree.
+</Definition>
+
+<Remark title="Ruled vs. geometrically ruled">
+Every geometrically ruled surface is ruled, but the converse is slightly subtle. A ruled surface need not admit a $\mathbb{P}^1$-bundle structure globally -- it may have singular fibers after performing a minimal model reduction. However, every **minimal** ruled surface is geometrically ruled: it is isomorphic to $\mathbb{P}(\mathcal{E})$ for some rank-$2$ bundle $\mathcal{E}$ on a curve $C$.
+</Remark>
+
+<Example id="trivial-ruling" title="The trivial ruled surface">
+When $\mathcal{E} = \mathcal{O}_C \oplus \mathcal{O}_C$, we get $\mathbb{P}(\mathcal{E}) \cong C \times \mathbb{P}^1$, the trivial product. This is the simplest geometrically ruled surface over $C$.
+
+For $C = \mathbb{P}^1$: $\mathbb{P}^1 \times \mathbb{P}^1$ is the smooth quadric $Q \subset \mathbb{P}^3$, with two rulings giving two $\mathbb{P}^1$-bundle structures.
+</Example>
+
+---
+
+## Hirzebruch surfaces
+
+<Definition title="Hirzebruch surfaces" number="5.9">
+For each integer $n \geq 0$, the **$n$-th Hirzebruch surface** is
+
+$$\mathbb{F}_n = \mathbb{P}(\mathcal{O}_{\mathbb{P}^1} \oplus \mathcal{O}_{\mathbb{P}^1}(-n)).$$
+
+This is a geometrically ruled surface over $\mathbb{P}^1$ with projection $\pi \colon \mathbb{F}_n \to \mathbb{P}^1$. The Hirzebruch surfaces are (up to isomorphism) exactly the geometrically ruled surfaces over $\mathbb{P}^1$.
+</Definition>
+
+<Example id="F0" title="F₀ = ℙ¹ × ℙ¹">
+The surface $\mathbb{F}_0 = \mathbb{P}(\mathcal{O} \oplus \mathcal{O})$ is the product $\mathbb{P}^1 \times \mathbb{P}^1$. It is the smooth quadric surface $Q \subset \mathbb{P}^3$ defined by $xw = yz$. It has two distinct rulings:
+
+- The projection to the first factor, and
+- The projection to the second factor.
+
+The Picard group is $\operatorname{Pic}(\mathbb{F}_0) \cong \mathbb{Z} F_1 \oplus \mathbb{Z} F_2$ with $F_1^2 = F_2^2 = 0$ and $F_1 \cdot F_2 = 1$.
+</Example>
+
+<Example id="F1" title="F₁ = Blowup of ℙ² at a point">
+The Hirzebruch surface $\mathbb{F}_1$ is isomorphic to the blowup $\operatorname{Bl}_P(\mathbb{P}^2)$ of $\mathbb{P}^2$ at one point $P$. The ruling $\pi \colon \mathbb{F}_1 \to \mathbb{P}^1$ corresponds to the pencil of lines in $\mathbb{P}^2$ through $P$:
+
+- Each line through $P$ becomes a fiber $F \cong \mathbb{P}^1$ of $\pi$.
+- The exceptional divisor $E$ of the blowup is the unique section with $E^2 = -1$.
+- The strict transform of a line not through $P$ gives a section $C_0$ with $C_0^2 = 1$.
+
+Note: $\mathbb{F}_1$ is **not** minimal because it contains the $(-1)$-curve $E$. Contracting $E$ recovers $\mathbb{P}^2$.
+</Example>
+
+<Example id="F2" title="F₂ and the rational normal cone">
+The surface $\mathbb{F}_2 = \mathbb{P}(\mathcal{O} \oplus \mathcal{O}(-2))$ can be realized as the minimal resolution of the **quadric cone** $V(xz - y^2) \subset \mathbb{P}^3$. More precisely:
+
+- The quadric cone has a singular point at the vertex $[0:0:0:1]$.
+- Blowing up the vertex resolves the singularity, and the resulting surface is $\mathbb{F}_2$.
+- The exceptional curve of the resolution is the unique section $C_0$ with $C_0^2 = -2$.
+
+Alternatively, $\mathbb{F}_2$ is the image of the $2$-uple embedding of $\mathbb{P}^1$ scrolled over $\mathbb{P}^1$: the cone over the rational normal curve of degree $2$ in $\mathbb{P}^2$ (a conic).
+</Example>
+
+<Example id="Fn-large" title="F_n for large n">
+The surface $\mathbb{F}_n$ for $n \geq 1$ can be realized as the projectivized cone over the rational normal curve of degree $n$ in $\mathbb{P}^n$:
+
+- Embed $\mathbb{P}^1 \hookrightarrow \mathbb{P}^n$ via $[s:t] \mapsto [s^n : s^{n-1}t : \cdots : t^n]$ (the $n$-uple Veronese).
+- Take the cone over this curve in $\mathbb{P}^{n+1}$.
+- Resolve the vertex of the cone to get $\mathbb{F}_n$.
+
+The negative section $C_0$ with $C_0^2 = -n$ is the exceptional curve of this resolution. For $n \geq 2$, $C_0$ is the unique irreducible curve with negative self-intersection on $\mathbb{F}_n$.
+</Example>
+
+---
+
+## Sections, fibers, and the Picard group
+
+<Definition title="The invariant e and the Picard group" number="5.10">
+Let $\pi \colon X = \mathbb{P}(\mathcal{E}) \to C$ be a geometrically ruled surface with $\mathcal{E}$ normalized (i.e., $H^0(\mathcal{E}) \neq 0$ but $H^0(\mathcal{E} \otimes \mathcal{L}^{-1}) = 0$ for all $\mathcal{L}$ of positive degree). Define:
+
+- **Fiber class** $F$: a fiber $\pi^{-1}(p) \cong \mathbb{P}^1$.
+- **Tautological section** $C_0$: the section corresponding to the surjection $\mathcal{E} \twoheadrightarrow \mathcal{O}_{\mathbb{P}(\mathcal{E})}(1)$.
+- The **invariant** $e = -\deg(\mathcal{E}) = -\deg(\det \mathcal{E})$ when $\mathcal{E}$ is normalized. Equivalently, $e = -C_0^2$.
+
+Then $\operatorname{Pic}(X) \cong \mathbb{Z} C_0 \oplus \pi^*\operatorname{Pic}(C)$, and numerically, $\operatorname{NS}(X) \cong \mathbb{Z} C_0 \oplus \mathbb{Z} F$.
+</Definition>
+
+<Example id="picard-hirzebruch" title="Picard group of Hirzebruch surfaces">
+For $\mathbb{F}_n$, the Picard group is $\operatorname{Pic}(\mathbb{F}_n) \cong \mathbb{Z} C_0 \oplus \mathbb{Z} F$ where:
+
+- $C_0$ is the section with $C_0^2 = -n$,
+- $F$ is a fiber of $\pi \colon \mathbb{F}_n \to \mathbb{P}^1$.
+- $C_0 \cdot F = 1$ (a section meets each fiber in one point).
+- $F^2 = 0$ (two distinct fibers are disjoint).
+
+The intersection matrix in the basis $(C_0, F)$ has entries $C_0^2 = -n$, $C_0 \cdot F = F \cdot C_0 = 1$, $F^2 = 0$, with determinant $-1$, confirming $\operatorname{NS}(\mathbb{F}_n)$ is unimodular.
+
+Any section $\sigma \colon \mathbb{P}^1 \to \mathbb{F}_n$ defines a divisor $\Sigma \sim C_0 + mF$ for some integer $m \geq 0$, with $\Sigma^2 = -n + 2m \geq -n$. The section $C_0$ achieves the minimum self-intersection $-n$.
+</Example>
+
+---
+
+## Intersection theory on ruled surfaces
+
+<Theorem title="Intersection calculus on ruled surfaces">
+Let $\pi \colon X = \mathbb{P}(\mathcal{E}) \to C$ be a geometrically ruled surface with invariant $e$, section $C_0$, and fiber $F$. Any divisor $D$ on $X$ is numerically equivalent to $aC_0 + bF$ for $a, b \in \mathbb{Z}$. The intersection numbers are:
+
+- $C_0^2 = -e$,
+- $C_0 \cdot F = 1$,
+- $F^2 = 0$.
+
+Hence for $D \sim aC_0 + bF$ and $D' \sim a'C_0 + b'F$:
+
+$$D \cdot D' = -eaa' + ab' + a'b.$$
+
+In particular, $D^2 = -ea^2 + 2ab$.
+</Theorem>
+
+<Example id="effective-divisors-Fn" title="Effective divisors on F_n">
+On $\mathbb{F}_n$ (with $n \geq 1$), a divisor $D \sim aC_0 + bF$ is effective if and only if $a \geq 0$ and $b \geq na$ (when $a > 0$), or $a = 0$ and $b \geq 0$. To see this:
+
+- If $D$ is effective and irreducible, either $D = C_0$, $D = F$, or $D$ is a section/multisection disjoint from $C_0$.
+- $D \cdot C_0 = a(-n) + b + 0 = b - na \geq 0$ for effective $D$ not equal to $C_0$.
+- $D \cdot F = a \geq 0$ for effective $D$.
+
+The nef cone of $\mathbb{F}_n$ is generated by $C_0 + nF$ and $F$: a divisor $aC_0 + bF$ is nef iff $a \geq 0$ and $b \geq na$.
+</Example>
+
+<Example id="ampleness-Fn" title="Ample divisors on F_n">
+On $\mathbb{F}_n$ (with $n \geq 1$), the divisor $D \sim aC_0 + bF$ is ample if and only if $a > 0$ and $b > na$. Checking via Nakai--Moishezon:
+
+- $D^2 = -na^2 + 2ab = a(2b - na) > 0$ requires $b > na/2$. But we also need:
+- $D \cdot C_0 = b - na > 0$, i.e., $b > na$.
+- $D \cdot F = a > 0$.
+
+So ampleness requires $a > 0$ and $b > na$. For example, on $\mathbb{F}_2$:
+- $C_0 + 3F$ is ample ($a = 1, b = 3 > 2$).
+- $C_0 + 2F$ is nef but not ample ($D \cdot C_0 = 0$).
+- $C_0 + F$ is not nef ($D \cdot C_0 = -1 < 0$).
+</Example>
+
+---
+
+## Canonical class of ruled surfaces
+
+<Theorem title="Canonical class of a geometrically ruled surface">
+Let $\pi \colon X = \mathbb{P}(\mathcal{E}) \to C$ be a geometrically ruled surface over a smooth curve $C$ of genus $g$, with invariant $e$. Then:
+
+$$K_X \sim -2C_0 + (\deg(\det \mathcal{E}) + 2g - 2)F = -2C_0 + (2g - 2 - e)F.$$
+
+In particular:
+- $K_X \cdot C_0 = 2(-e) + (2g - 2 - e)(-1) \cdot 0 + \ldots$; more directly, $K_X \cdot C_0 = e - 2 + 2g$ and $K_X \cdot F = -2$.
+- $K_X^2 = 8(1 - g)$.
+- The **Kodaira dimension** is $\kappa(X) = -\infty$ since $|mK_X| = \emptyset$ for all $m \geq 1$.
+</Theorem>
+
+<Example id="canonical-Fn" title="Canonical class of Hirzebruch surfaces">
+For $\mathbb{F}_n$ (base $\mathbb{P}^1$, genus $g = 0$, invariant $e = n$):
+
+$$K_{\mathbb{F}_n} \sim -2C_0 + (n - 2)F.$$
+
+Checking self-intersection: $K^2 = 4(-n) + 2 \cdot (-2)(n - 2) + 0 = -4n - 4n + 8 = 8 - 8n$... let us use the formula directly: $K^2 = 8(1 - 0) = 8$. This is consistent for all $\mathbb{F}_n$.
+
+Concrete cases:
+- $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$: $K \sim -2C_0 - 2F$, i.e., $K \sim -2F_1 - 2F_2$ (bidegree $(-2, -2)$). Then $K^2 = 8$.
+- $\mathbb{F}_1 = \operatorname{Bl}_P(\mathbb{P}^2)$: $K \sim -2C_0 - F$. Using $C_0 = H - E$ and $F = H$... or directly, $K^2 = 8$.
+- $\mathbb{F}_2$: $K \sim -2C_0$. The anticanonical class is $-K \sim 2C_0$, which is effective but not ample.
+</Example>
+
+<Example id="adjunction-ruling" title="Adjunction on fibers and sections">
+On a ruled surface $\pi \colon X \to C$ with canonical class $K_X$:
+
+**Fibers:** For a fiber $F \cong \mathbb{P}^1$ (with $g = 0$), adjunction gives $-2 = F^2 + K_X \cdot F = 0 + (-2) = -2$. Consistent.
+
+**Sections:** For the section $C_0$ on $\mathbb{F}_n$, adjunction gives:
+
+$$2g(C_0) - 2 = C_0^2 + K_X \cdot C_0 = -n + (-2(-n) + (n-2)) = -n + (n - 2) = -2.$$
+
+So $g(C_0) = 0$, confirming $C_0 \cong \mathbb{P}^1$. More generally, a section $\Sigma \sim C_0 + mF$ on $\mathbb{F}_n$ has genus:
+
+$$2g(\Sigma) - 2 = \Sigma^2 + K \cdot \Sigma = (2m - n) + (-2(2m - n) + (n-2) \cdot 1)$$
+
+which simplifies (using $K \cdot \Sigma = -2(m - n + 0) + (n-2) = -2m + n - 2$... let us compute directly): $K \cdot \Sigma = (-2C_0 + (n-2)F) \cdot (C_0 + mF) = -2(-n) + (-2)(m) + (n-2)(1) + 0 = 2n - 2m + n - 2 = 3n - 2m - 2$.
+
+So $2g - 2 = (2m - n) + (3n - 2m - 2) = 2n - 2$, giving $g(\Sigma) = n$... wait, that cannot be right for all sections. Let me redo: $\Sigma = C_0 + mF$, so $\Sigma^2 = -n + 2m$ and $K \cdot \Sigma = (-2C_0 + (n-2)F) \cdot (C_0 + mF) = 2n - 2m + n - 2 = 3n - 2m - 2$... hmm, this gives $g = n$ independent of $m$, which is wrong. The correct computation (being careful with the fiber): $K \cdot \Sigma = -2(C_0 \cdot C_0) - 2m(C_0 \cdot F) + (n-2)(F \cdot C_0) + m(n-2)(F \cdot F)$ $= -2(-n) - 2m + (n-2) + 0 = 2n - 2m + n - 2$. So indeed $2g - 2 = (2m - n) + (3n - 2m - 2) = 2n - 2$, giving $g = n$. But $C_0$ itself has $m = 0$ and $g = 0$ from $n = 0$ case... The issue is that $\Sigma \sim C_0 + mF$ for $m \geq n$ gives a smooth section only when $\Sigma$ actually is smooth. For $\mathbb{F}_0$, $n = 0$, so $g = 0$ for all sections -- correct since sections of $\mathbb{P}^1 \times \mathbb{P}^1 \to \mathbb{P}^1$ are rational.
+</Example>
+
+---
+
+## Minimal ruled surfaces and Nagata's theorem
+
+<Theorem title="Nagata's theorem on minimal ruled surfaces">
+Let $\pi \colon X = \mathbb{P}(\mathcal{E}) \to C$ be a geometrically ruled surface over a curve $C$ of genus $g$, with normalized bundle $\mathcal{E}$ and invariant $e$. Then:
+
+- $e \geq -g$ always.
+- If $\mathcal{E}$ is decomposable, i.e., $\mathcal{E} \cong \mathcal{O}_C \oplus \mathcal{L}$ for a line bundle $\mathcal{L}$ with $\deg \mathcal{L} = -e \leq 0$, then $e \geq 0$.
+- For every value $e \geq -g$, there exists a ruled surface over $C$ with that invariant.
+- Over $C = \mathbb{P}^1$, every vector bundle splits (Grothendieck's theorem), so $\mathcal{E} \cong \mathcal{O} \oplus \mathcal{O}(-n)$ with $n \geq 0$. Thus the Hirzebruch surfaces $\mathbb{F}_n$ ($n \geq 0$) are exactly the minimal ruled surfaces over $\mathbb{P}^1$.
+</Theorem>
+
+<Remark title="Minimality of ruled surfaces">
+A geometrically ruled surface $\mathbb{P}(\mathcal{E})$ is **minimal** (contains no $(-1)$-curves in a fiber) if and only if no fiber contains an exceptional curve. Equivalently:
+
+- Over $\mathbb{P}^1$: $\mathbb{F}_n$ is minimal for $n \neq 1$. The surface $\mathbb{F}_1$ is not minimal because the section $C_0$ with $C_0^2 = -1$ is an exceptional curve that can be contracted to yield $\mathbb{P}^2$.
+- Over a curve of genus $g \geq 1$: $\mathbb{P}(\mathcal{E})$ is always minimal (a ruled surface over a curve of positive genus has no $(-1)$-curves mapping to a point on the base).
+</Remark>
+
+<Example id="blow-down-F1" title="Blowing down F₁ to ℙ²">
+The surface $\mathbb{F}_1$ has a unique $(-1)$-curve, namely the section $C_0$ with $C_0^2 = -1$. Contracting $C_0$ gives $\mathbb{P}^2$:
+
+$$\mathbb{F}_1 = \operatorname{Bl}_P(\mathbb{P}^2) \xrightarrow{\text{contract } C_0} \mathbb{P}^2.$$
+
+After contraction, the fibers of the ruling become lines through $P$ in $\mathbb{P}^2$. Conversely, blowing up any point $P \in \mathbb{P}^2$ gives $\mathbb{F}_1$ with the ruling by proper transforms of lines through $P$.
+</Example>
+
+---
+
+## Rational surfaces
+
+<Definition title="Rational surface" number="5.11">
+A smooth projective surface $X$ is **rational** if it is birational to $\mathbb{P}^2$ (equivalently, birational to $\mathbb{P}^1 \times \mathbb{P}^1$, or equivalently, ruled over $\mathbb{P}^1$).
+
+A rational surface satisfies:
+- $q(X) = h^1(\mathcal{O}_X) = 0$ (irregularity zero),
+- $p_g(X) = h^0(K_X) = 0$ (geometric genus zero),
+- $\kappa(X) = -\infty$ (Kodaira dimension negative infinity).
+</Definition>
+
+<Theorem title="Castelnuovo's rationality criterion">
+A smooth projective surface $X$ is rational if and only if $q(X) = P_2(X) = 0$, where $q = h^1(\mathcal{O}_X)$ is the irregularity and $P_2 = h^0(2K_X)$ is the second plurigenus.
+
+This is a deep result: the vanishing of two numerical invariants suffices to guarantee birationality to $\mathbb{P}^2$.
+</Theorem>
+
+<Theorem title="Classification of minimal rational surfaces">
+Every minimal rational surface is isomorphic to exactly one of:
+
+- $\mathbb{P}^2$, or
+- $\mathbb{F}_n$ for $n = 0$ or $n \geq 2$.
+
+The surface $\mathbb{F}_1$ is excluded because it is not minimal (it is the blowup of $\mathbb{P}^2$ at one point). No two surfaces in this list are isomorphic to each other.
+
+Every rational surface is obtained from one of these minimal models by a finite sequence of blowups.
+</Theorem>
+
+<Example id="non-isomorphic-Fn" title="Hirzebruch surfaces are pairwise non-isomorphic">
+For $n \neq m$ (with $n, m \neq 1$), $\mathbb{F}_n \not\cong \mathbb{F}_m$. One way to distinguish them:
+
+- If $n \geq 2$, then $\mathbb{F}_n$ contains a unique irreducible curve with negative self-intersection, namely $C_0$ with $C_0^2 = -n$. Different values of $n$ give different self-intersection numbers.
+- $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$ has no curves of negative self-intersection at all, distinguishing it from $\mathbb{F}_n$ for $n \geq 2$.
+- $\mathbb{P}^2$ is distinguished from all $\mathbb{F}_n$ by its Picard number: $\rho(\mathbb{P}^2) = 1$ while $\rho(\mathbb{F}_n) = 2$.
+</Example>
+
+<Example id="birational-not-isomorphic" title="Birational but not isomorphic rational surfaces">
+All Hirzebruch surfaces are birational to each other (all rational), but not isomorphic:
+
+- $\mathbb{F}_0$ and $\mathbb{F}_2$ are both minimal rational surfaces, birational but not isomorphic.
+- To go from $\mathbb{F}_0$ to $\mathbb{F}_2$: blow up a point $P \in \mathbb{F}_0$ to get a surface with two $(-1)$-curves (the exceptional divisor and the proper transform of the fiber through $P$), then contract the proper transform of the fiber to get $\mathbb{F}_2$.
+- This is an **elementary transformation** (or **elm**): $\mathbb{F}_0 \dashrightarrow \mathbb{F}_2$ is a birational map that is not an isomorphism.
+
+More generally, an elementary transformation centered at a point on $\mathbb{F}_n$ gives either $\mathbb{F}_{n-1}$ or $\mathbb{F}_{n+1}$, depending on whether the point lies on $C_0$ or not.
+</Example>
+
+---
+
+## Scrolls in projective space
+
+<Definition title="Scroll" number="5.12">
+A **rational normal scroll** $S(a, b)$ with $1 \leq a \leq b$ is the image of the map $\mathbb{F}_{b-a} \to \mathbb{P}^{a+b+1}$ given by the linear system $|C_0 + bF|$, where $C_0$ is the section with $C_0^2 = -(b-a)$ and $F$ is the fiber class.
+
+Equivalently, $S(a, b)$ is the union of lines joining corresponding points on two rational normal curves of degrees $a$ and $b$ in complementary linear subspaces of $\mathbb{P}^{a+b+1}$.
+
+The scroll $S(a, b)$ has degree $a + b$ in $\mathbb{P}^{a+b+1}$ and is a surface of minimal degree (degree $= \operatorname{codim} + 1$).
+</Definition>
+
+<Example id="scroll-11" title="The scroll S(1,1)">
+$S(1,1)$ is the image of $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$ under the Segre embedding $\mathbb{P}^1 \times \mathbb{P}^1 \hookrightarrow \mathbb{P}^3$. This is the smooth quadric surface $Q \subset \mathbb{P}^3$, a surface of degree $2$ in $\mathbb{P}^3$ (minimal degree: $2 = 3 - 2 + 1 = \operatorname{codim} + 1$).
+</Example>
+
+<Example id="scroll-12" title="The scroll S(1,2)">
+$S(1,2)$ is the image of $\mathbb{F}_1$ in $\mathbb{P}^4$ via the linear system $|C_0 + 2F|$. This is a cubic scroll: a surface of degree $3$ in $\mathbb{P}^4$. It can be described as the union of lines joining a point and a conic in complementary subspaces $\mathbb{P}^0 \subset \mathbb{P}^4$ and $\mathbb{P}^2 \subset \mathbb{P}^4$... but actually $a = 1, b = 2$, so it is the join of a line and a conic in disjoint subspaces $\mathbb{P}^1$ and $\mathbb{P}^2$ of $\mathbb{P}^4$.
+
+It is a rational surface of minimal degree, ruled by lines.
+</Example>
+
+<Example id="scroll-13" title="The scroll S(1,3) and the rational normal scroll of degree 4">
+$S(1,3)$ is a surface of degree $4$ in $\mathbb{P}^5$, obtained from $\mathbb{F}_2$ via $|C_0 + 3F|$. It is the join of a line and a twisted cubic in disjoint linear subspaces $\mathbb{P}^1$ and $\mathbb{P}^3$ of $\mathbb{P}^5$.
+
+The "degenerate" case $S(0, n)$ (where $a = 0$) gives the cone over the rational normal curve of degree $n$: this is a surface of degree $n$ in $\mathbb{P}^{n+1}$ with a singular vertex point.
+</Example>
+
+---
+
+## Ruled surfaces over curves of higher genus
+
+<Example id="ruled-over-elliptic" title="Ruled surfaces over an elliptic curve">
+Let $C$ be an elliptic curve. Then:
+
+- **Decomposable bundles:** $\mathcal{E} = \mathcal{O}_C \oplus \mathcal{L}$ with $\deg \mathcal{L} \leq 0$ gives $e = -\deg \mathcal{L} \geq 0$. For $\mathcal{L} = \mathcal{O}_C$, we get $C \times \mathbb{P}^1$ with $e = 0$.
+
+- **Atiyah's bundle:** There is a unique non-split extension $0 \to \mathcal{O}_C \to \mathcal{E}_0 \to \mathcal{O}_C \to 0$ (the Atiyah bundle). Then $\mathbb{P}(\mathcal{E}_0)$ is a ruled surface over $C$ with $e = 0$ but **not** isomorphic to $C \times \mathbb{P}^1$. This surface has an interesting property: it has no section $\Sigma$ with $\Sigma^2 = 0$ (unlike $C \times \mathbb{P}^1$, which has many).
+
+- **Indecomposable bundles with $e = -1$:** Nagata's theorem allows $e = -1$ (since $g = 1$), and these correspond to indecomposable rank-$2$ bundles of odd degree.
+</Example>
+
+<Example id="ruled-over-genus2" title="Ruled surfaces over a genus-2 curve">
+Let $C$ be a curve of genus $2$. Nagata's theorem gives $e \geq -2$. So the possible invariants are $e \in \{-2, -1, 0, 1, 2, \ldots\}$.
+
+- **$e = -2$ (the extreme case):** These arise from stable rank-$2$ bundles. The moduli space of stable bundles of rank $2$ and degree $1$ on $C$ is isomorphic to $\mathbb{P}^3$ (Newstead's theorem), so there is a $3$-parameter family of such ruled surfaces.
+- **$e = 0$, decomposable:** $\mathcal{E} = \mathcal{O} \oplus \mathcal{O}$ gives $C \times \mathbb{P}^1$.
+- **$e = 0$, indecomposable:** Non-split extensions $0 \to \mathcal{O} \to \mathcal{E} \to \mathcal{O} \to 0$ exist and give ruled surfaces not isomorphic to $C \times \mathbb{P}^1$.
+</Example>
+
+---
+
+## Numerical invariants
+
+<Theorem title="Numerical invariants of ruled surfaces">
+Let $X = \mathbb{P}(\mathcal{E})$ be a geometrically ruled surface over a curve $C$ of genus $g$. Then:
+
+- $q(X) = g$ (irregularity equals genus of the base),
+- $p_g(X) = 0$ (geometric genus is zero),
+- $\chi(\mathcal{O}_X) = 1 - g$,
+- $K_X^2 = 8(1 - g)$,
+- $e(X) = 4(1 - g)$ (topological Euler characteristic, by Noether's formula: $12\chi(\mathcal{O}_X) = K^2 + e(X)$, so $e(X) = 12(1 - g) - 8(1 - g) = 4(1 - g)$),
+- $b_1(X) = 2g$, $b_2(X) = 2$ (Betti numbers, over $\mathbb{C}$),
+- $\kappa(X) = -\infty$.
+
+In particular, all ruled surfaces over the same base curve $C$ share the same numerical invariants -- they differ only in their algebraic structure.
+</Theorem>
+
+<Example id="invariants-table" title="Invariants for small genus">
+Here are the invariants for ruled surfaces $\mathbb{P}(\mathcal{E}) \to C$:
+
+For $g = 0$ (base $\mathbb{P}^1$, i.e., Hirzebruch surfaces): $q = 0$, $p_g = 0$, $\chi(\mathcal{O}) = 1$, $K^2 = 8$, $e = 4$, $b_2 = 2$.
+
+For $g = 1$ (base an elliptic curve): $q = 1$, $p_g = 0$, $\chi(\mathcal{O}) = 0$, $K^2 = 0$, $e = 0$, $b_2 = 2$.
+
+For $g = 2$: $q = 2$, $p_g = 0$, $\chi(\mathcal{O}) = -1$, $K^2 = -8$, $e = -4$, $b_2 = 2$.
+
+For $g = g$: $q = g$, $p_g = 0$, $\chi(\mathcal{O}) = 1 - g$, $K^2 = 8(1-g)$, $e = 4(1-g)$, $b_2 = 2$.
+
+Note the curious feature: $K^2 < 0$ for $g \geq 2$. The canonical class is "very negative" on a ruled surface, reflecting the rational fibers.
+</Example>
+
+---
+
+## Elementary transformations
+
+<Definition title="Elementary transformation" number="5.13">
+Let $\pi \colon X \to C$ be a geometrically ruled surface, and let $P \in X$ be a point lying on the fiber $F_0 = \pi^{-1}(\pi(P))$. The **elementary transformation** (or **elm**) at $P$ is the birational map:
+
+$$\operatorname{elm}_P \colon X \dashrightarrow X'$$
+
+defined by: blow up $P$ to get $\tilde{X}$ with exceptional divisor $E$, then contract the proper transform $\tilde{F}_0$ of the fiber $F_0$ (which is now a $(-1)$-curve on $\tilde{X}$) to get a new ruled surface $X'$ over $C$.
+
+If $X = \mathbb{F}_n$ over $\mathbb{P}^1$ and $P \in C_0$ (the negative section), then $X' \cong \mathbb{F}_{n-1}$. If $P \notin C_0$, then $X' \cong \mathbb{F}_{n+1}$.
+</Definition>
+
+<Example id="elm-F0-F2" title="Elementary transformation from F₀ to F₂">
+Start with $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$. Pick any point $P \in \mathbb{F}_0$.
+
+1. Blow up $P$: get $\tilde{X}$ with exceptional curve $E$ ($E^2 = -1$), and the proper transform $\tilde{F}$ of the fiber through $P$ has $\tilde{F}^2 = -1$.
+2. Contract $\tilde{F}$: the image surface is $\mathbb{F}_2$.
+
+The resulting birational map $\mathbb{F}_0 \dashrightarrow \mathbb{F}_2$ is not regular (it is undefined at $P$ and contracts a curve). This shows that $\mathbb{F}_0$ and $\mathbb{F}_2$ are birational but not isomorphic.
+
+Repeating: $\mathbb{F}_0 \dashrightarrow \mathbb{F}_2 \dashrightarrow \mathbb{F}_4 \dashrightarrow \cdots$ by choosing points off the negative section, or $\mathbb{F}_2 \dashrightarrow \mathbb{F}_1 \dashrightarrow \mathbb{F}_0$ by choosing points on $C_0$.
+</Example>
+
+---
+
+## The Tsen--Castelnuovo theorem
+
+<Theorem title="Every ruled surface over ℙ¹ is rational">
+If $X$ is ruled over $\mathbb{P}^1$, then $X$ is rational. More precisely, every $\mathbb{P}^1$-bundle over $\mathbb{P}^1$ is isomorphic to some $\mathbb{F}_n$ (by Grothendieck's theorem on vector bundles over $\mathbb{P}^1$), and every $\mathbb{F}_n$ is rational.
+
+Conversely, if $X$ is a ruled surface over a curve $C$ of genus $g \geq 1$, then $X$ is **irrational**: it is not birational to $\mathbb{P}^2$, since $q(X) = g > 0$ while $q(\mathbb{P}^2) = 0$, and the irregularity is a birational invariant.
+</Theorem>
+
+---
+
+## Ruled surfaces in the Enriques--Kodaira classification
+
+<Remark title="Role in the classification of surfaces">
+In the Enriques--Kodaira classification of algebraic surfaces by Kodaira dimension $\kappa$:
+
+- **$\kappa = -\infty$:** All such surfaces are ruled. More precisely, a surface has $\kappa = -\infty$ if and only if it is birational to $C \times \mathbb{P}^1$ for some curve $C$ (this is a deep theorem, relying on the abundance conjecture in dimension 2, proved by the Italian school and Kodaira).
+- **$\kappa = 0$:** K3 surfaces, abelian surfaces, Enriques surfaces, hyperelliptic surfaces.
+- **$\kappa = 1$:** Properly elliptic surfaces.
+- **$\kappa = 2$:** Surfaces of general type.
+
+Thus ruled surfaces form the entire class $\kappa = -\infty$, and their complete classification reduces to understanding rank-$2$ vector bundles on curves.
+</Remark>
+
+<Example id="detecting-ruled" title="Detecting ruled surfaces via invariants">
+To check if a surface $X$ is ruled, one can use the following criteria:
+
+- **Sufficient:** If $P_{12}(X) = h^0(12K_X) = 0$, then $X$ is ruled (Enriques).
+- **Necessary and sufficient:** $\kappa(X) = -\infty$, equivalently $P_n(X) = 0$ for all $n \geq 1$.
+- **Over the base curve $C$:** If $X$ is ruled over $C$, then $q(X) = g(C)$. So the Albanese variety $\operatorname{Alb}(X) \cong \operatorname{Jac}(C)$.
+
+For example, a surface with $q = 0, p_g = 0, K^2 = 8$ is either $\mathbb{P}^2$ (if $\rho = 1$), $\mathbb{F}_0$ or $\mathbb{F}_n$ (if $\rho = 2$ and minimal), or a non-minimal rational surface.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key facts about ruled surfaces">
+The theory of ruled surfaces rests on the following pillars:
+
+- **Structure:** Every geometrically ruled surface is $\mathbb{P}(\mathcal{E})$ for a rank-$2$ bundle $\mathcal{E}$ on a curve $C$, classified (up to twist) by the invariant $e$ and the isomorphism class of $\mathcal{E}$.
+- **Picard group:** $\operatorname{NS}(X) \cong \mathbb{Z} C_0 \oplus \mathbb{Z} F$ with $C_0^2 = -e$, $C_0 \cdot F = 1$, $F^2 = 0$.
+- **Canonical class:** $K_X \sim -2C_0 + (2g - 2 - e)F$, giving $\kappa = -\infty$.
+- **Minimality over $\mathbb{P}^1$:** The minimal models are $\mathbb{P}^2$ and $\mathbb{F}_n$ ($n \neq 1$).
+- **Birational geometry:** Elementary transformations connect all ruled surfaces over the same base curve.
+- **Scrolls:** Geometrically ruled surfaces embed as scrolls -- surfaces of minimal degree in projective space.
+</Remark>

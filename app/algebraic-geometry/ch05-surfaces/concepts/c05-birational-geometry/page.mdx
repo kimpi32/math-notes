@@ -1,0 +1,374 @@
+export const metadata = {
+  title: 'Birational Geometry of Surfaces — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Concept — Birational Geometry" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Birational Geometry of Surfaces
+
+Birational geometry studies surfaces "up to birational equivalence"---identifying two surfaces when they share a common dense open subset. For surfaces, the minimal model program has a complete and beautiful answer: every surface is obtained from a unique minimal model (for $\kappa \geq 0$) by a sequence of blowups, and the Enriques--Kodaira classification organizes all minimal surfaces by Kodaira dimension.
+
+---
+
+## Birational maps and equivalence
+
+<Definition title="Birational map" number="5.13">
+A **rational map** $\phi: X \dashrightarrow Y$ between smooth projective surfaces is a morphism defined on a dense open subset $U \subset X$. It is **birational** if there exists a rational map $\psi: Y \dashrightarrow X$ such that $\psi \circ \phi = \mathrm{id}_X$ and $\phi \circ \psi = \mathrm{id}_Y$ on appropriate dense open subsets.
+
+Equivalently, $X$ and $Y$ are **birationally equivalent** if their function fields are isomorphic: $k(X) \cong k(Y)$.
+
+A surface $X$ is **rational** if it is birational to $\mathbb{P}^2$, i.e., $k(X) \cong k(x, y)$.
+</Definition>
+
+<Example id="standard-cremona" title="The standard Cremona transformation">
+The **standard quadratic transformation** $\sigma: \mathbb{P}^2 \dashrightarrow \mathbb{P}^2$ is defined by:
+
+$$\sigma([x_0 : x_1 : x_2]) = [x_1 x_2 : x_0 x_2 : x_0 x_1].$$
+
+This is a birational involution ($\sigma^2 = \mathrm{id}$). It is undefined at the three coordinate points $P_0 = [1:0:0]$, $P_1 = [0:1:0]$, $P_2 = [0:0:1]$, and it contracts the three coordinate lines $x_i = 0$ to the opposite coordinate points.
+
+Resolving: blow up $P_0, P_1, P_2$ to get $\tilde{\mathbb{P}}^2$. On $\tilde{\mathbb{P}}^2$, $\sigma$ becomes a morphism that contracts the proper transforms of the three coordinate lines (each now a $(-1)$-curve) and blows down to $\mathbb{P}^2$.
+</Example>
+
+<Example id="birational-surfaces" title="Birationally equivalent surfaces">
+- $\mathbb{P}^2$ and $\mathbb{P}^1 \times \mathbb{P}^1$ are birational: the map $\mathbb{P}^2 \dashrightarrow \mathbb{P}^1 \times \mathbb{P}^1$ given by projection from a point realizes this. Concretely, $\operatorname{Bl}_P(\mathbb{P}^2) \cong \mathbb{F}_1$ admits a morphism to $\mathbb{P}^1 \times \mathbb{P}^1$ by blowing down a different $(-1)$-curve.
+
+- The Hirzebruch surfaces $\mathbb{F}_n$ for all $n \geq 0$ are rational: each is birational to $\mathbb{P}^1 \times \mathbb{P}^1 \cong \mathbb{F}_0$.
+
+- A smooth cubic surface $S \subset \mathbb{P}^3$ is rational. Projecting from a line $\ell \subset S$ gives a birational map $S \dashrightarrow \mathbb{P}^2$. Since $S$ contains exactly $27$ lines, there are many such projections.
+
+- A smooth quartic surface $S_4 \subset \mathbb{P}^3$ is a K3 surface and is **not** rational (it has $\kappa = 0$, while rational surfaces have $\kappa = -\infty$).
+</Example>
+
+---
+
+## Castelnuovo's contraction theorem
+
+<Definition title="Exceptional curve ((-1)-curve)" number="5.14">
+An **exceptional curve of the first kind** (or **$(-1)$-curve**) on a smooth projective surface $X$ is an irreducible curve $E \subset X$ with:
+
+$$E \cong \mathbb{P}^1, \quad E^2 = -1.$$
+
+By the adjunction formula, this is equivalent to $E^2 = -1$ and $K_X \cdot E = -1$ (since $2g(E) - 2 = E^2 + K_X \cdot E$ gives $-2 = -1 + K_X \cdot E$).
+</Definition>
+
+<Theorem title="Castelnuovo's contraction theorem">
+Let $E$ be a $(-1)$-curve on a smooth projective surface $X$. Then there exists a smooth projective surface $Y$ and a morphism $\pi: X \to Y$ such that:
+
+- $\pi$ is the blowup of $Y$ at a point $P \in Y$, and $E = \pi^{-1}(P)$ is the exceptional divisor.
+- $\pi|_{X \setminus E}: X \setminus E \xrightarrow{\sim} Y \setminus \{P\}$ is an isomorphism.
+- $K_X = \pi^* K_Y + E$ and $\rho(X) = \rho(Y) + 1$.
+
+In other words, every $(-1)$-curve can be **blown down** (contracted) to a smooth point. This is the inverse operation to blowing up.
+</Theorem>
+
+<Example id="blowdown-P2" title="Blowing down on Bl_P(ℙ²)">
+Let $X = \operatorname{Bl}_P(\mathbb{P}^2)$ with exceptional divisor $E$ and proper transform $H$ of a line through $P$. Then $\operatorname{Pic}(X) = \mathbb{Z}H \oplus \mathbb{Z}E$ with $H^2 = 1$, $E^2 = -1$, $H \cdot E = 0$.
+
+The curve $E$ is a $(-1)$-curve, and blowing it down recovers $\mathbb{P}^2$. But $H - E$ is also a $(-1)$-curve (it is the proper transform of a line not through $P$... actually, $H$ itself satisfies $H^2 = 1$, so $H$ is not a $(-1)$-curve). The curve $L = H - E$ satisfies $L^2 = 1 - 1 = 0$, so it is not a $(-1)$-curve either.
+
+On $\operatorname{Bl}_{P,Q}(\mathbb{P}^2)$ (blowup at two points), with basis $H, E_1, E_2$: the proper transform of the line through $P$ and $Q$ is $L = H - E_1 - E_2$, with $L^2 = 1 - 1 - 1 = -1$ and $L \cong \mathbb{P}^1$. So $L$ is a $(-1)$-curve that can be blown down, yielding $\mathbb{F}_1$.
+</Example>
+
+<Example id="del-pezzo-minus-one" title="(-1)-curves on del Pezzo surfaces">
+A **del Pezzo surface** $S_d$ of degree $d$ is a blowup of $\mathbb{P}^2$ at $r = 9 - d$ points in general position (for $1 \leq d \leq 9$). The number of $(-1)$-curves is:
+
+- $d = 9$ ($r = 0$, i.e., $\mathbb{P}^2$): $0$ exceptional curves.
+- $d = 8$ ($r = 1$): $1$ curve ($E_1$).
+- $d = 7$ ($r = 2$): $3$ curves ($E_1, E_2, L_{12}$).
+- $d = 6$ ($r = 3$): $6$ curves.
+- $d = 5$ ($r = 4$): $10$ curves.
+- $d = 4$ ($r = 5$): $16$ curves.
+- $d = 3$ ($r = 6$): $27$ curves --- these are the famous **27 lines on a cubic surface**.
+- $d = 2$ ($r = 7$): $56$ curves.
+- $d = 1$ ($r = 8$): $240$ curves.
+
+The count for degree $d \leq 6$ is $\binom{r}{1} + \binom{r}{2} + \ldots$ (exceptional divisors, proper transforms of lines, conics, etc.), reflecting the $E_r$ root system structure.
+</Example>
+
+---
+
+## Minimal models
+
+<Definition title="Minimal surface" number="5.15">
+A smooth projective surface $X$ is **minimal** if it contains no $(-1)$-curves. Equivalently, every birational morphism $X \to Y$ to another smooth projective surface is an isomorphism.
+
+The process of reaching a minimal model: start with any surface $X$, find a $(-1)$-curve, blow it down. Repeat. Since each blowdown decreases $\rho(X)$ by $1$ and $\rho \geq 1$, this process terminates in finitely many steps at a minimal surface $X_{\min}$.
+</Definition>
+
+<Theorem title="Uniqueness of minimal models">
+Let $X$ be a smooth projective surface over an algebraically closed field $k$.
+
+**Case $\kappa(X) \geq 0$**: The minimal model of $X$ is **unique** up to isomorphism. That is, if $X_1$ and $X_2$ are both minimal surfaces birational to $X$, then $X_1 \cong X_2$.
+
+**Case $\kappa(X) = -\infty$**: The minimal model is **not unique**. Both $\mathbb{P}^2$ and $\mathbb{F}_n$ (for $n \neq 1$) are minimal and rational, but $\mathbb{P}^2 \not\cong \mathbb{F}_n$. However, the possibilities are completely classified: a minimal rational surface is either $\mathbb{P}^2$ or a Hirzebruch surface $\mathbb{F}_n$ with $n \neq 1$.
+</Theorem>
+
+<Example id="minimal-model-process" title="The minimal model process in action">
+Start with $X = \operatorname{Bl}_{P_1, \ldots, P_6}(\mathbb{P}^2)$, the blowup of $\mathbb{P}^2$ at $6$ general points (a cubic surface $S_3 \subset \mathbb{P}^3$).
+
+This surface has $27$ exceptional curves ($(-1)$-curves). Pick any one, say $E_1$, and blow it down to get $\operatorname{Bl}_{P_2, \ldots, P_6}(\mathbb{P}^2)$, a del Pezzo of degree $4$ with $16$ exceptional curves. Continue:
+
+- Blow down $E_2$: get $\operatorname{Bl}_{P_3, \ldots, P_6}(\mathbb{P}^2)$ ($10$ exceptional curves).
+- Blow down $E_3$: get $\operatorname{Bl}_{P_4, P_5, P_6}(\mathbb{P}^2)$ ($6$ exceptional curves).
+- Blow down $E_4, E_5, E_6$: recover $\mathbb{P}^2$ (no exceptional curves, minimal).
+
+Alternatively, at any stage we could blow down different $(-1)$-curves, potentially arriving at $\mathbb{F}_n$ instead of $\mathbb{P}^2$. This illustrates the non-uniqueness for $\kappa = -\infty$.
+</Example>
+
+<Example id="minimal-K3" title="K3 surfaces are already minimal">
+A K3 surface $X$ has $K_X \sim 0$ (trivial canonical class). If $E$ were a $(-1)$-curve, then $K_X \cdot E = 0$ but also $K_X \cdot E = -1$ by adjunction, a contradiction. Therefore K3 surfaces contain no $(-1)$-curves and are automatically minimal.
+
+The same argument applies to abelian surfaces ($K_X \sim 0$) and Enriques surfaces ($2K_X \sim 0$, so $K_X \cdot E = 0$ for any curve $E$ since $2K_X \cdot E = 0$).
+</Example>
+
+---
+
+## The minimal model program for surfaces
+
+<Remark title="The MMP algorithm for surfaces">
+The **minimal model program** (MMP) for surfaces proceeds as follows:
+
+1. Start with a smooth projective surface $X$.
+2. If $K_X$ is nef (i.e., $K_X \cdot C \geq 0$ for all curves $C$), then $X$ is a minimal model. Stop.
+3. If $K_X$ is not nef, there exists a curve $C$ with $K_X \cdot C < 0$. By the Cone Theorem, we can choose $C$ to be a $(-1)$-curve (i.e., $C \cong \mathbb{P}^1$, $C^2 = -1$).
+4. Contract $C$ via Castelnuovo's theorem to get a smooth surface $X'$. Replace $X$ with $X'$ and go to step 2.
+
+This terminates because $\rho(X)$ decreases at each step. The result is either a minimal model (if $\kappa \geq 0$) or a surface with a $\mathbb{P}^1$-fibration or isomorphic to $\mathbb{P}^2$ (if $\kappa = -\infty$).
+</Remark>
+
+<Definition title="Kodaira dimension" number="5.16">
+The **Kodaira dimension** $\kappa(X)$ of a smooth projective surface $X$ is defined as:
+
+$$\kappa(X) = \limsup_{m \to \infty} \frac{\log h^0(X, mK_X)}{\log m},$$
+
+with the convention $\kappa = -\infty$ if $h^0(mK_X) = 0$ for all $m \geq 1$. For surfaces, $\kappa \in \{-\infty, 0, 1, 2\}$:
+
+- $\kappa = -\infty$: $P_m = 0$ for all $m \geq 1$ (no pluricanonical sections).
+- $\kappa = 0$: $P_m \in \{0, 1\}$ for all $m$, and $P_m = 1$ for some $m$.
+- $\kappa = 1$: $P_m$ grows linearly ($P_m \sim cm$ for large $m$).
+- $\kappa = 2$: $P_m$ grows quadratically ($P_m \sim cm^2$ for large $m$). These are **surfaces of general type**.
+</Definition>
+
+---
+
+## The Enriques--Kodaira classification
+
+### Kodaira dimension $\kappa = -\infty$: Ruled and rational surfaces
+
+<Definition title="Ruled surface" number="5.17">
+A smooth projective surface $X$ is **ruled** if it admits a surjective morphism $\pi: X \to C$ to a smooth curve $C$ whose fibers are isomorphic to $\mathbb{P}^1$. Equivalently, $X \cong \mathbb{P}(\mathcal{E})$ for some rank-$2$ vector bundle $\mathcal{E}$ on $C$.
+
+$X$ is **rational** if $C \cong \mathbb{P}^1$ (so $X$ is birational to $\mathbb{P}^2$). Otherwise, $X$ is an **irrational ruled surface** over a curve $C$ of genus $g(C) \geq 1$.
+</Definition>
+
+<Example id="kodaira-neg-inf" title="Minimal surfaces with κ = -∞">
+The minimal surfaces with $\kappa = -\infty$ are completely classified:
+
+**Rational surfaces** ($q = 0$):
+- $\mathbb{P}^2$: the projective plane, $K_{\mathbb{P}^2} = -3H$, $K^2 = 9$.
+- $\mathbb{F}_n = \mathbb{P}(\mathcal{O}_{\mathbb{P}^1} \oplus \mathcal{O}_{\mathbb{P}^1}(-n))$ for $n \neq 1$: Hirzebruch surfaces. Note $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$ and $\mathbb{F}_1 = \operatorname{Bl}_P(\mathbb{P}^2)$ (not minimal since it contains a $(-1)$-curve).
+
+**Irrational ruled surfaces** ($q = g(C) \geq 1$):
+- $\mathbb{P}(\mathcal{E}) \to C$ for an indecomposable rank-$2$ bundle $\mathcal{E}$ on a curve $C$ of genus $g \geq 1$. These satisfy $P_m = 0$ for all $m$ and $q = g(C) \geq 1$.
+
+**Castelnuovo's rationality criterion**: A surface is rational if and only if $q = h^1(\mathcal{O}_X) = 0$ and $P_2 = h^0(2K_X) = 0$.
+</Example>
+
+### Kodaira dimension $\kappa = 0$
+
+<Example id="kodaira-zero" title="Minimal surfaces with κ = 0">
+There are exactly four types of minimal surfaces with $\kappa = 0$:
+
+**K3 surfaces**: $K_X \sim 0$, $q = 0$, $p_g = 1$, $\chi(\mathcal{O}_X) = 2$. Examples: smooth quartic in $\mathbb{P}^3$, complete intersection of a quadric and cubic in $\mathbb{P}^4$, double cover of $\mathbb{P}^2$ branched along a smooth sextic. The lattice $H^2(X, \mathbb{Z})$ is isomorphic to $U^3 \oplus E_8(-1)^2$ (rank $22$, signature $(3,19)$).
+
+**Abelian surfaces**: $K_X \sim 0$, $q = 2$, $p_g = 1$, $\chi(\mathcal{O}_X) = 0$. These are $2$-dimensional abelian varieties, e.g., $E_1 \times E_2$ for elliptic curves $E_i$, or the Jacobian $\operatorname{Jac}(C)$ of a genus-$2$ curve.
+
+**Enriques surfaces**: $K_X \not\sim 0$ but $2K_X \sim 0$, $q = 0$, $p_g = 0$, $\chi(\mathcal{O}_X) = 1$. An Enriques surface is the quotient of a K3 surface by a fixed-point-free involution. Over $\mathbb{C}$, the fundamental group is $\pi_1(X) \cong \mathbb{Z}/2$.
+
+**Bielliptic (hyperelliptic) surfaces**: $K_X \not\sim 0$ but $nK_X \sim 0$ for some $n \in \{2, 3, 4, 6\}$, $q = 1$, $p_g = 0$. These are quotients $(E_1 \times E_2)/G$ where $G$ is a finite group acting by translations on $E_1$ and faithfully on $E_2$.
+</Example>
+
+### Kodaira dimension $\kappa = 1$
+
+<Example id="kodaira-one" title="Minimal surfaces with κ = 1: elliptic surfaces">
+A minimal surface with $\kappa = 1$ admits a unique **elliptic fibration** $\pi: X \to C$ over a smooth curve $C$, whose general fiber is an elliptic curve.
+
+Invariants: $K_X^2 = 0$ (since $K_X$ is nef and $\kappa = 1$, Kodaira's formula gives $K_X \sim_\mathbb{Q}$ a sum along fibers), with the canonical bundle formula $K_X \sim \pi^*(K_C \otimes L) + \sum_i a_i F_i$ involving the discriminant divisor and singular fibers.
+
+**Kodaira's classification of singular fibers**: the singular fibers can be of type $I_n$ (cycle of $n$ rational curves), $II$ (cuspidal rational curve), $III$ (two tangent rational curves), $IV$ (three concurrent rational curves), $I_n^*$, $II^*$, $III^*$, $IV^*$ (the starred types correspond to extended Dynkin diagrams $\tilde{D}_{n+4}$, $\tilde{E}_8$, $\tilde{E}_7$, $\tilde{E}_6$).
+
+**Concrete example**: the Fermat pencil $x^3 + y^3 + z^3 = t \cdot xyz$ in $\mathbb{P}^2 \times \mathbb{P}^1$. The general fiber is a smooth cubic (elliptic), with singular fibers at $t^3 = 27$ (nodal cubics, type $I_1$) and $t = \infty$ (the triangle $xyz = 0$, type $I_3$). After resolving base points, this gives an elliptic surface with $\kappa = 1$.
+</Example>
+
+### Kodaira dimension $\kappa = 2$: Surfaces of general type
+
+<Example id="kodaira-two" title="Minimal surfaces with κ = 2: surfaces of general type">
+A **surface of general type** is a surface with $\kappa = 2$. For a minimal surface of general type, $K_X$ is nef and big ($K_X^2 > 0$).
+
+Key inequalities for minimal surfaces of general type:
+- **Noether's inequality**: $K_X^2 \geq 2p_g - 4$ (equivalently, $\chi(\mathcal{O}_X) \leq \frac{1}{2}K_X^2 + 2$).
+- **Bogomolov--Miyaoka--Yau inequality**: $K_X^2 \leq 9\chi(\mathcal{O}_X) = 9(1 - q + p_g)$.
+- **Equality** $K_X^2 = 9\chi(\mathcal{O}_X)$ holds iff $X$ is a ball quotient $\mathbb{B}^2/\Gamma$ (Yau).
+
+**Examples**:
+- Smooth quintic in $\mathbb{P}^3$: $K_X = \mathcal{O}_X(1)$, $K_X^2 = 5$, $p_g = 4$, $q = 0$, $\chi = 5$.
+- Product $C_1 \times C_2$ of curves with $g(C_i) \geq 2$: $K^2 = 8(g_1 - 1)(g_2 - 1)$, $\chi = (g_1 - 1)(g_2 - 1)$.
+- **Godeaux surface**: $K^2 = 1$, $p_g = 0$, the simplest surface of general type. Constructed as the quotient of the Fermat quintic $x_0^5 + x_1^5 + x_2^5 + x_3^5 = 0$ by the $\mathbb{Z}/5$-action $x_i \mapsto \zeta^i x_i$ ($\zeta = e^{2\pi i/5}$).
+- **Barlow surface**: a simply connected surface of general type with $p_g = 0$, $K^2 = 1$.
+- **Beauville surface**: a surface isogenous to a higher product $C_1 \times C_2 / G$.
+</Example>
+
+---
+
+## The Cremona group
+
+<Definition title="Cremona group" number="5.18">
+The **Cremona group** $\operatorname{Cr}_2(k) = \operatorname{Bir}(\mathbb{P}^2_k)$ is the group of birational automorphisms of $\mathbb{P}^2$. Since $\mathbb{P}^2$ is rational, this equals $\operatorname{Aut}_k(k(x, y))$, the group of $k$-automorphisms of the purely transcendental field extension $k(x, y)/k$.
+
+The Cremona group contains:
+- $\operatorname{PGL}_3(k) = \operatorname{Aut}(\mathbb{P}^2)$ as a subgroup (the linear automorphisms).
+- The standard quadratic transformation $\sigma: [x:y:z] \mapsto [yz:xz:xy]$.
+- De Jonquieres transformations (birational maps preserving a pencil of lines through a point).
+</Definition>
+
+<Theorem title="Noether–Castelnuovo theorem">
+Every birational automorphism of $\mathbb{P}^2$ (over an algebraically closed field) is a composition of linear automorphisms and the standard quadratic transformation. In other words:
+
+$$\operatorname{Cr}_2(k) = \langle \operatorname{PGL}_3(k), \sigma \rangle.$$
+
+This means the Cremona group is generated by $\operatorname{PGL}_3(k)$ and a single quadratic involution.
+</Theorem>
+
+<Example id="cremona-elements" title="Elements of the Cremona group">
+- **Linear maps**: $[x:y:z] \mapsto [ax + by + cz : dx + ey + fz : gx + hy + iz]$, degree $1$.
+
+- **Standard Cremona** $\sigma$: degree $2$. Resolves to $3$ blowups followed by $3$ blowdowns.
+
+- **Degree-$n$ Cremona maps**: for example, $[x:y:z] \mapsto [x^n : y^n : z^n]$ is **not** birational (it has degree $n^2$). A degree-$n$ birational map is $[x:y:z] \mapsto [F_0 : F_1 : F_2]$ with $\deg F_i = n$ and a rational inverse.
+
+- **De Jonquieres transformation** of degree $n$: preserves the pencil of lines through $[1:0:0]$. In affine coordinates $(x, y)$: $(x, y) \mapsto (x, \frac{a(x)y + b(x)}{c(x)y + d(x)})$ for polynomials $a, b, c, d$ with $ad - bc \neq 0$. These form a subgroup $\operatorname{dJ} \subset \operatorname{Cr}_2$.
+
+- The Cremona group is **not simple**: Cantat and Lamy (2013) proved that $\operatorname{Cr}_2(\mathbb{C})$ is not simple, using the action on an infinite-dimensional hyperbolic space.
+</Example>
+
+---
+
+## Factorization of birational maps
+
+<Theorem title="Factorization theorem for surfaces">
+Let $\phi: X \dashrightarrow Y$ be a birational map between smooth projective surfaces. Then $\phi$ can be factored as a sequence of blowups followed by a sequence of blowdowns:
+
+$$X = X_0 \leftarrow X_1 \leftarrow \cdots \leftarrow X_n \rightarrow \cdots \rightarrow X_{n+m} = Y,$$
+
+where each left arrow $X_{i+1} \to X_i$ is a blowup at a point, and each right arrow $X_j \to X_{j+1}$ is a blowdown of a $(-1)$-curve.
+
+Equivalently, there exists a smooth surface $Z$ and morphisms $p: Z \to X$, $q: Z \to Y$ (both compositions of blowups) such that $\phi = q \circ p^{-1}$.
+</Theorem>
+
+<Example id="factorization-cremona" title="Factoring the standard Cremona transformation">
+The standard Cremona $\sigma: \mathbb{P}^2 \dashrightarrow \mathbb{P}^2$ factors as:
+
+1. **Three blowups**: Blow up $P_0 = [1:0:0]$, $P_1 = [0:1:0]$, $P_2 = [0:0:1]$ to obtain $Z = \operatorname{Bl}_{P_0, P_1, P_2}(\mathbb{P}^2)$. This introduces exceptional divisors $E_0, E_1, E_2$ with $E_i^2 = -1$, and the proper transforms $\ell_{01}, \ell_{02}, \ell_{12}$ of the coordinate lines now satisfy $\ell_{ij}^2 = -1$.
+
+2. **Three blowdowns**: Contract $\ell_{01}, \ell_{02}, \ell_{12}$ (the proper transforms) to get $\mathbb{P}^2$ again, where $E_0, E_1, E_2$ become the new coordinate lines.
+
+The intermediate surface $Z$ is the del Pezzo surface $S_6$ (degree $6$, isomorphic to $\mathbb{P}^2$ blown up at $3$ non-collinear points), and it admits two different contractions to $\mathbb{P}^2$.
+</Example>
+
+<Example id="birational-conic-bundle" title="Birational map between ruled surfaces">
+Consider $\mathbb{F}_0 = \mathbb{P}^1 \times \mathbb{P}^1$ and $\mathbb{F}_2$. These are birational (both rational) but not isomorphic. A birational map $\mathbb{F}_0 \dashrightarrow \mathbb{F}_2$ factors through one blowup and one blowdown:
+
+1. Blow up a point $P \in \mathbb{F}_0$: get $\operatorname{Bl}_P(\mathbb{F}_0) \cong \operatorname{Bl}_{Q_1, Q_2}(\mathbb{P}^2)$ (blowup of $\mathbb{P}^2$ at two points), which is $\mathbb{F}_1$ with an extra blowup.
+2. The proper transform of the fiber through $P$ becomes a $(-1)$-curve. Blowing it down yields $\mathbb{F}_2$.
+
+More generally, the **elementary transformation** $\operatorname{elm}_P: \mathbb{F}_n \dashrightarrow \mathbb{F}_{n \pm 1}$ at a point $P$ is a blowup followed by blowdown of the proper transform of the fiber.
+</Example>
+
+---
+
+## Comparison with higher-dimensional MMP
+
+<Remark title="Why surfaces are special">
+The minimal model program for surfaces is remarkably clean compared to higher dimensions:
+
+**What works for surfaces**:
+- Every birational map factors into blowups and blowdowns of smooth points.
+- Contracting a $(-1)$-curve always produces a smooth surface.
+- Minimal models exist and are unique (for $\kappa \geq 0$).
+- The classification is complete (Enriques--Kodaira).
+
+**What changes in dimension $\geq 3$**:
+- **Flips are needed**: contracting a $K_X$-negative curve in dimension $3$ can create singularities worse than a smooth point. One must perform a **flip** (a surgery replacing a curve with another) to continue.
+- **Terminal singularities**: the MMP must work with mildly singular varieties (terminal or canonical singularities), not just smooth ones.
+- **Flops**: birational maps between minimal models (in $\kappa = 0$) can involve **flops** --- birational maps that are isomorphisms in codimension $1$ but change the variety along codimension-$2$ loci.
+- **Termination**: proving that the sequence of flips terminates is a deep theorem in dimension $3$ (Mori, 1988) and was established in full generality by Birkar--Cascini--Hacon--McKernan (BCHM, 2010) for varieties of general type.
+- **Non-uniqueness of minimal models**: in dimension $\geq 3$, minimal models with $\kappa = 0$ are related by flops but need not be isomorphic.
+</Remark>
+
+<Example id="three-fold-flip" title="A flip in dimension 3">
+Consider a smooth 3-fold $X$ containing a curve $C \cong \mathbb{P}^1$ with normal bundle $N_{C/X} \cong \mathcal{O}(-1) \oplus \mathcal{O}(-1)$. Then $K_X \cdot C = -1$ (by adjunction on the 3-fold). The contraction $X \to Y$ that contracts $C$ to a point creates an **ordinary double point** (node) singularity.
+
+The **flip** $X \dashrightarrow X^+$ replaces $C \cong \mathbb{P}^1$ with a different $\mathbb{P}^1$ having normal bundle $\mathcal{O}(-1) \oplus \mathcal{O}(-1)$ but with $K_{X^+} \cdot C^+ = +1$. This phenomenon has no analogue for surfaces.
+
+The classical example: the **Atiyah flop** on the conifold $xy = zw$ in $\mathbb{C}^4$. The two small resolutions (blowing up the ideal $(x, z)$ vs. $(x, w)$) are related by a flop.
+</Example>
+
+---
+
+## Birational invariants
+
+<Definition title="Birational invariants of surfaces" number="5.19">
+The following are **birational invariants** of smooth projective surfaces (unchanged under birational equivalence):
+
+- The **Kodaira dimension** $\kappa(X)$.
+- The **plurigenera** $P_m = h^0(X, mK_X)$ for all $m \geq 1$.
+- The **irregularity** $q = h^1(X, \mathcal{O}_X) = h^0(X, \Omega^1_X)$.
+- The **fundamental group** $\pi_1(X)$ (in characteristic $0$).
+
+The following are **not** birational invariants:
+- The Picard number $\rho(X)$ (changes under blowup: $\rho(\operatorname{Bl}_P X) = \rho(X) + 1$).
+- The self-intersection $K_X^2$ (changes: $K_{\operatorname{Bl}_P X}^2 = K_X^2 - 1$).
+- The Euler characteristic $e(X)$ (changes: $e(\operatorname{Bl}_P X) = e(X) + 1$).
+- But $K_X^2 + \rho(X)$ **is** a birational invariant (since both change by $\pm 1$).
+</Definition>
+
+<Example id="birational-invariants-compute" title="Computing birational invariants">
+**Rational surfaces** ($\mathbb{P}^2$, $\mathbb{F}_n$, del Pezzo surfaces):
+$\kappa = -\infty$, $q = 0$, $P_m = 0$ for all $m$, $\pi_1 = 0$. But $K^2$ varies: $K^2_{\mathbb{P}^2} = 9$, $K^2_{\mathbb{F}_n} = 8$, $K^2_{S_d} = d$ for del Pezzo of degree $d$.
+
+**K3 surfaces**: $\kappa = 0$, $q = 0$, $P_1 = 1$, $P_m = 1$ for all $m \geq 1$. All K3 surfaces are diffeomorphic (over $\mathbb{C}$) and have $\pi_1 = 0$.
+
+**Abelian surfaces**: $\kappa = 0$, $q = 2$, $P_1 = 1$, $P_m = 1$ for all $m$. The fundamental group $\pi_1 \cong \mathbb{Z}^4$ distinguishes them from K3 surfaces.
+
+**Quintic surface** $S_5 \subset \mathbb{P}^3$ (general type): $\kappa = 2$, $q = 0$, $K^2 = 5$, $p_g = P_1 = 4$, $\chi(\mathcal{O}) = 5$, $\pi_1 = 0$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The structure of birational geometry for surfaces">
+The birational geometry of surfaces is governed by three pillars:
+
+- **Castelnuovo contraction**: every $(-1)$-curve can be blown down, reducing the surface toward a minimal model. For $\kappa \geq 0$, this minimal model is unique.
+- **Enriques--Kodaira classification**: minimal surfaces fall into four classes by Kodaira dimension: ruled ($\kappa = -\infty$), K3/abelian/Enriques/bielliptic ($\kappa = 0$), elliptic fibrations ($\kappa = 1$), and general type ($\kappa = 2$).
+- **Factorization**: every birational map between surfaces is a composition of blowups and blowdowns, and the Cremona group $\operatorname{Cr}_2$ is generated by $\operatorname{PGL}_3$ and a single quadratic involution.
+
+This complete picture --- achieved through the work of the Italian school, Kodaira, Bombieri, Mumford, and many others --- serves as both the template and the motivation for the higher-dimensional minimal model program.
+</Remark>

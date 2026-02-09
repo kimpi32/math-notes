@@ -1,0 +1,429 @@
+export const metadata = {
+  title: 'Blowing Up — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Concept — Blowing Up" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Blowing Up
+
+Blowing up replaces a point on a surface by an entire projective line, "separating" tangent directions at that point. It is the most fundamental operation in the birational geometry of surfaces: every birational morphism between smooth surfaces factors as a sequence of blowups, and every surface singularity can be resolved by iterated blowups.
+
+---
+
+## Definition of the blowup
+
+<Definition title="Blowup of a surface at a point" number="5.4">
+Let $X$ be a smooth algebraic surface and $P \in X$ a closed point. Choose local coordinates $(x, y)$ at $P$. The **blowup of $X$ at $P$** is the surface
+
+$$\widetilde{X} = \operatorname{Bl}_P(X)$$
+
+together with a proper birational morphism $\pi : \widetilde{X} \to X$ such that:
+
+- $\pi$ is an isomorphism over $X \setminus \{P\}$,
+- the fiber $E = \pi^{-1}(P) \cong \mathbb{P}^1$, called the **exceptional divisor**,
+- $\widetilde{X}$ is smooth if $X$ is smooth.
+
+Concretely, in local coordinates the blowup is the closure of the graph of the rational map $(x,y) \mapsto [x:y] \in \mathbb{P}^1$:
+
+$$\operatorname{Bl}_P(X) = \overline{\{(q, [s:t]) \in X \times \mathbb{P}^1 \mid x(q) \cdot t = y(q) \cdot s\}} \subset X \times \mathbb{P}^1.$$
+
+Points of $E$ correspond to tangent directions at $P$: each point $[s:t] \in E$ remembers "the direction of approach" to $P$.
+</Definition>
+
+<Example id="blowup-A2" title="Blowup of A² at the origin">
+Let $X = \mathbb{A}^2$ with coordinates $(x, y)$ and $P = (0, 0)$. The blowup is:
+
+$$\operatorname{Bl}_0(\mathbb{A}^2) = \{((x, y), [s:t]) \in \mathbb{A}^2 \times \mathbb{P}^1 \mid xt = ys\}.$$
+
+In the chart $s \neq 0$ (set $s = 1$, so $t = y/x$): the blowup is $\mathbb{A}^2$ with coordinates $(x, t)$ where $y = xt$. The map $\pi$ sends $(x, t) \mapsto (x, xt)$. The exceptional divisor in this chart is $x = 0$ (a copy of $\mathbb{A}^1$ with coordinate $t$).
+
+In the chart $t \neq 0$ (set $t = 1$, so $s = x/y$): coordinates $(s, y)$ with $x = sy$. The exceptional divisor is $y = 0$.
+
+The two charts glue to give $E \cong \mathbb{P}^1$, and $\operatorname{Bl}_0(\mathbb{A}^2)$ is again a smooth surface.
+</Example>
+
+---
+
+## The exceptional divisor
+
+<Definition title="Exceptional divisor" number="5.5">
+The **exceptional divisor** of $\pi: \operatorname{Bl}_P(X) \to X$ is the fiber $E = \pi^{-1}(P)$. It has the following fundamental properties:
+
+- $E \cong \mathbb{P}^1$ (as a variety),
+- $E^2 = -1$ (self-intersection on $\widetilde{X}$),
+- $\mathcal{O}_E(E) \cong \mathcal{O}_{\mathbb{P}^1}(-1)$ (the tautological bundle).
+
+A smooth rational curve $C \cong \mathbb{P}^1$ with $C^2 = -1$ on a smooth surface is called a **$(-1)$-curve** or **exceptional curve of the first kind**.
+</Definition>
+
+<Example id="E-squared" title="Computing E² = -1">
+On $\operatorname{Bl}_0(\mathbb{A}^2)$, in the chart $(x, t)$ with $y = xt$, the exceptional divisor is $E = V(x)$. To compute $E^2$, we use the adjunction formula. Since $E \cong \mathbb{P}^1$ has genus $0$:
+
+$$2g(E) - 2 = E^2 + K_{\widetilde{X}} \cdot E.$$
+
+We will show $K_{\widetilde{X}} \cdot E = -1$ (from $K_{\widetilde{X}} = \pi^*K_X + E$), giving $-2 = E^2 + (-1)$, hence $E^2 = -1$.
+
+Alternatively, compute directly: $\mathcal{O}_E(E) = N_{E/\widetilde{X}}$, the normal bundle. The normal bundle of $E \cong \mathbb{P}^1$ embedded via the tautological sub-bundle in the trivial rank-$2$ bundle is $\mathcal{O}_{\mathbb{P}^1}(-1)$. Therefore $E^2 = \deg \mathcal{O}_{\mathbb{P}^1}(-1) = -1$.
+</Example>
+
+---
+
+## Universal property
+
+<Theorem title="Universal property of blowup">
+The blowup $\pi: \operatorname{Bl}_P(X) \to X$ is the universal morphism that turns the ideal sheaf $\mathfrak{m}_P \subset \mathcal{O}_X$ of the point $P$ into an invertible sheaf. That is, $\mathfrak{m}_P \cdot \mathcal{O}_{\widetilde{X}} = \mathcal{O}_{\widetilde{X}}(-E)$ is an invertible ideal, and any morphism $f: Y \to X$ such that $\mathfrak{m}_P \cdot \mathcal{O}_Y$ is invertible factors uniquely through $\pi$.
+</Theorem>
+
+<Remark title="Blowup as Proj">
+The blowup can also be constructed as:
+
+$$\operatorname{Bl}_P(X) = \operatorname{Proj}\left(\bigoplus_{n \geq 0} \mathfrak{m}_P^n\right),$$
+
+the Proj of the **Rees algebra** of $\mathfrak{m}_P$. This construction generalizes to blowing up any ideal sheaf, not just the maximal ideal of a point.
+</Remark>
+
+---
+
+## Strict transform vs. total transform
+
+<Definition title="Total and strict transforms" number="5.6">
+Let $\pi: \widetilde{X} \to X$ be the blowup of $X$ at $P$, and let $C \subset X$ be a curve.
+
+- The **total transform** is $\pi^*C$, the divisorial pullback: $\pi^*C = \widetilde{C} + m \cdot E$ where $m = \operatorname{mult}_P(C)$ is the multiplicity of $C$ at $P$.
+
+- The **strict transform** (or **proper transform**) $\widetilde{C}$ is the closure of $\pi^{-1}(C \setminus \{P\})$ in $\widetilde{X}$.
+
+Thus $\pi^*C = \widetilde{C} + \operatorname{mult}_P(C) \cdot E$.
+</Definition>
+
+<Example id="strict-transform-line" title="Strict transform of a line">
+Consider $C = V(y) \subset \mathbb{A}^2$ (the $x$-axis) and the blowup $\pi: \operatorname{Bl}_0(\mathbb{A}^2) \to \mathbb{A}^2$. In the chart $(x, t)$ with $y = xt$:
+
+$$\pi^*C : y = 0 \iff xt = 0 \iff (x = 0) \cup (t = 0).$$
+
+So $\pi^*C = E + \widetilde{C}$ where $E = V(x)$ and $\widetilde{C} = V(t)$. Here $\operatorname{mult}_0(C) = 1$, consistent with $\pi^*C = \widetilde{C} + 1 \cdot E$.
+
+The strict transform $\widetilde{C} = V(t)$ meets $E = V(x)$ at the single point $(x, t) = (0, 0)$, which corresponds to the tangent direction $[1:0]$ of the line $y = 0$ at the origin.
+</Example>
+
+<Example id="strict-transform-node" title="Strict transform of a nodal curve">
+Let $C = V(y^2 - x^2 - x^3)$, a node at the origin with two branches tangent to $y = \pm x$. In the chart $(x, t)$ with $y = xt$:
+
+$$\pi^*C : (xt)^2 - x^2 - x^3 = 0 \iff x^2(t^2 - 1 - x) = 0.$$
+
+So $\pi^*C = 2E + \widetilde{C}$ where $\widetilde{C} = V(t^2 - 1 - x)$. Here $\operatorname{mult}_0(C) = 2$.
+
+The strict transform $\widetilde{C}$ meets $E$ at $x = 0, t^2 = 1$, i.e., at $t = \pm 1$. These correspond to the two tangent directions $y = \pm x$ at the node. The strict transform $\widetilde{C}$ is smooth: the node has been **resolved** by one blowup.
+</Example>
+
+<Example id="strict-transform-cuspid" title="Strict transform of a cuspidal curve">
+Let $C = V(y^2 - x^3)$, a cusp at the origin. In the chart $(x, t)$ with $y = xt$:
+
+$$\pi^*C: x^2 t^2 - x^3 = 0 \iff x^2(t^2 - x) = 0.$$
+
+So $\pi^*C = 2E + \widetilde{C}$ with $\widetilde{C} = V(t^2 - x)$. The strict transform meets $E$ at $(0, 0)$ only (a single point with $t = 0$). Moreover, $\widetilde{C}$ is a smooth parabola: the cusp has been resolved by a single blowup.
+</Example>
+
+---
+
+## Intersection numbers under blowup
+
+<Theorem title="Intersection calculus on the blowup">
+Let $\pi: \widetilde{X} = \operatorname{Bl}_P(X) \to X$ be the blowup of a smooth surface at $P$, with exceptional divisor $E$. Then:
+
+- $\operatorname{Pic}(\widetilde{X}) = \pi^*\operatorname{Pic}(X) \oplus \mathbb{Z} \cdot E$.
+- $\pi^*D \cdot E = 0$ for all $D \in \operatorname{Pic}(X)$.
+- $E^2 = -1$.
+- $\pi^*C \cdot \pi^*D = C \cdot D$ for all $C, D \in \operatorname{Pic}(X)$.
+
+For the strict transform $\widetilde{C} = \pi^*C - \operatorname{mult}_P(C) \cdot E$:
+
+$$\widetilde{C}^2 = C^2 - \operatorname{mult}_P(C)^2.$$
+
+$$\widetilde{C} \cdot \widetilde{D} = C \cdot D - \operatorname{mult}_P(C) \cdot \operatorname{mult}_P(D).$$
+</Theorem>
+
+<Example id="intersection-blowup" title="Intersection numbers on Bl_P(ℙ²)">
+Let $\widetilde{X} = \operatorname{Bl}_P(\mathbb{P}^2)$, $H = \pi^*\ell$ (pullback of a line), $E$ the exceptional divisor.
+
+**Basis:** $\operatorname{Pic}(\widetilde{X}) = \mathbb{Z} H \oplus \mathbb{Z} E$ with $H^2 = 1$, $E^2 = -1$, $H \cdot E = 0$.
+
+**Strict transform of a line through $P$:** $\widetilde{\ell} = H - E$ (since $\operatorname{mult}_P(\ell) = 1$). Then $\widetilde{\ell}^2 = 1 - 1 = 0$. This makes sense: two lines through $P$ become disjoint after blowup (their intersection point has been separated).
+
+**Strict transform of a conic through $P$:** $\widetilde{C} = 2H - E$. Then $\widetilde{C}^2 = 4 - 1 = 3$.
+
+**Strict transform of a conic tangent to a line at $P$:** the conic has $\operatorname{mult}_P = 1$, so $\widetilde{C} = 2H - E$. The line has $\widetilde{\ell} = H - E$. Then $\widetilde{C} \cdot \widetilde{\ell} = 2 - 1 = 1$. The tangency has been "separated" by the blowup.
+</Example>
+
+---
+
+## Canonical class of a blowup
+
+<Theorem title="Canonical class formula">
+Let $\pi: \widetilde{X} = \operatorname{Bl}_P(X) \to X$. Then the canonical class of the blowup is:
+
+$$K_{\widetilde{X}} = \pi^* K_X + E.$$
+
+More generally, for the blowup at $n$ distinct points $P_1, \ldots, P_n$:
+
+$$K_{\widetilde{X}} = \pi^* K_X + E_1 + E_2 + \cdots + E_n.$$
+</Theorem>
+
+<Example id="canonical-blowup-P2" title="Canonical class of Bl_P(ℙ²)">
+For $X = \mathbb{P}^2$, $K_X = -3H$. So:
+
+$$K_{\operatorname{Bl}_P(\mathbb{P}^2)} = -3H + E.$$
+
+Check with adjunction on $E$: $K \cdot E = (-3H + E) \cdot E = 0 + (-1) = -1$. Then $2g(E) - 2 = E^2 + K \cdot E = -1 + (-1) = -2$, giving $g(E) = 0$.
+
+Check $K^2$: $(-3H + E)^2 = 9 - 1 = 8$. Since $K_{\mathbb{P}^2}^2 = 9$, blowing up one point decreases $K^2$ by $1$.
+
+For the blowup of $\mathbb{P}^2$ at $n$ points: $K^2 = 9 - n$.
+</Example>
+
+---
+
+## Resolution of singularities
+
+<Remark title="Resolution by blowups">
+Every surface singularity over a field of characteristic $0$ (and many in positive characteristic) can be resolved by a finite sequence of blowups. The key examples:
+
+- **Node** ($A_1$: $y^2 = x^2 + x^3$ or $xy = 0$): resolved by one blowup, exceptional divisor is a $(-2)$-curve after normalizing.
+- **Cusp** ($y^2 = x^3$): resolved by one blowup (strict transform becomes smooth).
+- **$A_n$ singularity** ($y^2 = x^2 + x^{n+2}$ or $x^2 + y^2 + z^{n+1} = 0$): resolved by $n$ successive blowups, producing a chain of $n$ rational $(-2)$-curves.
+- **$D_n$ singularity** ($x^2 + y^2 z + z^{n-1} = 0$): resolved by blowups, dual graph is a $D_n$ Dynkin diagram.
+- **$E_6, E_7, E_8$ singularities**: dual graph of the exceptional divisor is the corresponding Dynkin diagram.
+</Remark>
+
+<Example id="resolve-node" title="Resolving a node">
+Let $S = V(xy - z^2) \subset \mathbb{A}^3$, which has an $A_1$ (node) singularity at the origin. Blow up the origin in $\mathbb{A}^3$ and take the strict transform.
+
+In the chart $[1:u:v]$ (i.e., $y = ux, z = vx$): the equation becomes $x^2(u - v^2) = 0$. The strict transform $\widetilde{S} = V(u - v^2)$ is smooth, isomorphic to $\mathbb{A}^2$ with coordinates $(x, v)$.
+
+The exceptional curve on $\widetilde{S}$ is $E = \widetilde{S} \cap V(x) = V(x, u - v^2)$, parametrized by $v$. So $E \cong \mathbb{P}^1$. One computes $E^2 = -2$ on $\widetilde{S}$: this is the minimal resolution of the $A_1$ singularity.
+</Example>
+
+<Example id="resolve-An" title="Resolving A_n singularities">
+The $A_n$ singularity is (locally) $x^2 + y^2 + z^{n+1} = 0$ (over $\mathbb{C}$, equivalently $uv = z^{n+1}$). The minimal resolution has exceptional divisor consisting of a chain of $n$ smooth rational curves $E_1, E_2, \ldots, E_n$, each with $E_i^2 = -2$, and:
+
+- $E_i \cdot E_{i+1} = 1$ for $i = 1, \ldots, n - 1$,
+- $E_i \cdot E_j = 0$ for $|i - j| \geq 2$.
+
+The intersection matrix is minus the Cartan matrix of the $A_n$ Dynkin diagram. For $A_2$ ($uv = z^3$): two $(-2)$-curves meeting in one point. For $A_3$: three $(-2)$-curves in a chain.
+</Example>
+
+---
+
+## Blowup of ℙ² at one point: the Hirzebruch surface F₁
+
+<Example id="blowup-P2-one" title="Bl_P(ℙ²) = F₁">
+The blowup $\operatorname{Bl}_P(\mathbb{P}^2)$ is isomorphic to the **Hirzebruch surface** $\mathbb{F}_1 = \mathbb{P}(\mathcal{O}_{\mathbb{P}^1} \oplus \mathcal{O}_{\mathbb{P}^1}(1))$.
+
+To see this, the linear system $|H - E|$ (strict transforms of lines through $P$) defines a morphism $\operatorname{Bl}_P(\mathbb{P}^2) \to \mathbb{P}^1$. The fibers are strict transforms of lines through $P$, each isomorphic to $\mathbb{P}^1$ with self-intersection $0$. This exhibits $\operatorname{Bl}_P(\mathbb{P}^2)$ as a ruled surface over $\mathbb{P}^1$.
+
+The exceptional divisor $E$ is a section with $E^2 = -1$, and the fibers $F = H - E$ satisfy $F^2 = 0$, $F \cdot E = 1$. This matches $\mathbb{F}_1$: the unique Hirzebruch surface with a section of self-intersection $-1$.
+
+**Numerical invariants:**
+- $\operatorname{Pic} = \mathbb{Z} H \oplus \mathbb{Z} E$, with $H^2 = 1, E^2 = -1, H \cdot E = 0$.
+- $K = -3H + E$, $K^2 = 8$.
+- $\chi(\mathcal{O}) = 1$, $p_g = q = 0$.
+</Example>
+
+---
+
+## Blowup of ℙ² at multiple points
+
+<Example id="blowup-P2-n" title="Bl_n(ℙ²): blowup at n points">
+Let $\widetilde{X} = \operatorname{Bl}_{P_1, \ldots, P_n}(\mathbb{P}^2)$ be the blowup of $\mathbb{P}^2$ at $n$ points in general position.
+
+**Picard group:** $\operatorname{Pic}(\widetilde{X}) = \mathbb{Z} H \oplus \mathbb{Z} E_1 \oplus \cdots \oplus \mathbb{Z} E_n$ with:
+- $H^2 = 1$, $E_i^2 = -1$, $H \cdot E_i = 0$, $E_i \cdot E_j = 0$ for $i \neq j$.
+
+**Canonical class:** $K = -3H + E_1 + \cdots + E_n$, $K^2 = 9 - n$.
+
+**Anticanonical class:** $-K = 3H - E_1 - \cdots - E_n$, $(-K)^2 = 9 - n$.
+
+For the anticanonical class to be effective, we need $n \leq 9$ (curves of degree $3$ through $n$ points exist iff $n \leq 9$).
+
+**Key classes of divisors:**
+- Lines through $P_i$: class $H - E_i$, self-intersection $0$.
+- Lines through $P_i, P_j$: class $H - E_i - E_j$, self-intersection $-1$ (a $(-1)$-curve!).
+- Conics through $P_1, \ldots, P_5$: class $2H - E_1 - \cdots - E_5$, self-intersection $-1$.
+- Cubics through $P_1, \ldots, P_6$ with a double point at $P_1$: class $3H - 2E_1 - E_2 - \cdots - E_6$, self-intersection $-1$.
+</Example>
+
+---
+
+## Castelnuovo's contraction theorem
+
+<Theorem title="Castelnuovo's contraction theorem">
+Let $X$ be a smooth projective surface and $E \subset X$ a $(-1)$-curve (i.e., $E \cong \mathbb{P}^1$ and $E^2 = -1$). Then there exists a smooth projective surface $Y$ and a point $P \in Y$ such that $X \cong \operatorname{Bl}_P(Y)$ with $E$ as the exceptional divisor.
+
+In other words: every $(-1)$-curve can be **blown down** (contracted) to a smooth point.
+</Theorem>
+
+<Example id="contraction-F1" title="Contracting the (-1)-curve on F₁">
+On $\mathbb{F}_1 = \operatorname{Bl}_P(\mathbb{P}^2)$, the exceptional curve $E$ with $E^2 = -1$ can be blown down to recover $\mathbb{P}^2$. But $\mathbb{F}_1$ has another family of $(-1)$-curves: the strict transforms of lines through $P$, which have class $H - E$ and self-intersection $0$... wait, $(H-E)^2 = 0$, not $-1$. Those are fibers, not $(-1)$-curves.
+
+Actually, on $\mathbb{F}_1$ the only $(-1)$-curve is $E$ itself. Blowing down $E$ recovers $\mathbb{P}^2$. On $\mathbb{F}_1$ there is no other contraction to a smooth surface.
+</Example>
+
+<Remark title="Minimal surfaces">
+A smooth projective surface is **minimal** if it contains no $(-1)$-curves. By Castelnuovo's theorem, any non-minimal surface can be blown down. Iterating:
+
+Every smooth projective surface $X$ can be obtained from a minimal surface $X_{\min}$ by a finite sequence of blowups. The minimal model $X_{\min}$ is unique in the birational equivalence class (for surfaces not birational to $\mathbb{P}^2$ or ruled surfaces).
+
+For rational surfaces: the minimal models are $\mathbb{P}^2$ and the Hirzebruch surfaces $\mathbb{F}_n$ ($n \neq 1$).
+</Remark>
+
+---
+
+## Del Pezzo surfaces
+
+<Definition title="Del Pezzo surface" number="5.7">
+A **del Pezzo surface** is a smooth projective surface $S$ with ample anticanonical class $-K_S$. The **degree** of $S$ is $d = K_S^2$.
+
+Every del Pezzo surface of degree $d \leq 7$ is isomorphic to the blowup of $\mathbb{P}^2$ at $n = 9 - d$ points in general position (no $3$ collinear, no $6$ on a conic, no $8$ on a singular cubic with one being the singular point).
+
+- $d = 9$ ($n = 0$): $\mathbb{P}^2$ itself.
+- $d = 8$ ($n = 1$): $\operatorname{Bl}_P(\mathbb{P}^2) \cong \mathbb{F}_1$, or $\mathbb{P}^1 \times \mathbb{P}^1$.
+- $d = 7$ ($n = 2$): $\operatorname{Bl}_{P_1, P_2}(\mathbb{P}^2)$.
+- $d = 6$ ($n = 3$): $\operatorname{Bl}_{P_1, P_2, P_3}(\mathbb{P}^2)$, a cubic in $\mathbb{P}^2 \times \mathbb{P}^2$ (a toric variety).
+- $d = 5$ ($n = 4$): $\operatorname{Bl}_{P_1, \ldots, P_4}(\mathbb{P}^2)$, the intersection of $5$ hyperplanes in $\operatorname{Gr}(2, 5)$.
+- $d = 4$ ($n = 5$): $\operatorname{Bl}_{P_1, \ldots, P_5}(\mathbb{P}^2)$, a complete intersection of two quadrics in $\mathbb{P}^4$.
+- $d = 3$ ($n = 6$): $\operatorname{Bl}_{P_1, \ldots, P_6}(\mathbb{P}^2)$, a smooth cubic surface in $\mathbb{P}^3$.
+- $d = 2$ ($n = 7$): $\operatorname{Bl}_{P_1, \ldots, P_7}(\mathbb{P}^2)$, a double cover of $\mathbb{P}^2$ branched over a quartic.
+- $d = 1$ ($n = 8$): $\operatorname{Bl}_{P_1, \ldots, P_8}(\mathbb{P}^2)$, a double cover of a quadric cone branched over a sextic.
+</Definition>
+
+<Example id="del-pezzo-ample" title="Ampleness of -K on del Pezzo surfaces">
+On $S = \operatorname{Bl}_{P_1, \ldots, P_n}(\mathbb{P}^2)$ with $n \leq 8$: $-K = 3H - E_1 - \cdots - E_n$.
+
+Check ampleness via Nakai--Moishezon:
+- $(-K)^2 = 9 - n > 0$ for $n \leq 8$. Good.
+- $(-K) \cdot E_i = 1 > 0$. Good.
+- $(-K) \cdot (H - E_i) = 2 > 0$ (strict transform of a line through one point). Good.
+- $(-K) \cdot (H - E_i - E_j) = 1 > 0$ (strict transform of a line through two points). Good.
+- $(-K) \cdot (2H - E_1 - \cdots - E_5) = 1 > 0$ (conic through five points). Good.
+
+For all irreducible curves $C$ on $S$, one verifies $(-K) \cdot C > 0$ provided the points are in general position. Hence $-K$ is ample.
+</Example>
+
+---
+
+## The cubic surface and 27 lines
+
+<Example id="cubic-27-lines" title="The cubic surface as Bl₆(ℙ²)">
+A smooth cubic surface $S \subset \mathbb{P}^3$ is isomorphic to $\operatorname{Bl}_{P_1, \ldots, P_6}(\mathbb{P}^2)$ where $P_1, \ldots, P_6$ are in general position.
+
+The anticanonical embedding $|-K_S| = |3H - E_1 - \cdots - E_6|$ maps $S$ into $\mathbb{P}^3$ as a cubic surface. Here $(-K)^2 = 3$, confirming the degree.
+
+**The 27 lines on $S$:** A line $\ell \subset S \subset \mathbb{P}^3$ is a curve with $\deg \ell = 1$, i.e., $(-K) \cdot \ell = 1$, and $\ell \cong \mathbb{P}^1$. The 27 lines are:
+
+- The $6$ exceptional divisors: $E_1, \ldots, E_6$. Each has $(-K) \cdot E_i = 1$.
+- The $15$ strict transforms of lines $\overline{P_iP_j}$: class $H - E_i - E_j$ with $(-K) \cdot (H - E_i - E_j) = 3 - 1 - 1 = 1$. There are $\binom{6}{2} = 15$ of these.
+- The $6$ strict transforms of conics through $5$ of the $6$ points: class $2H - E_1 - \cdots - \widehat{E_k} - \cdots - E_6 = 2H - \sum_{i \neq k} E_i$. Each has $(-K) \cdot (2H - \sum_{i \neq k} E_i) = 6 - 5 = 1$. There are $\binom{6}{5} = 6$ of these.
+
+Total: $6 + 15 + 6 = 27$ lines. Each is a $(-1)$-curve on $S$.
+</Example>
+
+<Example id="27-lines-intersection" title="Incidence of the 27 lines">
+Each of the 27 lines on a cubic surface meets exactly $10$ of the other $26$ lines. The intersection pattern:
+
+**Type $E_i$** (6 lines): $E_i \cdot E_j = 0$ for $j \neq i$. $E_i \cdot (H - E_j - E_k) = 1$ if $i \in \{j, k\}$, $0$ otherwise. $E_i \cdot (2H - \sum_{j \neq k} E_j) = 1$ if $i = k$, $0$ otherwise. So $E_i$ meets: the $5$ lines $H - E_i - E_j$ ($j \neq i$) plus the $5$ conics $2H - \sum_{j \neq k} E_j$ ($k \neq i$). Total: $10$.
+
+**Type $H - E_i - E_j$** (15 lines): meets $E_i$, $E_j$, and $4$ lines of type $H - E_k - E_l$ with $\{k,l\} \cap \{i,j\} = \varnothing$ (since $(H-E_i-E_j)(H-E_k-E_l) = 1$ iff $\{i,j\} \cap \{k,l\} = \varnothing$, giving $\binom{4}{2} = 6$... let me recount). We get $(H - E_i - E_j) \cdot (H - E_k - E_l) = 1 - \delta_{ik} - \delta_{il} - \delta_{jk} - \delta_{jl}$, which is $1$ when the sets are disjoint and $0$ when they share one element. With $6$ points, the number of disjoint pairs is $\binom{4}{2} = 6$. Adding the $2$ exceptional curves $E_i, E_j$, and $2$ conics, the count reaches $10$.
+
+This incidence structure is the **Schläfli graph**, which has deep connections to the $E_6$ root system and the Weyl group $W(E_6)$ of order $51840$, which acts as the symmetry group of the $27$ lines.
+</Example>
+
+---
+
+## Blowup and Cremona transformations
+
+<Example id="cremona" title="The standard Cremona transformation">
+The **standard Cremona transformation** $\sigma: \mathbb{P}^2 \dashrightarrow \mathbb{P}^2$ is defined by $[x:y:z] \mapsto [1/x : 1/y : 1/z] = [yz : xz : xy]$. It is a birational involution, undefined at the three coordinate points $P_1 = [1:0:0]$, $P_2 = [0:1:0]$, $P_3 = [0:0:1]$.
+
+The Cremona transformation factors through blowups:
+
+$$\mathbb{P}^2 \xleftarrow{\pi_1} \operatorname{Bl}_{P_1, P_2, P_3}(\mathbb{P}^2) \xrightarrow{\pi_2} \mathbb{P}^2.$$
+
+Here $\pi_1$ blows up $P_1, P_2, P_3$, and $\pi_2$ blows down the strict transforms of the three coordinate lines $\overline{P_1P_2}$, $\overline{P_1P_3}$, $\overline{P_2P_3}$ (each of which is a $(-1)$-curve on the blowup).
+
+On the blowup, the map $\pi_2$ is the anticanonical map $|{-K}| = |3H - E_1 - E_2 - E_3|$, which has $(-K)^2 = 9 - 3 = 6$... actually $\sigma^*H' = 2H - E_1 - E_2 - E_3$ (pulling back a line in the target gives a conic through the $3$ points). So $\sigma$ acts on $\operatorname{Pic}$ by $H' \mapsto 2H - E_1 - E_2 - E_3$.
+</Example>
+
+---
+
+## Blowup and the Euler characteristic
+
+<Example id="euler-char" title="Topological invariants of blowups">
+Over $\mathbb{C}$, the blowup $\operatorname{Bl}_P(X)$ has:
+
+- $e(\operatorname{Bl}_P(X)) = e(X) + 1$, where $e$ denotes the topological Euler characteristic. This is because we replace a point ($e = 1$) by $\mathbb{P}^1$ ($e = 2$).
+
+- $b_2(\operatorname{Bl}_P(X)) = b_2(X) + 1$ (one extra generator $[E]$ in $H_2$).
+
+- $H^2(\operatorname{Bl}_P(X), \mathbb{Z}) \cong H^2(X, \mathbb{Z}) \oplus \mathbb{Z} \cdot [E]$, and the intersection form gains a $(-1)$ summand.
+
+**Concrete values for $\operatorname{Bl}_n(\mathbb{P}^2)$:**
+- $e(\mathbb{P}^2) = 3$, so $e(\operatorname{Bl}_n(\mathbb{P}^2)) = 3 + n$.
+- $b_2 = 1 + n$, $b_1 = 0$, $b_0 = b_4 = 1$.
+- Intersection form: $\operatorname{diag}(1, -1, -1, \ldots, -1)$ of signature $(1, n)$.
+- $\chi(\mathcal{O}) = 1$ (birational invariant for rational surfaces).
+</Example>
+
+---
+
+## Blowups and minimal model program
+
+<Remark title="Role of blowups in classification">
+The classification of surfaces proceeds by first finding the **minimal model** (no $(-1)$-curves), then classifying minimal surfaces by Kodaira dimension $\kappa$:
+
+- $\kappa = -\infty$: rational or ruled surfaces. Minimal models: $\mathbb{P}^2$, $\mathbb{F}_n$ ($n \neq 1$), or ruled surfaces over curves of genus $g \geq 1$.
+- $\kappa = 0$: K3, Enriques, abelian, or bielliptic surfaces. Already minimal (they have no $(-1)$-curves since $K \cdot E = -1$ would force $K$ to be nonzero on a nontrivial curve).
+- $\kappa = 1$: properly elliptic surfaces. Minimal model admits an elliptic fibration.
+- $\kappa = 2$: surfaces of general type. The minimal model has $K$ nef.
+
+The key theorem (Castelnuovo--Enriques): the process of blowing down $(-1)$-curves terminates. Every birational morphism $f: X \to Y$ of smooth surfaces is a composition of blowups. The **factorization theorem**: if $f: X \dashrightarrow Y$ is a birational map of smooth surfaces, then there exists a smooth surface $Z$ with morphisms $Z \to X$ and $Z \to Y$, each a composition of blowups.
+</Remark>
+
+<Example id="surface-classification-blowup" title="Blowups and Kodaira dimension">
+The Kodaira dimension is a birational invariant, so blowing up does not change it:
+
+- $\operatorname{Bl}_n(\mathbb{P}^2)$ has $\kappa = -\infty$ for all $n$: it is rational.
+- Blowing up a point on a K3 surface gives $\kappa = 0$, but now the surface has a $(-1)$-curve, so it is not minimal. Blowing down recovers the K3.
+- Blowing up a point on a surface of general type with $K^2 > 0$: the new surface has $K^2 - 1$, still $\kappa = 2$ as long as $K$ is still big (which it always is for surfaces of general type).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key formulas for blowup">
+Let $\pi: \widetilde{X} = \operatorname{Bl}_P(X) \to X$ with exceptional divisor $E$. The essential identities:
+
+- **Picard group:** $\operatorname{Pic}(\widetilde{X}) = \pi^*\operatorname{Pic}(X) \oplus \mathbb{Z} E$.
+- **Self-intersection of $E$:** $E^2 = -1$.
+- **Pullback orthogonality:** $\pi^*D \cdot E = 0$.
+- **Strict transform:** $\widetilde{C} = \pi^*C - \operatorname{mult}_P(C) \cdot E$, $\widetilde{C}^2 = C^2 - \operatorname{mult}_P(C)^2$.
+- **Canonical class:** $K_{\widetilde{X}} = \pi^*K_X + E$.
+- **$K^2$ drop:** $K_{\widetilde{X}}^2 = K_X^2 - 1$.
+- **Euler characteristic:** $e(\widetilde{X}) = e(X) + 1$, $\chi(\mathcal{O}_{\widetilde{X}}) = \chi(\mathcal{O}_X)$.
+- **Contraction criterion:** a $(-1)$-curve can always be blown down to a smooth point.
+</Remark>

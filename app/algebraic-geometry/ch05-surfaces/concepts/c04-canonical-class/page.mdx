@@ -1,0 +1,478 @@
+export const metadata = {
+  title: 'Canonical Class K_X — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "5. 곡면", href: "/algebraic-geometry/ch05-surfaces" },
+  { label: "Concept — Canonical Class" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Canonical Class $K_X$
+
+The canonical class is the single most important invariant of a smooth projective surface. It governs the classification of surfaces via **Kodaira dimension**, determines the birational geometry through **pluricanonical maps**, and constrains the numerical invariants through deep inequalities like Noether's formula and the Bogomolov--Miyaoka--Yau inequality.
+
+---
+
+## Definition of the canonical class
+
+<Definition title="Canonical class" number="5.10">
+Let $X$ be a smooth projective surface over an algebraically closed field $k$. The **canonical sheaf** (or dualizing sheaf) is $\omega_X = \det \Omega^1_{X/k} = \wedge^2 \Omega^1_{X/k}$, the determinant of the cotangent bundle.
+
+The **canonical class** is the corresponding divisor class:
+
+$$K_X = c_1(\omega_X) = c_1(\det \Omega^1_{X/k}) \in \operatorname{Pic}(X).$$
+
+Any divisor in this class is called a **canonical divisor**. The canonical class is defined up to linear equivalence: if $\omega$ is a nonzero rational $2$-form on $X$, then $K_X = \operatorname{div}(\omega)$.
+</Definition>
+
+<Definition title="Plurigenera and Kodaira dimension" number="5.11">
+For a smooth projective surface $X$, the **$n$-th plurigenus** is
+
+$$P_n(X) = h^0(X, \omega_X^{\otimes n}) = h^0(X, \mathcal{O}_X(nK_X)), \quad n \geq 1.$$
+
+In particular, $P_1 = p_g = h^0(K_X)$ is the **geometric genus**.
+
+The **Kodaira dimension** $\kappa(X)$ is defined as:
+- $\kappa(X) = -\infty$ if $P_n = 0$ for all $n \geq 1$,
+- $\kappa(X) = 0$ if the $P_n$ are bounded but not all zero,
+- $\kappa(X) = 1$ if $P_n$ grows linearly: $P_n \sim cn$ for some $c > 0$,
+- $\kappa(X) = 2$ if $P_n$ grows quadratically: $P_n \sim cn^2$ for some $c > 0$.
+
+Equivalently, $\kappa(X) = \limsup_{n \to \infty} \frac{\log P_n}{\log n}$ when $P_n \neq 0$ for some $n$.
+</Definition>
+
+<Remark title="Birational invariance of plurigenera">
+The plurigenera $P_n$ are **birational invariants** of smooth projective surfaces. If $f: X \dashrightarrow Y$ is a birational map between smooth projective surfaces, then $P_n(X) = P_n(Y)$ for all $n \geq 1$. In particular, the Kodaira dimension $\kappa(X)$ is a birational invariant. This is because rational maps induce isomorphisms on pluricanonical forms away from codimension-$2$ loci, and sections extend by Hartogs' theorem.
+</Remark>
+
+---
+
+## Canonical class of basic surfaces
+
+<Example id="canonical-P2" title="Canonical class of P^2">
+On $\mathbb{P}^2$ with hyperplane class $H$, the **Euler sequence** $0 \to \Omega^1_{\mathbb{P}^2} \to \mathcal{O}(-1)^3 \to \mathcal{O} \to 0$ gives:
+
+$$K_{\mathbb{P}^2} = -3H.$$
+
+Since $K_{\mathbb{P}^2}$ is anti-ample, $P_n = h^0(nK) = h^0(\mathcal{O}(-3n)) = 0$ for all $n \geq 1$. Thus $\kappa(\mathbb{P}^2) = -\infty$.
+
+The self-intersection is $K_{\mathbb{P}^2}^2 = (-3H)^2 = 9$.
+</Example>
+
+<Example id="canonical-P1P1" title="Canonical class of P^1 x P^1">
+On $X = \mathbb{P}^1 \times \mathbb{P}^1$ with fiber classes $F_1, F_2$:
+
+$$K_X = -2F_1 - 2F_2.$$
+
+This follows from the product formula $\omega_X = \omega_{\mathbb{P}^1} \boxtimes \omega_{\mathbb{P}^1} = \mathcal{O}(-2) \boxtimes \mathcal{O}(-2)$.
+
+Again $K_X$ is anti-ample, so $\kappa = -\infty$. The self-intersection is $K_X^2 = (-2F_1 - 2F_2)^2 = 2 \cdot 4 = 8$.
+</Example>
+
+<Example id="canonical-hirzebruch" title="Canonical class of Hirzebruch surfaces">
+On the Hirzebruch surface $\mathbb{F}_n = \mathbb{P}(\mathcal{O} \oplus \mathcal{O}(-n))$ over $\mathbb{P}^1$, with negative section $C_0$ ($C_0^2 = -n$) and fiber $F$:
+
+$$K_{\mathbb{F}_n} = -2C_0 - (n+2)F.$$
+
+All Hirzebruch surfaces are rational, so $\kappa(\mathbb{F}_n) = -\infty$ and $K^2 = 8$ (for $n \geq 0$). Note $K^2 = (-2C_0 - (n+2)F)^2 = 4(-n) + 2 \cdot 2(n+2) = -4n + 4n + 8 = 8$.
+</Example>
+
+---
+
+## Adjunction formula and canonical class of hypersurfaces
+
+<Theorem title="Adjunction formula for hypersurfaces">
+Let $X$ be a smooth projective variety and $H \subset X$ a smooth divisor. The **adjunction formula** states:
+
+$$K_H = (K_X + H)|_H.$$
+
+Equivalently, $\omega_H \cong \omega_X \otimes \mathcal{O}_X(H)|_H$. On surfaces, this specializes to: if $C$ is a smooth curve on a surface $X$, then $2g(C) - 2 = C^2 + K_X \cdot C$.
+</Theorem>
+
+<Example id="canonical-hypersurface" title="Canonical class of smooth hypersurfaces in P^3">
+Let $S \subset \mathbb{P}^3$ be a smooth surface of degree $d$, so $S \sim dH$ where $H$ is the hyperplane class. By adjunction with $K_{\mathbb{P}^3} = -4H$:
+
+$$K_S = (K_{\mathbb{P}^3} + S)|_S = (-4H + dH)|_S = (d - 4)H|_S.$$
+
+- **$d = 1$** (plane $\mathbb{P}^2$): $K = -3H|_S$, anti-ample. $\kappa = -\infty$.
+- **$d = 2$** (quadric $\cong \mathbb{P}^1 \times \mathbb{P}^1$): $K = -2H|_S$, anti-ample. $\kappa = -\infty$.
+- **$d = 3$** (cubic surface): $K = -H|_S$, anti-ample. $\kappa = -\infty$. Rational (del Pezzo).
+- **$d = 4$** (quartic surface): $K = 0$. This is a **K3 surface**. $\kappa = 0$.
+- **$d = 5$** (quintic surface): $K = H|_S$, ample. $\kappa = 2$. Surface of general type.
+- **$d \geq 5$**: $K = (d-4)H|_S$ is ample, so $\kappa = 2$.
+
+The self-intersection: $K_S^2 = (d-4)^2 d$ (since $H|_S^2 = d$). For $d = 5$: $K^2 = 5$. For $d = 6$: $K^2 = 24$.
+</Example>
+
+<Example id="canonical-complete-intersection" title="Canonical class of complete intersections">
+For a smooth complete intersection surface $S = V(F_1, F_2) \subset \mathbb{P}^4$ of degrees $d_1, d_2$:
+
+$$K_S = (d_1 + d_2 - 5)H|_S.$$
+
+- **$(2, 2)$**: $K = -H|_S$, anti-ample. This is a **del Pezzo surface** of degree $4$. $\kappa = -\infty$.
+- **$(2, 3)$**: $K = 0$. A K3 surface. $\kappa = 0$.
+- **$(2, 4)$**: $K = H|_S$, ample. $K^2 = 8$. Surface of general type.
+- **$(3, 3)$**: $K = H|_S$, ample. $K^2 = 9$. Surface of general type.
+</Example>
+
+---
+
+## Kodaira dimension $-\infty$: rational and ruled surfaces
+
+<Definition title="Rational and ruled surfaces" number="5.12">
+A surface $X$ is **rational** if it is birational to $\mathbb{P}^2$. It is **ruled** if it is birational to $C \times \mathbb{P}^1$ for some smooth curve $C$. Ruled surfaces with $C = \mathbb{P}^1$ are exactly the rational surfaces.
+
+A surface has $\kappa(X) = -\infty$ if and only if $P_n(X) = 0$ for all $n \geq 1$, which happens if and only if $X$ is ruled (Enriques--Kodaira classification).
+</Definition>
+
+<Example id="kappa-minus-infty" title="Surfaces with kappa = -infty">
+- **$\mathbb{P}^2$**: rational, $K = -3H$, $K^2 = 9$. The prototype.
+- **$\mathbb{P}^1 \times \mathbb{P}^1$**: rational, $K = -2F_1 - 2F_2$, $K^2 = 8$. Birational to $\mathbb{P}^2$ via blowup/blowdown.
+- **$\mathbb{F}_n$**: rational, $K^2 = 8$. For $n \neq 1$, these are minimal; $\mathbb{F}_1 \cong \operatorname{Bl}_P(\mathbb{P}^2)$.
+- **Del Pezzo surfaces** $S_d$ (degree $d$): $K_{S_d} = -H$ (anticanonical embedding). $K^2 = d$ for $d = 1, \ldots, 9$. These are $\mathbb{P}^2$ blown up at $9 - d$ general points ($d \leq 8$) or $\mathbb{P}^1 \times \mathbb{P}^1$ ($d = 8$) or $\mathbb{P}^2$ ($d = 9$).
+- **Ruled surfaces over curves of genus $g \geq 1$**: $\mathbb{P}(\mathcal{E}) \to C$ for a rank-$2$ bundle $\mathcal{E}$ on a curve $C$ of genus $g$. Still $\kappa = -\infty$, but not rational when $g \geq 1$.
+
+The key invariant: $P_{12}(X) = 0$ characterizes $\kappa = -\infty$ (Castelnuovo's rationality criterion says $P_2 = q = 0$ implies rationality).
+</Example>
+
+---
+
+## Kodaira dimension $0$: surfaces with torsion canonical class
+
+<Definition title="Surfaces with kappa = 0" number="5.13">
+A minimal surface has $\kappa(X) = 0$ if and only if $nK_X \sim 0$ for some $n \geq 1$ (i.e., $K_X$ is a torsion element in $\operatorname{Pic}(X)$). The plurigenera satisfy $P_n \in \{0, 1\}$ for all $n$, and $P_n = 1$ whenever $n$ is a multiple of the order of $K_X$ in $\operatorname{Pic}(X)$.
+</Definition>
+
+<Example id="kappa-zero-K3" title="K3 surfaces (kappa = 0)">
+A **K3 surface** $X$ is a smooth projective surface with $K_X \sim 0$ (trivial canonical class) and $H^1(X, \mathcal{O}_X) = 0$ (simply connected in the algebraic sense: $q = 0$).
+
+Numerical invariants: $K^2 = 0$, $p_g = 1$, $q = 0$, $\chi(\mathcal{O}_X) = 2$, $c_2(X) = 24$, $b_2 = 22$.
+
+Examples of K3 surfaces:
+- Quartic surface in $\mathbb{P}^3$ (e.g., the Fermat quartic $x^4 + y^4 + z^4 + w^4 = 0$).
+- Complete intersection $(2, 3) \subset \mathbb{P}^4$.
+- Complete intersection $(2, 2, 2) \subset \mathbb{P}^5$.
+- Double cover of $\mathbb{P}^2$ branched along a smooth sextic.
+- Kummer surface: $\operatorname{Km}(A)$ for an abelian surface $A$ (minimal resolution of $A/\{{\pm 1}\}$).
+
+All K3 surfaces are deformation-equivalent (over $\mathbb{C}$), forming a $20$-dimensional moduli space.
+</Example>
+
+<Example id="kappa-zero-abelian" title="Abelian surfaces (kappa = 0)">
+An **abelian surface** $A$ is a $2$-dimensional abelian variety: a smooth projective group variety of dimension $2$. Equivalently, over $\mathbb{C}$, $A \cong \mathbb{C}^2 / \Lambda$ for a lattice $\Lambda \cong \mathbb{Z}^4$.
+
+The canonical class is trivial: $K_A = 0$ (the group structure provides a nowhere-vanishing $2$-form $dz_1 \wedge dz_2$).
+
+Numerical invariants: $K^2 = 0$, $p_g = 1$, $q = 2$, $\chi(\mathcal{O}_A) = 0$, $c_2(A) = 0$, $b_1 = 4$, $b_2 = 6$.
+
+Examples: products $E_1 \times E_2$ of elliptic curves, Jacobians $\operatorname{Jac}(C)$ of genus-$2$ curves.
+</Example>
+
+<Example id="kappa-zero-enriques" title="Enriques surfaces (kappa = 0)">
+An **Enriques surface** $X$ is a smooth projective surface with $K_X \not\sim 0$ but $2K_X \sim 0$, and $q = 0$.
+
+The canonical class has order exactly $2$ in $\operatorname{Pic}(X)$. The plurigenera alternate: $P_n = 0$ for $n$ odd, $P_n = 1$ for $n$ even.
+
+Numerical invariants: $K^2 = 0$, $p_g = 0$, $q = 0$, $\chi(\mathcal{O}_X) = 1$, $c_2(X) = 12$, $b_2 = 10$.
+
+Every Enriques surface admits an unramified double cover that is a K3 surface. The moduli space of Enriques surfaces (over $\mathbb{C}$) has dimension $10$.
+</Example>
+
+<Example id="kappa-zero-bielliptic" title="Bielliptic (hyperelliptic) surfaces (kappa = 0)">
+A **bielliptic surface** (also called hyperelliptic surface) is a surface of the form $X = (E_1 \times E_2)/G$ where $E_1, E_2$ are elliptic curves and $G$ is a finite group acting by translations on $E_1$ and faithfully on $E_2$.
+
+The canonical class satisfies $nK_X \sim 0$ where $n \in \{2, 3, 4, 6\}$ depending on $G$.
+
+Numerical invariants: $K^2 = 0$, $p_g = 0$, $q = 1$, $\chi(\mathcal{O}_X) = 0$, $c_2(X) = 0$.
+
+These are the only minimal surfaces with $\kappa = 0$ and $q = 1$.
+</Example>
+
+<Remark title="Complete classification of kappa = 0">
+Over $\mathbb{C}$, the four classes of minimal surfaces with $\kappa = 0$ are distinguished by their invariants:
+
+- **K3**: $K \sim 0$, $q = 0$, $p_g = 1$, $\chi(\mathcal{O}) = 2$.
+- **Abelian**: $K \sim 0$, $q = 2$, $p_g = 1$, $\chi(\mathcal{O}) = 0$.
+- **Enriques**: $2K \sim 0$, $K \not\sim 0$, $q = 0$, $p_g = 0$, $\chi(\mathcal{O}) = 1$.
+- **Bielliptic**: $nK \sim 0$ ($n = 2, 3, 4, 6$), $q = 1$, $p_g = 0$, $\chi(\mathcal{O}) = 0$.
+
+In all four cases, $K^2 = 0$ and $c_2 = 12\chi(\mathcal{O}_X)$ (by Noether's formula).
+</Remark>
+
+---
+
+## Kodaira dimension $1$: elliptic fibrations
+
+<Definition title="Elliptic surfaces" number="5.14">
+A smooth projective surface $X$ has $\kappa(X) = 1$ if and only if it admits an **elliptic fibration** $f: X \to C$ (a morphism to a curve whose general fiber is an elliptic curve) and the canonical class $K_X$ is not torsion.
+
+For such surfaces, $K_X$ is numerically equivalent to a positive rational multiple of the fiber class. The plurigenera grow linearly: $P_n \sim cn$ for some positive constant $c$ as $n \to \infty$.
+</Definition>
+
+<Example id="kappa-one-examples" title="Surfaces with kappa = 1">
+- **Elliptic surface over $\mathbb{P}^1$ with $\chi(\mathcal{O}) \geq 3$**: For instance, the surface $y^2 = x^3 + t^{12} + 1$ in a suitable weighted projective bundle over $\mathbb{P}^1_t$ gives $\kappa = 1$.
+- **Product $E \times C$** where $E$ is elliptic and $g(C) \geq 2$: $K = \pi_1^* K_E + \pi_2^* K_C = \pi_2^* K_C$. Then $P_n = h^0(C, nK_C) = (2n - 1)(g - 1)$ for $n \geq 2$, growing linearly. So $\kappa = 1$.
+- **Dolgachev surfaces**: certain logarithmic transforms of rational elliptic surfaces, giving $p_g = 0$, $q = 0$, $\kappa = 1$.
+
+Note: surfaces with $\kappa = 1$ always have $K^2 = 0$ (since $K$ is nef and $K^2 = 0$ for a numerically fiber-type class).
+</Example>
+
+---
+
+## Kodaira dimension $2$: surfaces of general type
+
+<Definition title="Surface of general type" number="5.15">
+A smooth projective surface $X$ has $\kappa(X) = 2$ (is of **general type**) if and only if, for the minimal model $X_{\min}$, the canonical class $K_{X_{\min}}$ is **nef and big**:
+- **Nef**: $K \cdot C \geq 0$ for every curve $C \subset X_{\min}$.
+- **Big**: $K^2 > 0$.
+
+Equivalently, $P_n$ grows quadratically: $P_n \sim \frac{1}{2}K^2 n^2$ as $n \to \infty$ (by Riemann--Roch and vanishing). These are the "generic" surfaces, analogous to curves of genus $\geq 2$.
+</Definition>
+
+<Example id="kappa-two-examples" title="Surfaces of general type">
+- **Quintic in $\mathbb{P}^3$** ($d = 5$): $K = H|_S$, $K^2 = 5$, $\chi(\mathcal{O}) = 5$, $p_g = 4$, $q = 0$.
+- **Sextic in $\mathbb{P}^3$** ($d = 6$): $K = 2H|_S$, $K^2 = 24$, $p_g = 20$.
+- **Complete intersection $(2, 4) \subset \mathbb{P}^4$**: $K = H|_S$, $K^2 = 8$.
+- **Complete intersection $(3, 3) \subset \mathbb{P}^4$**: $K = H|_S$, $K^2 = 9$.
+- **Product $C_1 \times C_2$** with $g(C_i) \geq 2$: $K = \pi_1^*K_{C_1} + \pi_2^*K_{C_2}$, $K^2 = 2(2g_1 - 2)(2g_2 - 2) = 8(g_1 - 1)(g_2 - 1)$.
+- **Godeaux surface**: $p_g = q = 0$, $K^2 = 1$. The simplest surface of general type. Classically constructed as $\operatorname{Fermat quintic}/(\mathbb{Z}/5)$.
+- **Barlow surface**: $p_g = q = 0$, $K^2 = 1$. A simply connected surface of general type -- showing that $\pi_1$ cannot distinguish rational surfaces from general type in all cases.
+- **Beauville surface**: $p_g = q = 0$, $K^2 = 8$. A quotient $(C_1 \times C_2)/G$ for suitable curves and group $G$.
+</Example>
+
+---
+
+## Abundance for surfaces
+
+<Theorem title="Abundance theorem for surfaces">
+Let $X$ be a smooth projective minimal surface with $\kappa(X) \geq 0$. Then $K_X$ is **semiample**: there exists $n > 0$ such that the linear system $|nK_X|$ is **base-point-free**.
+
+In particular, $|nK_X|$ defines a morphism $\phi_{|nK_X|}: X \to \mathbb{P}^{P_n - 1}$, called the **pluricanonical map**. The image has dimension equal to $\kappa(X)$.
+
+Concretely:
+- $\kappa = 0$: $\phi_{|nK|}$ maps $X$ to a point (since $P_n \leq 1$).
+- $\kappa = 1$: $\phi_{|nK|}$ factors through the elliptic fibration $X \to C$.
+- $\kappa = 2$: $\phi_{|nK|}$ is birational onto its image for $n \gg 0$ (in fact, $n \geq 5$ suffices by Bombieri's theorem).
+</Theorem>
+
+<Remark title="Abundance in higher dimensions">
+The abundance conjecture -- that nef canonical divisors on minimal varieties are always semiample -- is proven for surfaces (Mumford, Kawamata, and others) and threefolds (Miyaoka, Kawamata), but remains **open in dimension $\geq 4$**. It is one of the central conjectures in birational geometry, closely related to the Minimal Model Program.
+</Remark>
+
+---
+
+## Numerical invariants and Noether's formula
+
+<Theorem title="Noether's formula" number="5.2">
+For any smooth projective surface $X$:
+
+$$\chi(\mathcal{O}_X) = \frac{1}{12}(K_X^2 + c_2(X)),$$
+
+where $c_2(X) = e(X)$ is the topological Euler characteristic (the second Chern number of $T_X$).
+
+Writing out: $1 - q + p_g = \frac{1}{12}(K^2 + e(X))$, so $K^2 + e(X) = 12\chi(\mathcal{O}_X)$.
+</Theorem>
+
+<Example id="noether-verification" title="Noether's formula: verifications">
+- **$\mathbb{P}^2$**: $K^2 = 9$, $e = 3$ (Betti numbers $1, 0, 1, 0, 1$), $\chi(\mathcal{O}) = 1$. Check: $9 + 3 = 12$ ✓.
+- **$\mathbb{P}^1 \times \mathbb{P}^1$**: $K^2 = 8$, $e = 4$ (Betti numbers $1, 0, 2, 0, 1$), $\chi(\mathcal{O}) = 1$. Check: $8 + 4 = 12$ ✓.
+- **K3 surface**: $K^2 = 0$, $\chi(\mathcal{O}) = 2$. Noether gives $e = 24$, so $b_2 = 22$.
+- **Abelian surface**: $K^2 = 0$, $\chi(\mathcal{O}) = 0$. Noether gives $e = 0$, consistent with $b_0 = 1, b_1 = 4, b_2 = 6$ giving $e = 1 - 4 + 6 - 4 + 1 = 0$.
+- **Enriques surface**: $K^2 = 0$, $\chi(\mathcal{O}) = 1$. Noether gives $e = 12$, so $b_2 = 10$.
+- **Quintic in $\mathbb{P}^3$**: $K^2 = 5$, $\chi(\mathcal{O}) = 5$ (since $p_g = 4, q = 0$). Noether gives $e = 55$.
+</Example>
+
+---
+
+## Geography of surfaces: the BMY inequality
+
+<Theorem title="Bogomolov--Miyaoka--Yau inequality">
+For any smooth projective surface $X$ of general type (over $\mathbb{C}$):
+
+$$K_X^2 \leq 3c_2(X) = 3e(X).$$
+
+Using Noether's formula $K^2 + e = 12\chi(\mathcal{O})$, this is equivalent to:
+
+$$K_X^2 \leq 9\chi(\mathcal{O}_X).$$
+
+**Equality** $K^2 = 3c_2$ (equivalently $K^2 = 9\chi$) holds if and only if the universal cover of $X$ is the complex $2$-ball $\mathbb{B}^2 \subset \mathbb{C}^2$, i.e., $X$ is a **ball quotient**.
+</Theorem>
+
+<Theorem title="Noether's inequality">
+For a minimal surface of general type:
+
+$$K_X^2 \geq 2\chi(\mathcal{O}_X) - 6.$$
+
+Equivalently, $K^2 \geq 2p_g - 4$ when $q = 0$. This provides a **lower bound** complementing the BMY upper bound.
+</Theorem>
+
+<Example id="geography" title="Geography of surfaces of general type">
+The **geography problem** asks: which pairs $(K^2, \chi(\mathcal{O}))$ are realized by minimal surfaces of general type? The constraints are:
+
+- $K^2 > 0$ and $\chi(\mathcal{O}) > 0$ (general type, minimal).
+- **BMY inequality**: $K^2 \leq 9\chi(\mathcal{O})$ (the "BMY line").
+- **Noether inequality**: $K^2 \geq 2\chi(\mathcal{O}) - 6$ (the "Noether line").
+- **Bogomolov--Miyaoka--Yau**: $c_1^2 \leq 3c_2$.
+- $K^2$ and $\chi$ are positive integers with some congruence conditions.
+
+The "geography" of surfaces is the region in the $(K^2, \chi)$-plane between the Noether line and the BMY line:
+
+$$2\chi - 6 \leq K^2 \leq 9\chi.$$
+
+- **On the BMY line** ($K^2 = 9\chi$): ball quotients. The simplest is the **fake projective plane** with $K^2 = 9, \chi = 1$ ($p_g = q = 0$). Exactly $100$ fake projective planes exist (Prasad--Yeung, Cartwright--Steger).
+- **On the Noether line** ($K^2 = 2\chi - 6$): these include many families of fibered surfaces.
+- **$K^2 = 1, \chi = 1$**: Godeaux surfaces ($p_g = q = 0$).
+- **$K^2 = 2, \chi = 1$**: Campedelli surfaces ($p_g = q = 0$).
+- **$K^2 = 1, \chi = 2$**: numerical Godeaux with $p_g = 1$, no known examples with $q = 0$ -- an open problem.
+- Most lattice points in the region are realized by some surface.
+</Example>
+
+---
+
+## The canonical class under birational transformations
+
+<Theorem title="Canonical class of a blowup">
+Let $\pi: \tilde{X} \to X$ be the blowup of a smooth surface $X$ at a point $P$, with exceptional divisor $E$. Then:
+
+$$K_{\tilde{X}} = \pi^* K_X + E.$$
+
+Consequently: $K_{\tilde{X}}^2 = K_X^2 - 1$ (since $E^2 = -1$ and $\pi^*K_X \cdot E = 0$). Each blowup decreases $K^2$ by $1$.
+</Theorem>
+
+<Example id="blowup-chain" title="Blowups of P^2">
+Starting from $\mathbb{P}^2$ with $K^2 = 9$ and blowing up $r$ points in general position:
+
+$$K^2 = 9 - r, \quad K_{\tilde{X}} = -3H + E_1 + \cdots + E_r.$$
+
+- $r = 0$: $K^2 = 9$, this is $\mathbb{P}^2$.
+- $r = 1$: $K^2 = 8$, this is $\mathbb{F}_1$.
+- $r \leq 8$: del Pezzo surfaces $S_{9-r}$, with $-K$ ample.
+- $r = 9$: $K^2 = 0$, a rational elliptic surface. $-K$ defines an elliptic pencil $|-K|$.
+- $r = 10$: $K^2 = -1$. No longer del Pezzo; the surface becomes increasingly complicated.
+
+For del Pezzo surfaces ($r \leq 8$), $K$ is anti-ample and $-K$ embeds the surface as a degree-$(9-r)$ surface in $\mathbb{P}^{9-r}$.
+</Example>
+
+---
+
+## Invariants derived from $K_X$
+
+<Definition title="Irregularity and geometric genus" number="5.16">
+For a smooth projective surface $X$:
+
+- **Geometric genus**: $p_g = h^0(X, K_X) = h^{0,2} = h^{2,0}$ (over $\mathbb{C}$, by Hodge theory).
+- **Irregularity**: $q = h^1(X, \mathcal{O}_X) = h^{0,1}$ (dimension of $\operatorname{Pic}^0(X) = \operatorname{Alb}(X)$).
+- **Holomorphic Euler characteristic**: $\chi(\mathcal{O}_X) = 1 - q + p_g$.
+- **Chern numbers**: $c_1^2 = K_X^2$ and $c_2 = e(X) = $ topological Euler number.
+- **Relation**: $K^2 + c_2 = 12\chi(\mathcal{O}_X)$ (Noether's formula).
+
+These satisfy further constraints: $p_g \geq 0$, $q \geq 0$, and for surfaces of general type, $\chi(\mathcal{O}_X) > 0$.
+</Definition>
+
+<Example id="invariants-table" title="Table of invariants for classical surfaces">
+Summary of the canonical class and invariants:
+
+**Rational surfaces**: $K^2 = 9 - r$ (for $\operatorname{Bl}_r \mathbb{P}^2$), $q = 0$, $p_g = 0$, $\chi(\mathcal{O}) = 1$.
+
+**K3 surfaces**: $K \sim 0$, $K^2 = 0$, $q = 0$, $p_g = 1$, $\chi(\mathcal{O}) = 2$, $c_2 = 24$.
+
+**Abelian surfaces**: $K \sim 0$, $K^2 = 0$, $q = 2$, $p_g = 1$, $\chi(\mathcal{O}) = 0$, $c_2 = 0$.
+
+**Enriques surfaces**: $2K \sim 0$, $K^2 = 0$, $q = 0$, $p_g = 0$, $\chi(\mathcal{O}) = 1$, $c_2 = 12$.
+
+**Bielliptic surfaces**: $nK \sim 0$, $K^2 = 0$, $q = 1$, $p_g = 0$, $\chi(\mathcal{O}) = 0$, $c_2 = 0$.
+
+**Quintic surface ($\mathbb{P}^3$)**: $K = H|_S$, $K^2 = 5$, $q = 0$, $p_g = 4$, $\chi(\mathcal{O}) = 5$, $c_2 = 55$.
+
+**Product $C_{g_1} \times C_{g_2}$ ($g_i \geq 2$)**: $K^2 = 8(g_1-1)(g_2-1)$, $q = g_1 + g_2$, $p_g = g_1 g_2$, $c_2 = 4(g_1-1)(g_2-1)$. BMY ratio: $K^2/c_2 = 2$.
+</Example>
+
+---
+
+## Pluricanonical maps and Bombieri's theorem
+
+<Theorem title="Bombieri's theorem">
+Let $X$ be a minimal surface of general type. Then the **$n$-th pluricanonical map** $\phi_{|nK_X|}: X \to \mathbb{P}^{P_n - 1}$ is a **birational morphism** onto its image for all $n \geq 5$.
+
+Moreover:
+- $|2K_X|$ is base-point-free (for $K^2 \geq 2$; if $K^2 = 1$ then $|3K|$ is base-point-free).
+- $|5K_X|$ is very ample (gives a birational embedding) in all cases.
+- The image $\phi_{|nK|}(X)$ is a **canonical model** with at worst rational double point singularities.
+</Theorem>
+
+<Example id="pluricanonical-growth" title="Growth of plurigenera">
+By Riemann--Roch and Kawamata--Viehweg vanishing, for $n \geq 2$ on a minimal surface of general type:
+
+$$P_n = h^0(nK_X) = \frac{n(n-1)}{2}K^2 + \chi(\mathcal{O}_X).$$
+
+Explicit values for a **quintic surface** ($K^2 = 5$, $\chi = 5$):
+- $P_1 = p_g = 4$.
+- $P_2 = 5 + 5 = 10$.
+- $P_3 = 15 + 5 = 20$.
+- $P_4 = 30 + 5 = 35$.
+- $P_5 = 50 + 5 = 55$.
+
+For a **Godeaux surface** ($K^2 = 1$, $\chi = 1$):
+- $P_1 = 0$ (since $p_g = 0$, $q = 0$).
+- $P_2 = 1 + 1 = 2$.
+- $P_3 = 3 + 1 = 4$.
+- $P_4 = 6 + 1 = 7$.
+- $P_5 = 10 + 1 = 11$.
+
+Note that $P_1$ can differ from the Riemann--Roch prediction because vanishing may fail for $n = 1$.
+</Example>
+
+---
+
+## The canonical class and the minimal model program
+
+<Remark title="Minimal models and canonical class">
+The **minimal model program** (MMP) for surfaces proceeds by contracting $(-1)$-curves (smooth rational curves $E$ with $E^2 = -1$, equivalently $K \cdot E = -1$ by adjunction). Each contraction increases $K^2$ by $1$.
+
+A smooth surface is **minimal** if it contains no $(-1)$-curves. For a minimal surface:
+- $\kappa = -\infty$: $X$ is $\mathbb{P}^2$ or a ruled surface $\mathbb{P}(\mathcal{E}) \to C$ (Castelnuovo--Enriques).
+- $\kappa \geq 0$: $K_X$ is nef, and the canonical model exists by the abundance theorem.
+
+The canonical class governs the entire MMP: $(-1)$-curves are exactly the irreducible curves $E$ with $K \cdot E < 0$ and $E^2 < 0$, and their contraction "improves" $K$ toward nefness.
+</Remark>
+
+<Example id="mmp-example" title="Running the MMP on a blowup">
+Let $X = \operatorname{Bl}_{P_1, P_2}(\mathbb{P}^2)$, the blowup of $\mathbb{P}^2$ at two points, with $K_X = -3H + E_1 + E_2$, $K^2 = 7$.
+
+The $(-1)$-curves are $E_1, E_2$, and the strict transform $L$ of the line through $P_1, P_2$ (with $L \sim H - E_1 - E_2$, $L^2 = -1$).
+
+- Contract $E_1$: get $\operatorname{Bl}_{P_2}(\mathbb{P}^2) = \mathbb{F}_1$, $K^2 = 8$.
+- Contract the remaining $(-1)$-curve on $\mathbb{F}_1$: get $\mathbb{P}^2$, $K^2 = 9$.
+
+Alternatively, contract $L$ first: get a surface with $K^2 = 8$, which is $\mathbb{P}^1 \times \mathbb{P}^1$ (since contracting $L$ resolves to the other ruling). Then $\mathbb{P}^1 \times \mathbb{P}^1$ is already minimal.
+
+The MMP is not unique, but the minimal model for $\kappa = -\infty$ is always $\mathbb{P}^2$ or a Hirzebruch surface.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The canonical class as the master invariant">
+The canonical class $K_X$ organizes the entire theory of algebraic surfaces:
+
+**Classification**: The Kodaira dimension $\kappa(X) \in \{-\infty, 0, 1, 2\}$ determines the coarse type: rational/ruled, K3/abelian/Enriques/bielliptic, elliptic, or general type.
+
+**Numerical constraints**: Noether's formula $K^2 + c_2 = 12\chi$ and the BMY inequality $K^2 \leq 3c_2$ bound the geography of surfaces.
+
+**Birational geometry**: The MMP contracts curves with $K \cdot E < 0$ to reach a minimal model where $K$ is nef, and abundance ensures that $|nK|$ eventually defines the Iitaka fibration.
+
+**Pluricanonical maps**: For general type surfaces, $|5K|$ is birational (Bombieri), and $P_n = \frac{n(n-1)}{2}K^2 + \chi(\mathcal{O})$ for $n \geq 2$.
+</Remark>
