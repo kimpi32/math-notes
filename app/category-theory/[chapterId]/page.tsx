@@ -29,6 +29,11 @@ function ItemCard({ item, href }: { item: ContentItem; href: string }) {
   );
 }
 
+export function generateStaticParams() {
+  const subject = getSubject("category-theory");
+  return subject?.chapters.map((c) => ({ chapterId: c.id })) ?? [];
+}
+
 export default async function ChapterPage({
   params,
 }: {

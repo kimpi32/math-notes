@@ -10,6 +10,19 @@ const typeLabel: Record<string, string> = {
   proofs: "증명",
 };
 
+export function generateStaticParams() {
+  const subject = getSubject("analysis");
+  const params: { chapterId: string; type: string; itemId: string }[] = [];
+  for (const ch of subject?.chapters ?? []) {
+    for (const type of ["concepts", "theorems", "proofs"] as const) {
+      for (const item of ch[type]) {
+        params.push({ chapterId: ch.id, type, itemId: item.id });
+      }
+    }
+  }
+  return params;
+}
+
 export default async function ContentItemPage({
   params,
 }: {

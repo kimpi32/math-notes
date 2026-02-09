@@ -35,6 +35,11 @@ function ItemCard({
   );
 }
 
+export function generateStaticParams() {
+  const subject = getSubject("analysis");
+  return subject?.chapters.map((c) => ({ chapterId: c.id })) ?? [];
+}
+
 export default async function ChapterPage({
   params,
 }: {

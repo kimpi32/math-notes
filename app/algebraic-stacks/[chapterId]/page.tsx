@@ -29,6 +29,11 @@ function ItemCard({ item, href }: { item: ContentItem; href: string }) {
   );
 }
 
+export function generateStaticParams() {
+  const subject = getSubject("algebraic-stacks");
+  return subject?.chapters.map((c) => ({ chapterId: c.id })) ?? [];
+}
+
 export default async function ChapterPage({
   params,
 }: {

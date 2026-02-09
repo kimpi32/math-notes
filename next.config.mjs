@@ -5,7 +5,7 @@ import rehypeKatex from "rehype-katex";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: "/math",
-  output: "standalone",
+  output: "export",
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
 };
 
