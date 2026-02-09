@@ -1,0 +1,250 @@
+export const metadata = {
+  title: 'Elliptic Curves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Concept — Elliptic Curves" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Elliptic Curves
+
+An elliptic curve is a smooth projective curve of genus $1$ equipped with a distinguished rational point. They are simultaneously the simplest abelian varieties and among the richest objects in arithmetic and algebraic geometry.
+
+---
+
+## Definition and Weierstrass form
+
+<Definition title="Elliptic curve" number="4.16">
+An **elliptic curve** over a field $k$ is a pair $(E, O)$ where $E$ is a smooth projective curve of genus $1$ over $k$ and $O \in E(k)$ is a specified $k$-rational point (the **origin**).
+
+Every elliptic curve admits a **Weierstrass equation**: an embedding $E \hookrightarrow \mathbb{P}^2$ as a cubic curve
+
+$$y^2 + a_1 xy + a_3 y = x^3 + a_2 x^2 + a_4 x + a_6, \quad a_i \in k,$$
+
+with $O = [0:1:0]$ (the point at infinity on the $y$-axis).
+
+If $\operatorname{char}(k) \neq 2, 3$, we can complete the square and cube to get the **short Weierstrass form**:
+
+$$y^2 = x^3 + Ax + B, \quad A, B \in k, \quad 4A^3 + 27B^2 \neq 0.$$
+
+The condition $4A^3 + 27B^2 \neq 0$ ensures smoothness (i.e., the discriminant $\Delta = -16(4A^3 + 27B^2) \neq 0$).
+</Definition>
+
+<Example id="elliptic-examples" title="Concrete elliptic curves">
+- **$E: y^2 = x^3 - x$ over $\mathbb{Q}$**: Here $A = -1$, $B = 0$, $\Delta = 64 \neq 0$. The curve has complex multiplication by $\mathbb{Z}[i]$ (the Gaussian integers), since $[i]: (x, y) \mapsto (-x, iy)$ is an endomorphism.
+
+- **$E: y^2 = x^3 - 1$ over $\mathbb{Q}$**: Here $A = 0$, $B = -1$, $\Delta = -432 \neq 0$. Has CM by $\mathbb{Z}[\omega]$ where $\omega = e^{2\pi i/3}$, via $[\omega]: (x,y) \mapsto (\omega x, y)$.
+
+- **$E: y^2 = x^3 + x + 1$ over $\mathbb{F}_5$**: The points are $O, (0, \pm 1), (2, \pm 1), (3, \pm 1), (4, \pm 2)$, so $|E(\mathbb{F}_5)| = 9$.
+
+- **$E: y^2 = x(x-1)(x-\lambda)$ for $\lambda \neq 0, 1$**: the **Legendre family**, a universal family of elliptic curves with full level-2 structure. The $j$-invariant is $j = 256 \frac{(\lambda^2 - \lambda + 1)^3}{\lambda^2(\lambda - 1)^2}$.
+</Example>
+
+---
+
+## The group law
+
+<Definition title="Group law on an elliptic curve" number="4.17">
+The set $E(k)$ of $k$-rational points carries a natural **abelian group structure** with identity $O$:
+
+**Geometric description** (chord-tangent): Given $P, Q \in E(k)$:
+1. Draw the line $L$ through $P$ and $Q$ (tangent line if $P = Q$).
+2. $L$ meets $E$ in a third point $R$ (by Bezout: a line meets a cubic in 3 points).
+3. Define $P + Q$ as the reflection of $R$ over the $x$-axis: if $R = (x_0, y_0)$, then $P + Q = (x_0, -y_0 - a_1 x_0 - a_3)$.
+
+**Divisor-theoretic description**: Under the Abel–Jacobi isomorphism $E(k) \xrightarrow{\sim} \operatorname{Pic}^0(E)$, $P \mapsto [P - O]$:
+
+$$P + Q = R \iff [P - O] + [Q - O] = [R - O] \in \operatorname{Pic}^0(E).$$
+
+Equivalently, $P + Q + R' \sim 3O$ where $R'$ is the third intersection and $P + Q = $ reflection of $R'$.
+</Definition>
+
+<Example id="group-law-explicit" title="Explicit addition formulas">
+For $E: y^2 = x^3 + Ax + B$ in short Weierstrass form, $P = (x_1, y_1)$, $Q = (x_2, y_2)$:
+
+**Case $P \neq Q$**: The slope of $PQ$ is $\lambda = \frac{y_2 - y_1}{x_2 - x_1}$. Then:
+
+$$x_3 = \lambda^2 - x_1 - x_2, \quad y_3 = \lambda(x_1 - x_3) - y_1.$$
+
+**Case $P = Q$ (doubling)**: $\lambda = \frac{3x_1^2 + A}{2y_1}$. Same formulas for $x_3, y_3$.
+
+**Negation**: $-P = (x_1, -y_1)$.
+
+**Numerical example** on $y^2 = x^3 - 5x + 8$: Let $P = (1, 2)$ and $Q = (-1, -2\sqrt{3})$... Actually, let's use $P = (1, 2)$ (check: $4 = 1 - 5 + 8 = 4$ ✓). Doubling: $\lambda = \frac{3 - 5}{4} = -\frac{1}{2}$, so $x_3 = \frac{1}{4} - 2 = -\frac{7}{4}$, $y_3 = -\frac{1}{2}(1 + \frac{7}{4}) - 2 = -\frac{1}{2} \cdot \frac{11}{4} - 2 = -\frac{27}{8}$.
+
+Check: $\left(-\frac{27}{8}\right)^2 = \frac{729}{64}$ and $\left(-\frac{7}{4}\right)^3 - 5\left(-\frac{7}{4}\right) + 8 = -\frac{343}{64} + \frac{35}{4} + 8 = -\frac{343}{64} + \frac{560}{64} + \frac{512}{64} = \frac{729}{64}$ ✓
+</Example>
+
+<Example id="torsion-points" title="Torsion points">
+On $E: y^2 = x^3 - x$ over $\mathbb{Q}$:
+
+- **2-torsion** ($2P = O$): these are points with $y = 0$, i.e., $(0,0)$, $(1,0)$, $(-1,0)$. So $E[2](\mathbb{Q}) \cong (\mathbb{Z}/2)^2$.
+
+- **Over $\bar{\mathbb{Q}}$**: $E[n] \cong (\mathbb{Z}/n)^2$ for all $n \geq 1$. This is a free $\mathbb{Z}/n$-module of rank $2$.
+
+- **Mordell–Weil theorem**: $E(\mathbb{Q}) \cong \mathbb{Z}^r \oplus E(\mathbb{Q})_{\text{tors}}$. For this curve: $E(\mathbb{Q}) \cong (\mathbb{Z}/2)^2$ (rank $0$, torsion only).
+
+- **Mazur's theorem**: For $E/\mathbb{Q}$, the torsion subgroup $E(\mathbb{Q})_{\text{tors}}$ is isomorphic to $\mathbb{Z}/n$ for $1 \leq n \leq 10$ or $n = 12$, or $\mathbb{Z}/2 \times \mathbb{Z}/2m$ for $1 \leq m \leq 4$.
+</Example>
+
+---
+
+## The $j$-invariant and isomorphism classes
+
+<Definition title="j-invariant" number="4.18">
+The **$j$-invariant** of $E: y^2 = x^3 + Ax + B$ is
+
+$$j(E) = 1728 \cdot \frac{4A^3}{4A^3 + 27B^2} = -1728 \cdot \frac{(4A)^3}{\Delta}.$$
+
+Two elliptic curves over an algebraically closed field $\bar{k}$ are isomorphic if and only if they have the same $j$-invariant.
+
+The $j$-invariant defines a map $j: \mathcal{M}_{1,1} \to \mathbb{A}^1$ which is an isomorphism of coarse moduli spaces. Every $j_0 \in \bar{k}$ is realized by some elliptic curve.
+</Definition>
+
+<Example id="j-invariant-values" title="Notable j-invariants">
+- **$j = 0$**: $E: y^2 = x^3 + 1$ ($A = 0$). Has automorphism group $\mathbb{Z}/6$ (generated by $(x,y) \mapsto (\omega x, -y)$, $\omega^3 = 1$). CM by $\mathbb{Z}[\omega]$, $\omega = e^{2\pi i/3}$.
+
+- **$j = 1728$**: $E: y^2 = x^3 + x$ ($B = 0$). Has $\operatorname{Aut}(E) \cong \mathbb{Z}/4$ (generated by $(x,y) \mapsto (-x, iy)$). CM by $\mathbb{Z}[i]$.
+
+- **$j \neq 0, 1728$**: $\operatorname{Aut}(E) = \{\pm 1\} \cong \mathbb{Z}/2$ (the generic case).
+
+- **$j = -2^{15} \cdot 3 \cdot 5^3$**: corresponds to the curve $X_0(11): y^2 + y = x^3 - x^2 - 10x - 20$, the modular elliptic curve of conductor $11$.
+
+- **Over $\mathbb{F}_p$**: the **supersingular** elliptic curves form a finite set. For $p \geq 5$, $E$ is supersingular iff $|E(\mathbb{F}_p)| = p + 1$ iff the Hasse invariant vanishes. There are approximately $p/12$ supersingular $j$-invariants.
+</Example>
+
+---
+
+## Elliptic curves over $\mathbb{C}$: lattices and uniformization
+
+<Definition title="Complex uniformization" number="4.19">
+Over $\mathbb{C}$, every elliptic curve is isomorphic to $\mathbb{C}/\Lambda$ for a lattice $\Lambda = \mathbb{Z}\omega_1 + \mathbb{Z}\omega_2 \subset \mathbb{C}$ (with $\omega_1/\omega_2 \notin \mathbb{R}$).
+
+The isomorphism is given by the **Weierstrass $\wp$-function**:
+
+$$\wp(z) = \frac{1}{z^2} + \sum_{\omega \in \Lambda \setminus 0} \left(\frac{1}{(z - \omega)^2} - \frac{1}{\omega^2}\right)$$
+
+via $z \mapsto [\wp(z) : \wp'(z) : 1]$. This satisfies $(\wp')^2 = 4\wp^3 - g_2 \wp - g_3$ where $g_2 = 60 G_4$, $g_3 = 140 G_6$ are Eisenstein series.
+
+The moduli space: $\tau = \omega_1/\omega_2 \in \mathfrak{H}$ (upper half-plane), and $\mathbb{C}/\Lambda_\tau \cong \mathbb{C}/\Lambda_{\tau'}$ iff $\tau' = \frac{a\tau + b}{c\tau + d}$ for some $\begin{pmatrix} a & b \\ c & d \end{pmatrix} \in \operatorname{SL}_2(\mathbb{Z})$. So the moduli space is $\mathfrak{H}/\operatorname{SL}_2(\mathbb{Z})$.
+</Definition>
+
+<Example id="lattice-examples" title="Lattices and elliptic curves">
+- **Square lattice** $\Lambda = \mathbb{Z} + \mathbb{Z}i$: gives $\tau = i$, $j = 1728$. The curve $y^2 = x^3 + x$. The 4-fold symmetry $z \mapsto iz$ of the lattice corresponds to $(x,y) \mapsto (-x, iy)$.
+
+- **Hexagonal lattice** $\Lambda = \mathbb{Z} + \mathbb{Z}\omega$, $\omega = e^{2\pi i/3}$: gives $\tau = \omega$, $j = 0$. The curve $y^2 = x^3 + 1$. The 6-fold symmetry $z \mapsto \omega z$ gives $(x,y) \mapsto (\omega x, y)$... but the Weierstrass map mixes things up; the 6-fold symmetry descends to 3-fold on $x$ and sign flip on $y$.
+
+- **$\tau = 2i$**: a "tall" rectangular lattice. No extra symmetry, so $j \neq 0, 1728$. The $j$-invariant can be computed from $q = e^{2\pi i \cdot 2i} = e^{-4\pi}$ via the $q$-expansion $j(\tau) = q^{-1} + 744 + 196884q + \cdots$.
+
+- **Degeneration**: as $\tau \to i\infty$ (lattice becomes "infinitely tall"), $q \to 0$ and $j \to \infty$. The curve degenerates to a nodal cubic $y^2 = x^3 + x^2$ (a "Neron 1-gon").
+</Example>
+
+---
+
+## Isogenies
+
+<Definition title="Isogeny" number="4.20">
+An **isogeny** $\phi: E_1 \to E_2$ is a morphism of elliptic curves that sends $O_1 \mapsto O_2$. Equivalently, it is a surjective group homomorphism with finite kernel.
+
+Key properties:
+- Every isogeny has finite kernel $\ker(\phi) \subset E_1(\bar{k})$.
+- The **degree** of $\phi$ equals $|\ker(\phi)|$ (for separable isogenies; in general, $\deg \phi = |\ker \phi| \cdot p^i$ for some inseparable part).
+- The **dual isogeny** $\hat{\phi}: E_2 \to E_1$ satisfies $\hat{\phi} \circ \phi = [n]$ (multiplication by $n = \deg \phi$) on $E_1$.
+- $\operatorname{End}(E) = \operatorname{Hom}(E, E)$ is the **endomorphism ring**: either $\mathbb{Z}$, an order in an imaginary quadratic field (CM case), or a maximal order in a quaternion algebra (supersingular case in char $p$).
+</Definition>
+
+<Example id="isogeny-examples" title="Isogenies">
+- **Multiplication by $n$**: $[n]: E \to E$ is an isogeny of degree $n^2$, with $\ker([n]) = E[n] \cong (\mathbb{Z}/n)^2$ (if $(n, \operatorname{char} k) = 1$).
+
+- **Frobenius**: Over $\mathbb{F}_q$, the Frobenius $\phi_q: (x,y) \mapsto (x^q, y^q)$ is an isogeny of degree $q$. The trace $a_q = q + 1 - |E(\mathbb{F}_q)|$ satisfies $\phi_q^2 - a_q \phi_q + q = 0$ in $\operatorname{End}(E)$.
+
+- **2-isogenies from 2-torsion**: If $P_0 = (e, 0) \in E[2]$, there is a 2-isogeny $\phi: E \to E' = E/\langle P_0 \rangle$ given by Velu's formulas. For $E: y^2 = (x - e)(x^2 + ex + f)$:
+
+$$\phi(x, y) = \left(x + \frac{f - e^2}{x - e},\; y \cdot \frac{(x-e)^2 - (f - e^2)}{(x-e)^2}\right).$$
+
+- **$\operatorname{End}(E)$ for CM curves**: For $E: y^2 = x^3 - x$, $\operatorname{End}(E) \cong \mathbb{Z}[i]$ with $i: (x,y) \mapsto (-x, iy)$. The element $1 + i \in \mathbb{Z}[i]$ gives a $(1+i)$-isogeny of degree $|1+i|^2 = 2$.
+</Example>
+
+---
+
+## Arithmetic of elliptic curves
+
+<Theorem title="Hasse bound">
+For an elliptic curve $E$ over $\mathbb{F}_q$:
+
+$$|E(\mathbb{F}_q)| = q + 1 - a_q, \quad |a_q| \leq 2\sqrt{q}.$$
+
+This is the "Riemann hypothesis for elliptic curves": the zeta function $Z(E/\mathbb{F}_q, T) = \frac{1 - a_q T + qT^2}{(1-T)(1-qT)}$ has its roots on the circle $|T| = q^{-1/2}$.
+</Theorem>
+
+<Example id="point-counting" title="Point counting">
+- $E: y^2 = x^3 + x + 1$ over $\mathbb{F}_5$: We computed $|E(\mathbb{F}_5)| = 9$. So $a_5 = 5 + 1 - 9 = -3$. Check: $|-3| = 3 \leq 2\sqrt{5} \approx 4.47$ ✓.
+
+- Over $\mathbb{F}_7$: for $y^2 = x^3 + 1$, direct counting gives $|E(\mathbb{F}_7)| = 7$ (note: $7 \equiv 1 \pmod{3}$). So $a_7 = 1$. The curve is ordinary.
+
+- **Supersingular** over $\mathbb{F}_p$ ($p \geq 5$): $a_p = 0$, so $|E(\mathbb{F}_p)| = p + 1$. Example: $y^2 = x^3 + 1$ over $\mathbb{F}_5$: points are $O$, $(0, \pm 1)$, $(2, \pm 2)$, $(3, 0)$. That's $6 = 5 + 1$ ✓, so this is supersingular over $\mathbb{F}_5$.
+</Example>
+
+<Example id="bsd" title="The Birch and Swinnerton-Dyer conjecture">
+The **BSD conjecture** (one of the Clay Millennium Problems) relates the arithmetic and analytic data of $E/\mathbb{Q}$:
+
+$$\operatorname{ord}_{s=1} L(E, s) = \operatorname{rank} E(\mathbb{Q}),$$
+
+where $L(E, s) = \prod_p L_p(E, s)$ is the Hasse–Weil $L$-function. The leading coefficient involves the regulator, the Tate–Shafarevich group $\text{III}(E/\mathbb{Q})$, and other invariants.
+
+Known cases:
+- If $\operatorname{ord}_{s=1} L(E,s) = 0$: then $\operatorname{rank} E(\mathbb{Q}) = 0$ (Kolyvagin, using Gross–Zagier).
+- If $\operatorname{ord}_{s=1} L(E,s) = 1$: then $\operatorname{rank} E(\mathbb{Q}) = 1$ (Gross–Zagier + Kolyvagin).
+- $\operatorname{ord}_{s=1} L(E,s) \geq 2$: wide open.
+</Example>
+
+---
+
+## Elliptic curves and moduli
+
+<Definition title="Modular curves" number="4.21">
+The **modular curve** $Y(1) = \mathfrak{H}/\operatorname{SL}_2(\mathbb{Z})$ parametrizes isomorphism classes of elliptic curves over $\mathbb{C}$ via $\tau \mapsto \mathbb{C}/(\mathbb{Z} + \mathbb{Z}\tau)$.
+
+Its compactification $X(1) = Y(1) \cup \{\text{cusp}\} \cong \mathbb{P}^1$ via the $j$-invariant.
+
+With level structure:
+- $Y_0(N)$ parametrizes pairs $(E, C)$ where $C \subset E[N]$ is a cyclic subgroup of order $N$.
+- $Y_1(N)$ parametrizes pairs $(E, P)$ where $P \in E[N]$ is a point of exact order $N$.
+- $Y(N)$ parametrizes $(E, \alpha)$ where $\alpha: (\mathbb{Z}/N)^2 \xrightarrow{\sim} E[N]$ is a full level-$N$ structure.
+</Definition>
+
+<Example id="modular-examples" title="Modular curves and modularity">
+- **$X_0(11)$**: The first modular curve of genus $1$. It is the elliptic curve $y^2 + y = x^3 - x^2 - 10x - 20$ of conductor $11$.
+
+- **$X_0(N)$ for small $N$**: genus $0$ for $N \leq 10$ and $N = 12, 13, 16, 18, 25$. First genus-$1$ case: $N = 11$. First genus-$2$ case: $N = 23$.
+
+- **Modularity theorem** (Wiles, Taylor–Wiles, Breuil–Conrad–Diamond–Taylor): Every elliptic curve $E/\mathbb{Q}$ of conductor $N$ corresponds to a weight-2 newform $f \in S_2(\Gamma_0(N))$, i.e., there exists a surjection $X_0(N) \to E$.
+
+- **Fermat's Last Theorem** follows: Frey showed a solution $a^p + b^p = c^p$ gives a semistable curve $E: y^2 = x(x - a^p)(x + b^p)$ that cannot be modular by Ribet's theorem. Wiles proved all semistable curves are modular. Contradiction.
+</Example>
+
+---
+
+## Summary: the central role of elliptic curves
+
+<Remark title="Connections and applications">
+Elliptic curves sit at a remarkable crossroads:
+- **Number theory**: Mordell–Weil, BSD, Fermat's Last Theorem, modular forms.
+- **Algebraic geometry**: simplest abelian varieties, starting point for curves of higher genus.
+- **Complex geometry**: $\mathbb{C}/\Lambda$, moduli of lattices, modular forms.
+- **Cryptography**: ECDSA, pairing-based cryptography, isogeny-based post-quantum crypto (SIKE/SIDH).
+- **Physics**: mirror symmetry, string compactifications on elliptic fibrations.
+</Remark>

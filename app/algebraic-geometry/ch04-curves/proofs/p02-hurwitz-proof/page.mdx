@@ -1,0 +1,465 @@
+export const metadata = {
+  title: 'Proof of Hurwitz Formula — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Proof — Hurwitz Formula" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Hurwitz Formula
+
+The Hurwitz formula relates the genera of two smooth projective curves connected by a finite morphism. It is one of the most fundamental results in curve theory, governing the topology and arithmetic of branched covers. This page gives a complete algebraic proof via canonical divisors, a topological proof sketch over $\mathbb{C}$, the generalization to wild ramification, and extensive examples.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Hurwitz Formula" number="4.6">
+Let $f: C \to D$ be a finite separable morphism of degree $n$ between smooth projective curves over an algebraically closed field $k$. Then
+
+$$2g_C - 2 = n(2g_D - 2) + \deg R,$$
+
+where $g_C$ and $g_D$ are the genera of $C$ and $D$ respectively, and the **ramification divisor** is
+
+$$R = \sum_{P \in C} (e_P - 1) \cdot P,$$
+
+with $e_P$ the ramification index of $f$ at $P$. In particular, $\deg R = \sum_{P \in C} (e_P - 1) \geq 0$.
+</Theorem>
+
+<Remark title="Equivalent formulations">
+The Hurwitz formula can be written in several equivalent ways:
+
+- **In terms of the Euler characteristic**: $\chi(C) = n \cdot \chi(D) - \deg R$, where $\chi = 2 - 2g$.
+- **In terms of canonical divisors**: $K_C \sim f^*K_D + R$, so $\deg K_C = n \cdot \deg K_D + \deg R$.
+- **In terms of branch points**: if $Q_1, \ldots, Q_r \in D$ are the branch points and the fiber over $Q_j$ consists of points $P_{j,1}, \ldots, P_{j,s_j}$ with ramification indices $e_{j,1}, \ldots, e_{j,s_j}$, then $\deg R = \sum_{j=1}^r \sum_{i=1}^{s_j} (e_{j,i} - 1)$.
+</Remark>
+
+---
+
+## Proof via Canonical Divisors
+
+The proof proceeds in four steps: pullback of differentials, local computation of ramification, passage to canonical divisors, and degree counting.
+
+### Step 1: Pullback of Differentials
+
+<Proof>
+**Step 1: The pullback map $f^*: \Omega^1_D \to \Omega^1_C$.**
+
+Let $f: C \to D$ be a finite separable morphism of degree $n$. The morphism $f$ induces an inclusion of function fields $f^*: k(D) \hookrightarrow k(C)$, which is a finite separable field extension of degree $n$.
+
+By functoriality of Kahler differentials, there is a pullback map on the sheaves of differentials:
+
+$$f^*: \Omega^1_{D/k} \to \Omega^1_{C/k}.$$
+
+More precisely, for an open set $U \subseteq D$ and a regular differential $\omega \in \Omega^1_D(U)$, we obtain $f^*\omega \in \Omega^1_C(f^{-1}(U))$ by composition with $f^*$ on functions.
+
+At the level of function fields, if $\omega = g \, ds$ for some $g, s \in k(D)$, then $f^*\omega = f^*(g) \, d(f^*s)$, where we view $f^*(g)$ and $f^*(s)$ as elements of $k(C)$.
+
+**Key point:** Since $f$ is separable, the map $f^*: \Omega^1_{k(D)/k} \to \Omega^1_{k(C)/k}$ is injective. The pullback $f^*\omega$ is nonzero whenever $\omega$ is nonzero, so the pullback of a nonzero rational differential on $D$ gives a nonzero rational differential on $C$.
+</Proof>
+
+### Step 2: Local Computation of Ramification
+
+<Proof>
+**Step 2: Local analysis of $f^*\omega$ near a ramification point.**
+
+Let $P \in C$ be a closed point with $Q = f(P) \in D$, and let $e = e_P$ be the ramification index. Choose a local uniformizer $s$ at $Q$ (so $v_Q(s) = 1$) and a local uniformizer $t$ at $P$ (so $v_P(t) = 1$).
+
+Since $f$ has ramification index $e$ at $P$, we have $v_P(f^*s) = e$. Therefore we can write
+
+$$f^*s = u \cdot t^e$$
+
+where $u$ is a unit in the local ring $\mathcal{O}_{C,P}$ (i.e., $v_P(u) = 0$).
+
+Now consider the differential $\omega = ds$ on $D$ near $Q$. Its pullback is:
+
+$$f^*\omega = f^*(ds) = d(f^*s) = d(u \cdot t^e) = u \cdot e \cdot t^{e-1} \, dt + t^e \, du.$$
+
+Since $u$ is a unit and $du = u' \, dt$ for some regular function $u'$, we get
+
+$$f^*(ds) = (e \cdot u \cdot t^{e-1} + t^e \cdot u') \, dt = t^{e-1}(eu + tu') \, dt.$$
+
+The factor $(eu + tu')$ is a unit at $P$ because $u$ is a unit and we are in characteristic $0$ or $\gcd(e, \operatorname{char} k) = 1$ (the tamely ramified case), so $e \cdot u$ is a unit.
+
+Therefore: $v_P(f^*(ds)) = e - 1$.
+
+**Conclusion:** The pullback of the differential $ds$ acquires a zero of order exactly $e_P - 1$ at each ramification point $P$.
+</Proof>
+
+### Step 3: The Key Identity $K_C = f^*K_D + R$
+
+<Proof>
+**Step 3: From local data to the canonical divisor identity.**
+
+Let $\omega_D$ be a nonzero rational differential on $D$, so $\operatorname{div}(\omega_D) = K_D$ is a canonical divisor on $D$. The pullback $f^*\omega_D$ is a nonzero rational differential on $C$.
+
+We compute $\operatorname{div}(f^*\omega_D)$ by combining the pullback of divisors with the ramification contribution.
+
+**Pullback of divisors:** For any point $Q \in D$ and $P \in f^{-1}(Q)$, the pullback of divisors satisfies $v_P(f^*K_D) = e_P \cdot v_Q(K_D)$. More precisely, for the divisor $f^*K_D = \sum_{Q \in D} v_Q(K_D) \cdot f^*(Q)$ where $f^*(Q) = \sum_{P \mapsto Q} e_P \cdot P$.
+
+**Ramification contribution:** From Step 2, the pullback of differentials introduces an additional factor of $t^{e_P - 1}$ at each point $P$, contributing $e_P - 1$ to the order of vanishing.
+
+Combining these two effects:
+
+$$v_P(f^*\omega_D) = e_P \cdot v_Q(\omega_D) + (e_P - 1)$$
+
+for each $P \in C$ with $Q = f(P)$. In terms of divisors:
+
+$$\operatorname{div}(f^*\omega_D) = f^*(\operatorname{div}(\omega_D)) + R = f^*K_D + R,$$
+
+where $R = \sum_{P \in C}(e_P - 1) \cdot P$ is the ramification divisor.
+
+Since $\operatorname{div}(f^*\omega_D)$ is a canonical divisor on $C$, we obtain:
+
+$$K_C \sim f^*K_D + R.$$
+</Proof>
+
+### Step 4: Taking Degrees
+
+<Proof>
+**Step 4: Degree computation yields the Hurwitz formula.**
+
+Taking degrees of both sides of $K_C \sim f^*K_D + R$:
+
+$$\deg K_C = \deg(f^*K_D) + \deg R.$$
+
+We use two standard facts:
+
+**Fact 1:** For a smooth projective curve $X$ of genus $g$, $\deg K_X = 2g - 2$.
+
+**Fact 2:** For a finite morphism $f: C \to D$ of degree $n$ and any divisor $E$ on $D$, $\deg(f^*E) = n \cdot \deg E$. This follows from $f^*(Q) = \sum_{P \mapsto Q} e_P \cdot P$ and $\sum_{P \mapsto Q} e_P = n$ for each $Q$.
+
+Applying these:
+
+$$2g_C - 2 = n(2g_D - 2) + \deg R.$$
+
+Since each $e_P \geq 1$, we have $e_P - 1 \geq 0$ with equality at unramified points, so $\deg R \geq 0$. This completes the proof.
+</Proof>
+
+---
+
+## Wild Ramification: Characteristic $p$
+
+<Remark title="The different in characteristic p">
+When $\operatorname{char}(k) = p > 0$ and $p \mid e_P$ (**wild ramification**), the computation in Step 2 breaks down: the factor $e \cdot u$ may vanish since $e \equiv 0 \pmod{p}$. In this case, $v_P(f^*(ds))$ is strictly greater than $e_P - 1$.
+
+The correct generalization replaces the naive ramification divisor with the **different**:
+
+$$K_C \sim f^*K_D + \mathfrak{D},$$
+
+where the different $\mathfrak{D} = \sum_{P \in C} d_P \cdot P$ satisfies $d_P \geq e_P - 1$, with equality if and only if $p \nmid e_P$ (tame ramification).
+
+The generalized Hurwitz formula becomes:
+
+$$2g_C - 2 = n(2g_D - 2) + \sum_{P \in C} d_P.$$
+
+**Bounds on the different:** For wild ramification at $P$, we have $d_P \geq e_P - 1 + 1 = e_P$ when $p \mid e_P$. More precisely, if $e_P = p^a \cdot m$ with $\gcd(m, p) = 1$, then $d_P \geq e_P - 1 + a$ (though the exact value depends on the higher ramification groups).
+
+**Artin conductor:** The integer $d_P + 1$ is related to the Artin conductor at $P$, which measures the "depth" of wild ramification via the filtration of the inertia group by higher ramification groups $G_0 \supset G_1 \supset G_2 \supset \cdots$.
+</Remark>
+
+<Example id="artin-schreier" title="Artin-Schreier covers (wild ramification)">
+Let $k$ have characteristic $p > 0$. Consider the Artin--Schreier cover $f: C \to \mathbb{P}^1$ defined by $y^p - y = x^m$ where $\gcd(m, p) = 1$ and $m > 0$.
+
+This is a degree-$p$ cover, totally ramified at $\infty$ with a single point $P_\infty$ above $\infty$. The ramification index is $e_{P_\infty} = p$.
+
+The different at $P_\infty$ is $d_{P_\infty} = (p-1)(m+1)$, which exceeds $e_{P_\infty} - 1 = p - 1$ by $(p-1)m$.
+
+By the generalized Hurwitz formula:
+
+$$2g_C - 2 = p(2 \cdot 0 - 2) + (p-1)(m+1) = -2p + (p-1)(m+1).$$
+
+So $g_C = \frac{(p-1)(m-1)}{2}$. For example, with $p = 2$ and $m = 3$: $g_C = 1$ (an elliptic curve).
+</Example>
+
+---
+
+## Topological Proof Sketch over $\mathbb{C}$
+
+<Proof>
+**Topological proof using Euler characteristics.**
+
+When working over $\mathbb{C}$, the Hurwitz formula admits a purely topological proof via Euler characteristics. Let $f: C \to D$ be a branched cover of compact Riemann surfaces of degree $n$.
+
+**Step A: Remove branch points.** Let $B = \{Q_1, \ldots, Q_r\} \subset D$ be the set of branch points. Set $D^\circ = D \setminus B$ and $C^\circ = f^{-1}(D^\circ) = C \setminus f^{-1}(B)$. Then $f|_{C^\circ}: C^\circ \to D^\circ$ is an honest (unramified) covering of degree $n$.
+
+**Step B: Euler characteristic of the unbranched cover.** For an unramified degree-$n$ cover, $\chi(C^\circ) = n \cdot \chi(D^\circ)$.
+
+We compute $\chi(D^\circ) = \chi(D) - r = 2 - 2g_D - r$ (removing $r$ points from $D$ decreases $\chi$ by $r$, since each puncture removes a cell from a CW decomposition).
+
+Similarly, $|f^{-1}(B)| = \sum_{j=1}^r |\text{fiber over } Q_j|$. Over $Q_j$, there are $s_j$ points with ramification indices $e_{j,1}, \ldots, e_{j,s_j}$ where $\sum_i e_{j,i} = n$. So the total number of preimage points is $\sum_j s_j$.
+
+Thus $\chi(C^\circ) = \chi(C) - \sum_j s_j = 2 - 2g_C - \sum_j s_j$.
+
+**Step C: Combine.** Setting $\chi(C^\circ) = n \cdot \chi(D^\circ)$:
+
+$$2 - 2g_C - \sum_j s_j = n(2 - 2g_D - r).$$
+
+Rearranging:
+
+$$2 - 2g_C = n(2 - 2g_D) - nr + \sum_j s_j = n(2 - 2g_D) - \sum_j (n - s_j).$$
+
+Since $n - s_j = \sum_i e_{j,i} - s_j = \sum_i (e_{j,i} - 1) = \deg R_j$ (the ramification over $Q_j$), we get:
+
+$$2 - 2g_C = n(2 - 2g_D) - \deg R,$$
+
+which is exactly the Hurwitz formula $2g_C - 2 = n(2g_D - 2) + \deg R$.
+</Proof>
+
+---
+
+## Examples Verifying the Formula
+
+### Example 1: Covers of $\mathbb{P}^1$ by $\mathbb{P}^1$
+
+<Example id="p1-to-p1" title="Degree-n map between rational curves">
+Let $f: \mathbb{P}^1 \to \mathbb{P}^1$ be $f(t) = t^n$ (a degree-$n$ map). Here $g_C = g_D = 0$.
+
+**Ramification:** The map ramifies at $t = 0$ (with $e_0 = n$, since $t \mapsto t^n$) and at $t = \infty$ (with $e_\infty = n$). All other points are unramified.
+
+$$\deg R = (n - 1) + (n - 1) = 2(n - 1).$$
+
+**Hurwitz check:** $2(0) - 2 = n(2(0) - 2) + 2(n - 1)$, i.e., $-2 = -2n + 2n - 2 = -2$. Verified.
+</Example>
+
+### Example 2: Hyperelliptic Curves
+
+<Example id="hyperelliptic" title="Hyperelliptic double cover">
+Let $C: y^2 = f(x)$ where $f$ has degree $2g + 1$ or $2g + 2$ with distinct roots, defining a double cover $\pi: C \to \mathbb{P}^1$ via $(x, y) \mapsto x$.
+
+**Case $\deg f = 2g + 1$:** The branch points are the $2g + 1$ roots of $f$ in $\mathbb{A}^1$ plus $\infty$ (since the cover is totally ramified at infinity when $\deg f$ is odd). Total branch points: $2g + 2$. Each has $e = 2$, so $\deg R = (2g + 2) \cdot 1 = 2g + 2$.
+
+**Case $\deg f = 2g + 2$:** The $2g + 2$ roots of $f$ are the branch points (the point at infinity is unramified). Again $\deg R = 2g + 2$.
+
+**Hurwitz check:** $2g_C - 2 = 2(2 \cdot 0 - 2) + 2g + 2 = -4 + 2g + 2 = 2g - 2$, so $g_C = g$. The genus matches the definition.
+</Example>
+
+### Example 3: Smooth Plane Quartic
+
+<Example id="plane-quartic-projection" title="Projection from a smooth plane quartic">
+Let $C \subset \mathbb{P}^2$ be a smooth plane quartic ($g = 3$). Projection from a point $P \notin C$ gives a map $\pi_P: C \to \mathbb{P}^1$ of degree $4$.
+
+**Hurwitz formula:** $2(3) - 2 = 4(2(0) - 2) + \deg R$, so $4 = -8 + \deg R$, giving $\deg R = 12$.
+
+For a general projection, the map has $12$ simple ramification points (each with $e = 2$), consistent with $\deg R = 12$. These correspond to the tangent lines from $P$ to $C$, of which there are generically $12$ by the class formula for a degree-$4$ plane curve.
+</Example>
+
+### Example 4: Elliptic Curve Double Cover
+
+<Example id="elliptic-double" title="Elliptic curve as double cover of P^1">
+An elliptic curve $E: y^2 = x^3 + Ax + B$ over a field with $\operatorname{char} \neq 2$ admits a degree-$2$ map $E \to \mathbb{P}^1$ via $(x, y) \mapsto x$.
+
+The branch points are the three roots of $x^3 + Ax + B$ plus $\infty$, giving $4$ branch points, each with $e = 2$.
+
+$$\deg R = 4 \cdot (2 - 1) = 4.$$
+
+**Hurwitz check:** $2(1) - 2 = 2(2(0) - 2) + 4$, i.e., $0 = -4 + 4 = 0$. Verified.
+</Example>
+
+### Example 5: Cyclic Triple Cover
+
+<Example id="cyclic-triple" title="Cyclic triple cover of P^1">
+Consider $f: C \to \mathbb{P}^1$ defined by $y^3 = (x - a_1)(x - a_2) \cdots (x - a_r)$ where the $a_i$ are distinct and $3 \nmid r$ (so the cover is totally ramified at $\infty$ as well).
+
+Each root $a_i$ gives a totally ramified point with $e = 3$, contributing $e - 1 = 2$ to $\deg R$. If $3 \nmid r$, then $\infty$ is also totally ramified with $e = 3$, contributing $2$ more.
+
+$$\deg R = 2r + 2 \quad (3 \nmid r), \qquad \deg R = 2r \quad (3 \mid r).$$
+
+**Hurwitz:** $2g_C - 2 = 3(-2) + \deg R$.
+
+- If $r = 4$ (so $3 \nmid 4$): $\deg R = 10$, $2g_C - 2 = -6 + 10 = 4$, so $g_C = 3$.
+- If $r = 3$: $\deg R = 6$, $2g_C - 2 = -6 + 6 = 0$, so $g_C = 1$ (an elliptic curve).
+- If $r = 6$: $\deg R = 12$, $2g_C - 2 = -6 + 12 = 6$, so $g_C = 4$.
+</Example>
+
+### Example 6: The Fermat Curve
+
+<Example id="fermat" title="Fermat curve projection">
+The Fermat curve $C: x^n + y^n = z^n$ in $\mathbb{P}^2$ is smooth of genus $g = \frac{(n-1)(n-2)}{2}$.
+
+The projection $\pi: C \to \mathbb{P}^1$ via $[x:y:z] \mapsto [x:z]$ has degree $n$ (for a fixed ratio $x/z = \lambda$, we solve $y^n = z^n - x^n$).
+
+The map $\pi$ ramifies at the $n$-th roots of unity $\lambda^n = 1$ (where $y^n = 0$, giving a single point with $e = n$) and at $\infty$ (where $x^n + y^n = 0$, giving $n$ points with $e = 1$ if $k$ contains $n$-th roots of $-1$). Let us verify more carefully: over $\lambda$ with $\lambda^n = 1$, the equation $y^n = z^n(1 - \lambda^n) = 0$ gives $y = 0$, a single preimage with $e = n$. There are $n$ such branch points.
+
+$$\deg R = n \cdot (n - 1) = n(n-1).$$
+
+**Hurwitz check:** $2 \cdot \frac{(n-1)(n-2)}{2} - 2 = n(-2) + n(n-1)$, i.e., $(n-1)(n-2) - 2 = -2n + n^2 - n = n^2 - 3n$. The left side is $n^2 - 3n + 2 - 2 = n^2 - 3n$. Verified.
+</Example>
+
+### Example 7: Frobenius Morphism
+
+<Example id="frobenius" title="Frobenius morphism (purely inseparable)">
+Let $k = \overline{\mathbb{F}_p}$ and $C$ a smooth curve of genus $g$. The **absolute Frobenius** $F: C \to C$ sends $(x, y) \mapsto (x^p, y^p)$. This is a purely inseparable morphism of degree $p$.
+
+The Hurwitz formula does not directly apply in the naive form since $F$ is inseparable (not separable). However, we can factor the $p$-power map $\mathbb{P}^1 \to \mathbb{P}^1$ via $t \mapsto t^p$ as a purely inseparable map. In this case, every point has ramification index $p$ but the differential $d(t^p) = p \cdot t^{p-1} dt = 0$, so the formula via differentials gives $f^*\omega = 0$ and we need the generalized framework.
+
+For the **relative Frobenius** $F_{C/k}: C \to C^{(p)}$, the different is $\mathfrak{D} = (p-1)K_C + (\text{contribution from the inseparable structure})$. This is why separability is assumed in the standard Hurwitz formula.
+</Example>
+
+### Example 8: Map Between Elliptic Curves
+
+<Example id="elliptic-isogeny" title="Isogeny between elliptic curves">
+Let $\phi: E_1 \to E_2$ be a separable isogeny of degree $n$ between elliptic curves ($g_{E_1} = g_{E_2} = 1$).
+
+**Hurwitz formula:** $2(1) - 2 = n(2(1) - 2) + \deg R$, giving $0 = 0 + \deg R$, so $\deg R = 0$.
+
+This means $\phi$ is **unramified** everywhere. Every separable isogeny between elliptic curves is an unramified (etale) cover. This is consistent with the group-theoretic viewpoint: an isogeny is a group homomorphism, and its fibers are cosets of $\ker(\phi)$, which are all translates of each other and hence uniformly distributed.
+</Example>
+
+### Example 9: Genus 2 to Genus 0
+
+<Example id="genus2-to-P1" title="Covers from genus-2 curves to P^1">
+Any genus-$2$ curve $C$ admits a degree-$2$ map $f: C \to \mathbb{P}^1$ (every genus-$2$ curve is hyperelliptic).
+
+**Hurwitz:** $2(2) - 2 = 2(2(0) - 2) + \deg R$, so $2 = -4 + \deg R$, giving $\deg R = 6$.
+
+Since $n = 2$, each ramification point has $e = 2$, contributing $1$ to $\deg R$. So there are exactly $6$ branch points in $\mathbb{P}^1$. These are precisely the **Weierstrass points** of $C$ (their images under $f$), and their preimages are the $6$ Weierstrass points of $C$.
+</Example>
+
+### Example 10: Belyi Maps
+
+<Example id="belyi" title="Belyi maps (three branch points)">
+A **Belyi map** is a finite morphism $f: C \to \mathbb{P}^1$ ramified over at most three points (conventionally $0, 1, \infty$). By Belyi's theorem, a smooth curve over $\overline{\mathbb{Q}}$ admits a Belyi map if and only if it is defined over $\overline{\mathbb{Q}}$.
+
+For a Belyi map of degree $n$ on a curve of genus $g$, the Hurwitz formula reads:
+
+$$2g - 2 = -2n + \deg R.$$
+
+**Concrete example:** Consider the "dessin d'enfant" given by a degree-$4$ Belyi map $f: C \to \mathbb{P}^1$ with ramification type $(4)$ over $0$, $(2, 2)$ over $1$, and $(3, 1)$ over $\infty$. Then:
+
+$$\deg R = (4-1) + (2-1) + (2-1) + (3-1) + (1-1) = 3 + 1 + 1 + 2 + 0 = 7.$$
+
+So $2g - 2 = -8 + 7 = -1$, giving $g = 1/2$. This is impossible! Therefore, no such Belyi map exists. The ramification data must satisfy $\deg R \equiv 0 \pmod{2}$ (since $2g - 2 + 2n$ is always even).
+
+**Valid example:** Degree $3$, type $(3)$ over $0$, $(2, 1)$ over $1$, $(3)$ over $\infty$: $\deg R = 2 + 1 + 0 + 2 = 5$, $2g - 2 = -6 + 5 = -1$... still fractional. Let us try type $(3)$ over $0$, $(2, 1)$ over $1$, $(2, 1)$ over $\infty$: $\deg R = 2 + 1 + 1 = 4$, $2g - 2 = -6 + 4 = -2$, $g = 0$. This is valid, and describes a rational Belyi function.
+</Example>
+
+### Example 11: Covering of an Elliptic Curve by a Higher-Genus Curve
+
+<Example id="cover-elliptic" title="Double cover of an elliptic curve">
+Let $E$ be an elliptic curve and $f: C \to E$ a degree-$2$ cover.
+
+**Hurwitz:** $2g_C - 2 = 2(2 \cdot 1 - 2) + \deg R = 0 + \deg R$, so $g_C = 1 + \frac{\deg R}{2}$.
+
+Since each ramification point for a double cover has $e = 2$ (contributing $1$), the number of branch points equals $\deg R$. This must be even (by the Hurwitz formula parity constraint), so:
+
+- $\deg R = 0$: $g_C = 1$. Unramified double cover; $C$ is again an elliptic curve.
+- $\deg R = 2$: $g_C = 2$. A genus-$2$ curve double-covering $E$ with $2$ branch points.
+- $\deg R = 4$: $g_C = 3$. A genus-$3$ curve double-covering $E$ with $4$ branch points.
+- $\deg R = 2k$: $g_C = 1 + k$.
+</Example>
+
+### Example 12: Degree-$n$ Unramified Cover
+
+<Example id="unramified-cover" title="Unramified covers">
+If $f: C \to D$ is unramified (etale), then $\deg R = 0$ and the Hurwitz formula gives:
+
+$$2g_C - 2 = n(2g_D - 2),$$
+
+i.e., $g_C - 1 = n(g_D - 1)$.
+
+**Consequences:**
+
+- If $g_D = 0$: then $g_C - 1 = -n < 0$, impossible for $n > 1$. So $\mathbb{P}^1$ has no nontrivial etale covers (it is simply connected).
+- If $g_D = 1$: then $g_C = 1$ for any $n$. Etale covers of elliptic curves are elliptic curves (the $n$-isogenies).
+- If $g_D \geq 2$: then $g_C = n(g_D - 1) + 1 \geq n + 1$. A degree-$2$ unramified cover of a genus-$2$ curve has genus $3$.
+</Example>
+
+---
+
+## Applications
+
+### Constraining Genus
+
+<Remark title="Hurwitz formula as an obstruction">
+The Hurwitz formula provides powerful obstructions:
+
+1. **Lower bound on genus of covers:** If $f: C \to D$ has degree $n$, then $g_C \geq n(g_D - 1) + 1$ (since $\deg R \geq 0$). Equality holds iff $f$ is unramified.
+
+2. **Parity constraint:** Since $\deg R = 2g_C - 2 - n(2g_D - 2)$, and $\deg R \geq 0$, we need $2g_C - 2 \geq n(2g_D - 2)$, with equality iff the cover is etale.
+
+3. **Finiteness of automorphisms (Hurwitz bound):** If $G$ is a finite group of automorphisms of a curve $C$ of genus $g \geq 2$, then $f: C \to C/G$ has degree $|G|$, and the Hurwitz formula gives $|G| \leq 84(g - 1)$. This is the **Hurwitz bound**, achieved by the Klein quartic ($g = 3$, $|G| = 168$).
+
+4. **Ruling out covers:** There is no degree-$2$ map $\mathbb{P}^1 \to C$ if $g_C \geq 1$, since $-2 = 2(-2) + \deg R$ would give $\deg R = 2 < 0$ if $g_C = 1$... actually $-2 = 2(2g_C - 2) + \deg R$ is wrong; the map goes the other direction. The correct obstruction: if $f: C \to \mathbb{P}^1$ has degree $n$, then $g_C = \frac{\deg R}{2} - n + 1$, so $\deg R = 2g_C + 2n - 2$, which is always achievable.
+</Remark>
+
+### The Hurwitz Bound
+
+<Theorem title="Hurwitz Automorphism Bound" number="4.7">
+Let $C$ be a smooth projective curve of genus $g \geq 2$ over an algebraically closed field of characteristic $0$ (or characteristic $p$ not dividing $|G|$). Then
+
+$$|\operatorname{Aut}(C)| \leq 84(g - 1).$$
+</Theorem>
+
+<Proof>
+**Derivation from the Hurwitz formula.**
+
+Let $G = \operatorname{Aut}(C)$ and $D = C/G$. The quotient map $f: C \to D$ has degree $|G|$. Let $g_D$ be the genus of $D$ and suppose the branch points $Q_1, \ldots, Q_r$ have ramification indices $e_1, \ldots, e_r$ (where $e_j$ is the common ramification index above $Q_j$, well-defined since $G$ acts transitively on fibers).
+
+By Hurwitz: $2g - 2 = |G|(2g_D - 2) + |G| \sum_{j=1}^r (1 - 1/e_j)$.
+
+So $2g - 2 = |G|\left(2g_D - 2 + \sum_{j=1}^r (1 - 1/e_j)\right)$.
+
+We need $|G|$ to be bounded, so we need the factor $\mu = 2g_D - 2 + \sum_j(1 - 1/e_j) > 0$, and then $|G| = (2g-2)/\mu$.
+
+To maximize $|G|$, we minimize $\mu > 0$. The minimum positive value of $\mu$ is achieved at $g_D = 0$, $r = 3$, $(e_1, e_2, e_3) = (2, 3, 7)$:
+
+$$\mu = -2 + (1 - 1/2) + (1 - 1/3) + (1 - 1/7) = -2 + 1/2 + 2/3 + 6/7 = 1/42.$$
+
+Therefore $|G| \leq 42(2g - 2) = 84(g - 1)$.
+</Proof>
+
+<Example id="klein-quartic" title="Klein quartic achieves the Hurwitz bound">
+The **Klein quartic** $C: x^3 y + y^3 z + z^3 x = 0$ in $\mathbb{P}^2$ is a smooth curve of genus $3$.
+
+Its automorphism group is $G = \operatorname{PSL}(2, \mathbb{F}_7)$ of order $168 = 84(3 - 1) = 84 \cdot 2$.
+
+The quotient $C/G \cong \mathbb{P}^1$, and the quotient map has three branch points with ramification types $(2, 3, 7)$, achieving the minimum $\mu = 1/42$. This is the unique curve of genus $3$ that achieves the Hurwitz bound.
+</Example>
+
+### Riemann-Hurwitz and the Riemann Existence Theorem
+
+<Remark title="Which ramification data are realizable?">
+Over $\mathbb{C}$, the **Riemann Existence Theorem** states that any compatible ramification data can be realized by an actual cover. More precisely, given:
+
+- a Riemann surface $D$ of genus $g_D$,
+- branch points $Q_1, \ldots, Q_r \in D$,
+- a monodromy representation $\rho: \pi_1(D \setminus \{Q_1, \ldots, Q_r\}) \to S_n$,
+
+there exists a unique (up to isomorphism) degree-$n$ branched cover $f: C \to D$ realizing this data. The genus $g_C$ is then determined by Hurwitz.
+
+The Hurwitz formula thus provides the **necessary condition** (the genus must be a non-negative integer), while the Riemann Existence Theorem provides **sufficiency** (any combinatorially valid data is realized).
+
+**Hurwitz's counting problem:** The number of degree-$n$ covers of $\mathbb{P}^1$ with prescribed ramification is a classical enumerative problem. When all ramification is simple (each $e = 2$), the count is given by the **Hurwitz numbers**, which are connected to the representation theory of $S_n$ via the ELSV formula.
+</Remark>
+
+---
+
+## Summary of the Proof
+
+<Remark title="Logical structure">
+The proof of the Hurwitz formula follows this chain:
+
+1. **Functoriality of differentials**: a finite separable morphism $f: C \to D$ pulls back rational differentials on $D$ to rational differentials on $C$.
+
+2. **Local calculation**: at a ramification point with index $e$, the pullback $f^*(ds) = e \cdot u \cdot t^{e-1} dt$ acquires a zero of order $e - 1$ (in the tame case).
+
+3. **Global identity**: assembling the local data gives $K_C \sim f^*K_D + R$.
+
+4. **Degree formula**: taking degrees, $\deg K_C = 2g_C - 2$, $\deg(f^*K_D) = n(2g_D - 2)$, and $\deg R = \sum(e_P - 1)$, yielding the Hurwitz formula.
+
+The formula is remarkably powerful: it constrains which covers can exist, bounds automorphism groups, computes genera of explicit curves, and underlies the combinatorics of Hurwitz numbers and the topology of moduli spaces.
+</Remark>

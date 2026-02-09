@@ -1,0 +1,449 @@
+export const metadata = {
+  title: 'Linear Systems |D| — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Concept — Linear Systems" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Linear Systems |D|
+
+Linear systems are the bridge between divisors and maps to projective space. Every morphism from a curve to projective space arises from a linear system, and the geometry of the curve is reflected in the properties of its linear systems. This page develops the theory systematically, from complete linear systems through the canonical embedding.
+
+---
+
+## Complete linear systems
+
+<Definition title="Complete linear system" number="4.6">
+Let $C$ be a smooth projective curve over an algebraically closed field $k$, and let $D$ be a divisor on $C$. The **complete linear system** of $D$ is the set of all effective divisors linearly equivalent to $D$:
+
+$$|D| = \{D' \geq 0 \mid D' \sim D\}.$$
+
+Concretely, each $D' \in |D|$ has the form $D' = D + \operatorname{div}(f)$ for some $f \in L(D) \setminus \{0\}$, and two functions $f, g$ give the same effective divisor if and only if $f = \lambda g$ for some $\lambda \in k^*$. Therefore:
+
+$$|D| \cong \mathbb{P}(L(D)) = \mathbb{P}^{r}$$
+
+where $r = \ell(D) - 1$, and $\ell(D) = \dim_k L(D)$. If $\ell(D) = 0$, then $|D| = \emptyset$.
+</Definition>
+
+<Definition title="Linear system (sub-linear system)" number="4.7">
+A **linear system** on $C$ is a linear subspace $\mathfrak{d} \subseteq |D|$ for some divisor $D$, i.e., a projective subspace $\mathfrak{d} \cong \mathbb{P}^r \subseteq \mathbb{P}(L(D))$. Equivalently, $\mathfrak{d} = \mathbb{P}(V)$ for some vector subspace $V \subseteq L(D)$.
+
+The **dimension** of the linear system is $\dim \mathfrak{d} = r$, and the **degree** is $\deg D$.
+</Definition>
+
+<Example id="complete-system-P1" title="Complete linear systems on P^1">
+On $\mathbb{P}^1$ with $D = n \cdot [\infty]$ for $n \geq 0$:
+
+- $L(D) = \{f \in k(t) \mid \operatorname{div}(f) + n[\infty] \geq 0\} = \{$polynomials of degree $\leq n\}$.
+- A basis is $\{1, t, t^2, \ldots, t^n\}$, so $\ell(D) = n + 1$.
+- $|D| \cong \mathbb{P}^n$: each element is a divisor $[a_1] + [a_2] + \cdots + [a_n]$ (roots of a degree-$n$ polynomial, counted with multiplicity).
+- For $n = 1$: $|[\infty]| \cong \mathbb{P}^1$ parametrizes single points of $\mathbb{P}^1$.
+- For $n = 2$: $|2[\infty]| \cong \mathbb{P}^2$ parametrizes unordered pairs of points (including coincident pairs).
+</Example>
+
+<Example id="complete-system-elliptic" title="Complete linear systems on an elliptic curve">
+Let $E$ be an elliptic curve with origin $O$.
+
+- $|O|$: $\ell(O) = 1$, so $|O| = \{O\}$, a single point ($\mathbb{P}^0$).
+- $|2O|$: $\ell(2O) = 2$, so $|2O| \cong \mathbb{P}^1$. The basis $\{1, x\}$ gives effective divisors $\operatorname{div}(a + bx) + 2O$ for $[a:b] \in \mathbb{P}^1$. These are the fibers of the double cover $x: E \to \mathbb{P}^1$.
+- $|3O|$: $\ell(3O) = 3$, so $|3O| \cong \mathbb{P}^2$. Each element is a group of $3$ points cut out by a line in the Weierstrass embedding $E \hookrightarrow \mathbb{P}^2$.
+- $|nO|$ for $n \geq 1$: $\ell(nO) = n$, so $|nO| \cong \mathbb{P}^{n-1}$.
+</Example>
+
+---
+
+## Base points and base-point-free systems
+
+<Definition title="Base point and base locus" number="4.8">
+Let $\mathfrak{d}$ be a linear system on $C$. A point $P \in C$ is a **base point** of $\mathfrak{d}$ if $P \in \operatorname{Supp}(D')$ for every $D' \in \mathfrak{d}$.
+
+The **base locus** is $\operatorname{Bs}(\mathfrak{d}) = \bigcap_{D' \in \mathfrak{d}} \operatorname{Supp}(D')$.
+
+The linear system $\mathfrak{d}$ is **base-point-free** (bpf) if $\operatorname{Bs}(\mathfrak{d}) = \emptyset$, i.e., for every point $P \in C$, there exists $D' \in \mathfrak{d}$ with $P \notin \operatorname{Supp}(D')$.
+
+Equivalently, $|D|$ is base-point-free if and only if $\ell(D - P) = \ell(D) - 1$ for every point $P \in C$, i.e., evaluation at each point is surjective.
+</Definition>
+
+<Example id="basepoint-genus2" title="Base points on a genus-2 curve">
+Let $C$ have genus $2$ and let $P \in C$ be a non-Weierstrass point.
+
+- $|P|$: $\ell(P) = 1$ (by Riemann--Roch, since $P$ is not a Weierstrass point), so $|P| = \{P\}$. Trivially, $P$ is a base point.
+- $|2P|$: $\ell(2P) = 1$ for a general $P$ (since $\ell(K - 2P) = 1$ when $2P \sim K$ fails). So $|2P| = \{2P\}$ and $P$ is a base point of multiplicity $2$.
+- $|K_C|$: $\ell(K_C) = 2$ and $\deg K_C = 2$. For any point $P$, $\ell(K_C - P) = 1$ by Riemann--Roch ($= \ell(P) + 1 - 2 + 1$... more directly, since $K_C$ is the $g^1_2$, every point appears in some fiber). So $|K_C|$ is base-point-free.
+
+Now if $W$ is a Weierstrass point: $\ell(2W) = 2$, so $|2W| \cong \mathbb{P}^1$ and $2W \sim K_C$. In the canonical system, $W$ still appears in every divisor? No -- $|K_C| = |2W| \cong \mathbb{P}^1$, and the divisor corresponding to $x - x(W)$ is $2W$ itself, but other divisors in $|K_C|$ are pairs $Q + Q'$ not involving $W$. So $W$ is **not** a base point.
+</Example>
+
+<Remark title="Removing base points">
+If $\operatorname{Bs}(|D|) = \sum_P m_P \cdot P$ (where $m_P = \min_{D' \in |D|} v_P(D')$), then $D_0 = D - \sum m_P \cdot P$ satisfies $|D_0| \cong |D|$ as projective spaces, and $|D_0|$ is base-point-free. The "fixed part" $\sum m_P P$ is carried by every divisor in the system.
+</Remark>
+
+---
+
+## The $g^r_d$ notation
+
+<Definition title="The notation g^r_d" number="4.9">
+A $g^r_d$ on a curve $C$ is a linear system of **degree** $d$ and **(projective) dimension** $r$. That is, a $g^r_d$ is a pair $(D, V)$ where $D$ is a divisor of degree $d$ and $V \subseteq L(D)$ is a vector subspace of dimension $r + 1$, giving $\mathbb{P}(V) \cong \mathbb{P}^r$.
+
+If $V = L(D)$ (the full Riemann--Roch space), the $g^r_d$ is **complete** and we write $|D|$. In this case $r = \ell(D) - 1$.
+
+Special terminology:
+- A $g^0_d$ is a single effective divisor of degree $d$.
+- A $g^1_d$ is a **pencil**: a $1$-parameter family of degree-$d$ divisors, i.e., a map $C \to \mathbb{P}^1$ of degree $d$.
+- A $g^2_d$ is a **net**: a $2$-parameter family giving a map $C \to \mathbb{P}^2$.
+</Definition>
+
+<Example id="grd-examples" title="Classical examples of g^r_d">
+- **$\mathbb{P}^1$**: the system $|n \cdot [\infty]|$ is a $g^n_n$. In particular, $|[\infty]|$ is a $g^1_1$ (the identity map $\mathbb{P}^1 \to \mathbb{P}^1$).
+- **Elliptic curve**: $|nO|$ is a $g^{n-1}_n$. The system $|2O|$ is a $g^1_2$ (double cover of $\mathbb{P}^1$). The system $|3O|$ is a $g^2_3$ (plane cubic embedding).
+- **Genus-2 curve**: $|K_C|$ is a $g^1_2$ (the hyperelliptic pencil).
+- **Non-hyperelliptic genus-3 curve**: $|K_C|$ is a $g^2_4$ (canonical embedding as plane quartic).
+- **Non-hyperelliptic genus-4 curve**: $|K_C|$ is a $g^3_6$ (canonical embedding in $\mathbb{P}^3$, intersection of a quadric and a cubic).
+- **General genus-$g$ curve** ($g \geq 2$): $|K_C|$ is a $g^{g-1}_{2g-2}$.
+</Example>
+
+<Example id="grd-existence" title="Existence of g^1_d">
+A key question in curve theory is: what is the smallest $d$ such that $C$ carries a $g^1_d$?
+
+- $g = 0$: $d = 1$ (isomorphism to $\mathbb{P}^1$).
+- $g = 1$: $d = 2$ (every elliptic curve is a double cover of $\mathbb{P}^1$).
+- $g = 2$: $d = 2$ (every genus-$2$ curve is hyperelliptic).
+- $g = 3$: $d = 2$ if hyperelliptic; $d = 3$ if not (project from a point on the canonical quartic).
+- $g = 4$: $d = 2$ if hyperelliptic; $d = 3$ for a general curve (the canonical curve lies on a quadric surface in $\mathbb{P}^3$; rulings give a $g^1_3$).
+
+The **Brill--Noether number** $\rho(g, r, d) = g - (r+1)(g - d + r)$ governs when $g^r_d$'s exist on a general curve: if $\rho \geq 0$, a general curve of genus $g$ carries a $g^r_d$; if $\rho < 0$, it does not.
+</Example>
+
+---
+
+## Maps to projective space
+
+<Definition title="Map associated to a linear system" number="4.10">
+Let $D$ be a divisor on $C$ with $\ell(D) = r + 1 \geq 1$, and let $s_0, s_1, \ldots, s_r$ be a basis of $L(D)$. The associated **rational map** is:
+
+$$\phi_D : C \dashrightarrow \mathbb{P}^r, \quad P \mapsto [s_0(P) : s_1(P) : \cdots : s_r(P)].$$
+
+This is well-defined (a morphism, not just rational) at points where not all $s_i$ vanish simultaneously, i.e., at points $P \notin \operatorname{Bs}(|D|)$. If $|D|$ is base-point-free, then $\phi_D$ is a morphism everywhere.
+
+More generally, a sub-linear-system $\mathfrak{d} = \mathbb{P}(V) \subseteq |D|$ with $V \subseteq L(D)$ of dimension $r + 1$ gives a rational map $\phi_V : C \dashrightarrow \mathbb{P}^r$.
+</Definition>
+
+<Theorem title="Base-point-free systems give morphisms">
+The complete linear system $|D|$ is base-point-free if and only if $\phi_D : C \to \mathbb{P}^r$ is a morphism (defined everywhere). This holds if and only if for every $P \in C$:
+
+$$\ell(D - P) = \ell(D) - 1.$$
+</Theorem>
+
+<Example id="maps-P1" title="Veronese maps from P^1">
+On $\mathbb{P}^1$, the system $|n \cdot [\infty]|$ with basis $\{1, t, t^2, \ldots, t^n\}$ gives:
+
+$$\phi_{n[\infty]} : \mathbb{P}^1 \to \mathbb{P}^n, \quad [s:t] \mapsto [s^n : s^{n-1}t : \cdots : t^n].$$
+
+- $n = 1$: the identity $\mathbb{P}^1 \to \mathbb{P}^1$.
+- $n = 2$: the **Veronese conic** $\mathbb{P}^1 \hookrightarrow \mathbb{P}^2$, image is $\{xz = y^2\}$.
+- $n = 3$: the **twisted cubic** $\mathbb{P}^1 \hookrightarrow \mathbb{P}^3$, parametrized by $(s^3, s^2t, st^2, t^3)$.
+
+All are embeddings since the $g^n_n$ separates points and tangent vectors on $\mathbb{P}^1$.
+</Example>
+
+<Example id="maps-elliptic" title="Maps from an elliptic curve">
+Let $E: y^2 = x^3 + ax + b$ with origin $O$ at infinity.
+
+**The $g^1_2$ from $|2O|$**: basis $\{1, x\}$, giving $\phi : E \to \mathbb{P}^1$, $P \mapsto [1 : x(P)]$. This is the double cover $(x,y) \mapsto x$, branched at the four roots of $x^3 + ax + b = 0$ and at $\infty$.
+
+**The $g^2_3$ from $|3O|$**: basis $\{1, x, y\}$, giving $\phi : E \hookrightarrow \mathbb{P}^2$, $P \mapsto [1 : x(P) : y(P)]$. The image is the Weierstrass plane cubic. This is an embedding because $3O$ is very ample on $E$.
+
+**The $g^3_4$ from $|4O|$**: basis $\{1, x, y, x^2\}$, giving $\phi : E \hookrightarrow \mathbb{P}^3$, image is a curve of degree $4$, the intersection of two quadric surfaces.
+</Example>
+
+---
+
+## Very ample and ample divisors
+
+<Definition title="Very ample and ample divisors on curves" number="4.11">
+A divisor $D$ on $C$ is **very ample** if $\phi_D : C \hookrightarrow \mathbb{P}^r$ is a closed embedding. This requires two conditions beyond being base-point-free:
+
+- **Separation of points**: for any $P \neq Q$ in $C$, $\ell(D - P - Q) = \ell(D) - 2$, i.e., there exists $s \in L(D)$ vanishing at $P$ but not $Q$.
+- **Separation of tangent vectors**: for any $P \in C$, $\ell(D - 2P) = \ell(D) - 2$, i.e., the sections generate the fiber of $\mathcal{O}(D)$ to first order at $P$.
+
+A divisor $D$ is **ample** if some positive multiple $nD$ is very ample.
+
+On a curve, $D$ is ample if and only if $\deg D > 0$.
+</Definition>
+
+<Theorem title="Criteria for very ampleness on curves" number="4.3">
+Let $C$ be a smooth projective curve of genus $g$ and $D$ a divisor on $C$.
+
+(a) If $\deg D \geq 2g + 1$, then $D$ is very ample.
+
+(b) If $\deg D \geq 2g$, then $D$ is base-point-free.
+
+(c) If $\deg D \geq 1$, then $D$ is ample.
+
+In particular, for a general divisor of degree $d$:
+- $d \leq 0$: $|D| = \emptyset$ (no effective divisors).
+- $1 \leq d \leq g - 1$: $\ell(D)$ depends on the specific divisor class; may or may not be bpf.
+- $g \leq d \leq 2g - 2$: non-special if general, $\ell(D) = d - g + 1$, but may fail to be very ample.
+- $d \geq 2g + 1$: always very ample.
+</Theorem>
+
+<Example id="very-ample-genus1" title="Very ampleness threshold on an elliptic curve">
+For an elliptic curve $E$ ($g = 1$):
+
+- $D = O$ ($\deg = 1$): $\ell(D) = 1$, not base-point-free (point map to $\mathbb{P}^0$).
+- $D = 2O$ ($\deg = 2$): $\ell(D) = 2$, base-point-free (gives the $2:1$ cover $E \to \mathbb{P}^1$), but **not** very ample (does not separate the two preimages of each point).
+- $D = 3O$ ($\deg = 3 = 2g + 1$): $\ell(D) = 3$, very ample. Embeds $E$ as a plane cubic.
+- $D = 4O$ ($\deg = 4$): $\ell(D) = 4$, very ample. Embeds $E$ in $\mathbb{P}^3$ as the complete intersection of two quadrics.
+- $D = nO$ for $n \geq 3$: always very ample, embedding $E$ in $\mathbb{P}^{n-1}$ as a curve of degree $n$.
+</Example>
+
+<Example id="very-ample-genus2" title="Very ampleness on a genus-2 curve">
+For a genus-$2$ curve $C$ ($g = 2$, $2g + 1 = 5$):
+
+- $|K_C|$ is a $g^1_2$ ($\deg 2$). Base-point-free but not very ample -- gives a $2:1$ map to $\mathbb{P}^1$.
+- A general divisor $D$ of degree $3$: $\ell(D) = 2$ (since $3 - 2 + 1 = 2$ and $D$ is non-special for general $D$). This $g^1_3$ maps $C$ to $\mathbb{P}^1$, so not very ample.
+- A general divisor $D$ of degree $4$: $\ell(D) = 3$, giving a map $\phi_D : C \to \mathbb{P}^2$. One can check this is birational onto a plane quartic with one node (since $g = 2$ but a smooth quartic has $g = 3$). Not an embedding, so not very ample.
+- $D$ of degree $5$: $\ell(D) = 4$, and $D$ is very ample. Embeds $C \hookrightarrow \mathbb{P}^3$ as a curve of degree $5$.
+</Example>
+
+---
+
+## The canonical linear system
+
+<Definition title="Canonical linear system and canonical map" number="4.12">
+The **canonical linear system** is $|K_C|$, the complete linear system of the canonical divisor. Since $\ell(K_C) = g$, we have:
+
+$$|K_C| \cong \mathbb{P}^{g-1}$$
+
+which is a $g^{g-1}_{2g-2}$. The associated map is the **canonical map**:
+
+$$\phi_K : C \to \mathbb{P}^{g-1}.$$
+
+If $\omega_1, \omega_2, \ldots, \omega_g$ is a basis of $H^0(C, \omega_C)$ (regular differentials), then locally $\omega_i = f_i \, dt$ for a local coordinate $t$, and:
+
+$$\phi_K(P) = [f_1(P) : f_2(P) : \cdots : f_g(P)] = [\omega_1(P) : \cdots : \omega_g(P)].$$
+</Definition>
+
+<Theorem title="Canonical map: hyperelliptic vs. non-hyperelliptic" number="4.4">
+Let $C$ be a smooth projective curve of genus $g \geq 2$. Then:
+
+(a) If $C$ is **non-hyperelliptic**, the canonical map $\phi_K : C \hookrightarrow \mathbb{P}^{g-1}$ is an embedding. The image is called the **canonical curve** and has degree $2g - 2$ in $\mathbb{P}^{g-1}$.
+
+(b) If $C$ is **hyperelliptic**, the canonical map factors as $C \xrightarrow{2:1} \mathbb{P}^1 \xrightarrow{\nu_{g-1}} \mathbb{P}^{g-1}$, where $\nu_{g-1}$ is the Veronese embedding of degree $g - 1$. The image is a rational normal curve of degree $g - 1$.
+</Theorem>
+
+<Example id="canonical-genus2" title="Canonical map for genus 2">
+Every genus-$2$ curve is hyperelliptic. The canonical system $|K_C|$ is a $g^1_2$:
+
+$$\phi_K : C \xrightarrow{2:1} \mathbb{P}^1.$$
+
+If $C : y^2 = f(x)$ with $\deg f = 5$ or $6$, a basis of $H^0(\omega_C)$ is $\{dx/y,\, x\, dx/y\}$, and the canonical map is just $(x, y) \mapsto [1 : x]$, i.e., the projection to the $x$-coordinate. The six branch points are the roots of $f$ (plus $\infty$ if $\deg f = 5$).
+</Example>
+
+<Example id="canonical-genus3-nonhyp" title="Canonical embedding for genus 3 (non-hyperelliptic)">
+Let $C$ be a non-hyperelliptic curve of genus $3$. Then $|K_C|$ is a $g^2_4$:
+
+$$\phi_K : C \hookrightarrow \mathbb{P}^2$$
+
+embedding $C$ as a **smooth plane quartic**. Conversely, every smooth plane quartic is a canonically embedded genus-$3$ curve, since for a plane curve of degree $d = 4$, adjunction gives $K_C \sim (4 - 3)H|_C = H|_C$, i.e., the canonical class is the hyperplane class.
+
+**Explicit example**: Let $C = V(x^4 + y^4 + z^4) \subset \mathbb{P}^2$ (the Fermat quartic).
+- Genus: $g = \frac{(4-1)(4-2)}{2} = 3$.
+- The canonical system is cut out by lines: $|K_C| = \{C \cap L \mid L \text{ a line in } \mathbb{P}^2\}$.
+- Each canonical divisor consists of $4$ points (the intersection of a line with $C$).
+- The differentials $\omega_1 = x\,\frac{dz}{F_y}, \omega_2 = y\,\frac{dz}{F_y}, \omega_3 = z\,\frac{dz}{F_y}$ (up to scaling) give the identity embedding $C \hookrightarrow \mathbb{P}^2$.
+</Example>
+
+<Example id="canonical-genus3-hyp" title="Canonical map for a hyperelliptic genus-3 curve">
+Let $C: y^2 = f(x)$ with $\deg f = 7$ or $8$ be a hyperelliptic genus-$3$ curve. A basis of differentials is $\{dx/y,\, x\, dx/y,\, x^2\, dx/y\}$, so:
+
+$$\phi_K : C \to \mathbb{P}^2, \quad (x, y) \mapsto [1 : x : x^2].$$
+
+The image is the conic $\{xz = y^2\} \cong \mathbb{P}^1$ (the Veronese image of $\mathbb{P}^1$), and $\phi_K$ is $2:1$ onto this conic. The canonical map is **not** an embedding -- it collapses the pairs of conjugate points $(x, y)$ and $(x, -y)$.
+</Example>
+
+<Example id="canonical-genus4" title="Canonical embedding for genus 4">
+Let $C$ be a non-hyperelliptic curve of genus $4$. The canonical map gives:
+
+$$\phi_K : C \hookrightarrow \mathbb{P}^3$$
+
+with image of degree $2g - 2 = 6$. By the Enriques--Babbage theorem, the canonical curve $C \subset \mathbb{P}^3$ lies on a unique quadric surface $Q$:
+- If $Q$ is smooth ($Q \cong \mathbb{P}^1 \times \mathbb{P}^1$), then $C$ is a $(3,3)$-curve on $Q$, and $C = Q \cap S$ where $S$ is a cubic surface.
+- If $Q$ is a quadric cone, then $C$ is a divisor of type $3H$ on $Q$ (where $H$ is the hyperplane class).
+
+In either case, $C$ is a complete intersection of a quadric and a cubic in $\mathbb{P}^3$.
+</Example>
+
+---
+
+## The $g^r_d$ and maps to projective space
+
+<Remark title="Relationship between g^r_d and maps">
+A $g^r_d$ on $C$ (with no base points) determines a morphism $\phi : C \to \mathbb{P}^r$ of degree $d$. The dictionary is:
+
+- $g^1_d$: a degree-$d$ map $C \to \mathbb{P}^1$ (a $d$-sheeted cover of $\mathbb{P}^1$).
+- $g^2_d$: a degree-$d$ map $C \to \mathbb{P}^2$ (a plane model of $C$, often with singularities).
+- $g^r_d$ very ample: an embedding $C \hookrightarrow \mathbb{P}^r$ as a non-degenerate curve of degree $d$.
+
+The degree of the image and the degree of the map satisfy: $d = (\deg \phi) \cdot (\deg \phi(C))$. If $\phi$ is birational onto its image, the degree of the image equals $d$.
+</Remark>
+
+<Example id="plane-models" title="Plane models of curves">
+Every curve admits a birational plane model (a $g^2_d$ for some $d$):
+
+- **Genus $0$**: $\mathbb{P}^1 \hookrightarrow \mathbb{P}^2$ as a line ($g^2_1$) or conic ($g^2_2$).
+- **Genus $1$**: plane cubic ($g^2_3$), the Weierstrass embedding.
+- **Genus $2$**: project from $\mathbb{P}^3$ (degree $5$ embedding) to $\mathbb{P}^2$: get a plane quintic with $\binom{2}{2} = 1$ node... actually, by the degree-genus formula $g = \frac{(d-1)(d-2)}{2} - \delta$, a genus-$2$ curve maps birationally to a plane quartic with $\delta = 1$ node. So the minimal plane model has degree $4$ with one node.
+- **Genus $3$, non-hyperelliptic**: smooth plane quartic ($g^2_4$, no singularities needed).
+- **Genus $3$, hyperelliptic**: plane model of degree $5$ with $2$ nodes (since $3 = 6 - 3 = \frac{4 \cdot 3}{2} - 3$... more carefully, degree $5$ with $\delta = 3$ nodes).
+</Example>
+
+---
+
+## Geometric Riemann--Roch
+
+<Theorem title="Geometric Riemann–Roch" number="4.5">
+Let $C \hookrightarrow \mathbb{P}^{g-1}$ be a non-hyperelliptic canonical curve, and let $D = P_1 + P_2 + \cdots + P_d$ be an effective divisor of degree $d$ on $C$. Then:
+
+$$r(D) = d - 1 - \dim \overline{P_1 P_2 \cdots P_d}$$
+
+where $r(D) = \ell(D) - 1$ is the projective dimension of $|D|$, and $\overline{P_1 \cdots P_d}$ denotes the linear span of the points $P_1, \ldots, P_d$ in $\mathbb{P}^{g-1}$.
+
+Equivalently: $\ell(D) = d - \dim \overline{P_1 \cdots P_d}$, or rearranging:
+
+$$\dim \overline{P_1 \cdots P_d} = d - \ell(D) = d - (\deg D - g + 1 + i(D)) = g - 1 - i(D).$$
+
+So a divisor is special ($i(D) > 0$) if and only if its points fail to be in general position in canonical space (the span has dimension less than $\min(d - 1, g - 1)$).
+</Theorem>
+
+<Example id="geometric-rr-3pts" title="Geometric Riemann--Roch: three collinear points on a genus-3 quartic">
+Let $C \subset \mathbb{P}^2$ be a smooth plane quartic (canonical genus $3$, so $g - 1 = 2$ and $\mathbb{P}^{g-1} = \mathbb{P}^2$).
+
+Take $D = P_1 + P_2 + P_3$ where $P_1, P_2, P_3$ are collinear (they lie on a line $L$). Since $L \cap C$ consists of $4$ points, $L$ cuts out a canonical divisor $K \sim P_1 + P_2 + P_3 + P_4$.
+
+- $\dim \overline{P_1 P_2 P_3} = 1$ (a line in $\mathbb{P}^2$), not $\min(2, 2) = 2$.
+- Geometric RR: $r(D) = 3 - 1 - 1 = 1$, so $\ell(D) = 2$, i.e., $D$ moves in a $g^1_3$.
+- Alternatively: $i(D) = g - 1 - \dim \overline{P_1 P_2 P_3} = 2 - 1 = 1$, so $\ell(D) = 3 - 3 + 1 + 1 = 2$. Confirmed.
+
+This $g^1_3$ is cut out by the pencil of lines through $P_4$: each line through $P_4$ meets $C$ in $P_4$ plus three more points, giving a $1$-parameter family of degree-$3$ divisors.
+</Example>
+
+<Example id="geometric-rr-general" title="Geometric Riemann--Roch: general vs. special divisors">
+On a non-hyperelliptic curve of genus $g = 4$ canonically embedded in $\mathbb{P}^3$:
+
+**General $D$ of degree $3$**: three points $P_1, P_2, P_3$ in general position span a plane ($\dim = 2$). So $r(D) = 3 - 1 - 2 = 0$, meaning $\ell(D) = 1$ and $D$ does not move: it is a $g^0_3$.
+
+**Special $D$ of degree $3$**: three collinear points $P_1, P_2, P_3$ (lying on a line $L \subset \mathbb{P}^3$). Then $\dim \overline{P_1 P_2 P_3} = 1$, and $r(D) = 3 - 1 - 1 = 1$, so $\ell(D) = 2$. This is a $g^1_3$. Such a line $L$ meets the canonical curve (degree $6$) in at most $6$ points, and if it meets in exactly $3$ points of $D$, the residual intersection gives a $g^1_3$.
+</Example>
+
+<Example id="geometric-rr-genus5" title="Geometric Riemann--Roch on a genus-5 canonical curve">
+A non-hyperelliptic genus-$5$ curve $C \hookrightarrow \mathbb{P}^4$ has $\deg = 2g - 2 = 8$.
+
+Consider $D = P_1 + P_2 + P_3 + P_4$ (four points).
+
+**Case 1**: the four points are in general position, spanning a $\mathbb{P}^3 \subset \mathbb{P}^4$. Then $r(D) = 4 - 1 - 3 = 0$, so $\ell(D) = 1$: the divisor is rigid.
+
+**Case 2**: the four points lie on a plane $\Pi \cong \mathbb{P}^2$. Then $\dim \overline{D} = 2$ and $r(D) = 4 - 1 - 2 = 1$, so $\ell(D) = 2$: this is a $g^1_4$.
+
+**Case 3** (unlikely for general $C$): all four points are collinear. Then $\dim \overline{D} = 1$ and $r(D) = 4 - 1 - 1 = 2$, so $\ell(D) = 3$: a $g^2_4$ (plane model of degree $4$, giving $C \to \mathbb{P}^2$ with degree $4$ image). By Brill--Noether: $\rho(5, 2, 4) = 5 - 3(5 - 4 + 2) = 5 - 9 = -4 < 0$, so a general genus-$5$ curve has no $g^2_4$.
+</Example>
+
+---
+
+## Canonical embedding: detailed examples
+
+<Example id="canonical-detailed-genus3" title="Canonical curve of genus 3: the plane quartic in detail">
+Let $C$ be a non-hyperelliptic genus-$3$ curve, canonically embedded as a quartic $C \subset \mathbb{P}^2$.
+
+**Bitangent lines**: a bitangent to $C$ is a line $L$ meeting $C$ at two points $P, Q$ each with multiplicity $\geq 2$, so $L \cdot C = 2P + 2Q$. Since $L \cdot C \sim K_C$, we get $K_C \sim 2P + 2Q$, hence $P + Q$ is a **theta-characteristic** ($2(P+Q) \sim K_C$). A smooth quartic has exactly $28$ bitangent lines.
+
+**Flex points**: a flex is a point where $L \cdot C \geq 3P$. If $L \cdot C = 3P + Q$, then $\ell(3P) \geq 2$. A smooth quartic has $24$ flex points.
+
+**Linear systems**: $|K_C| = g^2_4$ (lines). A pencil of lines through a point $Q \in C$ cuts out a $g^1_3$ (after removing $Q$ from each divisor): the residual system $|K_C - Q|$ is a $g^1_3$.
+</Example>
+
+<Example id="canonical-detailed-genus4" title="Canonical curve of genus 4 in detail">
+A non-hyperelliptic genus-$4$ curve $C \hookrightarrow \mathbb{P}^3$ has degree $6$ and lies on a unique quadric $Q$.
+
+**Case 1: $Q$ smooth.** Then $Q \cong \mathbb{P}^1 \times \mathbb{P}^1$ (over $\bar{k}$), and $C$ has type $(3,3)$ on $Q$. The two rulings of $Q$ cut out two $g^1_3$'s on $C$. Thus every non-hyperelliptic genus-$4$ curve with smooth quadric carries **exactly two** $g^1_3$'s.
+
+**Case 2: $Q$ a quadric cone.** The rulings through the vertex cut out a single $g^1_3$. Thus $C$ carries a **unique** $g^1_3$ and is called **trigonal**.
+
+Using Brill--Noether: $\rho(4, 1, 3) = 4 - 2(4 - 3 + 1) = 4 - 4 = 0$, consistent with finitely many $g^1_3$'s on a general genus-$4$ curve.
+</Example>
+
+---
+
+## Ample vs. very ample: summary for curves
+
+<Remark title="Ampleness hierarchy for divisors on curves">
+On a smooth projective curve $C$ of genus $g$, we have the following hierarchy for a divisor $D$:
+
+**Ample** ($\deg D > 0$): some multiple $nD$ gives an embedding. On a curve, this is purely a degree condition.
+
+**Base-point-free** ($\ell(D - P) = \ell(D) - 1$ for all $P$): gives a morphism $\phi_D : C \to \mathbb{P}^r$. Guaranteed if $\deg D \geq 2g$.
+
+**Very ample** (separates points and tangent vectors): gives an embedding $\phi_D : C \hookrightarrow \mathbb{P}^r$. Guaranteed if $\deg D \geq 2g + 1$, but the canonical divisor ($\deg = 2g - 2$) is very ample precisely when $C$ is non-hyperelliptic.
+
+The **gaps** between these conditions are where the interesting geometry lies: $K_C$ is ample for $g \geq 2$, base-point-free for $g \geq 2$, but very ample only for non-hyperelliptic curves.
+</Remark>
+
+---
+
+## Brill--Noether theory (preview)
+
+<Remark title="Brill--Noether number">
+For a curve of genus $g$, the expected dimension of the variety $G^r_d(C)$ parametrizing $g^r_d$'s on $C$ is the **Brill--Noether number**:
+
+$$\rho(g, r, d) = g - (r + 1)(g - d + r).$$
+
+The Brill--Noether theorem (Griffiths--Harris, 1980) states that for a **general** curve of genus $g$:
+- If $\rho \geq 0$, then $G^r_d(C) \neq \emptyset$ and $\dim G^r_d(C) = \rho$.
+- If $\rho < 0$, then $G^r_d(C) = \emptyset$.
+
+This applies to a general curve in the moduli space $\mathcal{M}_g$. Special curves (hyperelliptic, trigonal, etc.) may carry unexpected linear systems.
+</Remark>
+
+<Example id="brill-noether-examples" title="Brill--Noether numbers">
+**Existence of $g^1_d$ on a general genus-$g$ curve**: $\rho(g, 1, d) = g - 2(g - d + 1) = 2d - g - 2$. This is $\geq 0$ when $d \geq (g + 2)/2$, i.e., $d \geq \lceil g/2 \rceil + 1$.
+
+- $g = 2$: $d \geq 2$. Every genus-$2$ curve has a $g^1_2$ (hyperelliptic). $\rho(2,1,2) = 0$: finitely many.
+- $g = 3$: $d \geq 3$. $\rho(3,1,3) = 0$: finitely many $g^1_3$'s on a general genus-$3$ curve.
+- $g = 4$: $d \geq 3$. $\rho(4,1,3) = 0$: finitely many $g^1_3$'s.
+- $g = 5$: $d \geq 4$. $\rho(5,1,4) = 0$: finitely many $g^1_4$'s.
+- $g = 6$: $d \geq 4$. $\rho(6,1,4) = 0$.
+
+**Existence of $g^2_d$**: $\rho(g, 2, d) = g - 3(g - d + 2) = 3d - 2g - 6$. For $g = 5$: $3d - 16 \geq 0$ requires $d \geq 6$, and $\rho(5, 2, 6) = 2$. A general genus-$5$ curve has a $2$-dimensional family of plane models of degree $6$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key principles of linear systems on curves">
+1. **Complete linear systems** $|D| \cong \mathbb{P}^{\ell(D) - 1}$ parametrize effective divisors in a given linear equivalence class.
+
+2. **Base-point-free** linear systems give morphisms to projective space; **very ample** systems give embeddings.
+
+3. The **$g^r_d$ notation** concisely encodes degree and dimension: a $g^r_d$ is a linear system of degree $d$ and dimension $r$.
+
+4. The **canonical system** $|K_C| = g^{g-1}_{2g-2}$ is the most important linear system on a curve. It is very ample (giving the canonical embedding) exactly when $C$ is non-hyperelliptic.
+
+5. **Geometric Riemann--Roch** translates the numerical statement $r(D) = d - 1 - \dim \overline{D}$ into a geometric criterion: a divisor is special if and only if its points are in "special position" (linearly dependent) in canonical space.
+
+6. **Brill--Noether theory** governs the existence of $g^r_d$'s on a general curve, with the Brill--Noether number $\rho(g, r, d) = g - (r+1)(g - d + r)$ being the key invariant.
+</Remark>

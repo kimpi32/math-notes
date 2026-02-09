@@ -1,0 +1,452 @@
+export const metadata = {
+  title: 'Ramification — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Concept — Ramification" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ramification
+
+Ramification is the phenomenon where a morphism of curves fails to be a local isomorphism. It measures how fibers of a map degenerate, generalizing the branching behavior of multi-valued functions in complex analysis. The concept lies at the heart of the Hurwitz formula, the classification of covers, and has deep analogues in algebraic number theory.
+
+---
+
+## Morphisms of curves and degree
+
+<Definition title="Finite morphism of curves" number="4.12">
+Let $C$ and $D$ be smooth projective curves over an algebraically closed field $k$, and let $f: C \to D$ be a nonconstant morphism. Then $f$ is automatically **finite** and **surjective**. It induces an extension of function fields $f^*: k(D) \hookrightarrow k(C)$.
+
+The **degree** of $f$ is the degree of the field extension:
+
+$$\deg f = [k(C) : k(D)].$$
+
+The morphism $f$ is **separable** if the extension $k(C)/k(D)$ is separable, and **purely inseparable** if every element of $k(C) \setminus k(D)$ is purely inseparable over $k(D)$. In general, $\deg f = \deg_s f \cdot \deg_i f$ where $\deg_s$ is the separable degree and $\deg_i$ is the inseparable degree.
+
+For any point $Q \in D$, the fiber $f^{-1}(Q)$ satisfies $\sum_{P \mapsto Q} e_P = \deg f$, where $e_P$ is the ramification index at $P$.
+</Definition>
+
+<Example id="degree-projection" title="Projection from a plane curve">
+Let $C \subset \mathbb{P}^2$ be a smooth plane curve of degree $d$, and $\pi: C \to \mathbb{P}^1$ the projection from a point $Q \notin C$. A generic line through $Q$ meets $C$ in $d$ points, so $\deg \pi = d$.
+
+Concretely, for $C: y^2 = x^3 + 1$ (a genus-1 curve of degree 3 in its Weierstrass embedding), the projection $\pi(x,y) = x$ has $\deg \pi = 2$: the generic fiber consists of the two points $(x_0, \pm\sqrt{x_0^3 + 1})$.
+</Example>
+
+<Example id="degree-power-map" title="The power map on ℙ^1">
+The map $f: \mathbb{P}^1 \to \mathbb{P}^1$ given by $f([x:y]) = [x^n : y^n]$ (or $t \mapsto t^n$ in affine coordinates) has degree $n$. The function field extension is $k(t) \hookrightarrow k(s)$ where $s^n = t$, which has degree $n$.
+
+The generic fiber over $t_0 \neq 0, \infty$ consists of $n$ distinct points (the $n$-th roots of $t_0$). Over $t_0 = 0$ and $t_0 = \infty$, the fiber has a single point with multiplicity $n$.
+</Example>
+
+---
+
+## Ramification index
+
+<Definition title="Ramification index and ramification point" number="4.13">
+Let $f: C \to D$ be a nonconstant morphism of smooth projective curves, and $P \in C$ a closed point with $Q = f(P) \in D$. Let $t$ be a uniformizer at $Q$ (i.e., a generator of the maximal ideal $\mathfrak{m}_Q \subset \mathcal{O}_{D,Q}$).
+
+The **ramification index** of $f$ at $P$ is
+
+$$e_P = v_P(f^* t)$$
+
+where $v_P$ is the valuation at $P$. Equivalently, $e_P$ is the largest integer $e$ such that $f^* t \in \mathfrak{m}_P^e$.
+
+- If $e_P = 1$, the morphism is **unramified** at $P$.
+- If $e_P \geq 2$, the point $P$ is a **ramification point** of $f$.
+- The image $Q = f(P)$ of a ramification point is called a **branch point**.
+- The **branch locus** of $f$ is the set of all branch points in $D$.
+
+The fundamental relation for each $Q \in D$:
+
+$$\sum_{P \in f^{-1}(Q)} e_P = \deg f.$$
+</Definition>
+
+<Example id="ramification-sqrt" title="Square root map">
+For $f: \mathbb{P}^1 \to \mathbb{P}^1$, $t \mapsto t^2$ (degree 2):
+
+- Over $Q = a^2 \neq 0, \infty$: the fiber is $\{a, -a\}$, two distinct points with $e_a = e_{-a} = 1$. Unramified.
+- Over $Q = 0$: the fiber is $\{0\}$ with $e_0 = 2$. Ramified! The uniformizer at $Q = 0$ is $t$, and $f^*t = s^2$ where $s$ is the coordinate on the source. So $v_0(s^2) = 2$.
+- Over $Q = \infty$: similarly $e_\infty = 2$.
+
+The branch locus is $\{0, \infty\} \subset \mathbb{P}^1$. The sum checks: $e_a + e_{-a} = 1 + 1 = 2 = \deg f$ (generic fiber), and $e_0 = 2 = \deg f$ (ramified fiber).
+</Example>
+
+<Example id="ramification-cubic" title="Ramification of the cubic map">
+For $f: \mathbb{P}^1 \to \mathbb{P}^1$, $t \mapsto t^3$ (degree 3):
+
+- Over $Q \neq 0, \infty$: three distinct preimages, each with $e = 1$.
+- Over $Q = 0$: single preimage $P = 0$ with $e_0 = 3$. **Totally ramified**.
+- Over $Q = \infty$: single preimage $P = \infty$ with $e_\infty = 3$. Totally ramified.
+
+Branch locus: $\{0, \infty\}$. The ramification divisor is $R = 2 \cdot [0] + 2 \cdot [\infty]$ with $\deg R = 4$.
+</Example>
+
+<Example id="ramification-chebyshev" title="Chebyshev polynomials">
+The degree-$n$ Chebyshev polynomial $T_n: \mathbb{P}^1 \to \mathbb{P}^1$ satisfies $T_n(\cos\theta) = \cos(n\theta)$. As a map of degree $n$:
+
+- Over $Q = \pm 1$: the preimages of $1$ are $\cos(2\pi k/n)$ for $k = 0, \ldots, n-1$, but some coincide. Specifically, $T_n$ has ramification index $2$ at each of $\cos(\pi k/n)$ for $k = 1, \ldots, n-1$ (the interior critical points).
+- Over generic $Q$: $n$ distinct preimages.
+
+For $T_2(t) = 2t^2 - 1$: branch points at $\pm 1$. Over $Q = 1$: preimages at $t = \pm 1$ with $e = 1$ each (since $T_2(\pm 1) = 1$ and $T_2'(\pm 1) = \pm 4 \neq 0$). Over $Q = -1$: single preimage $t = 0$ with $e = 2$ (since $T_2(0) = -1$ and $T_2'(0) = 0$). So the branch locus is $\{-1\}$.
+</Example>
+
+---
+
+## Ramification divisor and the different
+
+<Definition title="Ramification divisor" number="4.14">
+Let $f: C \to D$ be a separable morphism of smooth projective curves. The **ramification divisor** of $f$ is
+
+$$R = \sum_{P \in C} (e_P - 1) \cdot P.$$
+
+This is an effective divisor supported on the ramification points of $f$. Its degree is
+
+$$\deg R = \sum_{P \in C} (e_P - 1).$$
+
+In the tame case ($\operatorname{char} k \nmid e_P$ for all $P$), this coincides with the **different divisor**. In the wild case, the different may be strictly larger (see below).
+</Definition>
+
+<Definition title="Different and discriminant" number="4.15">
+More generally, for a finite separable morphism $f: C \to D$, the **different** $\mathfrak{D}_{C/D}$ is the effective divisor on $C$ defined by
+
+$$\mathfrak{D}_{C/D} = \sum_{P \in C} d_P \cdot P$$
+
+where $d_P = v_P(\mathfrak{D})$ is computed from the local different of the extension $\mathcal{O}_{D,f(P)} \hookrightarrow \mathcal{O}_{C,P}$ of discrete valuation rings.
+
+- **Tame ramification** ($\operatorname{char} k \nmid e_P$): $d_P = e_P - 1$.
+- **Wild ramification** ($\operatorname{char} k \mid e_P$): $d_P \geq e_P$, strictly greater than $e_P - 1$.
+
+The **discriminant** is the norm: $\Delta_{C/D} = f_* \mathfrak{D}_{C/D}$, a divisor on $D$.
+</Definition>
+
+---
+
+## Tame versus wild ramification
+
+<Remark title="Tame vs wild ramification">
+The distinction between tame and wild ramification is fundamental:
+
+**Tame ramification** ($\operatorname{char} k = 0$, or $\operatorname{char} k = p > 0$ with $p \nmid e_P$): the local picture is $t \mapsto t^e$, and the different exponent is $d_P = e_P - 1$. The ramification is "polynomial" and well-behaved.
+
+**Wild ramification** ($\operatorname{char} k = p > 0$ with $p \mid e_P$): the different exponent satisfies $d_P \geq e_P$, and higher ramification groups are nontrivial. The local structure is more intricate: it involves Artin-Schreier extensions in the $p$-part.
+
+Over $\mathbb{C}$, all ramification is tame. Over fields of characteristic $p$, wild ramification arises frequently and introduces subtle phenomena.
+</Remark>
+
+<Example id="wild-ramification" title="Wild ramification: Artin--Schreier cover">
+Let $k$ have characteristic $p > 0$. The **Artin--Schreier cover** $f: C \to \mathbb{P}^1$ is defined by $y^p - y = x^{-m}$ for $\gcd(m, p) = 1$.
+
+This is a degree-$p$ cyclic cover (Galois group $\mathbb{Z}/p$), totally ramified above $x = \infty$ with ramification index $e = p$. The different exponent at the unique point above $\infty$ is $d = (p-1)(m+1)$, which is strictly greater than $e - 1 = p - 1$ when $m \geq 2$.
+
+For $p = 2$, $m = 1$: the curve $y^2 - y = 1/x$ over $\mathbb{F}_2$. Here $e = 2$, $d = 1 \cdot 2 = 2 > 1 = e - 1$. Wild!
+
+For $p = 3$, $m = 2$: the curve $y^3 - y = x^{-2}$ over $\mathbb{F}_3$. Here $e = 3$, $d = 2 \cdot 3 = 6 > 2 = e - 1$. The genus of $C$ is larger than it would be with tame ramification.
+</Example>
+
+---
+
+## Ramification and differentials
+
+<Definition title="Pullback of differentials and the ramification divisor" number="4.16a">
+For a separable morphism $f: C \to D$, the pullback of the sheaf of differentials gives a map of line bundles:
+
+$$f^* \Omega^1_D \to \Omega^1_C.$$
+
+If $t$ is a local coordinate at $Q \in D$ and $s$ is a local coordinate at $P \in C$ with $f(P) = Q$, then $f^* t = u \cdot s^{e_P}$ for a unit $u \in \mathcal{O}_{C,P}^*$. Differentiating:
+
+$$f^*(dt) = d(u \cdot s^{e_P}) = (u' s^{e_P} + e_P u s^{e_P - 1})\, ds = s^{e_P - 1}(u' s + e_P u)\, ds.$$
+
+In the tame case ($\operatorname{char} k \nmid e_P$), the factor $e_P u$ is a unit, so $f^*(dt)$ vanishes to order exactly $e_P - 1$ at $P$. Thus:
+
+$$\operatorname{div}(f^* \omega) = f^* \operatorname{div}(\omega) + R$$
+
+for any nonzero rational differential $\omega$ on $D$, where $R$ is the ramification divisor.
+
+This gives the sheaf-theoretic relation: $\Omega^1_C \cong f^* \Omega^1_D \otimes \mathcal{O}_C(R)$, or equivalently $K_C \sim f^* K_D + R$.
+</Definition>
+
+---
+
+## Hurwitz formula
+
+<Theorem title="Hurwitz formula" number="4.12">
+Let $f: C \to D$ be a finite separable morphism of smooth projective curves of genera $g_C$ and $g_D$, respectively. Then
+
+$$2g_C - 2 = \deg(f) \cdot (2g_D - 2) + \deg R$$
+
+where $R = \sum_{P \in C} (e_P - 1) \cdot P$ is the ramification divisor (using $d_P$ instead of $e_P - 1$ in the wild case).
+
+Equivalently, taking degrees in $K_C \sim f^* K_D + R$:
+
+$$\deg K_C = \deg f \cdot \deg K_D + \deg R.$$
+
+Since $\deg K = 2g - 2$ for a curve of genus $g$, the formula follows.
+</Theorem>
+
+<Example id="hurwitz-double-P1" title="Double cover of ℙ^1 (hyperelliptic)">
+Let $f: C \to \mathbb{P}^1$ be a degree-2 cover with $g_D = 0$. The Hurwitz formula gives:
+
+$$2g_C - 2 = 2(0 - 2) + \deg R = -4 + \deg R.$$
+
+Each ramification point has $e_P = 2$ (totally ramified), so contributes $e_P - 1 = 1$ to $R$. If there are $r$ ramification points, $\deg R = r$, and:
+
+$$g_C = \frac{r - 2}{2}.$$
+
+So $r$ must be even, and:
+- $r = 2$: $g_C = 0$ (an isomorphism after base change).
+- $r = 4$: $g_C = 1$ (elliptic curve).
+- $r = 6$: $g_C = 2$ (genus 2, all genus-2 curves are hyperelliptic).
+- $r = 2g + 2$: $g_C = g$ (general hyperelliptic curve).
+</Example>
+
+<Example id="hurwitz-weierstrass" title="Weierstrass points of hyperelliptic curves">
+For a hyperelliptic curve $C: y^2 = f(x)$ where $f$ has degree $2g + 2$ with distinct roots $\alpha_1, \ldots, \alpha_{2g+2}$, the map $\pi: C \to \mathbb{P}^1$, $(x,y) \mapsto x$ has degree 2.
+
+The ramification points are exactly the **Weierstrass points**: the $2g + 2$ points $(\alpha_i, 0)$ where $f(\alpha_i) = 0$. At each of these, the fiber is a single point with $e = 2$.
+
+When $\deg f = 2g + 1$ instead (one root "at infinity"), the point at infinity is also a ramification point, giving $r = 2g + 2$ total. The Hurwitz formula still gives $g_C = g$.
+
+For $g = 2$, $C: y^2 = x^5 - 1$: the 6 ramification points are $(e^{2\pi i k/5}, 0)$ for $k = 0,\ldots,4$ plus the point at infinity. The 6 Weierstrass points are the fixed points of the hyperelliptic involution $(x,y) \mapsto (x,-y)$.
+</Example>
+
+<Example id="hurwitz-genus-1-to-1" title="Isogeny between elliptic curves">
+Let $f: E_1 \to E_2$ be an isogeny of elliptic curves (both genus 1). The Hurwitz formula gives:
+
+$$0 = \deg(f) \cdot 0 + \deg R$$
+
+so $\deg R = 0$, meaning $f$ is unramified everywhere. This confirms the general fact: a homomorphism of abelian varieties is etale (unramified) if and only if it is an isogeny, which is automatic for isogenies between elliptic curves in characteristic 0 (or when the degree is coprime to the characteristic).
+</Example>
+
+---
+
+## Cyclic covers and explicit ramification
+
+<Example id="cyclic-cover" title="Cyclic covers of ℙ^1">
+A **cyclic cover** of degree $n$ is $f: C \to \mathbb{P}^1$ given by $y^n = \prod_{i=1}^r (x - \alpha_i)^{a_i}$ where $0 < a_i < n$ and $\gcd(a_i, n) = 1$ ensures the cover is totally ramified above $\alpha_i$.
+
+At each ramification point above $\alpha_i$, the ramification index is $e = n$ and (in the tame case, $\operatorname{char} k \nmid n$) the contribution to $R$ is $n - 1$.
+
+By Hurwitz: $2g_C - 2 = n(2 \cdot 0 - 2) + r(n-1) = -2n + r(n-1)$, giving:
+
+$$g_C = \frac{(n-1)(r-2)}{2} \quad \text{(if all } a_i = 1 \text{)}.$$
+
+For $n = 3$, $r = 4$ (four branch points): $g_C = \frac{2 \cdot 2}{2} = 2$.
+
+For $n = 4$, $r = 3$: $g_C = \frac{3 \cdot 1}{2}$, which is not an integer! This means the ramification pattern with all $a_i = 1$ and $r = 3$ is not compatible with $n = 4$ unless we include the point at infinity, making $r = 4$ and $g_C = 3$.
+</Example>
+
+<Example id="fermat-curve" title="Fermat curve projection">
+The **Fermat curve** $F_n: x^n + y^n = z^n$ in $\mathbb{P}^2$ is smooth of degree $n$, so $g = \frac{(n-1)(n-2)}{2}$.
+
+The projection $\pi: F_n \to \mathbb{P}^1$, $[x:y:z] \mapsto [x:z]$ (i.e., $t = x/z$) has degree $n$. Setting $s = y/z$, we have $s^n = 1 - t^n$.
+
+The ramification occurs where $\frac{ds}{dt}$ is undefined, i.e., where $ns^{n-1} \frac{ds}{dt} = -nt^{n-1}$, so $\frac{ds}{dt} = -t^{n-1}/s^{n-1}$, which blows up when $s = 0$. This happens at $t = \zeta$ where $\zeta^n = 1$ (the $n$-th roots of unity).
+
+Over each branch point $t = \zeta$, the fiber is a single point $(x,y,z) = [\zeta : 0 : 1]$ with $e = n$. There are $n$ such branch points.
+
+Hurwitz check: $2g - 2 = n \cdot (-2) + n(n-1)$ gives $2g - 2 = n^2 - 3n = (n-1)(n-2) - 2$, which is $g = \frac{(n-1)(n-2)}{2}$, matching the genus formula for plane curves.
+</Example>
+
+---
+
+## Branch locus and monodromy
+
+<Definition title="Branch locus and monodromy representation" number="4.16b">
+For a finite morphism $f: C \to D$ of degree $n$ over $\mathbb{C}$ (or more generally in the etale topology), the restriction $f: C \setminus f^{-1}(B) \to D \setminus B$ is an unramified covering space, where $B \subset D$ is the branch locus.
+
+The **monodromy representation** is the homomorphism
+
+$$\rho: \pi_1(D \setminus B, Q_0) \to S_n$$
+
+that records how the $n$ sheets of the cover are permuted as we loop around branch points. The image $\operatorname{Im}(\rho)$ is a transitive subgroup of $S_n$ (since $C$ is connected), and the cover is Galois if and only if the image is a transitive subgroup acting regularly (equivalently, $|\operatorname{Im}(\rho)| = n$).
+
+The ramification index $e_P$ at a point $P$ above a branch point $Q$ equals the length of the cycle in $\rho(\gamma_Q)$ that contains the sheet corresponding to $P$, where $\gamma_Q$ is a small loop around $Q$.
+</Definition>
+
+<Example id="monodromy-double" title="Monodromy of double covers">
+For a degree-2 cover $f: C \to \mathbb{P}^1$ branched at $\{p_1, \ldots, p_{2g+2}\}$:
+
+The monodromy group is $S_2 = \mathbb{Z}/2$. Each branch point contributes a transposition $(1\,2)$. The monodromy representation is:
+
+$$\rho: \pi_1(\mathbb{P}^1 \setminus \{p_1, \ldots, p_{2g+2}\}) \to \mathbb{Z}/2, \quad \gamma_{p_i} \mapsto (1\,2).$$
+
+The fundamental group relation $\gamma_{p_1} \cdots \gamma_{p_{2g+2}} = 1$ requires $(1\,2)^{2g+2} = \mathrm{id}$, which holds since $2g+2$ is even.
+
+The cover is always Galois (since $S_2$ is abelian), with Galois group $\mathbb{Z}/2$. The nontrivial automorphism is the hyperelliptic involution $(x,y) \mapsto (x,-y)$.
+</Example>
+
+<Example id="monodromy-cubic" title="Monodromy of a cubic cover">
+Consider $f: C \to \mathbb{P}^1$ given by $y^3 = x(x-1)$ (a degree-3 cyclic cover). The branch points are $\{0, 1, \infty\}$, and the monodromy representation maps into $S_3$:
+
+$$\rho(\gamma_0) = (1\,2\,3), \quad \rho(\gamma_1) = (1\,2\,3), \quad \rho(\gamma_\infty) = (1\,2\,3)^{-1} \cdot (1\,2\,3)^{-1} = (1\,2\,3).$$
+
+Wait -- the relation is $\gamma_0 \gamma_1 \gamma_\infty = 1$, so $\rho(\gamma_\infty) = (1\,2\,3)^{-2} = (1\,2\,3)$. The image is $\mathbb{Z}/3 \subset S_3$, confirming the cover is Galois with group $\mathbb{Z}/3$.
+
+Hurwitz: $2g - 2 = 3(-2) + 3 \cdot 2 = 0$, so $g = 1$. The curve $C$ is an elliptic curve.
+</Example>
+
+---
+
+## Belyi maps
+
+<Example id="belyi-map" title="Belyi maps and dessins d'enfants">
+A **Belyi map** is a finite morphism $f: C \to \mathbb{P}^1$ unramified outside $\{0, 1, \infty\}$.
+
+**Belyi's theorem**: A smooth projective curve $C$ over $\mathbb{C}$ admits a Belyi map if and only if $C$ is defined over $\overline{\mathbb{Q}}$.
+
+**Example 1**: The identity $\mathrm{id}: \mathbb{P}^1 \to \mathbb{P}^1$ is the simplest Belyi map (degree 1, no ramification).
+
+**Example 2**: $f(t) = 4t(1-t)$ is a degree-2 Belyi map. Branch points: $f'(t) = 4 - 8t = 0$ at $t = 1/2$, so $f(1/2) = 1$. The map is ramified at $t = 1/2$ (above $1$) and at $t = \infty$ (above $\infty$), with $e = 2$ at each. Unramified outside $\{0, 1, \infty\}$ since the only critical value is $1$ (and $\infty$).
+
+**Example 3**: The Belyi map $f(t) = \frac{(t^2 - t + 1)^3}{t^2(t-1)^2}$ gives a degree-6 cover of $\mathbb{P}^1$ by $\mathbb{P}^1$ (genus 0). The ramification type over $0$ is $[2, 2, 2]$, over $1$ is $[3, 3]$, and over $\infty$ is $[2, 2, 2]$. This corresponds to the dessin of a tetrahedron.
+</Example>
+
+<Example id="belyi-elliptic" title="Belyi map from an elliptic curve">
+The elliptic curve $E: y^2 = x(x-1)(x-\lambda)$ has a natural degree-2 map $\pi: E \to \mathbb{P}^1$ via $(x,y) \mapsto x$, branched at $\{0, 1, \lambda, \infty\}$.
+
+To make a Belyi map, we compose with a rational function $g: \mathbb{P}^1 \to \mathbb{P}^1$ that sends $\{0, 1, \lambda, \infty\}$ into $\{0, 1, \infty\}$. For instance, if $\lambda = -1$, we can use $g(x) = x^2$, which sends $\{0, 1, -1, \infty\} \to \{0, 1, 1, \infty\}$.
+
+The composition $g \circ \pi: E \to \mathbb{P}^1$ is then a degree-4 Belyi map on the curve $y^2 = x(x-1)(x+1) = x^3 - x$.
+</Example>
+
+---
+
+## Number field analogy
+
+<Remark title="Ramification in number fields">
+The analogy between function fields and number fields is one of the deepest themes in arithmetic geometry. For a number field extension $L/K$ (e.g., $K = \mathbb{Q}$), the ring of integers $\mathcal{O}_L$ is a "curve" and primes $\mathfrak{p}$ of $K$ play the role of points of $D$:
+
+A prime $\mathfrak{p}$ of $K$ factors in $L$ as $\mathfrak{p} \mathcal{O}_L = \mathfrak{P}_1^{e_1} \cdots \mathfrak{P}_g^{e_g}$ with $\sum e_i f_i = [L:K]$ where $f_i = [\mathcal{O}_L/\mathfrak{P}_i : \mathcal{O}_K/\mathfrak{p}]$. Then:
+
+- **Split**: $e_i = f_i = 1$ for all $i$, and $g = [L:K]$. Analogous to an unramified point with $\deg f$ distinct preimages.
+- **Inert**: $g = 1$, $e = 1$, $f = [L:K]$. One preimage of higher residue degree.
+- **Ramified**: some $e_i \geq 2$. Exactly the branch points of the "cover."
+
+For $\mathbb{Q}(\sqrt{d})/\mathbb{Q}$: a prime $p$ ramifies iff $p \mid \Delta$ (discriminant). The branch locus is $\{p : p \mid 2d\}$, a finite set -- just as for morphisms of curves.
+</Remark>
+
+<Example id="number-field-analogy" title="Gaussian integers as a double cover">
+The extension $\mathbb{Z}[i]/\mathbb{Z}$ (i.e., $\mathbb{Q}(i)/\mathbb{Q}$) is a "degree-2 cover" of $\operatorname{Spec} \mathbb{Z}$:
+
+- $p = 2$: $(1+i)^2 = 2i$, so $2 = -i(1+i)^2$. **Ramified** ($e = 2$). The prime $2$ is the unique branch point.
+- $p \equiv 1 \pmod{4}$: $p = \mathfrak{p} \bar{\mathfrak{p}}$ splits into two primes. **Split** (unramified, two preimages).
+- $p \equiv 3 \pmod{4}$: $p$ remains prime in $\mathbb{Z}[i]$. **Inert** (unramified, one preimage of degree 2).
+
+This mirrors a double cover of curves: branch points (ramified primes), unramified points splitting into 2 preimages, and (unlike the geometric case) inert primes where the residue field doubles.
+</Example>
+
+---
+
+## Ramification of specific families
+
+<Example id="hyperelliptic-genus3" title="Hyperelliptic curve of genus 3">
+Let $C: y^2 = (x - 1)(x - 2)(x - 3)(x - 4)(x - 5)(x - 6)(x - 7)(x - 8)$ over $\mathbb{C}$.
+
+The projection $\pi(x,y) = x$ is a degree-2 map to $\mathbb{P}^1$ with $r = 8$ branch points (the roots of the polynomial, all with $e = 2$). By Hurwitz: $g = (8 - 2)/2 = 3$.
+
+The ramification divisor is $R = \sum_{i=1}^{8} P_i$ where $P_i = (i, 0)$, with $\deg R = 8$.
+
+The canonical divisor is $K_C = \pi^* K_{\mathbb{P}^1} + R \sim \pi^*(-2[\infty]) + R$. Since $\deg K_C = 2g - 2 = 4$ and $\deg R = 8$, $\deg \pi^* K_{\mathbb{P}^1} = 2 \cdot (-2) = -4$, and indeed $-4 + 8 = 4$.
+</Example>
+
+<Example id="klein-quartic" title="The Klein quartic">
+The **Klein quartic** $C: x^3 y + y^3 z + z^3 x = 0$ in $\mathbb{P}^2$ is a smooth plane curve of degree 4, so $g = 3$.
+
+It has the remarkable automorphism group $\operatorname{Aut}(C) \cong \operatorname{PSL}_2(\mathbb{F}_7)$ of order 168, achieving the Hurwitz bound $|\operatorname{Aut}(C)| \leq 84(g-1) = 168$.
+
+The quotient map $f: C \to C/\operatorname{Aut}(C) \cong \mathbb{P}^1$ has degree 168. By Hurwitz:
+
+$$2(3) - 2 = 168(0 - 2) + \deg R \implies \deg R = 4 + 336 = 340.$$
+
+The ramification has three orbits of branch points in $\mathbb{P}^1$:
+- Above one branch point: 24 points with $e = 7$, contributing $24 \cdot 6 = 144$.
+- Above another: 42 points with $e = 4$, contributing $42 \cdot 3 = 126$.
+- Above the third: 56 points with $e = 3$, contributing $56 \cdot 2 = 112$. -- but wait, let us recheck: we need $24 \cdot 7 = 168$, $42 \cdot 4 = 168$, $56 \cdot 3 = 168$. Contribution to $\deg R$: $24 \cdot 6 + 42 \cdot 3 + 56 \cdot 2 = 144 + 126 + 112 = 382$. But we need $\deg R = 340$.
+
+The correct ramification data is: above three branch points, with orbit sizes $24, 84, 56$ and ramification indices $7, 2, 3$:
+- 24 points with $e = 7$: contribution $24 \cdot 6 = 144$.
+- 84 points with $e = 2$: contribution $84 \cdot 1 = 84$.
+- 56 points with $e = 3$: contribution $56 \cdot 2 = 112$.
+
+Total: $144 + 84 + 112 = 340$. Check: $24 \cdot 7 = 168$, $84 \cdot 2 = 168$, $56 \cdot 3 = 168$. Correct!
+</Example>
+
+---
+
+## Purity and the branch locus
+
+<Theorem title="Purity of the branch locus">
+Let $f: C \to D$ be a finite morphism of smooth curves. If $f$ is unramified at every point in $f^{-1}(Q)$ for some $Q \in D$, then $f$ is etale in a neighborhood of $f^{-1}(Q)$.
+
+More generally (**Zariski--Nagata purity**): for a finite morphism $f: X \to Y$ of smooth varieties, the branch locus (the set of points of $Y$ over which $f$ is not etale) is a pure codimension-1 subvariety. For curves, this means the branch locus is a finite set of closed points.
+</Theorem>
+
+---
+
+## Riemann--Hurwitz and topology
+
+<Remark title="Topological viewpoint over ℂ">
+Over $\mathbb{C}$, the Hurwitz formula is a consequence of the multiplicativity of the Euler characteristic for covering spaces, corrected by ramification.
+
+For $f: C \to D$ of degree $n$, removing the branch locus and its preimage gives an honest $n$-sheeted covering $f_0: C_0 \to D_0$. The Euler characteristics satisfy $\chi(C_0) = n \cdot \chi(D_0)$.
+
+Filling back in the removed points: each branch point $Q_i$ adds $1$ to $\chi(D_0)$, and the points above $Q_i$ add $|f^{-1}(Q_i)|$ to $\chi(C_0)$. Since $|f^{-1}(Q_i)| = \sum_{P \mapsto Q_i} 1 = n - \sum_{P \mapsto Q_i}(e_P - 1)$, we get:
+
+$$\chi(C) = n \cdot \chi(D) - \sum_{P \in C}(e_P - 1) = n \cdot \chi(D) - \deg R.$$
+
+Since $\chi = 2 - 2g$ for a compact Riemann surface, this is the Hurwitz formula.
+</Remark>
+
+---
+
+## Further examples
+
+<Example id="triple-cover-elliptic" title="Triple cover producing genus 2">
+The curve $C: y^3 = x(x-1)$ is a degree-3 cyclic cover of $\mathbb{P}^1$ via $(x,y) \mapsto x$.
+
+Branch points: $x = 0$ and $x = 1$ (where $y^3 = 0$, a single root with $e = 3$), and $x = \infty$ (where the equation becomes $y^3 = x^2$ in suitable coordinates, again $e = 3$).
+
+So $r = 3$ branch points, each totally ramified with $e = 3$. By Hurwitz:
+
+$$2g - 2 = 3(-2) + 3(3-1) = -6 + 6 = 0.$$
+
+Thus $g = 1$: this is an elliptic curve, not genus 2!
+
+To get genus 2, we need more ramification: $C: y^3 = x(x-1)(x-2)(x-3)$. Here the branch points are $\{0, 1, 2, 3\}$, but each root appears with exponent 1, and since $\gcd(1,3) = 1$ each is totally ramified. The exponent sum is $4 \equiv 1 \pmod{3}$, so $\infty$ is also a branch point (since the total degree $4 \not\equiv 0 \pmod{3}$), but there we need a separate analysis. Ultimately this gives a curve of genus $g = \frac{(3-1)(5-2)}{2} = 3$ (with 5 branch points).
+</Example>
+
+<Example id="smooth-quartic" title="Map from a smooth quartic to ℙ^1">
+Let $C$ be a smooth plane quartic ($g = 3$). Projecting from a point $P \in C$ gives $\pi_P: C \to \mathbb{P}^1$ of degree 3 (a line through $P$ meets $C$ in $4$ points, one of which is $P$, leaving $3$ others).
+
+By Hurwitz: $2(3) - 2 = 3(-2) + \deg R$ gives $\deg R = 10$. So there are $10$ ramification points (each with $e = 2$, generically), corresponding to the lines through $P$ that are tangent to $C$ at some other point.
+
+Geometrically: $10 = 4 \cdot 3 - 2 = $ the number of tangent lines from $P$ to $C$ other than the tangent at $P$ itself (by the class formula for plane curves).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+The essential facts about ramification for curves:
+
+1. **Ramification index** $e_P = v_P(f^*t)$ measures the local branching order.
+2. **Hurwitz formula**: $2g_C - 2 = \deg(f)(2g_D - 2) + \deg R$ relates genera, degree, and ramification.
+3. **Tame vs wild**: in characteristic $p$, wild ramification ($p \mid e_P$) gives a larger different, requiring more care.
+4. **Differentials detect ramification**: $\Omega^1_C \cong f^*\Omega^1_D \otimes \mathcal{O}_C(R)$.
+5. **Monodromy** encodes the global structure: the cover is determined (up to isomorphism) by its monodromy representation $\pi_1(D \setminus B) \to S_n$.
+6. **Number field analogy**: primes splitting, remaining inert, or ramifying in extensions mirror the behavior of fibers of morphisms of curves.
+</Remark>

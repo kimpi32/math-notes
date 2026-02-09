@@ -1,0 +1,263 @@
+export const metadata = {
+  title: "Clifford's Theorem — Algebraic Geometry — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Theorem — Clifford's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Clifford's Theorem
+
+Clifford's theorem provides a sharp upper bound on the dimension of a complete linear system associated to a special divisor on a smooth algebraic curve. While Riemann--Roch tells us $\ell(D) = \deg D - g + 1 + i(D)$ with $i(D) \geq 1$ for special divisors, Clifford constrains just how large $\ell(D)$ can be. It is the fundamental inequality governing special linear series and the starting point for Brill--Noether theory.
+
+---
+
+## Recollection: special divisors
+
+<Definition title="Special divisor and projective dimension" number="4.24">
+Let $C$ be a smooth projective curve of genus $g$ over an algebraically closed field $k$. A divisor $D$ on $C$ is **special** if $i(D) = \ell(K_C - D) = h^1(C, \mathcal{O}(D)) > 0$. Any divisor with $\deg D > 2g - 2$ is automatically non-special.
+
+The **projective dimension** of $|D|$ is $r(D) = \ell(D) - 1 = \dim |D|$. A $g^r_d$ on $C$ is a linear series of degree $d$ and dimension $r$.
+</Definition>
+
+---
+
+## Statement
+
+<Theorem title="Clifford's Theorem" number="4.5">
+Let $C$ be a smooth projective curve of genus $g \geq 1$, and let $D$ be an effective special divisor on $C$ (i.e., $\ell(D) \geq 1$, $\ell(K_C - D) \geq 1$, so $0 \leq \deg D \leq 2g - 2$). Then
+
+$$r(D) \leq \frac{\deg D}{2},$$
+
+or equivalently $\ell(D) \leq \frac{\deg D}{2} + 1$.
+</Theorem>
+
+<Remark title="Interpretation of Clifford's bound">
+For non-special divisors, Riemann--Roch gives $r(D) = \deg D - g$, so the ratio $r/d$ approaches $1$. For special divisors, Clifford says this ratio is at most $1/2$.
+
+In the Brill--Noether diagram plotting $r$ versus $d$, Clifford's line $r = d/2$ and the Riemann--Roch line $r = d - g$ form a "V" shape bounding the region where linear series can exist.
+</Remark>
+
+---
+
+## Proof
+
+<Proof title="Proof of Clifford's theorem via the multiplication map">
+**Step 1.** Consider the product map $\mu: H^0(\mathcal{O}(D)) \otimes H^0(\mathcal{O}(K_C - D)) \to H^0(\mathcal{O}(K_C))$ sending $s \otimes t \mapsto s \cdot t$.
+
+**Step 2.** Fix nonzero $s_0 \in H^0(\mathcal{O}(D))$ and $t_0 \in H^0(\mathcal{O}(K_C - D))$. The maps $t \mapsto s_0 t$ and $s \mapsto s t_0$ are injective (since $C$ is irreducible), giving subspaces of $W = \operatorname{Im}(\mu)$ of dimensions $\ell(K_C - D)$ and $\ell(D)$ respectively. These share at least $s_0 t_0$, so $\dim W \geq \ell(D) + \ell(K_C - D) - 1$.
+
+**Step 3.** Since $W \subseteq H^0(\mathcal{O}(K_C))$, we get $\ell(D) + \ell(K_C - D) - 1 \leq g$.
+
+**Step 4.** By Riemann--Roch, $\ell(K_C - D) = \ell(D) - \deg D + g - 1$. Substituting:
+
+$$2\ell(D) - \deg D - 2 \leq 0 \implies \ell(D) \leq \frac{\deg D}{2} + 1. \qquad \square$$
+</Proof>
+
+---
+
+## Equality cases
+
+<Theorem title="Clifford's theorem: equality cases" number="4.6">
+Let $C$ be a smooth projective curve of genus $g \geq 2$, and $D$ an effective special divisor with $r(D) = \deg D / 2$. Then one of the following holds:
+
+- $D \sim 0$ (so $r(D) = 0$, $\deg D = 0$), or
+- $D \sim K_C$ (so $r(D) = g - 1$, $\deg D = 2g - 2$), or
+- $C$ is hyperelliptic and $D \sim m \cdot g^1_2$ for some $1 \leq m \leq g - 1$.
+
+In particular, for a non-hyperelliptic curve the strict inequality $r(D) < \deg D / 2$ holds whenever $0 < \deg D < 2g - 2$.
+</Theorem>
+
+<Example id="equality-trivial" title="Trivial equality cases">
+The two boundary cases always achieve equality: $r(0) = 0 = 0/2$ and $r(K_C) = g - 1 = (2g-2)/2$. The interesting content of Clifford is the constraint on divisors with $0 < \deg D < 2g - 2$.
+</Example>
+
+---
+
+## The Clifford index
+
+<Definition title="Clifford index" number="4.25">
+The **Clifford index** of a curve $C$ of genus $g \geq 2$ is
+
+$$\operatorname{Cliff}(C) = \min\left\{\deg D - 2r(D) \;\middle|\; D \text{ special}, \; r(D) \geq 1, \; \ell(K_C - D) \geq 1 \right\}.$$
+
+By Clifford's theorem, $\operatorname{Cliff}(C) \geq 0$, with equality if and only if $C$ is hyperelliptic.
+</Definition>
+
+<Remark title="Properties of the Clifford index">
+- $0 \leq \operatorname{Cliff}(C) \leq \lfloor(g-1)/2\rfloor$ for genus $g \geq 2$.
+- $\operatorname{Cliff}(C) = 0$ iff $C$ is hyperelliptic.
+- $\operatorname{Cliff}(C) = 1$ iff $C$ is trigonal or isomorphic to a smooth plane quintic ($g = 6$, with a $g^2_5$).
+- A general curve of genus $g$ satisfies $\operatorname{Cliff}(C) = \lfloor(g-1)/2\rfloor$.
+- Related to gonality: $\operatorname{Cliff}(C) \leq \gamma(C) - 2$, with equality in most cases.
+</Remark>
+
+---
+
+## Examples: hyperelliptic curves
+
+<Example id="hyperelliptic-cliff" title="Clifford's theorem on hyperelliptic curves">
+Let $C$ be hyperelliptic of genus $g \geq 2$ with the unique $g^1_2$ given by $D_0$.
+
+For $D = mD_0$ with $1 \leq m \leq g - 1$: $\deg(mD_0) = 2m$, $\ell(mD_0) = m + 1$ (with basis $1, f, f^2, \ldots, f^m$), $r(mD_0) = m = \deg(mD_0)/2$.
+
+**Equality holds in Clifford for all multiples of the $g^1_2$.** The "Clifford line" $r = d/2$ is entirely achieved, and $\operatorname{Cliff}(C) = 2 - 2 = 0$.
+</Example>
+
+<Example id="hyperelliptic-g2" title="Genus 2: every curve is hyperelliptic">
+For genus $2$: $\deg K_C = 2$ and $\ell(K_C) = 2$, so $|K_C|$ is a $g^1_2$. Every effective special divisor with $r \geq 1$ is $D = K_C$: $r = 1 = 2/2$. So $\operatorname{Cliff}(C) = 0$ for all genus-$2$ curves.
+</Example>
+
+<Example id="hyperelliptic-g3" title="Hyperelliptic curve of genus 3">
+For a hyperelliptic genus-$3$ curve with $g^1_2$ given by $D_0$: the equality divisors are $D_0$ ($r = 1 = 2/2$) and $2D_0 \sim K_C$ ($r = 2 = 4/2$).
+
+The canonical map $\phi_K: C \to \mathbb{P}^2$ is **not** an embedding: it factors as $C \xrightarrow{2:1} \mathbb{P}^1 \xrightarrow{\text{Veronese}} \mathbb{P}^2$, mapping $C$ onto a conic.
+</Example>
+
+---
+
+## Examples: non-hyperelliptic curves
+
+<Example id="plane-quartic" title="Smooth plane quartic (genus 3)">
+A smooth plane quartic $C \subset \mathbb{P}^2$ has $g = 3$, $K_C \sim \mathcal{O}_C(1)$ of degree $4$. The gonality is $\gamma = 3$ (a pencil of lines gives a $g^1_3$).
+
+For the $g^1_3$: $r = 1 < 3/2 = d/2$. Strict inequality! So $\operatorname{Cliff}(C) = 3 - 2 = 1$.
+</Example>
+
+<Example id="trigonal-cliff" title="Trigonal curves and Clifford index 1">
+A curve $C$ of genus $g \geq 4$ with a $g^1_3$ satisfies $\operatorname{Cliff}(C) \leq 3 - 2 = 1$. Since $C$ is not hyperelliptic ($\gamma = 3 > 2$), $\operatorname{Cliff}(C) = 1$.
+
+Conversely, $\operatorname{Cliff}(C) = 1$ iff $C$ is trigonal or a smooth plane quintic.
+</Example>
+
+<Example id="plane-quintic" title="Smooth plane quintic (genus 6)">
+A smooth plane quintic has $g = 6$. The system $|\mathcal{O}_C(1)|$ is a $g^2_5$: $\operatorname{Cliff} = 5 - 4 = 1$. The curve also has a $g^1_4$ (project from a point on $C$): $\operatorname{Cliff} = 4 - 2 = 2$. The minimum is $\operatorname{Cliff}(C) = 1$, achieved by the $g^2_5$.
+
+This shows the Clifford index is not always computed by a pencil: higher-dimensional series can give smaller contributions.
+</Example>
+
+<Example id="cliff-genus4" title="Detailed analysis: genus 4">
+For a non-hyperelliptic genus-$4$ curve, $\phi_K: C \hookrightarrow \mathbb{P}^3$ embeds $C$ with degree $6$. By Brill--Noether ($\rho(4, 1, 3) = 0$), a general such curve has finitely many $g^1_3$'s -- exactly two, from the two rulings of the quadric containing the canonical curve.
+
+Special divisors with $r \geq 1$: the $g^1_3$ gives $\operatorname{Cliff} = 1$; a $g^1_4$ gives $\operatorname{Cliff} = 2$; the residual $g^2_5 = |K_C - g^1_3|$ gives $5 - 4 = 1$. So $\operatorname{Cliff}(C) = 1$.
+</Example>
+
+<Example id="cliff-genus5" title="Detailed analysis: genus 5">
+For a general genus-$5$ curve: $\rho(5,1,3) = -1 < 0$ (not trigonal), $\rho(5,1,4) = 1$ ($1$-family of $g^1_4$'s). So $\gamma = 4$ and $\operatorname{Cliff}(C) = 2$. The canonical image in $\mathbb{P}^4$ has degree $8$ and lies on $3$ independent quadrics.
+</Example>
+
+---
+
+## General curves: Clifford index table
+
+<Example id="general-curve-cliff" title="Clifford index of a general curve">
+By Brill--Noether, a general curve of genus $g$ has gonality $\gamma = \lceil(g+2)/2\rceil$ and $\operatorname{Cliff}(C) = \gamma - 2 = \lfloor(g-1)/2\rfloor$:
+
+- $g = 2$: $\operatorname{Cliff} = 0$ (hyperelliptic). $g = 3$: $\operatorname{Cliff} = 1$. $g = 4$: $\operatorname{Cliff} = 1$ ($\gamma = 3$).
+- $g = 5$: $\operatorname{Cliff} = 2$ ($\gamma = 4$). $g = 6$: $\operatorname{Cliff} = 2$. $g = 7$: $\operatorname{Cliff} = 3$ ($\gamma = 5$).
+</Example>
+
+---
+
+## Relation to Brill--Noether theory
+
+<Definition title="Brill--Noether variety" number="4.26">
+The **Brill--Noether variety** $W^r_d(C) = \{L \in \operatorname{Pic}^d(C) \mid h^0(L) \geq r + 1\}$ parametrizes line bundles of degree $d$ with $\geq r + 1$ sections. Its expected dimension is $\rho(g, r, d) = g - (r+1)(g - d + r)$.
+
+Clifford says $W^r_d(C) = \emptyset$ when $r > d/2$ and $d \leq 2g - 2$. The Brill--Noether theorem (Griffiths--Harris) says for a general curve, $W^r_d(C) \neq \emptyset$ iff $\rho \geq 0$.
+</Definition>
+
+<Example id="bn-and-cliff" title="Brill--Noether vs. Clifford">
+**Genus $3$, $r = 1, d = 2$**: Clifford allows it ($1 \leq 1$), but $\rho(3,1,2) = -1 < 0$. A general genus-$3$ curve has no $g^1_2$. Brill--Noether is the sharper obstruction.
+
+**Genus $5$, $r = 2, d = 4$**: Clifford allows $r = 2 \leq 2$. But $\rho(5,2,4) = -1$. So no $g^2_4$ on a general genus-$5$ curve, even though Clifford does not forbid it.
+</Example>
+
+---
+
+## Green's conjecture
+
+<Remark title="Green's conjecture: Clifford index and syzygies">
+Let $C \subset \mathbb{P}^{g-1}$ be a non-hyperelliptic canonical curve. The **Koszul cohomology** groups $K_{p,q}(C, K_C)$ encode the graded Betti numbers of the minimal free resolution of $S_C$.
+
+**Green's conjecture** (1984): $\operatorname{Cliff}(C) = \min\{p \geq 1 \mid K_{p,1}(C, K_C) \neq 0\} - 1.$
+
+This was proved for general curves by Voisin (2002, 2005).
+</Remark>
+
+<Example id="green-genus4" title="Green's conjecture for genus 4">
+A non-hyperelliptic genus-$4$ canonical curve in $\mathbb{P}^3$ is a complete intersection of a quadric $Q_2$ and cubic $F_3$. The resolution $0 \to S(-5) \to S(-2) \oplus S(-3) \to S \to S_C \to 0$ has $K_{1,1} \neq 0$ (from $Q_2$). Green predicts $\operatorname{Cliff}(C) = 1$, matching the trigonal structure.
+</Example>
+
+---
+
+## Refinements
+
+<Theorem title="Clifford for higher-rank bundles" number="4.7">
+Let $\mathcal{E}$ be a semistable vector bundle of rank $n$ and degree $d$ on $C$ with $0 \leq d/n \leq 2g - 2$. Then $h^0(C, \mathcal{E}) \leq d/2 + n$. For $n = 1$ this recovers the classical inequality.
+</Theorem>
+
+<Remark title="Martens' theorem">
+For a non-hyperelliptic $C$ with $d \leq 2g - 2$: $\dim W^r_d(C) \leq d - 2r$. This is a "parametric" Clifford: the variety of divisors achieving a given $r$ also has bounded dimension. Mumford sharpened this further for curves that are also non-trigonal.
+</Remark>
+
+---
+
+## Further examples
+
+<Example id="cliff-elliptic" title="Clifford on elliptic curves">
+For $g = 1$, the Clifford range is $0 \leq \deg D \leq 0$. The only effective special divisor is $D = 0$, so Clifford is vacuously satisfied. Divisors of degree $d \geq 1$ are non-special with $\ell(D) = d$, giving $r = d - 1 > d/2$ for $d \geq 2$ -- but this does not violate Clifford since they lie outside the special range.
+</Example>
+
+<Example id="cliff-bielliptic" title="Bielliptic curves">
+A **bielliptic** curve $C$ admits a degree-$2$ map $f: C \to E$ to an elliptic curve. Pulling back a $g^1_2$ on $E$ gives a $g^1_4$ on $C$, so $\gamma(C) \leq 4$ and $\operatorname{Cliff}(C) \leq 2$. For $g \geq 6$, bielliptic curves need not be hyperelliptic or trigonal, achieving $\operatorname{Cliff}(C) = 2$ exactly.
+</Example>
+
+<Example id="cliff-complete-intersection" title="Complete intersection in ℙ³">
+A smooth complete intersection $C$ of a quadric and cubic in $\mathbb{P}^3$ has $\deg C = 6$, $g = 4$, $K_C \sim H|_C$. A ruling of the quadric cuts $C$ in $3$ points, giving a $g^1_3$. So $\operatorname{Cliff}(C) = 1$.
+</Example>
+
+---
+
+## Preview: Castelnuovo's bound
+
+<Theorem title="Castelnuovo's bound" number="4.8">
+For a non-degenerate smooth curve $C \subset \mathbb{P}^r$ of degree $d$ with $r \geq 3$, write $d - 1 = m(r-1) + \epsilon$ ($0 \leq \epsilon \leq r - 2$). Then $g \leq \pi(d,r) = \frac{m(m-1)}{2}(r-1) + m\epsilon$.
+</Theorem>
+
+<Remark title="Castelnuovo and Clifford">
+Castelnuovo's bound is a global consequence of Clifford: intersecting with successive hyperplanes and applying Clifford at each step bounds how many conditions each hyperplane imposes, yielding the genus bound. Curves achieving $g = \pi(d,r)$ are **Castelnuovo curves**, lying on surfaces of minimal degree.
+</Remark>
+
+<Example id="castelnuovo-examples" title="Castelnuovo's bound in ℙ³">
+In $\mathbb{P}^3$ ($r = 3$), $d - 1 = 2m + \epsilon$ with $\epsilon \in \{0,1\}$:
+
+- $d = 3$: $\pi = 0$ (twisted cubic). $d = 4$: $\pi = 1$ (elliptic quartic).
+- $d = 5$: $\pi = 2$. $d = 6$: $\pi = 4$ (canonical genus-$4$ curve achieves this).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The role of Clifford's theorem">
+1. **Sharp bound**: $r(D) \leq \deg(D)/2$ for special divisors, with equality precisely characterized.
+2. **Clifford index**: $\operatorname{Cliff}(C)$ measures the curve's complexity -- distance from hyperellipticity.
+3. **Bridge to Brill--Noether**: necessary conditions (Clifford) meet sufficient conditions (Brill--Noether).
+4. **Syzygies**: Green's conjecture links $\operatorname{Cliff}(C)$ to the canonical ring's algebraic structure.
+5. **Castelnuovo theory**: Clifford powers the genus bound for embedded curves.
+6. **Moduli stratification**: the Clifford index stratifies $\mathcal{M}_g$ by geometric complexity.
+</Remark>

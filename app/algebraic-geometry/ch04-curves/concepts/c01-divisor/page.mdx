@@ -1,0 +1,238 @@
+export const metadata = {
+  title: 'Divisors on Curves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Concept — Divisors" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Divisors on Curves
+
+Divisors are the fundamental tool for studying functions and line bundles on algebraic curves. They encode the zeros and poles of meromorphic functions and provide the language for the Riemann–Roch theorem.
+
+---
+
+## Weil divisors
+
+<Definition title="Divisor on a curve" number="4.1">
+Let $C$ be a smooth projective curve over a field $k$. A **(Weil) divisor** on $C$ is a formal $\mathbb{Z}$-linear combination of closed points:
+
+$$D = \sum_{P \in C} n_P \cdot P, \quad n_P \in \mathbb{Z}, \text{ almost all } n_P = 0.$$
+
+The **divisor group** $\operatorname{Div}(C)$ is the free abelian group on the closed points of $C$.
+
+The **degree** of $D$ is $\deg D = \sum_P n_P \cdot [\kappa(P) : k]$, where $\kappa(P)$ is the residue field. Over $k = \bar{k}$, this is simply $\sum n_P$.
+
+A divisor $D$ is **effective** (written $D \geq 0$) if $n_P \geq 0$ for all $P$. The **support** of $D$ is $\operatorname{Supp}(D) = \{P \mid n_P \neq 0\}$.
+</Definition>
+
+<Example id="divisors-P1" title="Divisors on ℙ¹">
+On $\mathbb{P}^1_k$ with $k = \bar{k}$, closed points correspond to $a \in k$ (the point $[a:1]$) plus $\infty = [1:0]$. Typical divisors:
+
+- $D = 3 \cdot [0] - 2 \cdot [\infty]$: degree $1$.
+- $D = [0] + [1] + [\infty]$: degree $3$, effective.
+- $D = -[0]$: degree $-1$, not effective.
+
+Over $\mathbb{R}$: the point $[i:1] \in \mathbb{P}^1_\mathbb{C}$ is not a point of $\mathbb{P}^1_\mathbb{R}$, but the closed point corresponding to $x^2 + 1 \in \mathbb{R}[x]$ has degree $[\mathbb{C}:\mathbb{R}] = 2$.
+</Example>
+
+---
+
+## Principal divisors
+
+<Definition title="Valuation and principal divisor" number="4.2">
+For each closed point $P \in C$, the **valuation** $v_P : k(C)^* \to \mathbb{Z}$ measures the order of vanishing (or pole) at $P$:
+- $v_P(f) > 0$: $f$ has a zero of order $v_P(f)$ at $P$.
+- $v_P(f) < 0$: $f$ has a pole of order $|v_P(f)|$ at $P$.
+- $v_P(f) = 0$: $f$ is regular and nonvanishing at $P$.
+
+The **principal divisor** of $f \in k(C)^*$ is
+
+$$\operatorname{div}(f) = \sum_P v_P(f) \cdot P.$$
+
+This is a finite sum since $f$ has only finitely many zeros and poles.
+</Definition>
+
+<Example id="principal-P1" title="Principal divisors on ℙ¹">
+On $\mathbb{P}^1$ with coordinate $t = x/y$:
+
+- $\operatorname{div}(t) = [0] - [\infty]$: a simple zero at $0$, simple pole at $\infty$.
+- $\operatorname{div}(t^2) = 2[0] - 2[\infty]$: double zero at $0$, double pole at $\infty$.
+- $\operatorname{div}(t - 1) = [1] - [\infty]$.
+- $\operatorname{div}\left(\frac{t}{t-1}\right) = [0] - [1]$: zero at $0$, pole at $1$, regular at $\infty$.
+- $\operatorname{div}(t^2 - 1) = [1] + [-1] - 2[\infty]$.
+
+Notice: $\deg(\operatorname{div}(f)) = 0$ always. This is a theorem!
+</Example>
+
+<Theorem title="Degree of a principal divisor">
+For any $f \in k(C)^*$ on a smooth projective curve $C$:
+
+$$\deg(\operatorname{div}(f)) = 0.$$
+
+Equivalently, $f$ has the same number of zeros as poles (counted with multiplicity and degree).
+</Theorem>
+
+<Example id="principal-elliptic" title="Principal divisors on an elliptic curve">
+Let $E: y^2 = x^3 - x$ over $\mathbb{C}$ with identity $O = [0:1:0]$.
+
+- $\operatorname{div}(x) = (0,0) + P_1 + P_{-1} - 3O$ where $P_{\pm 1} = (\pm 1, 0)$... but wait, we need $\deg = 0$. Actually $\operatorname{div}(x)$ is the divisor of $x$ viewed as a function $E \to \mathbb{P}^1$. The function $x$ has zeros at $(0,0)$ (where $x = 0$, and $y^2 = 0$ so $y = 0$ too — but we must account for the intersection multiplicity). More carefully:
+
+$$\operatorname{div}(x) = 2 \cdot (0,0) - 2O$$
+
+since $x$ has a double zero at $(0,0)$ (the tangent to $E$ at $(0,0)$ is vertical) and a double pole at $O$.
+
+- $\operatorname{div}(y) = (0,0) + (1,0) + (-1,0) - 3O$: degree $0$. ✓
+</Example>
+
+---
+
+## Linear equivalence and the Picard group
+
+<Definition title="Linear equivalence" number="4.3">
+Two divisors $D$ and $D'$ are **linearly equivalent** (written $D \sim D'$) if $D - D' = \operatorname{div}(f)$ for some $f \in k(C)^*$.
+
+The **divisor class group** (or **Picard group**) is
+
+$$\operatorname{Pic}(C) = \operatorname{Div}(C) / \{\text{principal divisors}\}.$$
+
+Since principal divisors have degree $0$, the degree map factors through $\operatorname{Pic}$:
+
+$$0 \to \operatorname{Pic}^0(C) \to \operatorname{Pic}(C) \xrightarrow{\deg} \mathbb{Z} \to 0$$
+
+where $\operatorname{Pic}^0(C)$ is the group of degree-$0$ divisor classes.
+</Definition>
+
+<Example id="pic-P1" title="Pic(ℙ¹)">
+On $\mathbb{P}^1$: any two points are linearly equivalent ($[a] - [b] = \operatorname{div}\left(\frac{t - a}{t - b}\right)$). So every degree-$d$ divisor is equivalent to $d \cdot [\infty]$, and:
+
+$$\operatorname{Pic}(\mathbb{P}^1) \cong \mathbb{Z}, \quad \operatorname{Pic}^0(\mathbb{P}^1) = 0.$$
+</Example>
+
+<Example id="pic-elliptic" title="Pic⁰(E) for an elliptic curve">
+For an elliptic curve $E$ with origin $O$, the **Abel–Jacobi map** gives:
+
+$$E(k) \xrightarrow{\sim} \operatorname{Pic}^0(E), \quad P \mapsto [P - O].$$
+
+This is an isomorphism of groups! The group law on $E$ (chord-tangent construction) corresponds to addition of divisor classes. So $\operatorname{Pic}^0(E) \cong E$ as a group variety.
+
+Over $\mathbb{C}$: $\operatorname{Pic}^0(E) \cong \mathbb{C}/\Lambda$ (a complex torus), and $\operatorname{Pic}(E) \cong \mathbb{Z} \oplus E(\mathbb{C})$.
+</Example>
+
+<Example id="pic-genus-g" title="Pic⁰ for higher genus">
+For a smooth curve $C$ of genus $g$:
+
+$$\operatorname{Pic}^0(C) \cong \operatorname{Jac}(C)$$
+
+the **Jacobian variety**, an abelian variety of dimension $g$. Over $\mathbb{C}$, $\operatorname{Jac}(C) \cong \mathbb{C}^g / \Lambda$ where $\Lambda$ is a lattice determined by the period matrix.
+
+- $g = 0$: $\operatorname{Jac} = 0$ (a point).
+- $g = 1$: $\operatorname{Jac}(E) \cong E$ (the curve is its own Jacobian).
+- $g = 2$: $\operatorname{Jac}(C)$ is a $2$-dimensional abelian surface. The curve $C$ embeds in $\operatorname{Jac}(C)$ via $P \mapsto [P - P_0]$.
+- $g = 3$: $\operatorname{Jac}(C)$ is a $3$-fold, and the theta divisor $\Theta \subseteq \operatorname{Jac}(C)$ is a surface isomorphic to $\operatorname{Sym}^2(C)$ (for non-hyperelliptic $C$).
+</Example>
+
+---
+
+## Divisors and line bundles
+
+<Definition title="Line bundle associated to a divisor" number="4.4">
+To a divisor $D$ on $C$, we associate the **invertible sheaf** (line bundle):
+
+$$\mathcal{O}_C(D)(U) = \{f \in k(C)^* \mid \operatorname{div}(f)|_U + D|_U \geq 0\} \cup \{0\}.$$
+
+This gives an isomorphism of groups:
+
+$$\operatorname{Div}(C)/\sim \;\xrightarrow{\sim}\; \operatorname{Pic}(C) \cong H^1(C, \mathcal{O}_C^*)$$
+
+sending $D \mapsto \mathcal{O}(D)$. Key properties:
+- $\mathcal{O}(D + D') \cong \mathcal{O}(D) \otimes \mathcal{O}(D')$.
+- $\mathcal{O}(-D) \cong \mathcal{O}(D)^{-1} = \mathcal{O}(D)^\vee$.
+- $\mathcal{O}(\operatorname{div}(f)) \cong \mathcal{O}_C$ (principal divisors give trivial line bundles).
+- $\deg \mathcal{O}(D) = \deg D$.
+</Definition>
+
+<Example id="line-bundle-Pn" title="Line bundles and divisors on ℙ¹">
+On $\mathbb{P}^1$: $\mathcal{O}(d \cdot [\infty]) = \mathcal{O}_{\mathbb{P}^1}(d)$, the usual twisting sheaf. So $\operatorname{Pic}(\mathbb{P}^1) = \{\mathcal{O}(d) \mid d \in \mathbb{Z}\} \cong \mathbb{Z}$, matching the divisor picture.
+
+On $\mathbb{P}^n$: a hypersurface $H = V(F)$ of degree $d$ gives a divisor with $\mathcal{O}(H) = \mathcal{O}(d)$. Different degree-$d$ hypersurfaces give linearly equivalent divisors.
+</Example>
+
+---
+
+## The canonical divisor
+
+<Definition title="Canonical divisor" number="4.5">
+The **canonical divisor** $K_C$ (or $K$) is any divisor with $\mathcal{O}(K_C) \cong \omega_C = \Omega^1_{C/k}$ (the sheaf of differentials). It is unique up to linear equivalence.
+
+Key facts:
+- $\deg K_C = 2g - 2$ where $g$ is the genus.
+- $h^0(K_C) = g$ (the space of regular differentials has dimension $g$).
+</Definition>
+
+<Example id="canonical-examples" title="Canonical divisors">
+- **$\mathbb{P}^1$** ($g = 0$): $K = -2[\infty]$, $\deg K = -2$. The differential $dt$ has a double pole at $\infty$: $dt = d(1/s) = -s^{-2}ds$. So $\operatorname{div}(dt) = -2[\infty]$.
+
+- **Elliptic curve** ($g = 1$): $K \sim 0$ (trivial). The regular differential $dx/y$ has no zeros or poles. So $\operatorname{div}(dx/y) = 0$.
+
+- **Genus-2 curve** $y^2 = f(x)$, $\deg f = 5$ or $6$: the differential $dx/y$ has $\operatorname{div}(dx/y) = \sum_i W_i - \text{polar terms}$ where $W_i$ are the Weierstrass points. $\deg K = 2$.
+
+- **Smooth plane curve** of degree $d$: $K_C \sim (d - 3)H|_C$ by adjunction. $\deg K = d(d-3)$, $g = \frac{(d-1)(d-2)}{2}$.
+</Example>
+
+---
+
+## Effective divisors and linear systems
+
+<Remark title="From divisors to geometry">
+The **Riemann–Roch space** $L(D) = H^0(C, \mathcal{O}(D))$ is the set of rational functions with poles bounded by $D$:
+
+$$L(D) = \{f \in k(C)^* \mid \operatorname{div}(f) + D \geq 0\} \cup \{0\}.$$
+
+With $\ell(D) = \dim L(D)$:
+- $\ell(D) = 0$ if $\deg D < 0$.
+- $\ell(0) = 1$ (only constants).
+- $\ell(D) \leq \deg D + 1$ (trivial bound, sharp for $g = 0$).
+- **Riemann–Roch**: $\ell(D) - \ell(K - D) = \deg D - g + 1$.
+</Remark>
+
+---
+
+## Summary: the divisor–line bundle dictionary
+
+<Remark title="Dictionary">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Divisors</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Line bundles</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">$D \in \operatorname{Div}(C)$</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(D) \in \operatorname{Pic}(C)$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$D + D'$</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(D) \otimes \mathcal{O}(D')$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$-D$</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(D)^\vee$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$D \sim D'$</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}(D) \cong \mathcal{O}(D')$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\operatorname{div}(f)$ (principal)</td><td className="border border-gray-200 px-3 py-2">$\mathcal{O}_C$ (trivial)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\deg D$</td><td className="border border-gray-200 px-3 py-2">$\deg \mathcal{O}(D) = c_1(\mathcal{O}(D))$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$L(D) = H^0(\mathcal{O}(D))$</td><td className="border border-gray-200 px-3 py-2">Global sections</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$K_C$ (canonical)</td><td className="border border-gray-200 px-3 py-2">$\omega_C = \Omega^1_{C/k}$</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$\operatorname{Pic}^0(C)$</td><td className="border border-gray-200 px-3 py-2">$\operatorname{Jac}(C)$ (Jacobian)</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>

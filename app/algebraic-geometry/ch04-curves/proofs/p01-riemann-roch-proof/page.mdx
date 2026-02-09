@@ -1,0 +1,365 @@
+export const metadata = {
+  title: 'Proof of Riemann–Roch for Curves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Proof — Riemann–Roch" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Riemann–Roch for Curves
+
+This proof establishes the Riemann–Roch theorem for smooth projective curves via sheaf cohomology and Serre duality. The approach follows Hartshorne IV.1 and reduces the theorem to computing the Euler characteristic of line bundles by induction on degree.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Riemann–Roch for Curves" number="4.1">
+Let $C$ be a smooth projective curve of genus $g$ over an algebraically closed field $k$, and let $D$ be a divisor on $C$. Then
+
+$$\ell(D) - \ell(K_C - D) = \deg D - g + 1,$$
+
+where $\ell(D) = \dim_k H^0(C, \mathcal{O}(D))$, and $K_C$ is a canonical divisor with $\deg K_C = 2g - 2$ and $\ell(K_C) = g$.
+</Theorem>
+
+<Remark title="Cohomological reformulation">
+By Serre duality for curves, we have $H^1(C, \mathcal{O}(D)) \cong H^0(C, \omega_C \otimes \mathcal{O}(D)^{-1})^\vee \cong H^0(C, \mathcal{O}(K_C - D))^\vee$, and therefore $h^1(\mathcal{O}(D)) = \ell(K_C - D)$. So Riemann--Roch is equivalent to the Euler characteristic formula:
+
+$$\chi(\mathcal{O}(D)) = h^0(\mathcal{O}(D)) - h^1(\mathcal{O}(D)) = \deg D + 1 - g.$$
+
+This is the form we shall prove. The strategy is: establish it for $D = 0$, then show $\chi$ changes by $1$ when the degree increases by $1$.
+</Remark>
+
+---
+
+## Step 1: The Base Case $D = 0$
+
+<Proof>
+**Claim:** $\chi(\mathcal{O}_C) = 1 - g$.
+
+The arithmetic genus of a smooth projective curve $C$ is defined as $p_a = 1 - \chi(\mathcal{O}_C)$, and for smooth curves the arithmetic genus coincides with the geometric genus $g = \dim_k H^0(C, \omega_C)$. So by definition:
+
+$$\chi(\mathcal{O}_C) = h^0(\mathcal{O}_C) - h^1(\mathcal{O}_C) = 1 - g.$$
+
+Here $h^0(\mathcal{O}_C) = 1$ because $C$ is connected and projective, so the only global regular functions are constants. And $h^1(\mathcal{O}_C) = g$ by Serre duality: $H^1(C, \mathcal{O}_C) \cong H^0(C, \omega_C)^\vee$, which has dimension $g$.
+
+This establishes $\chi(\mathcal{O}(D)) = \deg D + 1 - g$ for $D = 0$, since $\deg 0 = 0$ and $\chi(\mathcal{O}_C) = 0 + 1 - g = 1 - g$.
+</Proof>
+
+<Example id="base-case-genus0" title="Base case for genus 0">
+On $\mathbb{P}^1$ (genus $g = 0$): $h^0(\mathcal{O}) = 1$, $h^1(\mathcal{O}) = 0$. So $\chi(\mathcal{O}) = 1 - 0 = 1 = 1 - g$.
+</Example>
+
+<Example id="base-case-genus1" title="Base case for genus 1">
+On an elliptic curve $E$ (genus $g = 1$): $h^0(\mathcal{O}_E) = 1$, and the unique (up to scalar) holomorphic differential $dx/(2y)$ gives $h^0(\omega_E) = 1$, so $h^1(\mathcal{O}_E) = 1$ by Serre duality. Thus $\chi(\mathcal{O}_E) = 1 - 1 = 0 = 1 - g$.
+</Example>
+
+---
+
+## Step 2: The Key Exact Sequence
+
+<Proof>
+**Claim:** For any divisor $D$ and any closed point $P \in C$, there is a short exact sequence
+
+$$0 \to \mathcal{O}(D) \to \mathcal{O}(D + P) \to \kappa(P) \to 0,$$
+
+where $\kappa(P)$ is the skyscraper sheaf at $P$ (a one-dimensional $k$-vector space concentrated at $P$).
+
+**Construction.** Let $U \subseteq C$ be an open set, and let $t \in \mathcal{O}_{C,P}$ be a local parameter at $P$ (i.e., a uniformizer of the DVR $\mathcal{O}_{C,P}$).
+
+The inclusion $\mathcal{O}(D) \hookrightarrow \mathcal{O}(D + P)$ is given on each open set $U$ by the natural inclusion: if $f \in \mathcal{O}(D)(U)$, meaning $\mathrm{div}(f) + D \geq 0$ on $U$, then certainly $\mathrm{div}(f) + D + P \geq 0$ on $U$, so $f \in \mathcal{O}(D+P)(U)$.
+
+The quotient $\mathcal{O}(D+P)/\mathcal{O}(D)$ is supported at $P$: away from $P$ the two sheaves agree since $D$ and $D + P$ differ only at $P$. At $P$, a local section of $\mathcal{O}(D+P)$ near $P$ can have a pole of order one more than allowed by $\mathcal{O}(D)$. The map $\mathcal{O}(D+P) \to \kappa(P)$ sends $f$ to its "leading coefficient" at $P$, namely $\lim_{Q \to P} t \cdot f(Q) \in k$. This map is surjective with kernel $\mathcal{O}(D)$.
+</Proof>
+
+<Example id="exact-seq-P1" title="The exact sequence on P^1">
+On $\mathbb{P}^1$, take $D = 0$ and $P = [0]$. The sequence becomes $0 \to \mathcal{O} \to \mathcal{O}(1) \to \kappa([0]) \to 0$. In terms of global sections: $H^0(\mathcal{O}) = k$ (constants), $H^0(\mathcal{O}(1)) = k \oplus k \cdot t^{-1}$ (linear functions on $\mathbb{P}^1$), and the quotient picks out the coefficient of $t^{-1}$ at $P = [0]$, giving $k = \kappa([0])$.
+</Example>
+
+---
+
+## Step 3: Additivity of the Euler Characteristic
+
+<Proof>
+**Claim:** $\chi(\mathcal{O}(D + P)) = \chi(\mathcal{O}(D)) + 1$.
+
+From the short exact sequence $0 \to \mathcal{O}(D) \to \mathcal{O}(D + P) \to \kappa(P) \to 0$, we obtain the long exact sequence in cohomology:
+
+$$0 \to H^0(C, \mathcal{O}(D)) \to H^0(C, \mathcal{O}(D+P)) \to H^0(C, \kappa(P)) \to H^1(C, \mathcal{O}(D)) \to H^1(C, \mathcal{O}(D+P)) \to H^1(C, \kappa(P)) \to 0$$
+
+Now $\kappa(P)$ is a skyscraper sheaf, so $H^0(C, \kappa(P)) = k$ and $H^i(C, \kappa(P)) = 0$ for $i \geq 1$ (skyscraper sheaves are flasque). Therefore the long exact sequence simplifies to:
+
+$$0 \to H^0(\mathcal{O}(D)) \to H^0(\mathcal{O}(D+P)) \to k \to H^1(\mathcal{O}(D)) \to H^1(\mathcal{O}(D+P)) \to 0$$
+
+By the alternating sum property of exact sequences (the Euler characteristic is additive on short exact sequences):
+
+$$\chi(\mathcal{O}(D + P)) = \chi(\mathcal{O}(D)) + \chi(\kappa(P)) = \chi(\mathcal{O}(D)) + 1,$$
+
+since $\chi(\kappa(P)) = h^0(\kappa(P)) - h^1(\kappa(P)) = 1 - 0 = 1$.
+
+This is the crucial step: adding a point to a divisor increases the Euler characteristic by exactly $1$, regardless of the geometry of the curve.
+</Proof>
+
+<Example id="additivity-P1" title="Verifying additivity on P^1">
+On $\mathbb{P}^1$: $\chi(\mathcal{O}(n)) = h^0(\mathcal{O}(n)) - h^1(\mathcal{O}(n))$. For $n \geq 0$: $h^0 = n+1$, $h^1 = 0$, so $\chi = n + 1$. For $n = -1$: $h^0 = 0$, $h^1 = 0$, so $\chi = 0$. For $n \leq -2$: $h^0 = 0$, $h^1 = -n - 1$, so $\chi = n + 1$.
+
+In all cases $\chi(\mathcal{O}(n)) = n + 1$. Indeed $\chi(\mathcal{O}(n+1)) - \chi(\mathcal{O}(n)) = (n+2) - (n+1) = 1$.
+</Example>
+
+<Example id="additivity-elliptic" title="Verifying additivity on an elliptic curve">
+On an elliptic curve $E$ ($g = 1$), Riemann--Roch predicts $\chi(\mathcal{O}(nP)) = n$ for all $n$.
+
+- $n = 0$: $\chi(\mathcal{O}) = 0$. Indeed $h^0 = 1$, $h^1 = 1$, so $\chi = 0$.
+- $n = 1$: $\chi(\mathcal{O}(P)) = 1$. Indeed $h^0(P) = 1$ (a point on an elliptic curve is not linearly equivalent to any other, so there is no nonconstant function with just a simple pole at $P$), $h^1 = 0$ (by Serre duality, $h^1(\mathcal{O}(P)) = h^0(\mathcal{O}(K - P)) = h^0(\mathcal{O}(-P)) = 0$). So $\chi = 1$.
+- $n = 2$: $\chi(\mathcal{O}(2P)) = 2$. Here $h^0 = 2$ (the Weierstrass $x$-function), $h^1 = 0$. So $\chi = 2$.
+- $n = -1$: $\chi(\mathcal{O}(-P)) = -1$. Here $h^0 = 0$ (negative degree), $h^1 = h^0(K + P) = h^0(P) = 1$. So $\chi = 0 - 1 = -1$.
+
+Each step up increases $\chi$ by $1$.
+</Example>
+
+---
+
+## Step 4: Induction on Degree
+
+<Proof>
+**Completing the proof by induction.**
+
+We now prove $\chi(\mathcal{O}(D)) = \deg D + 1 - g$ for all divisors $D$ by induction on $|\deg D|$.
+
+**Base case:** For $D = 0$, we have $\chi(\mathcal{O}_C) = 1 - g = 0 + 1 - g$ (Step 1).
+
+**Inductive step (increasing degree):** Suppose $\chi(\mathcal{O}(D)) = \deg D + 1 - g$ for some divisor $D$. Choose any closed point $P \in C$. By Step 3:
+
+$$\chi(\mathcal{O}(D + P)) = \chi(\mathcal{O}(D)) + 1 = (\deg D + 1 - g) + 1 = \deg(D + P) + 1 - g.$$
+
+**Inductive step (decreasing degree):** Suppose $\chi(\mathcal{O}(D)) = \deg D + 1 - g$. Apply Step 3 to the divisor $D - P$ and point $P$:
+
+$$\chi(\mathcal{O}(D)) = \chi(\mathcal{O}((D - P) + P)) = \chi(\mathcal{O}(D - P)) + 1,$$
+
+so $\chi(\mathcal{O}(D - P)) = \chi(\mathcal{O}(D)) - 1 = (\deg D + 1 - g) - 1 = \deg(D - P) + 1 - g$.
+
+**Any divisor is reachable.** Any divisor $D = \sum n_i P_i$ can be connected to $0$ by adding or subtracting one point at a time: start from $0$ and add $P_1$ repeatedly $n_1$ times (or subtract if $n_1 < 0$), then do the same for $P_2$, and so on. So the formula holds for all $D$.
+
+Therefore: $\chi(\mathcal{O}(D)) = \deg D + 1 - g$ for every divisor $D$ on $C$.
+</Proof>
+
+---
+
+## Step 5: Serre Duality Completes the Proof
+
+<Proof>
+**Recovering the classical form.** We have established the Euler characteristic formula
+
+$$h^0(\mathcal{O}(D)) - h^1(\mathcal{O}(D)) = \deg D + 1 - g.$$
+
+Now we invoke Serre duality for curves. Let $C$ be a smooth projective curve of genus $g$ with canonical sheaf $\omega_C \cong \mathcal{O}(K_C)$. Serre duality gives a perfect pairing
+
+$$H^0(C, \mathcal{O}(K_C - D)) \times H^1(C, \mathcal{O}(D)) \to k,$$
+
+and therefore an isomorphism $H^1(C, \mathcal{O}(D)) \cong H^0(C, \mathcal{O}(K_C - D))^\vee$. In particular:
+
+$$h^1(\mathcal{O}(D)) = h^0(\mathcal{O}(K_C - D)) = \ell(K_C - D).$$
+
+Substituting into the Euler characteristic formula:
+
+$$\ell(D) - \ell(K_C - D) = \deg D + 1 - g.$$
+
+This is precisely the Riemann--Roch theorem. $\blacksquare$
+</Proof>
+
+<Example id="serre-duality-check-g2" title="Serre duality verification for genus 2">
+Let $C$ be a genus-$2$ curve and $D = K_C$ (the canonical divisor, $\deg K = 2$).
+
+Riemann--Roch: $\ell(K) - \ell(K - K) = 2 - 2 + 1 = 1$, so $\ell(K) - \ell(0) = 1$, giving $\ell(K) = 1 + 1 = 2$.
+
+Verification via Serre duality: $h^1(\mathcal{O}(K)) = h^0(\mathcal{O}(K - K)) = h^0(\mathcal{O}) = 1$. So $\chi(\mathcal{O}(K)) = \ell(K) - 1 = 2 - 1 = 1 = \deg K + 1 - g = 2 + 1 - 2 = 1$.
+</Example>
+
+---
+
+## Alternative Approach: Cech Cohomology
+
+<Remark title="Direct computation via Cech cohomology">
+There is an alternative, more computational proof that avoids the abstract machinery of Serre duality and instead works directly with Cech cohomology. This was closer to the spirit of classical proofs.
+
+**Setup.** Cover $C$ by two open sets: let $P \in C$ be a point, $U_1 = C \setminus \{P\}$, and $U_2 = \mathrm{Spec}\, \mathcal{O}_{C,P}$ (a formal neighborhood of $P$). This is not literally an open cover of $C$, but one can make it rigorous using adeles or formal completions.
+
+**The adelic approach.** Define the adele ring $\mathbb{A}_C = \prod'_{P \in C} K_P$ (restricted product of completions of $k(C)$). Then for any divisor $D$:
+
+$$H^0(C, \mathcal{O}(D)) = k(C) \cap \mathbb{A}_C(D), \quad H^1(C, \mathcal{O}(D)) \cong \mathbb{A}_C / (k(C) + \mathbb{A}_C(D)),$$
+
+where $\mathbb{A}_C(D) = \prod_P t_P^{-n_P} \mathcal{O}_P$ with $D = \sum n_P P$. The Riemann--Roch theorem then becomes a statement about dimensions of quotients of adele groups.
+</Remark>
+
+<Example id="cech-P1" title="Cech computation on P^1">
+On $\mathbb{P}^1$ with the cover $U_0 = \{x \neq 0\}$, $U_1 = \{y \neq 0\}$, and $t = y/x$ the coordinate on $U_0$:
+
+For $\mathcal{O}(n)$: sections on $U_0 \cap U_1 = \mathbb{A}^1 \setminus \{0\}$ are Laurent polynomials $\sum_{i} a_i t^i$.
+
+The Cech differential sends $f \in \mathcal{O}(n)(U_0 \cap U_1)$ to $(f|_{U_0}, -f|_{U_1})$. The kernel $H^0 = k[t]_{\leq n}$ (polynomials of degree $\leq n$), giving $h^0 = n + 1$ for $n \geq 0$. The cokernel $H^1 = 0$ for $n \geq -1$, and for $n \leq -2$, $H^1$ is spanned by $t^{-1}, t^{-2}, \ldots, t^{n+1}$, giving $h^1 = -n - 1$.
+
+In all cases: $\chi(\mathcal{O}(n)) = h^0 - h^1 = n + 1 = \deg(n \cdot [\infty]) + 1 - 0$.
+</Example>
+
+---
+
+## Historical Context
+
+<Remark title="Riemann's inequality and Roch's contribution">
+**Riemann (1857)** proved the inequality $\ell(D) \geq \deg D - g + 1$ for divisors on a Riemann surface. His argument used the Dirichlet principle to construct harmonic functions with prescribed singularities. Riemann understood that the "defect" $\ell(D) - (\deg D - g + 1) \geq 0$ came from obstructions related to periods of differentials, but did not give a precise formula for it.
+
+**Roch (1865)**, a student of Riemann, identified the defect as $\ell(K - D)$, the dimension of the space of differentials vanishing along $D$. His contribution was to make explicit the correction term that Riemann had left implicit.
+
+**Dedekind and Weber (1882)** gave the first algebraic proof, valid over arbitrary fields, using the theory of function fields and valuations. Their approach prefigures the modern algebraic treatment.
+
+**Modern formulation.** The sheaf-cohomological proof presented above, using the Euler characteristic and Serre duality, is due to Serre (1955) and was systematized by Grothendieck. It reduces the theorem to two ingredients: the additivity of $\chi$ on short exact sequences (a purely formal property), and Serre duality (a deep result relating $H^0$ and $H^1$).
+</Remark>
+
+---
+
+## The Role of the Residue Pairing
+
+<Remark title="Residues and Serre duality">
+The Serre duality pairing $H^0(C, \omega_C(-D)) \times H^1(C, \mathcal{O}(D)) \to k$ can be made explicit via residues.
+
+**The residue map.** For a meromorphic differential $\omega$ on $C$ with a pole at $P$, the **residue** is $\mathrm{Res}_P(\omega) = a_{-1}$ where $\omega = (\sum_{i \geq -n} a_i t^i)\, dt$ in a local coordinate $t$ at $P$. The residue theorem states $\sum_{P \in C} \mathrm{Res}_P(\omega) = 0$ for any meromorphic differential $\omega$ on $C$.
+
+**Constructing the pairing.** Given $\eta \in H^0(C, \omega_C(-D))$ (a differential whose zeros dominate $-D$, i.e., whose poles are bounded by $D$... more precisely, $\eta$ is a section of $\omega_C \otimes \mathcal{O}(-D)$, i.e., a differential $\eta$ with $\mathrm{div}(\eta) + D \leq K_C$), and a Cech 1-cocycle $f$ representing a class in $H^1(C, \mathcal{O}(D))$, the pairing is:
+
+$$\langle \eta, [f] \rangle = \sum_{P \in C} \mathrm{Res}_P(f \cdot \eta).$$
+
+This sum is finite and well-defined on cohomology classes by the residue theorem. The non-degeneracy of this pairing is Serre duality.
+</Remark>
+
+<Example id="residue-pairing-P1" title="Residue pairing on P^1">
+On $\mathbb{P}^1$ with coordinate $t$, take $D = -2 \cdot [\infty]$ (so $\mathcal{O}(D) = \mathcal{O}(-2)$).
+
+Then $h^1(\mathcal{O}(-2)) = 1$, generated by the Cech class of $t^{-1}$ on $U_0 \cap U_1$. The dual space $H^0(\omega(2[\infty])) = H^0(\mathcal{O}(-2 + 2)  \otimes \omega) = H^0(\omega(2[\infty]))$. Since $\omega_{\mathbb{P}^1} = \mathcal{O}(-2)$, we get $H^0(\mathcal{O}(-2+2)) = H^0(\mathcal{O}) = k$, generated by the constant $1$, corresponding to the differential $dt/t^2 \cdot t^2 = dt$... Let us be more careful.
+
+The pairing: take $\eta = dt \in H^0(\omega_{\mathbb{P}^1}(2[\infty]))$ (which has a double pole at $\infty$), and $[f] = [1/t]$ in $H^1(\mathcal{O}(-2))$. Then $f \cdot \eta = dt/t$. We get $\mathrm{Res}_0(dt/t) = 1$, and this is the only pole of $dt/t$ on $\mathbb{P}^1$ aside from $\infty$ where $\mathrm{Res}_\infty(dt/t) = -1$. The pairing gives $\langle \eta, [f] \rangle = 1 \neq 0$, confirming non-degeneracy.
+</Example>
+
+---
+
+## Detailed Verification of Each Step
+
+<Example id="verify-step2-genus3" title="The exact sequence for a genus-3 curve">
+Let $C$ be a non-hyperelliptic curve of genus $3$, embedded as a smooth plane quartic. Take $D = 0$ and a point $P \in C$. The exact sequence gives:
+
+$$0 \to H^0(\mathcal{O}) \to H^0(\mathcal{O}(P)) \to k \to H^1(\mathcal{O}) \to H^1(\mathcal{O}(P)) \to 0$$
+
+We know $h^0(\mathcal{O}) = 1$ and $h^1(\mathcal{O}) = g = 3$. For a general point $P$ on a genus-$3$ curve, $h^0(\mathcal{O}(P)) = 1$ (no nonconstant function with just a simple pole at a general point). So the connecting map $k \to H^1(\mathcal{O})$ is injective, giving $h^1(\mathcal{O}(P)) = 3 - 1 = 2$.
+
+Check: $\chi(\mathcal{O}(P)) = 1 - 2 = -1 = 1 + 1 - 3 = \deg P + 1 - g$.
+</Example>
+
+<Example id="verify-induction-neg" title="Induction in the negative direction">
+On a genus-$2$ curve $C$, start from $D = 0$ with $\chi(\mathcal{O}) = 1 - 2 = -1$.
+
+Step down to $D = -P$: $\chi(\mathcal{O}(-P)) = \chi(\mathcal{O}) - 1 = -1 - 1 = -2$. Check: $\deg(-P) + 1 - g = -1 + 1 - 2 = -2$.
+
+Indeed $h^0(\mathcal{O}(-P)) = 0$ (negative degree line bundle has no nonzero global sections), and $h^1(\mathcal{O}(-P)) = h^0(\mathcal{O}(K + P)) = h^0(\mathcal{O}(K + P))$. Since $\deg(K + P) = 3 > 2 = 2g - 2$, we get $h^0(\mathcal{O}(K+P)) = 3 - 2 + 1 = 2$. So $\chi = 0 - 2 = -2$.
+
+Step down again to $D = -2P$: $\chi(\mathcal{O}(-2P)) = -2 - 1 = -3 = -2 + 1 - 2$.
+</Example>
+
+<Example id="verify-canonical-class" title="Verification at the canonical divisor">
+For any genus $g$, take $D = K_C$ with $\deg K = 2g - 2$. Riemann--Roch predicts:
+
+$$\chi(\mathcal{O}(K)) = (2g - 2) + 1 - g = g - 1.$$
+
+Direct computation: $h^0(\mathcal{O}(K)) = g$ (by definition of genus, the space of holomorphic differentials is $g$-dimensional) and $h^1(\mathcal{O}(K)) = h^0(\mathcal{O}(K - K)) = h^0(\mathcal{O}) = 1$. So $\chi(\mathcal{O}(K)) = g - 1$.
+
+This is consistent for all $g$:
+- $g = 0$: $\chi(\mathcal{O}(-2[\infty])) = -2 + 1 - 0 = -1$. Indeed $h^0 = 0$, $h^1 = 1$, $\chi = -1$.
+- $g = 1$: $\chi(\mathcal{O}(0)) = 0 + 1 - 1 = 0$. Indeed $h^0 = 1$, $h^1 = 1$, $\chi = 0$.
+- $g = 2$: $\chi(\mathcal{O}(K)) = 2 + 1 - 2 = 1$. Indeed $h^0 = 2$, $h^1 = 1$, $\chi = 1$.
+- $g = 3$: $\chi(\mathcal{O}(K)) = 4 + 1 - 3 = 2$. Indeed $h^0 = 3$, $h^1 = 1$, $\chi = 2$.
+</Example>
+
+---
+
+## Full Proof Summary
+
+<Proof title="Complete proof of Riemann–Roch">
+**Theorem.** Let $C$ be a smooth projective curve of genus $g$ over $k = \bar{k}$, and $D$ a divisor on $C$. Then $\ell(D) - \ell(K_C - D) = \deg D - g + 1$.
+
+**Proof.** It suffices to prove the Euler characteristic formula $\chi(\mathcal{O}(D)) = \deg D + 1 - g$; the classical form then follows from Serre duality $h^1(\mathcal{O}(D)) = \ell(K_C - D)$.
+
+**(i) Base case.** $\chi(\mathcal{O}_C) = h^0(\mathcal{O}_C) - h^1(\mathcal{O}_C) = 1 - g$ by the definition of genus.
+
+**(ii) Key exact sequence.** For any divisor $D$ and point $P \in C$, the short exact sequence $0 \to \mathcal{O}(D) \to \mathcal{O}(D + P) \to \kappa(P) \to 0$ yields, by the additivity of $\chi$ on short exact sequences:
+
+$$\chi(\mathcal{O}(D + P)) = \chi(\mathcal{O}(D)) + \chi(\kappa(P)) = \chi(\mathcal{O}(D)) + 1.$$
+
+**(iii) Induction.** Write $D = n_1 P_1 + \cdots + n_r P_r$. Starting from $D_0 = 0$ with $\chi(\mathcal{O}) = 1 - g$, repeatedly add $P_1$ (or subtract, by applying (ii) in reverse) $n_1$ times, then $P_2$ a total of $n_2$ times, etc. After each step, $\chi$ changes by $\pm 1$ and $\deg$ changes by $\pm 1$, so $\chi(\mathcal{O}(D)) - \deg D$ is invariant. We conclude:
+
+$$\chi(\mathcal{O}(D)) = \deg D + (1 - g).$$
+
+**(iv) Serre duality.** The canonical sheaf $\omega_C$ is a dualizing sheaf for $C$, giving $H^1(C, \mathcal{O}(D))^\vee \cong H^0(C, \omega_C \otimes \mathcal{O}(-D)) = H^0(C, \mathcal{O}(K_C - D))$. Therefore $h^1(\mathcal{O}(D)) = \ell(K_C - D)$, and:
+
+$$\ell(D) - \ell(K_C - D) = h^0(\mathcal{O}(D)) - h^1(\mathcal{O}(D)) = \deg D + 1 - g. \quad \blacksquare$$
+</Proof>
+
+---
+
+## Symmetry and Self-Duality
+
+<Example id="symmetry-check" title="Riemann–Roch symmetry">
+The theorem is symmetric under $D \leftrightarrow K_C - D$. Replacing $D$ by $K_C - D$:
+
+$$\ell(K_C - D) - \ell(D) = \deg(K_C - D) - g + 1 = (2g - 2 - \deg D) - g + 1 = g - 1 - \deg D.$$
+
+This is the negative of $\ell(D) - \ell(K_C - D) = \deg D - g + 1$, which is consistent.
+
+On a genus-$2$ curve with $D = P$ ($\deg = 1$): $\ell(P) - \ell(K - P) = 1 - 2 + 1 = 0$. Now $\ell(P) = 1$ for a general point, so $\ell(K - P) = 1$. Since $\deg(K - P) = 1$ and $\ell(K - P) = 1$, the divisor $K - P$ has a unique effective representative, which is some point $Q$. This means $K \sim P + Q$ (the canonical map sends $P \mapsto Q$, revealing the hyperelliptic involution).
+</Example>
+
+---
+
+## What Each Ingredient Contributes
+
+<Remark title="Role of each component">
+The proof of Riemann--Roch rests on three pillars:
+
+**1. Sheaf cohomology and Euler characteristics.** The formalism of $\chi(\mathcal{F})$ and its additivity on short exact sequences is the engine. This is a general result from homological algebra: for any short exact sequence $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ of coherent sheaves on a projective variety, $\chi(\mathcal{F}) = \chi(\mathcal{F}') + \chi(\mathcal{F}'')$.
+
+**2. The key short exact sequence.** The sequence $0 \to \mathcal{O}(D) \to \mathcal{O}(D+P) \to \kappa(P) \to 0$ is specific to curves and divisors. It expresses the simple fact that adding a point to a divisor allows "one more pole." This is where the geometry of curves enters.
+
+**3. Serre duality.** The identification $h^1(\mathcal{O}(D)) = \ell(K - D)$ upgrades the Euler characteristic formula into the classical statement. Without Serre duality, we only get $\chi(\mathcal{O}(D)) = \deg D + 1 - g$, which is Riemann's inequality plus a correction term $h^1$ that we cannot identify. Serre duality names the correction.
+
+The beauty of this proof is the division of labor: the hard analysis (Serre duality, which in the classical setting involves existence of meromorphic differentials with prescribed residues) is factored out, and the remaining argument is purely algebraic and completely elementary.
+</Remark>
+
+---
+
+## Consequences Derived from the Proof Structure
+
+<Remark title="What the proof method yields beyond Riemann–Roch">
+The same technique of "twist by a point and use the exact sequence" has far-reaching consequences:
+
+**Hilbert polynomials.** The same argument shows that for any coherent sheaf $\mathcal{F}$ on a projective curve, $\chi(\mathcal{F}(n)) = \deg(\mathcal{F}) + n \cdot \mathrm{rk}(\mathcal{F}) + \mathrm{rk}(\mathcal{F})(1 - g)$ for $n$ sufficiently large, giving the Hilbert polynomial.
+
+**Grothendieck--Riemann--Roch.** The additivity of $\chi$ is the prototype for the Grothendieck group $K_0(C)$ and the Chern character map $\mathrm{ch}: K_0(C) \to A^*(C)_\mathbb{Q}$. The Riemann--Roch formula $\chi(\mathcal{L}) = \deg \mathcal{L} + 1 - g$ is the simplest instance of $\chi(\mathcal{F}) = \int_C \mathrm{ch}(\mathcal{F}) \cdot \mathrm{td}(T_C)$.
+
+**Higher-rank bundles.** For a vector bundle $\mathcal{E}$ of rank $r$ and degree $d$ on a curve of genus $g$, the same argument (applied $r$ times, using filtrations) gives $\chi(\mathcal{E}) = d + r(1 - g)$.
+</Remark>
+
+<Example id="higher-rank" title="Riemann–Roch for a rank-2 bundle">
+Let $\mathcal{E}$ be a rank-$2$ vector bundle of degree $d$ on a genus-$g$ curve. Then $\chi(\mathcal{E}) = d + 2(1 - g)$.
+
+For example, on a genus-$2$ curve with $\mathcal{E} = \mathcal{O} \oplus \mathcal{O}(K)$: $\deg \mathcal{E} = 0 + 2 = 2$, so $\chi(\mathcal{E}) = 2 + 2(1 - 2) = 0$. Direct check: $\chi(\mathcal{O}) + \chi(\mathcal{O}(K)) = (1 - 2) + (2 - 1) = -1 + 1 = 0$.
+</Example>

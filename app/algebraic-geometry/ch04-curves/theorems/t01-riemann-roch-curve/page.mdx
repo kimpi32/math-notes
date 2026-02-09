@@ -1,0 +1,211 @@
+export const metadata = {
+  title: 'Riemann–Roch for Curves — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Theorem — Riemann–Roch" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Riemann–Roch for Curves
+
+The Riemann–Roch theorem is the central result in the theory of algebraic curves, relating the dimension of the space of meromorphic functions with prescribed poles to the genus of the curve. It underlies virtually everything in curve theory: embeddings, classification, moduli, and special divisors.
+
+---
+
+## Statement
+
+<Theorem title="Riemann–Roch" number="4.1">
+Let $C$ be a smooth projective curve of genus $g$ over an algebraically closed field $k$, and let $D$ be a divisor on $C$. Then:
+
+$$\ell(D) - \ell(K_C - D) = \deg D - g + 1,$$
+
+where $\ell(D) = \dim_k H^0(C, \mathcal{O}(D))$ is the dimension of the Riemann–Roch space, and $K_C$ is a canonical divisor ($\deg K_C = 2g - 2$, $\ell(K_C) = g$).
+</Theorem>
+
+<Remark title="Equivalent formulations">
+Using Serre duality, $\ell(K_C - D) = \dim H^1(C, \mathcal{O}(D))$, so Riemann–Roch equivalently says:
+
+$$\chi(\mathcal{O}(D)) = h^0(\mathcal{O}(D)) - h^1(\mathcal{O}(D)) = \deg D + 1 - g.$$
+
+The Euler characteristic of a line bundle depends only on its degree and the genus, not on the specific divisor class.
+
+For $D = 0$: $\ell(0) - \ell(K_C) = 0 - g + 1$, giving $1 - g = 1 - g$ ✓ (with $\ell(0) = 1$ and $\ell(K_C) = g$).
+</Remark>
+
+---
+
+## Basic consequences
+
+<Theorem title="Riemann's inequality (weak form)" number="4.2">
+For any divisor $D$ on a curve of genus $g$:
+
+$$\ell(D) \geq \deg D - g + 1$$
+
+(since $\ell(K_C - D) \geq 0$). Equality holds when $\ell(K_C - D) = 0$, which happens whenever $\deg D > 2g - 2$ (since then $\deg(K_C - D) < 0$, forcing $\ell(K_C - D) = 0$).
+</Theorem>
+
+<Example id="rr-large-degree" title="Large degree: exact formula">
+If $\deg D > 2g - 2$, then $\ell(K_C - D) = 0$ so:
+
+$$\ell(D) = \deg D - g + 1.$$
+
+This is a complete, explicit formula. For instance:
+- **$g = 0$**: $\ell(D) = \deg D + 1$ for all $\deg D \geq 0$. So $\ell(n \cdot [P]) = n + 1$, the space of polynomials of degree $\leq n$ on $\mathbb{P}^1$.
+- **$g = 1$**: $\ell(D) = \deg D$ for $\deg D \geq 2$. In particular, $\ell(2P) = 2$, $\ell(3P) = 3$.
+- **$g = 2$**: $\ell(D) = \deg D - 1$ for $\deg D \geq 3$.
+</Example>
+
+---
+
+## Applications to genus 0
+
+<Example id="rr-genus0" title="Riemann–Roch characterizes ℙ¹">
+A smooth projective curve $C$ has genus $0$ if and only if $C \cong \mathbb{P}^1$ (assuming $C(k) \neq \emptyset$).
+
+**Proof**: If $g = 0$ and $P \in C(k)$, then $\ell(P) = 1 - 0 + 1 = 2$ by Riemann–Roch. So there exists a non-constant $f \in L(P)$, i.e., a rational function with a simple pole at $P$ and no other poles. This $f$ gives a morphism $C \to \mathbb{P}^1$ of degree $1$, hence an isomorphism.
+
+Conversely, on $\mathbb{P}^1$, $\deg K = -2 = 2g - 2$ gives $g = 0$.
+</Example>
+
+---
+
+## Applications to genus 1
+
+<Example id="rr-genus1" title="Riemann–Roch for elliptic curves">
+Let $(E, O)$ be an elliptic curve ($g = 1$), with $P = O$.
+
+- $\ell(O) = 1$: only constants (since $\deg(K - O) = -1 < 0$... wait, $\deg K = 0$ so $\deg(K - O) = -1$, giving $\ell(K-O) = 0$. Thus $\ell(O) = 1 - 1 + 1 = 1$).
+- $\ell(2O) = 2$: there is a function $x$ with a double pole at $O$. This gives $E \to \mathbb{P}^1$ of degree $2$ (the hyperelliptic map).
+- $\ell(3O) = 3$: adding $y$ (triple pole at $O$).
+- $\ell(4O) = 4$: adding $x^2$.
+- $\ell(5O) = 5$: adding $xy$.
+- $\ell(6O) = 6$: adding $x^3$ and $y^2$. But $\dim = 6$ with $7$ functions $\{1, x, y, x^2, xy, x^3, y^2\}$... so there must be a relation:
+
+$$y^2 + a_1 xy + a_3 y = x^3 + a_2 x^2 + a_4 x + a_6.$$
+
+This is the **Weierstrass equation**! Riemann–Roch naturally produces the equation of the curve.
+</Example>
+
+---
+
+## Applications to genus 2
+
+<Example id="rr-genus2" title="Riemann–Roch for genus 2">
+Let $C$ have genus $2$. The canonical divisor satisfies $\deg K = 2$ and $\ell(K) = 2$.
+
+The canonical map $\phi_K: C \to \mathbb{P}^1$ is a degree-$2$ morphism (since $\ell(K) = 2$ gives a $1$-dimensional linear system of degree $2$). Therefore:
+
+**Every genus-$2$ curve is hyperelliptic.**
+
+More explicitly, $|K|$ is a $g^1_2$ (a linear system of dimension $1$ and degree $2$). Taking a point $P$ with $\ell(P) = 1$ (which is true for "most" points since $\ell(P) \geq 1 - 2 + 1 = 0$, and $\ell(P) = 1$ iff $P$ is not a base point of $|K|$):
+
+By Riemann–Roch, $\ell(K - P) = \ell(P) + g - 1 - \deg P = \ell(P)$... Let's be more careful. $\ell(K-P) = \ell(P) + \deg(K-P) - g + 1 - (\ell(P) - ?)$. Better to just use RR directly:
+
+$\ell(2P)$: RR gives $\ell(2P) - \ell(K - 2P) = 2 - 2 + 1 = 1$. If $P$ is a Weierstrass point, $\ell(2P) = 2$ (and $\ell(K - 2P) = 1$). If not, $\ell(2P) = 1$ (and $\ell(K - 2P) = 0$). There are exactly $6$ Weierstrass points (over $\bar{k}$, in char $\neq 2$).
+</Example>
+
+---
+
+## Geometric interpretation: linear systems and maps
+
+<Definition title="Complete linear system" number="4.22">
+For a divisor $D$ on $C$, the **complete linear system** $|D|$ is the set of effective divisors linearly equivalent to $D$:
+
+$$|D| = \{D' \geq 0 \mid D' \sim D\} \cong \mathbb{P}(L(D)) = \mathbb{P}^{\ell(D) - 1}.$$
+
+A **$g^r_d$** is a linear system of dimension $r$ and degree $d$ (not necessarily complete), i.e., a sub-linear-system $V \subseteq |D|$ with $\dim V = r$ and $\deg D = d$.
+</Definition>
+
+<Example id="linear-systems-maps" title="Linear systems give maps to projective space">
+If $|D|$ has no base points (i.e., $\bigcap_{D' \in |D|} \operatorname{Supp}(D') = \emptyset$), then $|D|$ defines a morphism:
+
+$$\phi_D: C \to \mathbb{P}^{\ell(D) - 1}.$$
+
+- **$g = 0$, $D = n \cdot [\infty]$**: $\phi_D: \mathbb{P}^1 \to \mathbb{P}^n$ is the Veronese embedding (degree $n$, $\ell(D) = n+1$).
+
+- **$g = 1$, $D = 3O$**: $\phi_D: E \hookrightarrow \mathbb{P}^2$ is the Weierstrass embedding as a plane cubic.
+
+- **$g = 2$, $D = K$**: $\phi_K: C \to \mathbb{P}^1$ is the hyperelliptic double cover.
+
+- **$g = 3$, non-hyperelliptic, $D = K$**: $\deg K = 4$, $\ell(K) = 3$, so $\phi_K: C \hookrightarrow \mathbb{P}^2$ embeds $C$ as a smooth plane quartic. This is the **canonical embedding** for non-hyperelliptic genus 3.
+
+- **$g = 4$, non-hyperelliptic, $D = K$**: $\deg K = 6$, $\ell(K) = 4$, so $\phi_K: C \hookrightarrow \mathbb{P}^3$ embeds as a curve of degree $6$ in $\mathbb{P}^3$.
+</Example>
+
+---
+
+## Special divisors
+
+<Definition title="Special divisor" number="4.23">
+A divisor $D$ is **special** if $\ell(K_C - D) > 0$, equivalently $h^1(\mathcal{O}(D)) > 0$. This means $\ell(D)$ exceeds the "expected" value of $\deg D - g + 1$.
+
+The **index of speciality** is $i(D) = \ell(K_C - D) = h^1(\mathcal{O}(D))$, so Riemann–Roch reads:
+
+$$\ell(D) = \deg D - g + 1 + i(D).$$
+</Definition>
+
+<Example id="special-divisors" title="Special divisors on curves">
+- $D = 0$: $i(0) = \ell(K) = g$, so $\ell(0) = 0 - g + 1 + g = 1$ ✓.
+- $D = K_C$: $i(K) = \ell(0) = 1$, so $\ell(K) = (2g-2) - g + 1 + 1 = g$ ✓.
+- $\deg D > 2g - 2$: $i(D) = 0$ (non-special), $\ell(D) = \deg D - g + 1$.
+- On a hyperelliptic curve of genus $g$, the $g^1_2$ divisor $D$ (degree 2, $\ell(D) = 2$) satisfies $i(D) = 2 - 2 + g - 1 + ? $... By RR: $2 - i(D) = 2 - g + 1$, so $i(D) = g - 1$. Very special!
+</Example>
+
+---
+
+## Riemann–Roch for genus $g$: a table
+
+<Example id="rr-table" title="Riemann–Roch dimensions for small genus">
+For a general curve of genus $g$, the following table shows $\ell(nP)$ for a general point $P$:
+
+**$g = 0$ ($\mathbb{P}^1$)**: $\ell(nP) = n + 1$ for all $n \geq 0$.
+
+**$g = 1$ (elliptic)**: $\ell(0) = 1$; $\ell(nP) = n$ for $n \geq 1$.
+
+**$g = 2$**: $\ell(0) = 1$; $\ell(P) = 1$; $\ell(2P) = 1$ (general $P$); $\ell(nP) = n - 1$ for $n \geq 3$.
+
+**$g = 3$**: $\ell(0) = 1$; $\ell(nP) = 1$ for $n = 1, 2, 3$ (general $P$); $\ell(nP) = n - 2$ for $n \geq 5$; $\ell(4P) = 2$ (by RR: $4 - 3 + 1 = 2$ since $i(4P) = 0$ for general $P$ on non-hyperelliptic curve).
+
+The **Weierstrass gap sequence** at $P$ is the set of $n > 0$ with $\ell(nP) = \ell((n-1)P)$, i.e., $n$ is not a pole order of any function with pole only at $P$. By Riemann–Roch, there are exactly $g$ gaps, contained in $\{1, 2, \ldots, 2g\}$.
+</Example>
+
+---
+
+## The Riemann–Roch theorem as an index theorem
+
+<Remark title="Riemann–Roch as Euler characteristic">
+Riemann–Roch says $\chi(\mathcal{L}) = \deg \mathcal{L} + \chi(\mathcal{O}_C)$, where $\chi(\mathcal{O}_C) = 1 - g$. This is a special case of:
+
+- **Hirzebruch–Riemann–Roch** on a smooth variety $X$: $\chi(\mathcal{L}) = \int_X \operatorname{ch}(\mathcal{L}) \cdot \operatorname{td}(T_X)$.
+- **Grothendieck–Riemann–Roch** for a morphism $f: X \to Y$: $\operatorname{ch}(f_! \mathcal{F}) = f_*(\operatorname{ch}(\mathcal{F}) \cdot \operatorname{td}(T_{X/Y}))$.
+- **Atiyah–Singer index theorem** in differential geometry.
+
+For curves, all these reduce to $\chi(\mathcal{L}) = \deg \mathcal{L} + 1 - g$, where $\operatorname{ch}(\mathcal{L}) = 1 + c_1(\mathcal{L})$ and $\operatorname{td}(T_C) = 1 + \frac{1}{2}c_1(T_C) = 1 + (1-g)[pt]$.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Why Riemann–Roch matters">
+The Riemann–Roch theorem is the single most important result about algebraic curves:
+
+1. **Computes dimensions**: tells you exactly how many independent functions/sections exist with given pole constraints.
+2. **Classifies curves**: low-genus curves are classified via their canonical systems (genus 0 = rational, genus 1 = elliptic, genus 2 = hyperelliptic, ...).
+3. **Produces embeddings**: determines when a divisor gives an embedding into projective space.
+4. **Leads to moduli theory**: dimensions of linear systems determine geometry of moduli spaces $\mathcal{M}_g$.
+5. **Generalizes**: to Hirzebruch–Riemann–Roch (surfaces), Grothendieck–Riemann–Roch (arbitrary morphisms), and the Atiyah–Singer index theorem.
+</Remark>

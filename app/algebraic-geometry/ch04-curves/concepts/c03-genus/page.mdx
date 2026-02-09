@@ -1,0 +1,349 @@
+export const metadata = {
+  title: 'Genus — Algebraic Geometry — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수기하학", href: "/algebraic-geometry" },
+  { label: "4. 곡선", href: "/algebraic-geometry/ch04-curves" },
+  { label: "Concept — Genus" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Genus
+
+The genus is the most fundamental invariant of an algebraic curve. It measures the "complexity" of the curve: topologically it counts the number of handles, algebraically it governs the space of differentials, and it determines essentially all qualitative behavior of the curve and its function field.
+
+---
+
+## Arithmetic and geometric genus
+
+<Definition title="Arithmetic genus" number="4.9">
+Let $C$ be a projective curve over a field $k$. The **arithmetic genus** of $C$ is
+
+$$p_a(C) = 1 - \chi(\mathcal{O}_C) = 1 - h^0(C, \mathcal{O}_C) + h^1(C, \mathcal{O}_C).$$
+
+For a connected curve, $h^0(C, \mathcal{O}_C) = 1$, so $p_a(C) = h^1(C, \mathcal{O}_C)$.
+
+The arithmetic genus is defined for possibly singular or reducible curves and is invariant under deformations (it is a topological invariant of the Hilbert polynomial).
+</Definition>
+
+<Definition title="Geometric genus" number="4.10">
+Let $C$ be a projective curve over $k$. The **geometric genus** is
+
+$$p_g(C) = h^0(C, \omega_C) = \dim_k H^0(C, \omega_C)$$
+
+where $\omega_C$ is the dualizing sheaf. For a smooth curve, $\omega_C = \Omega^1_{C/k}$ is the sheaf of regular differentials, and $p_g = h^0(C, \Omega^1_{C/k})$.
+</Definition>
+
+<Theorem title="Equality for smooth curves">
+For a smooth projective curve $C$ of genus $g$ over a field $k$:
+
+$$p_a(C) = p_g(C) = g.$$
+
+This common value $g$ is called simply the **genus** of $C$. By Serre duality $H^1(C, \mathcal{O}_C) \cong H^0(C, \omega_C)^\vee$, so $h^1(\mathcal{O}_C) = h^0(\omega_C) = g$.
+
+For singular curves, the inequality $p_g \leq p_a$ holds, with equality if and only if $C$ is Gorenstein.
+</Theorem>
+
+<Example id="genus-low-values" title="Low genus values">
+- **$g = 0$**: $h^0(\omega_C) = 0$, $\deg K_C = -2$. The curve is $\cong \mathbb{P}^1$ over $\bar{k}$. No nonzero regular differentials.
+
+- **$g = 1$**: $h^0(\omega_C) = 1$, $\deg K_C = 0$, $\omega_C \cong \mathcal{O}_C$. With a rational point, $C$ is an elliptic curve. The unique differential on $y^2 = x^3 + Ax + B$ is $\omega = dx/(2y)$.
+
+- **$g = 2$**: $h^0(\omega_C) = 2$, $\deg K_C = 2$. Every genus-2 curve is hyperelliptic: the canonical map $\phi_K : C \to \mathbb{P}^1$ is a degree-2 cover.
+
+- **$g = 3$**: $h^0(\omega_C) = 3$, $\deg K_C = 4$. The canonical map is $\phi_K : C \to \mathbb{P}^2$. If non-hyperelliptic, this is an embedding as a smooth plane quartic.
+</Example>
+
+---
+
+## Genus-degree formula for plane curves
+
+<Theorem title="Genus-degree formula">
+Let $C \subset \mathbb{P}^2$ be a smooth plane curve of degree $d$. Then the genus of $C$ is
+
+$$g = \frac{(d-1)(d-2)}{2}.$$
+
+This follows from adjunction: $\omega_C = \mathcal{O}_C(d - 3)$, so $\deg K_C = d(d-3)$ and $g = 1 + \frac{d(d-3)}{2} = \frac{(d-1)(d-2)}{2}$.
+</Theorem>
+
+<Example id="genus-degree-table" title="Genus-degree table">
+- $d = 1$ (line): $g = 0$. $\quad$ $d = 2$ (conic): $g = 0$ ($\cong \mathbb{P}^1$).
+- $d = 3$ (cubic): $g = 1$ (elliptic curves). $\quad$ $d = 4$ (quartic): $g = 3$.
+- $d = 5$: $g = 6$. $\quad$ $d = 6$: $g = 10$. $\quad$ $d = 10$: $g = 36$.
+
+**Missing genera**: The values $(d-1)(d-2)/2$ are $0, 0, 1, 3, 6, 10, 15, 21, 28, \ldots$, so genus 2, 4, 5, 7, 8, 9, ... do not occur as smooth plane curves.
+</Example>
+
+<Example id="singular-plane-genus" title="Genus of singular plane curves">
+For a plane curve of degree $d$ with $\delta$ nodes (ordinary double points):
+
+$$p_a(C) = \frac{(d-1)(d-2)}{2}, \quad g(\widetilde{C}) = \frac{(d-1)(d-2)}{2} - \delta$$
+
+where $\widetilde{C}$ is the normalization. Each node drops the geometric genus by 1.
+
+- **Nodal cubic** ($d = 3$, $\delta = 1$): $g = 0$. Normalization is $\mathbb{P}^1$.
+- **Nodal quartic** ($d = 4$, $\delta = 1$): $g = 2$. A hyperelliptic curve.
+- **3-nodal quartic** ($d = 4$, $\delta = 3$): $g = 0$. Rational.
+- **Sextic with 4 nodes**: $g = 10 - 4 = 6$.
+
+More generally, a singularity of type $P$ contributes its **delta-invariant** $\delta_P$: $g = \frac{(d-1)(d-2)}{2} - \sum_P \delta_P$.
+</Example>
+
+---
+
+## Genus of complete intersections
+
+<Theorem title="Genus of complete intersection curves">
+Let $C \subset \mathbb{P}^n$ be a smooth complete intersection of hypersurfaces of degrees $d_1, \ldots, d_{n-1}$. Then $C$ has degree $d = d_1 \cdots d_{n-1}$ and genus
+
+$$g = 1 + \frac{d}{2}\left(\sum_{i=1}^{n-1} d_i - n - 1\right).$$
+</Theorem>
+
+<Example id="complete-intersection-genus" title="Complete intersection curves">
+**Curves in $\mathbb{P}^3$** (intersection of two surfaces of degrees $d_1, d_2$):
+- $(2, 2)$: degree $4$, $g = 1$. Elliptic (intersection of two quadrics).
+- $(2, 3)$: degree $6$, $g = 4$. A **canonical curve of genus 4**: $\omega_C \cong \mathcal{O}_C(1)$.
+- $(2, 4)$: degree $8$, $g = 9$.
+- $(3, 3)$: degree $9$, $g = 10$.
+
+**Curves in $\mathbb{P}^4$**:
+- $(2, 2, 2)$: degree $8$, $g = 5$.
+- $(2, 2, 3)$: degree $12$, $g = 13$.
+</Example>
+
+---
+
+## Topological genus over $\mathbb{C}$
+
+<Definition title="Topological genus" number="4.11">
+Let $C$ be a smooth projective curve of genus $g$ over $\mathbb{C}$. The analytification $C(\mathbb{C})$ is a compact Riemann surface:
+
+- $C(\mathbb{C})$ is homeomorphic to a sphere with $g$ handles.
+- Topological Euler characteristic: $\chi_{\mathrm{top}}(C(\mathbb{C})) = 2 - 2g$.
+- First Betti number: $b_1 = 2g$, so $H_1(C(\mathbb{C}), \mathbb{Z}) \cong \mathbb{Z}^{2g}$.
+- $\pi_1(C(\mathbb{C}))$ has $2g$ generators $a_1, b_1, \ldots, a_g, b_g$ with relation $\prod_{i=1}^g [a_i, b_i] = 1$.
+
+The topological genus agrees with the algebraic genus by Hodge theory/GAGA.
+</Definition>
+
+<Example id="topological-genus-examples" title="Topology of curves over C">
+- **$g = 0$**: $C(\mathbb{C}) \cong S^2$ (Riemann sphere). $\chi_{\mathrm{top}} = 2$, simply connected.
+- **$g = 1$**: $C(\mathbb{C}) \cong S^1 \times S^1$ (torus $\mathbb{C}/\Lambda$). $\chi_{\mathrm{top}} = 0$, $\pi_1 \cong \mathbb{Z}^2$.
+- **$g = 2$**: two handles. $\chi_{\mathrm{top}} = -2$, $b_1 = 4$.
+- **Smooth plane quartic** ($g = 3$): three handles. $\chi_{\mathrm{top}} = -4$, $H^1(C, \mathbb{Z}) \cong \mathbb{Z}^6$.
+
+The **Hodge decomposition** gives $H^1(C, \mathbb{C}) = H^{1,0} \oplus H^{0,1}$ with $h^{1,0} = h^{0,1} = g$.
+</Example>
+
+---
+
+## Genus and differentials
+
+<Theorem title="Genus as dimension of differentials">
+For a smooth projective curve $C$ of genus $g$:
+
+$$g = \dim_k H^0(C, \Omega^1_{C/k}).$$
+
+The genus equals the dimension of the space of regular differential 1-forms. Moreover, $\deg \Omega^1_{C/k} = 2g - 2$.
+</Theorem>
+
+<Example id="differentials-explicit" title="Explicit bases of differentials">
+**Hyperelliptic curve** $C: y^2 = f(x)$, $\deg f = 2g + 1$ or $2g + 2$, $f$ separable. The $g$ independent regular differentials are:
+
+$$\omega_i = \frac{x^{i-1}\,dx}{y}, \quad i = 1, \ldots, g.$$
+
+- **$g = 1$** ($y^2 = x^3 + Ax + B$): basis $\{dx/y\}$.
+- **$g = 2$**: basis $\{dx/y,\; x\,dx/y\}$.
+- **$g = 3$** hyperelliptic: basis $\{dx/y,\; x\,dx/y,\; x^2\,dx/y\}$.
+
+**Smooth plane curve** $F(x, y, z) = 0$ of degree $d$: the differentials are indexed by monomials $x^a y^b z^c$ with $a + b + c = d - 3$, $a, b, c \geq 0$. The count $\binom{d-1}{2} = \frac{(d-1)(d-2)}{2} = g$ confirms the genus-degree formula.
+</Example>
+
+---
+
+## The moduli space $\mathcal{M}_g$
+
+<Definition title="Moduli space of curves" number="4.12">
+The **moduli space** $\mathcal{M}_g$ parametrizes isomorphism classes of smooth projective curves of genus $g$:
+
+- $\dim \mathcal{M}_g = 3g - 3$ for $g \geq 2$. It is irreducible and quasi-projective.
+- The **Deligne-Mumford compactification** $\overline{\mathcal{M}}_g$ parametrizes stable curves (at worst nodal, finite automorphism group).
+- $\mathcal{M}_0 = \operatorname{pt}$. $\mathcal{M}_{1,1} \cong \mathbb{A}^1$ ($j$-line). $\dim \mathcal{M}_2 = 3$.
+</Definition>
+
+<Example id="dimension-moduli" title="Dimension of M_g via deformation theory">
+The tangent space to $\mathcal{M}_g$ at $[C]$ is $H^1(C, T_C)$ where $T_C = (\Omega^1_C)^\vee$. By Serre duality, $h^1(T_C) = h^0(K_C^{\otimes 2})$. For $g \geq 2$, Riemann-Roch gives:
+
+$$h^0(2K_C) = \deg(2K_C) - g + 1 = 4g - 4 - g + 1 = 3g - 3.$$
+</Example>
+
+<Example id="moduli-small-genus" title="Moduli for small genus">
+- **$\mathcal{M}_2$** ($\dim = 3$): every genus-2 curve is hyperelliptic $y^2 = f_6(x)$. Six branch points in $\mathbb{P}^1$ modulo $\operatorname{PGL}_2$: $\dim = 6 - 3 = 3$.
+
+- **$\mathcal{M}_3$** ($\dim = 6$): the general curve is a smooth plane quartic. Family dimension: $\dim |\mathcal{O}(4)| - \dim \operatorname{PGL}_3 = 14 - 8 = 6$. The hyperelliptic locus $\mathcal{H}_3$ has $\dim = 5$ (codimension 1).
+
+- **$\mathcal{M}_4$** ($\dim = 9$): a general genus-4 curve is a $(2,3)$ complete intersection in $\mathbb{P}^3$.
+
+- **$\overline{\mathcal{M}}_g$**: boundary has $\lfloor g/2 \rfloor + 1$ irreducible components $\Delta_0, \Delta_1, \ldots, \Delta_{\lfloor g/2 \rfloor}$, where $\Delta_i$ parametrizes nodal curves with components of genera $i$ and $g - i$.
+</Example>
+
+---
+
+## Classification by genus
+
+<Theorem title="Classification of curves by genus">
+**Genus 0**: $C \cong \mathbb{P}^1$. $\operatorname{Aut}(C) = \operatorname{PGL}_2(k)$ (3-dimensional). Kodaira dimension $\kappa = -\infty$.
+
+**Genus 1**: with a marked point, $(C, O)$ is an elliptic curve classified by $j \in k$. $\operatorname{Aut}(C, O)$ is finite: generically $\mathbb{Z}/2$, with $\mathbb{Z}/4$ for $j = 1728$ and $\mathbb{Z}/6$ for $j = 0$. Kodaira dimension $\kappa = 0$.
+
+**Genus $\geq 2$**: $C$ is of **general type** ($\kappa = 1$). $\operatorname{Aut}(C)$ is finite with the **Hurwitz bound** $|\operatorname{Aut}(C)| \leq 84(g - 1)$. The canonical divisor $K_C$ is ample.
+</Theorem>
+
+<Example id="hurwitz-bound" title="Hurwitz bound examples">
+- **$g = 2$**: bound $84$, actual maximum $48$ (achieved by $y^2 = x^5 - x$).
+- **$g = 3$**: bound $168$, achieved by the **Klein quartic** $x^3 y + y^3 z + z^3 x = 0$ with $\operatorname{Aut} \cong \operatorname{PSL}_2(\mathbb{F}_7)$.
+- **$g = 7$**: the **Macbeath curve** attains $|\operatorname{Aut}| = 504 = 84 \cdot 6$.
+
+The bound comes from Riemann-Hurwitz on $C \to C/G$: the minimum positive value of $2g' - 2 + \sum(1 - 1/e_i)$ is $1/42$, giving $|G| \leq 84(g-1)$.
+</Example>
+
+---
+
+## Hyperelliptic curves
+
+<Definition title="Hyperelliptic curve" number="4.13">
+A smooth curve $C$ of genus $g \geq 2$ is **hyperelliptic** if it admits a $g^1_2$ (degree-2 map to $\mathbb{P}^1$). The associated involution $\iota: C \to C$ is the **hyperelliptic involution**, with exactly $2g + 2$ fixed points (the **Weierstrass points**). A hyperelliptic curve has a model $y^2 = f(x)$, $\deg f = 2g + 1$ or $2g + 2$, $f$ separable.
+</Definition>
+
+<Theorem title="Characterization of hyperelliptic curves">
+For a smooth curve $C$ of genus $g \geq 2$, the following are equivalent:
+
+1. $C$ is hyperelliptic (admits a $g^1_2$).
+2. The canonical map $\phi_K : C \to \mathbb{P}^{g-1}$ is not an embedding (it is 2-to-1 onto a rational normal curve).
+3. There exist points $P, Q \in C$ with $h^0(\mathcal{O}_C(P + Q)) = 2$.
+
+For $g = 2$: every curve is hyperelliptic. For $g \geq 3$: $\mathcal{H}_g \subset \mathcal{M}_g$ has $\dim = 2g - 1 < 3g - 3$, so the general curve is non-hyperelliptic.
+</Theorem>
+
+<Example id="hyperelliptic-examples" title="Hyperelliptic curves">
+- **Genus 2**: $y^2 = x^5 + 1$. Six Weierstrass points. $\mathcal{M}_2 = \mathcal{H}_2$ entirely.
+
+- **Genus 3 hyperelliptic**: $y^2 = x^7 - 1$. Eight Weierstrass points. $\mathcal{H}_3 \subset \mathcal{M}_3$ has codimension 1.
+
+- **Genus 3 non-hyperelliptic**: $x^4 + y^4 + z^4 = 0$ (Fermat quartic). The canonical map is the identity embedding $C \hookrightarrow \mathbb{P}^2$.
+
+- **Genus 4 hyperelliptic**: $y^2 = x^9 + x$. $\mathcal{H}_4 \subset \mathcal{M}_4$ has codimension 2.
+</Example>
+
+---
+
+## Genus from the adjunction formula
+
+<Theorem title="Adjunction formula for curves on surfaces">
+Let $S$ be a smooth projective surface and $C \subset S$ a smooth curve. Then
+
+$$2g(C) - 2 = C \cdot C + K_S \cdot C.$$
+</Theorem>
+
+<Example id="adjunction-examples" title="Genus via adjunction on surfaces">
+**Curves on $\mathbb{P}^2$**: $K_{\mathbb{P}^2} = -3H$, $C \sim dH$, so $2g - 2 = d^2 - 3d$, giving $g = (d-1)(d-2)/2$.
+
+**Curves on $\mathbb{P}^1 \times \mathbb{P}^1$** of bidegree $(a, b)$: $K = (-2, -2)$, so $2g - 2 = 2ab - 2a - 2b$, giving $g = (a-1)(b-1)$.
+- Bidegree $(2, 2)$: $g = 1$. $\;$ $(2, 3)$: $g = 2$. $\;$ $(3, 3)$: $g = 4$.
+
+**On a K3 surface** ($K_S = 0$): $2g - 2 = C^2$. A rational curve satisfies $C^2 = -2$.
+
+**On an abelian surface** ($K_A = 0$): $2g - 2 = C^2 > 0$ for ample $C$, so $g \geq 2$.
+</Example>
+
+---
+
+## Fermat curves
+
+<Example id="fermat-curves" title="Fermat curves">
+The **Fermat curve** $F_d: x^d + y^d + z^d = 0 \subset \mathbb{P}^2$ has genus $g = (d-1)(d-2)/2$:
+
+- $F_3$: $g = 1$, elliptic with $j = 0$ and CM by $\mathbb{Z}[e^{2\pi i/3}]$.
+- $F_4$: $g = 3$, with $|\operatorname{Aut}| = 96$.
+- $F_5$: $g = 6$, the Fermat quintic curve.
+
+**Automorphisms**: $\operatorname{Aut}(F_d) \supseteq (\mathbb{Z}/d)^2 \rtimes S_3$ of order $6d^2$ for $d \geq 4$.
+
+**Fermat's Last Theorem**: rational points on $F_d$ give solutions to $a^d + b^d = c^d$. By Faltings' theorem ($g \geq 2$ for $d \geq 4$), only finitely many rational points exist.
+</Example>
+
+---
+
+## Trigonal curves and gonality
+
+<Example id="trigonal-curves" title="Trigonal curves">
+A curve is **trigonal** if it admits a $g^1_3$ (degree-3 map to $\mathbb{P}^1$).
+
+- **$g = 3$**: every non-hyperelliptic curve is a plane quartic; projection from a point gives a $g^1_3$.
+- **$g = 4$**: a non-hyperelliptic curve is a $(2,3)$ complete intersection in $\mathbb{P}^3$. The $g^1_3$ comes from the quadric's ruling.
+- **$g = 5$**: the general curve has gonality 4. The trigonal locus has codimension 1 in $\mathcal{M}_5$.
+</Example>
+
+---
+
+## Genus, Riemann-Roch, and the Jacobian
+
+<Remark title="Riemann-Roch and the role of genus">
+The genus $g$ is the correction term in the **Riemann-Roch theorem**: $\ell(D) - \ell(K_C - D) = \deg D - g + 1$. Key consequences:
+- $\ell(D) \geq \deg D - g + 1$ (Riemann's inequality).
+- $\ell(D) = \deg D - g + 1$ when $\deg D > 2g - 2$.
+- **Clifford's theorem**: for special $D$, $\ell(D) - 1 \leq \deg D / 2$.
+- **Brill-Noether**: $\dim G^r_d(C) \geq \rho(g, r, d) = g - (r+1)(g - d + r)$.
+</Remark>
+
+<Definition title="Jacobian variety" number="4.14">
+The **Jacobian** $\operatorname{Jac}(C) = \operatorname{Pic}^0(C)$ is an abelian variety of dimension $g$. Over $\mathbb{C}$: $\operatorname{Jac}(C) \cong \mathbb{C}^g / \Lambda$ where $\Lambda$ is the period lattice from integrating $g$ holomorphic differentials over $2g$ cycles. The **Torelli theorem** states that the pair $(\operatorname{Jac}(C), \Theta)$ determines $C$.
+</Definition>
+
+<Example id="jacobian-dimensions" title="Jacobians by genus">
+- **$g = 0$**: $\operatorname{Jac}(\mathbb{P}^1) = 0$.
+- **$g = 1$**: $\operatorname{Jac}(E) \cong E$ (an elliptic curve is its own Jacobian).
+- **$g = 2$**: $\operatorname{Jac}(C)$ is an abelian surface. The theta divisor $\Theta \cong C$.
+- **$g = 3$**: $\operatorname{Jac}(C)$ is 3-dimensional. For non-hyperelliptic $C$, $\Theta$ has a unique singular point.
+- **$g = 4$**: the Schottky problem: which abelian 4-folds are Jacobians? (Answer: those satisfying the KP equation.)
+</Example>
+
+---
+
+## Genus change under morphisms
+
+<Example id="genus-change" title="Riemann-Hurwitz and genus computation">
+For $f: C \to D$ of degree $n$: $2g_C - 2 = n(2g_D - 2) + \deg R$, where $R = \sum (e_P - 1) \cdot P$.
+
+- **Double cover of $\mathbb{P}^1$ branched at $2r$ points**: $g = r - 1$. For $r = 3$: $g = 2$; $r = 4$: $g = 3$.
+
+- **Cyclic $d$-fold cover** $y^d = (x - a_1) \cdots (x - a_s)$, $d \mid s$: $g = \frac{(s-2)(d-1)}{2}$.
+
+- **Unramified double cover of genus $g$**: $g_C = 2g - 1$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Central role of genus">
+The genus $g$ determines the qualitative behavior of a smooth curve $C$:
+
+**Invariants**: $\deg K_C = 2g - 2$, $h^0(K_C) = g$, $\chi(\mathcal{O}_C) = 1 - g$, $\chi_{\mathrm{top}} = 2 - 2g$, $\dim \operatorname{Jac}(C) = g$, $\dim \mathcal{M}_g = 3g - 3$.
+
+**Trichotomy**:
+- $g = 0$: rational, $\kappa = -\infty$, infinite automorphisms.
+- $g = 1$: elliptic, $\kappa = 0$, $K \sim 0$, group structure.
+- $g \geq 2$: general type, $\kappa = 1$, $K$ ample, finite automorphisms, Faltings finiteness over number fields.
+</Remark>
