@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Étale Equivalence Relations — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "개념 — Étale Equivalence Relations" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Étale Equivalence Relations
+
+The theory of étale equivalence relations provides the foundational machinery for constructing algebraic spaces. Every algebraic space arises as the quotient of a scheme by an étale equivalence relation, and conversely, every such quotient is an algebraic space. This perspective makes algebraic spaces concrete: they are "schemes modulo étale gluings."
+
+---
+
+## 1. Equivalence Relations in Categories
+
+<Definition title="Equivalence relation in a category">
+Let $\mathcal{C}$ be a category with fiber products. An **equivalence relation** on an object $U$ is a monomorphism $j: R \hookrightarrow U \times U$ such that for every object $T$, the image of $j(T): R(T) \to U(T) \times U(T)$ is an equivalence relation on the set $U(T)$.
+</Definition>
+
+Equivalently, $R \rightrightarrows U$ (via the two projections $s = \mathrm{pr}_1 \circ j$ and $t = \mathrm{pr}_2 \circ j$) must satisfy:
+
+1. **Reflexivity**: There exists a section $e: U \to R$ of both $s$ and $t$ (the diagonal $U \to U \times U$ factors through $R$).
+2. **Symmetry**: There exists an involution $\sigma: R \to R$ swapping $s$ and $t$.
+3. **Transitivity**: The map $R \times_{s, U, t} R \to U \times U$ given by $(r_1, r_2) \mapsto (t(r_1), s(r_2))$ factors through $R$.
+
+---
+
+## 2. Étale Equivalence Relations
+
+<Definition title="Étale equivalence relation">
+An equivalence relation $R \rightrightarrows U$ on a scheme $U$ (in the category of schemes over $S$) is an **étale equivalence relation** if both structure morphisms $s, t: R \to U$ are étale.
+</Definition>
+
+The étaleness condition is crucial: it ensures that the quotient sheaf (in the étale topology) is an algebraic space. Weaker conditions (e.g., flat or smooth) lead to algebraic stacks rather than algebraic spaces.
+
+<Definition title="Smooth and flat equivalence relations">
+An equivalence relation $R \rightrightarrows U$ is:
+- **smooth** if $s$ and $t$ are smooth,
+- **flat** if $s$ and $t$ are flat and locally of finite presentation.
+
+Smooth equivalence relations give rise to algebraic stacks (Artin stacks), while étale equivalence relations specifically give algebraic spaces.
+</Definition>
+
+---
+
+## 3. Quotient Sheaves
+
+Given an étale equivalence relation $R \rightrightarrows U$, we form the **quotient sheaf** $X = U/R$ in the étale topology:
+
+$$
+X(T) = \mathrm{coeq}\bigl(R(T) \rightrightarrows U(T)\bigr)
+$$
+
+for each scheme $T$, where the coequalizer is taken in the category of sets, and we sheafify with respect to the étale topology.
+
+<Theorem title="Étale quotients are algebraic spaces">
+Let $R \rightrightarrows U$ be an étale equivalence relation on a scheme $U$ over $S$. Then the quotient sheaf $X = U/R$ is an algebraic space over $S$, and the natural map $U \to X$ is an étale surjection serving as an atlas.
+</Theorem>
+
+<Proof>
+We verify the three conditions for an algebraic space:
+
+**Sheaf condition**: By construction, $X$ is a sheaf for the étale topology.
+
+**Representability of the diagonal**: For any scheme $T$ and morphisms $a, b: T \to X$, we need $T \times_{X \times X} X$ to be a scheme. After étale base change to $U$, the morphisms $a, b$ lift locally. The fiber product $T \times_{(a,b), X \times X, \Delta} X \cong T \times_{U \times U} R$ is a scheme since $R$ is a scheme and the map is a base change.
+
+**Existence of atlas**: The morphism $U \to X$ is étale and surjective by construction. Étaleness follows because for any $T \to X$, the base change $U \times_X T$ is an étale $T$-scheme (since $R \to U$ is étale). Surjectivity follows from the fact that étale-locally, every section of $X$ lifts to $U$.
+</Proof>
+
+---
+
+## 4. The Converse: Every Algebraic Space is a Quotient
+
+<Theorem title="Algebraic spaces as quotients">
+Every algebraic space $X$ over $S$ is isomorphic to $U/R$ for some étale equivalence relation $R \rightrightarrows U$ on a scheme $U$.
+</Theorem>
+
+<Proof>
+Let $U \to X$ be an étale atlas (which exists by definition). Set $R = U \times_X U$. Since the diagonal of $X$ is representable, $R$ is a scheme. The two projections $s, t: R \rightrightarrows U$ are étale because they are base changes of the étale morphism $U \to X$. The relation $R \hookrightarrow U \times_S U$ is an equivalence relation (reflexivity from the diagonal $U \to R$, symmetry from the swap map, transitivity from composition of correspondences). By construction, $X \cong U/R$.
+</Proof>
+
+---
+
+## 5. Examples
+
+<Example title="Trivial equivalence relation">
+The trivial equivalence relation on $U$ is $R = U$ (the diagonal). The quotient is $U/U \cong U$ itself. This shows every scheme arises from an étale equivalence relation.
+</Example>
+
+<Example title="Free action of a finite group">
+Let $G$ be a finite group acting freely on a scheme $U$ over a field $k$. Define $R = G \times U$ with $s(g, u) = u$ and $t(g, u) = g \cdot u$. Since $G$ is étale over $k$ (being a finite discrete group scheme in characteristic not dividing $|G|$), the projections $s, t: R \to U$ are étale. Freeness ensures $R \hookrightarrow U \times U$ is a monomorphism. The quotient $U/R = U/G$ is an algebraic space.
+</Example>
+
+<Example title="The affine line modulo translation">
+Let $U = \mathbb{A}^1_k$ and $G = \mathbb{Z}/n\mathbb{Z}$ acting by $x \mapsto x + 1$ (assuming $\mathrm{char}(k) \nmid n$ and $k$ contains a primitive $n$-th root of unity is not needed here; we only need $n \neq 0$ in $k$). Set $R = G \times U$. The quotient $\mathbb{A}^1_k / (\mathbb{Z}/n\mathbb{Z})$ is an algebraic space. When $n$ is invertible in $k$, this is isomorphic to $\mathbb{A}^1_k$ via the map $x \mapsto \prod_{i=0}^{n-1}(x - i)$.
+</Example>
+
+<Example title="Equivalence relation from an étale cover">
+Let $f: U \to X$ be an étale surjection of schemes. Then $R = U \times_X U \rightrightarrows U$ is an étale equivalence relation, and $U/R \cong X$. This provides a tautological presentation of any scheme as a quotient.
+</Example>
+
+<Example title="Quotient of a surface by an involution">
+Let $X = \mathbb{P}^1_k \times \mathbb{P}^1_k$ and $\sigma$ the involution swapping the two factors. On the open set $U = X \setminus \Delta$ (complement of the diagonal), $\sigma$ acts freely. The quotient $U/\langle \sigma \rangle$ is an algebraic space (and in this case a scheme, since $U$ is quasi-projective).
+</Example>
+
+<Example title="Non-separated étale equivalence relation">
+Take $U = \mathbb{A}^1_k \sqcup \mathbb{A}^1_k$ and let $R \subset U \times U$ be the equivalence relation that identifies the two copies everywhere except at the origin. The maps $s, t: R \to U$ are étale (they are open immersions on the gluing part). The quotient is the line with doubled origin, a non-separated algebraic space (which happens to be a scheme).
+</Example>
+
+<Example title="Étale equivalence relation from Galois action">
+Let $L/K$ be a finite Galois extension with group $G = \mathrm{Gal}(L/K)$. Let $U = \mathrm{Spec}(L)$. Then $R = \mathrm{Spec}(L \otimes_K L) \cong \coprod_{g \in G} \mathrm{Spec}(L)$ defines an étale equivalence relation, and $U/R \cong \mathrm{Spec}(K)$. This is Galois descent in its simplest form.
+</Example>
+
+<Example title="Gluing along an étale map">
+Let $U_1, U_2$ be schemes with an open subscheme $V_i \subset U_i$ and an étale isomorphism $\varphi: V_1 \xrightarrow{\sim} V_2$. Set $U = U_1 \sqcup U_2$ and $R = U \sqcup V_1$ (with appropriate maps using $\varphi$). The quotient $U/R$ is the algebraic space obtained by gluing $U_1$ and $U_2$ along $\varphi$. If $\varphi$ is not an open immersion on both sides, the result may fail to be a scheme.
+</Example>
+
+<Example title="Quotient of an abelian variety by a finite subgroup">
+Let $A$ be an abelian variety over $k$ and $H \subset A$ a finite étale subgroup scheme. Then $H$ acts freely on $A$ by translation: $R = H \times A \rightrightarrows A$. The quotient $A/H$ is an abelian variety (hence a scheme), and the map $A \to A/H$ is an isogeny. This is a case where the algebraic space quotient turns out to be a scheme.
+</Example>
+
+<Example title="Quotient by the symmetric group">
+Let $X = (\mathbb{P}^1)^n$ and $G = S_n$ (the symmetric group) acting by permuting factors. The quotient $X/S_n$ is the $n$-th symmetric product $\mathrm{Sym}^n(\mathbb{P}^1) \cong \mathbb{P}^n$ (a scheme). The étale equivalence relation $R = S_n \times X$ on the open locus of distinct points gives an étale presentation of the quotient.
+</Example>
+
+<Example title="Non-effective equivalence relation in Zariski topology">
+Consider $U = \mathrm{Spec}(k[x,y])$ and the equivalence relation given by the free $\mathbb{Z}/2\mathbb{Z}$-action $(x,y) \mapsto (-x, -y)$ restricted to $U \setminus \{0\}$. The Zariski quotient does not exist as a scheme with good properties, but in the étale topology, $U \setminus \{0\} / (\mathbb{Z}/2\mathbb{Z})$ is a well-defined algebraic space.
+</Example>
+
+<Example title="Étale equivalence relation on a curve">
+Let $C$ be a smooth projective curve of genus $g \geq 2$ over $k$, and $\sigma: C \to C$ a fixed-point-free involution (which exists when $C$ admits a degree-2 map to a curve $C'$ unramified everywhere). Then $R = C \sqcup C$ with the identity and $\sigma$ gives an étale equivalence relation, and $C/R \cong C'$ is a curve of genus $(g+1)/2$ when $g$ is odd.
+</Example>
+
+<Example title="Diagonal equivalence (trivial case)">
+For any scheme $U$, the diagonal $\Delta_U: U \hookrightarrow U \times U$ is an étale equivalence relation (in fact a closed immersion if $U$ is separated). The quotient is $U$ itself. This trivial example illustrates that the notion of étale equivalence relation subsumes the notion of identity.
+</Example>
+
+---
+
+## 6. Properties of Étale Equivalence Relations
+
+<Theorem title="Effectivity of étale equivalence relations">
+Every étale equivalence relation $R \rightrightarrows U$ in the category of schemes is **effective** in the étale topology: the natural map $R \to U \times_{U/R} U$ is an isomorphism.
+</Theorem>
+
+This is a key difference from the Zariski topology, where equivalence relations need not be effective. The étale topology has better descent properties, which is precisely why algebraic spaces are defined using it.
+
+<Remark>
+For smooth (but non-étale) equivalence relations, the quotient sheaf in the étale topology may not be an algebraic space but rather an algebraic stack. Effectivity still holds, but the quotient has a richer structure (with automorphisms).
+</Remark>
+
+---
+
+## 7. Refinements and Morita Equivalence
+
+Two étale equivalence relations $(R_1 \rightrightarrows U_1)$ and $(R_2 \rightrightarrows U_2)$ define the **same** algebraic space (up to isomorphism) if and only if they are **Morita equivalent**: there exists a scheme $W$ with étale surjections to both $U_1$ and $U_2$ that are compatible with the equivalence relations.
+
+<Definition title="Morita equivalence">
+Two étale equivalence relations $(R_1 \rightrightarrows U_1)$ and $(R_2 \rightrightarrows U_2)$ are **Morita equivalent** if $U_1/R_1 \cong U_2/R_2$ as sheaves on the big étale site.
+</Definition>
+
+This means an algebraic space is not "an" equivalence relation, but rather an equivalence class of equivalence relations. Different atlases give different presentations of the same algebraic space, much as different atlases present the same manifold.
+
+---
+
+## 8. Effectivity and Descent
+
+<Definition title="Effective equivalence relation">
+An equivalence relation $R \rightrightarrows U$ is **effective** (in a given topology) if the natural map $U \to U/R$ is a coequalizer and $R \cong U \times_{U/R} U$.
+</Definition>
+
+<Theorem title="Flat equivalence relations are effective in fppf topology">
+Let $R \rightrightarrows U$ be a flat, locally finitely presented equivalence relation on a scheme $U$. Then $R$ is effective in the fppf topology: the quotient fppf sheaf $X = U/R$ satisfies $R \cong U \times_X U$.
+</Theorem>
+
+For étale equivalence relations, effectivity already holds in the étale topology:
+
+$$
+R \xrightarrow{\sim} U \times_{U/R}^{\text{ét}} U
+$$
+
+This means that once we form the quotient sheaf, we recover the original equivalence relation by forming the fiber product.
+
+---
+
+## 9. Constructing Étale Equivalence Relations in Practice
+
+In practice, étale equivalence relations arise from:
+
+1. **Group actions**: A group scheme $G$ acting on $U$ gives $R = G \times U$ (when the action is free and $G \to S$ is étale).
+2. **Étale covers with descent data**: An étale cover $\{U_i \to X\}$ gives $R = \coprod U_i \times_X U_j$.
+3. **Gluing data**: Schemes $U_i$ with étale isomorphisms $\varphi_{ij}: U_{ij} \xrightarrow{\sim} U_{ji}$ satisfying the cocycle condition.
+
+The last construction is the most general and shows that algebraic spaces are obtained by "étale gluing" of schemes.
+
+---
+
+## References
+
+- D. Knutson, *Algebraic Spaces*, LNM 203, Springer, 1971, Chapter II.
+- M. Artin, "Algebraic Spaces," Yale Mathematical Monographs, 1971.
+- The Stacks Project, Tag 025Y: Algebraic Spaces.

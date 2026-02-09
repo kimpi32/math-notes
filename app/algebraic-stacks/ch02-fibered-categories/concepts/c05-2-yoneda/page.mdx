@@ -1,0 +1,261 @@
+export const metadata = {
+  title: '2-Yoneda Lemma -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Concept -- 2-Yoneda Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The 2-Yoneda Lemma
+
+The 2-Yoneda Lemma is the stack-theoretic generalization of the classical Yoneda lemma. It identifies the category of morphisms from a representable stack $h_U$ into a CFG $\mathcal{F}$ with the fiber category $\mathcal{F}(U)$. This result is foundational for the "functor of points" approach to stacks and underlies the definition of representable morphisms.
+
+---
+
+## The Classical Yoneda Lemma
+
+<Remark title="Recall: classical Yoneda">
+For a presheaf $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ and an object $U \in \mathcal{C}$, the classical Yoneda lemma gives a bijection:
+$$\operatorname{Nat}(h_U, F) \cong F(U)$$
+where $h_U = \operatorname{Hom}_\mathcal{C}(-, U)$ is the representable presheaf. The bijection sends a natural transformation $\alpha : h_U \to F$ to $\alpha_U(\operatorname{id}_U) \in F(U)$.
+
+This has two key consequences:
+1. **Embedding**: The Yoneda embedding $\mathcal{C} \hookrightarrow \mathbf{PSh}(\mathcal{C})$, $U \mapsto h_U$, is fully faithful.
+2. **Evaluation**: To understand a presheaf, it suffices to understand its values on representable presheaves.
+</Remark>
+
+---
+
+## Representable CFGs
+
+<Definition title="Representable CFG" number="2.5.1">
+Let $(\mathcal{C}, \tau)$ be a site and $U \in \mathcal{C}$. The **representable CFG** $h_U$ (or $\mathcal{C}/U$ viewed as a CFG) over $\mathcal{C}$ is defined by:
+
+$$h_U(V) = \operatorname{Hom}_\mathcal{C}(V, U)$$
+
+viewed as a discrete groupoid (only identity morphisms). This is a sheaf of sets (for a subcanonical topology), hence a stack.
+
+Equivalently, $h_U$ is the slice category $\mathcal{C}/U$ with the forgetful functor to $\mathcal{C}$, where the fiber over $V$ is the set of morphisms $V \to U$.
+</Definition>
+
+<Example id="representable-scheme" title="Representable CFG from a scheme">
+For $\mathcal{C} = \mathbf{Sch}$ (or $\mathbf{Sch}/S$) with the fppf topology, every scheme $X$ defines a representable stack $h_X$ with $h_X(T) = \operatorname{Hom}(T, X)$ (discrete groupoid). The etale and fppf topologies are subcanonical, so representable presheaves are automatically sheaves.
+
+For example, $h_{\mathbb{A}^n}(T) = \mathcal{O}(T)^n$ (the set of $n$-tuples of global functions on $T$).
+</Example>
+
+<Example id="representable-affine" title="Affine schemes">
+The representable CFG $h_{\operatorname{Spec} A}$ for a ring $A$ sends $T = \operatorname{Spec} B$ to $\operatorname{Hom}(A, B)$ (ring homomorphisms). For $A = \mathbb{Z}[x]$, we get $h_{\mathbb{A}^1}(T) = \mathcal{O}(T)$ (the "generic point"). For $A = \mathbb{Z}[x, y]/(xy - 1)$, we get $h_{\mathbb{G}_m}(T) = \mathcal{O}(T)^*$ (units).
+</Example>
+
+---
+
+## Statement of the 2-Yoneda Lemma
+
+<Definition title="2-Yoneda Lemma" number="2.5.2">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a CFG over a category $\mathcal{C}$, and let $U \in \mathcal{C}$. There is an **equivalence of categories**:
+
+$$\operatorname{Hom}_{\mathbf{CFG}(\mathcal{C})}(h_U, \mathcal{F}) \simeq \mathcal{F}(U)$$
+
+Here $\operatorname{Hom}_{\mathbf{CFG}(\mathcal{C})}(h_U, \mathcal{F})$ is the category whose objects are morphisms (functors) $h_U \to \mathcal{F}$ over $\mathcal{C}$, and whose morphisms are 2-morphisms (natural transformations) between such functors.
+
+The equivalence sends a morphism $F : h_U \to \mathcal{F}$ to $F_U(\operatorname{id}_U) \in \mathcal{F}(U)$, and conversely, an object $x \in \mathcal{F}(U)$ to the morphism $\Phi_x : h_U \to \mathcal{F}$ defined by $\Phi_x(f : V \to U) = f^*x$.
+</Definition>
+
+<Remark title="Why equivalence, not isomorphism">
+In the classical Yoneda lemma, we get a **bijection** of sets. In the 2-Yoneda lemma, we get an **equivalence of categories** (not an isomorphism). This is because the pullback $f^*x$ is only defined up to unique isomorphism (depending on the choice of cleavage), so different cleavage choices give naturally isomorphic, but not identical, functors $\Phi_x$.
+
+This is a fundamental feature of 2-category theory: "equations" are replaced by "coherent isomorphisms."
+</Remark>
+
+---
+
+## Proof Idea
+
+<Remark title="Sketch of proof">
+**Construction of the equivalence**: Given $x \in \mathcal{F}(U)$, define $\Phi_x : h_U \to \mathcal{F}$ as follows: for $f : V \to U$ (an object of $h_U$ over $V$), set $\Phi_x(f) = f^*x$ using a chosen cleavage. For a morphism $g : W \to V$ in $h_U$ (i.e., a commutative triangle $f \circ g = h$ in $\mathcal{C}$), set $\Phi_x(g)$ to be the unique morphism $g^*(f^*x) \to (f \circ g)^*x$ from the coherence of the cleavage.
+
+**Construction of the quasi-inverse**: Given $F : h_U \to \mathcal{F}$, set $\Psi(F) = F_U(\operatorname{id}_U) \in \mathcal{F}(U)$.
+
+**Verification**: The composition $\Psi \circ \Phi$ sends $x$ to $(\operatorname{id}_U)^*x \cong x$. The composition $\Phi \circ \Psi$ sends $F$ to $\Phi_{F(\operatorname{id}_U)}$, and the universal property of cartesian arrows gives a canonical natural isomorphism $\Phi_{F(\operatorname{id}_U)} \cong F$.
+</Remark>
+
+---
+
+## Examples and Applications
+
+<Example id="yoneda-evaluation" title="Evaluation at a point">
+Let $\mathcal{F} = \mathcal{M}_g$ (moduli of genus-$g$ curves) over $\mathbf{Sch}$. By the 2-Yoneda lemma:
+
+$$\operatorname{Hom}(h_S, \mathcal{M}_g) \simeq \mathcal{M}_g(S) = \{\text{smooth proper curves } C \to S \text{ of genus } g\}$$
+
+So a morphism $S \to \mathcal{M}_g$ (i.e., $h_S \to \mathcal{M}_g$) is the same as a family of curves over $S$. The "universal family" corresponds to the identity morphism $\mathcal{M}_g \to \mathcal{M}_g$ (though $\mathcal{M}_g$ is not representable).
+</Example>
+
+<Example id="yoneda-BG" title="Morphisms into BG">
+By the 2-Yoneda lemma:
+$$\operatorname{Hom}(h_S, BG) \simeq BG(S) = \{\text{principal } G\text{-torsors over } S\}$$
+
+A morphism $S \to BG$ corresponds to a $G$-torsor on $S$. The trivial morphism (composition $S \to * \to BG$) corresponds to the trivial torsor $G \times S$.
+
+For $G = \mathbb{G}_m$: morphisms $S \to B\mathbb{G}_m$ correspond to line bundles on $S$. The "tautological" line bundle on $B\mathbb{G}_m$ corresponds to the identity map $B\mathbb{G}_m \to B\mathbb{G}_m$.
+</Example>
+
+<Example id="yoneda-spec-k" title="Points of a stack">
+For $k$ a field and $\mathcal{X}$ a stack over $\mathbf{Sch}/k$:
+$$\mathcal{X}(k) := \operatorname{Hom}(h_{\operatorname{Spec} k}, \mathcal{X}) \simeq \mathcal{X}(\operatorname{Spec} k)$$
+
+This is a groupoid, not a set. The "set of $k$-points" is $|\mathcal{X}(k)| = \pi_0(\mathcal{X}(k))$ (isomorphism classes), but the full groupoid contains automorphism information.
+
+For $\mathcal{X} = B\mathbb{G}_m$ over $k$ algebraically closed: $|\mathcal{X}(k)| = \{*\}$ (one point), but $\operatorname{Aut}(*) = k^*$. For $\mathcal{X} = \mathcal{M}_2$: $|\mathcal{X}(k)|$ parametrizes genus-2 curves up to isomorphism.
+</Example>
+
+<Example id="yoneda-natural-trans" title="2-morphisms and automorphisms">
+Given two morphisms $f, g : h_S \to \mathcal{F}$ corresponding to objects $x, y \in \mathcal{F}(S)$, a 2-morphism $\alpha : f \Rightarrow g$ corresponds to an isomorphism $x \xrightarrow{\sim} y$ in $\mathcal{F}(S)$.
+
+In particular, the 2-automorphisms of a morphism $f : h_S \to \mathcal{F}$ correspond to $\operatorname{Aut}_{\mathcal{F}(S)}(x)$. This is how stacks encode automorphism groups: the group of self-2-morphisms of a point $S \to \mathcal{X}$.
+</Example>
+
+---
+
+## Representable Morphisms
+
+<Definition title="Representable morphism" number="2.5.3">
+A morphism $f : \mathcal{X} \to \mathcal{Y}$ of stacks (or CFGs) over a site $(\mathcal{C}, \tau)$ is **representable** (or **representable by objects of $\mathcal{C}$**) if for every object $U \in \mathcal{C}$ and every morphism $h_U \to \mathcal{Y}$, the 2-fiber product $\mathcal{X} \times_\mathcal{Y} h_U$ is representable:
+
+$$\mathcal{X} \times_\mathcal{Y} h_U \simeq h_V$$
+
+for some $V \in \mathcal{C}$.
+
+In the context of algebraic stacks, "representable" typically means "representable by algebraic spaces" (the fiber product is an algebraic space).
+</Definition>
+
+<Example id="representable-BG-to-point" title="The morphism from a scheme to BG">
+Let $P \to S$ be a $G$-torsor. The corresponding morphism $f : h_S \to BG$ is such that the 2-fiber product $h_S \times_{BG} h_S$ is representable by the scheme $P$ (viewed as a $G$-scheme over $S$):
+
+$$h_S \times_{BG} h_S \simeq h_P$$
+
+More precisely, a $T$-point of $h_S \times_{BG} h_S$ consists of two maps $T \to S$ with an isomorphism of the corresponding torsors, which is the same as a section of $P_T$, which by definition is a map $T \to P$.
+
+This shows that the diagonal $\Delta : h_S \to h_S \times_{BG} h_S$ is a $G$-torsor, and hence $BG$ has "affine diagonal" when $G$ is affine.
+</Example>
+
+<Example id="representable-Mg" title="Representable morphisms for M_g">
+The forgetful morphism $\mathcal{M}_{g,1} \to \mathcal{M}_g$ (forget the marked point) is representable. Given a family $C \to S$ (a morphism $h_S \to \mathcal{M}_g$), the fiber product is:
+
+$$\mathcal{M}_{g,1} \times_{\mathcal{M}_g} h_S \simeq h_C$$
+
+A $T$-point of the fiber product is a family $C_T \to T$ together with a section $T \to C_T$, which is the same as a map $T \to C$ over $S$. So the fiber product is the total space $C$ itself. This is the **universal curve** over $\mathcal{M}_g$ (in a relative sense).
+</Example>
+
+<Example id="representable-diagonal" title="Diagonal is representable">
+For a stack $\mathcal{X}$, the **diagonal** $\Delta : \mathcal{X} \to \mathcal{X} \times \mathcal{X}$ is representable if and only if for any two morphisms $h_U \to \mathcal{X}$ and $h_V \to \mathcal{X}$ (corresponding to objects $x \in \mathcal{X}(U)$ and $y \in \mathcal{X}(V)$), the Isom presheaf $\operatorname{Isom}(x, y)$ is representable by an object (scheme, algebraic space) of $\mathcal{C}$.
+
+This is a key condition in the definition of algebraic stacks:
+- **Deligne-Mumford stack**: diagonal is representable, unramified, and separated.
+- **Artin stack**: diagonal is representable and of finite type.
+</Example>
+
+---
+
+## Functors of Points for Stacks
+
+<Definition title="Functor of points" number="2.5.4">
+The 2-Yoneda lemma justifies the **functor of points** approach to stacks: a stack $\mathcal{X}$ over $\mathbf{Sch}$ is completely determined by its "functor of points"
+$$\mathcal{X}(-) : \mathbf{Sch}^{\mathrm{op}} \to \mathbf{Grpd}, \quad S \mapsto \mathcal{X}(S)$$
+together with the pullback functors. Morphisms $\mathcal{X} \to \mathcal{Y}$ are determined by their effect on $S$-points for all $S$.
+
+This is the stack-theoretic generalization of the scheme-theoretic functor of points, where a scheme $X$ is determined by $h_X(S) = \operatorname{Hom}(S, X)$.
+</Definition>
+
+<Example id="functor-points-affine" title="Functor of points for affine group schemes">
+The algebraic group $GL_n$ has functor of points $GL_n(S) = GL_n(\mathcal{O}(S))$ for affine $S = \operatorname{Spec} R$. The classifying stack $BGL_n$ has:
+
+$$BGL_n(S) = \{\text{rank-}n \text{ vector bundles on } S\}$$
+
+A morphism $f : S \to BGL_n$ is the same as a rank-$n$ vector bundle on $S$, by the 2-Yoneda lemma.
+
+The quotient stack $[\operatorname{Spec} k / GL_n]$ has:
+$$[\operatorname{Spec} k / GL_n](S) = \{(P, \sigma) : P \text{ a } GL_n\text{-torsor on } S, \sigma : P \to \operatorname{Spec} k \text{ equivariant}\} \simeq BGL_n(S)$$
+since every equivariant map to a point is unique.
+</Example>
+
+<Example id="functor-points-Hilb" title="Functor of points for the Hilbert scheme">
+The Hilbert scheme $\operatorname{Hilb}^n_{X/S}$ represents the functor:
+$$T \mapsto \{Z \subset X_T : Z \to T \text{ flat, proper, with Hilbert polynomial } n\}$$
+
+By Yoneda (classical, since this is a scheme), a morphism $T \to \operatorname{Hilb}^n$ is the same as a flat family of subschemes parametrized by $T$. The 2-Yoneda lemma tells us the analogous story for stacks.
+</Example>
+
+<Example id="functor-points-Bmu" title="Points of the classifying stack of mu_n">
+For $\mu_n = \operatorname{Spec} k[t]/(t^n - 1)$, the classifying stack $B\mu_n$ parametrizes $\mu_n$-torsors:
+
+$$B\mu_n(S) = \{(\mathcal{L}, \phi) : \mathcal{L} \text{ a line bundle on } S, \phi : \mathcal{L}^{\otimes n} \xrightarrow{\sim} \mathcal{O}_S\}$$
+
+An object is a line bundle with a trivialization of its $n$-th tensor power -- an "$n$-th root of the trivial bundle." The automorphism group is $\mu_n(S)$ acting by $\zeta \cdot (\mathcal{L}, \phi) = (\mathcal{L}, \zeta^n \phi)$ (but $\zeta^n = 1$, so $\operatorname{Aut} = \mu_n$).
+</Example>
+
+---
+
+## The Yoneda Embedding for Stacks
+
+<Definition title="2-Yoneda embedding" number="2.5.5">
+The **2-Yoneda embedding** is the 2-functor:
+$$\mathcal{Y} : \mathcal{C} \to \mathbf{CFG}(\mathcal{C}), \quad U \mapsto h_U$$
+
+The 2-Yoneda lemma implies this is **2-fully faithful**: for any $U, V \in \mathcal{C}$,
+$$\operatorname{Hom}_{\mathbf{CFG}}(h_U, h_V) \simeq h_V(U) = \operatorname{Hom}_\mathcal{C}(U, V)$$
+
+The right-hand side is a discrete groupoid (a set), and the equivalence restricts to a bijection on isomorphism classes. So the Yoneda embedding is fully faithful in the usual sense.
+</Definition>
+
+<Example id="yoneda-embedding-schemes" title="Schemes inside stacks">
+The 2-Yoneda embedding $\mathbf{Sch} \hookrightarrow \mathbf{Stacks}$ is 2-fully faithful. This means:
+- Schemes form a full sub-2-category of stacks.
+- A morphism between representable stacks $h_X \to h_Y$ is the same as a morphism of schemes $X \to Y$.
+- There are no nontrivial 2-morphisms between morphisms of schemes (since the fibers are discrete).
+
+A stack $\mathcal{X}$ is representable (equivalent to $h_X$ for some scheme $X$) if and only if $\mathcal{X}(S)$ is a discrete groupoid (set) for all $S$ and $\mathcal{X}$ is a sheaf.
+</Example>
+
+<Example id="yoneda-representability" title="Testing representability">
+The 2-Yoneda lemma gives a criterion: a stack $\mathcal{X}$ is representable if and only if:
+1. All automorphism groups $\operatorname{Aut}(x)$ are trivial for all $x \in \mathcal{X}(S)$.
+2. The presheaf of isomorphism classes $S \mapsto \pi_0(\mathcal{X}(S))$ is a sheaf.
+3. This sheaf is representable.
+
+Condition (1) is the key distinction: stacks with nontrivial automorphisms can never be schemes.
+
+For $\mathcal{M}_g$ ($g \geq 2$): condition (1) fails (the general curve has trivial automorphisms, but special curves like hyperelliptic curves have $\mathbb{Z}/2\mathbb{Z}$). So $\mathcal{M}_g$ is not a scheme.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+The 2-Yoneda lemma provides the conceptual foundation for working with stacks:
+
+1. **Objects are morphisms**: An object $x \in \mathcal{X}(S)$ is the same as a morphism $S \to \mathcal{X}$. This is the "functor of points" philosophy, elevated to the 2-categorical setting.
+
+2. **Automorphisms are 2-morphisms**: The automorphism group of $x$ equals the group of 2-automorphisms of the corresponding morphism $S \to \mathcal{X}$.
+
+3. **Representable morphisms**: Fiber products with representable objects detect geometric properties. A morphism $\mathcal{X} \to \mathcal{Y}$ is representable if pulling back along any point $S \to \mathcal{Y}$ gives a representable object.
+
+4. **Embedding**: Schemes embed fully faithfully into stacks, and properties of morphisms of stacks can be defined by pulling back to the representable case.
+
+These principles drive all subsequent developments: the definition of algebraic stacks, smooth/etale/flat morphisms of stacks, and cohomology of stacks.
+</Remark>

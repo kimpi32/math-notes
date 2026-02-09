@@ -1,0 +1,190 @@
+export const metadata = {
+  title: 'Stackification Existence -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Theorem -- Stackification Existence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Stackification Existence
+
+The stackification theorem guarantees that every category fibered in groupoids over a site can be turned into a stack in a universal way. This is the 2-categorical analogue of the sheafification theorem for presheaves.
+
+---
+
+## Main Theorem
+
+<Theorem title="Existence and uniqueness of stackification" number="2.7.1">
+Let $(\mathcal{C}, \tau)$ be a site and let $\mathcal{F}$ be a category fibered in groupoids over $\mathcal{C}$. There exists a stack $\mathcal{F}^{\mathrm{st}}$ over $(\mathcal{C}, \tau)$ and a morphism of CFGs
+
+$$\eta : \mathcal{F} \longrightarrow \mathcal{F}^{\mathrm{st}}$$
+
+satisfying the following **universal property**: for every stack $\mathcal{G}$ over $(\mathcal{C}, \tau)$ and every morphism $F : \mathcal{F} \to \mathcal{G}$ of CFGs, there exists a morphism of stacks $\tilde{F} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$, unique up to unique 2-isomorphism, such that $\tilde{F} \circ \eta \cong F$.
+
+Moreover, the pair $(\mathcal{F}^{\mathrm{st}}, \eta)$ is unique up to equivalence: if $(\mathcal{G}, \eta')$ is another such pair, there exists an equivalence $\mathcal{F}^{\mathrm{st}} \simeq \mathcal{G}$ compatible with $\eta$ and $\eta'$.
+</Theorem>
+
+---
+
+## Properties of the Stackification Morphism
+
+<Theorem title="Properties of eta" number="2.7.2">
+The stackification morphism $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ satisfies:
+
+**(i) Locally essentially surjective:** For every $U \in \mathcal{C}$ and every object $x \in \mathcal{F}^{\mathrm{st}}(U)$, there exists a covering $\{U_i \to U\}$ such that $x|_{U_i}$ is in the essential image of $\eta(U_i) : \mathcal{F}(U_i) \to \mathcal{F}^{\mathrm{st}}(U_i)$ for each $i$.
+
+**(ii) Locally fully faithful:** For every $U \in \mathcal{C}$ and objects $x, y \in \mathcal{F}(U)$, the morphism $\eta$ induces an isomorphism of sheaves:
+$$\operatorname{Isom}_\mathcal{F}(x, y)^+ \xrightarrow{\sim} \operatorname{Isom}_{\mathcal{F}^{\mathrm{st}}}(\eta(x), \eta(y))$$
+where $\operatorname{Isom}_\mathcal{F}(x, y)^+$ denotes the sheafification of the presheaf $\operatorname{Isom}_\mathcal{F}(x, y)$.
+
+**(iii) Characterization:** A morphism $\eta : \mathcal{F} \to \mathcal{G}$ of CFGs with $\mathcal{G}$ a stack is a stackification if and only if it satisfies both (i) and (ii).
+</Theorem>
+
+<Remark title="Analogies with sheafification">
+Properties (i) and (ii) are direct analogues of the properties of sheafification $\theta : F \to F^+$ for presheaves:
+- (i) is the analogue of "$F^+$ has the same local sections as $F$."
+- (ii) is the analogue of "$F^+$ has the same stalks as $F$."
+
+In the presheaf case, $\theta_p : F_p \to F^+_p$ is an isomorphism on stalks. In the stack case, $\eta$ induces isomorphisms on sheafified Isom (the "stacky stalks").
+</Remark>
+
+---
+
+## Uniqueness
+
+<Theorem title="Uniqueness of stackification" number="2.7.3">
+Let $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ and $\eta' : \mathcal{F} \to \mathcal{G}$ be two stackifications of $\mathcal{F}$ (both satisfying the universal property). Then there exists an equivalence of stacks $\Psi : \mathcal{F}^{\mathrm{st}} \xrightarrow{\sim} \mathcal{G}$ and a 2-isomorphism $\alpha : \Psi \circ \eta \xRightarrow{\sim} \eta'$. Moreover, the pair $(\Psi, \alpha)$ is unique up to unique 2-isomorphism.
+</Theorem>
+
+<Proof>
+By the universal property of $\eta$, there exists $\tilde{\eta}' : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$ with $\tilde{\eta}' \circ \eta \cong \eta'$. By the universal property of $\eta'$, there exists $\widetilde{\eta} : \mathcal{G} \to \mathcal{F}^{\mathrm{st}}$ with $\widetilde{\eta} \circ \eta' \cong \eta$. The composition $\widetilde{\eta} \circ \tilde{\eta}' : \mathcal{F}^{\mathrm{st}} \to \mathcal{F}^{\mathrm{st}}$ satisfies $(\widetilde{\eta} \circ \tilde{\eta}') \circ \eta \cong \eta$. By uniqueness (up to unique 2-isomorphism) in the universal property of $\eta$, $\widetilde{\eta} \circ \tilde{\eta}' \cong \operatorname{id}_{\mathcal{F}^{\mathrm{st}}}$. Similarly $\tilde{\eta}' \circ \widetilde{\eta} \cong \operatorname{id}_{\mathcal{G}}$. So $\tilde{\eta}'$ is an equivalence.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="stackification-trivial" title="Stackification of a stack is itself">
+If $\mathcal{F}$ is already a stack, then $\eta = \operatorname{id} : \mathcal{F} \to \mathcal{F}$ is a stackification. By uniqueness, $\mathcal{F}^{\mathrm{st}} \simeq \mathcal{F}$.
+</Example>
+
+<Example id="stackification-sheaf" title="Stackification reduces to sheafification for sets">
+Let $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ be a presheaf, viewed as a CFG with discrete fibers. The stackification $F^{\mathrm{st}}$ is equivalent (as a CFG with discrete fibers) to the sheafification $F^+$. This is because:
+- For discrete groupoids, "equivalence of categories" reduces to "bijection of sets."
+- The descent data category for a discrete CFG is a set (discrete groupoid).
+- The stackification universal property reduces to the sheafification universal property.
+</Example>
+
+<Example id="stackification-presheaf-groupoids" title="Stackification of a presheaf of groupoids">
+Let $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Grpd}$ be a presheaf of groupoids (strict functor, giving a split fibered category). The stackification produces a stack $F^{\mathrm{st}}$ that may be non-split.
+
+For example, let $F(U) = BG(U)$ be the presheaf sending every $U$ to the groupoid with one object and automorphism group $G(U)$. This is not a stack in general (descent fails). The stackification is the classifying stack $BG$ (torsors, not just trivial torsors).
+</Example>
+
+<Example id="stackification-orbit" title="Stackification of orbit presheaf to quotient stack">
+Let $G$ act on $X$. The orbit presheaf $\mathcal{O}$ with $\mathcal{O}(U) = X(U)/G(U)$ (as a set, viewed as discrete groupoid) is a CFG. Its stackification is **not** the quotient stack $[X/G]$ directly, because we lost the automorphism information.
+
+Instead, consider the CFG $\mathcal{F}$ with $\mathcal{F}(U) = $ the groupoid whose objects are elements of $X(U)$ and where $\operatorname{Hom}(x, y) = \{g \in G(U) : g \cdot x = y\}$. This is the action groupoid $[X(U)/G(U)]$. The stackification of $\mathcal{F}$ is the quotient stack $[X/G]$.
+</Example>
+
+<Example id="stackification-Zariski-to-etale" title="Stackification across topologies">
+Let $G$ be a smooth group scheme over $S$. Define $BG^{\mathrm{Zar}}$ as the CFG classifying Zariski-locally trivial $G$-torsors. This is a stack for the Zariski topology but typically **not** for the etale topology (there are etale-locally trivial torsors that are not Zariski-locally trivial).
+
+The stackification of $BG^{\mathrm{Zar}}$ on the etale site is $BG^{\mathrm{et}}$ (etale-locally trivial torsors). Similarly, the stackification of $BG^{\mathrm{et}}$ on the fppf site is $BG^{\mathrm{fppf}}$.
+
+For $G = GL_n$: all torsors are Zariski-locally trivial (Hilbert's Theorem 90), so $BGL_n^{\mathrm{Zar}} = BGL_n^{\mathrm{et}} = BGL_n^{\mathrm{fppf}}$.
+
+For $G = PGL_n$: there exist etale-locally trivial but not Zariski-locally trivial $PGL_n$-torsors (these correspond to Brauer-Severi varieties). So $BPGL_n^{\mathrm{Zar}} \subsetneq BPGL_n^{\mathrm{et}}$.
+</Example>
+
+<Example id="stackification-gerbe" title="Gerbes via stackification">
+Let $\mathcal{C} = \mathbf{Sch}/S$ with the etale topology, and let $\alpha \in \check{H}^2(S, \mathbb{G}_m)$ be a Brauer class represented by a Cech 2-cocycle $(\alpha_{ijk}) \in \mathbb{G}_m(U_{ijk})$ for a covering $\{U_i \to S\}$.
+
+Define a CFG $\mathcal{F}_\alpha$ by taking $\mathcal{F}_\alpha(T) = \emptyset$ for $T \to S$ that does not factor through any $U_i$, and using the cocycle data on the cover. The stackification of $\mathcal{F}_\alpha$ is a $\mathbb{G}_m$-gerbe over $S$ representing the class $\alpha$.
+
+The isomorphism class of the gerbe in $H^2(S, \mathbb{G}_m)$ depends only on the cohomology class of $\alpha$, not the specific cocycle.
+</Example>
+
+---
+
+## The Two-Step Construction
+
+<Theorem title="Two-step stackification" number="2.7.4">
+The stackification can be constructed in two steps:
+
+**Step 1 (Prestackification):** Define $\mathcal{F}^{\mathrm{ps}}$ with the same objects as $\mathcal{F}$ but with morphisms sheafified:
+$$\operatorname{Hom}_{\mathcal{F}^{\mathrm{ps}}(U)}(x, y) = \operatorname{Isom}_\mathcal{F}(x, y)^+(U)$$
+Then $\mathcal{F}^{\mathrm{ps}}$ is a prestack with $\eta_1 : \mathcal{F} \to \mathcal{F}^{\mathrm{ps}}$.
+
+**Step 2 (Effectivization):** Define $\mathcal{F}^{\mathrm{st}} = (\mathcal{F}^{\mathrm{ps}})^{\mathrm{eff}}$ where objects over $U$ are descent data for $\mathcal{F}^{\mathrm{ps}}$ relative to coverings of $U$, and morphisms are compatible families of isomorphisms on a common refinement. Then $\mathcal{F}^{\mathrm{st}}$ is a stack with $\eta_2 : \mathcal{F}^{\mathrm{ps}} \to \mathcal{F}^{\mathrm{st}}$.
+
+The composition $\eta = \eta_2 \circ \eta_1 : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ is the stackification.
+</Theorem>
+
+<Example id="two-step-BG" title="Two-step construction for BG">
+**Step 1**: Start with the CFG $\mathcal{F}$ where $\mathcal{F}(S)$ has one object (the "trivial torsor") with $\operatorname{Aut} = G(S)$. The presheaf $\operatorname{Isom}$ is already a sheaf (it is the sheaf represented by $G$), so $\mathcal{F}^{\mathrm{ps}} = \mathcal{F}$ and Step 1 is trivial.
+
+**Step 2**: Objects of $\mathcal{F}^{\mathrm{st}}(S)$ are descent data: coverings $\{S_i \to S\}$ with trivial torsors on each $S_i$ and transition functions $g_{ij} \in G(S_i \times_S S_j)$ satisfying the cocycle condition. This is precisely a $G$-torsor on $S$!
+
+So $\mathcal{F}^{\mathrm{st}} = BG$, as expected.
+</Example>
+
+<Example id="two-step-non-separated" title="Step 1 matters: non-separated prestacks">
+Consider the presheaf $F$ on $\mathbb{R}$ (with the usual topology) sending $U$ to the set of bounded continuous functions $U \to \mathbb{R}$, viewed as a CFG with discrete fibers. This is not a separated presheaf (hence not a prestack): the function $f(x) = x$ is bounded on each interval $(-n, n)$ but not globally, so locality fails.
+
+**Step 1**: Sheafify Isom (which for a presheaf of sets just means sheafify the presheaf). The prestackification is the sheaf of all continuous functions.
+
+**Step 2**: Since the prestackification is already a sheaf (= stack with discrete fibers), Step 2 is trivial.
+</Example>
+
+---
+
+## Functoriality
+
+<Theorem title="Functoriality of stackification" number="2.7.5">
+The stackification construction is functorial: a morphism $F : \mathcal{F} \to \mathcal{G}$ of CFGs induces a morphism $F^{\mathrm{st}} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}^{\mathrm{st}}$ of stacks, unique up to unique 2-isomorphism, making the diagram
+$$\mathcal{F} \xrightarrow{F} \mathcal{G}$$
+$$\downarrow \eta_\mathcal{F} \quad\quad \downarrow \eta_\mathcal{G}$$
+$$\mathcal{F}^{\mathrm{st}} \xrightarrow{F^{\mathrm{st}}} \mathcal{G}^{\mathrm{st}}$$
+2-commutative.
+
+Moreover, a 2-morphism $\alpha : F \Rightarrow G$ between morphisms $\mathcal{F} \to \mathcal{G}$ induces a 2-morphism $\alpha^{\mathrm{st}} : F^{\mathrm{st}} \Rightarrow G^{\mathrm{st}}$.
+
+In other words, stackification defines a **2-functor** $\mathbf{CFG}(\mathcal{C}) \to \mathbf{Stacks}(\mathcal{C})$ that is **left 2-adjoint** to the inclusion $\mathbf{Stacks}(\mathcal{C}) \hookrightarrow \mathbf{CFG}(\mathcal{C})$.
+</Theorem>
+
+<Example id="functoriality-quotient" title="Functorial application: quotient stacks">
+Let $\phi : G \to H$ be a homomorphism of group schemes, and let $G$ act on $X$ and $H$ act on $Y$, with a $\phi$-equivariant morphism $f : X \to Y$. Then $f$ induces a morphism of the corresponding action groupoid CFGs, and stackification gives a morphism of quotient stacks:
+$$[X/G] \to [Y/H]$$
+
+For instance, the inclusion $G \hookrightarrow G$ (identity) and the action map $G \to *$ give $[G/G] \to [*/G] = BG$: the inertia map.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Summary of stackification existence">
+The stackification theorem is a cornerstone of stack theory:
+
+1. **Existence**: Every CFG has a stackification, constructed in two steps (sheafify Isom, then add descent data).
+2. **Uniqueness**: The stackification is unique up to canonical equivalence.
+3. **Universal property**: Left 2-adjoint to the inclusion of stacks into CFGs.
+4. **Local nature**: The stackification does not change local data -- it only enforces global descent.
+5. **Functoriality**: The construction is functorial in the CFG.
+
+The complete proof is given in the proof section, following the two-step approach.
+</Remark>

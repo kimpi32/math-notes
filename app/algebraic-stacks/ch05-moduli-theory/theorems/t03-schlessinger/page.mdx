@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Schlessinger\'s Theorem — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Theorem — Schlessinger's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Schlessinger's Theorem
+
+Schlessinger's theorem (1968) provides necessary and sufficient conditions for a deformation functor to have a hull (pro-representable hull), and conditions for full pro-representability. It is the foundational result in formal deformation theory and underpins the local study of moduli problems.
+
+---
+
+## 1. Setup and Notation
+
+<Definition title="Category of Artinian Rings">
+Let $k$ be a field. Denote by $\mathsf{Art}_k$ the category of local Artinian $k$-algebras $(A, \mathfrak{m}_A)$ with residue field $A/\mathfrak{m}_A \cong k$. Morphisms are local $k$-algebra homomorphisms. The ring of dual numbers $k[\varepsilon] = k[\varepsilon]/(\varepsilon^2)$ is the simplest non-trivial object.
+</Definition>
+
+<Definition title="Functor of Artinian Rings">
+A **functor of Artinian rings** is a covariant functor
+$$F: \mathsf{Art}_k \to \mathsf{Sets}$$
+with $F(k) = \lbrace * \rbrace$ (a single point, the object being deformed). Such functors arise naturally from moduli problems by restricting to infinitesimal neighborhoods of a point.
+</Definition>
+
+<Definition title="Tangent Space">
+The **tangent space** to $F$ is
+$$t_F = F(k[\varepsilon]/(\varepsilon^2))$$
+If $F$ satisfies condition (H2) below, $t_F$ carries a natural $k$-vector space structure.
+</Definition>
+
+---
+
+## 2. The Fiber Product Condition
+
+The key technical tool is the analysis of fiber products in $\mathsf{Art}_k$.
+
+<Definition title="Fiber Product Diagram">
+Given morphisms $A_1 \to A_0$ and $A_2 \to A_0$ in $\mathsf{Art}_k$, the fiber product is
+$$A_1 \times_{A_0} A_2 = \lbrace (a_1, a_2) \in A_1 \times A_2 \mid a_1 \bmod A_0 = a_2 \bmod A_0 \rbrace$$
+The natural map on functors is
+$$F(A_1 \times_{A_0} A_2) \to F(A_1) \times_{F(A_0)} F(A_2)$$
+</Definition>
+
+---
+
+## 3. Schlessinger's Conditions
+
+<Theorem title="Schlessinger's Theorem (1968)">
+Let $F: \mathsf{Art}_k \to \mathsf{Sets}$ with $F(k) = \lbrace * \rbrace$ and $t_F$ finite-dimensional. Consider the conditions:
+
+**(H1)** For every fiber product diagram where $A_2 \to A_0$ is a small surjection, the natural map
+$$F(A_1 \times_{A_0} A_2) \to F(A_1) \times_{F(A_0)} F(A_2)$$
+is **surjective**.
+
+**(H2)** The above map is a **bijection** when $A_0 = k$ and $A_1 = A_2 = k[\varepsilon]$. (This gives $t_F$ a vector space structure.)
+
+**(H3)** $t_F$ is finite-dimensional over $k$.
+
+**(H4)** For every small surjection $A' \to A$, the map $F(A' \times_A A') \to F(A') \times_{F(A)} F(A')$ is a **bijection**.
+
+Then:
+- **(H1) + (H2) + (H3)** $\Longrightarrow$ $F$ has a **hull** (miniversal formal deformation).
+- **(H1) + (H2) + (H3) + (H4)** $\Longrightarrow$ $F$ is **pro-representable**.
+</Theorem>
+
+---
+
+## 4. Hulls and Pro-Representability
+
+<Definition title="Hull (Miniversal Deformation)">
+A **hull** for $F$ is a pair $(R, \hat{\xi})$ where:
+- $R$ is a complete local $k$-algebra with residue field $k$ and $\mathfrak{m}_R^2$ finitely generated.
+- $\hat{\xi} = \lbrace \xi_n \in F(R/\mathfrak{m}_R^n) \rbrace$ is a compatible system (formal element).
+- The induced morphism $h_R \to F$ is **smooth** (i.e., surjective on all Artinian quotients with the lifting property for small extensions).
+- The induced map on tangent spaces $t_{h_R} = \mathfrak{m}_R / \mathfrak{m}_R^2 \to t_F$ is an isomorphism.
+</Definition>
+
+<Definition title="Pro-Representability">
+$F$ is **pro-representable** if there exists a complete local $k$-algebra $R$ with
+$$F(A) \cong \mathrm{Hom}_{\text{cont}}(R, A)$$
+for all $A \in \mathsf{Art}_k$. This is stronger than having a hull: the morphism $h_R \to F$ is an isomorphism (not just smooth).
+</Definition>
+
+---
+
+## 5. Examples of Schlessinger's Conditions
+
+<Example title="Deformations of a Smooth Variety">
+For a smooth projective variety $X_0/k$, the deformation functor $\mathrm{Def}_{X_0}$ satisfies:
+- **(H1)**: Follows from the deformation theory of smooth morphisms.
+- **(H2)**: The tangent space $t_F = H^1(X_0, T_{X_0})$ has a natural vector space structure.
+- **(H3)**: $h^1(X_0, T_{X_0}) < \infty$ since $X_0$ is proper.
+- **(H4)**: Fails in general! Two deformations over $A'$ that agree modulo a small extension need not be the same deformation.
+
+So $\mathrm{Def}_{X_0}$ has a hull but is generally not pro-representable. It is pro-representable if and only if $\mathrm{Aut}(X_0) \to \mathrm{Aut}(H^0(X_0, \mathcal{O}_{X_0}))$ is injective (roughly, when automorphisms are "rigid").
+</Example>
+
+<Example title="Why (H4) Fails for Varieties with Automorphisms">
+Consider an elliptic curve $E$ with automorphism $[-1]$. Given a deformation $\mathcal{E}$ over $A'$, the pullback $[-1]^*\mathcal{E}$ is another deformation isomorphic to $\mathcal{E}$ over $A = A'/I$ (since $[-1]$ lifts to any infinitesimal thickening). But $\mathcal{E}$ and $[-1]^*\mathcal{E}$ might be distinct elements of $F(A')$ that become equal in $F(A)$. The fiber product $F(A' \times_A A')$ must account for this, and (H4) fails because the isomorphism $[-1]$ creates multiple elements mapping to the same pair.
+</Example>
+
+<Example title="Deformations of a Hypersurface Singularity">
+Let $f \in k[[x_1, \ldots, x_n]]$ define an isolated hypersurface singularity, and let $F$ be the functor of deformations of $X_0 = \mathrm{Spec}\, k[[x_1, \ldots, x_n]]/(f)$.
+
+The tangent space is $T^1 = k[[x_1, \ldots, x_n]] / (f, \partial f/\partial x_1, \ldots, \partial f/\partial x_n)$, the **Tjurina algebra**. For an isolated singularity, $\dim_k T^1 < \infty$.
+
+Condition (H4) holds because isolated singularities have trivial automorphisms in the formal category (the identity is the only automorphism fixing the singular point). So $F$ is pro-representable.
+</Example>
+
+<Example title="A_n Singularity">
+For the $A_n$ singularity $f = x^{n+1} + y^2$ (in $k[[x,y]]$):
+$$T^1 = k[[x,y]]/(x^{n+1} + y^2, (n+1)x^n, 2y) = k[x]/(x^n) \cong k^n$$
+The versal deformation is:
+$$F(t_1, \ldots, t_n) = x^{n+1} + t_{n-1}x^{n-1} + \cdots + t_1 x + t_0 + y^2$$
+The deformation ring is $R = k[[t_0, \ldots, t_{n-1}]]$, a smooth (power series) ring. The discriminant locus where the singularity persists is defined by the discriminant of the polynomial $x^{n+1} + t_{n-1}x^{n-1} + \cdots + t_0$.
+</Example>
+
+<Example title="D_4 Singularity">
+For $f = x^3 + y^3$ (the $D_4$ singularity in characteristic $\neq 3$):
+$$T^1 = k[[x,y]]/(x^3 + y^3, 3x^2, 3y^2) = k\lbrace 1, x, y, xy \rbrace \cong k^4$$
+The versal deformation is:
+$$F = x^3 + y^3 + t_3 xy + t_2 y + t_1 x + t_0$$
+The deformation ring $R = k[[t_0, t_1, t_2, t_3]]$ is smooth (no obstructions for curve singularities).
+</Example>
+
+<Example title="Cone over an Elliptic Curve">
+Let $X_0$ be the affine cone over an elliptic curve $E \hookrightarrow \mathbb{P}^2$ (a degree-3 cone in $\mathbb{A}^3$). The singularity at the vertex has:
+$$T^1 \cong \bigoplus_{n \geq 1} H^1(E, \mathcal{O}_E(n))$$
+which is 1-dimensional (only $n = 1$ contributes, giving $H^1(E, \mathcal{O}_E(1)) \cong H^1(E, \mathcal{O}_E) \cong k$).
+
+The obstruction space $T^2 = 0$ (the singularity is a complete intersection), so the deformation is unobstructed and $R = k[[t]]$.
+</Example>
+
+---
+
+## 6. The Tangent-Obstruction Exact Sequence
+
+<Theorem title="Exact Sequence for Fiber Products">
+For a functor $F$ satisfying (H1) and (H2), and a small extension $0 \to I \to A' \to A \to 0$, there is an exact sequence:
+$$0 \to t_F \otimes_k I \to F(A') \to F(A) \xrightarrow{\mathrm{ob}} \mathrm{Ob}(F) \otimes_k I$$
+where:
+- $t_F \otimes I$ acts freely and transitively on the fibers of $F(A') \to F(A)$ (when nonempty).
+- $\mathrm{ob}$ is the obstruction map.
+- $\mathrm{Ob}(F) = T^2$ is the obstruction space.
+
+The deformation ring has the form $R = k[[t_1, \ldots, t_m]]/(f_1, \ldots, f_r)$ where $m = \dim t_F$ and $r \leq \dim \mathrm{Ob}(F)$.
+</Theorem>
+
+<Example title="Obstructed Deformation: Mumford's Example">
+Mumford constructed a smooth projective surface $S$ in $\mathbb{P}^4$ (a regular surface of degree 15 with $p_g = 3$) whose deformation functor has:
+$$\dim t_F = h^1(S, T_S) = 0, \quad \dim \mathrm{Ob}(F) = h^2(S, T_S) \neq 0$$
+The surface is **rigid** (no deformations at all), yet the obstruction space is nonzero. This shows that the obstruction space can be "bigger than necessary."
+</Example>
+
+---
+
+## 7. Groupoid-Valued Version
+
+<Theorem title="Schlessinger for Groupoid-Valued Functors">
+For a functor $F: \mathsf{Art}_k \to \mathsf{Groupoids}$ (relevant for stacks), the analogous conditions are:
+- **(H1')**: The natural functor $F(A_1 \times_{A_0} A_2) \to F(A_1) \times_{F(A_0)} F(A_2)$ is essentially surjective when $A_2 \to A_0$ is surjective.
+- **(H2')**: It is an equivalence when $A_0 = k$.
+- **(H3')**: $t_F$ and $t_F^{-1} = \mathrm{Aut}_F(k[\varepsilon])$ are finite-dimensional.
+
+Under these conditions, $F$ admits a **versal formal object** (hull in the groupoid sense).
+</Theorem>
+
+<Example title="Deformation Groupoid of $\mathcal{M}_g$ at $[C]$">
+The deformation groupoid $F_{[C]}$ at a curve $[C] \in \mathcal{M}_g$:
+- $t_F = H^1(C, T_C) \cong k^{3g-3}$
+- $t_F^{-1} = H^0(C, T_C) = 0$ for $g \geq 2$
+- $\mathrm{Ob}(F) = H^2(C, T_C) = 0$
+
+Since $t_F^{-1} = 0$, condition (H4') holds and the groupoid functor is pro-representable (by $k[[t_1, \ldots, t_{3g-3}]]$). The **stack** structure at $[C]$ is the quotient $[\mathrm{Spf}\, k[[t_1, \ldots, t_{3g-3}]] / \mathrm{Aut}(C)]$.
+</Example>
+
+<Example title="Deformation Groupoid of $\mathrm{Bun}_n$ at $[\mathcal{E}]$">
+For a vector bundle $\mathcal{E}$ on a curve $C$ of genus $g$:
+- $t_F = H^1(C, \mathcal{E}nd(\mathcal{E})) \cong k^{n^2(g-1) + \dim \mathrm{End}(\mathcal{E})}$ (by Riemann-Roch)
+- $t_F^{-1} = H^0(C, \mathcal{E}nd(\mathcal{E})) = \mathrm{End}(\mathcal{E})$ (nontrivial! contains at least scalars)
+- $\mathrm{Ob}(F) = H^2(C, \mathcal{E}nd(\mathcal{E})) = 0$ (curve has dimension 1)
+
+The nonvanishing of $t_F^{-1}$ means (H4') fails: $F$ has a hull but is not pro-representable as a groupoid functor. This reflects the Artin stack (not DM) nature of $\mathrm{Bun}_n$.
+</Example>
+
+---
+
+## 8. Relation to Artin's Criteria
+
+<Remark title="Schlessinger to Artin">
+Schlessinger's theorem works at the **formal** level (complete local rings). To go from formal to algebraic, one needs:
+1. Schlessinger's conditions $\Rightarrow$ existence of a formal hull.
+2. Grothendieck's existence theorem $\Rightarrow$ effectivity (formal $\Rightarrow$ algebraic).
+3. Openness of versality $\Rightarrow$ the versal family covers an open neighborhood.
+
+Together, these give Artin's criteria. Schlessinger provides the infinitesimal foundation, and Artin's additional conditions bridge to the algebraic world.
+</Remark>
+
+<Example title="Summary of the Logical Chain">
+$$\text{Moduli Problem} \xrightarrow{\text{Schlessinger}} \text{Formal Hull} \xrightarrow{\text{Effectivity}} \text{Local Algebraic Family} \xrightarrow{\text{Openness}} \text{Smooth Atlas} \xrightarrow{\text{Artin}} \text{Algebraic Stack}$$
+</Example>

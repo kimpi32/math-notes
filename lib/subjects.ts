@@ -747,6 +747,129 @@ export const subjects: Subject[] = [
       },
     ],
   },
+  {
+    id: "algebraic-stacks",
+    titleKo: "대수 스택",
+    titleEn: "Algebraic Stacks",
+    description: "Stacks Project를 토대로 사이트, 하강, 올 범주, 대수 공간, 대수 스택, 모듈라이 이론을 체계적으로 다룹니다.",
+    color: "teal",
+    chapters: [
+      {
+        id: "ch01-sites-descent",
+        number: 1,
+        titleKo: "위치와 하강",
+        titleEn: "Sites and Descent",
+        description: "Grothendieck topologies, sheaves on sites, and faithfully flat descent",
+        concepts: [
+          { id: "c01-grothendieck-topology", type: "concept", titleKo: "그로텐디크 위상", titleEn: "Grothendieck Topologies", status: "complete" },
+          { id: "c02-sites-presheaves", type: "concept", titleKo: "사이트와 전층", titleEn: "Sites and Presheaves", status: "complete" },
+          { id: "c03-sheaves-on-sites", type: "concept", titleKo: "사이트 위의 층", titleEn: "Sheaves on Sites", status: "complete" },
+          { id: "c04-etale-fppf", type: "concept", titleKo: "에탈과 fppf 위상", titleEn: "Étale and fppf Topologies", status: "complete" },
+          { id: "c05-descent-data", type: "concept", titleKo: "하강 데이터", titleEn: "Descent Data", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-faithfully-flat-descent", type: "theorem", titleKo: "충실 평탄 하강", titleEn: "Faithfully Flat Descent", status: "complete" },
+          { id: "t02-etale-descent", type: "theorem", titleKo: "에탈 하강", titleEn: "Étale Descent", status: "complete" },
+          { id: "t03-sheafification", type: "theorem", titleKo: "사이트 위의 층화", titleEn: "Sheafification on Sites", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-faithfully-flat-descent-proof", type: "proof", titleKo: "충실 평탄 하강의 증명", titleEn: "Proof of Faithfully Flat Descent", status: "complete" },
+        ],
+      },
+      {
+        id: "ch02-fibered-categories",
+        number: 2,
+        titleKo: "올 범주",
+        titleEn: "Fibered Categories",
+        description: "Fibered categories, stacks, stackification, and the 2-Yoneda lemma",
+        concepts: [
+          { id: "c01-fibered-category", type: "concept", titleKo: "올 범주", titleEn: "Fibered Categories", status: "complete" },
+          { id: "c02-fibered-in-groupoids", type: "concept", titleKo: "군 아이 위의 올 범주", titleEn: "Categories Fibered in Groupoids", status: "complete" },
+          { id: "c03-stacks", type: "concept", titleKo: "스택", titleEn: "Stacks", status: "complete" },
+          { id: "c04-stackification", type: "concept", titleKo: "스택화", titleEn: "Stackification", status: "complete" },
+          { id: "c05-2-yoneda", type: "concept", titleKo: "2-요네다 보조정리", titleEn: "2-Yoneda Lemma", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-stack-condition", type: "theorem", titleKo: "스택 조건", titleEn: "Stack Condition", status: "complete" },
+          { id: "t02-stackification-existence", type: "theorem", titleKo: "스택화 존재성", titleEn: "Stackification Existence", status: "complete" },
+          { id: "t03-2-yoneda-lemma", type: "theorem", titleKo: "2-요네다 보조정리", titleEn: "2-Yoneda Lemma", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-stackification-proof", type: "proof", titleKo: "스택화의 증명", titleEn: "Proof of Stackification", status: "complete" },
+        ],
+      },
+      {
+        id: "ch03-algebraic-spaces",
+        number: 3,
+        titleKo: "대수 공간",
+        titleEn: "Algebraic Spaces",
+        description: "Algebraic spaces, étale equivalence relations, and their properties",
+        concepts: [
+          { id: "c01-algebraic-space", type: "concept", titleKo: "대수 공간", titleEn: "Algebraic Spaces", status: "complete" },
+          { id: "c02-etale-equivalence", type: "concept", titleKo: "에탈 동치 관계", titleEn: "Étale Equivalence Relations", status: "complete" },
+          { id: "c03-properties", type: "concept", titleKo: "대수 공간의 성질", titleEn: "Properties of Algebraic Spaces", status: "complete" },
+          { id: "c04-qcoh-sheaves", type: "concept", titleKo: "준연접층", titleEn: "QCoh Sheaves on Spaces", status: "complete" },
+          { id: "c05-separation-properness", type: "concept", titleKo: "분리성과 고유성", titleEn: "Separation and Properness", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-keel-mori", type: "theorem", titleKo: "킬-모리 정리", titleEn: "Keel–Mori Theorem", status: "complete" },
+          { id: "t02-chow-lemma", type: "theorem", titleKo: "차우 보조정리", titleEn: "Chow's Lemma for Algebraic Spaces", status: "complete" },
+          { id: "t03-nagata", type: "theorem", titleKo: "나가타 콤팩트화", titleEn: "Nagata Compactification", status: "complete" },
+          { id: "t04-artin-approximation", type: "theorem", titleKo: "아르틴 근사", titleEn: "Artin Approximation", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-keel-mori-proof", type: "proof", titleKo: "킬-모리 정리의 증명", titleEn: "Proof of Keel–Mori", status: "complete" },
+        ],
+      },
+      {
+        id: "ch04-algebraic-stacks",
+        number: 4,
+        titleKo: "대수 스택",
+        titleEn: "Algebraic Stacks",
+        description: "Artin stacks, Deligne–Mumford stacks, quotient stacks, and coarse moduli spaces",
+        concepts: [
+          { id: "c01-artin-stack", type: "concept", titleKo: "대수 (아르틴) 스택", titleEn: "Algebraic (Artin) Stacks", status: "complete" },
+          { id: "c02-deligne-mumford", type: "concept", titleKo: "들리뉴-멈퍼드 스택", titleEn: "Deligne–Mumford Stacks", status: "complete" },
+          { id: "c03-quotient-stack", type: "concept", titleKo: "몫 스택 [X/G]", titleEn: "Quotient Stacks [X/G]", status: "complete" },
+          { id: "c04-gerbes-root", type: "concept", titleKo: "제르브와 루트 스택", titleEn: "Gerbes and Root Stacks", status: "complete" },
+          { id: "c05-coarse-moduli", type: "concept", titleKo: "거친 모듈라이 공간", titleEn: "Coarse Moduli Spaces", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-artin-representability", type: "theorem", titleKo: "아르틴 표현가능성", titleEn: "Artin Representability", status: "complete" },
+          { id: "t02-keel-mori-stacks", type: "theorem", titleKo: "스택의 킬-모리", titleEn: "Keel–Mori for Stacks", status: "complete" },
+          { id: "t03-quotient-singularities", type: "theorem", titleKo: "몫 특이점", titleEn: "Quotient Singularities", status: "complete" },
+          { id: "t04-chow-lemma-stacks", type: "theorem", titleKo: "스택의 차우 보조정리", titleEn: "Chow's Lemma for Stacks", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-artin-representability-proof", type: "proof", titleKo: "아르틴 표현가능성의 증명", titleEn: "Proof of Artin Representability", status: "complete" },
+          { id: "p02-quotient-stack-algebraic", type: "proof", titleKo: "[X/G]가 대수적임의 증명", titleEn: "Proof that [X/G] is Algebraic", status: "complete" },
+        ],
+      },
+      {
+        id: "ch05-moduli-theory",
+        number: 5,
+        titleKo: "모듈라이 이론",
+        titleEn: "Moduli Theory",
+        description: "Moduli problems, moduli of curves, deformation theory, and Artin's criteria",
+        concepts: [
+          { id: "c01-moduli-problems", type: "concept", titleKo: "모듈라이 문제", titleEn: "Moduli Problems", status: "complete" },
+          { id: "c02-moduli-curves", type: "concept", titleKo: "곡선의 모듈라이 M_g", titleEn: "Moduli of Curves M_g", status: "complete" },
+          { id: "c03-classifying-stack", type: "concept", titleKo: "분류 스택 BG", titleEn: "Classifying Stack BG", status: "complete" },
+          { id: "c04-hilbert-quot", type: "concept", titleKo: "힐베르트·쿼트 스택", titleEn: "Hilbert and Quot Stacks", status: "complete" },
+          { id: "c05-deformation-theory", type: "concept", titleKo: "변형 이론", titleEn: "Deformation Theory", status: "complete" },
+        ],
+        theorems: [
+          { id: "t01-deligne-mumford-theorem", type: "theorem", titleKo: "들리뉴-멈퍼드 정리", titleEn: "Deligne–Mumford Theorem", status: "complete" },
+          { id: "t02-artin-criteria", type: "theorem", titleKo: "아르틴 판정 기준", titleEn: "Artin's Criteria", status: "complete" },
+          { id: "t03-schlessinger", type: "theorem", titleKo: "슐레진저 정리", titleEn: "Schlessinger's Theorem", status: "complete" },
+          { id: "t04-kodaira-spencer", type: "theorem", titleKo: "코다이라-스펜서 사상", titleEn: "Kodaira–Spencer Map", status: "complete" },
+        ],
+        proofs: [
+          { id: "p01-mg-is-dm-proof", type: "proof", titleKo: "M_g가 DM 스택임의 증명", titleEn: "Proof that M_g is a DM Stack", status: "complete" },
+        ],
+      },
+    ],
+  },
 ];
 
 export function getSubject(id: string): Subject | undefined {

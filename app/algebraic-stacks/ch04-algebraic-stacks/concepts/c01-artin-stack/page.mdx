@@ -1,0 +1,239 @@
+export const metadata = {
+  title: 'Algebraic (Artin) Stacks — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Concept — Algebraic (Artin) Stacks" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Algebraic (Artin) Stacks
+
+Algebraic stacks, introduced by Michael Artin, provide the most general framework in which moduli problems in algebraic geometry can be solved. They generalize algebraic spaces by allowing objects to have nontrivial automorphisms, which is captured by the groupoid structure of the stack. The essential idea is to require the existence of a **smooth atlas** from a scheme (or algebraic space), rather than the etale atlas demanded by Deligne--Mumford stacks.
+
+---
+
+## Motivation: why stacks?
+
+Many natural moduli problems fail to be representable by schemes or even algebraic spaces because the objects being parametrized carry nontrivial automorphisms. For instance, the moduli problem of vector bundles on a curve cannot be a fine moduli space as a scheme because vector bundles have scalar automorphisms. Stacks provide the correct categorical framework to handle these situations.
+
+<Remark title="The fundamental tension">
+If $F$ is a moduli functor and the objects it parametrizes have automorphisms, then $F$ cannot be a sheaf of sets -- it is naturally a sheaf of groupoids (a stack). Forcing it into a scheme (e.g., by rigidification or GIT quotient) loses information about automorphisms and introduces singularities that may not reflect the geometry of the moduli problem.
+</Remark>
+
+---
+
+## The definition of an algebraic stack
+
+<Definition title="Algebraic (Artin) Stack" number="4.1">
+A stack $\mathcal{X}$ over the category $(\mathrm{Sch}/S)_{\mathrm{fppf}}$ (schemes over a base $S$ with the fppf topology) is an **algebraic stack** (or **Artin stack**) if:
+
+1. The diagonal morphism $\Delta : \mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ is **representable** by algebraic spaces.
+2. There exists an algebraic space $U$ and a morphism $p : U \to \mathcal{X}$ that is **smooth** and **surjective** (a **smooth atlas** or **smooth presentation**).
+
+Here "representable" means: for any scheme $T$ and any morphism $T \to \mathcal{X} \times_S \mathcal{X}$ (equivalently, a pair of objects $\xi, \eta \in \mathcal{X}(T)$), the fiber product $T \times_{\mathcal{X} \times \mathcal{X}} \mathcal{X} \cong \operatorname{Isom}_T(\xi, \eta)$ is an algebraic space over $T$.
+</Definition>
+
+<Remark title="Representability of the diagonal">
+Condition (1) ensures that the isomorphism spaces $\operatorname{Isom}_T(\xi, \eta)$ are algebraic spaces, which is the minimal requirement for the geometry of $\mathcal{X}$ to be tractable. In particular, the automorphism group schemes $\operatorname{Aut}_T(\xi) = \operatorname{Isom}_T(\xi, \xi)$ are algebraic group spaces over $T$.
+</Remark>
+
+<Definition title="Smooth atlas" number="4.2">
+A **smooth atlas** (or **smooth presentation**) for an algebraic stack $\mathcal{X}$ is a smooth surjective morphism $p : U \to \mathcal{X}$ where $U$ is an algebraic space (often a scheme). Given such an atlas, the fiber product
+$$R = U \times_{\mathcal{X}} U$$
+is an algebraic space, and $(U, R, s, t, c)$ forms a smooth **groupoid in algebraic spaces**, where $s, t : R \rightrightarrows U$ are the source and target maps and $c : R \times_{s,U,t} R \to R$ is the composition. The stack $\mathcal{X}$ is equivalent to the quotient stack $[U/R]$.
+</Definition>
+
+---
+
+## Comparison with Deligne--Mumford stacks
+
+<Definition title="Deligne--Mumford stack" number="4.3">
+A **Deligne--Mumford (DM) stack** is an algebraic stack $\mathcal{X}$ that admits an **etale atlas**: there exists a scheme $U$ and an etale surjective morphism $U \to \mathcal{X}$.
+
+Equivalently, $\mathcal{X}$ is DM if and only if the diagonal $\Delta : \mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ is **unramified** (or equivalently, formally unramified).
+</Definition>
+
+<Remark title="DM vs Artin: the hierarchy">
+Every DM stack is an Artin stack, but the converse fails. The key distinction:
+
+| Property | DM stack | Artin stack |
+|---|---|---|
+| Atlas | etale | smooth |
+| Diagonal | unramified | representable |
+| Automorphism groups | discrete (etale, finite) | positive-dimensional allowed |
+| Typical example | $\mathcal{M}_g$ (curves) | $\mathcal{M}_{g,n}^{\mathrm{ss}}$ (semistable bundles), $\mathrm{B}G$ |
+
+The DM condition forces automorphism groups to be etale group schemes (discrete in characteristic zero), while Artin stacks allow automorphism groups like $\mathbb{G}_m$ or $\mathrm{GL}_n$.
+</Remark>
+
+---
+
+## The groupoid presentation
+
+Given a smooth atlas $p : U \to \mathcal{X}$, the algebraic stack $\mathcal{X}$ is completely determined by the smooth groupoid $(U, R, s, t, c, e, i)$ where:
+
+- $R = U \times_{\mathcal{X}} U$ (the "relations"),
+- $s, t : R \rightrightarrows U$ (source and target, both smooth),
+- $c : R \times_{s,U,t} R \to R$ (composition),
+- $e : U \to R$ (identity section),
+- $i : R \to R$ (inverse).
+
+<Definition title="Quotient stack of a groupoid" number="4.4">
+Given a smooth groupoid $(U, R)$ in algebraic spaces, the **quotient stack** $[U/R]$ is the stack whose objects over a test scheme $T$ are pairs $(P, \phi)$ where $P \to T$ is a smooth $R$-torsor and $\phi : P \to U$ is $R$-equivariant. Every algebraic stack is of this form.
+</Definition>
+
+---
+
+## Examples
+
+<Example id="classifying-stack" title="Classifying stack BG">
+Let $G$ be a smooth algebraic group over $S$. The **classifying stack** $\mathrm{B}G = [\operatorname{Spec} k / G]$ is the stack whose objects over a scheme $T$ are $G$-torsors (principal $G$-bundles) $P \to T$. A morphism is an isomorphism of $G$-torsors.
+
+The smooth atlas is $\operatorname{Spec} k \to \mathrm{B}G$ (the trivial torsor), which is smooth and surjective. The fiber product $\operatorname{Spec} k \times_{\mathrm{B}G} \operatorname{Spec} k \cong G$, so the groupoid is $({\operatorname{Spec} k}, G)$.
+
+For $G = \mathbb{G}_m$, $\mathrm{B}\mathbb{G}_m$ classifies line bundles. For $G = \mathrm{GL}_n$, $\mathrm{B}\mathrm{GL}_n$ classifies rank-$n$ vector bundles.
+
+Since $\operatorname{Aut}(P) = G$ for any $G$-torsor $P$, the automorphism groups are $G$ itself -- this is positive-dimensional for nontrivial $G$, so $\mathrm{B}G$ is an Artin stack but not DM (unless $G$ is etale).
+</Example>
+
+<Example id="moduli-curves" title="Moduli of curves (DM case)">
+The stack $\mathcal{M}_g$ of smooth projective curves of genus $g \geq 2$ is a Deligne--Mumford stack. A smooth atlas is provided by a sufficiently fine Hilbert scheme parametrizing embedded curves. The automorphism group of a genus $g \geq 2$ curve is finite, which is why $\mathcal{M}_g$ is DM rather than merely Artin.
+
+For $g = 1$, the stack $\mathcal{M}_1$ of elliptic curves (without marked point) has automorphism groups containing $\{\pm 1\}$ (and larger groups for $j = 0$ and $j = 1728$), but these are still finite, so $\mathcal{M}_1$ remains DM. However, $\mathcal{M}_{1,1}$ (with a marked point) is a cleaner DM stack.
+</Example>
+
+<Example id="quotient-smooth-action" title="Quotient by a smooth group action">
+Let $G$ be a smooth algebraic group acting on a scheme $X$. The quotient stack $[X/G]$ is an algebraic (Artin) stack. The atlas is $X \to [X/G]$, which is a $G$-torsor (hence smooth). The groupoid is $(X, G \times X)$ with $s(g,x) = x$ and $t(g,x) = g \cdot x$.
+
+If the action has finite stabilizers, $[X/G]$ is DM. If stabilizers are positive-dimensional (e.g., $\mathbb{G}_m$ acting on $\mathbb{A}^1$ with the origin as a fixed point), $[X/G]$ is Artin but not DM.
+</Example>
+
+<Example id="vector-bundles-curve" title="Moduli of vector bundles on a curve">
+Let $C$ be a smooth projective curve of genus $g \geq 2$. The stack $\operatorname{Bun}_n(C)$ of rank-$n$ vector bundles on $C$ is an algebraic (Artin) stack, smooth of dimension $n^2(g-1)$. Every vector bundle $E$ has $\operatorname{Aut}(E) \supseteq \mathbb{G}_m$ (scalar automorphisms), so this cannot be DM.
+
+For $n = 1$, $\operatorname{Bun}_1(C) \cong \operatorname{Pic}(C) \times \mathrm{B}\mathbb{G}_m$ decomposes as the Picard scheme times the classifying stack. For higher rank, the structure is much richer: the Harder--Narasimhan stratification provides a filtration by locally closed substacks.
+</Example>
+
+<Example id="weighted-projective" title="Weighted projective stack">
+The **weighted projective stack** $\mathcal{P}(a_0, \ldots, a_n)$ is defined as the quotient stack
+$$\mathcal{P}(a_0, \ldots, a_n) = [(\mathbb{A}^{n+1} \setminus \{0\}) / \mathbb{G}_m]$$
+where $\mathbb{G}_m$ acts by $t \cdot (x_0, \ldots, x_n) = (t^{a_0} x_0, \ldots, t^{a_n} x_n)$ with positive integer weights $a_i$.
+
+If all $a_i = 1$, this is $\mathbb{P}^n$ (a scheme). If the $a_i$ are not all equal, points with nontrivial stabilizers appear, and $\mathcal{P}(a_0, \ldots, a_n)$ is a DM stack (the stabilizers are cyclic, hence finite). The coarse moduli space is the classical weighted projective variety $\mathbb{P}(a_0, \ldots, a_n)$.
+
+For example, $\mathcal{P}(1,2)$ has the atlas $\mathbb{A}^2 \setminus \{0\} \to \mathcal{P}(1,2)$. The point $[0:1]$ has stabilizer $\mu_2 = \{\pm 1\}$.
+</Example>
+
+<Example id="bmu-n" title="Classifying stack of a finite group">
+For a finite group $G$ (viewed as a constant group scheme), $\mathrm{B}G = [\operatorname{Spec} k / G]$ classifies $G$-torsors, i.e., Galois $G$-covers. Over an algebraically closed field, $\mathrm{B}G$ has a single $k$-point (the trivial torsor $\operatorname{Spec} k$ with its unique $G$-structure up to isomorphism), but $\operatorname{Aut}$ of this point is $G$.
+
+Since $G$ is finite (hence etale), $\mathrm{B}G$ is a DM stack. Its coarse moduli space is $\operatorname{Spec} k$, but $\mathrm{B}G \neq \operatorname{Spec} k$ as stacks -- they differ in their stacky structure.
+</Example>
+
+<Example id="point-with-action" title="Origin with G_m-action">
+Consider $\mathbb{G}_m$ acting on $\operatorname{Spec} k$ trivially. Then $[\operatorname{Spec} k / \mathbb{G}_m] = \mathrm{B}\mathbb{G}_m$. Now consider $\mathbb{G}_m$ acting on $\mathbb{A}^1$ by scaling: $t \cdot x = tx$. Then $[\mathbb{A}^1/\mathbb{G}_m]$ is an Artin stack with two kinds of points:
+- The origin $0$: stabilizer is $\mathbb{G}_m$ (the full group).
+- Any $x \neq 0$: stabilizer is trivial (the orbit is $\mathbb{A}^1 \setminus \{0\}$, which is free).
+
+So $[\mathbb{A}^1/\mathbb{G}_m]$ has a "stacky point" at the origin (with automorphism group $\mathbb{G}_m$) and is a scheme (in fact $\operatorname{Spec} k$) away from the origin. The coarse moduli space is $\operatorname{Spec} k[x]^{\mathbb{G}_m} = \operatorname{Spec} k$ -- a point.
+</Example>
+
+<Example id="higgs-bundles" title="Stack of Higgs bundles">
+Let $C$ be a smooth projective curve. A **Higgs bundle** on $C$ is a pair $(E, \phi)$ where $E$ is a vector bundle on $C$ and $\phi : E \to E \otimes \omega_C$ is a morphism (the Higgs field). The moduli stack $\mathcal{H}iggs_n(C)$ of rank-$n$ Higgs bundles is an algebraic (Artin) stack. It plays a central role in the geometric Langlands program and in non-abelian Hodge theory.
+
+The Hitchin map $h : \mathcal{H}iggs_n(C) \to \bigoplus_{i=1}^n H^0(C, \omega_C^{\otimes i})$ sends $(E, \phi)$ to its characteristic polynomial. The generic fibers are abelian varieties (Hitchin fibers), giving $\mathcal{H}iggs_n(C)$ the structure of an integrable system.
+</Example>
+
+<Example id="torsion-sheaves" title="Stack of coherent sheaves">
+For a projective variety $X$, the stack $\operatorname{Coh}(X)$ of coherent sheaves on $X$ is an algebraic (Artin) stack, locally of finite type. Unlike the moduli of vector bundles, this stack is not of finite type -- there is no bound on the "complexity" of a coherent sheaf.
+
+The substack of torsion sheaves supported at a point $p \in X$ is equivalent to $\coprod_n [\operatorname{Spec} k / \mathrm{GL}_n]$ (one component for each length $n$), which captures the combinatorics of partitions via the Jordan normal form.
+</Example>
+
+<Example id="mg-bar" title="Deligne--Mumford compactification">
+The stack $\overline{\mathcal{M}}_{g,n}$ of $n$-pointed stable curves of genus $g$ (with $2g - 2 + n > 0$) is a proper, smooth DM stack of dimension $3g - 3 + n$. It compactifies $\mathcal{M}_{g,n}$ by allowing nodal curves with finite automorphism groups.
+
+The boundary $\overline{\mathcal{M}}_{g,n} \setminus \mathcal{M}_{g,n}$ is a normal crossing divisor. Its components are indexed by the combinatorial data of dual graphs: a stable graph $\Gamma$ with vertices (irreducible components), edges (nodes), and markings (labeled points). For $\overline{\mathcal{M}}_{0,4}$, the coarse space is $\mathbb{P}^1$ with three boundary points corresponding to the three ways to partition four points into two pairs.
+</Example>
+
+<Example id="artin-stack-not-dm" title="An Artin stack that is not DM">
+Let $X = \mathbb{A}^2$ with the $\mathbb{G}_m$-action $t \cdot (x, y) = (tx, t^{-1}y)$. The quotient stack $[\mathbb{A}^2 / \mathbb{G}_m]$ is Artin but not DM: the origin $(0,0)$ has stabilizer $\mathbb{G}_m$. The ring of invariants is $k[xy] \cong k[z]$, so the GIT quotient (coarse space) is $\mathbb{A}^1$. But the stack remembers the full orbit structure: the fiber over $z = 0$ consists of the three orbits $\{(x,0) : x \neq 0\}$, $\{(0,y) : y \neq 0\}$, and $\{(0,0)\}$, all collapsed to one point in the GIT quotient.
+</Example>
+
+<Example id="maps-to-target" title="Stack of maps (Kontsevich)">
+Fix a smooth projective variety $X$ and a class $\beta \in H_2(X, \mathbb{Z})$. The **Kontsevich moduli stack** $\overline{\mathcal{M}}_{g,n}(X, \beta)$ of $n$-pointed genus-$g$ stable maps $f : C \to X$ with $f_*[C] = \beta$ is a proper DM stack (when $X$ is convex, e.g., $X = \mathbb{P}^n$). It is the foundation of Gromov--Witten theory.
+
+For $g = 0$, $X = \mathbb{P}^2$, $\beta = d[\ell]$ (degree $d$ curves), $\overline{\mathcal{M}}_{0,0}(\mathbb{P}^2, d)$ has dimension $3d - 1$. The virtual fundamental class $[\overline{\mathcal{M}}_{0,0}(\mathbb{P}^2, d)]^{\mathrm{vir}}$ computes the number $N_d$ of rational curves of degree $d$ through $3d - 1$ general points: $N_1 = 1$, $N_2 = 1$, $N_3 = 12$, $N_4 = 620$, ...
+</Example>
+
+---
+
+## Properties of algebraic stacks
+
+<Definition title="Properties of morphisms" number="4.5">
+A morphism $f : \mathcal{X} \to \mathcal{Y}$ of algebraic stacks is said to have a property $P$ (such as smooth, flat, proper, finite type, etc.) if for some (equivalently, any) smooth atlas $V \to \mathcal{Y}$, the base change $\mathcal{X} \times_{\mathcal{Y}} V \to V$ has property $P$.
+
+This is well-defined because the property $P$ is **smooth-local on the target**: it is stable under smooth base change and satisfies smooth descent.
+</Definition>
+
+<Definition title="Quasi-coherent sheaves on a stack" number="4.6">
+A **quasi-coherent sheaf** on an algebraic stack $\mathcal{X}$ is a quasi-coherent sheaf $\mathcal{F}$ on a smooth atlas $U \to \mathcal{X}$ together with a descent datum: an isomorphism $\phi : s^*\mathcal{F} \xrightarrow{\sim} t^*\mathcal{F}$ on $R = U \times_{\mathcal{X}} U$ satisfying the cocycle condition on $R \times_{s,U,t} R$.
+
+Equivalently, $\operatorname{QCoh}(\mathcal{X})$ is the category of cartesian quasi-coherent sheaves on the simplicial algebraic space $U_\bullet$ associated to the atlas.
+</Definition>
+
+---
+
+## Quasi-separated and separated stacks
+
+<Definition title="Separated stack" number="4.7">
+An algebraic stack $\mathcal{X}$ is:
+
+- **Quasi-separated** if the diagonal $\Delta : \mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ is quasi-compact and quasi-separated.
+- **Separated** if the diagonal $\Delta$ is proper.
+
+For DM stacks, separated means the diagonal is a closed immersion (as for schemes). For Artin stacks, separated means proper diagonal -- a stronger condition since the diagonal has positive-dimensional fibers (the automorphism groups).
+</Definition>
+
+<Example id="bg-separated" title="Separatedness of BG">
+The classifying stack $\mathrm{B}G$ is separated if and only if $G$ is proper. So $\mathrm{B}(\mathbb{G}_m)$ is not separated (the diagonal $\mathrm{B}\mathbb{G}_m \to \mathrm{B}\mathbb{G}_m \times \mathrm{B}\mathbb{G}_m$ has fibers isomorphic to $\mathbb{G}_m$, which is not proper). On the other hand, $\mathrm{B}(\mu_n)$ is separated since $\mu_n$ is finite (hence proper).
+</Example>
+
+---
+
+## The 2-categorical structure
+
+<Remark title="Stacks as 2-functors">
+Algebraic stacks form a 2-category: morphisms between stacks admit 2-morphisms (natural isomorphisms). This means that the "space" of morphisms $\mathcal{X} \to \mathcal{Y}$ is not a set but a groupoid. In particular:
+
+- Fiber products of stacks are defined only up to equivalence.
+- A morphism $f : \mathcal{X} \to \mathcal{Y}$ is an equivalence if and only if it is fully faithful and essentially surjective (on each fiber groupoid).
+- The "pullback" of a stack along a morphism involves a 2-fiber product.
+
+For practical purposes, one often works with the associated 1-category obtained by identifying isomorphic morphisms, but the 2-categorical structure is essential for understanding the correct notion of "sameness" for stacks.
+</Remark>
+
+---
+
+## Summary
+
+Algebraic (Artin) stacks provide the natural generalization of schemes and algebraic spaces to the setting where objects have nontrivial automorphisms. The key features are:
+
+1. **Smooth atlas**: An Artin stack admits a smooth surjection from an algebraic space.
+2. **Representable diagonal**: Isomorphism spaces are algebraic spaces.
+3. **Groupoid presentation**: Every Artin stack is $[U/R]$ for a smooth groupoid.
+4. **Generalizes DM**: DM stacks (etale atlas) are a special case.
+5. **Handles automorphisms**: Unlike coarse moduli spaces, stacks remember the full automorphism structure of the objects they parametrize.

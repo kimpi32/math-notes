@@ -1,0 +1,215 @@
+export const metadata = {
+  title: 'Quotient Stacks [X/G] — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Concept — Quotient Stacks [X/G]" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quotient Stacks $[X/G]$
+
+The quotient stack $[X/G]$ is the prototypical example of an algebraic stack. It captures the "correct" notion of a quotient of a scheme $X$ by a group action, preserving the full information about stabilizers and orbits that is lost when passing to the GIT quotient or geometric quotient. In a precise sense, every algebraic stack is locally a quotient stack.
+
+---
+
+## Definition
+
+<Definition title="Quotient Stack" number="4.11">
+Let $G$ be a smooth algebraic group scheme over $S$ acting on an algebraic space $X$ over $S$ via $\sigma : G \times_S X \to X$. The **quotient stack** $[X/G]$ is the category fibered in groupoids over $(\mathrm{Sch}/S)$ defined as follows:
+
+**Objects** over a scheme $T$: pairs $(P, \phi)$ where $P \to T$ is a $G$-torsor (principal $G$-bundle) and $\phi : P \to X$ is a $G$-equivariant morphism.
+
+**Morphisms** from $(P, \phi)$ to $(P', \phi')$: $G$-equivariant morphisms $\psi : P \to P'$ over $T$ with $\phi' \circ \psi = \phi$.
+
+Equivalently, $[X/G](T) = \{(P \to T, \phi : P \to X) \mid P \text{ a } G\text{-torsor}, \phi \text{ equivariant}\} / \text{isomorphism}$.
+</Definition>
+
+<Remark title="Why this definition?">
+A naive quotient functor $T \mapsto X(T)/G(T)$ fails to be a sheaf in general (descent for $G$-orbits is not the same as descent for $G$-torsors). The quotient stack replaces "equivariant maps from $T$ to $X$" with "equivariant maps from a $G$-torsor over $T$ to $X$", which has the correct descent properties.
+
+If the action is free and the quotient $X/G$ exists as a scheme, then $[X/G] \cong X/G$ (the stack is equivalent to the scheme). But when the action has stabilizers, $[X/G]$ carries strictly more information than any scheme quotient.
+</Remark>
+
+---
+
+## The atlas and groupoid structure
+
+<Definition title="Atlas of a quotient stack" number="4.12">
+The natural projection $\pi : X \to [X/G]$ (sending $x \in X(T)$ to the trivial torsor $G \times T$ with the equivariant map $(g, t) \mapsto g \cdot x(t)$) is a smooth surjection. This is the **canonical atlas** of $[X/G]$.
+
+The groupoid presentation is:
+$$R = X \times_{[X/G]} X \cong G \times X$$
+with source map $s(g, x) = x$, target map $t(g, x) = g \cdot x$, and composition $c((h, g \cdot x), (g, x)) = (hg, x)$.
+
+So $[X/G] \cong [X / (G \times X)]$ in the groupoid notation, i.e., it is the quotient of $X$ by the action groupoid.
+</Definition>
+
+---
+
+## Fundamental properties
+
+<Definition title="Stabilizers in the quotient stack" number="4.13">
+For a geometric point $\bar{x} : \operatorname{Spec} k \to X \to [X/G]$, the automorphism group of the corresponding object in $[X/G]$ is the **stabilizer** (or **isotropy group**):
+$$\operatorname{Aut}_{[X/G]}(\bar{x}) \cong G_{\bar{x}} = \{g \in G : g \cdot \bar{x} = \bar{x}\} \subset G.$$
+
+This is a closed subgroup scheme of $G$. The quotient stack $[X/G]$ is:
+- A DM stack if and only if all stabilizers $G_x$ are etale (finite in characteristic zero).
+- An algebraic space if and only if all stabilizers are trivial (i.e., the action is free).
+</Definition>
+
+---
+
+## Examples with $\mathrm{GL}_n$
+
+<Example id="bgln" title="Classifying stack B GL_n">
+Taking $X = \operatorname{Spec} k$ with the trivial $\mathrm{GL}_n$-action gives the classifying stack
+$$\mathrm{B}\mathrm{GL}_n = [\operatorname{Spec} k / \mathrm{GL}_n].$$
+An object over $T$ is a $\mathrm{GL}_n$-torsor $P \to T$ (i.e., a frame bundle), which is equivalent to a rank-$n$ vector bundle $E \to T$. So $\mathrm{B}\mathrm{GL}_n$ is the **moduli stack of rank-$n$ vector bundles**.
+
+The single $k$-point of $\mathrm{B}\mathrm{GL}_n$ (the trivial bundle $k^n$) has $\operatorname{Aut} = \mathrm{GL}_n$, which is $n^2$-dimensional. Hence $\mathrm{B}\mathrm{GL}_n$ is an Artin stack of dimension $-n^2$ (in the stacky sense: $\dim \mathrm{B}G = -\dim G$).
+</Example>
+
+<Example id="matrix-quotient" title="Moduli of n-dimensional representations">
+Let $\mathrm{GL}_n$ act on $\mathrm{Mat}_{n \times n} = \mathbb{A}^{n^2}$ by conjugation: $g \cdot A = gAg^{-1}$. The quotient stack $[\mathrm{Mat}_{n \times n}/\mathrm{GL}_n]$ parametrizes pairs (vector bundle $E$, endomorphism $\phi : E \to E$).
+
+The GIT quotient is $\mathrm{Mat}_{n \times n} /\!/ \mathrm{GL}_n = \operatorname{Spec} k[\sigma_1, \ldots, \sigma_n] \cong \mathbb{A}^n$, where $\sigma_i$ are the coefficients of the characteristic polynomial. Two matrices have the same image if and only if they have the same characteristic polynomial -- but the stack $[\mathrm{Mat}_{n \times n}/\mathrm{GL}_n]$ distinguishes non-conjugate matrices with the same characteristic polynomial (e.g., the nilpotent matrix with a single Jordan block vs. the zero matrix in the $n = 2$ case).
+</Example>
+
+<Example id="vector-bundles-curve-gln" title="Vector bundles on a curve via GL_n">
+Let $C$ be a smooth projective curve and fix a line bundle $\mathcal{L}$ of sufficiently large degree. Consider the Quot scheme $\mathcal{Q}$ parametrizing quotients $\mathcal{L}^{\oplus N} \twoheadrightarrow E$ where $E$ is a rank-$n$ vector bundle. Then $\mathrm{GL}_N$ acts on $\mathcal{Q}$ and
+$$\mathrm{Bun}_n(C) \cong [\mathcal{Q}^{\mathrm{ss}} / \mathrm{GL}_N]$$
+(after restricting to the semistable locus). This gives an explicit presentation of the moduli stack of vector bundles as a quotient stack.
+</Example>
+
+---
+
+## Examples with $\mathbb{G}_m$
+
+<Example id="projective-space" title="Projective space as a quotient stack">
+$\mathbb{P}^n$ is the geometric quotient $(\mathbb{A}^{n+1} \setminus \{0\})/\mathbb{G}_m$, and since $\mathbb{G}_m$ acts freely on $\mathbb{A}^{n+1} \setminus \{0\}$, the quotient stack agrees with the scheme:
+$$[(\mathbb{A}^{n+1} \setminus \{0\}) / \mathbb{G}_m] \cong \mathbb{P}^n.$$
+More precisely, the $\mathbb{G}_m$-torsors over $T$ with equivariant map to $\mathbb{A}^{n+1} \setminus \{0\}$ are exactly the line bundles $\mathcal{L}$ on $T$ together with $n+1$ sections $(s_0, \ldots, s_n)$ generating $\mathcal{L}$. This recovers the functor of points of $\mathbb{P}^n$.
+</Example>
+
+<Example id="a1-gm" title="The fundamental example: [A^1 / G_m]">
+Let $\mathbb{G}_m$ act on $\mathbb{A}^1$ by scaling: $t \cdot x = tx$. The quotient stack $[\mathbb{A}^1/\mathbb{G}_m]$ has:
+- Over $x \neq 0$: the orbit is all of $\mathbb{A}^1 \setminus \{0\}$, with trivial stabilizer, giving a single point (isomorphic to $\operatorname{Spec} k$).
+- At $x = 0$: the stabilizer is $\mathbb{G}_m$, giving a point with automorphism group $\mathbb{G}_m$.
+
+So $[\mathbb{A}^1/\mathbb{G}_m]$ consists of "a point glued to $\mathrm{B}\mathbb{G}_m$". The GIT quotient is $\operatorname{Spec} k[x]^{\mathbb{G}_m} = \operatorname{Spec} k$, which collapses everything.
+
+This stack is sometimes called the "quotient point" or the "stacky point" -- it serves as a fundamental building block in the theory.
+</Example>
+
+<Example id="weighted-projective-gm" title="Weighted projective stacks">
+With $\mathbb{G}_m$ acting on $\mathbb{A}^{n+1} \setminus \{0\}$ by $t \cdot (x_0, \ldots, x_n) = (t^{a_0} x_0, \ldots, t^{a_n} x_n)$ for positive integers $a_i$, the quotient stack
+$$\mathcal{P}(a_0, \ldots, a_n) = [(\mathbb{A}^{n+1} \setminus \{0\}) / \mathbb{G}_m]$$
+is the **weighted projective stack**. For $\gcd(a_0, \ldots, a_n) = 1$, the generic stabilizer is trivial, but at coordinate points $[0:\cdots:0:1:0:\cdots:0]$ the stabilizer is $\mu_{a_i}$.
+
+For example, $\mathcal{P}(1, 2, 3)$ is a DM stack with:
+- At $[1:0:0]$: stabilizer is trivial.
+- At $[0:1:0]$: stabilizer is $\mu_2$.
+- At $[0:0:1]$: stabilizer is $\mu_3$.
+
+The coarse moduli space $\mathbb{P}(1,2,3)$ is a rational surface with cyclic quotient singularities of types $\frac{1}{2}(1,1)$ and $\frac{1}{3}(1,1)$.
+</Example>
+
+<Example id="line-bundle-gm" title="Total space of a line bundle">
+Let $\mathcal{L}$ be a line bundle on a scheme $X$. The total space $\operatorname{Tot}(\mathcal{L})$ carries a natural $\mathbb{G}_m$-action (scaling in the fibers). Then
+$$[\operatorname{Tot}(\mathcal{L}) / \mathbb{G}_m] \cong X \times \mathrm{B}\mathbb{G}_m$$
+via the zero section. More generally, removing the zero section gives
+$$[(\operatorname{Tot}(\mathcal{L}) \setminus X) / \mathbb{G}_m] \cong X$$
+since $\mathbb{G}_m$ acts freely on the complement of the zero section.
+</Example>
+
+---
+
+## Examples with finite groups
+
+<Example id="symmetric-product" title="Symmetric products">
+Let $G = S_n$ (the symmetric group) act on $X^n$ by permuting factors. The quotient stack $[X^n / S_n]$ parametrizes "unordered $n$-tuples of points on $X$ with multiplicity data." The coarse moduli space is the symmetric product $\operatorname{Sym}^n(X) = X^n / S_n$.
+
+For $X = \mathbb{A}^1$ and $n = 2$: $S_2$ acts on $\mathbb{A}^2$ by $(x, y) \mapsto (y, x)$. The quotient $\mathbb{A}^2/S_2 = \operatorname{Spec} k[x+y, xy] \cong \mathbb{A}^2$ is smooth (an accident of small $n$). But the stack $[\mathbb{A}^2/S_2]$ has a $\mathbb{Z}/2\mathbb{Z}$-gerbe along the diagonal $\{x = y\}$.
+</Example>
+
+<Example id="an-singularity" title="A_n singularity and cyclic quotient">
+Let $\mu_n = \mathbb{Z}/n\mathbb{Z}$ act on $\mathbb{A}^2$ by $\zeta \cdot (x, y) = (\zeta x, \zeta^{-1} y)$. The quotient stack $[\mathbb{A}^2/\mu_n]$ is a smooth DM stack. Its coarse space is
+$$\mathbb{A}^2/\mu_n = \operatorname{Spec} k[u, v, w]/(uv - w^n)$$
+which is the $A_{n-1}$ singularity. The stack "remembers" the smooth structure that the coarse space has lost.
+
+The minimal resolution of the $A_{n-1}$ singularity has $n-1$ exceptional $(-2)$-curves arranged in a chain, corresponding to the Dynkin diagram $A_{n-1}$. The McKay correspondence relates this resolution to the representation theory of $\mu_n$.
+</Example>
+
+<Example id="binary-dihedral" title="Binary groups and surface singularities">
+The **binary dihedral group** $BD_{4n}$ (of order $4n$) acts on $\mathbb{A}^2$ via its natural 2-dimensional representation. The quotient stack $[\mathbb{A}^2/BD_{4n}]$ is a smooth DM stack, while the coarse space $\mathbb{A}^2/BD_{4n}$ is a $D_{n+2}$ surface singularity:
+$$k[x,y,z]/(x^2 y + y^{n+1} + z^2).$$
+Similarly, the exceptional binary groups $\tilde{E}_6, \tilde{E}_7, \tilde{E}_8$ (binary tetrahedral, octahedral, icosahedral) give the $E_6, E_7, E_8$ surface singularities. This is part of the McKay correspondence.
+</Example>
+
+<Example id="involution-curve" title="Hyperelliptic quotient">
+Let $C$ be a hyperelliptic curve of genus $g$ with involution $\iota : C \to C$. The quotient stack $[C/\langle\iota\rangle]$ is a smooth DM stack with $\mu_2$-stabilizers at the $2g + 2$ Weierstrass points. The coarse space is $C/\langle\iota\rangle \cong \mathbb{P}^1$, and the map $C \to \mathbb{P}^1$ is a degree-2 cover branched at $2g + 2$ points.
+
+The Hurwitz formula reads $2g - 2 = 2(0 - 2) + (2g + 2)$, which is $2g - 2 = 2g - 2$, consistent.
+</Example>
+
+---
+
+## Quasi-coherent sheaves on $[X/G]$
+
+<Definition title="Equivariant sheaves" number="4.14">
+A quasi-coherent sheaf on $[X/G]$ is the same as a **$G$-equivariant quasi-coherent sheaf on $X$**: a quasi-coherent sheaf $\mathcal{F}$ on $X$ together with an isomorphism $\phi : \sigma^* \mathcal{F} \xrightarrow{\sim} \mathrm{pr}_2^* \mathcal{F}$ on $G \times X$ satisfying the cocycle condition on $G \times G \times X$.
+
+$$\operatorname{QCoh}([X/G]) \cong \operatorname{QCoh}^G(X).$$
+</Definition>
+
+<Example id="equivariant-line-bundles" title="Equivariant line bundles on a point">
+For $\mathrm{B}\mathbb{G}_m = [\operatorname{Spec} k / \mathbb{G}_m]$, a quasi-coherent sheaf is a $\mathbb{G}_m$-equivariant $k$-module, i.e., a $\mathbb{Z}$-graded $k$-vector space $V = \bigoplus_{n \in \mathbb{Z}} V_n$.
+
+Line bundles on $\mathrm{B}\mathbb{G}_m$ correspond to one-dimensional representations of $\mathbb{G}_m$, which are indexed by $\mathbb{Z}$ (via the weight). So $\operatorname{Pic}(\mathrm{B}\mathbb{G}_m) \cong \mathbb{Z}$. The line bundle of weight $n$ is denoted $\mathcal{O}(n)$.
+</Example>
+
+---
+
+## The quotient stack vs other quotients
+
+<Remark title="Comparison of quotients">
+Given an action of $G$ on $X$, there are several notions of quotient:
+
+| Quotient | Exists when... | Remembers... |
+|---|---|---|
+| $[X/G]$ (quotient stack) | Always | Full orbit and stabilizer data |
+| $X/G$ (geometric quotient) | Free action, suitable conditions | Orbits, forgets stabilizers |
+| $X /\!/ G$ (GIT quotient) | Reductive $G$, linearization | Only semistable orbits, forgets stabilizers |
+| $X/\!\!/\!/ G$ (stack quotient) | Always | Same as $[X/G]$ |
+
+The coarse moduli space map $[X/G] \to X /\!/ G$ (or $[X/G] \to X/G$) factors through the geometric quotient (when it exists) and then the GIT quotient.
+</Remark>
+
+---
+
+## Descent and the quotient stack
+
+<Remark title="Descent for quotient stacks">
+A key property of the quotient stack $[X/G]$ is that it satisfies **effective descent**: for any morphism $T \to [X/G]$ (i.e., a $G$-torsor $P \to T$ with equivariant map $\phi : P \to X$), the following diagram is a coequalizer in the category of stacks:
+$$G \times P \rightrightarrows P \to T.$$
+This means that $T$-families of objects of $[X/G]$ can be constructed by gluing, which is the essential property that makes $[X/G]$ useful as a moduli stack.
+</Remark>
+
+---
+
+## Summary
+
+Quotient stacks $[X/G]$ are the fundamental building blocks of the theory of algebraic stacks. They parametrize $G$-torsors with equivariant maps to $X$, and their geometry encodes the full structure of the group action, including stabilizers and orbit types. The correspondence $\operatorname{QCoh}([X/G]) \cong \operatorname{QCoh}^G(X)$ shows that the algebraic geometry of the quotient stack is equivalent to $G$-equivariant geometry on $X$.

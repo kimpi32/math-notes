@@ -1,0 +1,175 @@
+export const metadata = {
+  title: 'Coarse Moduli Spaces — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Concept — Coarse Moduli Spaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Coarse Moduli Spaces
+
+A coarse moduli space is the "best approximation" of a moduli stack by an algebraic space (or scheme). It retains the underlying set of isomorphism classes but forgets the automorphism data. The existence of coarse moduli spaces is guaranteed under mild conditions by the Keel--Mori theorem, and they serve as the bridge between the stack-theoretic and classical approaches to moduli theory.
+
+---
+
+## Definition
+
+<Definition title="Coarse Moduli Space" number="4.18">
+Let $\mathcal{X}$ be an algebraic stack over a scheme $S$. A **coarse moduli space** for $\mathcal{X}$ is a pair $(M, \pi)$ where $M$ is an algebraic space over $S$ and $\pi : \mathcal{X} \to M$ is a morphism, satisfying:
+
+1. **(Universal property)** For every algebraic space $N$ and morphism $f : \mathcal{X} \to N$, there exists a unique morphism $g : M \to N$ with $f = g \circ \pi$.
+
+2. **(Geometric bijectivity)** For every algebraically closed field $k$, the induced map $\pi(k) : |\mathcal{X}(k)| \to M(k)$ is a bijection, where $|\mathcal{X}(k)|$ denotes the set of isomorphism classes of objects of $\mathcal{X}$ over $\operatorname{Spec} k$.
+
+When it exists, the coarse moduli space is unique up to unique isomorphism.
+</Definition>
+
+<Remark title="Coarse vs fine moduli">
+A **fine moduli space** is a scheme (or algebraic space) $M$ that represents the moduli functor: there is a universal family over $M$. This requires $\mathcal{X} \cong M$ as stacks, which happens only when all automorphism groups are trivial.
+
+A coarse moduli space exists more generally but does **not** carry a universal family in general. The stack $\mathcal{X}$ carries the universal family; the coarse space $M$ is the quotient that identifies isomorphic objects.
+
+The relationship: $\mathcal{X} \xrightarrow{\pi} M$ is an isomorphism if and only if $\mathcal{X}$ is an algebraic space (i.e., has trivial automorphisms).
+</Remark>
+
+---
+
+## Existence
+
+<Remark title="Keel--Mori theorem (preview)">
+The Keel--Mori theorem states: if $\mathcal{X}$ is an algebraic stack with finite inertia (i.e., the inertia stack $\mathcal{I}_\mathcal{X} \to \mathcal{X}$ is finite), then a coarse moduli space exists. This applies in particular to separated DM stacks with quasi-finite diagonal. See the theorem page for the precise statement and proof outline.
+</Remark>
+
+---
+
+## Properties of the coarse moduli map
+
+<Definition title="Properties of the coarse map" number="4.19">
+Let $\pi : \mathcal{X} \to M$ be a coarse moduli space. Then:
+
+1. $\pi$ is **proper** and **quasi-finite** (if $\mathcal{X}$ is separated and of finite type).
+2. $\pi_* : \operatorname{QCoh}(\mathcal{X}) \to \operatorname{QCoh}(M)$ is exact (the pushforward preserves coherence and exactness for coherent sheaves when the characteristic does not divide the orders of the stabilizer groups).
+3. $\mathcal{O}_M \xrightarrow{\sim} \pi_* \mathcal{O}_\mathcal{X}$ (the structure sheaf of $M$ is the invariant part).
+4. For a DM stack $\mathcal{X}$ with generically trivial stabilizer, $\pi$ is an isomorphism on a dense open.
+</Definition>
+
+---
+
+## Examples
+
+<Example id="mg-coarse" title="Coarse moduli space of curves">
+The stack $\mathcal{M}_g$ ($g \geq 2$) has coarse moduli space $M_g$, a quasi-projective variety of dimension $3g - 3$. The map $\pi : \mathcal{M}_g \to M_g$ is an isomorphism on the open locus of curves with trivial automorphism group (which is dense for $g \geq 3$).
+
+For $g = 2$: every genus-2 curve is hyperelliptic, so $\operatorname{Aut}(C) \supseteq \mathbb{Z}/2\mathbb{Z}$ for all $C$. The coarse space $M_2$ has dimension 3 and is rational (birationally equivalent to $\mathbb{A}^3$).
+
+The Deligne--Mumford compactification $\overline{\mathcal{M}}_g$ has coarse moduli space $\overline{M}_g$, a projective variety. Mumford proved $\overline{M}_g$ is of general type for $g \geq 24$ (later improved by Harris--Mumford to $g \geq 23$, and by Farkas to $g = 22$).
+</Example>
+
+<Example id="m11-coarse" title="The j-line as coarse moduli space">
+The stack $\mathcal{M}_{1,1}$ of elliptic curves has coarse moduli space $M_{1,1} \cong \mathbb{A}^1_j$ (the $j$-line). The map $\pi : \mathcal{M}_{1,1} \to \mathbb{A}^1_j$ sends an elliptic curve $E$ to its $j$-invariant.
+
+Over $\mathbb{C}$, $\pi$ is an isomorphism over $\mathbb{A}^1 \setminus \{0, 1728\}$ (where automorphism groups are $\mu_2$, the minimum). At $j = 1728$, the fiber has automorphisms $\mu_4$, and at $j = 0$, the fiber has automorphisms $\mu_6$.
+
+There is **no universal elliptic curve over $\mathbb{A}^1_j$**. The obstruction is precisely that $\mathcal{M}_{1,1} \to \mathbb{A}^1_j$ is a nontrivial $\mu_2$-gerbe generically (every elliptic curve has the $[-1]$ involution).
+</Example>
+
+<Example id="bg-coarse" title="Coarse space of BG">
+For a finite group $G$, the classifying stack $\mathrm{B}G = [\operatorname{Spec} k / G]$ has coarse moduli space $\operatorname{Spec} k$ (a point). The map $\pi : \mathrm{B}G \to \operatorname{Spec} k$ collapses all the automorphism data. Over an algebraically closed field, $\mathrm{B}G$ has a unique isomorphism class (the trivial torsor), so the bijection on geometric points holds.
+
+This is the simplest example where the coarse space is smooth but the stack is "non-trivially stacky." The coarse map $\pi_* : \operatorname{QCoh}(\mathrm{B}G) \to \operatorname{QCoh}(\operatorname{Spec} k)$ sends a $G$-representation $V$ to its invariants $V^G$.
+</Example>
+
+<Example id="quotient-singularity-coarse" title="Quotient singularities as coarse spaces">
+Let $G$ be a finite group acting on a smooth variety $X$. The quotient stack $[X/G]$ is a smooth DM stack, and its coarse moduli space is the GIT quotient $X/G$. When $G$ acts with fixed points, $X/G$ acquires singularities even though $[X/G]$ is smooth.
+
+For $G = \mu_n$ acting on $\mathbb{A}^2$ by $\zeta \cdot (x,y) = (\zeta x, \zeta^{-1} y)$: the stack $[\mathbb{A}^2/\mu_n]$ is smooth, but the coarse space is the $A_{n-1}$ singularity $\operatorname{Spec} k[u,v,w]/(uv - w^n)$.
+
+This illustrates a key principle: **stacky smoothness is weaker than scheme smoothness**. The stack remembers the smooth local structure (it is locally the quotient of a smooth space), while the coarse space has a singularity at the fixed point.
+</Example>
+
+<Example id="weighted-proj-coarse" title="Coarse space of weighted projective stack">
+The weighted projective stack $\mathcal{P}(a_0, \ldots, a_n)$ has coarse moduli space $\mathbb{P}(a_0, \ldots, a_n)$, the classical weighted projective variety. When the weights are not all equal, $\mathbb{P}(a_0, \ldots, a_n)$ has cyclic quotient singularities at the coordinate vertices.
+
+For $\mathcal{P}(1, 1, 2)$: the coarse space $\mathbb{P}(1,1,2)$ is isomorphic to the quadric cone $V(xy - z^2) \subset \mathbb{P}^3$ (it has an $A_1$ singularity at the vertex $[0:0:1]$). The stack $\mathcal{P}(1,1,2)$ is smooth.
+</Example>
+
+<Example id="ag-coarse" title="Coarse moduli of abelian varieties">
+The stack $\mathcal{A}_g$ of principally polarized abelian varieties has coarse moduli space $A_g$. Over $\mathbb{C}$, $A_g = \mathrm{Sp}(2g, \mathbb{Z}) \backslash \mathfrak{H}_g$ (the Siegel modular variety).
+
+For $g = 1$: $A_1 = \mathbb{A}^1_j$ (the $j$-line), since principally polarized abelian varieties of dimension 1 are elliptic curves.
+
+For $g = 2$: $A_2$ is a 3-dimensional variety. The Torelli map $M_2 \to A_2$ is an isomorphism onto its image (since every principally polarized abelian surface that is a Jacobian is the Jacobian of a unique curve of genus 2).
+
+For $g = 3$: $A_3$ has dimension 6, and the Torelli map $M_3 \to A_3$ is generically injective (but not surjective: the image has codimension 0 since $\dim M_3 = 6 = \dim A_3$, but not all ppav of dimension 3 are Jacobians -- this is the Schottky problem).
+</Example>
+
+<Example id="root-stack-coarse" title="Coarse space of a root stack">
+The root stack $\sqrt[r]{D/X}$ (for a smooth divisor $D \subset X$) has coarse moduli space $X$ itself. The map $\pi : \sqrt[r]{D/X} \to X$ is an isomorphism over $X \setminus D$ and is a $\mu_r$-gerbe along $D$.
+
+For the pushforward: if $\mathcal{F}$ is a coherent sheaf on $\sqrt[r]{D/X}$, then $\pi_*\mathcal{F}$ is a coherent sheaf on $X$ with a filtration determined by the $\mu_r$-action on the fibers over $D$. This connects to the theory of parabolic sheaves.
+</Example>
+
+<Example id="higgs-coarse" title="Moduli of Higgs bundles -- coarse space">
+The moduli stack of semistable Higgs bundles $\mathcal{H}iggs_n^{\mathrm{ss}}(C)$ has a coarse moduli space $\mathcal{M}_H$ (the Hitchin moduli space), which is a quasi-projective variety. For $n = 2$ on a genus-$g$ curve:
+$$\dim \mathcal{M}_H = 2(4(g-1)) = 8g - 8 \quad (\text{as real manifold: } \dim_{\mathbb{R}} = 16g - 16).$$
+Actually for rank $n$ and genus $g$: $\dim \mathcal{M}_H = 2n^2(g-1)$.
+
+The Hitchin map $h : \mathcal{M}_H \to \mathcal{B}$ (to the Hitchin base) makes $\mathcal{M}_H$ into a completely integrable system. The generic fiber is an abelian variety (the Prym of the spectral curve).
+</Example>
+
+<Example id="gerbe-coarse" title="Coarse space of a gerbe">
+Let $\mathcal{X} \to X$ be a $\mu_n$-gerbe over a scheme $X$. Then the coarse moduli space of $\mathcal{X}$ is $X$ itself. The coarse map $\pi : \mathcal{X} \to X$ forgets the gerbe structure entirely.
+
+For the pushforward of sheaves: $\pi_*\mathcal{O}_\mathcal{X} = \mathcal{O}_X$, but for a line bundle $\mathcal{L}$ of weight $j$ (under the $\mu_n$-action) on $\mathcal{X}$, $\pi_*\mathcal{L} = 0$ if $j \not\equiv 0 \pmod{n}$. This is because the $\mu_n$-invariant part of a weight-$j$ representation is zero for $j \neq 0$.
+</Example>
+
+<Example id="orbifold-bv" title="Quotient of torus by involution">
+Let $E$ be an elliptic curve with involution $\iota : z \mapsto -z$. The stack $[E/\langle\iota\rangle]$ is a smooth DM stack. The coarse moduli space is $E/\langle\iota\rangle \cong \mathbb{P}^1$ (the Weierstrass model). The four fixed points of $\iota$ (the 2-torsion points) become orbifold points of order 2 in the stack, and ordinary double points are not introduced in $\mathbb{P}^1$ (which is already smooth), but the map $[E/\langle\iota\rangle] \to \mathbb{P}^1$ has nontrivial $\mu_2$-stabilizers at 4 points.
+
+The pushforward $\pi_*\mathcal{O}_{[E/\langle\iota\rangle]} = \mathcal{O}_{\mathbb{P}^1}$, consistent with $H^0(E, \mathcal{O}_E)^{\langle\iota\rangle} = k$.
+</Example>
+
+<Example id="stable-maps-coarse" title="Coarse space of Kontsevich stack">
+The Kontsevich stack $\overline{\mathcal{M}}_{0,n}(\mathbb{P}^r, d)$ of degree-$d$ rational stable maps to $\mathbb{P}^r$ is a proper DM stack. Its coarse moduli space $\overline{M}_{0,n}(\mathbb{P}^r, d)$ is a projective variety. For $r = 2$ and $d = 1$: $\overline{M}_{0,0}(\mathbb{P}^2, 1) \cong (\mathbb{P}^2)^*$ (the dual projective plane, parametrizing lines in $\mathbb{P}^2$).
+
+The virtual fundamental class lives on the stack $\overline{\mathcal{M}}_{0,n}(\mathbb{P}^r, d)$, but Gromov--Witten invariants (intersection numbers) can be computed on the coarse space since the pushforward $\pi_*$ preserves degree for proper maps (at least in characteristic zero, where the orders of stabilizers are invertible).
+</Example>
+
+<Example id="non-existence" title="When coarse moduli fails to be a scheme">
+The coarse moduli space is always an algebraic space but may not be a scheme. An example: let $\mathcal{X}$ be a smooth DM stack whose coarse space $M$ is an algebraic space that is not a scheme (such examples exist in dimension $\geq 3$, cf. Hironaka's example).
+
+More commonly: $M_g$ is a scheme for $g \geq 2$ (in fact quasi-projective), $\overline{M}_g$ is projective, $A_g$ is quasi-projective. For these classical moduli problems, the coarse spaces are always schemes.
+</Example>
+
+---
+
+## Coarse moduli and sheaf theory
+
+<Remark title="Pushforward and invariants">
+For a DM stack $\mathcal{X}$ with coarse moduli space $\pi : \mathcal{X} \to M$:
+
+- In **characteristic zero** (or when the orders of all stabilizer groups are invertible in the base): $\pi_*$ is exact on coherent sheaves and $\pi_*\mathcal{O}_\mathcal{X} = \mathcal{O}_M$.
+
+- In **positive characteristic** (when orders of stabilizers are divisible by the characteristic): $\pi_*$ may not be exact, and higher direct images $R^i\pi_*$ may be nonzero. This leads to subtle pathologies.
+
+The Chevalley--Shephard--Todd theorem in the affine case: if $G \subset \mathrm{GL}(V)$ is a finite group generated by pseudo-reflections and $|G|$ is invertible in $k$, then $V/G$ is smooth ($k[V]^G$ is a polynomial ring). In the stack setting: $[V/G] \to V/G$ is the coarse map, and the smoothness of $V/G$ is a "coincidence" -- the stack $[V/G]$ is always smooth.
+</Remark>
+
+---
+
+## Summary
+
+The coarse moduli space $M$ of a stack $\mathcal{X}$ is the universal algebraic space receiving a map from $\mathcal{X}$, with a bijection on geometric points. It exists for stacks with finite inertia (by Keel--Mori) and provides the bridge to classical algebraic geometry. However, the coarse space loses automorphism information and may acquire singularities, making the stack itself the more natural object for many purposes.

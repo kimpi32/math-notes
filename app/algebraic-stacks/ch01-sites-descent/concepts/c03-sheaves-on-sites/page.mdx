@@ -1,0 +1,283 @@
+export const metadata = {
+  title: 'Sheaves on Sites — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Concept — Sheaves on Sites" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sheaves on Sites
+
+The sheaf condition on a site generalizes the classical gluing axiom: sections that agree on overlaps can be uniquely patched together. On a Grothendieck site, "overlaps" are replaced by fiber products over covering morphisms, and the sheaf condition becomes an exactness condition for a diagram involving these fiber products. The category of sheaves on a site forms a **Grothendieck topos**, a rich categorical structure that serves as the foundation for cohomology in algebraic geometry.
+
+---
+
+## The Sheaf Condition on a Site
+
+<Definition title="Sheaf on a site (via covering families)" number="1.11">
+Let $(\mathcal{C}, J)$ be a site given by a pretopology. A presheaf $F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is a **sheaf** if for every covering family $\{U_i \to U\}_{i \in I}$, the diagram
+
+$$F(U) \xrightarrow{\;\;\prod \operatorname{res}_{U_i}\;\;} \prod_{i \in I} F(U_i) \rightrightarrows \prod_{i,j \in I} F(U_i \times_U U_j)$$
+
+is an **equalizer**. That is:
+
+1. **(Separation / Locality)** If $s, t \in F(U)$ have the same restriction to every $F(U_i)$, then $s = t$.
+
+2. **(Gluing)** If sections $s_i \in F(U_i)$ satisfy $s_i|_{U_i \times_U U_j} = s_j|_{U_i \times_U U_j}$ for all $i, j$ (the **cocycle condition**), then there exists $s \in F(U)$ with $s|_{U_i} = s_i$.
+</Definition>
+
+<Definition title="Sheaf on a site (via sieves)" number="1.12">
+Equivalently, using the sieve formulation: a presheaf $F$ is a sheaf if for every covering sieve $S \in J(U)$, the natural map
+
+$$F(U) \to \varprojlim_{(V \to U) \in S} F(V)$$
+
+is a bijection. Here the limit is taken over all morphisms $V \to U$ belonging to the sieve $S$, with the natural compatibility conditions.
+</Definition>
+
+<Example id="sheaf-structure-zariski" title="Structure sheaf on the Zariski site">
+On the Zariski site of $X = \operatorname{Spec}(A)$, the structure sheaf $\mathcal{O}_X$ assigns $\mathcal{O}_X(D(f)) = A_f$ to each principal open set. Given a Zariski cover $\{D(f_i)\}$ with $(f_1, \ldots, f_n) = A$, the sheaf condition requires the sequence
+
+$$0 \to A \to \prod_i A_{f_i} \rightrightarrows \prod_{i,j} A_{f_i f_j}$$
+
+to be exact. This is equivalent to saying $A \to \prod A_{f_i}$ is injective (separation) and any compatible family of elements in $\prod A_{f_i}$ comes from a unique element of $A$ (gluing).
+
+This is a theorem in commutative algebra: the sequence above is exact whenever $(f_1, \ldots, f_n)$ generates the unit ideal.
+</Example>
+
+<Example id="sheaf-gm-etale" title="Multiplicative group on the etale site">
+The presheaf $\mathbb{G}_m: U \mapsto \Gamma(U, \mathcal{O}_U)^\times$ is a sheaf on the etale site $X_{\text{et}}$. Given an etale cover $\{U_i \to U\}$, we need to verify:
+
+$$\Gamma(U, \mathcal{O}_U)^\times \to \prod_i \Gamma(U_i, \mathcal{O}_{U_i})^\times \rightrightarrows \prod_{i,j} \Gamma(U_i \times_U U_j, \mathcal{O}_{U_i \times_U U_j})^\times$$
+
+is an equalizer. This follows from the fact that the structure sheaf $\mathcal{O}$ is an etale sheaf (by fpqc descent for quasi-coherent sheaves) and that $(-)^\times$ preserves the equalizer diagram when $\mathcal{O}$ is a sheaf of rings.
+
+The first cohomology group $H^1_{\text{et}}(X, \mathbb{G}_m) = \operatorname{Pic}(X)$ classifies line bundles on $X$, just as in the Zariski case, by Hilbert's Theorem 90.
+</Example>
+
+<Example id="sheaf-constant-etale" title="Constant sheaves on the etale site">
+For an abelian group $A$, the **constant sheaf** $\underline{A}$ on $X_{\text{et}}$ assigns to each connected etale $U \to X$ the group $A$, and more generally to a possibly disconnected $U$ the group $A^{\pi_0(U)}$ (functions from connected components to $A$).
+
+On $X = \operatorname{Spec}(k)$, the global sections of the constant sheaf $\underline{A}$ are $\underline{A}(\operatorname{Spec}(k)) = A$. But the cohomology detects Galois information:
+
+$$H^n_{\text{et}}(\operatorname{Spec}(k), \underline{A}) = H^n(\operatorname{Gal}(k^{\text{sep}}/k), A)$$
+
+where the right side is group cohomology of the absolute Galois group with trivial action on $A$.
+</Example>
+
+<Example id="sheaf-mun-kummer" title="Sheaf of n-th roots of unity and the Kummer sequence">
+On $X_{\text{et}}$ where $n$ is invertible on $X$, the sheaf $\mu_n$ (defined by $\mu_n(U) = \{f \in \mathcal{O}(U)^\times : f^n = 1\}$) sits in an exact sequence of etale sheaves:
+
+$$1 \to \mu_n \to \mathbb{G}_m \xrightarrow{(\cdot)^n} \mathbb{G}_m \to 1$$
+
+This is the **Kummer sequence**. It is exact in the etale topology: the surjectivity of $(\cdot)^n$ means that every unit locally (in the etale topology) has an $n$-th root. This fails in the Zariski topology (not every unit on a Zariski open has a Zariski-local $n$-th root).
+
+The long exact sequence in cohomology gives
+
+$$\cdots \to H^0(X, \mathbb{G}_m) \xrightarrow{n} H^0(X, \mathbb{G}_m) \to H^1(X, \mu_n) \to \operatorname{Pic}(X) \xrightarrow{n} \operatorname{Pic}(X) \to \cdots$$
+</Example>
+
+---
+
+## Separated Presheaves
+
+<Definition title="Separated presheaf" number="1.13">
+A presheaf $F$ on a site $(\mathcal{C}, J)$ is **separated** (or a **monopresheaf**) if for every covering family $\{U_i \to U\}$, the restriction map
+
+$$F(U) \to \prod_i F(U_i)$$
+
+is **injective**. Equivalently, the separation axiom holds but gluing may fail.
+</Definition>
+
+<Example id="separated-presheaf-example" title="Bounded functions as a separated presheaf">
+On $\mathbb{R}$ with the usual topology (viewed as a site), the presheaf $\mathcal{B}(U) = \{f: U \to \mathbb{R} \mid f \text{ continuous and bounded}\}$ is separated: if two bounded continuous functions agree on every open set of a cover, they are equal. But gluing fails: locally bounded functions may not be globally bounded.
+
+In the etale-site context, the presheaf $U \mapsto \operatorname{Pic}(U)$ on the big Zariski site is separated (an isomorphism of line bundles that is trivial locally is trivial globally) but not necessarily a sheaf.
+</Example>
+
+<Example id="separated-to-sheaf" title="Separation is the first step of sheafification">
+The sheafification process can be done in two steps:
+1. Start with a presheaf $F$.
+2. Apply the "plus construction" once to get $F^+$, which is always a separated presheaf.
+3. Apply the plus construction again to get $F^{++}$, which is a sheaf.
+
+For a separated presheaf, a single application of the plus construction already produces a sheaf.
+</Example>
+
+---
+
+## Sheaves on Different Sites: A Comparison
+
+<Example id="zariski-vs-etale-sheaves" title="Zariski sheaves vs. etale sheaves">
+Consider the presheaf $F(U) = \{s \in \mathcal{O}(U) : s^2 - t = 0\}$ on the affine line $X = \mathbb{A}^1_k = \operatorname{Spec}(k[t])$ over a field $k$ with $\operatorname{char}(k) \neq 2$.
+
+**As a Zariski presheaf**: $F(U)$ is the set of regular functions $s$ on $U$ with $s^2 = t$. For a Zariski open $U \subseteq \mathbb{A}^1$, the function $\sqrt{t}$ is not regular (it has a branch point at $0$). So $F(U)$ is either empty or consists of two elements $\pm\sqrt{t}$ (the latter only on opens not containing $0$).
+
+**As an etale presheaf**: The etale cover $\operatorname{Spec}(k[t,s]/(s^2-t)) \to \mathbb{A}^1$ provides a "local square root" of $t$ in the etale topology. On this cover, $F$ has a section, and the etale sheafification is nontrivial.
+
+This illustrates how the etale topology can "see" algebraic data (square roots, Galois extensions) invisible to the Zariski topology.
+</Example>
+
+<Example id="artin-schreier-fppf" title="Artin-Schreier sheaf in characteristic p">
+Over $\mathbb{F}_p$, the **Artin-Schreier sequence** $0 \to \mathbb{F}_p \to \mathbb{G}_a \xrightarrow{F - 1} \mathbb{G}_a \to 0$ (where $F$ is the Frobenius $x \mapsto x^p$) is exact in the etale topology. The map $F - 1$ is surjective in the etale topology because for any $a$ in a ring $A$, the equation $x^p - x = a$ is separable (its derivative $-1$ is a unit), so it has a root after a finite etale extension.
+
+The resulting cohomology $H^1_{\text{et}}(\operatorname{Spec}(k), \mathbb{F}_p)$ classifies Artin-Schreier extensions of $k$.
+</Example>
+
+<Example id="big-vs-small-site-sheaves" title="Big site vs. small site sheaves">
+For a scheme $X$, a sheaf $\mathcal{F}$ on the big etale site $(\mathbf{Sch}/X)_{\text{et}}$ restricts to a sheaf on the small etale site $X_{\text{et}}$ via the inclusion functor. Conversely, a sheaf on $X_{\text{et}}$ can be extended to the big site (not uniquely in general).
+
+However, for computing cohomology, the two sites give the same answer: $H^i(X_{\text{et}}, \mathcal{F}|_{X_{\text{et}}}) \cong H^i((\mathbf{Sch}/X)_{\text{et}}, \mathcal{F})$. This is because the inclusion $X_{\text{et}} \hookrightarrow (\mathbf{Sch}/X)_{\text{et}}$ is a morphism of sites that induces an equivalence on the relevant derived categories.
+</Example>
+
+---
+
+## The Category of Sheaves
+
+<Definition title="Category of sheaves" number="1.14">
+The category $\operatorname{Sh}(\mathcal{C}, J)$ of sheaves of sets on a site $(\mathcal{C}, J)$ is the full subcategory of $\operatorname{PSh}(\mathcal{C})$ consisting of sheaves. For sheaves of abelian groups, we write $\operatorname{Ab}(\mathcal{C}, J)$ or $\operatorname{Sh}_{\operatorname{Ab}}(\mathcal{C}, J)$.
+
+Key properties:
+- $\operatorname{Sh}(\mathcal{C}, J)$ is a **Grothendieck topos**: it has finite limits, arbitrary colimits, internal hom, a subobject classifier, and a generating set.
+- $\operatorname{Ab}(\mathcal{C}, J)$ is a **Grothendieck abelian category**: it has enough injectives, exact filtered colimits, and a generator. This guarantees the existence of derived functors and sheaf cohomology.
+</Definition>
+
+<Example id="sheaves-on-spec-k" title="Sheaves on Spec(k) in various topologies">
+For $X = \operatorname{Spec}(k)$ with $k$ a field:
+
+**Zariski sheaves**: $\operatorname{Sh}(X_{\text{Zar}})$ is equivalent to $\mathbf{Set}$ (a single point has no nontrivial open covers).
+
+**Etale sheaves**: $\operatorname{Sh}(X_{\text{et}})$ is equivalent to the category of continuous discrete $G_k$-sets, where $G_k = \operatorname{Gal}(k^{\text{sep}}/k)$. The abelian category $\operatorname{Ab}(X_{\text{et}})$ is equivalent to the category of continuous discrete $G_k$-modules.
+
+**fppf sheaves**: $\operatorname{Sh}(X_{\text{fppf}})$ is strictly larger. It contains sheaves represented by non-smooth group schemes like $\alpha_p$ and $\mu_p$ in characteristic $p$.
+
+This shows concretely how finer topologies give richer categories of sheaves.
+</Example>
+
+<Example id="sheaves-abelian-properties" title="Abelian structure of sheaf categories">
+The category $\operatorname{Ab}(X_{\text{et}})$ of abelian etale sheaves on a scheme $X$ has:
+
+- **Kernels**: computed as the presheaf kernel (which is automatically a sheaf).
+- **Cokernels**: the sheafification of the presheaf cokernel.
+- **Images**: the sheafification of the presheaf image.
+- **Exact sequences**: a sequence $\mathcal{F} \to \mathcal{G} \to \mathcal{H}$ is exact if and only if it is exact on all stalks $\mathcal{F}_{\bar{x}} \to \mathcal{G}_{\bar{x}} \to \mathcal{H}_{\bar{x}}$ at all geometric points $\bar{x} \to X$.
+
+The existence of enough injectives ensures that the derived functor cohomology $H^i(X_{\text{et}}, \mathcal{F}) = R^i\Gamma(X_{\text{et}}, \mathcal{F})$ is well-defined.
+</Example>
+
+---
+
+## Stalks and Points of a Topos
+
+<Definition title="Point of a topos" number="1.15">
+A **point** of a topos $\operatorname{Sh}(\mathcal{C}, J)$ is a geometric morphism $p: \mathbf{Set} \to \operatorname{Sh}(\mathcal{C}, J)$, i.e., an adjoint pair $(p^*, p_*)$ where $p^*: \operatorname{Sh}(\mathcal{C}, J) \to \mathbf{Set}$ is left exact (preserves finite limits).
+
+The functor $p^*$ is the **stalk functor**: $p^*(\mathcal{F}) = \mathcal{F}_p$ is the stalk of $\mathcal{F}$ at $p$.
+
+A topos **has enough points** if a morphism of sheaves $\varphi: \mathcal{F} \to \mathcal{G}$ is an isomorphism if and only if $\varphi_p: \mathcal{F}_p \to \mathcal{G}_p$ is a bijection for every point $p$.
+</Definition>
+
+<Example id="stalks-etale-site" title="Stalks on the etale site">
+For the etale site of a scheme $X$, the points correspond to geometric points $\bar{x}: \operatorname{Spec}(\Omega) \to X$ where $\Omega$ is a separably closed field. The stalk at $\bar{x}$ is
+
+$$\mathcal{F}_{\bar{x}} = \varinjlim_{(U, u)} \mathcal{F}(U)$$
+
+where the colimit runs over etale neighborhoods $(U, u)$ of $\bar{x}$, i.e., pairs of an etale $U \to X$ and a lift $u: \operatorname{Spec}(\Omega) \to U$ of $\bar{x}$.
+
+The etale site has enough points (this is a theorem of Grothendieck). So a morphism of etale sheaves is an isomorphism if and only if it induces isomorphisms on all stalks at geometric points.
+</Example>
+
+<Example id="stalks-fppf-site" title="Stalks and points on the fppf site">
+The fppf site also has enough points, but the points are more complicated: they correspond to maps from spectra of strictly henselian local rings (for the etale case) or from spectra of henselian local rings with algebraically closed residue field (for the fppf case, roughly).
+
+In practice, one rarely computes fppf stalks directly. Instead, one uses the comparison between fppf and etale cohomology: for a smooth group scheme $G$, the etale and fppf cohomology agree: $H^i_{\text{et}}(X, G) \cong H^i_{\text{fppf}}(X, G)$.
+</Example>
+
+---
+
+## Morphisms of Sheaves and Sheaf Hom
+
+<Example id="sheaf-hom-internal" title="Internal hom of sheaves">
+For sheaves $\mathcal{F}, \mathcal{G}$ on $(\mathcal{C}, J)$, the **sheaf hom** (or internal hom) $\underline{\operatorname{Hom}}(\mathcal{F}, \mathcal{G})$ is the sheaf defined by
+
+$$\underline{\operatorname{Hom}}(\mathcal{F}, \mathcal{G})(U) = \operatorname{Hom}_{\operatorname{Sh}(\mathcal{C}/U)}(\mathcal{F}|_U, \mathcal{G}|_U)$$
+
+where $\mathcal{F}|_U$ denotes the restriction to the "localized" site over $U$.
+
+This gives the sheaf category a **closed monoidal structure** (if we also have a suitable tensor product). For sheaves of $\mathcal{O}$-modules on a ringed site, $\underline{\operatorname{Hom}}_{\mathcal{O}}(\mathcal{F}, \mathcal{G})$ is the sheaf of $\mathcal{O}$-module homomorphisms.
+</Example>
+
+<Example id="torsor-as-sheaf" title="Torsors as sheaves">
+Let $G$ be a sheaf of groups on $(\mathcal{C}, J)$. A **$G$-torsor** is a sheaf $P$ with a $G$-action $G \times P \to P$ such that:
+1. $P$ is locally nonempty: there exists a covering $\{U_i \to U\}$ such that $P(U_i) \neq \emptyset$.
+2. The action is simply transitive: $G \times P \to P \times P$ given by $(g, p) \mapsto (gp, p)$ is an isomorphism.
+
+Isomorphism classes of $G$-torsors form the pointed set $H^1((\mathcal{C}, J), G)$ (nonabelian first cohomology). For $G = \mathbb{G}_m$, this gives $\operatorname{Pic}$ (line bundles); for $G = GL_n$, this gives isomorphism classes of rank-$n$ vector bundles.
+</Example>
+
+---
+
+## Cech Cohomology on Sites
+
+<Definition title="Cech cohomology" number="1.16">
+For a covering family $\mathcal{U} = \{U_i \to U\}$ and an abelian sheaf $\mathcal{F}$, the **Cech complex** is
+
+$$\check{C}^0(\mathcal{U}, \mathcal{F}) = \prod_i \mathcal{F}(U_i), \quad \check{C}^1(\mathcal{U}, \mathcal{F}) = \prod_{i,j} \mathcal{F}(U_i \times_U U_j), \quad \check{C}^2(\mathcal{U}, \mathcal{F}) = \prod_{i,j,k} \mathcal{F}(U_i \times_U U_j \times_U U_k), \ldots$$
+
+with differentials given by alternating restriction maps. The **Cech cohomology** is $\check{H}^n(\mathcal{U}, \mathcal{F}) = H^n(\check{C}^\bullet(\mathcal{U}, \mathcal{F}))$.
+
+Taking the colimit over all covering families (ordered by refinement) gives $\check{H}^n(U, \mathcal{F})$.
+</Definition>
+
+<Example id="cech-vs-derived" title="Cech vs. derived functor cohomology">
+In general, $\check{H}^n$ and $H^n$ (derived functor cohomology) differ. However:
+
+- $\check{H}^0(U, \mathcal{F}) = H^0(U, \mathcal{F}) = \mathcal{F}(U)$ always.
+- $\check{H}^1(U, \mathcal{F}) = H^1(U, \mathcal{F})$ always (for abelian sheaves on a site).
+- For $n \geq 2$, Cech and derived functor cohomology agree when the site has "enough acyclic covers" (Leray's theorem / Cartan's theorem).
+
+On the etale site of a Noetherian scheme, Cech cohomology agrees with derived functor cohomology for all abelian sheaves. This is a key technical result that makes etale cohomology computable.
+</Example>
+
+---
+
+## Comparison with Classical Sheaves
+
+<Example id="comparison-classical" title="Recovering classical sheaves">
+For a topological space $X$, the classical category of sheaves $\operatorname{Sh}(X)$ equals $\operatorname{Sh}(\operatorname{Open}(X), J_{\text{open}})$ where $J_{\text{open}}$ is the open cover topology.
+
+For a scheme $X$ with Zariski topology:
+- $\operatorname{Sh}(X_{\text{Zar}}) = $ classical Zariski sheaves on $X$.
+- $\operatorname{Sh}(X_{\text{et}}) \supsetneq \operatorname{Sh}(X_{\text{Zar}})$ strictly, as etale sheaves encode Galois-theoretic information.
+- $\operatorname{Sh}(X_{\text{fppf}}) \supsetneq \operatorname{Sh}(X_{\text{et}})$ strictly, as fppf sheaves can detect inseparable phenomena.
+
+The comparison morphism $\epsilon: X_{\text{et}} \to X_{\text{Zar}}$ gives a pushforward $\epsilon_*: \operatorname{Sh}(X_{\text{et}}) \to \operatorname{Sh}(X_{\text{Zar}})$. For a quasi-coherent sheaf $\mathcal{F}$ on $X$, the etale and Zariski cohomology agree: $H^i_{\text{et}}(X, \mathcal{F}) = H^i_{\text{Zar}}(X, \mathcal{F})$ (a theorem of Grothendieck).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key ideas">
+1. A **sheaf** on a site satisfies the equalizer (gluing) condition for all covering families. It encodes local-to-global data.
+
+2. Sheaves form a **Grothendieck topos** (sets case) or **Grothendieck abelian category** (abelian case), with enough injectives for cohomology.
+
+3. **Stalks** at geometric points detect isomorphisms of sheaves (on etale and fppf sites).
+
+4. **Cech cohomology** provides a computable approximation to derived functor cohomology, and agrees with it on the etale site of Noetherian schemes.
+
+5. Different topologies (Zariski, etale, fppf) give different categories of sheaves, detecting progressively finer geometric information. The theory of sheaves on sites is the unified framework encompassing all of them.
+</Remark>

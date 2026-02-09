@@ -1,0 +1,171 @@
+export const metadata = {
+  title: 'Keel--Mori Theorem for Stacks — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Theorem — Keel--Mori for Stacks" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Keel--Mori Theorem: Existence of Coarse Moduli Spaces
+
+The Keel--Mori theorem is the fundamental existence result for coarse moduli spaces of algebraic stacks. It guarantees that every algebraic stack with finite inertia admits a coarse moduli space as an algebraic space, providing the essential link between the stacky world and classical algebraic geometry.
+
+---
+
+## Statement
+
+<Theorem title="Keel--Mori Theorem" number="4.3">
+Let $\mathcal{X}$ be an algebraic stack locally of finite type over an algebraic space $S$. Assume that the inertia stack $\mathcal{I}_\mathcal{X} \to \mathcal{X}$ is **finite** (equivalently, the stabilizer group schemes $G_x$ are finite for all geometric points $x$). Then there exists a **coarse moduli space** $\pi : \mathcal{X} \to M$ where:
+
+1. $M$ is an algebraic space locally of finite type over $S$.
+2. $\pi$ is proper and quasi-finite.
+3. $\mathcal{O}_M \xrightarrow{\sim} \pi_*\mathcal{O}_\mathcal{X}$.
+4. For every algebraically closed field $k$, $\pi$ induces a bijection $|\mathcal{X}(k)|/{\cong} \xrightarrow{\sim} M(k)$.
+5. $\pi$ is universal: any morphism $\mathcal{X} \to N$ to an algebraic space factors uniquely through $\pi$.
+
+Moreover, if $\mathcal{X}$ is separated, then $M$ is separated. If $\mathcal{X}$ is of finite type and separated, then $M$ is of finite type and separated.
+</Theorem>
+
+<Remark title="The finite inertia condition">
+The **inertia stack** $\mathcal{I}_\mathcal{X} = \mathcal{X} \times_{\mathcal{X} \times \mathcal{X}} \mathcal{X}$ parametrizes pairs (object $\xi$, automorphism $\alpha \in \operatorname{Aut}(\xi)$). The condition that $\mathcal{I}_\mathcal{X} \to \mathcal{X}$ is finite means each stabilizer group is a finite group scheme. This includes:
+
+- All DM stacks with quasi-finite diagonal.
+- Quotient stacks $[X/G]$ where $G$ is a finite group.
+- **But not** $\mathrm{B}\mathbb{G}_m$ (stabilizer $\mathbb{G}_m$ is not finite).
+
+Without the finite inertia condition, coarse moduli spaces may not exist. For $\mathrm{B}\mathbb{G}_m$, the "coarse space" would need to be $\operatorname{Spec} k$, but the universal property fails: there exist non-isomorphic line bundles on some scheme $T$ that both map to the same point of $\operatorname{Spec} k$.
+</Remark>
+
+---
+
+## Key properties of the coarse moduli map
+
+<Theorem title="Properties of the Coarse Map" number="4.4">
+Let $\pi : \mathcal{X} \to M$ be the coarse moduli map from the Keel--Mori theorem. Then:
+
+**(a)** $\pi$ is **initial** among morphisms from $\mathcal{X}$ to algebraic spaces.
+
+**(b)** The formation of $M$ commutes with **flat base change**: if $M' \to M$ is flat, then $M'$ is the coarse moduli space of $\mathcal{X}' = \mathcal{X} \times_M M'$.
+
+**(c)** If $\mathcal{X} = [X/G]$ with $G$ finite acting on $X$, then $M = X/G$ (the geometric quotient, which exists as an algebraic space by Keel--Mori applied to the action groupoid).
+
+**(d)** The map $\pi$ is a **homeomorphism** on underlying topological spaces: $|\mathcal{X}| \xrightarrow{\sim} |M|$.
+
+**(e)** In **characteristic zero** (or when the orders of all stabilizers are invertible in $\mathcal{O}_S$): $\pi_*$ is exact on coherent sheaves, and $R^i\pi_*\mathcal{F} = 0$ for $i > 0$ and $\mathcal{F}$ coherent.
+</Theorem>
+
+---
+
+## Examples
+
+<Example id="km-mg" title="Coarse space of M_g">
+For $\mathcal{M}_g$ ($g \geq 2$), the inertia is finite (automorphism groups are finite by the Hurwitz bound). Keel--Mori gives the coarse moduli space $M_g$, a quasi-projective variety of dimension $3g - 3$. The map $\pi : \mathcal{M}_g \to M_g$ is proper and quasi-finite, and an isomorphism over the open locus of curves without extra automorphisms.
+
+For $g = 2$: every genus-2 curve has the hyperelliptic involution, so $\pi$ is nowhere an isomorphism. The coarse space $M_2 \cong \mathbb{A}^3/S_6$ (identified via the six branch points of the hyperelliptic map, modulo the $S_6$-action by relabeling).
+</Example>
+
+<Example id="km-bg" title="BG for finite G">
+For $\mathrm{B}G = [\operatorname{Spec} k/G]$ with $G$ finite, the coarse space is $\operatorname{Spec} k$. The map $\pi : \mathrm{B}G \to \operatorname{Spec} k$ sends every $G$-torsor to the unique $k$-point. The pushforward $\pi_* : \operatorname{Rep}(G) \to \operatorname{Vect}_k$ is the functor $V \mapsto V^G$ (taking $G$-invariants).
+
+In characteristic zero, this is exact (Maschke's theorem: $V^G$ is a direct summand of $V$). In characteristic $p$ dividing $|G|$, the functor $V \mapsto V^G$ is only left-exact, and $R^i\pi_*$ can be nonzero.
+</Example>
+
+<Example id="km-quotient-surface" title="Surface quotient singularities">
+For $G = \mu_n$ acting on $\mathbb{A}^2$ (type $A_{n-1}$), Keel--Mori gives $[\mathbb{A}^2/\mu_n] \to \mathbb{A}^2/\mu_n$. The coarse space has the $A_{n-1}$ singularity at the origin, while the stack is smooth. The map $\pi$ is a bijection on geometric points (both have the same underlying set of orbits), but $\pi$ is not an isomorphism at the origin.
+
+More generally, for $G \subset \mathrm{SL}(2, k)$ a finite subgroup (giving ADE singularities), the coarse space $\mathbb{A}^2/G$ has the corresponding surface singularity, and $[\mathbb{A}^2/G]$ is the "canonical stacky resolution."
+</Example>
+
+<Example id="km-weighted-proj" title="Weighted projective spaces">
+For $\mathcal{P}(a_0, \ldots, a_n)$ with $\gcd(a_0, \ldots, a_n) = 1$, the stabilizers are cyclic (hence finite), and Keel--Mori gives the coarse space $\mathbb{P}(a_0, \ldots, a_n)$ (the classical weighted projective variety).
+
+For $\mathcal{P}(1, 1, 2)$: the coarse space is $\mathbb{P}(1,1,2) \cong V(xy - z^2) \subset \mathbb{P}^3$ (the quadric cone). The Keel--Mori map $\pi$ is an isomorphism away from $[0:0:1]$ (where the $\mu_2$-stabilizer lives) and contracts the $\mu_2$-gerbe at $[0:0:1]$ to the singular point of the cone.
+</Example>
+
+<Example id="km-m11" title="Elliptic curves revisited">
+For $\mathcal{M}_{1,1}$, the inertia is finite (stabilizers are $\mu_2$, $\mu_4$, or $\mu_6$). Keel--Mori gives $M_{1,1} = \mathbb{A}^1_j$ (the $j$-line). The map $\pi$ satisfies:
+- $\pi^{-1}(j) \cong \mathrm{B}\operatorname{Aut}(E_j)$ for each $j$-value (the fiber is the residual gerbe).
+- $\pi_*\mathcal{O}_{\mathcal{M}_{1,1}} = \mathcal{O}_{\mathbb{A}^1_j}$.
+- The universal elliptic curve exists on the stack $\mathcal{M}_{1,1}$ but **not** on $\mathbb{A}^1_j$.
+</Example>
+
+<Example id="km-m0n" title="M₀,ₙ is already a scheme">
+For $n \geq 3$, $\mathcal{M}_{0,n}$ has trivial automorphism groups (a rational curve with $\geq 3$ marked points is rigid), so the coarse moduli map is an isomorphism: $\mathcal{M}_{0,n} \cong M_{0,n}$. The compactification $\overline{\mathcal{M}}_{0,n} \cong \overline{M}_{0,n}$ is a smooth projective variety, explicitly described as an iterated blowup of $(\mathbb{P}^1)^{n-3}$.
+
+For $n = 4$: $\overline{M}_{0,4} \cong \mathbb{P}^1$ (the cross-ratio).
+For $n = 5$: $\overline{M}_{0,5} \cong \operatorname{Bl}_4 \mathbb{P}^2$ (the del Pezzo surface of degree 5).
+</Example>
+
+<Example id="km-root-stack" title="Root stack">
+For the root stack $\sqrt[r]{D/X}$ with $D$ a smooth divisor in a smooth variety $X$, the stabilizers along $D$ are $\mu_r$ (finite). Keel--Mori gives the coarse space $X$ back:
+$$\sqrt[r]{D/X} \xrightarrow{\pi} X.$$
+The map $\pi$ is an isomorphism over $X \setminus D$ and a $\mu_r$-gerbe along $D$.
+</Example>
+
+<Example id="km-ag" title="Moduli of abelian varieties">
+The stack $\mathcal{A}_g$ has finite stabilizers (the automorphism group of a ppav is finite). Keel--Mori gives the coarse space $A_g$, which over $\mathbb{C}$ is the Siegel modular variety $\mathrm{Sp}(2g, \mathbb{Z}) \backslash \mathfrak{H}_g$.
+
+For $g = 1$: $A_1 \cong \mathbb{A}^1_j$.
+For $g = 2$: $A_2$ is a normal quasi-projective variety of dimension 3, with the Igusa compactification $A_2^* = A_2 \cup \{0\text{-dim cusp}\}$ being projective.
+</Example>
+
+<Example id="km-non-separated" title="Non-separated coarse space">
+Consider $\mathcal{X} = [(\mathbb{A}^1 \sqcup \mathbb{A}^1) / \mathbb{Z}_2]$, where $\mathbb{Z}_2$ swaps the two copies of $\mathbb{A}^1 \setminus \{0\}$ but fixes both origins. The coarse space $M$ is the "line with doubled origin" -- a non-separated algebraic space. This happens because $\mathcal{X}$ itself is not separated.
+</Example>
+
+<Example id="km-fails-gm" title="Failure of Keel--Mori for BG_m">
+The stack $\mathrm{B}\mathbb{G}_m$ has stabilizer $\mathbb{G}_m$ at its unique point -- this is **not finite**, so Keel--Mori does not apply. Indeed, there is no coarse moduli space: the universal property would require that every line bundle on every scheme $T$ is pulled back from a map $T \to \operatorname{Spec} k$. But $\operatorname{Pic}(T)$ can be nontrivial (e.g., $T = \mathbb{P}^1$), contradicting the pullback requirement.
+
+The "good moduli space" theory of Alper extends the Keel--Mori theorem to certain Artin stacks with non-finite stabilizers, replacing "coarse moduli space" with "good moduli space."
+</Example>
+
+<Example id="km-tame" title="Tame stacks">
+A DM stack $\mathcal{X}$ is **tame** if the stabilizer groups at all geometric points have order invertible in the base. The Keel--Mori theorem for tame stacks has the additional property that $\pi_* : \operatorname{Coh}(\mathcal{X}) \to \operatorname{Coh}(M)$ is exact.
+
+For example, over $\operatorname{Spec} \mathbb{Z}[1/n]$, any DM stack with stabilizers of order dividing $n$ is tame. The stack $\mathcal{M}_{1,1}$ over $\operatorname{Spec} \mathbb{Z}[1/6]$ is tame (stabilizers have order dividing 6).
+
+In the wild case (characteristic divides the order of stabilizers), the Keel--Mori theorem still gives a coarse space, but the pushforward $\pi_*$ may fail to be exact.
+</Example>
+
+<Example id="km-gerbe-over-space" title="Gerbe over a coarse space">
+If $\mathcal{X}$ is a DM stack with all stabilizers isomorphic to a fixed finite group $G$, then $\pi : \mathcal{X} \to M$ makes $\mathcal{X}$ into a $G$-gerbe over $M$ (in the etale topology). The gerbe class $[\mathcal{X}] \in H^2_{\mathrm{et}}(M, G)$ is the obstruction to $\mathcal{X}$ having a section (i.e., to $\mathcal{X}$ being a "trivial" gerbe).
+
+For $\mathcal{M}_{1,1} \to \mathbb{A}^1_j$: generically this is a $\mu_2$-gerbe (the generic stabilizer is $\mu_2$). The gerbe class in $H^2_{\mathrm{et}}(\mathbb{A}^1_j \setminus \{0, 1728\}, \mu_2) \cong \operatorname{Br}(\mathbb{A}^1_j \setminus \{0, 1728\})[2]$ is nontrivial -- there is no universal elliptic curve over the $j$-line.
+</Example>
+
+---
+
+## Proof strategy
+
+<Remark title="Outline of proof">
+The proof of the Keel--Mori theorem proceeds in several steps:
+
+**Step 1** (Local construction): Reduce to the case $\mathcal{X} = [U/R]$ where $(U, R)$ is an etale groupoid. Then $M$ is constructed locally as the coequalizer of $R \rightrightarrows U$ in the category of algebraic spaces. The key tool is the existence of quotients by finite flat equivalence relations (due to Artin).
+
+**Step 2** (Finite flat closure): Replace the etale groupoid by a finite flat equivalence relation by taking the "schematic image" of $R$ in $U \times U$. This requires the finiteness of the inertia.
+
+**Step 3** (Gluing): Glue the local constructions using the universal property and descent.
+
+**Step 4** (Properties): Verify that $M$ satisfies the universal property and the bijection on geometric points.
+
+The original proof by Keel and Mori (1997) used a slightly different approach via "coarsification"; the above outline follows the treatment of Conrad.
+</Remark>
+
+---
+
+## Summary
+
+The Keel--Mori theorem guarantees that any algebraic stack with finite inertia admits a coarse moduli space as an algebraic space. The coarse map $\pi : \mathcal{X} \to M$ is proper and quasi-finite, induces a bijection on geometric points, and is universal among maps to algebraic spaces. This theorem is the cornerstone for connecting the stack-theoretic approach to classical algebraic geometry.

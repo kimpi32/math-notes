@@ -1,0 +1,243 @@
+export const metadata = {
+  title: 'Artin Approximation — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "정리 — Artin Approximation" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Artin Approximation
+
+Artin's approximation theorem is a powerful result that allows one to approximate formal solutions to systems of polynomial equations by convergent (analytic) or algebraic solutions. It is a cornerstone of Artin's approach to algebraic spaces and algebraic stacks, providing the key tool for proving representability theorems. The theorem has deep connections to commutative algebra, deformation theory, and the foundations of moduli theory.
+
+---
+
+## 1. The Classical Statement
+
+<Theorem title="Artin Approximation Theorem (classical)">
+Let $R$ be a field or an excellent Dedekind domain, and let $A$ be the henselization of a finitely generated $R$-algebra at a prime ideal. Let $\hat{A}$ be the completion of $A$ at a maximal ideal $\mathfrak{m}$. Given a system of polynomial equations
+
+$$
+F(x_1, \ldots, x_n) = 0
+$$
+
+where $F = (f_1, \ldots, f_m)$ are polynomials with coefficients in $A$, and given a solution $\hat{x} = (\hat{x}_1, \ldots, \hat{x}_n) \in \hat{A}^n$, for every integer $c \geq 1$ there exists a solution $x = (x_1, \ldots, x_n) \in A^n$ such that
+
+$$
+x_i \equiv \hat{x}_i \pmod{\mathfrak{m}^c}
+$$
+
+for all $i = 1, \ldots, n$.
+</Theorem>
+
+In short: if a system of equations has a formal solution (in the completion), it has an algebraic solution that approximates the formal one to any desired order.
+
+---
+
+## 2. The Functor-Theoretic Statement
+
+Artin reformulated the approximation theorem in terms of functors, which is the version most relevant to algebraic geometry:
+
+<Theorem title="Artin Approximation (functor version)">
+Let $R$ be an excellent ring, $\mathfrak{m} \subset R$ a maximal ideal, and $F: (\text{$R$-algebras}) \to \mathrm{Sets}$ a functor that is locally of finite presentation. If $\hat{\xi} \in F(\hat{R}_\mathfrak{m})$ is an element (a formal solution), then for every $c \geq 1$, there exists $\xi \in F(R^h_\mathfrak{m})$ (where $R^h$ is the henselization) such that $\xi$ and $\hat{\xi}$ agree modulo $\mathfrak{m}^c$:
+
+$$
+\xi \equiv \hat{\xi} \pmod{\mathfrak{m}^c}
+$$
+</Theorem>
+
+<Remark>
+The condition "locally of finite presentation" means that $F$ commutes with filtered colimits of rings. This is a mild condition satisfied by all moduli functors of geometric interest.
+</Remark>
+
+---
+
+## 3. Strong Artin Approximation
+
+<Theorem title="Strong Artin Approximation">
+Let $A$ be an excellent henselian local ring with maximal ideal $\mathfrak{m}$, and $F(x) = 0$ a system of polynomial equations. Then there exists a function $\beta: \mathbb{N} \to \mathbb{N}$ (the **Artin function**) such that: if $\bar{x} \in A^n$ satisfies $F(\bar{x}) \equiv 0 \pmod{\mathfrak{m}^{\beta(c)}}$, then there exists an exact solution $x \in A^n$ with $x \equiv \bar{x} \pmod{\mathfrak{m}^c}$.
+</Theorem>
+
+The strong version says that not only can formal solutions be approximated, but even "approximate solutions" (solutions modulo a high power of $\mathfrak{m}$) can be lifted to exact solutions. The Artin function $\beta$ controls how good the approximation needs to be.
+
+---
+
+## 4. Artin Approximation over the Complex Numbers
+
+Over $\mathbb{C}$, there is an analytic version:
+
+<Theorem title="Artin Approximation — analytic version">
+Let $f_1, \ldots, f_m \in \mathbb{C}\{x_1, \ldots, x_n\}[y_1, \ldots, y_p]$ be polynomials in $y$ with convergent power series coefficients in $x$. If $\hat{y}(x) \in \mathbb{C}[[x_1, \ldots, x_n]]^p$ is a formal solution:
+
+$$
+f_i(x, \hat{y}(x)) = 0 \quad \text{for all } i
+$$
+
+then for every $c \geq 1$, there exists a convergent solution $y(x) \in \mathbb{C}\{x_1, \ldots, x_n\}^p$ with
+
+$$
+y(x) \equiv \hat{y}(x) \pmod{(x_1, \ldots, x_n)^c}
+$$
+</Theorem>
+
+This is the original form, relating formal and convergent power series solutions.
+
+---
+
+## 5. Popescu's Theorem and General Neron Desingularization
+
+A deep generalization of Artin approximation is:
+
+<Theorem title="Popescu's Theorem (General Neron Desingularization)">
+Let $A \to B$ be a regular morphism of noetherian rings. Then $B$ is a filtered colimit of smooth $A$-algebras.
+</Theorem>
+
+This implies Artin approximation: taking $A = R^h$ (henselization) and $B = \hat{R}$ (completion), the map $R^h \to \hat{R}$ is regular, so $\hat{R} = \varinjlim C_i$ with $C_i$ smooth over $R^h$. Any element of $F(\hat{R})$ for a finitely presented $F$ factors through some $F(C_i)$, giving an algebraic solution.
+
+---
+
+## 6. Examples
+
+<Example title="Implicit function theorem (algebraic version)">
+Consider the equation $f(x, y) = y^2 - x = 0$ in $\mathbb{C}[[x]]$. The formal solution $\hat{y} = \sqrt{x} = x^{1/2}$ does not lie in $\mathbb{C}[[x]]$, but after the base change $x = t^2$, we get $y = t \in \mathbb{C}\{t\}$. Artin approximation in this setting recovers the algebraic branch of the square root, approximating formal solutions by algebraic ones.
+</Example>
+
+<Example title="Hensel's Lemma as a special case">
+Hensel's lemma says: if $f(x) \in \mathbb{Z}_p[x]$ and $f(a) \equiv 0 \pmod{p}$ with $f'(a) \not\equiv 0 \pmod{p}$, then there exists $\alpha \in \mathbb{Z}_p$ with $f(\alpha) = 0$ and $\alpha \equiv a \pmod{p}$. This is a special case of Artin approximation for $A = \mathbb{Z}_p$ (which is henselian) with $c = 1$.
+</Example>
+
+<Example title="Deformation of singularities">
+Let $(X_0, x_0)$ be a singular germ. A formal deformation $\hat{X} \to \mathrm{Spf}(\hat{R})$ can be approximated by an algebraic deformation $X \to \mathrm{Spec}(R^h)$. This is how Artin approximation is used in deformation theory: formal deformations (which are easier to construct) are promoted to algebraic ones.
+</Example>
+
+<Example title="Smooth morphisms and approximation">
+Let $f: X \to S$ be a smooth morphism and $\hat{s} \in X(\hat{\mathcal{O}}_{S,s})$ a formal section. Artin approximation gives a section $\sigma \in X(\mathcal{O}^h_{S,s})$ agreeing with $\hat{s}$ to any prescribed order. For smooth morphisms, this is equivalent to the formal lifting criterion.
+</Example>
+
+<Example title="Approximation of vector bundles">
+Let $X$ be a proper scheme over a henselian local ring $(R, \mathfrak{m})$. A formal vector bundle $\hat{\mathcal{E}}$ on $X \times_R \hat{R}$ can be approximated by an algebraic vector bundle on $X$ (i.e., a vector bundle on $X$ whose completion is isomorphic to $\hat{\mathcal{E}}$ modulo $\mathfrak{m}^c$). This follows from Artin approximation applied to the functor parametrizing vector bundles.
+</Example>
+
+<Example title="Approximation for etale maps">
+Let $A$ be a henselian local ring and $\hat{B}$ an étale $\hat{A}$-algebra. By Artin approximation, there exists an étale $A$-algebra $B$ with $B \otimes_A \hat{A} \cong \hat{B}$. In fact, for étale algebras, one gets an exact statement (not just modulo $\mathfrak{m}^c$) by Hensel's lemma.
+</Example>
+
+<Example title="Deformation of curves">
+Consider a smooth curve $C_0$ over a field $k$. A formal deformation over $k[[t]]$ corresponds to a point of the formal completion of $\mathcal{M}_g$ at $[C_0]$. Artin approximation shows this formal deformation is approximated by an algebraic family $C \to \mathrm{Spec}(R)$ for a suitable henselian local $R$, giving an actual algebraic curve near $C_0$.
+</Example>
+
+<Example title="Resolving indeterminacies">
+Let $f: X \dashrightarrow Y$ be a rational map between proper varieties, and suppose $f$ extends formally at a point $x \in X$ (i.e., extends to $\hat{\mathcal{O}}_{X,x}$). Artin approximation shows $f$ extends to an étale neighborhood of $x$. This is used in the proof that rational maps between proper regular varieties extend in codimension $\leq 1$.
+</Example>
+
+<Example title="Nash approximation">
+Over $\mathbb{R}$, the analogue of Artin approximation involves Nash functions (algebraic functions on semialgebraic sets). Formal solutions to real polynomial equations in $\mathbb{R}[[x]]$ can be approximated by Nash functions. This is the Artin-Mazur theorem in real algebraic geometry.
+</Example>
+
+<Example title="p-adic approximation">
+Over a $p$-adic field $K$, Artin approximation for the ring $\mathcal{O}_K$ (which is henselian) says: formal solutions in $\hat{\mathcal{O}}_K = \mathcal{O}_K$ can be approximated by algebraic solutions. Since $\mathcal{O}_K$ is already complete, the theorem is trivially true here, but becomes nontrivial for more complex rings (e.g., affinoid algebras in rigid geometry).
+</Example>
+
+<Example title="Formal GAGA as approximation">
+For a proper scheme $X$ over a complete local ring $(R, \mathfrak{m})$, the formal GAGA theorem says that coherent sheaves on the formal scheme $\hat{X}$ correspond to coherent sheaves on $X$. This can be viewed as a global version of Artin approximation: formal objects on a proper family are algebraic.
+</Example>
+
+<Example title="Approximation for moduli problems">
+Let $\mathcal{F}$ be the moduli functor of stable sheaves on a projective variety $X$. A formal family $\hat{\mathcal{E}} \in \mathcal{F}(\hat{R})$ can be approximated by an algebraic family $\mathcal{E} \in \mathcal{F}(R^h)$. This is crucial for proving that moduli spaces of sheaves are algebraic spaces (by Artin's representability criteria).
+</Example>
+
+---
+
+## 7. Artin's Criteria for Algebraic Spaces
+
+The most important application of Artin approximation in algebraic geometry is Artin's representability theorem:
+
+<Theorem title="Artin's Representability Theorem">
+Let $S$ be an excellent scheme and $F: (\mathrm{Sch}/S)^{\mathrm{op}} \to \mathrm{Sets}$ a functor. Suppose:
+
+1. $F$ is a sheaf for the étale topology.
+2. $F$ is locally of finite presentation.
+3. $F$ is compatible with formal deformations (Schlessinger's conditions).
+4. $F$ satisfies effectivity of formal objects (Artin's condition).
+5. $F$ has an obstruction theory.
+
+Then $F$ is an algebraic space (locally of finite type over $S$).
+</Theorem>
+
+Artin approximation enters in step (4): it converts formal objects (which are constructed by deformation theory) into algebraic objects (which give étale atlases).
+
+---
+
+## 8. Connection to Algebraic Spaces
+
+<Theorem title="Algebraization of formal modifications">
+Let $X$ be a proper algebraic space over an excellent henselian local ring $(R, \mathfrak{m})$. Let $\hat{X}' \to \hat{X}$ be a formal modification (a proper birational morphism of formal algebraic spaces). Then there exists an algebraic modification $X' \to X$ whose completion is $\hat{X}' \to \hat{X}$.
+</Theorem>
+
+This algebraization result, which relies on Artin approximation, shows that formal constructions over algebraic spaces can be made algebraic. It is used, for instance, in the proof of the existence of flips in the minimal model program.
+
+---
+
+## 9. Comparison: Formal vs. Henselian vs. Algebraic
+
+The three levels of "solutions" form a hierarchy:
+
+| Level | Ring | Nature | Example |
+|-------|------|--------|---------|
+| Algebraic | $R$ (finitely generated) | Polynomial | $y = p(x)/q(x)$ |
+| Henselian | $R^h$ (henselization) | Algebraic power series | Solutions of polynomial ODE |
+| Formal | $\hat{R}$ (completion) | Formal power series | $\sum a_n x^n$ |
+
+Artin approximation says: formal solutions can be approximated by henselian (algebraic) solutions. The approximation is only modulo $\mathfrak{m}^c$, not exact in general (formal solutions need not be algebraic).
+
+<Example title="Non-algebraic formal solution">
+The formal power series $\hat{y} = \sum_{n=0}^\infty n! \, x^n \in \mathbb{C}[[x]]$ satisfies no polynomial equation over $\mathbb{C}(x)$: it is transcendental. However, for any $c$, the polynomial $\sum_{n=0}^{c-1} n!\, x^n$ is an algebraic approximation modulo $(x)^c$.
+</Example>
+
+---
+
+## 10. The Role of Excellence
+
+<Definition title="Excellent ring">
+A noetherian ring $R$ is **excellent** if:
+1. $R$ is universally catenary.
+2. For every prime $\mathfrak{p}$, the formal fibers of $R_\mathfrak{p}$ are geometrically regular.
+3. For every finitely generated $R$-algebra $A$, the regular locus of $\mathrm{Spec}(A)$ is open.
+</Definition>
+
+<Remark>
+The excellence hypothesis is essential for Artin approximation. All rings arising in classical algebraic geometry (fields, $\mathbb{Z}$, complete local rings, finitely generated algebras over these) are excellent. The excellence condition ensures that the completion map $R^h \to \hat{R}$ has good properties (regular formal fibers), which is needed for the approximation argument.
+</Remark>
+
+---
+
+## 11. Elkik's Algebraization
+
+A related and complementary result is:
+
+<Theorem title="Elkik's algebraization">
+Let $(R, \mathfrak{m})$ be a henselian excellent local ring and $\hat{X}$ a proper formal algebraic space over $\hat{R}$. If $\hat{X}$ is algebraizable modulo $\mathfrak{m}^c$ for all $c$ (i.e., there exist algebraic approximations $X_c$ over $R/\mathfrak{m}^c$), and these approximations are compatible, then $\hat{X}$ is algebraizable: there exists a proper algebraic space $X$ over $R$ with $\hat{X} \cong X \times_R \hat{R}$.
+</Theorem>
+
+---
+
+## References
+
+- M. Artin, "Algebraic approximation of structures over complete local rings," Publ. Math. IHES 36 (1969), 23-58.
+- M. Artin, "Versal deformations and algebraic stacks," Invent. Math. 27 (1974), 165-189.
+- D. Popescu, "General Neron desingularization and approximation," Nagoya Math. J. 104 (1986), 85-115.
+- R. Elkik, "Solutions d'equations a coefficients dans un anneau henselien," Ann. Sci. ENS 6 (1973), 553-603.
+- The Stacks Project, Tag 07BX: Artin's Axioms.

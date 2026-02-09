@@ -1,0 +1,217 @@
+export const metadata = {
+  title: 'Keel-Mori Theorem — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "정리 — Keel-Mori Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The Keel-Mori Theorem
+
+The Keel-Mori theorem is one of the most important results connecting the theory of algebraic stacks to algebraic spaces. It guarantees the existence of a coarse moduli space (as an algebraic space) for any Deligne-Mumford stack with finite inertia. This theorem provides the bridge between stacky moduli problems and more classical geometric objects.
+
+---
+
+## 1. Motivation: Coarse Moduli Spaces
+
+In moduli theory, one often encounters the following situation: a moduli problem is naturally described by an algebraic stack $\mathcal{X}$ (because objects can have nontrivial automorphisms), but for many purposes one wants an algebraic space $X$ that "best approximates" $\mathcal{X}$.
+
+<Definition title="Coarse moduli space">
+Let $\mathcal{X}$ be an algebraic stack over a scheme $S$. A **coarse moduli space** for $\mathcal{X}$ is a pair $(X, \pi)$ where $X$ is an algebraic space over $S$ and $\pi: \mathcal{X} \to X$ is a morphism such that:
+
+1. $\pi$ is initial among morphisms from $\mathcal{X}$ to algebraic spaces: for every algebraic space $Y$ and morphism $f: \mathcal{X} \to Y$, there exists a unique $g: X \to Y$ with $f = g \circ \pi$.
+2. For every algebraically closed field $k$, the map $\pi(k): |\mathcal{X}(k)| \to X(k)$ is a bijection, where $|\mathcal{X}(k)|$ denotes isomorphism classes of $k$-points.
+</Definition>
+
+<Remark>
+Condition (1) says $X$ is the "best" algebraic-space approximation. Condition (2) says $X$ has the "right" geometric points. Together, they uniquely characterize $X$ up to unique isomorphism.
+</Remark>
+
+---
+
+## 2. The Inertia Stack
+
+<Definition title="Inertia stack">
+For an algebraic stack $\mathcal{X}$ over $S$, the **inertia stack** $I_\mathcal{X}$ is defined as the fiber product
+
+$$
+I_\mathcal{X} = \mathcal{X} \times_{\mathcal{X} \times_S \mathcal{X}} \mathcal{X}
+$$
+
+where both maps $\mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ are the diagonal. For each $T$-point $x \in \mathcal{X}(T)$, the fiber of $I_\mathcal{X}$ over $x$ is $\mathrm{Aut}(x)$, the automorphism group scheme of $x$.
+</Definition>
+
+<Definition title="Finite inertia">
+An algebraic stack $\mathcal{X}$ has **finite inertia** if the morphism $I_\mathcal{X} \to \mathcal{X}$ is finite. This means all automorphism groups are finite group schemes.
+</Definition>
+
+For a Deligne-Mumford stack, the inertia is always unramified (since the diagonal is unramified). If additionally the automorphism groups are finite, the inertia is finite.
+
+---
+
+## 3. Statement of the Theorem
+
+<Theorem title="Keel-Mori Theorem">
+Let $S$ be a scheme and $\mathcal{X}$ a separated Deligne-Mumford stack of finite type over $S$ with finite inertia $I_\mathcal{X} \to \mathcal{X}$. Then there exists a coarse moduli space $\pi: \mathcal{X} \to X$ where $X$ is a separated algebraic space of finite type over $S$. Moreover:
+
+1. $\pi$ is proper and quasi-finite.
+2. $\pi_* \mathcal{O}_\mathcal{X} = \mathcal{O}_X$ (the pushforward of the structure sheaf is the structure sheaf).
+3. $\pi$ is universal for morphisms from $\mathcal{X}$ to algebraic spaces.
+4. If $\mathcal{X}$ is proper over $S$, then $X$ is proper over $S$.
+5. For any algebraically closed field $k$, $\pi$ induces a bijection $|\mathcal{X}(k)| \xrightarrow{\sim} X(k)$.
+</Theorem>
+
+---
+
+## 4. The Generalized Version
+
+The Keel-Mori theorem has been generalized beyond DM stacks:
+
+<Theorem title="Keel-Mori for Artin stacks (Conrad version)">
+Let $\mathcal{X}$ be an Artin stack locally of finite type over a locally noetherian scheme $S$, with finite inertia. Then a coarse moduli space $\pi: \mathcal{X} \to X$ exists as an algebraic space locally of finite type over $S$, and $\pi_*\mathcal{O}_\mathcal{X} = \mathcal{O}_X$.
+</Theorem>
+
+This generalization, due to Brian Conrad (following ideas of Keel-Mori and de Jong), removes the DM hypothesis at the cost of working with Artin stacks.
+
+---
+
+## 5. Key Properties of the Coarse Moduli Map
+
+<Theorem title="Properties of pi: X -> X">
+The coarse moduli map $\pi: \mathcal{X} \to X$ satisfies:
+
+1. **Universality**: $\pi$ is initial among maps to algebraic spaces.
+2. **Geometric bijectivity**: $\pi$ induces bijections on geometric points.
+3. **Properness**: $\pi$ is proper.
+4. **Stein factorization**: $\pi_* \mathcal{O}_\mathcal{X} = \mathcal{O}_X$.
+5. **Étale local structure**: étale-locally on $X$, the stack $\mathcal{X}$ is isomorphic to a quotient stack $[U/G]$ where $G$ is a finite group acting on an affine scheme $U$, and $X$ is étale-locally $U/G$ (the GIT quotient).
+</Theorem>
+
+Property (5) is particularly important: it says that the Keel-Mori theorem is, étale-locally, just the classical quotient by a finite group.
+
+---
+
+## 6. Examples
+
+<Example title="BG has a point as coarse moduli space">
+Let $G$ be a finite group and $\mathcal{X} = BG = [\mathrm{Spec}(k)/G]$ the classifying stack. The coarse moduli space is $X = \mathrm{Spec}(k)$ with $\pi: BG \to \mathrm{Spec}(k)$ the structure map. Indeed, $BG$ has a single $k$-point (the trivial torsor), $\pi_*\mathcal{O}_{BG} = \mathcal{O}_k^G = k$, and every map $BG \to Y$ factors through $\mathrm{Spec}(k)$.
+</Example>
+
+<Example title="Coarse moduli of M_g">
+The moduli stack $\mathcal{M}_g$ of smooth curves of genus $g \geq 2$ is a smooth DM stack with finite inertia (automorphism groups of curves are finite). The Keel-Mori theorem produces the coarse moduli space $M_g$, which is a quasi-projective variety (the classical moduli space of curves). The map $\pi: \mathcal{M}_g \to M_g$ identifies isomorphic curves and forgets automorphisms.
+</Example>
+
+<Example title="Coarse moduli of M₁,₁">
+The moduli stack $\mathcal{M}_{1,1}$ of elliptic curves is a smooth DM stack. Every elliptic curve has the automorphism $[-1]$, and special curves have larger automorphism groups ($j = 0$ and $j = 1728$). The coarse moduli space is $M_{1,1} \cong \mathbb{A}^1_j$ (the $j$-line). The map $\pi: \mathcal{M}_{1,1} \to \mathbb{A}^1_j$ sends an elliptic curve to its $j$-invariant.
+</Example>
+
+<Example title="Quotient stack [X/G]">
+Let $X$ be a scheme with a free action of a finite group $G$. Then $\mathcal{X} = [X/G]$ is a DM stack with trivial inertia (the action is free). The coarse moduli space is $X/G$, which is an algebraic space, and $\pi: [X/G] \to X/G$ is an isomorphism of algebraic spaces. When the action is free, the coarse moduli space captures everything.
+</Example>
+
+<Example title="Non-free action: quotient singularity">
+Let $G = \mathbb{Z}/n\mathbb{Z}$ act on $\mathbb{A}^2_k$ by $(x,y) \mapsto (\zeta x, \zeta^{-1} y)$ where $\zeta$ is a primitive $n$-th root of unity. The quotient stack $[\mathbb{A}^2/G]$ is a DM stack with non-trivial inertia at the origin. The coarse moduli space is $\mathbb{A}^2/G = \mathrm{Spec}(k[x^n, xy, y^n])$, the $A_{n-1}$-singularity. The map $\pi$ is an isomorphism away from the origin.
+</Example>
+
+<Example title="Weighted projective stack">
+The weighted projective stack $\mathcal{P}(a_0, \ldots, a_n)$ for weights $a_i > 0$ is a smooth DM stack (when $\gcd(a_i) = 1$). Its coarse moduli space is the weighted projective space $\mathbb{P}(a_0, \ldots, a_n)$, which is a projective scheme (possibly with quotient singularities). The coarse moduli map collapses the stacky structure at points with nontrivial stabilizers.
+</Example>
+
+<Example title="Moduli of stable curves">
+The moduli stack $\overline{\mathcal{M}}_g$ of stable curves of genus $g \geq 2$ is a proper smooth DM stack with finite inertia. The Keel-Mori theorem produces $\overline{M}_g$, a proper (and in fact projective) algebraic space. Combined with Knudsen and Mumford's ampleness results, $\overline{M}_g$ is a projective scheme.
+</Example>
+
+<Example title="Moduli of pointed curves">
+For $\overline{\mathcal{M}}_{g,n}$ (genus $g$, $n$ marked points), when $2g - 2 + n > 0$, the coarse moduli space $\overline{M}_{g,n}$ exists as a projective scheme. The stability condition ensures finite automorphism groups, so the Keel-Mori theorem applies.
+</Example>
+
+<Example title="Root stack">
+Let $X$ be a scheme with an effective Cartier divisor $D$, and let $\mathcal{X} = \sqrt[n]{D/X}$ be the $n$-th root stack. This is a DM stack with inertia $\mu_n$ along $D$ and trivial elsewhere. The coarse moduli space is $X$ itself, with $\pi: \sqrt[n]{D/X} \to X$ being an isomorphism away from $D$ and degree-$n$ over $D$.
+</Example>
+
+<Example title="Gerbe over an algebraic space">
+Let $X$ be an algebraic space and $\mathcal{G} \to X$ a gerbe banded by $\mu_n$. Then $\mathcal{G}$ is a DM stack with inertia $\mu_n$ everywhere, and the coarse moduli space of $\mathcal{G}$ is $X$. The map $\pi: \mathcal{G} \to X$ satisfies $\pi_*\mathcal{O}_\mathcal{G} = \mathcal{O}_X$ since $\mu_n$ acts trivially on the structure sheaf (when $n$ is invertible on $X$).
+</Example>
+
+<Example title="Failure without finite inertia">
+Consider $\mathcal{X} = [*/\mathbb{G}_m]$, the classifying stack of $\mathbb{G}_m$. The inertia is $\mathbb{G}_m$, which is not finite. There is no coarse moduli space in the sense of Keel-Mori. The map $\pi: [*/\mathbb{G}_m] \to \mathrm{Spec}(k)$ satisfies $\pi_*\mathcal{O} = k$, but the universality condition fails.
+</Example>
+
+<Example title="Keel-Mori over a non-algebraically closed field">
+Over a non-algebraically closed field $k$, the Keel-Mori theorem still applies, but the bijection on geometric points is only over algebraically closed fields. For example, $M_{1,1}$ over $\mathbb{Q}$ is the $j$-line $\mathbb{A}^1_\mathbb{Q}$, but not every $\mathbb{Q}$-point of $\mathbb{A}^1$ corresponds to an elliptic curve over $\mathbb{Q}$ (obstructed by the Brauer group).
+</Example>
+
+---
+
+## 7. Uniqueness
+
+<Theorem title="Uniqueness of coarse moduli space">
+The coarse moduli space $(X, \pi)$ is unique up to unique isomorphism. That is, if $(X', \pi')$ is another coarse moduli space, there exists a unique isomorphism $\varphi: X \xrightarrow{\sim} X'$ with $\pi' = \varphi \circ \pi$.
+</Theorem>
+
+<Proof>
+By the universal property of $\pi$, there exists a unique $g: X \to X'$ with $\pi' = g \circ \pi$. By the universal property of $\pi'$, there exists a unique $h: X' \to X$ with $\pi = h \circ \pi'$. Then $h \circ g \circ \pi = \pi$ and by uniqueness, $h \circ g = \mathrm{id}_X$. Similarly $g \circ h = \mathrm{id}_{X'}$.
+</Proof>
+
+---
+
+## 8. The Étale Local Structure
+
+A crucial ingredient in the proof of the Keel-Mori theorem is the étale-local description:
+
+<Theorem title="Étale-local quotient structure">
+Let $\mathcal{X}$ be a DM stack with finite inertia and $x \in \mathcal{X}$ a geometric point with automorphism group $G = \mathrm{Aut}(x)$. Then there exists an étale neighborhood $U$ of $\pi(x)$ in $X$ such that
+
+$$
+\mathcal{X} \times_X U \cong [V/G]
+$$
+
+where $V$ is an affine scheme with a $G$-action, and $U \cong V/G$.
+</Theorem>
+
+This is the stacky analogue of the slice theorem in equivariant geometry.
+
+---
+
+## 9. Behavior of Sheaves Under the Coarse Moduli Map
+
+<Theorem title="Pushforward under coarse moduli map">
+Let $\pi: \mathcal{X} \to X$ be the coarse moduli map of a DM stack with finite inertia. Then:
+
+1. $\pi_*: \mathrm{QCoh}(\mathcal{X}) \to \mathrm{QCoh}(X)$ is exact when restricted to sheaves on which the generic stabilizers act trivially.
+2. $\pi_*\mathcal{O}_\mathcal{X} = \mathcal{O}_X$.
+3. For a coherent sheaf $\mathcal{F}$ on $\mathcal{X}$, the pushforward $\pi_*\mathcal{F}$ is coherent on $X$.
+4. If $\mathrm{char}(k) = 0$ (or more generally, if the orders of all stabilizer groups are invertible), then $\pi_*$ is exact on coherent sheaves.
+</Theorem>
+
+---
+
+## 10. Historical Context
+
+The theorem was first proven by Sean Keel and Shigefumi Mori in their 1997 paper. Their proof used the technique of "Hilbert scheme trick" combined with careful analysis of finite group actions. The theorem was subsequently generalized and simplified by various authors:
+
+- **Conrad (2005)**: Extended to Artin stacks with finite inertia.
+- **Rydh (2013)**: Gave a very general version removing noetherian hypotheses.
+- **Alper-Hall-Rydh**: Further generalizations to good moduli spaces (beyond the DM case).
+
+---
+
+## References
+
+- S. Keel and S. Mori, "Quotients by groupoids," Ann. of Math. 145 (1997), 193-213.
+- B. Conrad, "The Keel-Mori theorem via stacks," preprint, 2005.
+- D. Rydh, "Existence and properties of geometric quotients," J. Algebraic Geom. 22 (2013), 629-669.
+- J. Alper, "Good moduli spaces for Artin stacks," Ann. Inst. Fourier 63 (2013), 2349-2402.

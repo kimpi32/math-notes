@@ -1,0 +1,210 @@
+export const metadata = {
+  title: 'Artin\'s Criteria — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Theorem — Artin's Criteria" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Artin's Criteria for Algebraicity
+
+Artin's representability criteria provide a systematic set of conditions under which a functor (or stack) is algebraic. These criteria reduce the problem of proving algebraicity to verifiable deformation-theoretic and set-theoretic conditions, and they are the workhorse behind almost all existence results for moduli spaces and moduli stacks.
+
+---
+
+## 1. Artin's Axioms
+
+<Theorem title="Artin's Criteria for Algebraic Stacks (1974)">
+Let $S$ be an excellent scheme and $\mathcal{X}$ a category fibered in groupoids over $(\mathsf{Sch}/S)_{\mathrm{fppf}}$. Then $\mathcal{X}$ is an algebraic stack locally of finite presentation over $S$ if and only if the following conditions hold:
+
+1. **Stack condition**: $\mathcal{X}$ is a stack for the fppf (or etale) topology.
+
+2. **Limit preservation**: $\mathcal{X}$ is **locally of finite presentation**, i.e., for any filtered inverse system $\lbrace T_i \rbrace$ of affine $S$-schemes with limit $T = \varprojlim T_i$:
+$$\varinjlim \mathcal{X}(T_i) \xrightarrow{\sim} \mathcal{X}(T)$$
+
+3. **Deformation theory (Schlessinger's conditions)**: For any local Artinian $S$-algebra $A$ and small extension $A' \to A$, the natural functor satisfies certain formal properties (existence of a cotangent complex).
+
+4. **Effectivity of formal deformations (Grothendieck's existence)**: Formal deformations are effective, i.e., compatible systems of deformations over $A/\mathfrak{m}^n$ arise from algebraic deformations.
+
+5. **Openness of versality**: If $\hat{\xi}$ is a formal versal deformation at a point $x \in \mathcal{X}$, then the locus where it remains versal is open.
+</Theorem>
+
+---
+
+## 2. Detailed Conditions
+
+<Definition title="Small Extension">
+A **small extension** in $\mathsf{Art}_k$ is a surjection $A' \to A$ of Artinian local $k$-algebras with kernel $I$ satisfying $\mathfrak{m}_{A'} \cdot I = 0$. The kernel $I$ is then a $k$-vector space. The fundamental small extension is $k[\varepsilon]/(\varepsilon^2) \to k$.
+</Definition>
+
+<Definition title="Deformation Situation">
+A **deformation situation** consists of a diagram:
+$$0 \to M \to A' \to A \to 0$$
+where $A' \to A$ is a small extension of Artinian local rings and $M = \ker(A' \to A)$ is an $A/\mathfrak{m}_A \cong k$-module. Given $\xi \in \mathcal{X}(A)$, we ask:
+- Does $\xi$ lift to $\xi' \in \mathcal{X}(A')$?
+- If so, what is the set of lifts?
+</Definition>
+
+<Theorem title="Schlessinger-Type Conditions">
+For a functor $\mathcal{X}$ satisfying Artin's axioms, at each point $\xi_0 \in \mathcal{X}(k)$, there exist $k$-vector spaces $T_i$ (for $i = -1, 0, 1$) and functorial maps such that for each deformation situation:
+- There is an **obstruction class** $\mathrm{ob}(\xi, A' \to A) \in T_1 \otimes_k M$ whose vanishing is necessary and sufficient for the existence of a lift.
+- When the obstruction vanishes, the set of lifts is a **torsor** under $T_0 \otimes_k M$.
+- The automorphisms of any lift form a group isomorphic to $T_{-1} \otimes_k M$.
+
+These $T_i$ are the cohomology groups of the cotangent complex restricted to $\xi_0$.
+</Theorem>
+
+---
+
+## 3. Examples of Verifying Artin's Criteria
+
+<Example title="Moduli of Curves $\mathcal{M}_g$">
+To show $\mathcal{M}_g$ is algebraic via Artin's criteria:
+
+1. **Stack**: Descent for flat proper morphisms with connected fibers is effective in the fppf topology.
+
+2. **Finite presentation**: A smooth curve of genus $g$ over $\varprojlim T_i$ spreads out to some $T_i$ (standard limit arguments for finitely presented morphisms).
+
+3. **Deformation theory**: $T_{-1} = H^0(C, T_C) = 0$ (for $g \geq 2$), $T_0 = H^1(C, T_C) \cong k^{3g-3}$, $T_1 = H^2(C, T_C) = 0$. Schlessinger's conditions hold.
+
+4. **Effectivity**: By Grothendieck's formal GAGA, a compatible system of curves over $\mathrm{Spec}\, k[[t]]/t^n$ algebraizes to a curve over $\mathrm{Spec}\, k[[t]]$.
+
+5. **Openness of versality**: Follows from the theory of the Hilbert scheme and openness of smoothness.
+</Example>
+
+<Example title="Moduli of Vector Bundles $\mathrm{Bun}_n(C)$">
+For a smooth projective curve $C$, the stack $\mathrm{Bun}_n(C)$ of rank-$n$ vector bundles satisfies Artin's criteria:
+
+1. **Stack**: Vector bundles satisfy fppf descent.
+2. **Finite presentation**: Coherent sheaves over limits spread out.
+3. **Deformation theory**: For a bundle $\mathcal{E}$: $T_{-1} = \mathrm{End}(\mathcal{E})$, $T_0 = \mathrm{Ext}^1(\mathcal{E}, \mathcal{E}) = H^1(C, \mathcal{E}nd(\mathcal{E}))$, $T_1 = H^2(C, \mathcal{E}nd(\mathcal{E})) = 0$ (since $\dim C = 1$). Unobstructed!
+4. **Effectivity**: Formal GAGA for coherent sheaves.
+5. **Openness**: Standard argument.
+
+Hence $\mathrm{Bun}_n(C)$ is a smooth algebraic stack of dimension $n^2(g-1)$ (when non-empty).
+</Example>
+
+<Example title="Picard Stack">
+The Picard stack $\mathcal{P}ic_{X/S}$ parametrizing line bundles on $X/S$:
+- $T_{-1} = H^0(X, \mathcal{O}_X) = k$ (scalars, corresponding to $\mathbb{G}_m$-automorphisms).
+- $T_0 = H^1(X, \mathcal{O}_X)$ (first-order deformations of a line bundle).
+- $T_1 = H^2(X, \mathcal{O}_X)$ (obstructions).
+
+By Artin's criteria, $\mathcal{P}ic_{X/S}$ is an algebraic stack. The rigidification (killing the $\mathbb{G}_m$-automorphisms) gives the Picard scheme $\mathrm{Pic}_{X/S}$, which is an algebraic space (or scheme under mild assumptions).
+</Example>
+
+<Example title="Moduli of Stable Maps">
+The Kontsevich moduli stack $\overline{\mathcal{M}}_{g,n}(X, \beta)$ of stable maps from $n$-pointed genus-$g$ curves to a target variety $X$ representing a class $\beta \in H_2(X, \mathbb{Z})$. Artin's criteria verify algebraicity:
+- Deformation theory: $T_0 = H^0(C, f^*T_X)$ balanced against $T_1 = H^1(C, f^*T_X)$.
+- The expected dimension is $\dim X (1-g) + \int_\beta c_1(T_X) + 3g - 3 + n$.
+- Effectivity follows from GAGA.
+</Example>
+
+---
+
+## 4. The Effectivity Condition
+
+<Definition title="Formal Object">
+A **formal object** of $\mathcal{X}$ over a complete local ring $\hat{R} = \varprojlim R/\mathfrak{m}^n$ is a compatible system $\lbrace \xi_n \in \mathcal{X}(R/\mathfrak{m}^n) \rbrace_{n \geq 1}$ with $\xi_n|_{R/\mathfrak{m}^{n-1}} \cong \xi_{n-1}$.
+</Definition>
+
+<Theorem title="Grothendieck Existence Theorem">
+If $f: X \to \mathrm{Spec}\, R$ is a proper morphism (with $R$ a complete local Noetherian ring), then the functor
+$$\mathsf{Coh}(X) \to \varprojlim \mathsf{Coh}(X_n)$$
+is an equivalence of categories, where $X_n = X \times_{\mathrm{Spec}\, R} \mathrm{Spec}\, R/\mathfrak{m}^n$.
+</Theorem>
+
+<Example title="Effectivity for Curves">
+A compatible system of curves $\lbrace C_n \to \mathrm{Spec}\, k[t]/(t^n) \rbrace$ algebraizes to a curve $\mathcal{C} \to \mathrm{Spec}\, k[[t]]$ by Grothendieck's existence theorem applied to the embedding $C_n \hookrightarrow \mathbb{P}^N_{k[t]/(t^n)}$ via the $n$-canonical embedding.
+</Example>
+
+<Example title="Non-Effectivity for Non-Proper Situations">
+Consider formal deformations of the affine line $\mathbb{A}^1$. The formal deformation $\mathrm{Spec}\, k[[t]][x]/(x^2 - t)$ over $k[[t]]$ gives a family of smooth affine curves. But formal deformations of non-proper schemes need not algebraize in general. The effectivity condition in Artin's criteria handles this subtlety.
+</Example>
+
+---
+
+## 5. Openness of Versality
+
+<Definition title="Versal Deformation">
+A deformation $\xi \in \mathcal{X}(\mathrm{Spec}\, R)$ is **versal** at a closed point $s \in \mathrm{Spec}\, R$ if for every deformation situation, every deformation over $A$ lifts (not necessarily uniquely) to $A'$ via a map from $R$. It is **miniversal** (or **semi-universal**) if the induced map on tangent spaces is an isomorphism.
+</Definition>
+
+<Theorem title="Openness of Versality">
+If a morphism $U \to \mathcal{X}$ is versal at a point $u \in U$, then it is versal in a Zariski open neighborhood of $u$. This is the condition that ensures one can construct a smooth atlas from local versal deformations.
+</Theorem>
+
+<Example title="Versality for Curves">
+Given a versal family of curves $\mathcal{C} \to B$ over a smooth base $B$ at a point $b_0 \in B$, the versality is open: there exists an open $U \ni b_0$ in $B$ such that $\mathcal{C}_U \to U$ is a versal family for all fibers simultaneously. The map $U \to \mathcal{M}_g$ is then smooth, providing a smooth atlas.
+</Example>
+
+---
+
+## 6. Artin's Criteria for Algebraic Spaces
+
+<Theorem title="Artin's Criteria for Algebraic Spaces">
+A functor $F: (\mathsf{Sch}/S)^{\mathrm{op}} \to \mathsf{Sets}$ is an algebraic space locally of finite presentation over $S$ if:
+1. $F$ is a sheaf for the etale topology.
+2. $F$ is locally of finite presentation.
+3. The deformation theory conditions hold (with $T_{-1} = 0$, since there are no automorphisms for functors valued in sets).
+4. Formal deformations are effective.
+5. Openness of versality.
+</Theorem>
+
+<Example title="Picard Scheme via Artin's Criteria">
+The Picard functor $\mathrm{Pic}_{X/S}$ (after rigidification) satisfies Artin's criteria for algebraic spaces. The tangent space is $H^1(X, \mathcal{O}_X)$, obstructions lie in $H^2(X, \mathcal{O}_X)$, and there are no automorphisms after rigidification.
+</Example>
+
+<Example title="Hilbert Scheme via Artin (Alternative Proof)">
+One can re-prove Grothendieck's representability of the Hilbert functor using Artin's criteria:
+- The tangent space at $[Z]$ is $\mathrm{Hom}(\mathcal{I}_Z, \mathcal{O}_Z)$.
+- Obstructions lie in $\mathrm{Ext}^1(\mathcal{I}_Z, \mathcal{O}_Z)$.
+- No automorphisms: $T_{-1} = \mathrm{Hom}(\mathcal{O}_Z, \mathcal{O}_Z) / k = 0$ (after subtracting the identity).
+- Effectivity by Grothendieck's existence theorem.
+</Example>
+
+---
+
+## 7. Comparison: DM vs. Artin Stacks
+
+<Remark title="When is a Stack DM?">
+An algebraic (Artin) stack $\mathcal{X}$ is Deligne-Mumford if and only if the diagonal $\Delta: \mathcal{X} \to \mathcal{X} \times \mathcal{X}$ is unramified. Equivalently:
+- The automorphism group scheme $\mathrm{Aut}_{\mathcal{X}}(\xi)$ is **etale** (hence finite, if proper) for every object $\xi$.
+- In the deformation theory: $T_{-1} = 0$ (no infinitesimal automorphisms).
+
+If additionally $\mathrm{Aut}_{\mathcal{X}}(\xi)$ is always trivial, then $\mathcal{X}$ is an algebraic space.
+</Remark>
+
+<Example title="DM vs. Artin Comparison Table">
+| Stack | $T_{-1}$ | Type |
+|-------|----------|------|
+| $\mathcal{M}_g$ ($g \geq 2$) | $H^0(C, T_C) = 0$ | Deligne-Mumford |
+| $\mathcal{M}_{1,1}$ | $H^0(E, T_E) = 0$ (using marked point) | Deligne-Mumford |
+| $\mathcal{M}_0 = B\mathrm{PGL}_2$ | $\mathrm{Lie}(\mathrm{PGL}_2) \neq 0$ | Artin, not DM |
+| $\mathrm{Bun}_n(C)$ | $\mathrm{End}(\mathcal{E}) \neq 0$ | Artin, not DM |
+| $\mathrm{Hilb}^P_{X/S}$ | 0 (subschemes) | Scheme |
+| $\mathcal{P}ic_{X/S}$ | $H^0(\mathcal{O}_X) = k$ ($\mathbb{G}_m$ auts) | Artin, not DM |
+</Example>
+
+<Example title="Applying Artin's Criteria to Quotient Stacks">
+For a quotient stack $[X/G]$ where $G$ is a smooth group scheme acting on a finite-type $S$-scheme $X$:
+- The stack condition holds because $G$-torsors satisfy descent.
+- Finite presentation follows from finite type of $X$ and $G$.
+- Deformation theory: $T_{-1}$ is the Lie algebra of the stabilizer, $T_0$ is the normal space to the orbit, $T_1$ is related to $H^1$ of the normal sheaf.
+- Effectivity and openness follow from the algebraicity of $X$ and $G$.
+
+Hence $[X/G]$ is always an algebraic stack when $G$ is smooth and $X$ is of finite type over $S$.
+</Example>

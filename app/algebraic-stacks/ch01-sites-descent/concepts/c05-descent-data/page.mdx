@@ -1,0 +1,260 @@
+export const metadata = {
+  title: 'Descent Data — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Concept — Descent Data" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Descent Data
+
+Descent theory answers the fundamental question: given local data on a covering (modules, morphisms, schemes), when and how can it be glued into a global object? **Descent data** encodes the compatibility conditions (cocycle conditions) that local data must satisfy in order to glue. This formalism provides the precise framework for "patching" constructions in algebraic geometry, generalizing the classical gluing of sheaves along open covers to the etale, fppf, and fpqc topologies.
+
+---
+
+## Motivation: Gluing in the Zariski Topology
+
+Before treating the general case, recall the classical gluing problem.
+
+<Example id="zariski-gluing-sheaves" title="Gluing sheaves on an open cover">
+Let $X = U_1 \cup U_2$ be a Zariski open cover. To glue sheaves $\mathcal{F}_1$ on $U_1$ and $\mathcal{F}_2$ on $U_2$ into a sheaf $\mathcal{F}$ on $X$, we need:
+
+- An isomorphism $\varphi_{12}: \mathcal{F}_1|_{U_1 \cap U_2} \xrightarrow{\sim} \mathcal{F}_2|_{U_1 \cap U_2}$ (the **gluing datum**).
+
+For three opens $U_1, U_2, U_3$, we additionally need the **cocycle condition** on triple overlaps:
+
+$$\varphi_{13} = \varphi_{23} \circ \varphi_{12} \quad \text{on } U_1 \cap U_2 \cap U_3.$$
+
+This data $(\mathcal{F}_i, \varphi_{ij})$ satisfying the cocycle condition is precisely a **descent datum** for the Zariski cover $\{U_i \to X\}$. The classical gluing lemma says such data always produces a unique sheaf $\mathcal{F}$ on $X$, i.e., Zariski descent is **effective** for sheaves.
+</Example>
+
+<Example id="zariski-gluing-p1" title="Constructing line bundles on P1 by gluing">
+The line bundle $\mathcal{O}(n)$ on $\mathbb{P}^1 = U_0 \cup U_1$ (where $U_i = \operatorname{Spec}(k[t_i])$ with $t_0 = 1/t_1$) is constructed by gluing the trivial line bundles $\mathcal{O}_{U_0}$ and $\mathcal{O}_{U_1}$ via the transition function
+
+$$\varphi_{01}: \mathcal{O}_{U_0}|_{U_0 \cap U_1} \to \mathcal{O}_{U_1}|_{U_0 \cap U_1}, \quad f \mapsto t_1^n \cdot f$$
+
+on $U_0 \cap U_1 = \operatorname{Spec}(k[t_0, t_0^{-1}]) = \operatorname{Spec}(k[t_1, t_1^{-1}])$. The cocycle condition is automatic for two opens. Different integers $n$ give non-isomorphic line bundles, and $\operatorname{Pic}(\mathbb{P}^1) \cong \mathbb{Z}$.
+</Example>
+
+---
+
+## Descent Data for a Morphism
+
+<Definition title="Descent datum for a morphism of schemes" number="1.21">
+Let $f: Y \to X$ be a morphism of schemes. Let $p_1, p_2: Y \times_X Y \to Y$ be the two projections. A **descent datum** on an $Y$-scheme $Z \to Y$ relative to $f$ is an isomorphism
+
+$$\varphi: p_1^* Z \xrightarrow{\sim} p_2^* Z$$
+
+over $Y \times_X Y$, satisfying the **cocycle condition**: on $Y \times_X Y \times_X Y$, we have
+
+$$p_{23}^*\varphi \circ p_{12}^*\varphi = p_{13}^*\varphi$$
+
+where $p_{ij}: Y \times_X Y \times_X Y \to Y \times_X Y$ are the projections onto the $(i,j)$-th factors.
+</Definition>
+
+<Remark title="Interpretation of the cocycle condition">
+The cocycle condition is the algebraic analogue of the compatibility on triple overlaps in classical gluing. If $Y = \coprod U_i$ is a disjoint union (as in a covering family), then:
+
+- $Y \times_X Y = \coprod_{i,j} U_i \times_X U_j$ corresponds to pairwise overlaps.
+- $Y \times_X Y \times_X Y = \coprod_{i,j,k} U_i \times_X U_j \times_X U_k$ corresponds to triple overlaps.
+
+The isomorphism $\varphi$ restricts to isomorphisms $\varphi_{ij}: Z_i|_{U_i \times_X U_j} \xrightarrow{\sim} Z_j|_{U_i \times_X U_j}$ and the cocycle condition says $\varphi_{ik} = \varphi_{jk} \circ \varphi_{ij}$ on $U_i \times_X U_j \times_X U_k$.
+</Remark>
+
+---
+
+## Descent Data for Modules
+
+<Definition title="Descent datum for modules" number="1.22">
+Let $A \to B$ be a ring homomorphism. A **descent datum** for $B$-modules relative to $A \to B$ is a pair $(M, \varphi)$ where:
+
+- $M$ is a $B$-module.
+- $\varphi: M \otimes_A B \xrightarrow{\sim} B \otimes_A M$ is a $B \otimes_A B$-module isomorphism.
+
+The isomorphism $\varphi$ satisfies the **cocycle condition**: the diagram
+
+$$M \otimes_A B \otimes_A B \xrightarrow{\varphi_{12}} B \otimes_A M \otimes_A B \xrightarrow{\varphi_{23}} B \otimes_A B \otimes_A M$$
+
+equals $\varphi_{13}: M \otimes_A B \otimes_A B \to B \otimes_A B \otimes_A M$ (the subscripts indicate which tensor factors the isomorphism acts on).
+
+Here $\varphi_{12} = \varphi \otimes \operatorname{id}_B$, $\varphi_{23} = \operatorname{id}_B \otimes \varphi$, and $\varphi_{13}$ is the "composite" isomorphism.
+</Definition>
+
+<Example id="descent-trivial-module" title="Trivial descent datum">
+Let $N$ be an $A$-module and $M = N \otimes_A B$ the base change. Then $M$ has a canonical descent datum $\varphi: (N \otimes_A B) \otimes_A B \xrightarrow{\sim} B \otimes_A (N \otimes_A B)$ given by
+
+$$n \otimes b_1 \otimes b_2 \mapsto b_1 \otimes n \otimes b_2$$
+
+(i.e., swapping the $B$-factors past $N$). This is the **trivial** descent datum. The cocycle condition is immediate from the associativity of tensor products.
+
+A descent datum $(M, \varphi)$ is **effective** if it is isomorphic to a trivial one, i.e., if $M \cong N \otimes_A B$ for some $A$-module $N$ and $\varphi$ corresponds to the canonical isomorphism.
+</Example>
+
+<Example id="descent-rank-1-free" title="Descent data for rank-1 free modules">
+Let $A \to B$ be faithfully flat. A descent datum on $M = B$ (a free $B$-module of rank 1) amounts to a $B \otimes_A B$-module automorphism $\varphi: B \otimes_A B \to B \otimes_A B$ satisfying the cocycle condition. Such an automorphism is multiplication by a unit $u \in (B \otimes_A B)^\times$.
+
+The cocycle condition says that in $(B \otimes_A B \otimes_A B)^\times$:
+
+$$p_{23}^*(u) \cdot p_{12}^*(u) = p_{13}^*(u)$$
+
+This is a **1-cocycle** in the Amitsur complex $B^\times \to (B \otimes_A B)^\times \to (B \otimes_A B \otimes_A B)^\times \to \cdots$, and the cohomology $H^1(B/A, \mathbb{G}_m)$ classifies isomorphism classes of such descent data, which correspond to rank-1 projective $A$-modules (i.e., elements of $\operatorname{Pic}(A)$).
+</Example>
+
+<Example id="descent-matrix" title="Descent data as cocycles in matrix groups">
+For a free $B$-module $M = B^n$ of rank $n$, a descent datum amounts to a matrix $g \in GL_n(B \otimes_A B)$ satisfying the cocycle condition:
+
+$$p_{23}^*(g) \cdot p_{12}^*(g) = p_{13}^*(g) \in GL_n(B \otimes_A B \otimes_A B)$$
+
+Two descent data $g, g'$ are isomorphic if $g' = p_2^*(h) \cdot g \cdot p_1^*(h)^{-1}$ for some $h \in GL_n(B)$.
+
+The set of effective descent data modulo isomorphism is $H^1(B/A, GL_n)$, classifying rank-$n$ projective $A$-modules (or rank-$n$ vector bundles on $\operatorname{Spec}(A)$).
+</Example>
+
+---
+
+## Effectiveness of Descent
+
+<Definition title="Effective descent" number="1.23">
+Let $f: Y \to X$ be a morphism, and let $\operatorname{DD}(Y/X)$ denote the category of descent data (pairs $(Z, \varphi)$ of $Y$-schemes with descent data). There is a natural functor
+
+$$f^*: \mathbf{Sch}/X \to \operatorname{DD}(Y/X)$$
+
+sending an $X$-scheme $W$ to $(W \times_X Y, \text{canonical isomorphism})$.
+
+We say descent is **effective** for the morphism $f$ (and a given class of objects) if $f^*$ is an equivalence of categories, i.e., every descent datum arises (up to isomorphism) from a unique object over $X$.
+</Definition>
+
+<Example id="effective-descent-modules" title="Effectiveness for quasi-coherent modules">
+**Faithfully flat descent for modules** (Grothendieck): Let $A \to B$ be a faithfully flat ring homomorphism. Then the functor
+
+$$\{\text{$A$-modules}\} \to \{\text{descent data for $B$-modules}\}, \quad N \mapsto (N \otimes_A B, \text{canonical } \varphi)$$
+
+is an equivalence of categories. The quasi-inverse sends $(M, \varphi)$ to
+
+$$N = \{m \in M \mid \varphi(m \otimes 1) = 1 \otimes m \text{ in } B \otimes_A M\} = \ker(M \rightrightarrows B \otimes_A M).$$
+
+This is the **module of invariants** (or **descent module**): the elements of $M$ that are "invariant" under the descent datum.
+
+Moreover, $M$ is finitely generated (resp. finitely presented, projective) as a $B$-module if and only if $N$ is finitely generated (resp. finitely presented, projective) as an $A$-module.
+</Example>
+
+<Example id="effective-descent-algebras" title="Effectiveness for algebras">
+Faithfully flat descent is also effective for $A$-algebras: if $A \to B$ is faithfully flat and $(C, \varphi)$ is a $B$-algebra with descent datum, then $C_0 = \ker(C \rightrightarrows B \otimes_A C)$ is an $A$-algebra with $C_0 \otimes_A B \cong C$.
+
+This extends to: descent is effective for quasi-coherent $\mathcal{O}_X$-algebras along faithfully flat quasi-compact morphisms $Y \to X$. This is the key to "descending" affine morphisms.
+</Example>
+
+<Example id="effective-descent-affine" title="Effectiveness for affine schemes">
+Descent is effective for **affine morphisms** along fpqc covers. More precisely: let $f: Y \to X$ be an fpqc morphism, and let $Z \to Y$ be an affine $Y$-scheme equipped with descent data $\varphi$. Then there exists an affine $X$-scheme $W$ with $W \times_X Y \cong Z$ (compatibly with $\varphi$), and $W$ is unique up to unique isomorphism.
+
+This follows from the effectiveness for quasi-coherent algebras: an affine $Y$-scheme $Z = \operatorname{Spec}(\mathcal{A})$ corresponds to a quasi-coherent $\mathcal{O}_Y$-algebra $\mathcal{A}$, and the descent datum on $Z$ corresponds to a descent datum on $\mathcal{A}$. Descending $\mathcal{A}$ to an $\mathcal{O}_X$-algebra $\mathcal{A}_0$ gives $W = \operatorname{Spec}(\mathcal{A}_0)$.
+</Example>
+
+---
+
+## Descent for Morphisms
+
+<Definition title="Descent for morphisms" number="1.24">
+Let $f: Y \to X$ be a morphism and let $W_1, W_2$ be $X$-schemes. The question of **descent for morphisms** asks: is the sequence
+
+$$\operatorname{Hom}_X(W_1, W_2) \to \operatorname{Hom}_Y(W_1 \times_X Y, W_2 \times_X Y) \rightrightarrows \operatorname{Hom}_{Y \times_X Y}(W_1 \times_X Y \times_X Y, W_2 \times_X Y \times_X Y)$$
+
+exact (i.e., an equalizer)?
+
+If so, morphisms can be "descended" along $f$: a morphism $g: W_1 \times_X Y \to W_2 \times_X Y$ over $Y$ that is compatible with the two pullbacks to $Y \times_X Y$ comes from a unique morphism $W_1 \to W_2$ over $X$.
+</Definition>
+
+<Example id="descent-morphisms-fpqc" title="fpqc descent for morphisms">
+For any fpqc morphism $f: Y \to X$, descent for morphisms is effective: the sequence above is always an equalizer. This is equivalent to saying that representable presheaves are sheaves for the fpqc topology (the fpqc topology is subcanonical).
+
+Concretely: given schemes $W_1, W_2$ over $X$ and a morphism $g: W_1 \times_X Y \to W_2 \times_X Y$ over $Y$ such that the two pullbacks to $Y \times_X Y$ agree, there is a unique morphism $\bar{g}: W_1 \to W_2$ over $X$ with $\bar{g} \times_X Y = g$.
+</Example>
+
+<Example id="descent-morphisms-galois" title="Galois descent for morphisms">
+Let $L/K$ be a finite Galois extension with group $G$. Descent for morphisms along $\operatorname{Spec}(L) \to \operatorname{Spec}(K)$ says: given $K$-schemes $W_1, W_2$, a $K$-morphism $W_1 \to W_2$ is the same as an $L$-morphism $W_{1,L} \to W_{2,L}$ that commutes with the Galois action (i.e., $g^* \circ f = f \circ g^*$ for all $g \in G$).
+
+This is the scheme-theoretic version of Galois descent: to give a $K$-rational map between $K$-varieties, it suffices to give a $\bar{K}$-rational map that is Galois-equivariant.
+</Example>
+
+---
+
+## Non-effective Descent
+
+<Example id="non-effective-descent" title="Descent can fail for general schemes">
+Descent is **not** always effective for arbitrary schemes (or algebraic spaces) along fpqc covers. The classical counterexample is due to Hironaka:
+
+There exists a proper non-projective threefold $X$ over $\mathbb{C}$ with an involution $\sigma$ such that the quotient $X/\sigma$ exists as an algebraic space but not as a scheme. The descent datum for $X \to X/\sigma$ (as a scheme over $X/\sigma$) is a scheme over $X/\sigma$ by descent, but the "descended" object $X/\sigma$ is only an algebraic space.
+
+More precisely: descent along etale covers is effective for separated schemes (by a theorem of Artin), but effectiveness can fail for non-separated schemes. This failure is one motivation for enlarging the category of schemes to algebraic spaces and stacks.
+</Example>
+
+<Example id="non-effective-descent-vector" title="Effective descent for vector bundles but not for all bundles">
+Descent for **vector bundles** (locally free sheaves of finite rank) is effective along fpqc covers. This is because vector bundles are affine over the base (locally $\operatorname{Spec}(\operatorname{Sym}(\mathcal{E}^\vee))$), and descent is effective for affine schemes.
+
+However, descent for **projective bundles** $\mathbb{P}(\mathcal{E})$ is more subtle. A projective bundle $\mathbb{P}^{n-1}$ with descent data gives a Brauer-Severi variety, and the obstruction to effectiveness is an element of the Brauer group $\operatorname{Br}(X) = H^2(X, \mathbb{G}_m)$.
+
+Concretely, a Brauer-Severi variety $V$ over a field $k$ is a variety that becomes isomorphic to $\mathbb{P}^{n-1}$ over $\bar{k}$. It is trivial (i.e., already isomorphic to $\mathbb{P}^{n-1}$) if and only if it has a $k$-rational point. Its class in $\operatorname{Br}(k)$ is the obstruction.
+</Example>
+
+---
+
+## The Descent Category and Fibered Categories
+
+<Definition title="Category of descent data" number="1.25">
+For a morphism $f: Y \to X$, the **category of descent data** $\operatorname{DD}(Y/X, \mathcal{F})$ for a fibered category $\mathcal{F} \to \mathbf{Sch}/X$ consists of:
+
+- **Objects**: Pairs $(a, \varphi)$ where $a \in \mathcal{F}(Y)$ and $\varphi: p_1^* a \xrightarrow{\sim} p_2^* a$ in $\mathcal{F}(Y \times_X Y)$ satisfying the cocycle condition on $Y \times_X Y \times_X Y$.
+
+- **Morphisms**: $(a, \varphi) \to (b, \psi)$ are morphisms $\alpha: a \to b$ in $\mathcal{F}(Y)$ compatible with $\varphi$ and $\psi$.
+
+The functor $f^*: \mathcal{F}(X) \to \operatorname{DD}(Y/X, \mathcal{F})$ is always fully faithful when $f$ is an fpqc cover and $\mathcal{F}$ is a stack (or satisfies descent for morphisms). Effectiveness means $f^*$ is essentially surjective, hence an equivalence.
+</Definition>
+
+<Example id="descent-category-concrete" title="The descent category for a Galois cover">
+Let $L/K$ be a finite Galois extension with group $G = \operatorname{Gal}(L/K)$. For the fibered category of vector bundles:
+
+$\operatorname{DD}(\operatorname{Spec}(L)/\operatorname{Spec}(K))$ has objects: pairs $(V, \{\varphi_g\}_{g \in G})$ where $V$ is a finite-dimensional $L$-vector space and $\varphi_g: V \to g^*V = V$ (with $L$-action twisted by $g$) are isomorphisms satisfying $\varphi_{gh} = g^*\varphi_h \circ \varphi_g$.
+
+This is precisely a **semilinear representation** of $G$ on $V$: each $\varphi_g$ is $g$-semilinear ($\varphi_g(\lambda v) = g(\lambda) \varphi_g(v)$) and $\varphi_{gh} = \varphi_g \circ \varphi_h$.
+
+By Hilbert's Theorem 90 (in the generalized form), descent is effective: every semilinear representation comes from a $K$-vector space $W$ with $V = W \otimes_K L$.
+</Example>
+
+<Example id="descent-data-torsor" title="Descent data for torsors">
+Let $G$ be a group scheme over $X$ and $f: Y \to X$ an fpqc cover. A $G$-torsor $P$ over $X$ becomes trivial over $Y$ if and only if $P(Y) \neq \emptyset$ (i.e., $P$ has a section over $Y$).
+
+Assuming $P \times_X Y \cong G \times_X Y$ (trivial torsor over $Y$), the descent datum for $P$ is encoded by an element $g \in G(Y \times_X Y)$ satisfying the cocycle condition $p_{23}^*(g) \cdot p_{12}^*(g) = p_{13}^*(g)$. This is precisely a Cech 1-cocycle, and isomorphism classes of torsors trivial over $Y$ are classified by $\check{H}^1(\{Y \to X\}, G)$.
+
+Taking the colimit over all covers gives $H^1(X, G)$ (first cohomology, or first nonabelian cohomology if $G$ is not commutative).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Overview of descent">
+1. **Descent data** = an object on $Y$ + an isomorphism on $Y \times_X Y$ + cocycle condition on $Y \times_X Y \times_X Y$.
+
+2. **Descent for morphisms** is effective along fpqc covers (the fpqc topology is subcanonical). This is foundational.
+
+3. **Descent for quasi-coherent modules** is effective along faithfully flat morphisms. This includes vector bundles, algebras, and affine schemes.
+
+4. **Descent for schemes** is effective for affine schemes and separated schemes (along etale covers) but can fail for general schemes. This failure motivates algebraic spaces and stacks.
+
+5. **The cocycle condition** is the algebraic analogue of the topological gluing condition on triple overlaps. It arises from the simplicial structure of the Cech nerve $Y^{\times_X \bullet}$.
+
+6. Descent is the mechanism by which **local constructions** (on a covering) become **global objects**. It is the technical heart of the theory of algebraic stacks.
+</Remark>

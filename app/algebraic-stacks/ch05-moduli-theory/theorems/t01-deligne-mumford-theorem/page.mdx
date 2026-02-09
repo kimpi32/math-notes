@@ -1,0 +1,177 @@
+export const metadata = {
+  title: 'Deligne-Mumford Theorem — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Theorem — Deligne-Mumford Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Deligne-Mumford Theorem on $\overline{\mathcal{M}}_g$
+
+The theorem of Deligne and Mumford (1969) is one of the foundational results in the theory of algebraic stacks. It establishes that the moduli of stable curves forms a proper smooth Deligne-Mumford stack, providing both the first major example of a DM stack and the compactification of the moduli of smooth curves.
+
+---
+
+## 1. Statement of the Theorem
+
+<Theorem title="Deligne-Mumford Theorem">
+For $g \geq 2$, the moduli stack $\overline{\mathcal{M}}_g$ of stable curves of genus $g$ satisfies:
+1. $\overline{\mathcal{M}}_g$ is a **smooth** algebraic stack of dimension $3g - 3$ over $\mathrm{Spec}\, \mathbb{Z}$.
+2. $\overline{\mathcal{M}}_g$ is **proper** (satisfies the valuative criterion for properness).
+3. $\overline{\mathcal{M}}_g$ is a **Deligne-Mumford stack** (the diagonal is unramified; equivalently, automorphism groups are finite and reduced in characteristic 0).
+4. $\overline{\mathcal{M}}_g$ is **irreducible** over every algebraically closed field.
+5. The open substack $\mathcal{M}_g \subset \overline{\mathcal{M}}_g$ parametrizing smooth curves is dense.
+</Theorem>
+
+---
+
+## 2. Finiteness of Automorphisms
+
+The DM property rests on the finiteness of automorphism groups of stable curves.
+
+<Theorem title="Finiteness of Automorphisms">
+Let $C$ be a stable curve of genus $g \geq 2$ over an algebraically closed field $k$. Then the automorphism group $\mathrm{Aut}(C)$ is finite. Moreover:
+1. If $C$ is smooth, $|\mathrm{Aut}(C)| \leq 84(g-1)$ (Hurwitz bound).
+2. In general, $|\mathrm{Aut}(C)|$ is bounded by a function of $g$ alone.
+</Theorem>
+
+<Example title="Hurwitz Bound">
+The Hurwitz bound $|\mathrm{Aut}(C)| \leq 84(g-1)$ for smooth curves of genus $g \geq 2$ follows from the Riemann-Hurwitz formula applied to $C \to C/\mathrm{Aut}(C)$. The bound is achieved by the Klein quartic for $g = 3$:
+$$x^3 y + y^3 z + z^3 x = 0 \subset \mathbb{P}^2$$
+which has $|\mathrm{Aut}(C)| = 168 = 84 \cdot 2 = 84(3-1)$, with $\mathrm{Aut}(C) \cong \mathrm{PSL}_2(\mathbb{F}_7)$.
+</Example>
+
+<Example title="Automorphisms of Genus 2 Curves">
+Every genus 2 curve $C$ is hyperelliptic with involution $\iota$. The full automorphism group satisfies:
+- Generic curve: $\mathrm{Aut}(C) = \lbrace 1, \iota \rbrace \cong \mathbb{Z}/2\mathbb{Z}$.
+- $y^2 = x^6 - 1$: $\mathrm{Aut}(C) \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}$, order 12.
+- $y^2 = x^5 - x$: $\mathrm{Aut}(C)$ has order 10.
+- $y^2 = x^5 - 1$: $\mathrm{Aut}(C) \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/5\mathbb{Z}$, order 10.
+- $y^2 = x^6 - x$: $\mathrm{Aut}(C)$ has order $2 \cdot 24 = 48$ (the maximum for genus 2).
+</Example>
+
+<Example title="Automorphisms of Stable Nodal Curves">
+Consider the stable curve $C$ obtained by taking an elliptic curve $E$ and identifying two points $p, q \in E$. Then $\mathrm{Aut}(C)$ includes automorphisms of $E$ fixing $\lbrace p, q \rbrace$ as a set. If $E$ is generic and $p, q$ are generic, then $\mathrm{Aut}(C) = \lbrace \mathrm{id} \rbrace$ (or $\mathbb{Z}/2\mathbb{Z}$ from the involution swapping $p$ and $q$ when such exists). The group is always finite.
+</Example>
+
+---
+
+## 3. Smoothness
+
+<Theorem title="Smoothness of $\overline{\mathcal{M}}_g$">
+The stack $\overline{\mathcal{M}}_g$ is smooth over $\mathrm{Spec}\, \mathbb{Z}$. At a point $[C]$ corresponding to a stable curve $C$ with $\delta$ nodes:
+- The tangent space has dimension $3g - 3$.
+- The local deformation space is smooth: $\widehat{\mathcal{O}}_{\overline{\mathcal{M}}_g, [C]} \cong k[[t_1, \ldots, t_{3g-3}]]$.
+- The first $\delta$ parameters $t_1, \ldots, t_\delta$ correspond to smoothing the $\delta$ nodes, and $t_{\delta+1}, \ldots, t_{3g-3}$ correspond to deformations preserving the nodes.
+</Theorem>
+
+<Example title="Local Structure at a Nodal Curve">
+Let $C$ be a stable curve of genus $g$ with a single node $p$. Locally at $p$, $C = \mathrm{Spec}\, k[[x,y]]/(xy)$. The universal deformation of the node is $xy = t_1$, and the remaining deformations give a smooth base $k[[t_2, \ldots, t_{3g-3}]]$.
+
+The boundary divisor $\Delta \subset \overline{\mathcal{M}}_g$ is locally cut out by $t_1 = 0$, so $\Delta$ is a smooth divisor in the smooth stack $\overline{\mathcal{M}}_g$.
+</Example>
+
+<Example title="Local Structure at a Maximally Degenerate Curve">
+A maximally degenerate stable curve of genus $g$ has $3g - 3$ nodes (the maximum for a stable curve). Every component is rational ($\cong \mathbb{P}^1$) with exactly 3 special points (nodes). The dual graph $\Gamma$ is a trivalent graph with $2g - 2$ vertices, $3g - 3$ edges, and first Betti number $g$.
+
+At such a point, the deformation space is $k[[t_1, \ldots, t_{3g-3}]]$ where each $t_i$ smooths one node. The boundary of $\overline{\mathcal{M}}_g$ has normal crossings at this point, cut out by $t_1 \cdots t_{3g-3} = 0$.
+</Example>
+
+---
+
+## 4. Properness via Stable Reduction
+
+<Theorem title="Stable Reduction Theorem (Deligne-Mumford)">
+Let $R$ be a DVR with fraction field $K$ and algebraically closed residue field $k$, and let $C_K$ be a smooth curve of genus $g \geq 2$ over $K$. Then after a finite extension $K'/K$, the curve $C_{K'}$ extends to a stable curve $\mathcal{C} \to \mathrm{Spec}\, R'$ over the integral closure $R'$ of $R$ in $K'$.
+</Theorem>
+
+This theorem is precisely the valuative criterion of properness for $\overline{\mathcal{M}}_g$: given a map $\mathrm{Spec}\, K \to \overline{\mathcal{M}}_g$ (a curve over $K$), after a base change, it extends to a map $\mathrm{Spec}\, R' \to \overline{\mathcal{M}}_g$ (a stable curve over $R'$).
+
+<Example title="Stable Reduction of a Degenerating Family">
+Consider the family $y^2 = x(x-1)(x-t)$ of elliptic curves over $\mathrm{Spec}\, k[[t]]$. At $t = 0$, the curve $y^2 = x^2(x-1)$ has a node at $(0,0)$. The stable reduction gives a rational curve with a node (the Neron model's special fiber has a node).
+
+For pointed curves ($\mathcal{M}_{1,1}$), the stable limit is uniquely determined. For $t = 1$ (where two branch points collide), the stable limit in $\overline{\mathcal{M}}_{1,1}$ is the rational curve $\mathbb{P}^1$ with $0$ and $\infty$ identified.
+</Example>
+
+<Example title="Stable Reduction with Base Change">
+Consider the family of genus 2 curves $y^2 = x^6 - t$ over $k[[t]]$. At $t = 0$, the fiber $y^2 = x^6$ has a non-stable singularity (a cusp of sorts). After the base change $t = s^6$, we get $y^2 = x^6 - s^6 = (x^3 - s^3)(x^3 + s^3)$, which can be resolved to a stable curve. The stable limit is a curve with two rational components meeting at three points.
+</Example>
+
+---
+
+## 5. Irreducibility
+
+<Theorem title="Irreducibility of $\mathcal{M}_g$">
+The stack $\mathcal{M}_g$ (and hence $\overline{\mathcal{M}}_g$) is irreducible over every algebraically closed field. Over $\mathrm{Spec}\, \mathbb{Z}$, every geometric fiber of $\overline{\mathcal{M}}_g$ is irreducible.
+</Theorem>
+
+<Proof>
+The irreducibility in characteristic 0 follows from the Teichmuller theory: the Teichmuller space $\mathcal{T}_g$ (the universal cover of the moduli space) is homeomorphic to $\mathbb{R}^{6g-6}$, hence connected.
+
+In positive characteristic, Deligne and Mumford prove irreducibility by showing that every stable curve over $\overline{\mathbb{F}}_p$ can be lifted to characteristic 0 (using the smoothness of $\overline{\mathcal{M}}_g$ over $\mathbb{Z}$) and then specializing from the characteristic-0 irreducibility. Specifically, since $\overline{\mathcal{M}}_g$ is smooth over $\mathbb{Z}$ and its generic fiber (over $\mathbb{Q}$) is irreducible, every special fiber (over $\mathbb{F}_p$) must also be irreducible.
+</Proof>
+
+<Example title="Irreducibility Fails for $g = 0$">
+For $g = 0$, $\mathcal{M}_0$ is a point (just $\mathbb{P}^1$), trivially irreducible. For $g = 1$, $\mathcal{M}_{1,1}$ is irreducible (the $j$-line). The first nontrivial case is $g = 2$, where $\mathcal{M}_2$ is a 3-dimensional irreducible variety.
+</Example>
+
+---
+
+## 6. The Coarse Moduli Space
+
+<Theorem title="Existence of Coarse Moduli">
+The coarse moduli space $\overline{M}_g$ associated to $\overline{\mathcal{M}}_g$ is a projective variety of dimension $3g - 3$ over $\mathrm{Spec}\, \mathbb{Z}$. The morphism $\overline{\mathcal{M}}_g \to \overline{M}_g$ is proper, quasi-finite, and an isomorphism over the locus of curves with trivial automorphism group.
+</Theorem>
+
+<Example title="Coarse Moduli for Small $g$">
+- $g = 2$: $\overline{M}_2$ is a 3-dimensional projective variety. Every genus 2 curve has $\mathrm{Aut}(C) \supseteq \mathbb{Z}/2\mathbb{Z}$, so the coarse moduli has quotient singularities everywhere.
+- $g = 3$: $\overline{M}_3$ is a 6-dimensional projective variety. The non-hyperelliptic curves form an open dense subset. A generic genus 3 curve has $\mathrm{Aut}(C) = \lbrace \mathrm{id} \rbrace$, so $\overline{M}_3$ is generically smooth.
+- $g \geq 3$: The generic curve has trivial automorphism group, so $\overline{M}_g$ is generically a manifold.
+</Example>
+
+<Example title="$\overline{M}_g$ is of General Type for $g \geq 24$">
+Harris-Mumford (1982) and Eisenbud-Harris (1987) proved:
+- For $g \geq 24$, $\overline{M}_g$ is of general type (i.e., $\kappa(\overline{M}_g) = 3g - 3$).
+- For $g \leq 16$, $\overline{M}_g$ is unirational (rational or close to rational).
+- The cases $17 \leq g \leq 23$ remain largely open (Kodaira dimension unknown for most of these).
+
+The key technique is computing the canonical class $K_{\overline{M}_g}$ in terms of the tautological classes $\lambda$ and $\delta_i$:
+$$K_{\overline{M}_g} = 13\lambda - 2\delta_0 - 3\delta_1 - 2\delta_2 - \cdots - 2\delta_{\lfloor g/2 \rfloor}$$
+and showing it is ample (big) for $g \geq 24$.
+</Example>
+
+---
+
+## 7. Consequences and Applications
+
+<Example title="Picard Group of $\mathcal{M}_g$">
+For $g \geq 3$, the Picard group of $\mathcal{M}_g$ is:
+$$\mathrm{Pic}(\mathcal{M}_g) \otimes \mathbb{Q} \cong \mathbb{Q} \cdot \lambda$$
+where $\lambda = c_1(\mathbb{E})$ is the first Chern class of the Hodge bundle. For the compactification:
+$$\mathrm{Pic}(\overline{\mathcal{M}}_g) \otimes \mathbb{Q} \cong \mathbb{Q} \cdot \lambda \oplus \bigoplus_{i=0}^{\lfloor g/2 \rfloor} \mathbb{Q} \cdot \delta_i$$
+where $\delta_i = [\Delta_i]$ are the boundary divisor classes.
+</Example>
+
+<Example title="Intersection Numbers">
+On $\overline{\mathcal{M}}_g$, key intersection numbers include:
+- $\lambda^{3g-3} = 0$ on $\overline{M}_g$ (since $\lambda$ is not ample on the boundary).
+- $\int_{\overline{\mathcal{M}}_{1,1}} \lambda = \frac{1}{24}$ (as a rational number, reflecting the stacky structure).
+- $\int_{\overline{\mathcal{M}}_{2}} \lambda^3 = \frac{1}{240}$.
+</Example>
+
+<Example title="Stability vs. Semistability">
+Stable curves have **finite** automorphism groups. If we allowed semistable curves (nodal curves where rational components meet the rest in $\geq 2$ points instead of $\geq 3$), automorphism groups could be infinite (e.g., a rational bridge with 2 nodes has $\mathbb{G}_m$ automorphisms). This is why the stability condition is essential for the DM property.
+</Example>

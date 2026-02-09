@@ -1,0 +1,193 @@
+export const metadata = {
+  title: "Chow's Lemma for Algebraic Spaces — Algebraic Stacks — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "정리 — Chow's Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Chow's Lemma for Algebraic Spaces
+
+Chow's lemma is a fundamental tool that relates proper algebraic spaces to projective schemes. In its classical form, it states that every proper variety is "close to" being projective — more precisely, it can be dominated by a projective variety via a birational morphism. The extension to algebraic spaces is essential because proper algebraic spaces need not be schemes, yet Chow's lemma shows they can still be understood through projective schemes.
+
+---
+
+## 1. Classical Chow's Lemma for Schemes
+
+We begin by recalling the classical statement:
+
+<Theorem title="Chow's lemma for schemes">
+Let $f: X \to S$ be a proper morphism of noetherian schemes. Then there exists a projective scheme $X'$ over $S$ and a surjective birational morphism $g: X' \to X$ over $S$.
+
+If $X$ is irreducible, we can choose $X'$ irreducible and $g$ to be an isomorphism over a dense open subset of $X$.
+</Theorem>
+
+The key idea: find a dense open $U \subset X$ that is quasi-projective over $S$, embed $U$ into a projective $S$-scheme $\mathbb{P}$, and take $X'$ to be the closure of the graph of $U \hookrightarrow X \times_S \mathbb{P}$.
+
+---
+
+## 2. Statement for Algebraic Spaces
+
+<Theorem title="Chow's lemma for algebraic spaces">
+Let $S$ be a noetherian scheme and $f: X \to S$ a proper morphism where $X$ is an algebraic space of finite type over $S$. Then there exists:
+
+1. A projective scheme $X'$ over $S$, and
+2. A proper surjective morphism $g: X' \to X$ that is a **modification** (i.e., there exists a dense open $U \subseteq X$ such that $g^{-1}(U) \to U$ is an isomorphism).
+
+If $X$ is irreducible and reduced, we can take $X'$ to be irreducible and reduced, and $g$ to be birational.
+</Theorem>
+
+<Remark>
+The morphism $g: X' \to X$ is sometimes called a **Chow cover** or **Chow envelope**. It says that every proper algebraic space is "birationally projective." The existence of such $g$ is a powerful tool: it allows one to reduce many questions about proper algebraic spaces to the case of projective schemes.
+</Remark>
+
+---
+
+## 3. The Stronger Version
+
+<Theorem title="Chow's lemma — strong form">
+Let $X$ be a proper algebraic space over a noetherian scheme $S$. Then there exists a commutative diagram
+
+$$
+X' \xrightarrow{g} X
+$$
+$$
+\downarrow^{h} \quad\quad \downarrow^{f}
+$$
+$$
+\mathbb{P} \to S
+$$
+
+where:
+- $X'$ is a scheme,
+- $\mathbb{P} = \mathbb{P}^n_S$ for some $n$,
+- $g$ is proper, surjective, and birational (a modification),
+- $h$ is a closed immersion (so $X'$ is projective over $S$),
+- The morphism $X' \to X \times_S \mathbb{P}$ is a closed immersion.
+</Theorem>
+
+---
+
+## 4. Idea of the Proof
+
+The proof proceeds in several steps:
+
+**Step 1: Find a quasi-projective dense open.** Since $X$ is of finite type over $S$, there exists an étale atlas $U \to X$ with $U$ a scheme of finite type over $S$. Using Noetherian induction, one finds a dense open subspace $V \subseteq X$ that is a scheme (by the theorem that separated algebraic spaces contain dense open schematic subspaces).
+
+**Step 2: Embed in projective space.** The quasi-projective scheme $V$ admits a locally closed immersion $V \hookrightarrow \mathbb{P}^n_S$.
+
+**Step 3: Form the graph.** Consider the rational map $X \dashrightarrow \mathbb{P}^n_S$ defined on $V$. The graph of this rational map is a locally closed subspace of $X \times_S \mathbb{P}^n_S$.
+
+**Step 4: Take the closure.** Let $X'$ be the scheme-theoretic closure of the graph in $X \times_S \mathbb{P}^n_S$. Since $X$ is proper and $\mathbb{P}^n_S$ is proper, $X \times_S \mathbb{P}^n_S$ is proper over $S$, and $X'$ is a closed subscheme, hence projective over $S$.
+
+**Step 5: Verify properties.** The projection $g: X' \to X$ is proper (as a morphism between proper $S$-spaces) and birational (it is an isomorphism over $V$).
+
+<Remark>
+A subtlety for algebraic spaces: in Step 1, one needs to know that every proper algebraic space over a noetherian base contains a dense open subspace that is a scheme. This is a nontrivial result, essentially due to the fact that algebraic spaces of dimension $\leq 1$ are schemes, combined with Noetherian induction.
+</Remark>
+
+---
+
+## 5. Examples
+
+<Example title="Chow's lemma for a proper scheme">
+If $X$ is already a projective scheme, take $X' = X$ and $g = \mathrm{id}$. More generally, if $X$ is a proper scheme that is not projective (e.g., a complete non-projective toric variety), Chow's lemma produces a projective $X'$ with a birational map $X' \to X$.
+</Example>
+
+<Example title="Blowup as Chow cover">
+Let $X$ be a proper scheme over $k$ and $Z \subset X$ a closed subscheme. The blowup $\mathrm{Bl}_Z(X) \to X$ is a proper birational morphism. If $\mathrm{Bl}_Z(X)$ is projective (which happens when $X$ is projective or when $Z$ is suitably chosen), this gives an explicit Chow cover. Hironaka's resolution of singularities provides Chow covers in characteristic zero.
+</Example>
+
+<Example title="Proper non-projective threefold">
+Consider a proper smooth non-projective threefold $X$ over $\mathbb{C}$ (as in Hironaka's example). Chow's lemma guarantees a projective threefold $X'$ with a birational morphism $X' \to X$. Concretely, $X'$ can be obtained by blowing up appropriate subvarieties in a projective model.
+</Example>
+
+<Example title="Chow's lemma for proper algebraic space from Keel-Mori">
+Let $\mathcal{X}$ be a proper DM stack and $X$ its coarse moduli space (a proper algebraic space by Keel-Mori). Chow's lemma produces a projective $X' \to X$. Composing with $\pi: \mathcal{X} \to X$ gives a diagram $X' \to X \leftarrow \mathcal{X}$, relating the stack to a projective scheme.
+</Example>
+
+<Example title="Abelian varieties">
+An abelian variety $A$ over $k$ is proper. By the theory of ample line bundles on abelian varieties, $A$ is in fact projective, so Chow's lemma is trivially satisfied with $X' = A$. However, for quotients $A/G$ that are algebraic spaces (not schemes), Chow's lemma provides a nontrivial projective cover.
+</Example>
+
+<Example title="Surface case: resolution">
+For a proper algebraic surface $X$ over a perfect field $k$, Chow's lemma combined with resolution of singularities for surfaces gives: there exists a smooth projective surface $X'$ and a birational morphism $X' \to X$. Moreover, $X'$ can be chosen to be obtained from $X$ by a sequence of blowups at closed points.
+</Example>
+
+<Example title="Moduli of stable curves">
+The coarse moduli space $\overline{M}_g$ is a proper algebraic space. Chow's lemma guarantees a projective $X' \to \overline{M}_g$. In fact, $\overline{M}_g$ is itself projective (by work of Knudsen, Mumford, and Cornalba-Harris), so Chow's lemma is superseded by this stronger result.
+</Example>
+
+<Example title="Non-effective application: base change">
+Chow's lemma is often used in proofs by reducing to the projective case. For instance, to prove the proper base change theorem for algebraic spaces, one uses Chow's lemma to reduce to the projective case (where the theorem is known for schemes) and then descends the result.
+</Example>
+
+<Example title="K3 surfaces">
+A K3 surface $X$ over $\mathbb{C}$ is proper and smooth. By a theorem of Kodaira, every K3 surface is Kähler, and the algebraic ones are projective. For an algebraic K3 surface (which is a scheme), Chow's lemma is automatic. Non-algebraic K3 surfaces exist in the analytic category but not in the algebraic one.
+</Example>
+
+<Example title="Chow's lemma and GAGA">
+Over $\mathbb{C}$, for a proper algebraic space $X$, Chow's lemma combined with Serre's GAGA theorem gives: the categories of coherent sheaves on $X$ and on $X^{\mathrm{an}}$ are equivalent. The proof uses $X' \to X$ with $X'$ projective (where classical GAGA applies) and then descends.
+</Example>
+
+<Example title="Relative Chow's lemma">
+For a proper morphism $f: X \to Y$ of noetherian algebraic spaces, there exists a projective $Y$-scheme $X'$ with a modification $X' \to X$ over $Y$. This relative version is essential for inductive arguments in the theory of algebraic spaces.
+</Example>
+
+<Example title="Equivariant Chow's lemma">
+Let $G$ be a finite group acting on a proper algebraic space $X$. Then one can find an equivariant Chow cover: a projective scheme $X'$ with $G$-action and an equivariant modification $X' \to X$. This is proven by applying Chow's lemma to the stack $[X/G]$ and using the Keel-Mori correspondence.
+</Example>
+
+---
+
+## 6. Applications
+
+### Coherent Sheaf Cohomology
+
+<Theorem title="Finiteness of cohomology">
+Let $X$ be a proper algebraic space over a noetherian ring $A$. Then for any coherent sheaf $\mathcal{F}$ on $X$, the cohomology groups $H^i(X, \mathcal{F})$ are finitely generated $A$-modules.
+</Theorem>
+
+The proof uses Chow's lemma: choose $g: X' \to X$ with $X'$ projective. The Leray spectral sequence gives $H^p(X, R^q g_* g^*\mathcal{F}) \Rightarrow H^{p+q}(X', g^*\mathcal{F})$. Since $X'$ is projective, the right side is finitely generated. The finiteness of $R^q g_*$ and induction on the number of components where $g$ is not an isomorphism give the result.
+
+### GAGA for Algebraic Spaces
+
+Chow's lemma is a key ingredient in extending Serre's GAGA theorem from projective varieties to proper algebraic spaces:
+
+<Theorem title="GAGA for proper algebraic spaces">
+Let $X$ be a proper algebraic space over $\mathbb{C}$. Then the analytification functor $\mathrm{Coh}(X) \to \mathrm{Coh}(X^{\mathrm{an}})$ is an equivalence of categories.
+</Theorem>
+
+---
+
+## 7. Limitations and Generalizations
+
+Chow's lemma does not generalize directly to algebraic stacks:
+
+<Remark>
+For an algebraic stack $\mathcal{X}$, one cannot generally find a projective scheme $X'$ with a representable birational morphism $X' \to \mathcal{X}$. However, one can find such a morphism to the coarse moduli space $X$ (when it exists). For stacks without coarse moduli spaces, alternative techniques (such as destackification) are needed.
+</Remark>
+
+The Chow lemma has been extended to non-noetherian settings by Rydh and others, using approximation techniques.
+
+---
+
+## References
+
+- The Stacks Project, Tag 089J: Chow's Lemma for Algebraic Spaces.
+- D. Knutson, *Algebraic Spaces*, LNM 203, Theorem 4.2.
+- B. Conrad, "Deligne's notes on Nagata compactification," J. Ramanujan Math. Soc. 22 (2007), 205-257.
+- R. Hartshorne, *Algebraic Geometry*, Exercise II.4.10 (scheme case).

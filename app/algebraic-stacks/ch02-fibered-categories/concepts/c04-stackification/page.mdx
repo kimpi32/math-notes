@@ -1,0 +1,235 @@
+export const metadata = {
+  title: 'Stackification -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Concept -- Stackification" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Stackification
+
+Stackification is the process of turning an arbitrary category fibered in groupoids (or prestack) into a stack, analogous to sheafification of presheaves. It is a universal construction: the stackification of $\mathcal{F}$ is the "closest" stack to $\mathcal{F}$, obtained by formally adding objects that arise from descent data.
+
+---
+
+## Motivation
+
+<Remark title="Why stackification is needed">
+Many naturally defined CFGs fail to be stacks. Consider the following common situations:
+
+1. **Presheaves of groupoids**: The CFG associated to a presheaf of groupoids $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Grpd}$ is typically not a stack (the Isom presheaves need not be sheaves, and descent data need not be effective).
+
+2. **Naive moduli problems**: The CFG parametrizing "curves of genus $g$ up to isomorphism over the Zariski topology" is not a stack for the etale topology -- one needs to stackify to obtain $\mathcal{M}_g$.
+
+3. **Quotient prestacks**: Given a group $G$ acting on $X$, the naive quotient presheaf $U \mapsto X(U)/G(U)$ is rarely a sheaf. The quotient stack $[X/G]$ is the stackification of this prestack.
+
+Stackification addresses all these problems systematically.
+</Remark>
+
+---
+
+## From CFG to Prestack
+
+<Definition title="Prestackification" number="2.4.1">
+Given a CFG $p : \mathcal{F} \to \mathcal{C}$ over a site $(\mathcal{C}, \tau)$, the **prestackification** $\mathcal{F}^{\mathrm{ps}}$ is the CFG with the same objects as $\mathcal{F}$, but where the morphism sets are replaced by their sheafifications:
+
+For $x, y \in \mathcal{F}(U)$, define
+$$\operatorname{Hom}_{\mathcal{F}^{\mathrm{ps}}(U)}(x, y) = \operatorname{Isom}(x, y)^+(U)$$
+where $\operatorname{Isom}(x, y)^+$ is the sheafification of the presheaf $\operatorname{Isom}(x, y)$.
+
+The prestackification $\mathcal{F}^{\mathrm{ps}}$ is a prestack (Isom presheaves are sheaves by construction) with a natural morphism $\mathcal{F} \to \mathcal{F}^{\mathrm{ps}}$ that is universal among morphisms from $\mathcal{F}$ to prestacks.
+</Definition>
+
+<Example id="prestack-naive-quotient" title="Prestackification of a naive quotient">
+Let $G = \mathbb{Z}/2\mathbb{Z}$ act on $X = \mathbb{A}^1_k$ by $x \mapsto -x$ ($\operatorname{char} k \neq 2$). The naive presheaf quotient sends $U$ to $X(U)/G(U) = \mathcal{O}(U)/\{\pm 1\}$. This is not a sheaf: consider $f \in \mathcal{O}(U)$; the class $[f]$ and $[-f]$ agree on any cover where $f$ has constant sign, but may not be detected globally.
+
+The prestackification makes $\operatorname{Isom}$ into a sheaf but does not yet ensure effective descent. One further step (adding descent data objects) gives the stackification $[\mathbb{A}^1 / (\mathbb{Z}/2\mathbb{Z})]$.
+</Example>
+
+<Example id="prestack-already" title="A CFG that is already a prestack">
+The CFG of quasi-coherent sheaves $\mathbf{QCoh}$ over $\mathbf{Sch}$ with the fppf topology is already a prestack: for any two quasi-coherent sheaves $\mathcal{E}, \mathcal{F}$ on $S$, the presheaf $T \mapsto \operatorname{Hom}_{T}(f^*\mathcal{E}, f^*\mathcal{F})$ is a sheaf (in fact representable by a quasi-coherent sheaf $\mathcal{H}om(\mathcal{E}, \mathcal{F})$). However, $\mathbf{QCoh}$ is also a stack since descent for quasi-coherent sheaves is effective.
+</Example>
+
+---
+
+## The Stackification Construction
+
+<Definition title="Stackification" number="2.4.2">
+Given a CFG $\mathcal{F}$ over a site $(\mathcal{C}, \tau)$, the **stackification** $\mathcal{F}^{\mathrm{st}}$ (also denoted $\mathcal{F}^a$ or $\tilde{\mathcal{F}}$) is a stack together with a morphism $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ satisfying the following universal property:
+
+For every stack $\mathcal{G}$ and every morphism $F : \mathcal{F} \to \mathcal{G}$ of CFGs, there exists a morphism $\tilde{F} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$ (unique up to unique 2-isomorphism) such that $\tilde{F} \circ \eta \cong F$:
+
+$$\mathcal{F} \xrightarrow{\eta} \mathcal{F}^{\mathrm{st}} \xrightarrow{\tilde{F}} \mathcal{G}$$
+</Definition>
+
+<Definition title="Explicit construction" number="2.4.3">
+The stackification $\mathcal{F}^{\mathrm{st}}$ can be constructed in two steps:
+
+**Step 1 (Prestackify):** Replace $\mathcal{F}$ by $\mathcal{F}^{\mathrm{ps}}$ (sheafify Isom presheaves). Now Axiom 1 holds.
+
+**Step 2 (Effectivize):** Objects of $\mathcal{F}^{\mathrm{st}}$ over $U$ are descent data for $\mathcal{F}^{\mathrm{ps}}$: tuples $(\{U_i \to U\}, \{x_i\}, \{\varphi_{ij}\})$ where $\{U_i \to U\}$ is a covering, $x_i \in \mathcal{F}^{\mathrm{ps}}(U_i)$, and $\varphi_{ij} : x_i|_{U_{ij}} \xrightarrow{\sim} x_j|_{U_{ij}}$ satisfy the cocycle condition.
+
+Two descent data $(\{U_i\}, \{x_i\}, \{\varphi_{ij}\})$ and $(\{V_k\}, \{y_k\}, \{\psi_{kl}\})$ over $U$ are isomorphic if on a common refinement there exist isomorphisms between the corresponding objects compatible with the gluing data.
+
+A morphism in $\mathcal{F}^{\mathrm{st}}(U)$ between two descent data is a family of isomorphisms on a common refinement, compatible with the transition maps.
+</Definition>
+
+<Example id="stackification-presheaf-set" title="Stackification of a presheaf of sets">
+When $\mathcal{F}$ is a presheaf of sets (viewed as a CFG with discrete fibers), the stackification reduces to ordinary sheafification. Step 1 is vacuous (Isom is already a sheaf for discrete groupoids: it is either $\emptyset$ or $\{*\}$). Step 2 adds sections that are locally in $\mathcal{F}$ -- exactly the sheafification construction.
+</Example>
+
+<Example id="stackification-BG-Zariski" title="Stackification of the Zariski BG">
+Let $G$ be a smooth group scheme. The naive CFG $BG^{\mathrm{Zar}}$ on the Zariski site classifies Zariski-locally trivial $G$-torsors. When stackified on the etale site, we obtain $BG^{\mathrm{et}}$ classifying etale-locally trivial torsors. The stackification adds new objects: torsors that are only locally trivial in the etale topology.
+
+For $G = GL_n$, every $GL_n$-torsor is already Zariski-locally trivial (by Hilbert 90 / the Zariski triviality of vector bundles on local rings), so $BGL_n^{\mathrm{Zar}} = BGL_n^{\mathrm{et}}$. But for $G = \mu_n$ or $G = PGL_n$, the etale stackification is strictly larger.
+</Example>
+
+<Example id="stackification-quotient" title="Stackification gives quotient stacks">
+Let $G$ act on $X$. The presheaf $U \mapsto X(U)/G(U)$ (orbit presheaf) can be viewed as a CFG. Its stackification is the quotient stack $[X/G]$.
+
+More precisely, consider the CFG $\mathcal{F}$ where $\mathcal{F}(U)$ is the groupoid of "trivial $G$-torsors $P$ over $U$ with $G$-equivariant maps $P \to X$." The objects are just $G$-equivariant maps $G \times U \to X$, i.e., elements of $X(U)$. The stackification adds "twisted" objects: non-trivial torsors with equivariant maps, yielding $[X/G]$.
+</Example>
+
+---
+
+## Properties of Stackification
+
+<Definition title="Key properties" number="2.4.4">
+The stackification $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ satisfies:
+
+1. **Universal property**: As stated above, unique factorization through any stack.
+2. **Same objects locally**: For every object $x \in \mathcal{F}^{\mathrm{st}}(U)$, there exists a covering $\{U_i \to U\}$ such that $x|_{U_i}$ is in the essential image of $\eta(U_i) : \mathcal{F}(U_i) \to \mathcal{F}^{\mathrm{st}}(U_i)$.
+3. **Fully faithful on Isom**: The morphism $\eta$ induces isomorphisms on sheafified Isom: for $x, y \in \mathcal{F}(U)$, $\operatorname{Isom}_{\mathcal{F}^{\mathrm{st}}}(\eta(x), \eta(y)) \cong \operatorname{Isom}_{\mathcal{F}}(x, y)^+$ (the sheafification).
+4. **Idempotent**: If $\mathcal{F}$ is already a stack, then $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ is an equivalence.
+5. **Functorial**: The stackification is functorial in $\mathcal{F}$ -- a morphism $\mathcal{F} \to \mathcal{G}$ of CFGs induces $\mathcal{F}^{\mathrm{st}} \to \mathcal{G}^{\mathrm{st}}$ of stacks.
+</Definition>
+
+<Example id="stackification-stalks" title="Stackification preserves stalks (for presheaves)">
+For a presheaf of sets $F$, the sheafification $F^+$ has the same stalks: $F^+_p \cong F_p$. The analogous statement for stackification is property (3): on "germs" (stalks) and isomorphisms, the stackification does not change the local data. It only changes global information by making descent effective.
+</Example>
+
+<Example id="stackification-equiv" title="Two equivalent descriptions of stackification">
+For a prestack $\mathcal{F}$ (Axiom 1 already satisfied), the stackification has two equivalent descriptions:
+
+**(a) Via descent data):** $\mathcal{F}^{\mathrm{st}}(U)$ is the category of descent data for $\mathcal{F}$ relative to all coverings of $U$, modulo refinement.
+
+**(b) Via Cech nerve):** For a single covering $\pi : V \to U$, form the simplicial object (Cech nerve):
+$$V \times_U V \times_U V \;\substack{\to \\ \to \\ \to}\; V \times_U V \;\substack{\to \\ \to}\; V$$
+Then $\mathcal{F}^{\mathrm{st}}(U)$ is the 2-limit (homotopy limit) of the cosimplicial diagram obtained by applying $\mathcal{F}$ to the Cech nerve, taken over all coverings.
+</Example>
+
+---
+
+## Stackification in Practice
+
+<Example id="stackification-Brauer" title="The Brauer stack">
+Consider the presheaf of groupoids $\mathcal{A}z$ where $\mathcal{A}z(S)$ is the groupoid of Azumaya algebras on $S$ (locally free $\mathcal{O}_S$-algebras that are etale-locally matrix algebras). The morphisms are isomorphisms of algebras.
+
+This is already a prestack (Isom is representable), and descent for Azumaya algebras is effective, so $\mathcal{A}z$ is already a stack. However, if we started with "central simple algebras" (only defined over fields), we would need stackification to extend to a stack on $\mathbf{Sch}$.
+
+The isomorphism classes give the **Brauer group**: $\pi_0(\mathcal{A}z(S)) \cong \operatorname{Br}(S)$ (up to some Morita-equivalence issues). As a stack, $\mathcal{A}z \cong [*/PGL_\infty]$ in a suitable sense.
+</Example>
+
+<Example id="stackification-formal" title="Formal properties in use">
+Consider the morphism of prestacks $F : \mathcal{F} \to \mathcal{G}$ where $\mathcal{G}$ is a stack. By the universal property, $F$ factors uniquely through $\mathcal{F}^{\mathrm{st}}$:
+
+$$\mathcal{F} \xrightarrow{\eta} \mathcal{F}^{\mathrm{st}} \xrightarrow{\tilde{F}} \mathcal{G}$$
+
+Moreover, $\tilde{F}$ is an equivalence if and only if:
+- $F$ is locally essentially surjective: every object of $\mathcal{G}(U)$ is locally in the essential image of $F$.
+- $F$ induces isomorphisms on sheafified Isom.
+
+This gives a practical criterion for identifying stackifications.
+</Example>
+
+<Example id="stackification-gerbe" title="Gerbes from stackification">
+Let $X$ be a scheme and $G$ a sheaf of abelian groups on $X$. A **$G$-gerbe** is a stack $\mathcal{G}$ over $X$ that is locally non-empty and locally connected (any two objects are locally isomorphic), with $\operatorname{Aut}(x) \cong G$ for all objects $x$.
+
+Gerbes can be constructed via stackification: start with the "trivial" CFG over $X$ (objects are open subsets, only identity morphisms), then twist by a Cech 2-cocycle with values in $G$. The stackification of this twisted CFG is a $G$-gerbe. The isomorphism class of the gerbe is an element of $H^2(X, G)$.
+
+For $G = \mathbb{G}_m$, we get $\mathbb{G}_m$-gerbes classified by $H^2(X, \mathbb{G}_m) = \operatorname{Br}(X)$ (the cohomological Brauer group).
+</Example>
+
+<Example id="stackification-homotopy" title="Homotopy-theoretic perspective">
+From the perspective of higher category theory, stackification is a **localization**: the 2-category of stacks is obtained from the 2-category of CFGs by inverting "local equivalences" (morphisms that are locally essentially surjective and locally fully faithful).
+
+In the language of model categories, CFGs over a site form a model category where:
+- Weak equivalences are local equivalences.
+- Fibrant objects are stacks.
+- Stackification is fibrant replacement.
+
+This perspective connects stackification to the theory of higher stacks and derived algebraic geometry.
+</Example>
+
+---
+
+## Comparison with Sheafification
+
+<Remark title="Analogy table">
+<div className="overflow-x-auto my-4">
+<table className="min-w-full text-sm border border-gray-200">
+<thead>
+<tr className="bg-gray-50">
+<th className="border border-gray-200 px-3 py-2 text-left">Sheafification</th>
+<th className="border border-gray-200 px-3 py-2 text-left">Stackification</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="border border-gray-200 px-3 py-2">Presheaf of sets</td><td className="border border-gray-200 px-3 py-2">CFG (presheaf of groupoids)</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Separated presheaf</td><td className="border border-gray-200 px-3 py-2">Prestack</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Sheaf</td><td className="border border-gray-200 px-3 py-2">Stack</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Same stalks</td><td className="border border-gray-200 px-3 py-2">Same Isom sheaves</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Add compatible families</td><td className="border border-gray-200 px-3 py-2">Add descent data</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Left adjoint to inclusion</td><td className="border border-gray-200 px-3 py-2">Left 2-adjoint to inclusion</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">$F^+(U) = $ compatible germs</td><td className="border border-gray-200 px-3 py-2">$\mathcal{F}^{\mathrm{st}}(U) = $ descent data</td></tr>
+<tr><td className="border border-gray-200 px-3 py-2">Two-step: separate then glue</td><td className="border border-gray-200 px-3 py-2">Two-step: prestackify then effectivize</td></tr>
+</tbody>
+</table>
+</div>
+</Remark>
+
+---
+
+## Further Examples
+
+<Example id="stackification-root-stack" title="Root stacks via stackification">
+Let $X$ be a scheme, $D \subset X$ an effective Cartier divisor, and $r \geq 1$. Consider the CFG $\mathcal{F}$ over $\mathbf{Sch}/X$ where $\mathcal{F}(T \to X)$ is the groupoid of pairs $(\mathcal{L}, \phi)$ with $\mathcal{L}$ a line bundle on $T$ and $\phi : \mathcal{L}^{\otimes r} \to \mathcal{O}_T(D|_T)$ an isomorphism.
+
+This CFG is already a prestack (Isom is representable by $\mu_r$-torsors). The stackification ensures effective descent: locally defined $r$-th roots of $D$ with compatible transition data glue to global $r$-th roots. The resulting stack $\sqrt[r]{D/X}$ is the **$r$-th root stack**, a Deligne-Mumford stack with $\mu_r$-stabilizers along $D$.
+
+For $X = \mathbb{A}^1$ and $D = \{0\}$ with $r = 2$: the root stack $\sqrt[2]{\{0\}/\mathbb{A}^1}$ looks like $\mathbb{A}^1$ away from the origin but has a $\mu_2$-gerbe at the origin.
+</Example>
+
+<Example id="stackification-weighted-proj" title="Weighted projective stacks">
+The weighted projective stack $\mathcal{P}(a_0, \ldots, a_n)$ is the stackification of the quotient prestack $[\mathbb{A}^{n+1} \setminus \{0\} / \mathbb{G}_m]$ where $\mathbb{G}_m$ acts with weights $(a_0, \ldots, a_n)$. When all weights are 1, the stackification gives $\mathbb{P}^n$ (a scheme). When weights are not all 1, the stackification produces a genuine Deligne-Mumford stack with $\mu_{a_i}$-stabilizers at the coordinate points.
+
+For example, $\mathcal{P}(1, 2)$ is a stack whose coarse moduli space is $\mathbb{P}^1$, but with a $\mu_2$-stacky point at $[0:1]$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="When to stackify">
+In practice, stackification is most often used in the following situations:
+
+1. **Quotient stacks**: Starting from the naive orbit presheaf $X/G$ and stackifying to get $[X/G]$.
+2. **Changing topology**: A stack for the Zariski topology might need stackification to become a stack for the etale or fppf topology.
+3. **Moduli prestacks**: A moduli problem defined naively (e.g., on affine schemes only, or without descent) is stackified to get the "correct" moduli stack.
+4. **Image stacks**: The image of a morphism $\mathcal{F} \to \mathcal{G}$ of stacks is a prestack; its stackification gives the "stack-theoretic image."
+
+The existence and uniqueness of stackification (up to equivalence) is a fundamental result, proved in the next theorem sections.
+</Remark>

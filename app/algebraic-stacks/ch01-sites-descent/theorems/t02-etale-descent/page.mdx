@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Etale Descent — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Theorem — Etale Descent" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Etale Descent
+
+Etale descent specializes the general machinery of faithfully flat descent to the etale topology. Because etale morphisms are the algebraic analogue of local homeomorphisms, etale descent gives particularly clean results: it is effective for separated schemes, it connects naturally to Galois theory, and it provides the framework for defining algebraic spaces and Deligne-Mumford stacks.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Etale Descent for Quasi-coherent Sheaves" number="1.5">
+Let $f: Y \to X$ be a surjective etale morphism of schemes. Then the pullback functor
+
+$$f^*: \operatorname{QCoh}(X) \to \operatorname{DD}(Y/X, \operatorname{QCoh})$$
+
+is an equivalence of categories.
+
+In other words, quasi-coherent sheaves on $X$ are equivalent to quasi-coherent sheaves on $Y$ equipped with descent data satisfying the cocycle condition.
+</Theorem>
+
+<Remark title="Etale descent as a special case of fpqc descent">
+Since etale surjective morphisms are fpqc (they are flat, locally of finite presentation, and surjective), etale descent for quasi-coherent sheaves is a special case of faithfully flat descent. The added value of the etale setting is:
+
+1. Fiber products $Y \times_X Y$ and $Y \times_X Y \times_X Y$ are much better behaved (etale morphisms are unramified, so the diagonal is an open immersion).
+2. Descent is effective for a wider class of geometric objects (separated schemes, algebraic spaces).
+3. The connection to Galois theory is immediate and explicit.
+</Remark>
+
+<Theorem title="Etale Descent for Separated Schemes" number="1.6">
+Let $f: Y \to X$ be a surjective etale morphism. Let $Z$ be a separated $Y$-scheme with descent data $\varphi: p_1^*Z \xrightarrow{\sim} p_2^*Z$ satisfying the cocycle condition. Then descent is effective: there exists a separated $X$-scheme $W$ with $W \times_X Y \cong Z$ compatibly with $\varphi$, and $W$ is unique up to unique isomorphism.
+
+More generally, descent is effective for **algebraic spaces** separated over $X$ along etale surjective morphisms.
+</Theorem>
+
+---
+
+## Galois Descent
+
+<Definition title="Galois descent" number="1.7">
+Let $L/K$ be a finite Galois extension with Galois group $G$. The morphism $f: \operatorname{Spec}(L) \to \operatorname{Spec}(K)$ is finite etale with
+
+$$\operatorname{Spec}(L) \times_{\operatorname{Spec}(K)} \operatorname{Spec}(L) \cong \coprod_{g \in G} \operatorname{Spec}(L).$$
+
+**Galois descent** is etale descent for this specific cover. A descent datum for an $L$-object $V$ amounts to a collection of isomorphisms $\{\varphi_g: V \xrightarrow{\sim} g^*V\}_{g \in G}$ satisfying $\varphi_{gh} = h^*(\varphi_g) \circ \varphi_h$ (the cocycle condition reduces to a group action condition).
+</Definition>
+
+<Example id="galois-descent-vector-spaces" title="Galois descent for vector spaces">
+**Statement**: The category of $K$-vector spaces is equivalent to the category of $L$-vector spaces with semilinear $G$-action.
+
+Given a $K$-vector space $W$, the $L$-vector space $V = W \otimes_K L$ has a natural semilinear $G$-action: $g(w \otimes \lambda) = w \otimes g(\lambda)$.
+
+Conversely, given $(V, \{g\}_{g \in G})$, we recover $W = V^G = \{v \in V \mid g(v) = v \; \forall g \in G\}$.
+
+**Concrete example**: $L = \mathbb{Q}(i)$, $K = \mathbb{Q}$, $G = \{1, \sigma\}$ where $\sigma(i) = -i$. The $\mathbb{Q}(i)$-vector space $V = \mathbb{Q}(i)^2$ with semilinear $\sigma$-action $\sigma(z_1, z_2) = (\bar{z}_1, \bar{z}_2)$ descends to $W = \mathbb{Q}^2$.
+
+But a different $\sigma$-action, say $\sigma(z_1, z_2) = (\bar{z}_2, \bar{z}_1)$, also descends to a $\mathbb{Q}$-vector space of dimension 2. This gives an isomorphic $W$, reflecting that $H^1(G, GL_2(L)) = 1$ (non-abelian Hilbert 90).
+</Example>
+
+<Example id="galois-descent-curves" title="Galois descent for curves">
+Let $L/K$ be Galois with group $G$. A smooth projective curve $C$ over $K$ can be studied via its base change $C_L = C \times_K L$. Conversely, a curve $D$ over $L$ with a $G$-equivariant structure (compatible semilinear $G$-action on $D$) descends to a curve over $K$ if the action is "geometric" (respects the scheme structure).
+
+**Example**: The curve $x^2 + y^2 = 1$ over $\mathbb{R}$ has a natural $\operatorname{Gal}(\mathbb{C}/\mathbb{R})$-equivariant structure on its complexification. Complex conjugation acts on $\mathbb{C}$-points by $(x, y) \mapsto (\bar{x}, \bar{y})$, and the fixed points are exactly the $\mathbb{R}$-points.
+
+**Example**: The conic $x^2 + y^2 + z^2 = 0$ in $\mathbb{P}^2_\mathbb{R}$ has no $\mathbb{R}$-points (it is a non-trivial Brauer-Severi curve). Over $\mathbb{C}$, it becomes isomorphic to $\mathbb{P}^1_\mathbb{C}$, but the descent datum is non-trivial: it corresponds to the unique non-trivial element of $\operatorname{Br}(\mathbb{R})[2] = \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="galois-descent-quadratic-forms" title="Descent for quadratic forms">
+Quadratic forms over $K$ can be studied via Galois descent. A quadratic form $q$ over $K$ extends to $q_L$ over $L$, which is easier to classify (e.g., over algebraically closed fields, every non-degenerate form is equivalent to $\sum x_i^2$).
+
+The set of $K$-forms of the standard quadratic form $\sum_{i=1}^n x_i^2$ is $H^1(G_K, O_n)$ where $O_n$ is the orthogonal group. The exact sequence $1 \to SO_n \to O_n \to \mu_2 \to 1$ gives a long exact sequence relating quadratic forms to the discriminant and the spinor norm.
+
+For $n = 2$ over $\mathbb{Q}$: quadratic forms $ax^2 + by^2$ with $ab \neq 0$ are classified (up to scaling) by $a \in \mathbb{Q}^\times/(\mathbb{Q}^\times)^2$. The form $x^2 + y^2$ is isomorphic to $x^2 - y^2$ over $\mathbb{Q}(\sqrt{-1})$ but not over $\mathbb{Q}$.
+</Example>
+
+---
+
+## Applications to Algebraic Spaces
+
+<Definition title="Algebraic space" number="1.8">
+An **algebraic space** over a scheme $S$ is an fppf sheaf $X: (\mathbf{Sch}/S)^{\mathrm{op}} \to \mathbf{Set}$ such that:
+
+1. The diagonal $\Delta: X \to X \times_S X$ is representable by schemes.
+2. There exists a surjective etale morphism $U \to X$ from a scheme $U$ (an **etale atlas**).
+
+Algebraic spaces arise naturally when descent for separated schemes along etale covers is not enough (e.g., when descending non-separated objects). They are defined so that etale descent is tautologically effective.
+</Definition>
+
+<Example id="algebraic-space-quotient" title="Quotients as algebraic spaces">
+Let $X$ be a scheme with an action of a finite group $G$. The quotient $X/G$ always exists as an algebraic space (though not always as a scheme). If $G$ acts freely and $X$ is separated, then $X/G$ is a separated algebraic space.
+
+**Concrete example**: Let $X = \mathbb{A}^2_k \setminus \{0\}$ and $G = \mathbb{Z}/2\mathbb{Z}$ acting by $(x,y) \mapsto (-x, -y)$. The quotient $X/G$ is a smooth algebraic space, but it is NOT a scheme (it is the "affine plane with doubled origin" quotient). The etale cover $X \to X/G$ exhibits $X/G$ as an algebraic space via etale descent.
+
+More generally, if a finite group $G$ acts on a scheme $X$ and the stabilizers are trivial (free action), then $X \to X/G$ is a finite etale $G$-torsor, and $X/G$ is the algebraic space obtained by etale descent.
+</Example>
+
+<Example id="algebraic-space-non-scheme" title="An algebraic space that is not a scheme">
+The classical example (due to Hironaka) of an algebraic space that is not a scheme: start with a smooth threefold $X$ over $\mathbb{C}$ with an involution $\sigma$ that acts freely outside a codimension-2 subvariety. The quotient $X/\sigma$ exists as an algebraic space but cannot be a scheme (it fails to have enough open affine subsets).
+
+Another example: the etale quotient of $\mathbb{A}^1$ by the equivalence relation that identifies $0$ and $1$ (but this one fails to be separated, so it requires more care).
+</Example>
+
+---
+
+## Etale Descent for Properties
+
+<Example id="descent-properties-etale" title="Properties that descend along etale covers">
+The following properties descend along etale surjective morphisms $f: Y \to X$:
+
+**Properties of schemes**: reduced, normal, regular, Cohen-Macaulay, locally Noetherian, S$_n$ (Serre's condition), R$_n$ (regularity in codimension $n$).
+
+**Properties of morphisms**: if $g: Z \to X$ is a morphism and $g': Z \times_X Y \to Y$ is its base change, then $g$ is flat (resp. smooth, etale, unramified, proper, finite, affine, quasi-finite, a closed immersion, an open immersion) if and only if $g'$ is.
+
+**Properties of sheaves**: a coherent sheaf $\mathcal{F}$ on $X$ is locally free of rank $r$ if and only if $f^*\mathcal{F}$ is locally free of rank $r$ on $Y$.
+
+These results follow from etale descent being a special case of fpqc descent, combined with the fact that etale morphisms are open maps.
+</Example>
+
+<Example id="descent-smoothness-check" title="Checking smoothness by etale descent">
+To verify that a morphism $g: Z \to X$ is smooth, it suffices to check after an etale base change. For instance, consider $Z = \operatorname{Spec}(k[x,y]/(y^2 - x^3 - x)) \to X = \operatorname{Spec}(k)$ (an elliptic curve over $k$ with $\operatorname{char}(k) \neq 2, 3$).
+
+After the etale cover $\operatorname{Spec}(\bar{k}) \to \operatorname{Spec}(k)$, the morphism becomes $E_{\bar{k}} \to \operatorname{Spec}(\bar{k})$, which is smooth (the curve $y^2 = x^3 + x$ is non-singular since $4 \cdot 1^3 + 27 \cdot 0 = 4 \neq 0$). By etale descent of smoothness, the original morphism is smooth.
+</Example>
+
+---
+
+## Etale Descent and Cohomology
+
+<Example id="etale-descent-cohomology" title="Descent spectral sequence">
+For a surjective etale morphism $f: Y \to X$ and an abelian sheaf $\mathcal{F}$ on $X_{\text{et}}$, there is a **descent spectral sequence** (or Cech-to-derived spectral sequence):
+
+$$E_2^{p,q} = \check{H}^p(\{Y \to X\}, \mathcal{H}^q(\mathcal{F})) \implies H^{p+q}_{\text{et}}(X, \mathcal{F})$$
+
+where $\mathcal{H}^q(\mathcal{F})$ is the presheaf $U \mapsto H^q_{\text{et}}(U, \mathcal{F})$ and the Cech cohomology is computed using the simplicial scheme $Y^{\times_X \bullet}$.
+
+When $f$ is a Galois cover with group $G$ (e.g., $\operatorname{Spec}(L) \to \operatorname{Spec}(K)$ for a Galois extension $L/K$), the spectral sequence becomes the **Hochschild-Serre spectral sequence**:
+
+$$E_2^{p,q} = H^p(G, H^q_{\text{et}}(Y, \mathcal{F})) \implies H^{p+q}_{\text{et}}(X, \mathcal{F})$$
+
+This is one of the most important computational tools in etale cohomology.
+</Example>
+
+<Example id="hochschild-serre-example" title="Computing with the Hochschild-Serre spectral sequence">
+Let $k$ be a field, $X = \operatorname{Spec}(k)$, $Y = \operatorname{Spec}(k^{\text{sep}})$, $G = G_k = \operatorname{Gal}(k^{\text{sep}}/k)$. For $\mathcal{F} = \mathbb{G}_m$:
+
+$$E_2^{p,q} = H^p(G_k, H^q_{\text{et}}(\operatorname{Spec}(k^{\text{sep}}), \mathbb{G}_m))$$
+
+Since $H^0(\operatorname{Spec}(k^{\text{sep}}), \mathbb{G}_m) = (k^{\text{sep}})^\times$ and $H^q = 0$ for $q > 0$ (Spec of a separably closed field), the spectral sequence degenerates to
+
+$$H^p_{\text{et}}(\operatorname{Spec}(k), \mathbb{G}_m) = H^p(G_k, (k^{\text{sep}})^\times)$$
+
+This gives $H^1 = 0$ (Hilbert 90) and $H^2 = \operatorname{Br}(k)$ (the Brauer group equals the Galois cohomology $H^2(G_k, (k^{\text{sep}})^\times)$).
+</Example>
+
+<Example id="etale-descent-picard" title="Picard groups via etale descent">
+For a scheme $X$ and an etale cover $\{U_i \to X\}$, the Picard group $\operatorname{Pic}(X)$ can be computed via the Cech complex:
+
+$$\prod_i \mathcal{O}(U_i)^\times \to \prod_{i,j} \mathcal{O}(U_i \times_X U_j)^\times \to \prod_{i,j,k} \mathcal{O}(U_i \times_X U_j \times_X U_k)^\times$$
+
+with $\operatorname{Pic}(X) = \check{H}^1(\{U_i\}, \mathbb{G}_m)$. This is the standard description: line bundles are classified by transition functions (1-cocycles) modulo coboundaries.
+
+For $X = \operatorname{Spec}(\mathbb{Z})$ with the etale cover $\operatorname{Spec}(\mathbb{Z}[\sqrt{-5}]) \to \operatorname{Spec}(\mathbb{Z})$ (after inverting appropriate primes), one can compute $\operatorname{Pic}(\mathbb{Z}[\sqrt{-5}]) = \mathbb{Z}/2\mathbb{Z}$ (the class group of $\mathbb{Q}(\sqrt{-5})$).
+</Example>
+
+---
+
+## Etale Descent and Algebraic Stacks
+
+<Remark title="Connection to Deligne-Mumford stacks">
+Etale descent is the foundation of **Deligne-Mumford stacks**. A Deligne-Mumford stack is a stack $\mathcal{X}$ for the etale topology with:
+
+1. Representable diagonal.
+2. An etale surjection $U \to \mathcal{X}$ from a scheme $U$.
+
+The existence of an etale atlas means that $\mathcal{X}$ can be "covered" by a scheme in the etale topology, and the descent data for this cover (encoded in the groupoid $U \times_{\mathcal{X}} U \rightrightarrows U$) determines $\mathcal{X}$.
+
+The moduli stack $\mathcal{M}_g$ of curves of genus $g \geq 2$ is a Deligne-Mumford stack: it has an etale atlas (a Hilbert scheme parametrizing embedded curves) and the automorphism groups of objects are finite (etale, since curves of genus $\geq 2$ have finite automorphism groups).
+
+For stacks where the automorphism groups are smooth but not etale (e.g., $BG$ for a smooth group scheme $G$), one needs the fppf or smooth topology, leading to **Artin stacks**.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key results of etale descent">
+1. Etale descent for **quasi-coherent sheaves** is effective (as a special case of fpqc descent).
+
+2. Etale descent for **separated schemes** is effective (Artin's theorem).
+
+3. **Galois descent** is the special case for Galois covers, connecting to classical Galois theory and semilinear algebra.
+
+4. The **Hochschild-Serre spectral sequence** computes etale cohomology via Galois cohomology, providing the main computational tool.
+
+5. **Algebraic spaces** are defined so that etale descent is effective by construction, extending the category of schemes.
+
+6. **Deligne-Mumford stacks** are stacks for the etale topology, and their definition relies on the effectiveness of etale descent for the relevant geometric objects.
+</Remark>

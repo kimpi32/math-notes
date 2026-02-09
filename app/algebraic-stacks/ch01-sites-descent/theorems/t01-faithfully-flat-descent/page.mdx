@@ -1,0 +1,235 @@
+export const metadata = {
+  title: 'Faithfully Flat Descent — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Theorem — Faithfully Flat Descent" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Faithfully Flat Descent
+
+Faithfully flat descent is one of the most important theorems in modern algebraic geometry. It provides the theoretical foundation for gluing constructions along flat covers, which is essential for defining algebraic stacks, for proving that various moduli functors are representable, and for extending the scope of algebraic geometry beyond what the Zariski topology allows.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Faithfully Flat Descent for Modules" number="1.1">
+Let $\varphi: A \to B$ be a faithfully flat ring homomorphism. Then the base change functor
+
+$$- \otimes_A B: \operatorname{Mod}_A \to \operatorname{DD}(B/A)$$
+
+from the category of $A$-modules to the category of descent data for $B$-modules relative to $A$ is an **equivalence of categories**.
+
+Concretely, this means:
+
+1. **(Fully faithful / Descent for morphisms)** For any $A$-modules $M, N$, the natural map
+
+$$\operatorname{Hom}_A(M, N) \to \operatorname{Hom}_{B}^{\mathrm{desc}}(M \otimes_A B, N \otimes_A B)$$
+
+is a bijection, where $\operatorname{Hom}^{\mathrm{desc}}$ denotes $B$-module maps compatible with the descent data.
+
+2. **(Essential surjectivity / Effectiveness)** Every descent datum $(M_B, \varphi)$ (where $M_B$ is a $B$-module and $\varphi: M_B \otimes_A B \xrightarrow{\sim} B \otimes_A M_B$ is an isomorphism satisfying the cocycle condition) is effective: there exists an $A$-module $M$ with $M \otimes_A B \cong M_B$ compatibly with $\varphi$.
+
+Moreover, $M$ is recovered as the equalizer:
+
+$$M = \ker\left(M_B \rightrightarrows B \otimes_A M_B\right)$$
+
+where the two maps are $m \mapsto 1 \otimes m$ and $m \mapsto \varphi(m \otimes 1)$.
+</Theorem>
+
+<Theorem title="Faithfully Flat Descent for Quasi-coherent Sheaves" number="1.2">
+Let $f: Y \to X$ be a faithfully flat quasi-compact (fpqc) morphism of schemes. Then the pullback functor
+
+$$f^*: \operatorname{QCoh}(X) \to \operatorname{DD}(Y/X, \operatorname{QCoh})$$
+
+is an equivalence of categories, where $\operatorname{DD}(Y/X, \operatorname{QCoh})$ is the category of quasi-coherent sheaves on $Y$ equipped with descent data relative to $f$.
+</Theorem>
+
+---
+
+## Significance
+
+<Remark title="Why faithfully flat descent matters">
+Faithfully flat descent has far-reaching consequences:
+
+1. **Foundation for stacks**: The definition of an algebraic stack requires that descent be effective for certain types of objects (schemes, algebraic spaces) along smooth or etale covers. Faithfully flat descent for modules and algebras is the technical engine behind this.
+
+2. **Representability results**: To show a functor is representable (or representable by an algebraic space), one often constructs the representing object locally in some flat topology and then descends.
+
+3. **Descent of properties**: Many properties of morphisms (flat, smooth, etale, proper, finite, etc.) can be checked after a faithfully flat base change. The theorem ensures that these local checks determine global properties.
+
+4. **Galois descent**: For a Galois extension $L/K$, faithfully flat descent specializes to classical Galois descent, relating $K$-structures to $L$-structures with Galois action.
+
+5. **Torsors and cohomology**: The classification of torsors via Cech cohomology relies on descent. A $G$-torsor that is trivial on a cover $Y \to X$ is determined by descent data, which is a 1-cocycle.
+</Remark>
+
+---
+
+## The Amitsur Complex
+
+<Definition title="Amitsur complex" number="1.3">
+For a ring map $A \to B$, the **Amitsur complex** is the cosimplicial ring
+
+$$B \rightrightarrows B \otimes_A B \; \substack{\to \\ \to \\ \to} \; B \otimes_A B \otimes_A B \; \cdots$$
+
+More precisely, let $B^{\otimes n} = B \otimes_A \cdots \otimes_A B$ ($n$ copies). The coface maps $d^i: B^{\otimes n} \to B^{\otimes (n+1)}$ insert a $1$ in the $i$-th position:
+
+$$d^i(b_1 \otimes \cdots \otimes b_n) = b_1 \otimes \cdots \otimes b_i \otimes 1 \otimes b_{i+1} \otimes \cdots \otimes b_n.$$
+
+For a $B$-module $M$, the **Amitsur complex of $M$** is
+
+$$M \to M \otimes_A B \to M \otimes_A B \otimes_A B \to \cdots$$
+
+with differentials $d = \sum (-1)^i d^i$. The descent datum is an isomorphism making this complex exact at the first few terms.
+</Definition>
+
+<Example id="amitsur-faithfully-flat" title="Exactness of the Amitsur complex">
+When $A \to B$ is faithfully flat, the Amitsur complex
+
+$$0 \to A \to B \to B \otimes_A B \to B \otimes_A B \otimes_A B \to \cdots$$
+
+is exact. This is the key technical fact underlying faithfully flat descent.
+
+For the proof: if $A \to B$ has a section $s: B \to A$ (e.g., $A \to A \times C$ with projection), then the complex has a contracting homotopy $h^n: B^{\otimes(n+1)} \to B^{\otimes n}$ given by $h^n(b_0 \otimes \cdots \otimes b_n) = s(b_0) \cdot b_1 \otimes \cdots \otimes b_n$. In the general faithfully flat case, we reduce to this case by the faithful flatness of $A \to B$ (the complex is exact after tensoring with $B$, and faithful flatness detects exactness).
+</Example>
+
+---
+
+## Applications
+
+<Example id="application-properties-descent" title="Descent of ring-theoretic properties">
+Let $A \to B$ be faithfully flat. Then many properties of $A$ can be detected from $B$:
+
+- $A$ is Noetherian $\iff$ $B$ is Noetherian (and $A \to B$ is of finite type).
+- $A$ is reduced $\iff$ $B$ is reduced.
+- $A$ is normal $\iff$ $B$ is normal.
+- $A$ is regular $\iff$ $B$ is regular (when both are Noetherian).
+
+More precisely, these properties "descend" along faithfully flat morphisms: if $B$ has the property, then $A$ has the property. The converse ("ascent") also holds for most of these.
+
+This is stronger than the Affine Communication Lemma (which handles only Zariski covers): faithfully flat descent works for arbitrary faithfully flat covers, including etale and fppf covers.
+</Example>
+
+<Example id="application-vector-bundles" title="Descent for vector bundles">
+A vector bundle on $X$ is a locally free $\mathcal{O}_X$-module of finite rank. By faithfully flat descent:
+
+If $f: Y \to X$ is an fpqc cover and $\mathcal{E}$ is a locally free sheaf on $Y$ with descent data, then $\mathcal{E}$ descends to a unique locally free sheaf on $X$.
+
+In particular, a rank-$n$ vector bundle on $X$ that is trivial on $Y$ is classified by a 1-cocycle $g \in GL_n(\mathcal{O}(Y \times_X Y))$ satisfying $p_{23}^*(g) \cdot p_{12}^*(g) = p_{13}^*(g)$. This gives
+
+$$\{\text{rank-}n \text{ vector bundles on } X, \text{ trivial on } Y\} / \cong \; = \; \check{H}^1(\{Y \to X\}, GL_n).$$
+</Example>
+
+<Example id="application-galois-descent-concrete" title="Galois descent for vector spaces">
+Let $L/K$ be a Galois extension with group $G$. By faithfully flat descent (since $K \to L$ is faithfully flat), the category of $K$-vector spaces is equivalent to the category of $L$-vector spaces with $G$-semilinear action.
+
+Concretely, given an $L$-vector space $V$ with semilinear $G$-action (i.e., $\sigma(\lambda v) = \sigma(\lambda) \sigma(v)$ for $\sigma \in G, \lambda \in L$), the $K$-vector space $W = V^G$ (the invariants) satisfies $W \otimes_K L \cong V$.
+
+**Example**: Let $L = \mathbb{C}$, $K = \mathbb{R}$, $G = \{1, \sigma\}$ with $\sigma$ = complex conjugation. A $\mathbb{C}$-vector space $V$ with a semilinear involution $\sigma$ descends to $W = V^\sigma$. If $V = \mathbb{C}^2$ and $\sigma(z_1, z_2) = (\bar{z}_2, \bar{z}_1)$, then $W = \{(z, \bar{z}) : z \in \mathbb{C}\} \cong \mathbb{R}^2$.
+</Example>
+
+<Example id="application-weil-restriction" title="Weil restriction via descent">
+Let $L/K$ be a finite field extension and $X$ a scheme over $L$. The **Weil restriction** (or restriction of scalars) $\operatorname{Res}_{L/K}(X)$ is a scheme over $K$ with the property:
+
+$$\operatorname{Res}_{L/K}(X)(T) = X(T \times_K L)$$
+
+for any $K$-scheme $T$. When $L/K$ is separable, $\operatorname{Res}_{L/K}(X)$ exists and can be constructed using etale descent.
+
+For $X = \mathbb{G}_{m,L}$ (the multiplicative group over $L$), $\operatorname{Res}_{L/K}(\mathbb{G}_m)(T) = (T \otimes_K L)^\times$. When $L/K$ is Galois with group $G$, we have $\operatorname{Res}_{L/K}(\mathbb{G}_m) \times_K L \cong \prod_{g \in G} \mathbb{G}_{m,L}$, and the descent datum encodes the Galois action permuting the factors.
+</Example>
+
+<Example id="application-etale-forms" title="Twisted forms and inner forms">
+Let $X_0$ be a scheme over a field $k$. A **twisted form** (or **$k$-form**) of $X_0$ is a scheme $X$ over $k$ such that $X \times_k k^{\text{sep}} \cong X_0 \times_k k^{\text{sep}}$ (they become isomorphic over a separable closure).
+
+By etale descent, twisted forms of $X_0$ are classified by
+
+$$H^1_{\text{et}}(\operatorname{Spec}(k), \operatorname{Aut}(X_0))$$
+
+where $\operatorname{Aut}(X_0)$ is the sheaf of automorphisms of $X_0$.
+
+**Example**: Twisted forms of $\mathbb{P}^{n-1}$ are Brauer-Severi varieties, classified by $H^1(k, PGL_n) \cong \operatorname{Br}(k)[n]$ (the $n$-torsion of the Brauer group). A Brauer-Severi variety $V$ is trivial iff it has a $k$-rational point.
+
+**Example**: Twisted forms of $M_n(k)$ (the matrix algebra) are central simple algebras of degree $n$. Their isomorphism classes form $\operatorname{Br}(k)[n]$.
+</Example>
+
+<Example id="application-descent-morphism-properties" title="Descent of morphism properties">
+Let $f: X \to Y$ be a morphism and $g: Y' \to Y$ a faithfully flat quasi-compact morphism. Let $f': X' \to Y'$ be the base change ($X' = X \times_Y Y'$). Then many properties of $f$ can be checked on $f'$:
+
+$$f \text{ has property } \mathcal{P} \iff f' \text{ has property } \mathcal{P}$$
+
+for $\mathcal{P} \in \{\text{flat, smooth, étale, unramified, proper, finite, affine, quasi-finite, surjective, open immersion, closed immersion, isomorphism, ...}\}$.
+
+This is immensely powerful: to check a morphism is smooth, it suffices to check it after any faithfully flat base change.
+</Example>
+
+---
+
+## Descent for Schemes
+
+<Theorem title="Descent for affine schemes" number="1.4">
+Let $f: Y \to X$ be an fpqc morphism. The category of **affine $X$-schemes** is equivalent (via base change $f^*$) to the category of affine $Y$-schemes with descent data. That is, descent is effective for affine schemes along fpqc morphisms.
+</Theorem>
+
+<Remark title="Descent for general schemes">
+For **arbitrary schemes** (not necessarily affine), descent along fpqc covers is generally NOT effective. However:
+
+1. Descent is effective for **separated schemes** along etale covers (Artin).
+2. Descent is effective for **quasi-affine schemes** along fpqc covers.
+3. Descent is effective for **closed subschemes** along fpqc covers.
+4. Descent is effective in the category of **algebraic spaces** along etale covers (by definition, essentially).
+
+The failure of descent for general schemes is precisely what motivates the introduction of algebraic spaces and algebraic stacks: they are defined so that descent becomes effective in the appropriate sense.
+</Remark>
+
+<Example id="descent-closed-subschemes" title="Descent for closed subschemes">
+Let $f: Y \to X$ be an fpqc cover. Then closed subschemes of $X$ correspond bijectively to closed subschemes of $Y$ with descent data. The descent datum for a closed subscheme $Z \hookrightarrow Y$ is an equality $p_1^{-1}(Z) = p_2^{-1}(Z)$ as closed subschemes of $Y \times_X Y$.
+
+In terms of ideal sheaves: descent for closed subschemes corresponds to descent for quasi-coherent ideal sheaves $\mathcal{I} \subseteq \mathcal{O}_Y$, which is a special case of descent for quasi-coherent modules.
+</Example>
+
+---
+
+## Connection to Stacks
+
+<Remark title="From descent to stacks">
+The theory of descent naturally leads to the concept of a **stack**:
+
+A **prestack** (fibered category) $\mathcal{F}$ over $\mathbf{Sch}/S$ satisfies **descent for morphisms** in a topology $\tau$ if for every $\tau$-cover $\{U_i \to U\}$, the natural functor $\mathcal{F}(U) \to \operatorname{DD}(\{U_i\}/U, \mathcal{F})$ is fully faithful.
+
+A **stack** additionally satisfies **effectiveness of descent**: the functor $\mathcal{F}(U) \to \operatorname{DD}(\{U_i\}/U, \mathcal{F})$ is an equivalence of categories.
+
+Faithfully flat descent tells us that:
+- The fibered category of quasi-coherent sheaves is a stack for the fpqc topology.
+- The fibered category of affine schemes is a stack for the fpqc topology.
+- The fibered category of all schemes is a stack for the Zariski topology but NOT for the etale or fpqc topology.
+
+To remedy this, we enlarge our category: the fibered category of algebraic spaces is a stack for the etale topology, and algebraic stacks are stacks for the fppf (or smooth/etale) topology by construction.
+</Remark>
+
+---
+
+## Historical Notes
+
+<Remark title="History">
+Faithfully flat descent was developed by Grothendieck in the late 1950s and early 1960s (SGA 1, FGA). The key ideas appear in:
+
+- **FGA** (Fondements de la Geometrie Algebrique), especially the Bourbaki seminars on descent (1959-1960).
+- **SGA 1** (Revetements etales et groupe fondamental), Expose VIII on faithfully flat descent.
+- **EGA IV**, Section 2, on descent of properties of morphisms.
+
+The formalism was later refined by Giraud (for non-abelian cohomology), Deligne and Mumford (for stacks), and Artin (for algebraic spaces). The modern treatment can be found in the Stacks Project.
+</Remark>

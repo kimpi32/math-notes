@@ -1,0 +1,197 @@
+export const metadata = {
+  title: "Chow's Lemma for Stacks — Algebraic Stacks — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Theorem — Chow's Lemma for Stacks" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Chow's Lemma for Stacks
+
+Chow's lemma is a fundamental tool that allows one to reduce questions about proper morphisms to questions about projective morphisms. The classical version states that every proper variety is birational to a projective variety. Extensions to algebraic spaces and algebraic stacks are essential for establishing cohomological results, GAGA theorems, and finiteness properties in the stacky setting.
+
+---
+
+## Classical Chow's Lemma
+
+<Theorem title="Classical Chow's Lemma" number="4.8">
+Let $f : X \to S$ be a proper morphism of Noetherian schemes. Then there exists a scheme $X'$ and a morphism $g : X' \to X$ such that:
+
+1. $g$ is proper and birational (an isomorphism on a dense open subset of $X$).
+2. $f \circ g : X' \to S$ is **quasi-projective** (in fact, projective if $S$ is quasi-compact).
+
+More precisely, $X'$ can be taken to be a blowup of $X$ along a suitable closed subscheme, and $f \circ g$ factors through a locally closed immersion $X' \hookrightarrow \mathbb{P}^N_S$.
+</Theorem>
+
+<Remark title="Role of Chow's lemma">
+Chow's lemma reduces many questions about proper morphisms to the projective case. For instance:
+
+- **Finiteness of cohomology**: To prove $R^if_*\mathcal{F}$ is coherent for $f$ proper and $\mathcal{F}$ coherent, one first proves it for projective morphisms (using Serre's theorem) and then deduces the general case via Chow's lemma and a spectral sequence argument.
+- **GAGA**: Serre's GAGA theorem is first proved for projective varieties and then extended to proper varieties using Chow's lemma.
+- **Proper base change**: Similar reduction strategy.
+</Remark>
+
+---
+
+## Chow's Lemma for algebraic spaces
+
+<Theorem title="Chow's Lemma for Algebraic Spaces" number="4.9">
+Let $f : X \to S$ be a proper morphism of algebraic spaces with $S$ Noetherian. Then there exists an algebraic space $X'$ and a morphism $g : X' \to X$ such that:
+
+1. $g$ is proper and surjective.
+2. $f \circ g : X' \to S$ is projective (or quasi-projective).
+3. $g$ is an isomorphism over a dense open subspace of $X$.
+
+This was proved by Knutson (1971) as part of the foundations of algebraic space theory.
+</Theorem>
+
+---
+
+## Chow's Lemma for Deligne--Mumford stacks
+
+<Theorem title="Chow's Lemma for DM Stacks" number="4.10">
+Let $\mathcal{X}$ be a separated Deligne--Mumford stack of finite type over a Noetherian scheme $S$, with finite inertia. Then there exists a scheme $Z$ and a morphism $g : Z \to \mathcal{X}$ such that:
+
+1. $g$ is proper and surjective.
+2. The composition $Z \to \mathcal{X} \to S$ is quasi-projective.
+3. $g$ is an isomorphism over a dense open substack of $\mathcal{X}$ (i.e., $g$ is birational in the appropriate sense).
+
+Moreover, $Z$ can be chosen so that $g$ is **representable** (the fibers of $g$ are schemes, not stacks).
+</Theorem>
+
+<Example id="chow-mg" title="Chow's Lemma for M_g">
+For $\overline{\mathcal{M}}_g$ (the DM compactification of the moduli of genus-$g$ curves), Chow's lemma provides a scheme $Z$ with a proper birational map $Z \to \overline{\mathcal{M}}_g$. Concretely, one can take $Z$ to be the Hilbert scheme of $n$-canonically embedded stable curves (for $n$ sufficiently large), which is a projective scheme. The map $Z \to \overline{\mathcal{M}}_g$ forgets the embedding.
+
+This is how Mumford and Knudsen originally proved the projectivity of $\overline{M}_g$ (the coarse moduli space): $Z \to \overline{\mathcal{M}}_g \to \overline{M}_g$ with $Z$ projective and the composition proper and birational implies $\overline{M}_g$ is projective.
+</Example>
+
+<Example id="chow-quotient-finite" title="Chow's Lemma for [X/G] with G finite">
+For $\mathcal{X} = [X/G]$ where $X$ is a proper scheme over $S$ and $G$ is a finite group, Chow's lemma for $\mathcal{X}$ can be deduced from Chow's lemma for $X$: if $X' \to X$ is a proper birational morphism with $X'$ quasi-projective, then $Z = X'$ with the composition $X' \to X \to [X/G]$ satisfies the conditions.
+
+In fact, one can do better: the **equivariant Chow's lemma** provides a $G$-equivariant proper birational map $X' \to X$ with $X'$ quasi-projective and the $G$-action on $X'$ being linearized (i.e., $X'$ embeds $G$-equivariantly into some $\mathbb{P}^N$). Then $[X'/G] \to [X/G]$ is a proper birational morphism of stacks.
+</Example>
+
+---
+
+## Chow's Lemma for Artin stacks
+
+<Theorem title="Chow's Lemma for Artin Stacks (Olsson--Starr)" number="4.11">
+Let $\mathcal{X}$ be a separated Artin stack of finite type over a Noetherian scheme $S$ with finite inertia. Then there exists an algebraic space $W$ and a proper surjective morphism $g : W \to \mathcal{X}$.
+
+If furthermore $\mathcal{X}$ has quasi-finite diagonal, then one can find $W$ quasi-projective over $S$ and $g$ representable, proper, and birational.
+</Theorem>
+
+<Remark title="The stacky subtlety">
+For Artin stacks, "birational" requires care: $g : W \to \mathcal{X}$ is birational if there exists a dense open substack $\mathcal{U} \subset \mathcal{X}$ that is an algebraic space and $g^{-1}(\mathcal{U}) \to \mathcal{U}$ is an isomorphism. This works when the generic stabilizer is trivial. When the generic stabilizer is nontrivial (e.g., for $\mathrm{B}G$), birational maps do not exist and one must settle for proper surjective maps.
+</Remark>
+
+---
+
+## Applications
+
+<Example id="finiteness-cohomology" title="Finiteness of cohomology">
+Chow's lemma for stacks implies the following finiteness result: if $\mathcal{X}$ is a proper DM stack over a Noetherian ring $R$ and $\mathcal{F}$ is a coherent sheaf on $\mathcal{X}$, then $H^i(\mathcal{X}, \mathcal{F})$ is a finitely generated $R$-module for all $i$.
+
+**Proof sketch**: By Chow's lemma, there is a proper birational map $g : Z \to \mathcal{X}$ with $Z$ a projective scheme. The Leray spectral sequence $H^p(\mathcal{X}, R^q g_* g^*\mathcal{F}) \Rightarrow H^{p+q}(Z, g^*\mathcal{F})$ relates the cohomology of $\mathcal{X}$ to the (known-to-be-finite) cohomology of the projective scheme $Z$.
+</Example>
+
+<Example id="gaga-stacks" title="GAGA for stacks">
+For a proper DM stack $\mathcal{X}$ over $\mathbb{C}$, the **GAGA theorem for stacks** (due to various authors, including Behrend, Olsson) states:
+$$\operatorname{Coh}(\mathcal{X}) \cong \operatorname{Coh}(\mathcal{X}^{\mathrm{an}})$$
+(the algebraic and analytic categories of coherent sheaves are equivalent). Chow's lemma reduces this to the scheme case (Serre's original GAGA).
+
+This implies: every analytic coherent sheaf on $\overline{\mathcal{M}}_g$ (as a complex-analytic orbifold) is algebraic.
+</Example>
+
+<Example id="proper-base-change" title="Proper base change for stacks">
+The proper base change theorem extends to DM stacks: if $f : \mathcal{X} \to \mathcal{Y}$ is a proper morphism of DM stacks and $\mathcal{F}$ is a torsion etale sheaf on $\mathcal{X}$, then the formation of $R^i f_* \mathcal{F}$ commutes with base change. Chow's lemma reduces this to the scheme case.
+</Example>
+
+<Example id="kodaira-stacks" title="Kodaira vanishing for stacks">
+Using Chow's lemma, one can extend Kodaira-type vanishing theorems to DM stacks. For a smooth proper DM stack $\mathcal{X}$ over $\mathbb{C}$ with an ample line bundle $\mathcal{L}$ (on the coarse space):
+
+$$H^i(\mathcal{X}, \omega_{\mathcal{X}} \otimes \pi^*\mathcal{L}) = 0 \quad \text{for } i > 0$$
+
+where $\pi : \mathcal{X} \to M$ is the coarse moduli map.
+
+For $\overline{\mathcal{M}}_g$: applying this with $\mathcal{L}$ chosen appropriately on $\overline{M}_g$ gives vanishing results used to compute the Picard group of $\overline{\mathcal{M}}_g$.
+</Example>
+
+<Example id="intersection-theory" title="Intersection theory on stacks">
+Chow's lemma underpins the construction of **Chow groups** $A_*(\mathcal{X})$ for DM stacks (Vistoli, Edidin--Graham). The proper pushforward $g_* : A_*(Z) \to A_*(\mathcal{X})$ from a Chow's lemma presentation $Z \to \mathcal{X}$ allows one to define cycles on $\mathcal{X}$ in terms of cycles on the scheme $Z$.
+
+The rational Chow ring $A^*(\mathcal{X})_\mathbb{Q}$ is particularly well-behaved: for $\mathcal{X} = [X/G]$ with $G$ finite, $A^*(\mathcal{X})_\mathbb{Q} \cong A^*_G(X)_\mathbb{Q}$ (equivariant Chow groups).
+</Example>
+
+<Example id="serre-duality-stacks" title="Serre duality for stacks">
+For a smooth proper DM stack $\mathcal{X}$ of dimension $n$, Serre duality takes the form:
+$$H^i(\mathcal{X}, \mathcal{F}) \cong H^{n-i}(\mathcal{X}, \mathcal{F}^\vee \otimes \omega_\mathcal{X})^\vee.$$
+
+The proof uses Chow's lemma to reduce to the scheme case: take a proper birational map $g : Z \to \mathcal{X}$ with $Z$ projective, apply Serre duality on $Z$, and use the Leray spectral sequence to transfer the result back to $\mathcal{X}$.
+
+For $\overline{\mathcal{M}}_g$: $\omega_{\overline{\mathcal{M}}_g} = \lambda_g$ (the Hodge bundle determinant, up to boundary corrections), and Serre duality relates $H^i(\overline{\mathcal{M}}_g, \lambda_g^{\otimes k})$ to $H^{3g-3-i}(\overline{\mathcal{M}}_g, \lambda_g^{\otimes(1-k)})$.
+</Example>
+
+<Example id="lefschetz-stacks" title="Lefschetz theorem for stacks">
+For a smooth proper DM stack $\mathcal{X}$ and a "hyperplane section" $\mathcal{H} \hookrightarrow \mathcal{X}$ (defined via the coarse space), the Lefschetz hyperplane theorem states:
+$$H^i(\mathcal{X}, \mathbb{Q}_\ell) \xrightarrow{\sim} H^i(\mathcal{H}, \mathbb{Q}_\ell) \quad \text{for } i < \dim \mathcal{X} - 1.$$
+
+Chow's lemma allows one to reduce this to the scheme case by pulling back along $g : Z \to \mathcal{X}$.
+</Example>
+
+<Example id="global-quotient" title="Quasi-projective stacks as global quotients">
+A consequence of Chow's lemma (combined with the Totaro--Edidin--Graham embedding theorem): every smooth separated DM stack $\mathcal{X}$ of finite type with quasi-projective coarse space is a **global quotient stack** $[U/\mathrm{GL}_N]$ for some quasi-projective scheme $U$ and some $N$.
+
+This is crucial for defining equivariant cohomology theories: since $\mathcal{X} = [U/\mathrm{GL}_N]$, one has $H^*(\mathcal{X}) = H^*_{\mathrm{GL}_N}(U)$, and the Borel construction gives a topological model.
+</Example>
+
+<Example id="chow-quot-stack" title="Application to the Quot stack">
+For the moduli stack $\operatorname{Quot}_{E/X/S}^P$ of quotients of a coherent sheaf $E$ on $X/S$, Chow's lemma (applied to the already-known projectivity of the coarse space) confirms that the stack itself has good cohomological properties. In particular, the obstruction theory and virtual fundamental class on $\operatorname{Quot}$ are well-defined.
+
+The same applies to the stack of stable maps $\overline{\mathcal{M}}_{g,n}(X, \beta)$: Chow's lemma for the coarse space $\overline{M}_{g,n}(X, \beta)$ (which is projective by Kontsevich) ensures that the virtual fundamental class on the stack pushes forward correctly.
+</Example>
+
+<Example id="mmp-stacks" title="Minimal model program for stacks">
+In the context of the minimal model program for stacks (developed by Kresch, Abramovich, and others), Chow's lemma plays an analogous role to the classical case: it allows one to reduce questions about proper birational maps of stacks to questions about projective morphisms. This is used, for instance, in the proof that $\overline{M}_g$ is of general type for large $g$, where one needs to construct effective divisors on $\overline{\mathcal{M}}_g$ and compute their classes in the Picard group.
+</Example>
+
+<Example id="nagata-stacks" title="Nagata compactification for stacks">
+As a companion to Chow's lemma, there is a **Nagata compactification theorem for stacks** (Rydh): every separated morphism $\mathcal{X} \to S$ of finite type with $\mathcal{X}$ a DM stack admits a compactification, i.e., there exists a proper DM stack $\bar{\mathcal{X}}$ over $S$ containing $\mathcal{X}$ as a dense open substack.
+
+Combined with Chow's lemma, this gives: every separated DM stack of finite type admits a proper birational map from a quasi-projective scheme, which is the starting point for many cohomological arguments.
+</Example>
+
+---
+
+## Proof sketch for DM stacks
+
+<Remark title="Proof idea">
+The proof of Chow's lemma for DM stacks follows the strategy:
+
+**Step 1**: Pass to the coarse moduli space $M$ (via Keel--Mori). Apply classical Chow's lemma to $M$ to get $M' \to M$ proper and birational with $M'$ quasi-projective.
+
+**Step 2**: Pull back: $\mathcal{X}' = \mathcal{X} \times_M M'$ is a DM stack over $M'$. Since $M' \to M$ is proper and birational, $\mathcal{X}' \to \mathcal{X}$ is also proper and birational.
+
+**Step 3**: Now $\mathcal{X}'$ is a DM stack over the quasi-projective $M'$. By choosing an etale atlas $U' \to \mathcal{X}'$ with $U'$ a scheme, and using the quasi-projectivity of $M'$, one can find a scheme $Z$ quasi-projective over $S$ with a proper map $Z \to \mathcal{X}'$.
+
+**Step 4**: Compose: $Z \to \mathcal{X}' \to \mathcal{X}$ is proper, surjective, and birational, with $Z$ quasi-projective over $S$.
+</Remark>
+
+---
+
+## Summary
+
+Chow's lemma for algebraic stacks ensures that every proper (separated, finite type) DM stack can be dominated by a quasi-projective scheme via a proper birational map. This fundamental tool enables the transfer of cohomological results, vanishing theorems, and intersection-theoretic constructions from the well-understood projective setting to the stacky setting.

@@ -1,0 +1,271 @@
+export const metadata = {
+  title: 'Separation and Properness — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "개념 — Separation and Properness" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Separation and Properness for Algebraic Spaces
+
+The notions of separatedness and properness for algebraic spaces generalize the corresponding notions for schemes. These properties are fundamental for algebraic geometry: separatedness ensures that intersections behave well, while properness is the algebraic analogue of compactness. The valuative criteria, which characterize these properties in terms of extensions of morphisms from valuation rings, extend naturally to algebraic spaces.
+
+---
+
+## 1. Separated Morphisms
+
+<Definition title="Separated morphism of algebraic spaces">
+A morphism $f: X \to Y$ of algebraic spaces is **separated** if the diagonal morphism
+
+$$
+\Delta_{X/Y}: X \to X \times_Y X
+$$
+
+is a closed immersion.
+</Definition>
+
+<Definition title="Quasi-separated morphism">
+A morphism $f: X \to Y$ is **quasi-separated** if $\Delta_{X/Y}$ is quasi-compact.
+</Definition>
+
+Separatedness can be tested on atlases:
+
+<Theorem title="Separatedness via presentations">
+Let $f: X \to Y$ be a morphism of algebraic spaces with étale presentation $R \rightrightarrows U$ for $X$ and $S \rightrightarrows V$ for $Y$. Then $f$ is separated if and only if the morphism $R \to U \times_V U$ (induced by the relation and the atlas maps) is a closed immersion.
+</Theorem>
+
+---
+
+## 2. The Valuative Criterion for Separatedness
+
+<Theorem title="Valuative criterion for separatedness">
+Let $f: X \to Y$ be a morphism of algebraic spaces that is quasi-separated and locally of finite type. Then $f$ is separated if and only if for every valuation ring $A$ with fraction field $K$, every commutative diagram
+
+$$
+\mathrm{Spec}(K) \to X
+$$
+$$
+\downarrow \qquad\qquad \downarrow f
+$$
+$$
+\mathrm{Spec}(A) \to Y
+$$
+
+admits at most one lift $\mathrm{Spec}(A) \to X$ making both triangles commute.
+</Theorem>
+
+In other words, $f$ is separated if and only if "limits of points are unique."
+
+<Remark>
+For algebraic spaces, one must be careful: the valuative criterion involves geometric points and étale neighborhoods. The morphism $\mathrm{Spec}(K) \to X$ might only exist after an étale extension of $K$, so the criterion is stated for all valuation rings mapping to $Y$.
+</Remark>
+
+---
+
+## 3. Examples of Separated and Non-Separated Algebraic Spaces
+
+<Example title="Affine algebraic spaces are separated">
+If $X$ is an algebraic space such that $X \to S$ is affine (i.e., for every affine scheme $\mathrm{Spec}(A) \to S$, the fiber product $X \times_S \mathrm{Spec}(A)$ is affine), then $X \to S$ is separated. Indeed, affine morphisms are separated.
+</Example>
+
+<Example title="Projective algebraic spaces">
+An algebraic space $X$ equipped with a closed immersion $X \hookrightarrow \mathbb{P}^n_S$ is separated over $S$, since $\mathbb{P}^n_S \to S$ is separated and closed immersions are separated.
+</Example>
+
+<Example title="Quotient by free finite group action">
+Let $U$ be a separated scheme over $S$ and $G$ a finite group acting freely on $U$ over $S$. Then $X = U/G$ is separated over $S$. The diagonal $X \to X \times_S X$ is a closed immersion because $R = G \times U \to U \times_S U$ is a closed immersion (freeness makes this a monomorphism, and finiteness makes it proper, hence closed).
+</Example>
+
+<Example title="Line with doubled origin is not separated">
+The line with doubled origin $X$ is not separated over $k$. Consider the valuation ring $A = k[[t]]$ with fraction field $K = k((t))$. The map $\mathrm{Spec}(K) \to X$ sending the generic point to $t \in \mathbb{A}^1_k \setminus \{0\}$ admits two extensions to $\mathrm{Spec}(A) \to X$, corresponding to the two origins. This violates the valuative criterion.
+</Example>
+
+<Example title="Separated but not quasi-projective">
+Hironaka's example provides a smooth proper threefold $X$ over $\mathbb{C}$ that is separated but not projective. The quotient of $X$ by a free involution gives a proper separated algebraic space that admits no ample line bundle and is thus not a scheme.
+</Example>
+
+<Example title="Separated algebraic space over Z">
+Let $E$ be an elliptic curve over $\mathbb{Q}$ and $\sigma$ the negation involution. Away from the 2-torsion points, $\sigma$ acts freely. The quotient of $E \setminus E[2]$ by $\sigma$ is a separated algebraic space over $\mathbb{Q}$, isomorphic to $\mathbb{P}^1 \setminus \{4 \text{ points}\}$.
+</Example>
+
+---
+
+## 4. Proper Morphisms
+
+<Definition title="Proper morphism of algebraic spaces">
+A morphism $f: X \to Y$ of algebraic spaces is **proper** if it is:
+
+1. **Separated**: $\Delta_{X/Y}$ is a closed immersion.
+2. **Of finite type**: $f$ is quasi-compact and locally of finite type.
+3. **Universally closed**: for every base change $Y' \to Y$, the map $|X \times_Y Y'| \to |Y'|$ on underlying topological spaces is a closed map.
+</Definition>
+
+<Remark>
+For schemes, properness can be characterized as: separated, of finite type, and universally closed. The same definition works for algebraic spaces. Universal closedness is the hardest condition to verify directly, which motivates the valuative criterion.
+</Remark>
+
+---
+
+## 5. The Valuative Criterion for Properness
+
+<Theorem title="Valuative criterion for properness">
+Let $f: X \to Y$ be a morphism of algebraic spaces that is separated and of finite type. Then $f$ is proper if and only if for every valuation ring $A$ with fraction field $K$, every commutative diagram
+
+$$
+\mathrm{Spec}(K) \to X
+$$
+$$
+\downarrow \qquad\qquad \downarrow f
+$$
+$$
+\mathrm{Spec}(A) \to Y
+$$
+
+admits a (necessarily unique, by separatedness) lift $\mathrm{Spec}(A) \to X$.
+</Theorem>
+
+The uniqueness of the lift follows from separatedness. Properness adds the existence. Together, they say: "every point has a unique limit."
+
+<Theorem title="Valuative criterion — refined version">
+In the setting above, it suffices to check the lifting property for discrete valuation rings (DVRs) when $Y$ is locally noetherian and $f$ is of finite type.
+</Theorem>
+
+---
+
+## 6. Examples of Proper Algebraic Spaces
+
+<Example title="Proper schemes are proper algebraic spaces">
+Every proper scheme over $S$ is a proper algebraic space over $S$. For instance, $\mathbb{P}^n_S \to S$ is proper.
+</Example>
+
+<Example title="Quotient of a proper scheme by a free action">
+Let $X$ be a proper scheme over $S$ and $G$ a finite group acting freely on $X$ over $S$. Then $X/G$ is a proper algebraic space over $S$. Properness of $X/G$ follows from: (a) it is separated (see above), (b) it is of finite type since $X$ is, and (c) universal closedness is inherited because $X \to X/G$ is surjective and finite.
+</Example>
+
+<Example title="Hironaka's proper non-projective algebraic space">
+The quotient of Hironaka's threefold by a free involution is a smooth proper algebraic space of dimension 3 over $\mathbb{C}$ that is not a scheme. It satisfies the valuative criterion because the original threefold is proper, and properness descends along finite surjective maps.
+</Example>
+
+<Example title="Proper algebraic spaces of dimension 1 are projective schemes">
+Every proper algebraic space of dimension $\leq 1$ over a field is a projective scheme. This follows from the fact that proper curves have ample line bundles (by Riemann-Roch), so they are projective, and hence schemes. In dimension 1, there is no distinction between proper algebraic spaces and proper schemes.
+</Example>
+
+<Example title="Coarse moduli space of curves">
+The coarse moduli space $M_g$ of smooth genus-$g$ curves (for $g \geq 2$) is a proper algebraic space (and in fact a quasi-projective scheme). It is obtained from the proper DM stack $\overline{\mathcal{M}}_g$ via the Keel-Mori theorem.
+</Example>
+
+<Example title="Proper but not projective: Moishezon spaces">
+Over $\mathbb{C}$, there exist proper smooth algebraic spaces that are not projective (and hence not schemes). These correspond to Moishezon manifolds that are not Kähler. The simplest examples occur in dimension 3.
+</Example>
+
+---
+
+## 7. Properties Preserved Under Proper Morphisms
+
+<Theorem title="Properties of proper morphisms">
+Let $f: X \to Y$ be a proper morphism of algebraic spaces. Then:
+
+1. **Closed image**: The image of $f$ in $|Y|$ is closed.
+2. **Finite fibers implies finite**: If $f$ has finite fibers, then $f$ is finite.
+3. **Coherent pushforward**: If $\mathcal{F}$ is coherent on $X$ and $Y$ is noetherian, then $R^i f_* \mathcal{F}$ is coherent on $Y$ for all $i \geq 0$.
+4. **Composition**: If $g: Y \to Z$ is also proper, then $g \circ f$ is proper.
+5. **Base change**: For any $Y' \to Y$, the base change $X \times_Y Y' \to Y'$ is proper.
+</Theorem>
+
+---
+
+## 8. Relationship Between Separatedness and Properness
+
+The hierarchy of finiteness conditions for morphisms of algebraic spaces is:
+
+$$
+\text{closed immersion} \Rightarrow \text{finite} \Rightarrow \text{proper} \Rightarrow \text{separated + finite type} \Rightarrow \text{separated}
+$$
+
+<Example title="Finite morphisms are proper">
+A finite morphism $f: X \to Y$ is proper. Indeed, finite morphisms are affine (hence separated), of finite type, and universally closed (because finite morphisms are closed and this property is stable under base change).
+</Example>
+
+<Example title="Open immersions are separated but not proper">
+The open immersion $\mathbb{A}^1_k \setminus \{0\} \hookrightarrow \mathbb{A}^1_k$ is separated but not proper (it is not universally closed). The valuative criterion fails: the map $\mathrm{Spec}(k((t))) \to \mathbb{A}^1 \setminus \{0\}$ corresponding to $t^{-1}$ does not extend to $\mathrm{Spec}(k[[t]])$.
+</Example>
+
+---
+
+## 9. Compactifications
+
+<Definition title="Compactification">
+A **compactification** of a separated finite-type morphism $f: X \to S$ of algebraic spaces is an open immersion $j: X \hookrightarrow \overline{X}$ over $S$ such that $\overline{X} \to S$ is proper.
+</Definition>
+
+The existence of compactifications is the content of Nagata's theorem, which we discuss in a dedicated section. The key result is:
+
+<Theorem title="Nagata compactification for algebraic spaces">
+Every separated morphism of finite type between quasi-compact quasi-separated algebraic spaces admits a compactification.
+</Theorem>
+
+---
+
+## 10. Chow's Lemma
+
+Chow's lemma for algebraic spaces relates proper algebraic spaces to projective schemes:
+
+<Theorem title="Chow's lemma (informal)">
+Let $X$ be a proper algebraic space over a noetherian scheme $S$. Then there exists a projective scheme $X'$ over $S$ and a surjective birational morphism $X' \to X$.
+</Theorem>
+
+This means every proper algebraic space is "close to" a projective scheme. The precise statement involves modifications and is treated in the theorems section.
+
+---
+
+## 11. The Diagonal and Separation
+
+<Theorem title="Diagonal characterization of separatedness">
+For an algebraic space $X$ over $S$, the following are equivalent:
+1. $X$ is separated over $S$.
+2. $\Delta_{X/S}: X \to X \times_S X$ is a closed immersion.
+3. For every pair of morphisms $f, g: T \to X$ from a scheme $T$, the equalizer $\mathrm{Eq}(f, g) \hookrightarrow T$ is a closed subscheme.
+4. The valuative criterion for separatedness holds.
+</Theorem>
+
+<Example title="Testing separatedness via the diagonal">
+For the line with doubled origin $X$, the diagonal $\Delta: X \to X \times X$ is not a closed immersion. The fiber product $X \times X$ has extra points coming from mixed pairs (one origin from each copy), and the diagonal does not capture these. Explicitly, the complement of the diagonal image is not open.
+</Example>
+
+---
+
+## 12. Finiteness Conditions Summary
+
+| Condition | Diagonal $\Delta_{X/S}$ | Structure morphism $X \to S$ |
+|-----------|--------------------------|------------------------------|
+| Quasi-separated | Quasi-compact | — |
+| Separated | Closed immersion | — |
+| Quasi-compact | — | Quasi-compact |
+| Finite type | — | Quasi-compact + loc. finite type |
+| Proper | Closed immersion | Fin. type + univ. closed |
+
+<Example title="Checking properness step by step">
+To verify that $X/G \to \mathrm{Spec}(k)$ is proper (for $G$ finite acting freely on proper $X$): (1) Separated: $G \times X \hookrightarrow X \times X$ is a closed immersion since $G$ is finite and the action is free. (2) Finite type: $X$ is of finite type, and $X \to X/G$ is finite surjective, so $X/G$ is of finite type. (3) Universally closed: for any $T$, the map $|X \times_k T| \to |T|$ is closed (properness of $X$), and $|X/G \times_k T| \to |T|$ is the image of a closed map under a finite surjection, hence closed.
+</Example>
+
+---
+
+## References
+
+- The Stacks Project, Tag 03XX: Separated and Proper Morphisms of Algebraic Spaces.
+- D. Knutson, *Algebraic Spaces*, LNM 203, Chapter V.
+- B. Conrad, "Deligne's notes on Nagata compactification," J. Ramanujan Math. Soc., 2007.
+- R. Hartshorne, *Algebraic Geometry*, Chapter II, Section 4 (for the scheme case).

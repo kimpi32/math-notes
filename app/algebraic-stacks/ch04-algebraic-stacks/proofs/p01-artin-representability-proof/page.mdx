@@ -1,0 +1,226 @@
+export const metadata = {
+  title: 'Proof of Artin Representability — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Proof — Artin Representability" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Artin Representability Theorem
+
+We present the proof that a stack (or functor) satisfying Artin's axioms is algebraic. The proof constructs a smooth atlas by building formal versal deformations, algebraizing them, and then showing that the resulting morphism is smooth. This is the foundational argument that underlies the construction of virtually all moduli stacks in algebraic geometry.
+
+---
+
+## Recollection of the statement
+
+<Theorem title="Artin Representability (Theorem 4.1)" number="4.1 (restated)">
+Let $S$ be an excellent scheme and $\mathcal{X}$ a category fibered in groupoids over $(\mathrm{Sch}/S)_{\mathrm{fppf}}$ satisfying:
+
+1. $\mathcal{X}$ is a stack for the fppf topology.
+2. $\mathcal{X}$ is limit-preserving (locally of finite presentation).
+3. $\mathcal{X}$ satisfies Schlessinger's conditions (S1) and (S2) for the fiber products of Artinian rings.
+4. Formal deformations are effective.
+5. Openness of versality.
+6. The deformation and obstruction theory is controlled by coherent sheaves.
+
+Then $\mathcal{X}$ is an algebraic stack, locally of finite presentation over $S$.
+</Theorem>
+
+---
+
+## Step 1: Construction of the formal versal deformation
+
+<Proof title="Step 1 -- Formal versal deformation">
+**Goal**: For each closed point $x_0 \in \mathcal{X}$ (i.e., an object $\xi_0 \in \mathcal{X}(k)$ for a field $k$), construct a complete Noetherian local ring $(\hat{A}, \mathfrak{m})$ with residue field $k$ and a **formally versal** deformation $\hat{\xi} \in \mathcal{X}(\hat{A})$ lifting $\xi_0$.
+
+**Construction via Schlessinger's theorem**: By conditions (3) and (6), the deformation functor
+$$D_{\xi_0} : \mathrm{Art}_k \to \mathrm{Groupoids}, \quad A \mapsto \mathcal{X}(A) \times_{\mathcal{X}(k)} \{\xi_0\}$$
+(deformations of $\xi_0$ over Artinian local $k$-algebras with residue field $k$) satisfies Schlessinger's conditions:
+
+**(S1)**: For any surjection $A'' \to A$ and any map $A' \to A$, the natural map
+$$D_{\xi_0}(A' \times_A A'') \to D_{\xi_0}(A') \times_{D_{\xi_0}(A)} D_{\xi_0}(A'')$$
+is essentially surjective.
+
+**(S2)**: When $A = k$, the above map is an equivalence.
+
+These conditions, combined with the finite-dimensionality of the tangent space $T^1 = D_{\xi_0}(k[\epsilon])$ (guaranteed by condition (6) -- the tangent space is controlled by a coherent sheaf), allow us to apply Schlessinger's theorem (extended to the groupoid setting by Rim) to conclude:
+
+There exists a complete Noetherian local ring $\hat{A} \cong k[[t_1, \ldots, t_n]]/I$ (with $n = \dim_k T^1$) and a **formally versal** element $\hat{\xi} \in \mathcal{X}(\hat{A})$, meaning: for every Artinian local $k$-algebra $B$ and deformation $\eta \in D_{\xi_0}(B)$, there exists a (not necessarily unique) local homomorphism $\hat{A} \to B$ pulling $\hat{\xi}$ back to $\eta$.
+
+**Obstruction analysis**: The ideal $I$ is determined by the obstruction space $T^2$. More precisely, the hull $\hat{A}$ is constructed inductively: starting from $A_1 = k[T^1]/(T^1)^2$, one extends $A_n$ to $A_{n+1}$ by lifting along the surjection $A_{n+1} \to A_n$ with kernel annihilated by $\mathfrak{m}$. The obstruction to lifting lies in $T^2 \otimes \ker(A_{n+1} \to A_n)$. The elements of $I$ are precisely the obstructions encountered in this inductive construction.
+
+When $T^2 = 0$ (the unobstructed case), $\hat{A} \cong k[[t_1, \ldots, t_n]]$ is a power series ring, and the versal deformation space is smooth.
+</Proof>
+
+---
+
+## Step 2: Algebraization of the formal deformation
+
+<Proof title="Step 2 -- Algebraization (Effectivity)">
+**Goal**: Promote the formal versal deformation $\hat{\xi} \in \mathcal{X}(\hat{A})$ to an algebraic deformation $\xi \in \mathcal{X}(A)$ for some ring $A$ of finite type over $S$, with $\hat{A}$ as the completion of $A$ at a point.
+
+**Using effectivity (condition 4)**: Write $\hat{A} = \varprojlim A_n$ where $A_n = \hat{A}/\mathfrak{m}^{n+1}$. The formal deformation $\hat{\xi}$ is a compatible system $\{\xi_n \in \mathcal{X}(A_n)\}$. By the effectivity condition, this system is induced by a single object $\hat{\xi} \in \mathcal{X}(\hat{A})$.
+
+**Artin approximation**: Artin's approximation theorem (which requires the excellence of $S$) states: given $\hat{\xi} \in \mathcal{X}(\hat{A})$, there exists an $S$-algebra $A$ of finite type, a point $s \in \operatorname{Spec} A$ with $\hat{\mathcal{O}}_{\operatorname{Spec} A, s} \cong \hat{A}$, and an object $\xi \in \mathcal{X}(A)$ such that $\xi$ and $\hat{\xi}$ agree to any prescribed finite order at $s$.
+
+More precisely, for any $N \geq 1$, there exists $A$ of finite type and $\xi \in \mathcal{X}(A)$ with:
+$$\xi \otimes_A A/\mathfrak{m}_s^N \cong \hat{\xi} \otimes_{\hat{A}} \hat{A}/\mathfrak{m}^N.$$
+
+By choosing $N$ sufficiently large (depending on the obstruction theory), we can ensure that $\xi$ retains the essential properties of $\hat{\xi}$, in particular the formal versality.
+
+**Result**: We obtain a scheme $U_0 = \operatorname{Spec} A$ (or an open neighborhood of $s$ in $\operatorname{Spec} A$) of finite type over $S$, together with a morphism $\phi_0 : U_0 \to \mathcal{X}$ that is formally smooth at the point $s$.
+</Proof>
+
+---
+
+## Step 3: Openness of versality
+
+<Proof title="Step 3 -- From pointwise to local smoothness">
+**Goal**: Show that the morphism $\phi_0 : U_0 \to \mathcal{X}$ constructed in Step 2, which is formally smooth at the point $s$, is actually smooth in a Zariski neighborhood of $s$.
+
+**Using openness of versality (condition 5)**: This condition states precisely that the locus of points in $U_0$ where $\phi_0$ is formally smooth is a **Zariski open** subset. By construction, this locus contains $s$, so it contains an open neighborhood $U \ni s$.
+
+**Why this is non-trivial**: Formally smooth at a point means the infinitesimal lifting property holds at that point. This is an infinitesimal condition. Openness of versality promotes this to a Zariski-open condition, bridging the formal and algebraic worlds.
+
+**Verification of openness**: In practice, openness of versality follows from the coherence of the deformation and obstruction sheaves (condition 6). The formal smoothness of $\phi_0$ at a point $t \in U_0$ is equivalent to the surjectivity of a map between coherent sheaves at $t$, and surjectivity of a map of coherent sheaves is an open condition.
+
+**Result**: There is an open subscheme $U \subset U_0$ containing $s$ such that $\phi = \phi_0|_U : U \to \mathcal{X}$ is formally smooth, hence smooth (since $\mathcal{X}$ and $U$ are locally of finite presentation, formal smoothness equals smoothness).
+</Proof>
+
+---
+
+## Step 4: Construction of the smooth atlas
+
+<Proof title="Step 4 -- Surjectivity and atlas">
+**Goal**: Show that by performing the construction of Steps 1--3 for all closed points, we can patch together the local smooth morphisms into a global smooth surjection $U \to \mathcal{X}$.
+
+**For each closed point $x_0 \in |\mathcal{X}|$**: Steps 1--3 produce an affine scheme $U_{x_0}$ of finite type over $S$ and a smooth morphism $\phi_{x_0} : U_{x_0} \to \mathcal{X}$ whose image contains $x_0$.
+
+**Surjectivity**: The images $\phi_{x_0}(U_{x_0})$ cover all closed points of $|\mathcal{X}|$. By the limit preservation condition (2), the stack $\mathcal{X}$ is locally of finite presentation, so its points are determined by finite-type points (closed points of fibers). Hence the collection $\{\phi_{x_0}\}$ covers all of $|\mathcal{X}|$.
+
+**Taking the disjoint union**: Define $U = \coprod_{x_0} U_{x_0}$ (over a set of closed points covering all of $|\mathcal{X}|$). The induced morphism
+$$\phi : U \to \mathcal{X}$$
+is smooth (each component is smooth) and surjective (the images cover $|\mathcal{X}|$).
+
+**Finiteness**: By quasi-compactness of $\mathcal{X}$ (or by restricting to a finite cover if $\mathcal{X}$ is quasi-compact), we can take $U$ to be a finite disjoint union.
+
+**Conclusion**: The morphism $\phi : U \to \mathcal{X}$ is a smooth surjection from a scheme, i.e., $\phi$ is a **smooth atlas**. Combined with the representability of the diagonal (which follows from the Schlessinger-type conditions on isomorphism functors), this proves $\mathcal{X}$ is an algebraic stack. $\square$
+</Proof>
+
+---
+
+## Detailed analysis of the key steps
+
+### Schlessinger's conditions in detail
+
+<Remark title="Rim--Schlessinger for groupoids">
+The classical Schlessinger theorem applies to functors $D : \mathrm{Art}_k \to \mathrm{Set}$. For stacks, we need the groupoid version (due to Rim):
+
+Given $A' \to A \leftarrow A''$ with $A'' \to A$ surjective, the fiber product $A' \times_A A''$ is an Artinian local ring, and the condition is:
+$$\mathcal{X}(A' \times_A A'') \xrightarrow{\sim} \mathcal{X}(A') \times_{\mathcal{X}(A)} \mathcal{X}(A'')$$
+where the right side is the **2-fiber product** of groupoids (not just the fiber product of sets). This means:
+
+- **Essential surjectivity**: Given $\xi' \in \mathcal{X}(A')$, $\xi'' \in \mathcal{X}(A'')$, and an isomorphism $\alpha : \xi'|_A \xrightarrow{\sim} \xi''|_A$ in $\mathcal{X}(A)$, there exists $\xi \in \mathcal{X}(A' \times_A A'')$ with $\xi|_{A'} \cong \xi'$ and $\xi|_{A''} \cong \xi''$ (compatibly with $\alpha$).
+
+- **Full faithfulness**: The isomorphism between any two lifts is also compatible.
+
+This 2-categorical refinement is essential for the proof to work for stacks (as opposed to just functors).
+</Remark>
+
+### The role of Artin approximation
+
+<Remark title="Artin approximation theorem">
+The key algebraization tool is:
+
+**Artin approximation** (strong form): Let $\hat{A}$ be the completion of an excellent local ring $(A_0, \mathfrak{m})$. Let $F$ be a functor locally of finite presentation. If $\hat{\xi} \in F(\hat{A})$, then for every $N \geq 1$, there exists $\xi \in F(A_0)$ with $\xi \equiv \hat{\xi} \pmod{\mathfrak{m}^N}$.
+
+Applied to our situation: $F = \mathcal{X}$, and the formal versal deformation $\hat{\xi} \in \mathcal{X}(\hat{A})$ is approximated by an algebraic deformation $\xi \in \mathcal{X}(A)$ for a ring of finite type. The approximation to high enough order preserves the formal smoothness of the map $\operatorname{Spec} A \to \mathcal{X}$.
+
+**Why excellence is needed**: Artin approximation requires the base to be excellent, which ensures that the completion map $A_0 \to \hat{A}$ is regular (=geometrically regular fibers) and that Neron desingularization applies. Over non-excellent bases, the theorem can fail.
+</Remark>
+
+---
+
+## Representability of the diagonal
+
+<Proof title="Representability of the diagonal">
+The proof that $\Delta : \mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ is representable uses the same strategy applied to the **isomorphism functor**:
+
+For objects $\xi, \eta \in \mathcal{X}(T)$, the sheaf $\operatorname{Isom}_T(\xi, \eta)$ must be shown to be an algebraic space. This is a functor on $(\mathrm{Sch}/T)$:
+$$\operatorname{Isom}_T(\xi, \eta)(T') = \{\text{isomorphisms } \xi|_{T'} \xrightarrow{\sim} \eta|_{T'}\}.$$
+
+The Schlessinger-type conditions for $\mathcal{X}$ imply analogous conditions for $\operatorname{Isom}_T(\xi, \eta)$:
+- The tangent space is $T^0(\xi, \eta) = \operatorname{Hom}(\xi, \eta)$ (a coherent module).
+- The obstruction space is $T^1(\xi, \eta) \subseteq \operatorname{Ext}^1(\xi, \eta)$.
+
+By Artin's representability for algebraic spaces (Theorem 4.2), $\operatorname{Isom}_T(\xi, \eta)$ is an algebraic space. This gives the representability of $\Delta$.
+
+For the special case $\xi = \eta$: $\operatorname{Aut}_T(\xi) = \operatorname{Isom}_T(\xi, \xi)$ is an algebraic group space over $T$, whose Lie algebra is $\operatorname{End}(\xi)$.
+</Proof>
+
+---
+
+## The unobstructed case
+
+<Example id="unobstructed-proof" title="The unobstructed case (T^2 = 0)">
+When the obstruction space $T^2 = 0$ for all objects, the proof simplifies dramatically:
+
+1. **Formal versal deformation**: $\hat{A} = k[[t_1, \ldots, t_n]]$ (a smooth formal scheme, since no obstructions $\Rightarrow$ no relations).
+2. **Algebraization**: $\hat{\xi}$ algebraizes to $\xi$ over $A = k[t_1, \ldots, t_n]$ (or an etale neighborhood).
+3. **Versality**: The map $\operatorname{Spec} A \to \mathcal{X}$ is smooth at the origin, and by openness, smooth everywhere.
+
+This gives a smooth atlas from a smooth scheme, so $\mathcal{X}$ is a **smooth** algebraic stack.
+
+**Application**: This applies to $\mathcal{M}_g$ ($g \geq 2$), $\operatorname{Bun}_n(C)$ (vector bundles on a curve), and $\mathcal{A}_g$ (abelian varieties), all of which have $T^2 = 0$. The proof of algebraicity for these moduli stacks is essentially formal once the vanishing of $T^2$ is established.
+</Example>
+
+---
+
+## Modern perspective: the cotangent complex
+
+<Remark title="Lurie's reformulation">
+In derived algebraic geometry, Artin's conditions (3)--(6) are elegantly captured by a single condition on the **cotangent complex** $L_{\mathcal{X}/S}$:
+
+A derived stack $\mathcal{X}$ is algebraic if and only if:
+1. $\mathcal{X}$ is a sheaf for the etale topology.
+2. $\mathcal{X}$ is nilcomplete and integrable (formal conditions).
+3. $L_{\mathcal{X}/S}$ is connective and almost of finite presentation.
+
+Condition (3) subsumes Schlessinger's conditions, effectivity, and openness of versality. The cotangent complex at a point $\xi_0$ computes:
+- $T^0(\xi_0) = \pi_1(L_{\mathcal{X}/S}|_{\xi_0})$ (infinitesimal automorphisms),
+- $T^1(\xi_0) = \pi_0(L_{\mathcal{X}/S}|_{\xi_0})$ (deformations),
+- $T^2(\xi_0) = \pi_{-1}(L_{\mathcal{X}/S}|_{\xi_0})$ (obstructions).
+
+The advantage: the cotangent complex is a single coherent object encoding all of the infinitesimal information, and its existence is often easier to verify than the individual Artin axioms.
+</Remark>
+
+---
+
+## Summary of the proof structure
+
+<Remark title="Proof summary">
+The proof of Artin representability follows the blueprint:
+
+$$\text{Point } \xi_0 \xrightarrow{\text{Schlessinger}} \text{Formal versal } \hat{\xi} \xrightarrow{\text{Algebraize}} \text{Algebraic } \xi \xrightarrow{\text{Openness}} \text{Smooth map } U \to \mathcal{X}$$
+
+1. **Schlessinger/Rim**: Build the formal versal deformation ring $\hat{A}$ and formal object $\hat{\xi}$.
+2. **Effectivity + Artin approximation**: Algebraize $\hat{\xi}$ to get $\xi$ over a ring of finite type.
+3. **Openness of versality**: Promote formal smoothness at a point to smoothness on an open set.
+4. **Glue**: Perform this at all points and take the disjoint union to get a smooth surjective atlas.
+
+The diagonal representability is handled separately by applying the algebraic space version of the theorem to isomorphism functors.
+</Remark>

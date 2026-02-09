@@ -1,0 +1,190 @@
+export const metadata = {
+  title: 'Kodaira-Spencer Map — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Theorem — Kodaira-Spencer Map" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Kodaira-Spencer Map
+
+The Kodaira-Spencer map is the fundamental tool connecting families of geometric objects to cohomological data. It identifies the tangent space to a moduli space at a point with a cohomology group, thereby providing the infinitesimal description of how objects vary in families.
+
+---
+
+## 1. Classical Kodaira-Spencer Map
+
+<Definition title="Kodaira-Spencer Map for Smooth Families">
+Let $f: \mathcal{X} \to B$ be a smooth proper morphism of smooth varieties, with fiber $X_b = f^{-1}(b)$ over a point $b \in B$. The **Kodaira-Spencer map** at $b$ is the $k$-linear map
+$$\mathrm{KS}_b : T_b B \to H^1(X_b, T_{X_b})$$
+that associates to each tangent direction in the base the corresponding first-order deformation of the fiber.
+</Definition>
+
+<Theorem title="Construction of the KS Map">
+The Kodaira-Spencer map arises from the exact sequence of tangent bundles along the fiber $X_b$:
+$$0 \to T_{X_b} \to T_{\mathcal{X}}|_{X_b} \to f^*T_B|_{X_b} \cong \mathcal{O}_{X_b} \otimes T_b B \to 0$$
+Taking the long exact sequence in cohomology:
+$$H^0(X_b, T_{\mathcal{X}}|_{X_b}) \to H^0(X_b, \mathcal{O}_{X_b}) \otimes T_b B \xrightarrow{\mathrm{KS}_b} H^1(X_b, T_{X_b})$$
+The connecting homomorphism is the Kodaira-Spencer map (noting $H^0(X_b, \mathcal{O}_{X_b}) = k$ for connected $X_b$).
+</Theorem>
+
+---
+
+## 2. Interpretation and Basic Properties
+
+<Theorem title="KS Map and Moduli">
+Let $\mathcal{M}$ be a moduli stack for the objects $X_b$, and let $\phi: B \to \mathcal{M}$ be the classifying morphism of the family $f: \mathcal{X} \to B$. Then the Kodaira-Spencer map is the differential of $\phi$:
+$$\mathrm{KS}_b = d\phi_b : T_b B \to T_{\phi(b)} \mathcal{M} \cong H^1(X_b, T_{X_b})$$
+In particular:
+- $\mathrm{KS}_b$ is **injective** iff the family is **effectively parametrized** (no redundant parameters).
+- $\mathrm{KS}_b$ is **surjective** iff the family is **versal** at $b$.
+- $\mathrm{KS}_b$ is an **isomorphism** iff the family is **miniversal** at $b$.
+</Theorem>
+
+<Example title="Constant Family">
+If $\mathcal{X} = X \times B \to B$ is the constant (trivial) family, then $\mathrm{KS}_b = 0$ for all $b$. The classifying map $B \to \mathcal{M}$ is constant, and its differential is zero.
+</Example>
+
+<Example title="Universal Family on Moduli">
+If $\mathcal{X} \to \mathcal{M}$ is the universal family (when it exists), then $\mathrm{KS}_{[X]}: T_{[X]}\mathcal{M} \to H^1(X, T_X)$ is an isomorphism at every point. This is the tautological statement that the tangent space to moduli equals the space of first-order deformations.
+</Example>
+
+---
+
+## 3. Examples with Curves
+
+<Example title="KS Map for a Family of Elliptic Curves">
+Consider the Legendre family $E_\lambda: y^2 = x(x-1)(x-\lambda)$ over $B = \mathbb{A}^1 \setminus \lbrace 0, 1 \rbrace$. The KS map at $\lambda_0$ is:
+$$\mathrm{KS}_{\lambda_0}: T_{\lambda_0} B = k \to H^1(E_{\lambda_0}, T_{E_{\lambda_0}})$$
+Since $H^1(E, T_E) \cong H^0(E, \omega_E)^{\vee} \cong k$ (one-dimensional), the KS map is either zero or an isomorphism. It is an isomorphism because the $j$-invariant $j(\lambda) = 256 \frac{(\lambda^2 - \lambda + 1)^3}{\lambda^2(\lambda - 1)^2}$ has nonvanishing derivative for generic $\lambda$.
+
+In coordinates, the class $\mathrm{KS}(\partial/\partial\lambda)$ can be represented by the Cech cocycle obtained by differentiating the transition functions of the family with respect to $\lambda$.
+</Example>
+
+<Example title="KS Map for Curves of Genus $g$">
+Let $f: \mathcal{C} \to B$ be a family of smooth curves of genus $g \geq 2$. Then:
+$$\mathrm{KS}_b: T_b B \to H^1(C_b, T_{C_b}) \cong H^0(C_b, \omega_{C_b}^{\otimes 2})^{\vee}$$
+The dual map is:
+$$\mathrm{KS}_b^{\vee}: H^0(C_b, \omega_{C_b}^{\otimes 2}) \to T_b^* B$$
+This sends a quadratic differential $q \in H^0(C_b, \omega_C^2)$ to a cotangent vector on the base. In Teichmuller theory, quadratic differentials on a Riemann surface parametrize the cotangent space to Teichmuller space.
+</Example>
+
+<Example title="Hyperelliptic Family">
+Consider the family of genus-$g$ hyperelliptic curves
+$$C_t: y^2 = \prod_{i=1}^{2g+2} (x - t_i)$$
+over $B = \lbrace (t_1, \ldots, t_{2g+2}) \mid t_i \text{ distinct} \rbrace / \mathrm{PGL}_2$. The dimension of $B$ is $2g + 2 - 3 = 2g - 1$, while $\dim H^1(C, T_C) = 3g - 3$. So:
+$$\mathrm{KS}: k^{2g-1} \to k^{3g-3}$$
+is injective for $g \geq 2$ (the family captures only the hyperelliptic deformations, missing $g - 2$ non-hyperelliptic directions). For $g = 2$, it is an isomorphism (all genus-2 curves are hyperelliptic).
+</Example>
+
+---
+
+## 4. KS Map for Sheaves and Bundles
+
+<Definition title="KS Map for Vector Bundles">
+Let $\pi: \mathcal{E} \to B$ be a family of vector bundles on a fixed smooth projective variety $X$ (i.e., a vector bundle on $X \times B$, flat over $B$). The **Kodaira-Spencer map** at $b \in B$ is:
+$$\mathrm{KS}_b: T_b B \to \mathrm{Ext}^1(\mathcal{E}_b, \mathcal{E}_b) = H^1(X, \mathcal{E}nd(\mathcal{E}_b))$$
+</Definition>
+
+<Example title="Line Bundles and the Abel-Jacobi Map">
+For a family of line bundles $\mathcal{L}_t$ on a curve $C$ parametrized by $t \in B$, the KS map is:
+$$\mathrm{KS}: T_b B \to H^1(C, \mathcal{O}_C) = T_{[\mathcal{L}_b]} \mathrm{Pic}^0(C)$$
+If $B = C$ and $\mathcal{L}_t = \mathcal{O}_C(t - p_0)$ (varying the point), this is the differential of the Abel-Jacobi map $\mathrm{AJ}: C \to \mathrm{Pic}^1(C) \cong J(C)$:
+$$d(\mathrm{AJ})_p: T_p C \to T_{[\mathcal{O}(p-p_0)]} J(C) = H^1(C, \mathcal{O}_C) \cong H^0(C, \omega_C)^{\vee}$$
+The dual of this map sends $\omega \in H^0(C, \omega_C)$ to $\omega(p)$, the evaluation at $p$. This is an embedding (injective) by the non-vanishing of holomorphic differentials at general points.
+</Example>
+
+<Example title="Atiyah Class as Universal KS">
+For a vector bundle $\mathcal{E}$ on $X$, the **Atiyah class** $\mathrm{At}(\mathcal{E}) \in H^1(X, \mathcal{E}nd(\mathcal{E}) \otimes \Omega^1_X)$ is the obstruction to the existence of an algebraic connection on $\mathcal{E}$. The KS map for any family can be factored through the Atiyah class:
+
+For a deformation $\mathcal{E}_t$ with tangent vector $v \in T_b B$, $\mathrm{KS}(v) = \mathrm{At}(\mathcal{E}) \cup v^*$, where $v^*$ is the pullback of the tangent vector via the classifying map.
+</Example>
+
+---
+
+## 5. KS Map and Period Maps
+
+<Definition title="Period Map">
+Let $f: \mathcal{X} \to B$ be a smooth projective family. The **period map** records the Hodge structure on the cohomology of fibers:
+$$\mathcal{P}: B \to D / \Gamma$$
+where $D$ is a period domain (a flag variety parametrizing Hodge filtrations) and $\Gamma$ is a monodromy group.
+</Definition>
+
+<Theorem title="Griffiths Transversality and KS">
+The differential of the period map at $b \in B$ factors through the Kodaira-Spencer map:
+$$d\mathcal{P}_b: T_b B \xrightarrow{\mathrm{KS}} H^1(X_b, T_{X_b}) \xrightarrow{\cup} \bigoplus_p \mathrm{Hom}(H^{p,q}(X_b), H^{p-1,q+1}(X_b))$$
+where the second map is the cup product with the contraction $T_X \otimes \Omega^p_X \to \Omega^{p-1}_X$. **Griffiths transversality** states that the image of $d\mathcal{P}$ lies in the $(-1, +1)$-part of the tangent to the period domain.
+</Theorem>
+
+<Example title="Period Map for Curves">
+For a family of curves $f: \mathcal{C} \to B$ of genus $g$, the period map sends $b$ to the Jacobian $J(C_b)$ with its polarization. The differential is:
+$$d\mathcal{P}: T_b B \xrightarrow{\mathrm{KS}} H^1(C_b, T_{C_b}) \cong H^0(\omega_{C_b}^2)^{\vee} \xrightarrow{\cup} \mathrm{Sym}^2 H^0(\omega_{C_b})^{\vee}$$
+The composed map is the Petri map (dual). Infinitesimal Torelli holds for non-hyperelliptic curves of genus $g \geq 3$: the period map is an immersion.
+</Example>
+
+<Example title="Period Map for K3 Surfaces">
+For a family of K3 surfaces, the KS map gives
+$$T_b B \xrightarrow{\mathrm{KS}} H^1(S_b, T_{S_b}) \cong H^1(S_b, \Omega^1_{S_b})$$
+and the period map records the position of $H^{2,0}(S_b) = \mathbb{C}\omega$ in $H^2(S_b, \mathbb{C})$. The local Torelli theorem for K3 surfaces states that the period map is a local isomorphism: the KS map is an isomorphism from $T_b B$ (20-dimensional) to the tangent space of the period domain.
+</Example>
+
+---
+
+## 6. Obstructions and Higher KS Maps
+
+<Definition title="Second-Order Kodaira-Spencer Map">
+Given a first-order deformation $\xi_1 \in H^1(X, T_X)$, the **obstruction** to extending it to second order is the class
+$$\mathrm{ob}_2(\xi_1) = \frac{1}{2}[\xi_1, \xi_1] \in H^2(X, T_X)$$
+where $[\cdot, \cdot]$ is the Lie bracket on $T_X$ composed with the cup product $H^1 \times H^1 \to H^2$. More precisely, it is the image of $\xi_1 \cup \xi_1$ under the map induced by the Lie bracket $T_X \otimes T_X \to T_X$.
+</Definition>
+
+<Example title="Unobstructed Extensions">
+For a smooth curve $C$ of genus $g \geq 2$, $H^2(C, T_C) = 0$, so $\mathrm{ob}_2(\xi_1) = 0$ for all $\xi_1$. Every first-order deformation extends to all orders.
+</Example>
+
+<Example title="Obstructed Extension for a Surface">
+Let $S$ be a smooth surface with $H^2(S, T_S) \neq 0$. A first-order deformation $\xi_1 \in H^1(S, T_S)$ extends to second order if and only if $[\xi_1, \xi_1] = 0$ in $H^2(S, T_S)$. This defines a quadratic cone in $H^1(S, T_S)$, the **Kuranishi space** being locally the zero set of this quadratic map (plus higher-order terms).
+</Example>
+
+<Example title="Calabi-Yau Threefolds and the Bogomolov-Tian-Todorov Theorem">
+For a Calabi-Yau threefold $X$ (with $\omega_X \cong \mathcal{O}_X$, $H^1(\mathcal{O}_X) = 0$):
+$$H^1(X, T_X) \cong H^1(X, \Omega^2_X) = H^{1,2}(X)$$
+$$H^2(X, T_X) \cong H^2(X, \Omega^2_X) = H^{2,2}(X) \neq 0$$
+Despite the nonvanishing of the obstruction space, the **Bogomolov-Tian-Todorov theorem** states that all obstructions vanish: every first-order deformation extends to all orders. The proof uses the $\partial\bar{\partial}$-lemma and the triviality of the canonical bundle to show that $[\xi, \xi]$ is always exact.
+</Example>
+
+---
+
+## 7. KS Map in the Stacky Setting
+
+<Remark title="KS for Stacks">
+For an algebraic stack $\mathcal{X}$ with cotangent complex $\mathbb{L}_{\mathcal{X}}$, the tangent complex is $\mathbb{T}_{\mathcal{X}} = \mathbb{R}\mathcal{H}om(\mathbb{L}_{\mathcal{X}}, \mathcal{O}_{\mathcal{X}})$. At a point $x: \mathrm{Spec}\, k \to \mathcal{X}$:
+- $H^{-1}(\mathbb{T}_{\mathcal{X}}|_x) = \mathrm{Lie}(\mathrm{Aut}(x))$ (infinitesimal automorphisms)
+- $H^0(\mathbb{T}_{\mathcal{X}}|_x) = T_x \mathcal{X}$ (first-order deformations / tangent space)
+- $H^1(\mathbb{T}_{\mathcal{X}}|_x) = \mathrm{Ob}_x$ (obstructions)
+
+For a morphism $f: B \to \mathcal{X}$, the KS map $df: T_b B \to H^0(\mathbb{T}_{\mathcal{X}}|_{f(b)})$ is the differential. The full derived KS map involves the entire tangent complex.
+</Remark>
+
+<Example title="KS Map for Families over $\mathcal{M}_g$">
+A family of genus-$g$ curves $\pi: \mathcal{C} \to S$ determines a map $\phi: S \to \mathcal{M}_g$. The KS map
+$$d\phi_s: T_s S \to H^1(C_s, T_{C_s})$$
+is computed by the connecting homomorphism of the relative tangent sequence $0 \to T_{\mathcal{C}/S} \to T_{\mathcal{C}} \to \pi^*T_S \to 0$ restricted to the fiber $C_s$. At the stack level, the full tangent complex of $\mathcal{M}_g$ at $[C]$ is concentrated in degree 0 (since $H^0(T_C) = 0$ and $H^2(T_C) = 0$), confirming $\mathcal{M}_g$ is a smooth DM stack.
+</Example>
+
+<Example title="KS and Schiffer Variations">
+A **Schiffer variation** at a point $p \in C$ of a curve $C$ is the first-order deformation corresponding to the KS class supported at $p$. Explicitly, if $z$ is a local coordinate at $p$, the Schiffer variation is the Cech 1-cocycle $\partial/\partial z \in H^1(C, T_C)$ defined on the cover $\lbrace C \setminus \lbrace p \rbrace, U_p \rbrace$. The collection of all Schiffer variations as $p$ varies spans $H^1(C, T_C)$ for a non-hyperelliptic curve.
+</Example>

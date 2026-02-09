@@ -1,0 +1,209 @@
+export const metadata = {
+  title: 'Moduli of Curves — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Concept — Moduli of Curves" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Moduli of Curves $\mathcal{M}_g$
+
+The moduli of algebraic curves is one of the richest and most studied examples in all of algebraic geometry. It provides the prototypical example of a Deligne-Mumford stack and illustrates the full power of the stacky approach to moduli theory.
+
+---
+
+## 1. The Moduli Functor
+
+<Definition title="Moduli Functor of Smooth Curves">
+For an integer $g \geq 2$, the **moduli functor of smooth curves of genus $g$** is the functor
+$$\mathcal{M}_g : (\mathsf{Sch}/\mathbb{Z})^{\mathrm{op}} \to \mathsf{Groupoids}$$
+that assigns to a scheme $S$ the groupoid $\mathcal{M}_g(S)$ whose objects are smooth proper morphisms $f: C \to S$ whose geometric fibers are connected curves of genus $g$, and whose morphisms are $S$-isomorphisms of such families.
+</Definition>
+
+The genus condition means that for every geometric point $\bar{s} \to S$, the fiber $C_{\bar{s}}$ is a smooth connected projective curve with $H^1(C_{\bar{s}}, \mathcal{O}_{C_{\bar{s}}}) = g$.
+
+<Example title="Genus 0">
+For $g = 0$, smooth curves of genus 0 are conics. Over an algebraically closed field, there is a unique curve: $\mathbb{P}^1$. But $\mathrm{Aut}(\mathbb{P}^1) = \mathrm{PGL}_2$, which is 3-dimensional. Thus $\mathcal{M}_0 = [*/\mathrm{PGL}_2] = B\mathrm{PGL}_2$, the classifying stack. The coarse moduli space is a point.
+</Example>
+
+<Example title="Genus 1 (Elliptic Curves)">
+For $g = 1$, we need a marked point to get the moduli of elliptic curves $\mathcal{M}_{1,1}$. Without the marking, $\mathcal{M}_1$ is again a classifying-type stack. The stack $\mathcal{M}_{1,1}$ is a Deligne-Mumford stack with coarse moduli the $j$-line $\mathbb{A}^1_j$.
+
+The generic elliptic curve has $\mathrm{Aut}(E) = \lbrace \pm 1 \rbrace \cong \mathbb{Z}/2\mathbb{Z}$. Special curves have larger automorphism groups:
+- $j = 1728$ ($y^2 = x^3 - x$): $\mathrm{Aut}(E) \cong \mathbb{Z}/4\mathbb{Z}$
+- $j = 0$ ($y^2 = x^3 - 1$): $\mathrm{Aut}(E) \cong \mathbb{Z}/6\mathbb{Z}$
+</Example>
+
+<Example title="Genus 2">
+Every curve of genus 2 is hyperelliptic. The moduli stack $\mathcal{M}_2$ has dimension $3 \cdot 2 - 3 = 3$. A genus 2 curve over a field of characteristic $\neq 2$ can be written as $y^2 = f(x)$ where $f$ has degree 5 or 6 with distinct roots. The hyperelliptic involution $\iota: (x, y) \mapsto (x, -y)$ is always an automorphism.
+
+The moduli space can be described via Igusa invariants $(J_2, J_4, J_6, J_{10})$ modulo weighted projective equivalence.
+</Example>
+
+---
+
+## 2. Dimension Count
+
+<Theorem title="Dimension of Moduli of Curves">
+For $g \geq 2$, the moduli stack $\mathcal{M}_g$ has dimension $3g - 3$.
+</Theorem>
+
+<Proof>
+By deformation theory, the tangent space to $\mathcal{M}_g$ at a point $[C]$ is $H^1(C, T_C)$, where $T_C$ is the tangent sheaf. By Serre duality,
+$$H^1(C, T_C) \cong H^0(C, \omega_C^{\otimes 2})^{\vee}$$
+where $\omega_C$ is the canonical sheaf. By Riemann-Roch, $\deg(\omega_C^{\otimes 2}) = 2(2g-2) = 4g - 4$, and for $g \geq 2$:
+$$h^0(C, \omega_C^{\otimes 2}) = 4g - 4 - g + 1 = 3g - 3$$
+using that $h^1(C, \omega_C^{\otimes 2}) = h^0(C, \omega_C^{-1}) = 0$ for $g \geq 2$ (since $\deg(\omega_C^{-1}) = -(2g-2) < 0$).
+</Proof>
+
+<Example title="Small Genus Dimensions">
+| Genus $g$ | $\dim \mathcal{M}_g$ | Description |
+|-----------|---------------------|-------------|
+| 0 | $-3$ (empty/point) | Only $\mathbb{P}^1$ |
+| 1 | 0 (but $\mathcal{M}_{1,1}$ has dim 1) | Elliptic curves: 1 parameter ($j$) |
+| 2 | 3 | Hyperelliptic: 6 branch points modulo $\mathrm{PGL}_2$ |
+| 3 | 6 | Non-hyperelliptic: plane quartics |
+| 4 | 9 | Intersection of quadric and cubic in $\mathbb{P}^3$ |
+| 5 | 12 | Intersection of 3 quadrics in $\mathbb{P}^4$ |
+</Example>
+
+---
+
+## 3. Stable Curves and Compactification
+
+The moduli stack $\mathcal{M}_g$ is not proper: families of smooth curves can degenerate. Deligne and Mumford introduced stable curves to compactify.
+
+<Definition title="Stable Curve">
+A **stable curve** of genus $g \geq 2$ over an algebraically closed field $k$ is a connected, projective curve $C$ of arithmetic genus $g$ such that:
+1. $C$ has at worst **nodal singularities** (ordinary double points, locally $xy = 0$).
+2. Every irreducible component $E \cong \mathbb{P}^1$ of $C$ meets the remaining components in at least 3 points (the **stability condition**).
+3. $\omega_C$ is ample.
+</Definition>
+
+The stability condition is equivalent to requiring that $\mathrm{Aut}(C)$ is finite. This ensures properness of the compactified moduli.
+
+<Definition title="Compactified Moduli Stack">
+The **Deligne-Mumford compactification** $\overline{\mathcal{M}}_g$ is the moduli stack whose objects over $S$ are flat proper morphisms $f: C \to S$ whose geometric fibers are stable curves of genus $g$.
+</Definition>
+
+<Example title="Stable Curves of Genus 2">
+A stable curve of genus 2 can be:
+- A smooth genus 2 curve.
+- Two elliptic curves $E_1, E_2$ meeting at a single node (genus $1 + 1 = 2$).
+- An elliptic curve with a rational component attached at two points, forming a node each.
+- A rational curve with 3 nodes (genus $0 + 3 = 3$... but this has genus 3, not 2).
+
+For genus 2, the boundary $\overline{\mathcal{M}}_2 \setminus \mathcal{M}_2$ consists of two irreducible divisors:
+- $\Delta_0$: irreducible curves with one node (a smooth genus 1 curve with a self-intersection).
+- $\Delta_1$: two elliptic curves joined at a node.
+</Example>
+
+<Example title="Boundary Divisors of M_g-bar">
+The boundary $\overline{\mathcal{M}}_g \setminus \mathcal{M}_g$ is a normal crossing divisor with irreducible components $\Delta_0, \Delta_1, \ldots, \Delta_{\lfloor g/2 \rfloor}$ where:
+- $\Delta_0$: irreducible nodal curves (normalizing the node gives a genus $g-1$ curve).
+- $\Delta_i$ for $1 \leq i \leq \lfloor g/2 \rfloor$: curves consisting of a genus $i$ component and a genus $g-i$ component meeting at one node.
+</Example>
+
+---
+
+## 4. Pointed Curves
+
+<Definition title="Moduli of Pointed Curves">
+For $g, n \geq 0$ with $2g - 2 + n > 0$, the moduli stack $\mathcal{M}_{g,n}$ parametrizes smooth curves of genus $g$ with $n$ distinct ordered marked points. A **stable $n$-pointed curve** of genus $g$ is a nodal curve $C$ with $n$ distinct smooth marked points $p_1, \ldots, p_n$ such that $\omega_C(p_1 + \cdots + p_n)$ is ample (equivalently, every rational component has at least 3 special points, where special means node or marked point).
+</Definition>
+
+<Example title="$\overline{\mathcal{M}}_{0,n}$ — Moduli of Pointed Rational Curves">
+The stack $\overline{\mathcal{M}}_{0,n}$ is actually a smooth projective **scheme** (fine moduli!) for $n \geq 3$, since pointed rational curves with $\geq 3$ marked points have no automorphisms ($\mathrm{PGL}_2$ acts sharply 3-transitively on $\mathbb{P}^1$).
+
+Dimensions: $\dim \overline{\mathcal{M}}_{0,n} = n - 3$.
+- $\overline{\mathcal{M}}_{0,3} = \mathrm{Spec}\, k$ (a point: unique 3-pointed $\mathbb{P}^1$).
+- $\overline{\mathcal{M}}_{0,4} \cong \mathbb{P}^1$ (the cross-ratio).
+- $\overline{\mathcal{M}}_{0,5}$ is the del Pezzo surface of degree 5 (blowup of $\mathbb{P}^2$ at 4 points).
+</Example>
+
+<Example title="$\overline{\mathcal{M}}_{1,1}$">
+This parametrizes stable 1-pointed genus 1 curves. The compactification adds a single boundary point: the rational nodal curve (a $\mathbb{P}^1$ with $0$ and $\infty$ identified) with the smooth marked point. So $\overline{\mathcal{M}}_{1,1}$ is a DM stack with coarse moduli $\overline{M}_{1,1} \cong \mathbb{P}^1$ (the $j$-line compactified).
+</Example>
+
+---
+
+## 5. The DM Stack Structure
+
+<Theorem title="Deligne-Mumford (1969)">
+For $g \geq 2$, $\overline{\mathcal{M}}_g$ is a smooth proper Deligne-Mumford stack of dimension $3g-3$ over $\mathrm{Spec}\, \mathbb{Z}$. It is irreducible over every algebraically closed field.
+</Theorem>
+
+The key properties:
+- **DM** (not Artin): automorphism groups of stable curves are finite (and reduced in characteristic 0).
+- **Smooth**: deformation theory shows the local deformation space is smooth.
+- **Proper**: the stable reduction theorem (valuative criterion).
+
+<Example title="Etale Atlas for $\mathcal{M}_g$">
+An etale atlas for $\mathcal{M}_g$ can be constructed using the Hilbert scheme. Choose $n \gg 0$ so that $\omega_C^{\otimes n}$ embeds $C \hookrightarrow \mathbb{P}^N$ where $N = n(2g-2) - g$. Let $H \subset \mathrm{Hilb}_{\mathbb{P}^N}$ be the locally closed subscheme parametrizing $n$-canonically embedded smooth curves of genus $g$. Then $\mathrm{PGL}_{N+1}$ acts on $H$, and
+$$\mathcal{M}_g \cong [H / \mathrm{PGL}_{N+1}].$$
+The morphism $H \to \mathcal{M}_g$ is a smooth surjection, providing a smooth atlas. To get an etale atlas, one can use the rigidification provided by level structures.
+</Example>
+
+---
+
+## 6. Tautological Classes
+
+<Definition title="Tautological Ring">
+The **tautological ring** $R^*(\overline{\mathcal{M}}_{g,n}) \subset A^*(\overline{\mathcal{M}}_{g,n})$ is the subring of the Chow ring generated by:
+- **$\psi$-classes**: $\psi_i = c_1(\mathbb{L}_i)$ where $\mathbb{L}_i$ is the cotangent line bundle at the $i$-th marked point.
+- **$\kappa$-classes**: $\kappa_j = \pi_*(\psi_{n+1}^{j+1})$ where $\pi: \overline{\mathcal{M}}_{g,n+1} \to \overline{\mathcal{M}}_{g,n}$ is the forgetful map.
+- **Boundary classes**: the classes $[\Delta_{i,S}]$ of boundary divisors.
+</Definition>
+
+<Example title="$\psi$-class on $\overline{\mathcal{M}}_{0,4}$">
+On $\overline{\mathcal{M}}_{0,4} \cong \mathbb{P}^1$, the class $\psi_1$ is the class of a point. The integral $\int_{\overline{\mathcal{M}}_{0,4}} \psi_1 = 1$. More generally, the Witten-Kontsevich theorem gives:
+$$\int_{\overline{\mathcal{M}}_{0,n}} \psi_1^{a_1} \cdots \psi_n^{a_n} = \binom{n-3}{a_1, \ldots, a_n}$$
+when $a_1 + \cdots + a_n = n - 3$.
+</Example>
+
+<Example title="$\lambda$-class and the Hodge Bundle">
+The **Hodge bundle** $\mathbb{E} = \pi_* \omega_{C/S}$ is a rank-$g$ vector bundle on $\overline{\mathcal{M}}_g$. The **$\lambda$-classes** are $\lambda_i = c_i(\mathbb{E})$. The Mumford relation gives:
+$$c(\mathbb{E}) \cdot c(\mathbb{E}^{\vee}) = 1$$
+in $A^*(\overline{\mathcal{M}}_g)$, where $c$ denotes the total Chern class.
+</Example>
+
+---
+
+## 7. Stable Reduction
+
+<Theorem title="Stable Reduction Theorem">
+Let $R$ be a discrete valuation ring with fraction field $K$, and let $C_K$ be a smooth curve of genus $g \geq 2$ over $K$. Then there exists a finite field extension $K'/K$, with $R'$ the integral closure of $R$ in $K'$, such that $C_{K'}$ extends to a stable curve $\mathcal{C} \to \mathrm{Spec}\, R'$.
+</Theorem>
+
+<Example title="Degeneration of Genus 1 Curve">
+Consider the family of elliptic curves $y^2 = x^3 - t$ over $\mathrm{Spec}\, k[[t]]$. At $t = 0$, this degenerates to the cuspidal cubic $y^2 = x^3$, which is **not** stable (cusp is not a node). After a base change $t = s^6$ and appropriate birational modifications, one obtains a stable reduction. The stable limit is a rational curve with a node (the Kodaira fiber of type $II$).
+</Example>
+
+<Example title="Degeneration of Hyperelliptic Curve">
+Consider $y^2 = (x^2 - t)(x^2 - 2t)(x^2 - 3t)$ as a family of genus 2 curves over $\mathrm{Spec}\, k[[t]]$. At $t = 0$, the six branch points $\pm\sqrt{t}, \pm\sqrt{2t}, \pm\sqrt{3t}$ all collide at the origin. After base change $t = s^2$, the branch points become $\pm s, \pm s\sqrt{2}, \pm s\sqrt{3}$, and a semistable model can be constructed with the stable limit being two rational curves meeting at three nodes (a curve of genus 2 with compact type degeneration).
+</Example>
+
+---
+
+## 8. Intersection Theory on $\overline{\mathcal{M}}_g$
+
+<Example title="Witten's Conjecture / Kontsevich's Theorem">
+Define the generating function
+$$F(t_0, t_1, \ldots) = \sum_{g \geq 0} \sum_{n \geq 0} \frac{1}{n!} \sum_{a_1, \ldots, a_n \geq 0} \left( \int_{\overline{\mathcal{M}}_{g,n}} \prod_{i=1}^n \psi_i^{a_i} \right) \prod_{i=1}^n t_{a_i}$$
+Then $e^F$ is a $\tau$-function for the KdV hierarchy. Equivalently, the intersection numbers satisfy the Virasoro constraints:
+$$L_n \cdot e^F = 0 \quad \text{for } n \geq -1$$
+where $L_n$ are specific differential operators forming a representation of (half of) the Virasoro algebra.
+</Example>

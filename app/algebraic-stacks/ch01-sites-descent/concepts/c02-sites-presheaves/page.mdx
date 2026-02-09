@@ -1,0 +1,294 @@
+export const metadata = {
+  title: 'Sites and Presheaves — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Concept — Sites and Presheaves" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sites and Presheaves
+
+A **site** is a category equipped with a Grothendieck topology, providing the categorical framework for defining sheaves and cohomology beyond the realm of classical topological spaces. Presheaves on a site are the starting point for all constructions, and the Yoneda embedding provides the bridge between geometric objects and the functorial world.
+
+---
+
+## Definition of a Site
+
+<Definition title="Site" number="1.7">
+A **site** is a pair $(\mathcal{C}, J)$ where $\mathcal{C}$ is a category (usually assumed to be essentially small or to have a small set of objects up to isomorphism) and $J$ is a Grothendieck topology on $\mathcal{C}$.
+
+When the topology is understood, we write simply $\mathcal{C}$ for the site.
+
+A **morphism of sites** $f: (\mathcal{C}, J) \to (\mathcal{D}, K)$ is a functor $u: \mathcal{D} \to \mathcal{C}$ (note the reversal of direction) that is **continuous**: for every covering sieve $S \in K(V)$, the pullback sieve $u^{-1}(S) \in J(u(V))$.
+</Definition>
+
+<Example id="site-topological-space" title="Sites from topological spaces">
+For a topological space $X$, the category $\operatorname{Open}(X)$ with the open cover topology forms a site. The objects are open subsets $U \subseteq X$, morphisms are inclusions $V \hookrightarrow U$, and covering families of $U$ are open covers $\{U_i\}$ with $\bigcup U_i = U$.
+
+This is the prototypical site. All concepts for general sites reduce to classical notions when restricted to this case.
+</Example>
+
+<Example id="site-small-etale" title="Small etale site">
+For a scheme $X$, the small etale site $X_{\text{et}}$ is defined as follows:
+- **Objects**: Etale morphisms $U \to X$ (equivalently, etale $X$-schemes).
+- **Morphisms**: $X$-morphisms $U \to V$ (which are automatically etale since etale is stable under composition and the morphisms are over $X$).
+- **Covering families**: Families $\{U_i \to U\}$ of etale morphisms such that $\coprod U_i \to U$ is surjective.
+
+The category $X_{\text{et}}$ is essentially small (there is a set of isomorphism classes of etale $X$-schemes), so set-theoretic issues are mild.
+</Example>
+
+<Example id="site-big-fppf" title="Big fppf site">
+The big fppf site $(\mathbf{Sch}/S)_{\text{fppf}}$ has:
+- **Objects**: All $S$-schemes (or a suitable essentially small subcategory, e.g., schemes of bounded cardinality).
+- **Morphisms**: $S$-morphisms.
+- **Covering families**: Families $\{U_i \to U\}$ where each $U_i \to U$ is flat and locally of finite presentation, and $\coprod U_i \to U$ is surjective.
+
+The big site allows us to define presheaves and sheaves that take values on all schemes, such as the functor of points of a group scheme.
+</Example>
+
+<Example id="site-simplicial" title="Simplicial sites">
+Given a simplicial scheme $X_\bullet$ (a functor $\Delta^{\mathrm{op}} \to \mathbf{Sch}$), one can define an etale site on $X_\bullet$ whose objects are etale morphisms to the components $X_n$, with appropriate covering conditions. The cohomology of sheaves on this site computes the cohomological descent spectral sequence.
+
+This is fundamental for the construction of etale cohomology via hypercoverings and for the theory of algebraic stacks.
+</Example>
+
+---
+
+## Presheaves on a Category
+
+<Definition title="Presheaf" number="1.8">
+Let $\mathcal{C}$ be a category. A **presheaf** on $\mathcal{C}$ (with values in sets) is a functor
+
+$$F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}.$$
+
+For each object $U \in \mathcal{C}$, we call $F(U)$ the set of **sections** of $F$ over $U$. For a morphism $f: V \to U$, the map $F(f): F(U) \to F(V)$ is the **restriction** along $f$, often written $s \mapsto f^*s$ or $s \mapsto s|_V$.
+
+The category of presheaves is denoted $\operatorname{PSh}(\mathcal{C}) = \operatorname{Fun}(\mathcal{C}^{\mathrm{op}}, \mathbf{Set})$. It is a functor category and inherits many good properties.
+</Definition>
+
+<Example id="presheaf-representable" title="Representable presheaves">
+For each object $U \in \mathcal{C}$, the **representable presheaf** (or **Yoneda presheaf**) is
+
+$$h_U = \operatorname{Hom}_{\mathcal{C}}(-, U): \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}.$$
+
+It sends $V \mapsto \operatorname{Hom}(V, U)$ and a morphism $f: W \to V$ to precomposition $g \mapsto g \circ f$.
+
+In the scheme-theoretic setting with $\mathcal{C} = \mathbf{Sch}/S$, the representable presheaf $h_X$ for an $S$-scheme $X$ sends $T \mapsto \operatorname{Hom}_S(T, X)$. This is the **functor of points** of $X$.
+</Example>
+
+<Example id="presheaf-ga" title="Additive group presheaf">
+The **additive group scheme** $\mathbb{G}_a$ over a base $S = \operatorname{Spec}(R)$ represents the presheaf
+
+$$\mathbb{G}_a(T) = \Gamma(T, \mathcal{O}_T)$$
+
+on $\mathbf{Sch}/S$, assigning to each $S$-scheme $T$ its ring of global sections. For $T = \operatorname{Spec}(A)$ (an affine $S$-scheme, i.e., an $R$-algebra $A$), $\mathbb{G}_a(T) = A$ as a set (with its additive group structure).
+
+This is representable: $\mathbb{G}_a = \operatorname{Spec}(R[t])$, and $\operatorname{Hom}_S(\operatorname{Spec}(A), \operatorname{Spec}(R[t])) = \operatorname{Hom}_{R\text{-alg}}(R[t], A) \cong A$.
+</Example>
+
+<Example id="presheaf-gm" title="Multiplicative group presheaf">
+The **multiplicative group scheme** $\mathbb{G}_m$ represents
+
+$$\mathbb{G}_m(T) = \Gamma(T, \mathcal{O}_T)^\times$$
+
+the group of invertible global sections. It is representable: $\mathbb{G}_m = \operatorname{Spec}(R[t, t^{-1}])$.
+
+For $T = \operatorname{Spec}(A)$, we have $\mathbb{G}_m(T) = A^\times$. The cohomology $H^1_{\text{et}}(X, \mathbb{G}_m) \cong \operatorname{Pic}(X)$ is one of the most important computations in etale cohomology.
+</Example>
+
+<Example id="presheaf-mun" title="Roots of unity presheaf">
+For a positive integer $n$ invertible on the base $S$, the **group scheme of $n$-th roots of unity** $\mu_n$ represents
+
+$$\mu_n(T) = \{f \in \Gamma(T, \mathcal{O}_T)^\times \mid f^n = 1\}.$$
+
+It is representable: $\mu_n = \operatorname{Spec}(R[t]/(t^n - 1))$, which is a finite etale group scheme when $n$ is invertible on $S$. Over an algebraically closed field, $\mu_n(\overline{k}) \cong \mathbb{Z}/n\mathbb{Z}$.
+
+The Kummer sequence $1 \to \mu_n \to \mathbb{G}_m \xrightarrow{(\cdot)^n} \mathbb{G}_m \to 1$ is exact in the etale topology and gives the fundamental exact sequence in etale cohomology.
+</Example>
+
+---
+
+## The Yoneda Lemma
+
+<Definition title="Yoneda embedding" number="1.9">
+The **Yoneda embedding** is the functor
+
+$$h: \mathcal{C} \to \operatorname{PSh}(\mathcal{C}), \quad U \mapsto h_U = \operatorname{Hom}(-, U).$$
+
+The **Yoneda Lemma** states that for any presheaf $F$ and object $U$:
+
+$$\operatorname{Hom}_{\operatorname{PSh}(\mathcal{C})}(h_U, F) \cong F(U).$$
+
+The bijection sends a natural transformation $\alpha: h_U \to F$ to $\alpha_U(\operatorname{id}_U) \in F(U)$.
+</Definition>
+
+<Remark title="Consequences of Yoneda">
+The Yoneda Lemma has several fundamental consequences:
+
+1. The Yoneda embedding $h: \mathcal{C} \to \operatorname{PSh}(\mathcal{C})$ is **fully faithful**: $\operatorname{Hom}(U, V) \cong \operatorname{Hom}(h_U, h_V)$. So $\mathcal{C}$ embeds as a full subcategory of $\operatorname{PSh}(\mathcal{C})$.
+
+2. Two objects $U, V \in \mathcal{C}$ are isomorphic if and only if $h_U \cong h_V$.
+
+3. Any presheaf $F$ is a colimit of representable presheaves: $F \cong \operatorname{colim}_{(U, s) \in (\mathcal{C}/F)} h_U$.
+
+4. In scheme theory, this means a scheme $X$ is completely determined by its functor of points $h_X(T) = \operatorname{Hom}(T, X)$. Two schemes are isomorphic if and only if their functors of points are naturally isomorphic.
+</Remark>
+
+<Example id="yoneda-affine-line" title="Yoneda for the affine line">
+Let $\mathcal{C} = \mathbf{Aff}_k = (\mathbf{CAlg}_k)^{\mathrm{op}}$ be the category of affine $k$-schemes. The affine line $\mathbb{A}^1_k = \operatorname{Spec}(k[t])$ represents the forgetful functor:
+
+$$h_{\mathbb{A}^1}(\operatorname{Spec}(A)) = \operatorname{Hom}(\operatorname{Spec}(A), \mathbb{A}^1) = \operatorname{Hom}_{k\text{-alg}}(k[t], A) \cong A.$$
+
+By Yoneda, a natural transformation $h_{\mathbb{A}^1} \to h_{\mathbb{A}^1}$ corresponds to an element of $h_{\mathbb{A}^1}(\mathbb{A}^1) = k[t]$. So endomorphisms of $\mathbb{A}^1$ as a scheme correspond to polynomials $f(t) \in k[t]$. This recovers the geometric fact that polynomial maps $\mathbb{A}^1 \to \mathbb{A}^1$ are classified by polynomials.
+</Example>
+
+<Example id="yoneda-grassmannian" title="Yoneda for the Grassmannian">
+The Grassmannian $\operatorname{Gr}(r, n)$ represents the functor
+
+$$\operatorname{Gr}(r, n)(T) = \{\text{locally free quotients } \mathcal{O}_T^n \twoheadrightarrow \mathcal{E} \text{ of rank } r\} / \cong$$
+
+By Yoneda, a morphism $T \to \operatorname{Gr}(r, n)$ corresponds to a rank-$r$ quotient bundle of the trivial rank-$n$ bundle on $T$. The universal such quotient lives on $\operatorname{Gr}(r, n)$ itself.
+
+This "moduli" perspective is the starting point for the theory of algebraic stacks: many moduli problems define presheaves (or fibered categories) that may not be representable by schemes but can be represented by stacks.
+</Example>
+
+<Example id="yoneda-hilbert" title="Non-representable presheaves and moduli">
+Consider the presheaf $\mathcal{M}_{1,1}$ on $\mathbf{Sch}/\mathbb{Z}$ that assigns to $T$ the set of isomorphism classes of elliptic curves over $T$:
+
+$$\mathcal{M}_{1,1}(T) = \{(E \to T, e: T \to E) \mid E/T \text{ smooth genus-1 curve, } e \text{ section}\} / \cong$$
+
+This presheaf is **not** representable by a scheme (not even by an algebraic space), because elliptic curves can have nontrivial automorphisms ($j=0$ and $j=1728$ have extra automorphisms).
+
+However, $\mathcal{M}_{1,1}$ is representable as a **Deligne-Mumford stack** (or more precisely, a fibered category with descent data). This is one of the primary motivations for the theory of algebraic stacks.
+</Example>
+
+---
+
+## Presheaves of Groups, Rings, and Modules
+
+<Definition title="Presheaves with algebraic structure" number="1.10">
+A **presheaf of abelian groups** on $\mathcal{C}$ is a functor $F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Ab}$. Similarly, presheaves of rings, modules, etc.
+
+For a presheaf of rings $\mathcal{O}$ on $\mathcal{C}$ (a **ringed site**), a **presheaf of $\mathcal{O}$-modules** is a presheaf $\mathcal{F}$ of abelian groups with a compatible $\mathcal{O}(U)$-module structure on $\mathcal{F}(U)$ for each $U$.
+
+The category of presheaves of $\mathcal{O}$-modules is an abelian category with enough injectives.
+</Definition>
+
+<Example id="presheaf-qcoh" title="Quasi-coherent presheaves on the big Zariski site">
+On the big Zariski site of $S = \operatorname{Spec}(R)$, a quasi-coherent module $M$ on $S$ defines a presheaf of $\mathcal{O}$-modules by
+
+$$\widetilde{M}(\operatorname{Spec}(A)) = M \otimes_R A$$
+
+for any $R$-algebra $A$. This is a sheaf for the Zariski, etale, and even fpqc topology (by faithfully flat descent for modules).
+</Example>
+
+<Example id="presheaf-differential-forms" title="Differential forms as a presheaf">
+On the small etale site $X_{\text{et}}$ of a smooth scheme $X$ over a field $k$, the presheaf of Kahler differentials assigns
+
+$$\Omega^1(U \to X) = \Gamma(U, \Omega^1_{U/k})$$
+
+to each etale $U \to X$. Since etale morphisms are smooth (in fact unramified), and $\Omega^1$ commutes with etale base change, this is actually a sheaf.
+
+More precisely, if $f: U \to X$ is etale, then $f^*\Omega^1_{X/k} \cong \Omega^1_{U/k}$, so we have a canonical identification of the differentials.
+</Example>
+
+---
+
+## Presheaves on Comma Categories
+
+<Example id="presheaf-over-category" title="Presheaves on the slice category">
+For a fixed object $X \in \mathcal{C}$, the **slice category** (or **over category**) $\mathcal{C}/X$ has objects $(U, f: U \to X)$ and morphisms commuting triangles. A presheaf on $\mathcal{C}/X$ is then a contravariant functor from $\mathcal{C}/X$ to $\mathbf{Set}$.
+
+If $\mathcal{C} = \mathbf{Sch}/S$ and $X$ is an $S$-scheme, then $\mathcal{C}/X = \mathbf{Sch}/X$. The presheaves on the big site of $X$ are precisely presheaves on this slice category with the induced topology.
+
+By Yoneda, there is an equivalence between morphisms $Y \to X$ and natural transformations $h_Y \to h_X$ of presheaves on $\mathcal{C}$.
+</Example>
+
+<Example id="presheaf-fiber-functor" title="Fiber functors">
+A **fiber functor** on a site $(\mathcal{C}, J)$ is an exact functor $\omega: \operatorname{Sh}(\mathcal{C}, J) \to \mathbf{Set}$ that commutes with finite limits and arbitrary colimits. For the small etale site of $\operatorname{Spec}(k)$, a fiber functor is given by evaluation at a separable closure:
+
+$$\omega(\mathcal{F}) = \varinjlim_{k'/k \text{ finite separable}} \mathcal{F}(\operatorname{Spec}(k'))$$
+
+This is the stalk at the geometric point $\overline{k} \to k$. The automorphism group of this fiber functor is the absolute Galois group $G_k = \operatorname{Gal}(k^{\text{sep}}/k)$, and Grothendieck's Galois theory identifies the category of locally constant sheaves of finite sets on $(\operatorname{Spec}(k))_{\text{et}}$ with the category of finite continuous $G_k$-sets.
+</Example>
+
+---
+
+## Colimits and Limits in Presheaf Categories
+
+<Remark title="Presheaf categories are (co)complete">
+The category $\operatorname{PSh}(\mathcal{C})$ has all small limits and colimits, computed objectwise:
+
+$$(\varprojlim_i F_i)(U) = \varprojlim_i F_i(U), \quad (\varinjlim_i F_i)(U) = \varinjlim_i F_i(U).$$
+
+In particular:
+- **Products**: $(F \times G)(U) = F(U) \times G(U)$.
+- **Coproducts**: $(F \sqcup G)(U) = F(U) \sqcup G(U)$.
+- **Equalizers**: $(\operatorname{eq}(f,g))(U) = \operatorname{eq}(f_U, g_U)$.
+- **Coequalizers**: $(\operatorname{coeq}(f,g))(U) = \operatorname{coeq}(f_U, g_U)$.
+
+This makes $\operatorname{PSh}(\mathcal{C})$ a **topos** (a category with properties mimicking the category of sets). The category of sheaves $\operatorname{Sh}(\mathcal{C}, J)$ is a **subtopos**: it is closed under limits but not colimits (colimits of sheaves require sheafification).
+</Remark>
+
+<Example id="presheaf-coproduct" title="Coproduct of representable presheaves">
+In $\operatorname{PSh}(\mathcal{C})$, the coproduct $h_U \sqcup h_V$ sends $W \mapsto \operatorname{Hom}(W, U) \sqcup \operatorname{Hom}(W, V)$. This is typically **not** representable: in $\mathcal{C} = \mathbf{Sch}/k$, the coproduct $h_U \sqcup h_V$ is the presheaf of "choosing a map to $U$ or a map to $V$," which is represented by the disjoint union $U \sqcup V$ only when the disjoint union exists in $\mathcal{C}$.
+
+This illustrates why presheaf categories are much larger than the original category: they freely adjoin colimits.
+</Example>
+
+---
+
+## The Functor of Points Perspective
+
+<Example id="functor-of-points-scheme" title="Schemes via functors of points">
+By Yoneda, a scheme $X$ over $S$ is determined by the functor $h_X: (\mathbf{Sch}/S)^{\mathrm{op}} \to \mathbf{Set}$. In practice, we often define $X$ by specifying $h_X$ on affine schemes:
+
+For $\mathbb{P}^n_S$, the functor of points is
+
+$$\mathbb{P}^n(T) = \{\text{line bundle quotients } \mathcal{O}_T^{n+1} \twoheadrightarrow \mathcal{L}\} / \cong$$
+
+For $GL_n$, the functor is $GL_n(T) = GL_n(\Gamma(T, \mathcal{O}_T))$, the group of invertible $n \times n$ matrices with entries in the global sections of $T$.
+
+For the Hilbert scheme $\operatorname{Hilb}^p_{X/S}$:
+
+$$\operatorname{Hilb}^p_{X/S}(T) = \{Z \hookrightarrow X \times_S T \mid Z \text{ flat over } T \text{ with Hilbert polynomial } p\}$$
+
+The functor of points perspective makes moduli problems precise and motivates the definition of algebraic stacks for non-representable functors.
+</Example>
+
+<Example id="functor-of-points-formal" title="Formal schemes as presheaves">
+A **formal scheme** $\hat{X}$ (e.g., the formal completion of $\operatorname{Spec}(k[[x]])$) represents a presheaf on the category of schemes, but it is not itself a scheme. On affine schemes:
+
+$$\hat{\mathbb{A}}^1(T) = \Gamma(T, \mathcal{O}_T)_{\text{nilp}} = \{f \in \Gamma(T, \mathcal{O}_T) \mid f \text{ locally nilpotent}\}$$
+
+This presheaf is an ind-scheme (a colimit of schemes), and its functor of points perspective allows us to treat formal objects on equal footing with ordinary schemes.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. A **site** $(\mathcal{C}, J)$ = category + Grothendieck topology. The topology specifies which families count as "covers."
+
+2. A **presheaf** on $\mathcal{C}$ is a contravariant functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$. Presheaves form a complete, cocomplete category.
+
+3. The **Yoneda embedding** $\mathcal{C} \hookrightarrow \operatorname{PSh}(\mathcal{C})$ is fully faithful. Objects of $\mathcal{C}$ are determined by their functors of points.
+
+4. **Representable presheaves** correspond to objects of $\mathcal{C}$. Non-representable presheaves arise naturally as moduli functors.
+
+5. The passage from presheaves to sheaves (via sheafification) imposes the gluing condition dictated by the topology $J$. This is the subject of the next section.
+</Remark>

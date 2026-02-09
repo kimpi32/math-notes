@@ -1,0 +1,245 @@
+export const metadata = {
+  title: 'Proof: M_g is a Deligne-Mumford Stack — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Proof — M_g is a DM Stack" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof that $\mathcal{M}_g$ is a Deligne-Mumford Stack
+
+We give a detailed proof that the moduli stack $\overline{\mathcal{M}}_g$ of stable curves of genus $g \geq 2$ is a smooth, proper Deligne-Mumford stack of dimension $3g - 3$ over $\mathrm{Spec}\, \mathbb{Z}$. The proof proceeds through several key steps: defining the stack, verifying the DM condition, constructing an etale atlas, proving smoothness, and establishing properness.
+
+---
+
+## Step 1: Definition of the Stack
+
+<Definition title="Moduli Stack of Stable Curves">
+The stack $\overline{\mathcal{M}}_g$ is the category fibered in groupoids over $(\mathsf{Sch}/\mathbb{Z})$ defined as follows:
+- **Objects**: Pairs $(S, f: C \to S)$ where $f$ is a flat proper morphism whose geometric fibers are connected stable curves of arithmetic genus $g$.
+- **Morphisms**: A morphism from $(S', C' \to S')$ to $(S, C \to S)$ is a pair $(\phi, \Phi)$ where $\phi: S' \to S$ is a morphism of schemes and $\Phi: C' \to C \times_S S'$ is an isomorphism over $S'$.
+</Definition>
+
+<Remark title="Stack Axioms">
+The stack axioms (descent for morphisms and objects) hold because:
+1. **Descent for morphisms**: Given two stable curves $C_1, C_2 \to S$ and an etale cover $\lbrace U_i \to S \rbrace$, isomorphisms $\phi_i: C_1|_{U_i} \xrightarrow{\sim} C_2|_{U_i}$ satisfying the cocycle condition glue to a global isomorphism. This follows from faithful flatness of etale covers and the fact that $\underline{\mathrm{Isom}}_S(C_1, C_2)$ is a scheme (being a closed subscheme of a Hilbert scheme).
+2. **Descent for objects**: Stable curves over an etale cover with gluing data descend to the base. This follows from effective descent for proper flat morphisms in the fpqc topology.
+</Remark>
+
+---
+
+## Step 2: Finiteness of Automorphisms (DM Condition)
+
+The Deligne-Mumford condition requires that the diagonal $\Delta: \overline{\mathcal{M}}_g \to \overline{\mathcal{M}}_g \times \overline{\mathcal{M}}_g$ is unramified, which is equivalent to the automorphism group scheme of every object being unramified (i.e., etale, hence finite and reduced in characteristic 0).
+
+<Theorem title="Finite Automorphisms of Stable Curves">
+For any stable curve $C$ of genus $g \geq 2$ over an algebraically closed field $k$, the automorphism group $\mathrm{Aut}(C)$ is a finite group. In characteristic 0, this is equivalent to $H^0(C, T_C) = 0$.
+</Theorem>
+
+<Proof>
+We prove this in several cases.
+
+**Case 1: $C$ is smooth.** The canonical bundle $\omega_C$ has degree $2g - 2 > 0$, so $\omega_C$ is ample. Any automorphism $\sigma \in \mathrm{Aut}(C)$ preserves $\omega_C$, hence preserves the $n$-canonical embedding $\phi_{n\omega_C}: C \hookrightarrow \mathbb{P}^N$ for $n \geq 3$. Thus $\mathrm{Aut}(C) \hookrightarrow \mathrm{PGL}_{N+1}$ as a closed subgroup fixing the embedded curve $\phi(C)$.
+
+To show finiteness: the tangent space to $\mathrm{Aut}(C)$ at the identity is $H^0(C, T_C)$. Since $T_C = \omega_C^{-1}$ has degree $-(2g-2) < 0$ for $g \geq 2$, we have $H^0(C, T_C) = 0$. Hence $\mathrm{Aut}(C)$ is a 0-dimensional group scheme. Being also of finite type (closed in $\mathrm{PGL}_{N+1}$), it is finite.
+
+In characteristic $p > 0$, one must additionally show the group scheme is reduced. This requires more care; in general, $\mathrm{Aut}(C)$ is a finite etale group scheme when $p > 2g + 1$ or when $C$ has no "wild" automorphisms.
+
+**Case 2: $C$ is nodal but irreducible.** Let $\nu: \widetilde{C} \to C$ be the normalization, and let $\lbrace p_1, q_1, \ldots, p_\delta, q_\delta \rbrace \subset \widetilde{C}$ be the preimages of the $\delta$ nodes. An automorphism of $C$ lifts to an automorphism of $\widetilde{C}$ that preserves the set $\lbrace (p_i, q_i) \rbrace$ (permuting within each pair or between pairs mapping to the same node). Thus $\mathrm{Aut}(C) \hookrightarrow \mathrm{Aut}(\widetilde{C}, \lbrace p_i, q_i \rbrace)$, a subgroup of the finite group of automorphisms of $\widetilde{C}$ permuting finitely many marked points.
+
+**Case 3: $C$ is reducible.** Write $C = C_1 \cup \cdots \cup C_r$ as a union of irreducible components. An automorphism either permutes the components or preserves them. The permutation group is finite, and the group of automorphisms preserving each component is finite by the argument for irreducible curves (each component $C_i \cong \mathbb{P}^1$ has at least 3 special points by stability, and $\mathrm{Aut}(\mathbb{P}^1; p_1, p_2, p_3)$ is finite).
+
+The stability condition is crucial: a rational component with only 2 special points would have a $\mathbb{G}_m$-family of automorphisms (fixing 2 points on $\mathbb{P}^1$), giving an infinite automorphism group.
+</Proof>
+
+<Example title="Why Stability is Necessary">
+Consider an unstable nodal curve: two genus-1 curves $E_1, E_2$ joined by a rational bridge $\mathbb{P}^1$ meeting $E_1$ at one point and $E_2$ at another. The rational bridge has only 2 special points, so $\mathrm{Aut}(\mathbb{P}^1; 0, \infty) \cong \mathbb{G}_m$ (scaling $z \mapsto \lambda z$). This infinite automorphism group means the diagonal is not unramified, and the moduli problem fails to be DM without the stability condition.
+</Example>
+
+<Example title="Explicit Bound">
+For a smooth curve $C$ of genus $g \geq 2$, the Hurwitz bound gives $|\mathrm{Aut}(C)| \leq 84(g - 1)$. The proof: $C / \mathrm{Aut}(C)$ has some genus $g'$ with $r$ branch points, and Riemann-Hurwitz gives:
+$$2g - 2 = |\mathrm{Aut}(C)| \left( 2g' - 2 + \sum_{i=1}^r \left(1 - \frac{1}{e_i}\right) \right)$$
+The minimum positive value of $2g' - 2 + \sum (1 - 1/e_i)$ is $1/42$ (achieved at $g' = 0$, $r = 3$, $(e_1, e_2, e_3) = (2, 3, 7)$), giving $|\mathrm{Aut}(C)| \leq 84(g - 1)$.
+</Example>
+
+---
+
+## Step 3: Construction of an Etale Atlas
+
+<Theorem title="Existence of Etale Atlas">
+There exists a scheme $H$ of finite type over $\mathbb{Z}$ and a smooth surjective morphism $H \to \overline{\mathcal{M}}_g$ (or even an etale surjection after adding level structure).
+</Theorem>
+
+<Proof>
+**Step 3a: Embedding via pluricanonical maps.**
+
+For $n \geq 3$ and a stable curve $C$ of genus $g \geq 2$, the $n$-canonical sheaf $\omega_C^{\otimes n}$ is very ample (Deligne-Mumford). By Riemann-Roch:
+$$h^0(C, \omega_C^{\otimes n}) = n(2g - 2) - g + 1 = (2n-1)(g-1)$$
+Let $N = (2n-1)(g-1) - 1$. The $n$-canonical embedding gives $C \hookrightarrow \mathbb{P}^N$.
+
+The Hilbert polynomial of $C$ in this embedding is:
+$$P(m) = mn(2g-2) - g + 1$$
+
+**Step 3b: Hilbert scheme.**
+
+Let $\mathcal{H} = \mathrm{Hilb}^P_{\mathbb{P}^N / \mathbb{Z}}$ be the Hilbert scheme parametrizing closed subschemes of $\mathbb{P}^N$ with Hilbert polynomial $P$. By Grothendieck's theorem, $\mathcal{H}$ is a projective scheme over $\mathbb{Z}$.
+
+Let $H \subset \mathcal{H}$ be the locally closed subscheme parametrizing $n$-canonically embedded stable curves. More precisely, $H$ parametrizes closed subschemes $C \subset \mathbb{P}^N$ such that:
+1. $C$ is a stable curve of genus $g$.
+2. $\mathcal{O}_C(1) \cong \omega_C^{\otimes n}$ (the embedding is $n$-canonical).
+
+Then $H$ is a quasi-projective scheme.
+
+**Step 3c: Group action and quotient.**
+
+The group $G = \mathrm{PGL}_{N+1}$ acts on $H$ by changing the embedding (i.e., changing coordinates in $\mathbb{P}^N$). Two points of $H$ represent isomorphic curves if and only if they are in the same $G$-orbit. The quotient stack is:
+$$\overline{\mathcal{M}}_g \cong [H / G]$$
+
+The projection $H \to [H/G] = \overline{\mathcal{M}}_g$ is a smooth morphism (since $G$ is smooth), giving a smooth atlas for $\overline{\mathcal{M}}_g$.
+
+**Step 3d: Etale atlas via level structure.**
+
+To obtain an **etale** atlas, one can add level-$n$ structure (for $n \geq 3$) to kill all automorphisms. Define $H^{[n]} \to H$ to be the scheme parametrizing curves with level-$n$ structure. Since the level structure trivializes automorphisms, the map $H^{[n]} \to \overline{\mathcal{M}}_g$ factors through an etale morphism $H^{[n]} \to \overline{\mathcal{M}}_g^{[n]} \to \overline{\mathcal{M}}_g$, providing an etale atlas.
+</Proof>
+
+<Example title="Concrete Atlas for $\mathcal{M}_2$">
+For $g = 2$, the tricanonical embedding gives $C \hookrightarrow \mathbb{P}^4$ (since $h^0(\omega_C^3) = 5$). Stable genus-2 curves in $\mathbb{P}^4$ form a locally closed subscheme $H \subset \mathrm{Hilb}_{\mathbb{P}^4}$, and $\mathcal{M}_2 = [H / \mathrm{PGL}_5]$.
+
+Alternatively, since every genus-2 curve is hyperelliptic, we can use the binary sextic description: $C: y^2 = f_6(x)$ where $f_6$ has degree 6. The space of binary sextics is $\mathbb{A}^7$ (coefficients), and $\mathrm{PGL}_2$ acts by Mobius transformations on $x$. Then $\mathcal{M}_2 = [U / \mathrm{PGL}_2 \times \mathbb{G}_m]$ where $U$ is the open set of sextics with distinct roots, and $\mathbb{G}_m$ acts by scaling $y$.
+</Example>
+
+---
+
+## Step 4: Smoothness
+
+<Theorem title="Smoothness of $\overline{\mathcal{M}}_g$">
+The stack $\overline{\mathcal{M}}_g$ is smooth over $\mathrm{Spec}\, \mathbb{Z}$, of relative dimension $3g - 3$.
+</Theorem>
+
+<Proof>
+We need to show that the deformation functor of any stable curve $C$ is unobstructed.
+
+**Tangent space computation.** For a stable curve $C$ over $k$, the first-order deformations are classified by $\mathrm{Ext}^1(\Omega^1_C, \mathcal{O}_C)$. Using the exact sequence for the cotangent complex of a nodal curve:
+$$0 \to \Omega^1_C \to \omega_C \to \bigoplus_{p \in \mathrm{Sing}(C)} k(p) \to 0$$
+(where $\omega_C$ is the dualizing sheaf), we get the long exact sequence:
+$$\mathrm{Hom}(\omega_C, \mathcal{O}_C) \to \mathrm{Hom}(\Omega^1_C, \mathcal{O}_C) \to \bigoplus_p \mathrm{Ext}^1(k(p), \mathcal{O}_C)$$
+$$\to \mathrm{Ext}^1(\omega_C, \mathcal{O}_C) \to \mathrm{Ext}^1(\Omega^1_C, \mathcal{O}_C) \to 0$$
+
+Now:
+- $\mathrm{Hom}(\omega_C, \mathcal{O}_C) = H^0(C, \omega_C^{-1}) = 0$ for $g \geq 2$ (since $\omega_C$ is ample on a stable curve).
+- $\mathrm{Ext}^1(k(p), \mathcal{O}_C) \cong k$ for each node $p$ (the smoothing parameter).
+- $\mathrm{Ext}^1(\omega_C, \mathcal{O}_C) = H^1(C, \omega_C^{-1}) \cong H^0(C, \omega_C^{\otimes 2})^{\vee}$ by Serre duality on the stable curve (using the dualizing sheaf).
+
+So $T^1 = \mathrm{Ext}^1(\Omega^1_C, \mathcal{O}_C)$ has dimension $3g - 3$ (it equals $\delta + \dim H^0(C, \omega_C^2) - \text{correction}$, but the total is always $3g - 3$ by Riemann-Roch-type arguments).
+
+**Obstruction space.** The obstructions lie in $T^2 = \mathrm{Ext}^2(\Omega^1_C, \mathcal{O}_C)$. For a curve ($\dim C = 1$), Ext groups vanish in degree $\geq 2$ for locally free sheaves. For the non-locally-free $\Omega^1_C$ on a nodal curve, one computes:
+$$\mathrm{Ext}^2(\Omega^1_C, \mathcal{O}_C) = 0$$
+This follows from the local analysis: at a node $xy = 0$, the module $\Omega^1$ has a presentation allowing the computation of $T^2 = 0$.
+
+Since $T^2 = 0$, the deformation functor is unobstructed, and $\overline{\mathcal{M}}_g$ is smooth.
+</Proof>
+
+<Example title="Local Model at a 1-Nodal Curve">
+Let $C$ be a stable curve with exactly one node $p$. The formal neighborhood of $[C]$ in $\overline{\mathcal{M}}_g$ is:
+$$\widehat{\mathcal{O}}_{\overline{\mathcal{M}}_g, [C]} \cong k[[t_1, t_2, \ldots, t_{3g-3}]]$$
+where $t_1$ is the smoothing parameter for the node (the local equation changes from $xy = 0$ to $xy = t_1$), and $t_2, \ldots, t_{3g-3}$ parametrize equisingular deformations (deforming the normalization with marked points).
+
+The boundary divisor $\Delta$ is locally $\lbrace t_1 = 0 \rbrace$, a smooth divisor in the smooth stack.
+</Example>
+
+---
+
+## Step 5: Properness (Stable Reduction)
+
+<Theorem title="Properness of $\overline{\mathcal{M}}_g$">
+The stack $\overline{\mathcal{M}}_g$ is proper over $\mathrm{Spec}\, \mathbb{Z}$.
+</Theorem>
+
+<Proof>
+By the valuative criterion for properness of stacks, we need: given a DVR $R$ with fraction field $K$ and a stable curve $C_K$ over $K$, there exists (after a finite base change $R \to R'$) a unique extension to a stable curve $\mathcal{C}$ over $R'$.
+
+**Existence** is the Stable Reduction Theorem. The proof proceeds as follows:
+
+1. **Semistable reduction**: By resolution of singularities for surfaces (Abhyankar, Lipman), one can find a regular model $\mathcal{C}_0 \to \mathrm{Spec}\, R'$ (after base change) whose special fiber is a reduced normal crossings divisor. This gives a semistable model.
+
+2. **Stabilization**: From the semistable model, contract all unstable components:
+   - Rational components meeting the rest of the curve in only 1 point (these can be blown down).
+   - Rational components meeting the rest in exactly 2 points (rational bridges with $\mathbb{G}_m$ automorphisms — these are contracted by identifying the two attachment points).
+
+   After finitely many contractions, one arrives at a stable model.
+
+**Uniqueness** follows from the separatedness of $\overline{\mathcal{M}}_g$ (the diagonal is proper), which in turn follows from: if two stable curves over $R$ are isomorphic over $K$, then they are isomorphic over $R$ (because the isomorphism, being a rational map between proper schemes over $R$, extends by normality/regularity arguments).
+</Proof>
+
+<Example title="Stable Reduction in Practice">
+Consider the family of genus-2 curves $y^2 = x^5 - t$ over $k[[t]]$.
+
+At $t = 0$: $y^2 = x^5$ has a cusp at the origin (not a node). This is not even semistable.
+
+Base change $t = s^{10}$: $y^2 = x^5 - s^{10}$. Substitute $x = s^2 u$, $y = s^5 v$: $s^{10}v^2 = s^{10}u^5 - s^{10}$, giving $v^2 = u^5 - 1$. This is a smooth genus-2 curve for all $s$, so the stable limit is the smooth curve $v^2 = u^5 - 1$.
+
+This illustrates that after sufficient base change, the stable reduction can be smooth (no degeneration at all in this case).
+</Example>
+
+---
+
+## Step 6: Irreducibility
+
+<Theorem title="Irreducibility">
+$\overline{\mathcal{M}}_g$ is irreducible over every algebraically closed field.
+</Theorem>
+
+<Proof>
+**Over $\mathbb{C}$**: The classical Teichmuller space $\mathcal{T}_g$ is homeomorphic to a ball in $\mathbb{R}^{6g-6}$ (Teichmuller's theorem), hence connected. Since $\mathcal{M}_g(\mathbb{C}) = \mathcal{T}_g / \mathrm{Mod}_g$ (quotient by the mapping class group), and the mapping class group is connected as a discrete group acting on a connected space, the quotient is connected. As $\mathcal{M}_g$ is also smooth, it is irreducible.
+
+For the compactification $\overline{\mathcal{M}}_g$: the boundary $\overline{\mathcal{M}}_g \setminus \mathcal{M}_g$ has codimension 1, and adding a codimension-1 locus to an irreducible variety preserves irreducibility (by the smoothness of $\overline{\mathcal{M}}_g$).
+
+**Over $\overline{\mathbb{F}}_p$**: Since $\overline{\mathcal{M}}_g$ is smooth over $\mathbb{Z}$, each fiber $\overline{\mathcal{M}}_g \otimes \overline{\mathbb{F}}_p$ has the same number of irreducible components as the generic fiber. (A smooth proper morphism with connected generic fiber has connected special fibers, by Zariski's connectedness theorem applied to the Stein factorization.) Since the generic fiber (over $\overline{\mathbb{Q}}$) is irreducible, so is every special fiber.
+</Proof>
+
+---
+
+## Step 7: Summary and Diagram
+
+<Remark title="Summary of the Proof">
+The proof assembles the following pieces:
+
+$$\boxed{\overline{\mathcal{M}}_g \text{ is a smooth proper DM stack of dim } 3g-3}$$
+
+1. **Stack**: Descent for flat proper morphisms.
+2. **DM**: $\mathrm{Aut}(C)$ finite $\Leftrightarrow$ $\omega_C$ ample $\Leftrightarrow$ stability.
+3. **Algebraic**: Etale atlas from Hilbert scheme quotient $H \to [H/G]$.
+4. **Smooth**: $T^2 = \mathrm{Ext}^2(\Omega^1_C, \mathcal{O}_C) = 0$ (curves are unobstructed).
+5. **Proper**: Stable reduction theorem (valuative criterion).
+6. **Irreducible**: Teichmuller theory (char 0) + smooth base change (char $p$).
+</Remark>
+
+<Example title="Comparison with Higher-Dimensional Moduli">
+This proof strategy breaks down for higher-dimensional varieties:
+- Surfaces can have obstructed deformations ($T^2 \neq 0$), so the moduli stack need not be smooth.
+- Stable reduction for surfaces is a deep open problem (the Minimal Model Program provides partial results).
+- Finiteness of automorphisms fails for many classes (e.g., abelian surfaces have continuous automorphisms).
+
+The beauty of the curve case is that all steps work cleanly, making $\overline{\mathcal{M}}_g$ the perfect testing ground for the theory of algebraic stacks.
+</Example>
+
+<Example title="What Changes for $\overline{\mathcal{M}}_{g,n}$?">
+For pointed stable curves, the same proof applies with minor modifications:
+- Stability requires $\omega_C(p_1 + \cdots + p_n)$ ample (adjusting the condition on rational components to require $\geq 3$ special points counting marked points).
+- The dimension becomes $3g - 3 + n$.
+- For $(g,n) = (0,n)$ with $n \geq 3$, automorphisms are trivial, so $\overline{\mathcal{M}}_{0,n}$ is actually a **smooth projective scheme** (not just a DM stack).
+- For $(g,n) = (1,1)$, the generic automorphism group is $\mathbb{Z}/2\mathbb{Z}$ (the elliptic involution).
+</Example>

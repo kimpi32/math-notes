@@ -1,0 +1,242 @@
+export const metadata = {
+  title: 'Stacks -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Concept -- Stacks" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Stacks
+
+A stack is a category fibered in groupoids satisfying descent conditions -- it is the 2-categorical analogue of a sheaf. Just as a sheaf is a presheaf satisfying gluing axioms, a stack is a prestack (a CFG with sheaf-like Isom) satisfying a further gluing axiom for objects. Stacks are the foundational geometric objects in the theory of algebraic stacks, encoding moduli problems with non-trivial automorphisms.
+
+---
+
+## Descent Data
+
+<Definition title="Descent datum" number="2.3.1">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a CFG over a site $(\mathcal{C}, \tau)$. Let $\{U_i \to U\}_{i \in I}$ be a covering family in $\tau$. A **descent datum** for $\mathcal{F}$ relative to this covering consists of:
+
+1. **Objects**: For each $i \in I$, an object $x_i \in \mathcal{F}(U_i)$.
+2. **Gluing isomorphisms**: For each pair $(i, j)$, an isomorphism
+$$\varphi_{ij} : \operatorname{pr}_1^* x_i \xrightarrow{\sim} \operatorname{pr}_2^* x_j \quad \text{in } \mathcal{F}(U_i \times_U U_j)$$
+   where $\operatorname{pr}_1 : U_i \times_U U_j \to U_i$ and $\operatorname{pr}_2 : U_i \times_U U_j \to U_j$ are the projections.
+
+3. **Cocycle condition**: On triple overlaps $U_i \times_U U_j \times_U U_k$, the diagram
+$$\operatorname{pr}_{13}^*\varphi_{ik} = \operatorname{pr}_{23}^*\varphi_{jk} \circ \operatorname{pr}_{12}^*\varphi_{ij}$$
+   commutes.
+
+We denote the category of descent data by $\mathcal{F}(\{U_i \to U\})$.
+</Definition>
+
+<Remark title="Descent in terms of equalizers">
+A descent datum is the 2-categorical analogue of the equalizer condition for sheaves. For a sheaf $F$ of sets, the sheaf condition says:
+$$F(U) \to \prod_i F(U_i) \rightrightarrows \prod_{i,j} F(U_{ij})$$
+is an equalizer. For a stack, we replace this with a condition on the category of descent data.
+</Remark>
+
+<Example id="descent-vector-bundles" title="Descent data for vector bundles">
+Consider the CFG of vector bundles on a scheme $S$, with a Zariski cover $\{U_i\}$ of $S$. A descent datum consists of:
+- Vector bundles $\mathcal{E}_i$ on each $U_i$.
+- Isomorphisms $\varphi_{ij} : \mathcal{E}_i|_{U_{ij}} \xrightarrow{\sim} \mathcal{E}_j|_{U_{ij}}$ on overlaps (transition functions).
+- Cocycle condition $\varphi_{ik} = \varphi_{jk} \circ \varphi_{ij}$ on triple overlaps.
+
+This is exactly the classical transition-function description of a vector bundle! The descent datum glues to a global vector bundle $\mathcal{E}$ on $S$ with $\mathcal{E}|_{U_i} \cong \mathcal{E}_i$.
+</Example>
+
+<Example id="descent-line-bundles" title="Descent data for line bundles">
+For line bundles on $S$ with cover $\{U_i\}$, the transition functions $\varphi_{ij} \in \mathcal{O}^*(U_{ij})$ satisfy the Cech cocycle condition $\varphi_{ik} = \varphi_{jk} \cdot \varphi_{ij}$. This is a Cech 1-cocycle with values in $\mathbb{G}_m$, and two descent data give isomorphic line bundles if and only if the cocycles differ by a coboundary. So $\operatorname{Pic}(S) \cong \check{H}^1(S, \mathbb{G}_m)$.
+</Example>
+
+<Example id="descent-etale-covers" title="Descent for etale covers">
+Consider finite etale covers of a scheme $S$ with the etale topology. A descent datum for the covering $T \to S$ consists of a finite etale $X \to T$ together with an isomorphism $\varphi : \operatorname{pr}_1^*X \xrightarrow{\sim} \operatorname{pr}_2^*X$ over $T \times_S T$ satisfying the cocycle condition over $T \times_S T \times_S T$. By faithfully flat descent (Grothendieck), such descent data are effective: they glue to a unique finite etale cover of $S$.
+</Example>
+
+---
+
+## The Stack Axioms
+
+<Definition title="Prestack" number="2.3.2">
+A CFG $p : \mathcal{F} \to \mathcal{C}$ over a site $(\mathcal{C}, \tau)$ is a **prestack** (or **separated prestack**) if for every covering $\{U_i \to U\}$ and any two objects $x, y \in \mathcal{F}(U)$, the presheaf $\operatorname{Isom}(x, y)$ on $\mathcal{C}/U$ is a **sheaf** for the topology $\tau$.
+
+Explicitly: if $\alpha, \beta : x \to y$ are two morphisms in $\mathcal{F}_U$ such that $\alpha|_{U_i} = \beta|_{U_i}$ for all $i$, then $\alpha = \beta$ (locality); and if $\alpha_i : x|_{U_i} \to y|_{U_i}$ agree on overlaps, they glue to a global $\alpha : x \to y$ (gluing for morphisms).
+</Definition>
+
+<Definition title="Stack" number="2.3.3">
+A CFG $p : \mathcal{F} \to \mathcal{C}$ over a site $(\mathcal{C}, \tau)$ is a **stack** if:
+
+**(Axiom 1 -- Descent for morphisms):** $\mathcal{F}$ is a prestack, i.e., $\operatorname{Isom}(x, y)$ is a sheaf for all $x, y$.
+
+**(Axiom 2 -- Descent for objects / Effectivity):** For every covering $\{U_i \to U\}$, every descent datum $(x_i, \varphi_{ij})$ is **effective**: there exists an object $x \in \mathcal{F}(U)$ together with isomorphisms $\psi_i : x|_{U_i} \xrightarrow{\sim} x_i$ such that $\varphi_{ij} \circ (\psi_i|_{U_{ij}}) = \psi_j|_{U_{ij}}$.
+
+Equivalently, the natural functor
+$$\mathcal{F}(U) \to \mathcal{F}(\{U_i \to U\})$$
+from the fiber to the category of descent data is an **equivalence of categories** (not just fully faithful, which would be Axiom 1 alone).
+</Definition>
+
+<Remark title="Comparison with sheaves">
+For a presheaf of sets $F$, viewed as a CFG with discrete fibers:
+- Axiom 1 (Isom is a sheaf) corresponds to the **locality/identity** axiom: sections that agree locally are equal.
+- Axiom 2 (effective descent) corresponds to the **gluing** axiom: compatible local sections glue.
+
+So stacks generalize sheaves from sets to groupoids, replacing equalities by isomorphisms throughout.
+</Remark>
+
+---
+
+## Examples of Stacks
+
+<Example id="stack-sheaf" title="Sheaves as stacks">
+Any sheaf $F$ on $(\mathcal{C}, \tau)$ defines a stack: view $F(U)$ as a discrete groupoid (set). Axiom 1 holds because $\operatorname{Isom}(x, y) = \emptyset$ if $x \neq y$ and $\{*\}$ if $x = y$ (or rather, equality is detected locally). Axiom 2 is the gluing axiom for $F$.
+
+In particular, any scheme $X$ (via the functor of points $h_X$) defines a stack on the etale (or fppf) site.
+</Example>
+
+<Example id="stack-BG" title="The classifying stack BG">
+Let $G$ be a smooth group scheme over $S$. The CFG $BG$ (classifying $G$-torsors) is a stack on the fppf site of $\mathbf{Sch}/S$.
+
+**Axiom 1**: For two $G$-torsors $P, Q$ over $T$, the presheaf $\operatorname{Isom}(P, Q)$ is a sheaf -- in fact, it is representable by the scheme $P \times^G Q^{\mathrm{op}}$ (a twisted form of $G$), so it is automatically a sheaf.
+
+**Axiom 2**: Descent for torsors is effective by faithfully flat descent. Given a covering $\{T_i \to T\}$ and $G$-torsors $P_i$ on $T_i$ with compatible transition isomorphisms, we can glue to a $G$-torsor on $T$.
+
+$BG$ is typically **not** a scheme: the fiber over $\operatorname{Spec} k$ ($k$ algebraically closed) has only one isomorphism class (the trivial torsor) but automorphism group $G(k)$. If $BG$ were a scheme, it would be $\operatorname{Spec} k$ with trivial automorphisms.
+</Example>
+
+<Example id="stack-Mg" title="The moduli stack M_g">
+The CFG $\mathcal{M}_g$ of smooth genus-$g$ curves ($g \geq 2$) is a stack on the etale site.
+
+**Axiom 1**: For two smooth curves $C, C'$ over $S$, the functor $\operatorname{Isom}(C, C')$ is representable by a scheme (a locally closed subscheme of the Hilbert scheme), hence a sheaf.
+
+**Axiom 2**: By descent theory for morphisms of schemes, smooth proper curves can be glued from local data. This uses the fact that smooth proper morphisms satisfy effective descent for the etale (and fppf) topology.
+
+The Deligne-Mumford theorem (1969) shows that $\mathcal{M}_g$ is a smooth, proper Deligne-Mumford stack of dimension $3g - 3$ (for $g \geq 2$).
+</Example>
+
+<Example id="stack-quotient" title="Quotient stacks [X/G]">
+Let $G$ be an algebraic group acting on a scheme $X$ over $S$. The **quotient stack** $[X/G]$ is the stack whose objects over $T$ are pairs $(P, \sigma)$ where $P$ is a $G$-torsor on $T$ and $\sigma : P \to X$ is a $G$-equivariant morphism.
+
+Equivalently, $[X/G](T) = \{(P \to T, P \to X) : P \text{ is a } G\text{-torsor}, P \to X \text{ is } G\text{-equivariant}\}$.
+
+Key properties:
+- $[*/G] = BG$ (the classifying stack).
+- $[X/\{e\}] = X$ (trivial group gives the scheme back).
+- If $G$ acts freely and the quotient $X/G$ is a scheme, then $[X/G]$ is equivalent to $X/G$.
+- If $G$ acts with finite stabilizers, $[X/G]$ is a Deligne-Mumford stack.
+- For general $G$, $[X/G]$ is an Artin stack (algebraic stack).
+</Example>
+
+<Example id="stack-root" title="Root stacks">
+Let $X$ be a scheme, $D \subset X$ an effective Cartier divisor, and $r \geq 1$ an integer. The **$r$-th root stack** $\sqrt[r]{D/X}$ parametrizes "$r$-th roots of $D$": objects over $T \to X$ are pairs $(\mathcal{L}, \phi)$ where $\mathcal{L}$ is a line bundle on $T$ and $\phi : \mathcal{L}^{\otimes r} \xrightarrow{\sim} \mathcal{O}_T(D|_T)$ is an isomorphism.
+
+This is a Deligne-Mumford stack. Away from $D$, it is isomorphic to $X \setminus D$. Along $D$, it has $\mu_r$-stabilizers (automorphisms are $r$-th roots of unity acting on $\mathcal{L}$).
+
+Root stacks appear in logarithmic geometry and orbifold theory.
+</Example>
+
+<Example id="stack-Picard" title="The Picard stack">
+For a smooth proper morphism $f : X \to S$, the **Picard stack** $\mathcal{P}ic_{X/S}$ parametrizes line bundles on fibers: objects over $T \to S$ are line bundles $\mathcal{L}$ on $X_T = X \times_S T$.
+
+This is a stack (descent for line bundles is effective). The associated coarse moduli is the Picard scheme $\operatorname{Pic}_{X/S}$ (when it exists). Every object has automorphism group $\mathbb{G}_m$ (scalar multiplication on the line bundle), so $\mathcal{P}ic_{X/S}$ is a $\mathbb{G}_m$-gerbe over $\operatorname{Pic}_{X/S}$.
+</Example>
+
+<Example id="stack-Hilbert" title="The Hilbert stack vs. Hilbert scheme">
+The functor $\operatorname{Hilb}_{X/S}$ parametrizing closed subschemes of $X \to S$ is representable by a scheme (the Hilbert scheme, when $X/S$ is projective). This is a "scheme" stack (discrete fibers, no nontrivial automorphisms).
+
+However, if we instead parametrize closed subschemes **up to some equivalence** (e.g., flat families of 0-dimensional subschemes of length $n$ up to permutation), we get a stack with nontrivial automorphisms, the **symmetric product stack** $[\operatorname{Hilb}^n / S_n]$.
+</Example>
+
+---
+
+## Stacks on Different Sites
+
+<Definition title="Common sites for stacks" number="2.3.4">
+The choice of site $(\mathcal{C}, \tau)$ is important. The most common choices:
+
+- **Zariski site**: Covers are Zariski open coverings. Many CFGs fail to be stacks here (e.g., $BG$ for nontrivial $G$) because the Zariski topology is too coarse for descent of torsors.
+- **Etale site**: Covers are surjective families of etale morphisms. Good for Deligne-Mumford stacks.
+- **fppf site** (faithfully flat, finitely presented): Covers are surjective families of flat, finitely presented morphisms. The standard choice for Artin stacks.
+- **fpqc site** (faithfully flat, quasi-compact): The finest commonly used topology. All reasonable descent is effective here.
+
+A prestack for the etale topology may fail to be a stack for fppf. In practice, one works with the fppf topology for general algebraic stacks.
+</Definition>
+
+<Example id="stack-BG-Zariski-fail" title="BG fails on the Zariski site">
+Let $G = \mu_2 = \operatorname{Spec} k[t]/(t^2 - 1)$ over a field $k$ with $\operatorname{char} k \neq 2$. The $\mu_2$-torsor $\operatorname{Spec} k[x]/(x^2 - a) \to \operatorname{Spec} k$ (for $a \in k^*$, not a square) is trivial Zariski-locally (it splits over the extension $k(\sqrt{a})$) but this extension is etale, not a Zariski open. So $B\mu_2$ is **not** a stack for the Zariski topology.
+
+It is, however, a stack for the etale and fppf topologies, since $\mu_2$-torsors satisfy effective descent for these finer topologies.
+</Example>
+
+<Example id="stack-site-comparison" title="Comparing sites">
+For a smooth affine group scheme $G$ over $S$:
+- $H^1_{\mathrm{Zar}}(S, G) \subseteq H^1_{\mathrm{et}}(S, G) \subseteq H^1_{\mathrm{fppf}}(S, G)$
+
+These inclusions can be strict. For example, $H^1_{\mathrm{Zar}}(\operatorname{Spec} \mathbb{R}, \mu_2) = 0$ (every $\mu_2$-torsor over $\operatorname{Spec} \mathbb{R}$ is Zariski-trivial? No -- there are none nontrivial Zariski-locally, but $\operatorname{Spec} \mathbb{C} \to \operatorname{Spec} \mathbb{R}$ is a nontrivial etale $\mu_2$-torsor).
+</Example>
+
+---
+
+## The Effective Descent Condition
+
+<Remark title="What effectivity means geometrically">
+Axiom 2 (effectivity) says: given objects on a cover that are compatible on overlaps, they glue to a global object. This is the categorical analogue of the patching construction in topology.
+
+For quasi-coherent sheaves: given $\mathcal{E}_i$ on $U_i$ with $\mathcal{E}_i|_{U_{ij}} \cong \mathcal{E}_j|_{U_{ij}}$ (satisfying the cocycle condition), there exists a global $\mathcal{E}$ on $U$ with $\mathcal{E}|_{U_i} \cong \mathcal{E}_i$. This is Grothendieck's faithfully flat descent theorem.
+
+For schemes: given $X_i$ over $U_i$ with isomorphisms on overlaps satisfying the cocycle condition, the $X_i$ glue to a global $X$ over $U$. This works for the fpqc topology (and hence fppf and etale).
+</Remark>
+
+<Example id="effective-descent-affine" title="Effective descent for affine morphisms">
+Affine morphisms satisfy effective descent: if $T \to S$ is faithfully flat and $X \to T$ is affine, and if we have descent data $(X, \varphi)$ where $\varphi : \operatorname{pr}_1^*X \cong \operatorname{pr}_2^*X$ over $T \times_S T$ satisfies the cocycle condition, then there exists a unique (up to canonical isomorphism) affine morphism $Y \to S$ with $Y \times_S T \cong X$.
+
+This follows from the equivalence between affine morphisms $X \to T$ and quasi-coherent $\mathcal{O}_T$-algebras, combined with faithfully flat descent for quasi-coherent sheaves.
+</Example>
+
+<Example id="effective-descent-nonproper" title="A non-effective descent datum">
+Descent is **not** always effective for the Zariski topology on non-separated schemes. Consider gluing two copies of $\mathbb{A}^1$ along $\mathbb{A}^1 \setminus \{0\}$ via the identity -- this gives the non-separated "line with doubled origin." But this scheme does not arise from a separated scheme over a point.
+
+More precisely, there exist descent data for the Zariski topology that are not effective when the objects are not quasi-projective. The fppf and etale topologies have much stronger effectivity results.
+</Example>
+
+---
+
+## Prestacks and Stackification
+
+<Remark title="Every CFG has a stackification">
+Not every CFG is a stack. A CFG that is **not** a prestack fails Axiom 1: $\operatorname{Isom}$ is not a sheaf. A prestack that is **not** a stack fails Axiom 2: some descent data are not effective.
+
+Given any CFG $\mathcal{F}$ over a site, there exists a stack $\mathcal{F}^{\mathrm{st}}$ (the **stackification**) with a morphism $\mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ that is universal among morphisms from $\mathcal{F}$ to stacks. This is analogous to sheafification of presheaves, and is treated in the next section.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="The stack hierarchy">
+The hierarchy of descent conditions:
+
+$$\text{CFG} \xrightarrow{\text{Isom is a sheaf}} \text{Prestack} \xrightarrow{\text{effective descent}} \text{Stack}$$
+
+Equivalently, $\mathcal{F}$ is a stack iff $\mathcal{F}(U) \xrightarrow{\sim} \mathcal{F}(\{U_i \to U\})$ is an equivalence for all covers.
+
+Key examples:
+- $B\mathbb{G}_m$ (line bundles): stack on fppf site.
+- $\mathcal{M}_g$ (smooth curves): stack on etale site, Deligne-Mumford stack for $g \geq 2$.
+- $[X/G]$ (quotient by group action): stack on fppf site, algebraic stack.
+- Sheaves of sets: stacks with discrete fibers.
+- $\operatorname{Pic}_{X/S}$ (Picard stack): $\mathbb{G}_m$-gerbe over the Picard scheme.
+
+The theory of stacks provides a unified framework for all these examples, with the descent conditions ensuring that local-to-global principles hold in a 2-categorical sense.
+</Remark>

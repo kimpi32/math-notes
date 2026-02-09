@@ -1,0 +1,232 @@
+export const metadata = {
+  title: '2-Yoneda Lemma -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Theorem -- 2-Yoneda Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The 2-Yoneda Lemma
+
+The 2-Yoneda lemma is the fundamental representability result for categories fibered in groupoids. It establishes an equivalence between the category of morphisms from a representable CFG $h_U$ to an arbitrary CFG $\mathcal{F}$, and the fiber $\mathcal{F}(U)$. This result is the engine behind the "functor of points" approach to algebraic stacks.
+
+---
+
+## Formal Statement
+
+<Theorem title="2-Yoneda Lemma" number="2.8.1">
+Let $\mathcal{C}$ be a category and let $p : \mathcal{F} \to \mathcal{C}$ be a category fibered in groupoids over $\mathcal{C}$. For every object $U \in \mathcal{C}$, there is an equivalence of categories
+
+$$\mathbf{Y}_U : \mathcal{F}(U) \xrightarrow{\;\simeq\;} \operatorname{Hom}_{\mathbf{CFG}/\mathcal{C}}(h_U, \mathcal{F})$$
+
+where $h_U$ is the CFG represented by $U$ (the slice category $\mathcal{C}/U$ with discrete fibers), and $\operatorname{Hom}_{\mathbf{CFG}/\mathcal{C}}(h_U, \mathcal{F})$ is the category of morphisms $h_U \to \mathcal{F}$ over $\mathcal{C}$ (1-morphisms as objects, 2-morphisms as morphisms).
+
+A quasi-inverse is given by the **evaluation functor**
+$$\mathbf{ev}_U : \operatorname{Hom}_{\mathbf{CFG}/\mathcal{C}}(h_U, \mathcal{F}) \xrightarrow{\;\simeq\;} \mathcal{F}(U), \quad F \mapsto F_U(\operatorname{id}_U)$$
+</Theorem>
+
+---
+
+## Construction of the Equivalence
+
+<Definition title="The functor Y_U" number="2.8.2">
+Fix a cleavage for $\mathcal{F}$ (choice of pullbacks). Given an object $x \in \mathcal{F}(U)$, define the morphism $\Phi_x : h_U \to \mathcal{F}$ as follows:
+
+**On objects:** For $f : V \to U$ (an object of $h_U$ over $V$), set $\Phi_x(f) = f^*x \in \mathcal{F}(V)$, where $f^*x$ is the chosen pullback.
+
+**On morphisms:** For a morphism in $h_U$ from $(g : W \to U)$ to $(f : V \to U)$ given by $h : W \to V$ with $f \circ h = g$, set $\Phi_x(h)$ to be the unique morphism $g^*x \to f^*x$ in $\mathcal{F}$ lying over $h$ making the diagram of cartesian arrows commute. (This exists and is unique because $g^*x \to x$ and $f^*x \to x$ are both cartesian over $g$ and $f$ respectively, and $f \circ h = g$.)
+
+**On morphisms in the fiber:** Given an isomorphism $\alpha : x \to y$ in $\mathcal{F}(U)$, define a 2-morphism $\mathbf{Y}_U(\alpha) : \Phi_x \Rightarrow \Phi_y$ by setting the component at $(f : V \to U)$ to be $f^*\alpha : f^*x \to f^*y$.
+</Definition>
+
+<Definition title="The evaluation functor" number="2.8.3">
+The quasi-inverse $\mathbf{ev}_U : \operatorname{Hom}(h_U, \mathcal{F}) \to \mathcal{F}(U)$ sends:
+
+**On objects:** A morphism $F : h_U \to \mathcal{F}$ to $F(\operatorname{id}_U) \in \mathcal{F}(U)$.
+
+**On morphisms:** A 2-morphism $\alpha : F \Rightarrow G$ to the component $\alpha_{\operatorname{id}_U} : F(\operatorname{id}_U) \to G(\operatorname{id}_U)$ in $\mathcal{F}(U)$.
+</Definition>
+
+---
+
+## Proof
+
+<Proof>
+We verify that $\mathbf{ev}_U \circ \mathbf{Y}_U \simeq \operatorname{id}_{\mathcal{F}(U)}$ and $\mathbf{Y}_U \circ \mathbf{ev}_U \simeq \operatorname{id}_{\operatorname{Hom}(h_U, \mathcal{F})}$.
+
+**Step 1:** $\mathbf{ev}_U \circ \mathbf{Y}_U \simeq \operatorname{id}$.
+
+For $x \in \mathcal{F}(U)$, we have $\mathbf{ev}_U(\Phi_x) = \Phi_x(\operatorname{id}_U) = (\operatorname{id}_U)^*x$. By the cleavage, there is a canonical isomorphism $\epsilon_x : (\operatorname{id}_U)^*x \xrightarrow{\sim} x$. These isomorphisms are natural in $x$, giving a natural isomorphism $\mathbf{ev}_U \circ \mathbf{Y}_U \cong \operatorname{id}_{\mathcal{F}(U)}$.
+
+**Step 2:** $\mathbf{Y}_U \circ \mathbf{ev}_U \simeq \operatorname{id}$.
+
+For a morphism $F : h_U \to \mathcal{F}$, set $x = F(\operatorname{id}_U)$. We need a 2-isomorphism $\Phi_x \cong F$.
+
+For any $f : V \to U$, we have $\Phi_x(f) = f^*x = f^*F(\operatorname{id}_U)$ and $F(f) \in \mathcal{F}(V)$. Now $F$ maps the morphism $f : (\operatorname{id}_U \circ f = f) \to (\operatorname{id}_U)$ in $h_U$ to a morphism $F(f) \to F(\operatorname{id}_U) = x$ in $\mathcal{F}$ lying over $f$. Since $\mathcal{F}$ is fibered in groupoids, every morphism is cartesian, so this morphism is a cartesian lift of $f$ at $x$. By uniqueness of cartesian lifts up to unique isomorphism, there is a unique isomorphism $\theta_f : f^*x \xrightarrow{\sim} F(f)$ in $\mathcal{F}(V)$.
+
+The collection $\{\theta_f\}_{f \in h_U}$ defines a 2-isomorphism $\theta : \Phi_x \Rightarrow F$. Naturality of $\theta$ follows from the universal property of cartesian arrows.
+
+**Step 3:** Functoriality and coherence.
+
+The isomorphisms in Steps 1 and 2 are natural in $x$ and $F$ respectively, giving the required equivalence of categories. The coherence conditions (triangle identities for the adjunction) follow from the uniqueness assertions in the universal property of cartesian morphisms.
+</Proof>
+
+---
+
+## Key Consequences
+
+<Theorem title="2-Yoneda embedding is 2-fully faithful" number="2.8.4">
+The 2-Yoneda embedding $\mathcal{Y} : \mathcal{C} \to \mathbf{CFG}/\mathcal{C}$, $U \mapsto h_U$, is **2-fully faithful**: for all $U, V \in \mathcal{C}$,
+
+$$\operatorname{Hom}_{\mathbf{CFG}/\mathcal{C}}(h_U, h_V) \simeq h_V(U) = \operatorname{Hom}_\mathcal{C}(U, V)$$
+
+where the right-hand side is a discrete category (set).
+</Theorem>
+
+<Proof>
+Apply the 2-Yoneda lemma with $\mathcal{F} = h_V$. Then $\operatorname{Hom}(h_U, h_V) \simeq h_V(U) = \operatorname{Hom}_\mathcal{C}(U, V)$, which is a set viewed as a discrete groupoid. In particular, there are no non-identity 2-morphisms between morphisms of representable CFGs.
+</Proof>
+
+<Theorem title="Morphisms from representables detect properties" number="2.8.5">
+Let $F : \mathcal{X} \to \mathcal{Y}$ be a morphism of CFGs over $\mathcal{C}$. Then $F$ is an equivalence if and only if for every $U \in \mathcal{C}$, the induced functor
+
+$$F_* : \operatorname{Hom}(h_U, \mathcal{X}) \to \operatorname{Hom}(h_U, \mathcal{Y})$$
+
+is an equivalence of categories. By the 2-Yoneda lemma, this is equivalent to requiring that $F(U) : \mathcal{X}(U) \to \mathcal{Y}(U)$ is an equivalence for all $U$.
+</Theorem>
+
+---
+
+## Applications
+
+<Example id="yoneda-families" title="Families as morphisms">
+For $\mathcal{X} = \mathcal{M}_g$ (moduli of genus-$g$ curves), the 2-Yoneda lemma gives:
+
+$$\operatorname{Hom}(h_S, \mathcal{M}_g) \simeq \mathcal{M}_g(S) = \left\{\parbox{20em}{\centering smooth proper morphisms $C \to S$ with geometrically connected fibers of genus $g$}\right\}$$
+
+A morphism $S \to \mathcal{M}_g$ **is** a family of curves over $S$. A 2-morphism between two morphisms $f, g : S \to \mathcal{M}_g$ is an isomorphism between the corresponding families. The automorphism group of a morphism $f : S \to \mathcal{M}_g$ is $\operatorname{Aut}(C/S)$, the automorphism group of the corresponding family.
+</Example>
+
+<Example id="yoneda-representability-test" title="Representability criterion">
+A CFG $\mathcal{X}$ is representable by an object $X \in \mathcal{C}$ if and only if there exists $X$ and an equivalence $\mathcal{X} \simeq h_X$. By the 2-Yoneda lemma, this is equivalent to:
+1. $\mathcal{X}(U)$ is a discrete groupoid (set) for all $U$.
+2. The functor $U \mapsto \pi_0(\mathcal{X}(U))$ is representable.
+
+For stacks on $(\mathbf{Sch}, \mathrm{fppf})$, condition (1) means all automorphism groups are trivial.
+</Example>
+
+<Example id="yoneda-fiber-product" title="Fiber products via the 2-Yoneda lemma">
+For stacks $\mathcal{X}, \mathcal{Y}, \mathcal{Z}$ with morphisms $\mathcal{X} \to \mathcal{Z}$ and $\mathcal{Y} \to \mathcal{Z}$, the 2-fiber product $\mathcal{X} \times_\mathcal{Z} \mathcal{Y}$ is characterized by:
+
+$$(\mathcal{X} \times_\mathcal{Z} \mathcal{Y})(U) \simeq \mathcal{X}(U) \times_{\mathcal{Z}(U)} \mathcal{Y}(U)$$
+
+where the right-hand side is the 2-fiber product of groupoids. This follows from the 2-Yoneda lemma since $\operatorname{Hom}(h_U, \mathcal{X} \times_\mathcal{Z} \mathcal{Y}) \simeq \operatorname{Hom}(h_U, \mathcal{X}) \times_{\operatorname{Hom}(h_U, \mathcal{Z})} \operatorname{Hom}(h_U, \mathcal{Y})$.
+</Example>
+
+<Example id="yoneda-diagonal" title="The diagonal and representability">
+The diagonal $\Delta : \mathcal{X} \to \mathcal{X} \times \mathcal{X}$ of a stack $\mathcal{X}$ is representable if and only if for every $U \in \mathcal{C}$ and every pair of objects $x, y \in \mathcal{X}(U)$, the presheaf $\operatorname{Isom}(x, y)$ is representable (by an object of $\mathcal{C}$, or an algebraic space).
+
+By the 2-Yoneda lemma, a morphism $h_U \to \mathcal{X} \times \mathcal{X}$ corresponds to a pair $(x, y) \in \mathcal{X}(U) \times \mathcal{X}(U)$, and:
+$$h_U \times_{\mathcal{X} \times \mathcal{X}} \mathcal{X} \simeq \operatorname{Isom}(x, y)$$
+So representability of $\Delta$ amounts to representability of all Isom functors.
+</Example>
+
+<Example id="yoneda-atlas" title="Atlases for algebraic stacks">
+An **atlas** (or **presentation**) of a stack $\mathcal{X}$ is a representable morphism $p : h_U \to \mathcal{X}$ that is a smooth surjection. By the 2-Yoneda lemma, $p$ corresponds to an object $x \in \mathcal{X}(U)$.
+
+The conditions on $p$ translate to:
+- **Surjective**: For every field $k$ and $y \in \mathcal{X}(\operatorname{Spec} k)$, there exists a field extension $k'/k$ and an isomorphism $y|_{k'} \cong x|_{k'}$ in $\mathcal{X}(k')$. (Locally, every object comes from $x$.)
+- **Smooth**: The fiber product $h_U \times_\mathcal{X} h_U = \operatorname{Isom}(x, x) \times \cdots$ (the groupoid scheme $R = U \times_\mathcal{X} U$) is smooth over $U$ via both projections.
+</Example>
+
+<Example id="yoneda-classifying" title="The universal object">
+For a stack $\mathcal{X}$, the identity morphism $\operatorname{id} : \mathcal{X} \to \mathcal{X}$ corresponds (by a generalized 2-Yoneda) to the **universal object** over $\mathcal{X}$. For example:
+- For $\mathcal{M}_g$: the identity corresponds to the **universal curve** $\mathcal{C}_g \to \mathcal{M}_g$.
+- For $BG$: the identity corresponds to the **universal torsor** $EG \to BG$ (which is the morphism $\operatorname{Spec} k \to BG$ corresponding to the trivial torsor).
+- For $B\mathbb{G}_m$: the identity corresponds to the **universal line bundle** on $B\mathbb{G}_m$.
+
+These universal objects are constructed abstractly from the 2-Yoneda lemma.
+</Example>
+
+---
+
+## Enriched Versions
+
+<Theorem title="2-Yoneda for stacks on a site" number="2.8.6">
+Let $(\mathcal{C}, \tau)$ be a site with subcanonical topology (representable presheaves are sheaves). Then for any stack $\mathcal{F}$ on $(\mathcal{C}, \tau)$ and $U \in \mathcal{C}$:
+
+$$\operatorname{Hom}_{\mathbf{Stacks}/\mathcal{C}}(h_U, \mathcal{F}) \simeq \mathcal{F}(U)$$
+
+The same equivalence holds with $\mathbf{CFG}$ replaced by $\mathbf{Stacks}$, since the representable CFG $h_U$ is already a stack (it is a sheaf of sets).
+</Theorem>
+
+<Example id="yoneda-algebraic-spaces" title="Extension to algebraic spaces">
+If $\mathcal{C} = \mathbf{Sch}$ and we allow algebraic spaces, then for an algebraic space $X$ (which is a sheaf on the etale site, but not necessarily representable by a scheme):
+
+$$\operatorname{Hom}_{\mathbf{Stacks}}(X, \mathcal{F}) \simeq \mathcal{F}(X)$$
+
+where $\mathcal{F}(X)$ is defined by extending $\mathcal{F}$ from schemes to algebraic spaces (using the etale presentation $U \to X$ and descent). This allows us to treat algebraic spaces on equal footing with schemes in the functor-of-points language.
+</Example>
+
+<Example id="yoneda-derived" title="Higher Yoneda in derived algebraic geometry">
+In derived algebraic geometry (Lurie, Toen-Vezzosi), the 2-Yoneda lemma generalizes to the **$\infty$-Yoneda lemma**: for a derived stack $\mathcal{X}$ (a functor $\mathbf{dAff}^{\mathrm{op}} \to \mathcal{S}$ satisfying descent, where $\mathcal{S}$ is the $\infty$-category of spaces):
+
+$$\operatorname{Map}(h_{\operatorname{Spec} A}, \mathcal{X}) \simeq \mathcal{X}(\operatorname{Spec} A)$$
+
+as an equivalence of spaces (not just groupoids). Here $\operatorname{Map}$ is the mapping space in the $\infty$-category of derived stacks. The classical 2-Yoneda lemma is the truncation to $\pi_0$ and $\pi_1$.
+</Example>
+
+---
+
+## Naturality
+
+<Theorem title="Naturality of the 2-Yoneda equivalence" number="2.8.7">
+The equivalence $\mathcal{F}(U) \simeq \operatorname{Hom}(h_U, \mathcal{F})$ is natural in both $U$ and $\mathcal{F}$:
+
+**(a) In $U$:** For a morphism $f : V \to U$ in $\mathcal{C}$, the diagram
+$$\mathcal{F}(U) \xrightarrow{\mathbf{Y}_U} \operatorname{Hom}(h_U, \mathcal{F})$$
+$$\downarrow f^* \quad\quad\quad\quad \downarrow f^*$$
+$$\mathcal{F}(V) \xrightarrow{\mathbf{Y}_V} \operatorname{Hom}(h_V, \mathcal{F})$$
+2-commutes, where the right vertical map is precomposition with $h_f : h_V \to h_U$.
+
+**(b) In $\mathcal{F}$:** For a morphism $G : \mathcal{F} \to \mathcal{G}$ of CFGs, the diagram
+$$\mathcal{F}(U) \xrightarrow{\mathbf{Y}_U} \operatorname{Hom}(h_U, \mathcal{F})$$
+$$\downarrow G_U \quad\quad\quad\quad \downarrow G_*$$
+$$\mathcal{G}(U) \xrightarrow{\mathbf{Y}_U} \operatorname{Hom}(h_U, \mathcal{G})$$
+2-commutes, where $G_*$ is postcomposition with $G$.
+</Theorem>
+
+<Example id="naturality-pullback" title="Naturality and pullback">
+Naturality in $U$ means: if $x \in \mathcal{F}(U)$ corresponds to $\Phi_x : h_U \to \mathcal{F}$, then the pullback $f^*x \in \mathcal{F}(V)$ corresponds to $\Phi_x \circ h_f : h_V \to h_U \to \mathcal{F}$. In moduli terms: if $C \to S$ is a family (corresponding to $S \to \mathcal{M}_g$) and $f : T \to S$, then $f^*C = C \times_S T$ corresponds to the composition $T \to S \to \mathcal{M}_g$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The 2-Yoneda lemma in practice">
+The 2-Yoneda lemma is used constantly in the theory of stacks:
+
+1. **Object = morphism**: An object of $\mathcal{X}(S)$ is a morphism $S \to \mathcal{X}$. This is the "functor of points."
+2. **Automorphism = 2-automorphism**: $\operatorname{Aut}(x) = \operatorname{Aut}(S \to \mathcal{X})$, the group of self-2-morphisms.
+3. **Representability**: $\mathcal{X}$ is a scheme iff all fibers are discrete groupoids.
+4. **Fiber products**: $(\mathcal{X} \times_\mathcal{Z} \mathcal{Y})(U) \simeq \mathcal{X}(U) \times_{\mathcal{Z}(U)} \mathcal{Y}(U)$.
+5. **Representable morphisms**: $f : \mathcal{X} \to \mathcal{Y}$ is representable iff $\mathcal{X} \times_\mathcal{Y} h_U$ is representable for all $U \to \mathcal{Y}$.
+6. **Universal objects**: The identity $\operatorname{id} : \mathcal{X} \to \mathcal{X}$ gives the universal family.
+7. **Atlases**: A smooth surjection $h_U \to \mathcal{X}$ (an object of $\mathcal{X}(U)$) presents $\mathcal{X}$.
+
+These principles reduce questions about stacks to questions about groupoids and schemes.
+</Remark>

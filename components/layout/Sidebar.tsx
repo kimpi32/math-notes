@@ -38,6 +38,7 @@ export function Sidebar({ subject }: { subject: Subject }) {
     rose: "text-rose-600",
     violet: "text-violet-600",
     orange: "text-orange-600",
+    teal: "text-teal-600",
   };
 
   const sidebarContent = (

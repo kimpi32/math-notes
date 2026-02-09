@@ -1,0 +1,213 @@
+export const metadata = {
+  title: 'Algebraic Spaces — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "개념 — Algebraic Spaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Algebraic Spaces
+
+Algebraic spaces were introduced by Michael Artin in the late 1960s as a natural generalization of schemes. They arise when one takes quotients of schemes by étale equivalence relations — a construction that does not always remain in the category of schemes. Algebraic spaces form an intermediate category between schemes and algebraic stacks, and they appear naturally in moduli problems where a fine moduli scheme fails to exist but a coarse moduli space does.
+
+---
+
+## 1. Motivation: Beyond Schemes
+
+Many natural constructions in algebraic geometry produce objects that are not schemes. For instance, if $G$ is a finite group acting freely on a scheme $X$, the quotient $X/G$ may not exist as a scheme but always exists as an algebraic space. This motivates the need for a broader category.
+
+The key insight is to work with the étale topology rather than the Zariski topology. In the étale topology, representable functors are sheaves, and algebraic spaces are certain sheaves that are "close to" being representable.
+
+---
+
+## 2. The Étale Site
+
+<Definition title="Big Étale Site">
+Let $S$ be a scheme. The **big étale site** $(\mathrm{Sch}/S)_{\text{ét}}$ is the category of $S$-schemes equipped with the étale topology, where coverings are families of étale morphisms $\{U_i \to U\}$ such that $\coprod U_i \to U$ is surjective.
+</Definition>
+
+A presheaf $F: (\mathrm{Sch}/S)^{\mathrm{op}} \to \mathrm{Set}$ is a **sheaf** for the étale topology if for every étale covering $\{U_i \to U\}$, the diagram
+
+$$
+F(U) \to \prod_i F(U_i) \rightrightarrows \prod_{i,j} F(U_i \times_U U_j)
+$$
+
+is an equalizer.
+
+---
+
+## 3. Definition of Algebraic Spaces
+
+<Definition title="Algebraic Space">
+An **algebraic space** over a scheme $S$ is a functor $X: (\mathrm{Sch}/S)^{\mathrm{op}} \to \mathrm{Set}$ such that:
+
+1. $X$ is a sheaf for the étale topology on $(\mathrm{Sch}/S)$.
+2. The diagonal $\Delta: X \to X \times_S X$ is representable by schemes.
+3. There exists a scheme $U$ and a surjective étale morphism $U \to X$ (an **étale atlas**).
+</Definition>
+
+Condition (2) ensures that for any scheme $T$ and any two morphisms $a, b: T \to X$, the fiber product $T \times_{(a,b), X \times X} X$ is a scheme. This means the "overlap" data is always schematic.
+
+Condition (3) says that $X$ is locally (in the étale topology) a scheme.
+
+<Remark>
+Every scheme is an algebraic space: the functor of points $h_X = \mathrm{Hom}(-, X)$ satisfies all three conditions, with $U = X$ as the atlas.
+</Remark>
+
+---
+
+## 4. Equivalent Formulation via Equivalence Relations
+
+An algebraic space can equivalently be described as a quotient sheaf $U/R$ where $R \rightrightarrows U$ is an étale equivalence relation on a scheme $U$. We will develop this perspective in detail in the next section on étale equivalence relations.
+
+<Definition title="Étale Presentation">
+An **étale presentation** of an algebraic space $X$ is a pair $(U, R)$ where $U$ is a scheme with an étale surjection $U \to X$ and $R = U \times_X U$ is the equivalence relation, with both projections $s, t: R \rightrightarrows U$ being étale.
+</Definition>
+
+---
+
+## 5. Morphisms of Algebraic Spaces
+
+A **morphism** of algebraic spaces $f: X \to Y$ over $S$ is simply a natural transformation of functors. Since algebraic spaces are sheaves on the big étale site, the category of algebraic spaces over $S$ is a full subcategory of the category of sheaves.
+
+<Definition title="Representable Morphism">
+A morphism $f: X \to Y$ of algebraic spaces is **representable** (by schemes) if for every scheme $T$ and morphism $T \to Y$, the fiber product $X \times_Y T$ is a scheme.
+</Definition>
+
+For a representable morphism, we can define properties such as being étale, smooth, flat, proper, etc., by requiring that the base change $X \times_Y T \to T$ has the corresponding property for all $T \to Y$.
+
+---
+
+## 6. Examples
+
+<Example title="Schemes as algebraic spaces">
+Every scheme $X$ over $S$ defines an algebraic space via its functor of points $h_X(T) = \mathrm{Hom}_S(T, X)$. The identity $X \to h_X$ is an étale atlas. This embedding $\mathrm{Sch}/S \hookrightarrow \mathrm{AlgSp}/S$ is fully faithful.
+</Example>
+
+<Example title="Quotient by a free finite group action">
+Let $X$ be a scheme and $G$ a finite group acting freely on $X$ (i.e., the map $G \times X \to X \times X$ given by $(g, x) \mapsto (gx, x)$ is a closed immersion). Define $R = G \times X$ with $s(g,x) = x$ and $t(g,x) = gx$. Then $R \rightrightarrows X$ is an étale equivalence relation, and the quotient $X/G$ is an algebraic space. When the action is not free, one must use algebraic stacks instead.
+</Example>
+
+<Example title="Non-separated algebraic space: the line with doubled origin">
+Consider $U = \mathbb{A}^1_k \sqcup \mathbb{A}^1_k$ and the equivalence relation $R$ that identifies the two copies away from the origin: $R = U \sqcup \mathbb{G}_{m,k}$ with appropriate source and target maps. The resulting algebraic space is the "line with doubled origin," which is an algebraic space but not a separated one. Indeed, it is also a scheme — a non-separated one.
+</Example>
+
+<Example title="Quotient of the plane by an involution">
+Let $X = \mathbb{A}^2_k$ and $G = \mathbb{Z}/2\mathbb{Z}$ acting by $(x,y) \mapsto (-x, -y)$. The quotient $X/G$ exists as a scheme $\mathrm{Spec}\, k[x^2, xy, y^2] \cong \mathrm{Spec}\, k[a,b,c]/(ac - b^2)$. This is a quadric cone, and in this case the algebraic space is actually a scheme.
+</Example>
+
+<Example title="An algebraic space that is not a scheme">
+Let $k$ be an algebraically closed field and let $A$ be an abelian surface over $k$. Let $\iota: A \to A$ be the involution $a \mapsto -a$. The fixed locus consists of the 16 two-torsion points. Let $U = A \setminus \{0\}$ and $G = \{1, \iota|_U\}$. Since $\iota$ acts freely on $U$ (the other 15 fixed points being blown up), $U/G$ is an algebraic space. However, for suitable choices, one can arrange that this quotient is an algebraic space not isomorphic to any scheme.
+</Example>
+
+<Example title="Hironaka's example">
+Hironaka constructed a smooth proper threefold $X$ over $\mathbb{C}$ with a free $\mathbb{Z}/2\mathbb{Z}$-action such that the quotient $X / (\mathbb{Z}/2\mathbb{Z})$ is a proper smooth algebraic space that is not a scheme. This is one of the classical examples demonstrating the necessity of algebraic spaces. The key point is that $X$ is a proper variety, but the quotient, while proper as an algebraic space, does not admit an ample line bundle, and therefore is not projective and indeed not a scheme.
+</Example>
+
+<Example title="Affine algebraic spaces are schemes">
+If $X$ is an algebraic space admitting an étale atlas $U \to X$ with $U$ affine, and if $X$ is quasi-separated, then $X$ is actually an affine scheme. More generally, every quasi-separated algebraic space that is affine over a scheme is itself a scheme.
+</Example>
+
+<Example title="Algebraic space from a non-effective descent datum">
+Consider a scheme $S$ and an étale cover $\{U_i \to S\}$ with a descent datum for quasi-coherent sheaves that is effective. Now consider the moduli functor that parametrizes descent data. When descent fails to be effective (in the Zariski topology), the resulting functor may be an algebraic space rather than a scheme, witnessing the strictly larger scope of the étale topology.
+</Example>
+
+<Example title="The Hilbert scheme as an algebraic space">
+For certain moduli problems, the Hilbert functor is representable by a scheme (by Grothendieck's theorem). However, relative Hilbert functors for algebraic spaces, $\mathrm{Hilb}_{X/S}$ where $X$ is an algebraic space over $S$, exist as algebraic spaces. This generalization is due to Artin.
+</Example>
+
+<Example title="Algebraic space structure on analytic quotients">
+Over $\mathbb{C}$, let $X$ be a smooth scheme and $G$ a finite group acting properly on $X^{\mathrm{an}}$. By GAGA-type results, if the quotient $X^{\mathrm{an}}/G$ is algebraizable, it carries the structure of an algebraic space. The passage from analytic to algebraic often forces one to work with algebraic spaces rather than schemes.
+</Example>
+
+<Example title="Quotients by étale group schemes">
+Let $S$ be a scheme, $X$ an $S$-scheme, and $G \to S$ an étale group scheme acting freely on $X$. Then the fppf quotient sheaf $X/G$ is an algebraic space over $S$. When $G$ is a constant finite group, this recovers the earlier example.
+</Example>
+
+<Example title="Weil restriction producing algebraic spaces">
+Let $L/K$ be a finite separable field extension, and let $X$ be a scheme over $L$. The Weil restriction $\mathrm{Res}_{L/K}(X)$ is defined as the functor $T \mapsto X(T \times_K L)$. When $X$ is quasi-projective, $\mathrm{Res}_{L/K}(X)$ is a scheme. For more general $X$, the Weil restriction exists as an algebraic space over $K$.
+</Example>
+
+<Example title="The coarse moduli space of curves">
+The moduli stack $\mathcal{M}_g$ of smooth curves of genus $g \geq 2$ is a smooth proper Deligne-Mumford stack. Its coarse moduli space $M_g$ is an algebraic space (and in fact a quasi-projective scheme by the Keel-Mori theorem combined with results on ampleness). For $g = 1$ with level structure, similar constructions produce algebraic spaces.
+</Example>
+
+---
+
+## 7. Comparison with Schemes
+
+The relationship between schemes and algebraic spaces can be summarized as follows:
+
+| Property | Schemes | Algebraic Spaces |
+|----------|---------|------------------|
+| Local model | Affine schemes $\mathrm{Spec}(A)$ | Schemes (via étale atlas) |
+| Topology used | Zariski | Étale |
+| Points | $\mathrm{Spec}(k) \to X$ | Geometric points modulo equivalence |
+| Ample line bundles | May exist | May not exist |
+| Quotients by free finite groups | May fail | Always exist |
+
+<Theorem title="Schemes inside algebraic spaces">
+The functor $\mathrm{Sch}/S \to \mathrm{AlgSp}/S$ is fully faithful. An algebraic space $X$ is a scheme if and only if there exists a Zariski open covering $\{U_i \to X\}$ where each $U_i$ is an affine scheme.
+</Theorem>
+
+---
+
+## 8. Points of an Algebraic Space
+
+<Definition title="Points of an algebraic space">
+A **point** of an algebraic space $X$ is an equivalence class of morphisms $\mathrm{Spec}(k) \to X$ where $k$ is a field, under the equivalence relation generated by: $\mathrm{Spec}(k) \to X$ is equivalent to $\mathrm{Spec}(k') \to X$ if there exists a common field extension $\mathrm{Spec}(\Omega) \to \mathrm{Spec}(k)$ and $\mathrm{Spec}(\Omega) \to \mathrm{Spec}(k')$ making the diagram commute.
+</Definition>
+
+The set of points $|X|$ carries a natural topology: a subset $Z \subseteq |X|$ is closed if and only if $p^{-1}(Z) \subseteq |U|$ is closed for some (equivalently, any) étale atlas $p: U \to X$.
+
+<Remark>
+Unlike schemes, the topological space $|X|$ of an algebraic space may not be sober (i.e., not every irreducible closed subset need have a unique generic point). However, if $X$ is quasi-separated, then $|X|$ is sober.
+</Remark>
+
+---
+
+## 9. The Diagonal and Quasi-Separatedness
+
+The representability of the diagonal $\Delta: X \to X \times_S X$ is part of the definition. The diagonal encodes how "overlaps" in an algebraic space behave.
+
+<Definition title="Quasi-separated algebraic space">
+An algebraic space $X$ over $S$ is **quasi-separated** if the diagonal $\Delta: X \to X \times_S X$ is quasi-compact. It is **separated** if $\Delta$ is a closed immersion.
+</Definition>
+
+Most algebraic spaces encountered in practice are quasi-separated. The quasi-separated hypothesis is important for many foundational results, including the comparison between the étale and Zariski topologies.
+
+---
+
+## 10. Algebraic Spaces and Stacks
+
+Algebraic spaces sit naturally in the hierarchy:
+
+$$
+\text{Affine schemes} \subset \text{Schemes} \subset \text{Algebraic spaces} \subset \text{DM stacks} \subset \text{Algebraic stacks}
+$$
+
+An algebraic space is the same thing as a Deligne-Mumford stack with trivial automorphism groups. Equivalently, an algebraic space is a DM stack $\mathcal{X}$ such that the inertia stack $I_\mathcal{X} \to \mathcal{X}$ is the identity.
+
+This perspective is extremely useful: results proven for DM stacks immediately specialize to algebraic spaces, and many techniques (such as the Keel-Mori theorem) go in the reverse direction, producing algebraic spaces from DM stacks.
+
+---
+
+## References
+
+- M. Artin, *Algebraic Spaces*, Yale Mathematical Monographs, 1971.
+- D. Knutson, *Algebraic Spaces*, Lecture Notes in Mathematics 203, Springer, 1971.
+- The Stacks Project, Part: Algebraic Spaces.
+- G. Laumon and L. Moret-Bailly, *Champs algébriques*, Springer, 2000.

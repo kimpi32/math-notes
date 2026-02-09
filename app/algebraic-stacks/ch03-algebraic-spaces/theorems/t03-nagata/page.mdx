@@ -1,0 +1,215 @@
+export const metadata = {
+  title: 'Nagata Compactification — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "정리 — Nagata Compactification" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Nagata Compactification
+
+Nagata's compactification theorem asserts that every separated scheme (or algebraic space) of finite type over a noetherian base can be compactified — that is, embedded as a dense open subspace of a proper algebraic space. This is a foundational result with far-reaching consequences, including the construction of compactly supported cohomology and the formulation of Grothendieck duality.
+
+---
+
+## 1. Classical Nagata's Theorem for Schemes
+
+<Theorem title="Nagata compactification for schemes (original)">
+Let $S$ be a noetherian scheme and $f: X \to S$ a separated morphism of finite type. Then there exists a proper $S$-scheme $\overline{X}$ and an open immersion $j: X \hookrightarrow \overline{X}$ over $S$ such that $j(X)$ is dense in $\overline{X}$.
+</Theorem>
+
+Nagata originally proved this in 1962 for the case $S = \mathrm{Spec}(\mathbb{Z})$, which implies the general noetherian case. The proof is notoriously intricate, and several modern treatments have been given.
+
+---
+
+## 2. Statement for Algebraic Spaces
+
+<Theorem title="Nagata compactification for algebraic spaces">
+Let $f: X \to S$ be a separated morphism of finite type between algebraic spaces, where $S$ is quasi-compact and quasi-separated. Then there exists a factorization
+
+$$
+X \xrightarrow{j} \overline{X} \xrightarrow{\bar{f}} S
+$$
+
+where $j$ is an open immersion with dense image and $\bar{f}$ is proper. That is, $\overline{X}$ is a **compactification** of $X$ over $S$.
+</Theorem>
+
+<Remark>
+The compactification $\overline{X}$ is an algebraic space, not necessarily a scheme. However, if $X$ is a scheme, one can arrange (in the noetherian case) for $\overline{X}$ to also be a scheme.
+</Remark>
+
+---
+
+## 3. The Boundary
+
+<Definition title="Boundary of a compactification">
+Given a compactification $j: X \hookrightarrow \overline{X}$, the **boundary** is the complement $\partial X = \overline{X} \setminus X$ with its reduced induced structure. It is a proper closed subspace of $\overline{X}$.
+</Definition>
+
+In general, the boundary may be highly singular, even when $X$ is smooth. The problem of finding compactifications with "nice" boundaries (e.g., simple normal crossing divisors) is the subject of resolution of singularities.
+
+---
+
+## 4. Uniqueness and Non-Uniqueness
+
+Nagata compactifications are far from unique:
+
+<Remark>
+Given $X \to S$ separated of finite type, there are typically infinitely many non-isomorphic compactifications. For instance, $\mathbb{A}^1_k$ can be compactified to $\mathbb{P}^1_k$, but also to any Hirzebruch surface $\mathbb{F}_n$ (viewed as a compactification of the total space $\mathbb{A}^1$ of a line bundle on $\mathbb{P}^1$, restricted to a fiber). However, there is a notion of "minimal" compactification in certain settings.
+</Remark>
+
+<Definition title="Wonderful compactification">
+In special cases (e.g., for symmetric varieties or complements of hyperplane arrangements), there exist canonical or "wonderful" compactifications with especially nice properties (smooth boundary with normal crossings, explicit description of boundary strata).
+</Definition>
+
+---
+
+## 5. Examples
+
+<Example title="Affine line to projective line">
+The simplest example: $\mathbb{A}^1_k \hookrightarrow \mathbb{P}^1_k$ is a Nagata compactification. The boundary is a single point $\{\infty\}$. This extends to $\mathbb{A}^n_k \hookrightarrow \mathbb{P}^n_k$ with boundary the hyperplane at infinity.
+</Example>
+
+<Example title="Affine variety to projective closure">
+Let $X = V(f) \subset \mathbb{A}^n_k$ be an affine variety. Its projective closure $\overline{X} = V(f^h) \subset \mathbb{P}^n_k$ (where $f^h$ is the homogenization) is a Nagata compactification. However, $\overline{X}$ may be singular even if $X$ is smooth, in which case one might prefer a different compactification.
+</Example>
+
+<Example title="Complement of a divisor">
+Let $\overline{X}$ be a proper scheme and $D \subset \overline{X}$ a closed subscheme. Then $X = \overline{X} \setminus D$ is a separated scheme of finite type, and $X \hookrightarrow \overline{X}$ is a compactification. Nagata's theorem says the converse: every such $X$ admits at least one such compactification.
+</Example>
+
+<Example title="Torus compactification">
+The algebraic torus $\mathbb{G}_m^n = (\mathbb{A}^1 \setminus \{0\})^n$ can be compactified in many ways: $(\mathbb{P}^1)^n$, toric varieties associated to fans, or the projective space via the Segre embedding. Toric geometry provides a systematic framework for compactifying tori and torus orbits.
+</Example>
+
+<Example title="Compactification of a smooth curve">
+Let $C$ be a smooth affine curve over an algebraically closed field $k$. Then $C$ admits a unique smooth compactification $\overline{C}$: the smooth projective curve containing $C$ as a dense open subset. The boundary $\overline{C} \setminus C$ is a finite set of points. Uniqueness follows from the fact that birational smooth projective curves are isomorphic.
+</Example>
+
+<Example title="Compactification of a surface">
+For a smooth surface $X$ over $k$, there exist smooth compactifications $\overline{X}$ (in characteristic zero, by Hironaka's resolution; in any characteristic for surfaces, by Lipman's resolution). The boundary can be arranged to be a simple normal crossing divisor.
+</Example>
+
+<Example title="Quotient compactification">
+Let $G$ be a finite group acting freely on a separated scheme $X$ of finite type over $S$. If $\overline{X}$ is a $G$-equivariant compactification of $X$ (i.e., the $G$-action extends to $\overline{X}$), then $\overline{X}/G$ is a compactification of $X/G$. However, finding equivariant compactifications requires extra work (it is a theorem of Sumihiro for torus actions and can be arranged for finite group actions by averaging).
+</Example>
+
+<Example title="Algebraic space compactification">
+Let $X$ be a separated algebraic space of finite type over a field that is not a scheme (e.g., Hironaka's quotient). Then Nagata's theorem provides a proper algebraic space $\overline{X}$ containing $X$ as a dense open subspace. By Chow's lemma, $\overline{X}$ is dominated by a projective scheme.
+</Example>
+
+<Example title="Moduli space compactification">
+The moduli space $M_g$ of smooth genus-$g$ curves is a quasi-projective variety. Its Deligne-Mumford compactification $\overline{M}_g$ (parametrizing stable curves) is a Nagata compactification. The boundary $\overline{M}_g \setminus M_g$ parametrizes singular stable curves with nodes.
+</Example>
+
+<Example title="Compactification over a DVR">
+Let $S = \mathrm{Spec}(R)$ where $R$ is a DVR, and $X \to S$ a smooth separated family of curves over the generic fiber. Nagata's theorem gives a proper $\overline{X} \to S$, providing a (possibly singular) model over the special fiber. The semistable reduction theorem gives a compactification with mild singularities (nodes) after base change.
+</Example>
+
+<Example title="Non-compactifiable morphisms">
+If $f: X \to S$ is not separated, Nagata's theorem fails. For instance, the line with doubled origin over $\mathrm{Spec}(k)$ does not embed as a dense open in any proper scheme (it is already "complete" in the non-separated sense). Separatedness is essential.
+</Example>
+
+<Example title="Compactification preserving regularity">
+In characteristic zero, one can always find a smooth compactification of a smooth variety (by Hironaka). In positive characteristic, this is a major open problem in dimensions $\geq 4$. Nagata's theorem gives a compactification, but possibly singular.
+</Example>
+
+---
+
+## 6. Sketch of the Proof
+
+The proof of Nagata's theorem is technical but the overall strategy is beautiful:
+
+**Step 1: Reduce to the affine case.** Cover $X$ by finitely many affine opens $U_1, \ldots, U_n$. If each $U_i$ admits a compactification $\overline{U}_i$, one glues them.
+
+**Step 2: Compactify affine schemes.** For an affine scheme $U = \mathrm{Spec}(A)$ of finite type over $S$, choose generators $a_1, \ldots, a_n$ of $A$ over $\mathcal{O}_S$ and embed $U \hookrightarrow \mathbb{A}^n_S \hookrightarrow \mathbb{P}^n_S$. Take the closure to get a compactification.
+
+**Step 3: Glue compactifications.** Given compactifications $\overline{U}_i$ of an open cover $\{U_i\}$ of $X$, one cannot simply glue (the gluing data may not extend). Instead, one uses a process of "blowing up" and "flattening" to make the compactifications compatible. This is the most technical part.
+
+**Step 4: Apply Raynaud-Gruson flattening.** A key ingredient is Raynaud and Gruson's flattening theorem, which allows one to modify a compactification to make morphisms flat, thereby controlling the gluing.
+
+<Remark>
+Modern proofs (Lütkebohmert, Conrad, Temkin, and especially Rydh) streamline the gluing step. Conrad's approach, following Deligne's notes, uses a systematic analysis of the "boundary" behavior. Rydh's proof works in the most general setting (for algebraic spaces over quasi-compact quasi-separated bases).
+</Remark>
+
+---
+
+## 7. Applications
+
+### Compactly Supported Cohomology
+
+<Definition title="Compactly supported cohomology">
+For a separated finite-type morphism $f: X \to S$ and a sheaf $\mathcal{F}$ on $X$, choose a compactification $j: X \hookrightarrow \overline{X}$. The **cohomology with compact support** is
+
+$$
+H^i_c(X, \mathcal{F}) = H^i(\overline{X}, j_!\mathcal{F})
+$$
+
+where $j_!$ is extension by zero. This is independent of the choice of compactification.
+</Definition>
+
+### Grothendieck Duality
+
+Nagata compactification is essential for formulating Grothendieck duality for non-proper morphisms:
+
+$$
+Rf_! \mathcal{R}\mathcal{H}om(\mathcal{F}, f^!\mathcal{G}) \cong \mathcal{R}\mathcal{H}om(Rf_*\mathcal{F}, \mathcal{G})
+$$
+
+where $f^! = j^* \circ \bar{f}^!$ for a compactification $j: X \hookrightarrow \overline{X}$ and $\bar{f}: \overline{X} \to S$ proper.
+
+### Poincare Duality
+
+For smooth varieties over a field, Nagata compactification enables the proof of Poincare duality in étale cohomology:
+
+$$
+H^i_c(X, \mathbb{Q}_\ell) \times H^{2d-i}(X, \mathbb{Q}_\ell) \to H^{2d}_c(X, \mathbb{Q}_\ell) \cong \mathbb{Q}_\ell(-d)
+$$
+
+---
+
+## 8. Generalizations
+
+<Theorem title="Nagata for algebraic stacks (Rydh)">
+Let $f: \mathcal{X} \to S$ be a morphism of finite type from a separated algebraic stack $\mathcal{X}$ with finite inertia to a quasi-compact quasi-separated algebraic space $S$. Then there exists a compactification: an open immersion $\mathcal{X} \hookrightarrow \overline{\mathcal{X}}$ into a proper algebraic stack $\overline{\mathcal{X}}$ over $S$.
+</Theorem>
+
+This remarkable generalization, due to David Rydh, extends Nagata's theorem from schemes and algebraic spaces to algebraic stacks with finite inertia.
+
+---
+
+## 9. The Minimal Compactification
+
+In certain settings, there is a notion of a "smallest" compactification:
+
+<Definition title="Minimal compactification">
+A compactification $j: X \hookrightarrow \overline{X}$ is **minimal** if for any other compactification $j': X \hookrightarrow \overline{X}'$, there exists a morphism $\overline{X}' \to \overline{X}$ compatible with $j$ and $j'$.
+</Definition>
+
+Minimal compactifications rarely exist in general, but they do in special cases:
+- For smooth curves: the smooth projective model.
+- For abelian varieties: the abelian variety itself (already proper).
+- For tori: the theory of toroidal compactifications provides canonical choices (though not necessarily minimal in the above sense).
+
+---
+
+## References
+
+- M. Nagata, "Imbedding of an abstract variety in a complete variety," J. Math. Kyoto Univ. 2 (1962), 1-10.
+- B. Conrad, "Deligne's notes on Nagata compactification," J. Ramanujan Math. Soc. 22 (2007), 205-257.
+- D. Rydh, "Compactification of tame Deligne-Mumford stacks," preprint, 2012.
+- W. Lütkebohmert, "On compactification of schemes," Manuscripta Math. 80 (1993), 95-111.
+- M. Temkin, "Relative Riemann-Zariski spaces," Israel J. Math. 185 (2011), 1-42.

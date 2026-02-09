@@ -1,0 +1,264 @@
+export const metadata = {
+  title: 'Fibered Categories -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Concept -- Fibered Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Fibered Categories
+
+Fibered categories provide the categorical framework underpinning the theory of stacks. They formalize the idea of a "family of categories parametrized by a base category," generalizing the notion of a sheaf from sets to categories. Just as a sheaf associates data to open sets with compatibility, a fibered category associates an entire category to each object of a base, with functorial pullback operations.
+
+---
+
+## The Functor to the Base
+
+<Definition title="Category over a base" number="2.1.1">
+Let $\mathcal{C}$ be a category. A **category over $\mathcal{C}$** is a category $\mathcal{F}$ together with a functor $p : \mathcal{F} \to \mathcal{C}$. We call $p$ the **structure functor** and $\mathcal{C}$ the **base category**.
+
+For an object $U \in \mathcal{C}$, the **fiber** (or **fibre**) of $\mathcal{F}$ over $U$ is the subcategory $\mathcal{F}(U) = \mathcal{F}_U$ consisting of:
+- Objects: $\{x \in \operatorname{Ob}(\mathcal{F}) \mid p(x) = U\}$
+- Morphisms: $\{\phi \in \operatorname{Mor}(\mathcal{F}) \mid p(\phi) = \operatorname{id}_U\}$
+
+Morphisms in the fiber are called **vertical morphisms**.
+</Definition>
+
+<Example id="trivial-fibered" title="Trivial fibered category">
+Let $\mathcal{C}$ be any category and $\mathcal{D}$ a fixed category. The **trivial fibered category** is $\mathcal{F} = \mathcal{C} \times \mathcal{D}$ with $p = \operatorname{pr}_1 : \mathcal{C} \times \mathcal{D} \to \mathcal{C}$. The fiber over any $U \in \mathcal{C}$ is $\mathcal{F}_U \cong \mathcal{D}$. This is the fibered category analogue of a trivial bundle.
+</Example>
+
+<Example id="arrow-category" title="Arrow category">
+Let $\mathcal{C}$ be a category. The **arrow category** $\operatorname{Arr}(\mathcal{C})$ has morphisms $f : X \to Y$ in $\mathcal{C}$ as objects, and commutative squares as morphisms. The functor $\operatorname{target} : \operatorname{Arr}(\mathcal{C}) \to \mathcal{C}$ sending $f : X \to Y$ to $Y$ gives $\operatorname{Arr}(\mathcal{C})$ the structure of a category over $\mathcal{C}$. The fiber over $Y$ is the slice category $\mathcal{C}/Y$.
+</Example>
+
+---
+
+## Cartesian Arrows
+
+<Definition title="Cartesian arrow (morphism)" number="2.1.2">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a category over $\mathcal{C}$. A morphism $\phi : y \to x$ in $\mathcal{F}$ is **cartesian** (or a **cartesian lift**) if for every morphism $\psi : z \to x$ in $\mathcal{F}$ and every morphism $h : p(z) \to p(y)$ in $\mathcal{C}$ with $p(\phi) \circ h = p(\psi)$, there exists a **unique** morphism $\chi : z \to y$ with $p(\chi) = h$ and $\phi \circ \chi = \psi$.
+
+In a diagram:
+$$z \xrightarrow{\exists!\, \chi} y \xrightarrow{\phi} x$$
+lying over
+$$p(z) \xrightarrow{h} p(y) \xrightarrow{p(\phi)} p(x)$$
+
+Informally, $\phi$ is cartesian if $y$ is the "best pullback" of $x$ along $p(\phi)$.
+</Definition>
+
+<Remark title="Universal property viewpoint">
+The cartesian condition is a universal property: the morphism $\phi : y \to x$ lying over $f : V \to U$ is cartesian if and only if for every object $z$ in $\mathcal{F}$ lying over $W$, the map
+$$\operatorname{Hom}_\mathcal{F}(z, y) \to \operatorname{Hom}_\mathcal{F}(z, x) \times_{\operatorname{Hom}_\mathcal{C}(W, U)} \operatorname{Hom}_\mathcal{C}(W, V)$$
+is a bijection. This is precisely saying that $y$ represents a certain functor.
+</Remark>
+
+<Example id="cartesian-pullback-schemes" title="Cartesian arrows as fiber products">
+Let $\mathcal{C} = \mathbf{Sch}$ (schemes) and let $\mathcal{F}$ be the category of quasi-coherent sheaves: objects are pairs $(S, \mathcal{E})$ where $S$ is a scheme and $\mathcal{E}$ is a quasi-coherent $\mathcal{O}_S$-module. The functor $p(S, \mathcal{E}) = S$.
+
+A morphism $(f, \varphi) : (T, \mathcal{G}) \to (S, \mathcal{E})$ consists of $f : T \to S$ and $\varphi : f^*\mathcal{E} \to \mathcal{G}$. This morphism is **cartesian** if and only if $\varphi$ is an isomorphism, i.e., $\mathcal{G} \cong f^*\mathcal{E}$. Cartesian arrows correspond to pulling back sheaves.
+</Example>
+
+<Example id="cartesian-in-sets" title="Cartesian arrows for sets">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a category over $\mathcal{C}$ where each fiber $\mathcal{F}_U$ is a discrete category (a set). Then every morphism in $\mathcal{F}$ is automatically cartesian. This recovers the theory of presheaves of sets.
+</Example>
+
+---
+
+## Fibered Categories
+
+<Definition title="Fibered category" number="2.1.3">
+A functor $p : \mathcal{F} \to \mathcal{C}$ is a **fibered category** (or **$\mathcal{F}$ is fibered over $\mathcal{C}$**) if for every morphism $f : V \to U$ in $\mathcal{C}$ and every object $x \in \mathcal{F}_U$ (lying over $U$), there exists a cartesian morphism $\phi : y \to x$ with $p(\phi) = f$.
+
+Equivalently: every morphism in the base can be "lifted" to a cartesian morphism in the total category, providing pullbacks of objects along any base morphism.
+</Definition>
+
+<Example id="fibered-modules" title="Modules over varying rings">
+Define $\mathcal{F}$ as follows: objects are pairs $(A, M)$ where $A$ is a commutative ring and $M$ is an $A$-module. A morphism $(A, M) \to (B, N)$ is a ring homomorphism $f : A \to B$ together with an $A$-module map $M \to f^*N$ (where $f^*N$ is $N$ viewed as an $A$-module via $f$). The functor $p(A, M) = A$ makes $\mathcal{F}$ fibered over $\mathbf{CRing}$.
+
+The fiber $\mathcal{F}_A$ is the category $A\text{-}\mathbf{Mod}$ of $A$-modules. Given $f : A \to B$ and a $B$-module $N$, the cartesian lift is $(A, f^*N) \to (B, N)$ where $f^*N$ is $N$ with the $A$-module structure $a \cdot n = f(a)n$. This is the **restriction of scalars**.
+</Example>
+
+<Example id="fibered-schemes-over-S" title="Schemes over a base scheme S">
+Fix a scheme $S$. The category $\mathbf{Sch}/S$ of $S$-schemes is fibered over $\mathbf{Sch}$ via the forgetful functor. More precisely, let $\mathcal{F}$ have objects $(T, X \to T)$ where $T$ is a scheme and $X \to T$ is a morphism of schemes, and let $p(T, X \to T) = T$.
+
+Given a morphism $f : T' \to T$ and an object $X \to T$, the cartesian lift is the base change $X \times_T T' \to T'$. The fiber over $T$ is the category of schemes over $T$, and pullback is fiber product.
+</Example>
+
+<Example id="fibered-vector-bundles" title="Vector bundles">
+Let $\mathcal{F}$ be the category of vector bundles: objects are pairs $(X, E)$ where $X$ is a smooth manifold (or scheme) and $E \to X$ is a vector bundle. Morphisms are bundle maps covering base maps. The functor $p(X, E) = X$ is fibered, with cartesian morphisms being pullback bundles $f^*E$.
+
+The fiber $\mathcal{F}_X$ is the category $\mathbf{Vect}(X)$ of vector bundles on $X$.
+</Example>
+
+<Example id="fibered-etale-covers" title="Etale covers">
+Let $\mathcal{C} = \mathbf{Sch}$ and let $\mathcal{F}$ be the category whose objects are pairs $(S, X \to S)$ where $X \to S$ is a finite etale morphism. This is fibered over $\mathbf{Sch}$: the cartesian lift of $X \to S$ along $T \to S$ is the base change $X \times_S T \to T$, which is again finite etale.
+
+The fiber over $S$ is the category $\mathbf{FEt}_S$ of finite etale covers of $S$. When $S = \operatorname{Spec} k$, this is the category of finite $\operatorname{Gal}(\bar{k}/k)$-sets, central to Grothendieck's algebraic fundamental group.
+</Example>
+
+<Example id="fibered-principal-bundles" title="Principal G-bundles">
+Fix a group scheme $G$ over a base scheme $S$. Define a category $\mathcal{F}$ whose objects over $T \in \mathbf{Sch}/S$ are principal $G_T$-bundles $P \to T$ (locally trivial in the appropriate topology). A morphism from $(T', P')$ to $(T, P)$ over $f : T' \to T$ is an isomorphism $P' \cong f^*P$.
+
+This is fibered over $\mathbf{Sch}/S$. The fiber over $T$ is the groupoid of principal $G_T$-bundles, which we denote $BG(T)$. This is the classifying stack of $G$.
+</Example>
+
+---
+
+## Cleavage and Splitting
+
+<Definition title="Cleavage" number="2.1.4">
+A **cleavage** for a fibered category $p : \mathcal{F} \to \mathcal{C}$ is a choice, for each morphism $f : V \to U$ in $\mathcal{C}$ and each object $x \in \mathcal{F}_U$, of a specific cartesian morphism $\phi_{f,x} : f^*x \to x$ lying over $f$.
+
+The chosen object $f^*x \in \mathcal{F}_V$ is called the **pullback** of $x$ along $f$. The assignment $x \mapsto f^*x$ extends to a functor $f^* : \mathcal{F}_U \to \mathcal{F}_V$.
+
+A fibered category with a chosen cleavage is called a **cloven fibered category**.
+</Definition>
+
+<Remark title="Axiom of choice">
+By the axiom of choice, every fibered category admits a cleavage. The point is that the cleavage is additional structure, not a property. Different cleavages can give non-isomorphic (but equivalent) pullback functors.
+</Remark>
+
+<Definition title="Splitting" number="2.1.5">
+A cleavage is a **splitting** if the pullback functors satisfy strict compatibility:
+1. $(\operatorname{id}_U)^* = \operatorname{id}_{\mathcal{F}_U}$ (not just naturally isomorphic),
+2. $(f \circ g)^* = g^* \circ f^*$ (strict equality, not just natural isomorphism).
+
+A fibered category with a splitting is called a **split fibered category**. This means $\mathcal{F}$ is equivalent to a strict functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Cat}$.
+</Definition>
+
+<Example id="split-presheaf" title="Split fibered categories from presheaves">
+Every presheaf of categories $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Cat}$ gives rise to a split fibered category via the **Grothendieck construction**. The total category $\int F$ (also denoted $\mathcal{C} \int F$ or the **category of elements**) has:
+- Objects: pairs $(U, x)$ with $U \in \mathcal{C}$ and $x \in F(U)$
+- Morphisms $(V, y) \to (U, x)$: pairs $(f, \phi)$ where $f : V \to U$ in $\mathcal{C}$ and $\phi : y \to F(f)(x)$ in $F(V)$
+
+The projection $(U, x) \mapsto U$ is a split fibered category with splitting $f^*(U, x) = (V, F(f)(x))$.
+</Example>
+
+<Example id="non-split-fibered" title="Non-split fibered category">
+Consider the fibered category of quasi-coherent sheaves over $\mathbf{Sch}$. Even after choosing a cleavage, the pullback functors generally satisfy $(f \circ g)^* \cong g^* \circ f^*$ only up to natural isomorphism, not strict equality. This is because the pullback $f^*\mathcal{E}$ is typically defined as $\mathcal{O}_{T'} \otimes_{f^{-1}\mathcal{O}_T} f^{-1}\mathcal{E}$, and the tensor product is only associative up to isomorphism.
+
+The associativity isomorphisms $\alpha_{f,g} : g^* \circ f^* \xrightarrow{\sim} (f \circ g)^*$ satisfy a cocycle condition, giving a **pseudofunctor** (or **2-functor**) rather than a strict functor.
+</Example>
+
+---
+
+## The Pseudofunctor Perspective
+
+<Definition title="Pseudofunctor" number="2.1.6">
+A **pseudofunctor** (or **lax 2-functor**) $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Cat}$ consists of:
+1. For each $U \in \mathcal{C}$, a category $F(U)$.
+2. For each $f : V \to U$, a functor $f^* : F(U) \to F(V)$.
+3. For each $U$, a natural isomorphism $\epsilon_U : \operatorname{id}_{F(U)} \xrightarrow{\sim} (\operatorname{id}_U)^*$.
+4. For each composable pair $W \xrightarrow{g} V \xrightarrow{f} U$, a natural isomorphism $\alpha_{f,g} : g^* \circ f^* \xrightarrow{\sim} (f \circ g)^*$.
+
+These must satisfy the **coherence conditions**: for composable $X \xrightarrow{h} W \xrightarrow{g} V \xrightarrow{f} U$,
+$$\alpha_{fg, h} \circ (\alpha_{f,g} * h^*) = \alpha_{f, gh} \circ (g^* * \alpha_{f,h})$$
+(a cocycle/pentagon-like condition), plus unit axioms involving $\epsilon$.
+</Definition>
+
+<Remark title="Equivalence of notions">
+There is an equivalence of 2-categories:
+
+$$\{\text{fibered categories over } \mathcal{C}\} \simeq \{\text{pseudofunctors } \mathcal{C}^{\mathrm{op}} \to \mathbf{Cat}\}$$
+
+The forward direction chooses a cleavage and records the coherence isomorphisms. The backward direction is the Grothendieck construction. This equivalence is one of the foundational results of Grothendieck's SGA1.
+</Remark>
+
+<Example id="pseudo-qcoh" title="Quasi-coherent sheaves as a pseudofunctor">
+The assignment $S \mapsto \mathbf{QCoh}(S)$ (the category of quasi-coherent sheaves on a scheme $S$) defines a pseudofunctor $\mathbf{Sch}^{\mathrm{op}} \to \mathbf{Cat}$. For a morphism $f : T \to S$, the pullback functor is $f^* : \mathbf{QCoh}(S) \to \mathbf{QCoh}(T)$.
+
+The coherence isomorphisms $g^* \circ f^* \cong (f \circ g)^*$ come from the canonical isomorphisms of tensor products. This pseudofunctor corresponds to the fibered category of quasi-coherent sheaves.
+</Example>
+
+---
+
+## Properties of Cartesian Morphisms
+
+<Definition title="Properties of cartesian morphisms" number="2.1.7">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a fibered category.
+
+1. The **composition** of two cartesian morphisms is cartesian.
+2. If $\phi : y \to x$ is cartesian and $\psi : z \to x$ is any morphism with $p(\psi) = p(\phi)$, and if $p(\phi)$ is an isomorphism, then $\phi$ is an isomorphism.
+3. A morphism $\phi : y \to x$ is cartesian if and only if for every $z \in \mathcal{F}_{p(y)}$, the map $\operatorname{Hom}_{\mathcal{F}_{p(y)}}(z, y) \to \operatorname{Hom}_{\mathcal{F}}(z, x)$ given by $\chi \mapsto \phi \circ \chi$ is a bijection onto the set of morphisms $z \to x$ lying over $p(\phi)$.
+4. Any two cartesian lifts of the same morphism and object are **uniquely isomorphic** in the fiber.
+</Definition>
+
+<Example id="uniqueness-cartesian" title="Uniqueness of cartesian lifts">
+Let $f : V \to U$ be a morphism in $\mathcal{C}$ and $x \in \mathcal{F}_U$. If $\phi : y \to x$ and $\phi' : y' \to x$ are both cartesian over $f$, then by the universal property of $\phi$ applied to $\phi'$, there exists a unique $\chi : y' \to y$ in $\mathcal{F}_V$ with $\phi \circ \chi = \phi'$. Symmetrically, there is a unique $\chi' : y \to y'$ with $\phi' \circ \chi' = \phi$. Uniqueness forces $\chi \circ \chi' = \operatorname{id}_y$ and $\chi' \circ \chi = \operatorname{id}_{y'}$. So $y \cong y'$ canonically in $\mathcal{F}_V$.
+
+This is why the pullback $f^*x$ is "well-defined up to unique isomorphism."
+</Example>
+
+<Example id="composition-cartesian" title="Composition of cartesian arrows">
+Let $W \xrightarrow{g} V \xrightarrow{f} U$ in $\mathcal{C}$ and $x \in \mathcal{F}_U$. Choose cartesian lifts $\phi : f^*x \to x$ over $f$ and $\psi : g^*(f^*x) \to f^*x$ over $g$. The composition $\phi \circ \psi : g^*(f^*x) \to x$ lies over $f \circ g$ and is cartesian.
+
+By uniqueness, $g^*(f^*x) \cong (f \circ g)^*x$ canonically. This canonical isomorphism is the coherence datum $\alpha_{f,g}$ from the pseudofunctor perspective.
+</Example>
+
+---
+
+## The 2-Category of Fibered Categories
+
+<Definition title="Morphisms of fibered categories" number="2.1.8">
+Let $p : \mathcal{F} \to \mathcal{C}$ and $q : \mathcal{G} \to \mathcal{C}$ be fibered categories over $\mathcal{C}$.
+
+A **morphism** (or **1-morphism**) $\Phi : \mathcal{F} \to \mathcal{G}$ is a functor $\Phi$ with $q \circ \Phi = p$ (strict equality) that preserves cartesian morphisms: if $\phi$ is cartesian in $\mathcal{F}$, then $\Phi(\phi)$ is cartesian in $\mathcal{G}$.
+
+A **2-morphism** $\alpha : \Phi \Rightarrow \Psi$ between two morphisms $\Phi, \Psi : \mathcal{F} \to \mathcal{G}$ is a natural transformation $\alpha$ such that $q(\alpha_x) = \operatorname{id}_{p(x)}$ for every $x \in \mathcal{F}$ (the components are vertical morphisms in $\mathcal{G}$).
+</Definition>
+
+<Example id="morphism-qcoh-to-etale" title="Morphism between fibered categories">
+Consider the fibered categories $\mathbf{QCoh}$ and $\mathbf{Sh}_{\mathrm{et}}$ over $\mathbf{Sch}$, where $\mathbf{Sh}_{\mathrm{et}}(S)$ is the category of etale sheaves on $S$. The functor sending a quasi-coherent sheaf $\mathcal{E}$ on $S$ to its associated etale sheaf $\mathcal{E}^{\mathrm{et}}$ defines a morphism of fibered categories, since pullback of quasi-coherent sheaves is compatible with the etale sheafification.
+</Example>
+
+---
+
+## Fibered Categories in Algebraic Geometry
+
+<Example id="fibered-moduli-curves" title="The fibered category of smooth curves">
+Define $\mathcal{M}_g$ as a category over $\mathbf{Sch}$: objects over $S$ are smooth proper morphisms $f : X \to S$ whose geometric fibers are connected curves of genus $g$. A morphism from $(T, Y \to T)$ to $(S, X \to S)$ over $h : T \to S$ is an isomorphism $Y \cong X \times_S T$ over $T$.
+
+This is a fibered category (in fact, fibered in groupoids). The fiber over $\operatorname{Spec} k$ is the groupoid of smooth curves of genus $g$ over $k$. This is the starting point for the moduli stack $\mathcal{M}_g$.
+</Example>
+
+<Example id="fibered-torsors" title="The fibered category of torsors">
+Fix a smooth group scheme $G/S$. Define $\mathcal{B}G$ over $\mathbf{Sch}/S$: objects over $T$ are right $G_T$-torsors $P \to T$ (for the fppf or etale topology). Morphisms are $G$-equivariant isomorphisms compatible with base change.
+
+The fiber over $T$ is the groupoid of $G_T$-torsors. When $G = \mathbb{G}_m$, torsors correspond to line bundles, so $\mathcal{B}\mathbb{G}_m(T) \simeq \operatorname{Pic}(T)$ as a groupoid. When $G = GL_n$, torsors correspond to rank-$n$ vector bundles.
+</Example>
+
+---
+
+## Summary and Outlook
+
+<Remark title="Summary of key ideas">
+The theory of fibered categories provides:
+
+1. **A framework for families**: Objects in the fibers are "geometric objects parametrized by the base." Cartesian arrows formalize "pullback" or "base change."
+
+2. **Controlled descent**: The cleavage and coherence data keep track of how pullbacks compose, which is essential for gluing.
+
+3. **The bridge to stacks**: A fibered category over a site satisfying descent conditions becomes a stack. The fibered category language handles the crucial 2-categorical aspects (objects up to isomorphism, rather than equality) that naive functor-of-points approaches miss.
+
+4. **Key examples to remember**:
+   - Quasi-coherent sheaves $\to$ fibered category (not split)
+   - Schemes over $S$ $\to$ fibered category
+   - Presheaves of sets $\to$ split fibered category (discrete fibers)
+   - Moduli problems $\to$ fibered categories in groupoids (next section)
+
+The passage from fibered categories to stacks proceeds: fibered category $\to$ fibered in groupoids $\to$ prestack $\to$ stack.
+</Remark>

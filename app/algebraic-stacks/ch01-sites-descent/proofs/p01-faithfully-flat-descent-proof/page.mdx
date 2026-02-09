@@ -1,0 +1,277 @@
+export const metadata = {
+  title: 'Proof of Faithfully Flat Descent — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Proof — Faithfully Flat Descent" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Faithfully Flat Descent
+
+This proof establishes the fundamental theorem of faithfully flat descent for modules, following the classical approach of Grothendieck. We prove that the base change functor from $A$-modules to $B$-modules with descent data is an equivalence of categories when $A \to B$ is faithfully flat.
+
+## Statement
+
+<Theorem>
+Let $\varphi: A \to B$ be a faithfully flat ring homomorphism. Then the functor
+
+$$\Phi: \operatorname{Mod}_A \to \operatorname{DD}(B/A)$$
+
+defined by $\Phi(N) = (N \otimes_A B, \text{canonical descent datum})$ is an equivalence of categories. The quasi-inverse sends $(M, \sigma)$ to $M^\sigma = \ker(M \rightrightarrows B \otimes_A M)$.
+</Theorem>
+
+## Preliminary: Faithfully Flat Modules
+
+We begin with the key properties of faithfully flat modules that will be used throughout the proof.
+
+<Proof>
+**Lemma (Properties of faithfully flat maps).** Let $A \to B$ be a faithfully flat ring map. Then:
+
+**(a)** A sequence $M' \to M \to M''$ of $A$-modules is exact if and only if $M' \otimes_A B \to M \otimes_A B \to M'' \otimes_A B$ is exact.
+
+**(b)** An $A$-module $M$ is zero if and only if $M \otimes_A B = 0$.
+
+**(c)** A map $f: M \to N$ of $A$-modules is injective (resp. surjective, bijective) if and only if $f \otimes \operatorname{id}_B: M \otimes_A B \to N \otimes_A B$ is.
+
+*Proof of Lemma.* Since $B$ is a flat $A$-module, $- \otimes_A B$ is exact, so the "only if" direction in (a) is immediate. For the "if" direction: let $H = \ker(M \to M'') / \operatorname{im}(M' \to M)$ be the homology. Then $H \otimes_A B = 0$ by hypothesis. Since $A \to B$ is faithfully flat, $H = 0$, giving exactness. Parts (b) and (c) are special cases of (a).
+</Proof>
+
+## Step 1: Exactness of the Amitsur Complex
+
+The key technical ingredient is the exactness of the Amitsur (or descent) complex.
+
+<Proof>
+**Step 1a: The Amitsur complex.**
+
+For an $A$-module $N$, consider the augmented cosimplicial complex (the Amitsur complex):
+
+$$0 \to N \xrightarrow{d^0} N \otimes_A B \xrightarrow{d^0 - d^1} N \otimes_A B \otimes_A B \xrightarrow{d^0 - d^1 + d^2} N \otimes_A B^{\otimes 3} \to \cdots$$
+
+where $d^i: N \otimes_A B^{\otimes n} \to N \otimes_A B^{\otimes (n+1)}$ inserts $1_B$ in the $(i+1)$-th tensor position. Explicitly:
+
+$$d^0(n \otimes b_1 \otimes \cdots \otimes b_n) = n \otimes 1 \otimes b_1 \otimes \cdots \otimes b_n$$
+$$d^i(n \otimes b_1 \otimes \cdots \otimes b_n) = n \otimes b_1 \otimes \cdots \otimes b_i \otimes 1 \otimes b_{i+1} \otimes \cdots \otimes b_n$$
+
+**Step 1b: Reduction to the split case.**
+
+After tensoring the Amitsur complex with $B$ over $A$ (applying $- \otimes_A B$), we get the same complex for the ring map $B \to B \otimes_A B$, $b \mapsto b \otimes 1$.
+
+This map has a section: $s: B \otimes_A B \to B$ defined by $s(b_1 \otimes b_2) = b_1 b_2$ (the multiplication map). The existence of a section means we are in the "split" case.
+
+**Step 1c: Exactness in the split case.**
+
+When $A \to B$ has a section $s: B \to A$ (i.e., $s \circ \varphi = \operatorname{id}_A$), the Amitsur complex is exact. We construct a contracting homotopy.
+
+Define $h^n: N \otimes_A B^{\otimes (n+1)} \to N \otimes_A B^{\otimes n}$ by
+
+$$h^n(n \otimes b_0 \otimes b_1 \otimes \cdots \otimes b_n) = s(b_0) \cdot n \otimes b_1 \otimes \cdots \otimes b_n$$
+
+We claim this is a contracting homotopy: $h^{n+1} \circ \partial^{n+1} + \partial^n \circ h^n = \operatorname{id}$ where $\partial^n = \sum_{i=0}^n (-1)^i d^i$.
+
+To verify: $h^{n+1} \circ d^0 (n \otimes b_1 \otimes \cdots \otimes b_n) = h^{n+1}(n \otimes 1 \otimes b_1 \otimes \cdots \otimes b_n) = s(1) \cdot n \otimes b_1 \otimes \cdots \otimes b_n = n \otimes b_1 \otimes \cdots \otimes b_n$. And $h^{n+1} \circ d^i = d^{i-1} \circ h^n$ for $i \geq 1$, from which the homotopy identity follows.
+
+**Step 1d: Conclusion of exactness.**
+
+Since $A \to B$ is faithfully flat, a complex of $A$-modules is exact if and only if it becomes exact after tensoring with $B$. After tensoring the Amitsur complex with $B$, we are in the split case (Step 1c), so the tensored complex is exact. By faithful flatness, the original complex is exact.
+
+Therefore, for any $A$-module $N$:
+
+$$0 \to N \to N \otimes_A B \rightrightarrows N \otimes_A B \otimes_A B$$
+
+is exact. In particular, $N = \ker(N \otimes_A B \rightrightarrows N \otimes_A B^{\otimes 2})$.
+</Proof>
+
+## Step 2: Descent for Morphisms (Fully Faithful)
+
+<Proof>
+**Step 2a: Setup.**
+
+We show that for any $A$-modules $N_1, N_2$, the natural map
+
+$$\operatorname{Hom}_A(N_1, N_2) \to \operatorname{Hom}_{B}^{\mathrm{desc}}(N_1 \otimes_A B, N_2 \otimes_A B)$$
+
+is a bijection, where $\operatorname{Hom}^{\mathrm{desc}}$ denotes $B$-module homomorphisms compatible with the canonical descent data.
+
+**Step 2b: Injectivity.**
+
+Let $f: N_1 \to N_2$ be an $A$-module map such that $f \otimes \operatorname{id}_B = 0$. By faithful flatness (Step 1, property (c)), $f = 0$. So the map is injective.
+
+**Step 2c: Surjectivity.**
+
+Let $g: N_1 \otimes_A B \to N_2 \otimes_A B$ be a $B$-module map compatible with the canonical descent data. "Compatible" means the diagram
+
+$$N_1 \otimes_A B \otimes_A B \xrightarrow{g \otimes \operatorname{id}} N_2 \otimes_A B \otimes_A B$$
+
+commutes with the two natural maps from $N_i \otimes_A B$ to $N_i \otimes_A B \otimes_A B$ (inserting $1$ on the left vs. on the right).
+
+Consider the two maps $\alpha, \beta: N_1 \otimes_A B \to N_2 \otimes_A B \otimes_A B$ defined by:
+- $\alpha = (g \otimes \operatorname{id}_B) \circ d^1$ (first map $N_1 \otimes B \to N_1 \otimes B \otimes B$, then apply $g$ on the first two factors)
+- $\beta = d^1 \circ g$ (apply $g$ first, then map to the triple tensor)
+
+Wait, let us be more precise. The compatibility condition states that
+
+$$(\operatorname{id}_{N_2} \otimes d^0_B) \circ g = (g \otimes \operatorname{id}_B) \circ (\operatorname{id}_{N_1} \otimes d^0_B)$$
+
+where $d^0_B: B \to B \otimes_A B$ sends $b \mapsto 1 \otimes b$ and $d^1_B$ sends $b \mapsto b \otimes 1$.
+
+By the exactness of the Amitsur complex (Step 1), $g$ maps the submodule $N_1 \hookrightarrow N_1 \otimes_A B$ to $N_2 \hookrightarrow N_2 \otimes_A B$. Here $N_i \hookrightarrow N_i \otimes_A B$ is the map $n \mapsto n \otimes 1$, and the image is precisely the kernel of $N_i \otimes B \rightrightarrows N_i \otimes B \otimes B$.
+
+Indeed, the compatibility condition says $g$ preserves the equalizer of the two maps to the double tensor, and this equalizer is $N_i$ (by Step 1). So $g$ restricts to an $A$-module map $f: N_1 \to N_2$, and $g = f \otimes \operatorname{id}_B$.
+</Proof>
+
+## Step 3: Effectiveness of Descent
+
+<Proof>
+**Step 3a: Setup.**
+
+Let $(M, \sigma)$ be a descent datum: $M$ is a $B$-module and $\sigma: M \otimes_A B \xrightarrow{\sim} B \otimes_A M$ is a $B \otimes_A B$-module isomorphism satisfying the cocycle condition on $B^{\otimes 3}$.
+
+We need to construct an $A$-module $N$ with $N \otimes_A B \cong M$ (compatibly with $\sigma$).
+
+**Step 3b: Construction of $N$.**
+
+Define $N$ as the equalizer:
+
+$$N = \ker\left(M \xrightarrow{d^0} B \otimes_A M \xleftarrow{\sigma} M \otimes_A B \xleftarrow{d^1} M\right)$$
+
+More precisely, we have two maps $M \rightrightarrows B \otimes_A M$:
+- $\alpha: M \to B \otimes_A M$ defined by $m \mapsto 1 \otimes m$ (the map $d^0$).
+- $\beta: M \to M \otimes_A B \xrightarrow{\sigma} B \otimes_A M$ defined by $\beta(m) = \sigma(m \otimes 1)$.
+
+Set $N = \{m \in M \mid 1 \otimes m = \sigma(m \otimes 1) \text{ in } B \otimes_A M\}$.
+
+This is an $A$-submodule of $M$ (the map $\alpha - \beta$ is $A$-linear, and $N$ is its kernel).
+
+**Step 3c: The map $N \otimes_A B \to M$.**
+
+There is a natural $B$-module map $\mu: N \otimes_A B \to M$ defined by $n \otimes b \mapsto bn$ (using the $B$-module structure on $M$). We claim this is an isomorphism.
+
+**Step 3d: Proof that $\mu$ is an isomorphism (after base change).**
+
+We use the faithful flatness strategy: show that $\mu \otimes_A B$ is an isomorphism, then conclude by faithful flatness.
+
+After base changing along $A \to B$, we get:
+- The module $M$ becomes $M \otimes_A B$ (a $B \otimes_A B$-module).
+- The descent datum $\sigma: M \otimes_A B \to B \otimes_A M$ becomes $\sigma': M \otimes_A B \otimes_A B \to B \otimes_A M \otimes_A B$.
+
+The base-changed descent datum is "split": via the multiplication map $B \otimes_A B \to B$ (sending $b_1 \otimes b_2 \mapsto b_1 b_2$), we have a section of $B \to B \otimes_A B$.
+
+In the split case, the descent datum comes from a $B$-module: explicitly, $M$ itself viewed as a $B$-module (with the section providing the splitting). The equalizer $N \otimes_A B$ in the split case is isomorphic to $M$ (this is the content of the contracting homotopy from Step 1).
+
+Therefore $\mu \otimes_A B$ is an isomorphism. Since $A \to B$ is faithfully flat, $\mu$ is an isomorphism.
+
+**Step 3e: Compatibility with descent data.**
+
+We must verify that the isomorphism $\mu: N \otimes_A B \xrightarrow{\sim} M$ is compatible with the descent data, i.e., the canonical descent datum on $N \otimes_A B$ corresponds to $\sigma$ under $\mu$.
+
+The canonical descent datum on $N \otimes_A B$ is the isomorphism $(N \otimes_A B) \otimes_A B \xrightarrow{\sim} B \otimes_A (N \otimes_A B)$ given by $n \otimes b_1 \otimes b_2 \mapsto b_1 \otimes n \otimes b_2$.
+
+Under $\mu$: the left side maps to $M \otimes_A B$ (via $n \otimes b_1 \otimes b_2 \mapsto b_1 n \otimes b_2$), and the right side maps to $B \otimes_A M$ (via $b_1 \otimes n \otimes b_2 \mapsto b_1 \otimes b_2 n$). The composite isomorphism is $\sigma$, which holds because $n \in N$ satisfies $1 \otimes n = \sigma(n \otimes 1)$, and extending by $B$-linearity gives the full compatibility.
+</Proof>
+
+## Step 4: The Quasi-inverse is Well-defined
+
+<Proof>
+**Step 4a: $N$ is functorial.**
+
+The construction $N = \ker(M \rightrightarrows B \otimes_A M)$ is functorial in $(M, \sigma)$: a morphism of descent data $(M, \sigma) \to (M', \sigma')$ (a $B$-module map $f: M \to M'$ compatible with $\sigma, \sigma'$) restricts to a map $f|_N: N \to N'$.
+
+**Step 4b: The unit.**
+
+For an $A$-module $N_0$, setting $M = N_0 \otimes_A B$ with canonical descent datum, the equalizer recovers $N_0$: this is the content of Step 1 (exactness of the Amitsur complex), which says $N_0 = \ker(N_0 \otimes_A B \rightrightarrows N_0 \otimes_A B^{\otimes 2})$.
+
+So the composite $N_0 \mapsto (N_0 \otimes_A B, \text{can}) \mapsto \ker(\cdots) = N_0$ is the identity (up to canonical isomorphism).
+
+**Step 4c: The counit.**
+
+For a descent datum $(M, \sigma)$, we constructed $N = \ker(M \rightrightarrows B \otimes_A M)$ and showed $N \otimes_A B \cong M$ in Step 3. So the composite $(M, \sigma) \mapsto N \mapsto (N \otimes_A B, \text{can}) \cong (M, \sigma)$ is an isomorphism.
+
+This completes the proof that $\Phi$ and its quasi-inverse form an equivalence of categories.
+</Proof>
+
+## Step 5: Preservation of Finiteness
+
+<Proof>
+**Step 5: Properties preserved by descent.**
+
+The equivalence $\Phi$ preserves many properties of modules:
+
+**(a)** $N$ is finitely generated over $A$ $\iff$ $N \otimes_A B$ is finitely generated over $B$.
+
+*Proof.* The "only if" direction is clear. For "if": suppose $M = N \otimes_A B$ is generated by $m_1, \ldots, m_r$. Write $m_j = \sum_i n_{ij} \otimes b_{ij}$ for some $n_{ij} \in N$ and $b_{ij} \in B$. Let $N_0 = \sum_{i,j} A \cdot n_{ij} \subseteq N$. Then $N_0 \otimes_A B \to N \otimes_A B = M$ is surjective (since the $m_j$ are in the image). By faithful flatness, $N_0 \to N$ is surjective, so $N$ is finitely generated.
+
+**(b)** $N$ is finitely presented over $A$ $\iff$ $N \otimes_A B$ is finitely presented over $B$. (Similar argument using that faithful flatness reflects finite presentation.)
+
+**(c)** $N$ is projective over $A$ $\iff$ $N \otimes_A B$ is projective over $B$. (Uses that faithful flatness reflects projectivity.)
+
+**(d)** $N$ is flat over $A$ $\iff$ $N \otimes_A B$ is flat over $B$. (Because flatness is detected by the vanishing of $\operatorname{Tor}_1$, and $\operatorname{Tor}$ commutes with flat base change.)
+
+These results are essential for applications: they show that descent preserves the "type" of module (finitely generated, projective, etc.).
+</Proof>
+
+## Geometric Version
+
+<Remark>
+The geometric version of the theorem follows from the affine version by gluing:
+
+**Theorem.** Let $f: Y \to X$ be a faithfully flat quasi-compact morphism of schemes. Then $f^*: \operatorname{QCoh}(X) \to \operatorname{DD}(Y/X, \operatorname{QCoh})$ is an equivalence.
+
+*Proof sketch.* Cover $X$ by affine opens $\operatorname{Spec}(A_i)$. Since $f$ is quasi-compact, each $f^{-1}(\operatorname{Spec}(A_i))$ has a finite affine cover $\operatorname{Spec}(B_{ij})$. The map $A_i \to \prod_j B_{ij}$ is faithfully flat. Apply the affine theorem on each piece and glue using the Zariski descent (which is effective for quasi-coherent sheaves).
+</Remark>
+
+## Verification: An Explicit Example
+
+<Example id="explicit-descent-example" title="Explicit descent computation">
+Let $A = \mathbb{R}$, $B = \mathbb{C}$, so $A \to B$ is faithfully flat (in fact, finite free of rank 2). The Galois group is $G = \{1, \sigma\}$ with $\sigma$ = complex conjugation.
+
+A descent datum is a $\mathbb{C}$-module $M$ with an isomorphism $\varphi: M \otimes_\mathbb{R} \mathbb{C} \to \mathbb{C} \otimes_\mathbb{R} M$ satisfying the cocycle condition. Using $\mathbb{C} \otimes_\mathbb{R} \mathbb{C} \cong \mathbb{C} \times \mathbb{C}$ (via $a \otimes b \mapsto (ab, a\bar{b})$), this is equivalent to a semilinear automorphism $\sigma_M: M \to M$ with $\sigma_M^2 = \operatorname{id}$.
+
+Take $M = \mathbb{C}^2$ and $\sigma_M(z_1, z_2) = (\bar{z}_1, \bar{z}_2)$ (componentwise conjugation). Then
+
+$$N = M^{\sigma_M} = \{(z_1, z_2) \in \mathbb{C}^2 : (\bar{z}_1, \bar{z}_2) = (z_1, z_2)\} = \mathbb{R}^2.$$
+
+And indeed $N \otimes_\mathbb{R} \mathbb{C} = \mathbb{R}^2 \otimes_\mathbb{R} \mathbb{C} = \mathbb{C}^2 = M$. Descent is effective.
+
+Now take a non-trivial descent datum: $M = \mathbb{C}^2$ with $\sigma_M(z_1, z_2) = (\bar{z}_2, \bar{z}_1)$. Then
+
+$$N = \{(z_1, z_2) : (\bar{z}_2, \bar{z}_1) = (z_1, z_2)\} = \{(z, \bar{z}) : z \in \mathbb{C}\} \cong \mathbb{R}^2$$
+
+(via $z \mapsto (\operatorname{Re}(z), \operatorname{Im}(z))$). Again $N \otimes_\mathbb{R} \mathbb{C} \cong \mathbb{C}^2$, but the $\mathbb{R}$-structure is different (the real structure on $\mathbb{C}^2$ is different from the componentwise one).
+</Example>
+
+<Example id="descent-non-galois" title="Non-Galois descent example">
+Let $A = \mathbb{Z}$ and $B = \mathbb{Z}[i]$ (Gaussian integers). This is not a Galois cover of $\operatorname{Spec}(\mathbb{Z})$ (it ramifies at $p = 2$). But $\mathbb{Z} \to \mathbb{Z}[i]$ is faithfully flat (since $\mathbb{Z}[i]$ is free of rank 2 as a $\mathbb{Z}$-module).
+
+A descent datum on a $\mathbb{Z}[i]$-module $M$ is an isomorphism $\sigma: M \otimes_\mathbb{Z} \mathbb{Z}[i] \to \mathbb{Z}[i] \otimes_\mathbb{Z} M$. Using $\mathbb{Z}[i] \otimes_\mathbb{Z} \mathbb{Z}[i] \cong \mathbb{Z}[i][x]/(x^2 + 1) = \mathbb{Z}[i][x]/((x-i)(x+i)) \cong \mathbb{Z}[i] \times \mathbb{Z}[i]$, we can analyze the descent datum as a pair of endomorphisms.
+
+For $M = \mathbb{Z}[i]$ (free rank 1), the descent data are classified by $(\mathbb{Z}[i] \otimes_\mathbb{Z} \mathbb{Z}[i])^\times / \text{coboundaries}$, which gives $\operatorname{Pic}(\mathbb{Z}) = 0$. Every rank-1 descent datum is effective and trivial.
+</Example>
+
+## Summary of the Proof
+
+<Remark>
+The proof of faithfully flat descent has four main ingredients:
+
+1. **Exactness of the Amitsur complex** (Step 1): proved by reducing to the split case via faithful flatness.
+
+2. **Fully faithfulness** (Step 2): morphisms of $A$-modules embed into morphisms of descent data, by the exactness from Step 1.
+
+3. **Essential surjectivity** (Step 3): every descent datum $(M, \sigma)$ is effective, with $N = \ker(M \rightrightarrows B \otimes_A M)$ being the descended module, proved by showing $N \otimes_A B \cong M$ via reduction to the split case.
+
+4. **Preservation of finiteness** (Step 5): the descent equivalence preserves finite generation, finite presentation, projectivity, and flatness.
+
+The same strategy (reduce to the split case, use faithful flatness to detect exactness) appears repeatedly in algebraic geometry whenever descent arguments are needed.
+</Remark>

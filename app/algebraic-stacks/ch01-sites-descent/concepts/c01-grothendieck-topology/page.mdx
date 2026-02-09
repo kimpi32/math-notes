@@ -1,0 +1,299 @@
+export const metadata = {
+  title: 'Grothendieck Topologies — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Concept — Grothendieck Topologies" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Grothendieck Topologies
+
+Grothendieck topologies generalize the notion of open covers from classical topology to arbitrary categories. Instead of specifying which subsets are open, we specify which families of morphisms should be considered "coverings." This abstraction is one of the most powerful ideas in modern algebraic geometry, enabling the construction of cohomology theories (etale, fppf, crystalline) that go far beyond what the Zariski topology can detect.
+
+---
+
+## Motivation: Why Generalize Topology?
+
+The Zariski topology on a scheme $X$ is too coarse for many purposes. For instance, there are no nonconstant continuous maps $\mathbb{A}^1_{\mathbb{C}} \to \{0, 1\}$ in the Zariski topology (since $\mathbb{A}^1$ is irreducible), so the Zariski topology cannot detect the fundamental group or produce a good cohomology theory with finite coefficients.
+
+Grothendieck's insight was that we should replace "open subsets" with "morphisms that behave like open covers" in a categorical sense. The etale topology, for example, uses etale morphisms as the analogue of local homeomorphisms, recovering information that the Zariski topology misses entirely.
+
+---
+
+## Pretopologies
+
+<Definition title="Pretopology (Grothendieck pretopology)" number="1.1">
+Let $\mathcal{C}$ be a category with fiber products. A **pretopology** (or **basis for a Grothendieck topology**) on $\mathcal{C}$ is an assignment, to each object $U \in \mathcal{C}$, of a collection $\operatorname{Cov}(U)$ of families of morphisms $\{U_i \to U\}_{i \in I}$, called **covering families**, satisfying:
+
+1. **(Isomorphism)** If $V \xrightarrow{\sim} U$ is an isomorphism, then $\{V \to U\} \in \operatorname{Cov}(U)$.
+
+2. **(Stability under base change)** If $\{U_i \to U\}_{i \in I} \in \operatorname{Cov}(U)$ and $V \to U$ is any morphism, then $\{U_i \times_U V \to V\}_{i \in I} \in \operatorname{Cov}(V)$.
+
+3. **(Local character / Composition)** If $\{U_i \to U\}_{i \in I} \in \operatorname{Cov}(U)$ and for each $i$, $\{V_{ij} \to U_i\}_{j \in J_i} \in \operatorname{Cov}(U_i)$, then the composite family $\{V_{ij} \to U_i \to U\}_{i,j} \in \operatorname{Cov}(U)$.
+</Definition>
+
+<Example id="zariski-pretopology" title="Zariski pretopology">
+Let $\mathcal{C} = \mathbf{Sch}/S$ be the category of $S$-schemes. The **Zariski pretopology** declares that a family $\{U_i \to U\}_{i \in I}$ is a covering family if each $U_i \to U$ is an open immersion and $U = \bigcup_i \operatorname{im}(U_i)$.
+
+For $U = \operatorname{Spec}(A)$, a Zariski cover corresponds to a collection of principal open sets $D(f_i)$ with $(f_1, \ldots, f_n) = A$, i.e., the $f_i$ generate the unit ideal.
+
+This recovers the classical Zariski topology: the covering families are precisely the open covers.
+</Example>
+
+<Example id="etale-pretopology" title="Etale pretopology">
+The **etale pretopology** on $\mathbf{Sch}/S$ declares $\{U_i \to U\}$ to be a covering family if each $U_i \to U$ is etale and $\coprod_i U_i \to U$ is surjective.
+
+Recall that a morphism $f: X \to Y$ of finite presentation is **etale** if it is flat and unramified, or equivalently if for every $y \in Y$, the fiber $X_y$ is a disjoint union of spectra of separable field extensions of $k(y)$.
+
+For $U = \operatorname{Spec}(k)$ where $k$ is a field, etale covers are of the form $\{\operatorname{Spec}(L_i) \to \operatorname{Spec}(k)\}$ where each $L_i/k$ is a finite separable extension and $\prod L_i$ is a faithfully flat $k$-algebra.
+</Example>
+
+<Example id="fppf-pretopology" title="fppf pretopology">
+The **fppf pretopology** (fidelement plat de presentation finie) declares $\{U_i \to U\}$ to be a covering family if each $U_i \to U$ is flat and locally of finite presentation, and $\coprod_i U_i \to U$ is surjective.
+
+This is strictly finer than the etale pretopology: every etale cover is an fppf cover, but not conversely. For instance, $\operatorname{Spec}(k[\epsilon]/(\epsilon^p)) \to \operatorname{Spec}(k)$ over a field of characteristic $p$ is flat and finitely presented (hence an fppf cover) but not etale (it is purely inseparable).
+
+The fppf topology is needed to study non-smooth group schemes and torsors correctly.
+</Example>
+
+<Example id="fpqc-pretopology" title="fpqc pretopology">
+The **fpqc pretopology** (fidelement plat et quasi-compact) declares $\{U_i \to U\}$ to be a covering family if each $U_i \to U$ is flat and $\coprod_i U_i \to U$ is surjective and quasi-compact.
+
+This is the finest of the standard algebraic topologies. Every fppf cover is an fpqc cover. Additionally, any faithfully flat morphism $V \to U$ that is quasi-compact gives a single-morphism cover $\{V \to U\}$.
+
+The fpqc topology is the natural home for faithfully flat descent, but it is technically harder to work with because fpqc morphisms need not be of finite presentation.
+</Example>
+
+---
+
+## Sieves
+
+<Definition title="Sieve" number="1.2">
+Let $\mathcal{C}$ be a category and $U \in \mathcal{C}$ an object. A **sieve** on $U$ is a subfunctor $S \subseteq h_U = \operatorname{Hom}_{\mathcal{C}}(-, U)$ of the representable presheaf. Concretely, $S$ assigns to each object $V$ a subset $S(V) \subseteq \operatorname{Hom}(V, U)$ such that if $f \in S(V)$ and $g: W \to V$ is any morphism, then $f \circ g \in S(W)$.
+
+Equivalently, a sieve on $U$ is a collection of morphisms with target $U$ that is closed under precomposition: if $f: V \to U$ is in the sieve and $g: W \to V$ is any morphism, then $f \circ g: W \to U$ is also in the sieve.
+</Definition>
+
+<Example id="sieve-from-cover" title="Sieve generated by a covering family">
+Given a covering family $\{U_i \to U\}_{i \in I}$ (in some pretopology), the **sieve generated** by this family is
+
+$$S(V) = \{f: V \to U \mid f \text{ factors through some } U_i \to U\}.$$
+
+More precisely, $f \in S(V)$ if there exists $i \in I$ and a morphism $g: V \to U_i$ such that $f = (U_i \to U) \circ g$. This is indeed closed under precomposition: if $h: W \to V$ then $f \circ h$ factors through $U_i$ via $g \circ h$.
+
+The passage from covering families to sieves is how a pretopology generates a full Grothendieck topology.
+</Example>
+
+<Example id="maximal-sieve" title="Maximal and empty sieves">
+For any object $U$:
+- The **maximal sieve** is $h_U$ itself: $S(V) = \operatorname{Hom}(V, U)$ for all $V$. Every morphism to $U$ belongs to this sieve.
+- The **empty sieve** is $S(V) = \emptyset$ for all $V$. No morphism to $U$ belongs to this sieve.
+
+If $\mathcal{C}$ has a terminal object $*$, then the maximal sieve on $*$ is the entire category (every object maps to $*$).
+</Example>
+
+---
+
+## Grothendieck Topologies
+
+<Definition title="Grothendieck topology" number="1.3">
+A **Grothendieck topology** $J$ on a category $\mathcal{C}$ assigns to each object $U \in \mathcal{C}$ a collection $J(U)$ of sieves on $U$, called **covering sieves**, satisfying:
+
+1. **(Maximal sieve)** The maximal sieve $h_U \in J(U)$ for all $U$.
+
+2. **(Stability / Pullback)** If $S \in J(U)$ is a covering sieve and $f: V \to U$ is any morphism, then the **pullback sieve** $f^*S \in J(V)$, where $f^*S(W) = \{g: W \to V \mid f \circ g \in S(W)\}$.
+
+3. **(Transitivity / Local character)** If $S \in J(U)$ is a covering sieve and $T$ is a sieve on $U$ such that for every $f: V \to U$ in $S$, the pullback $f^*T \in J(V)$, then $T \in J(U)$.
+</Definition>
+
+<Remark title="Pretopology vs. topology">
+A pretopology determines a Grothendieck topology by declaring a sieve $S$ on $U$ to be covering if it contains a covering family from the pretopology. Different pretopologies can generate the same Grothendieck topology, and it is the Grothendieck topology (not the pretopology) that determines the category of sheaves.
+
+For most practical work, one specifies a pretopology and works with covering families. The sieve formulation is needed for the abstract theory (especially for sheafification and topos theory).
+</Remark>
+
+<Example id="classical-topology-as-grothendieck" title="Classical topology as a Grothendieck topology">
+Let $X$ be a topological space and $\mathcal{C} = \operatorname{Open}(X)$ the category of open subsets (with inclusions). For an open set $U$, a sieve $S$ on $U$ consists of a collection of open subsets of $U$, closed under taking smaller opens. Define $S \in J(U)$ if and only if $\bigcup_{V \in S} V = U$.
+
+This recovers the classical sheaf theory on $X$. The pretopology version says: a covering family of $U$ is an open cover $\{U_i \subseteq U\}$ with $\bigcup U_i = U$.
+
+This shows that classical topology is a special case of Grothendieck topology.
+</Example>
+
+<Example id="nisnevich-topology" title="Nisnevich topology">
+The **Nisnevich topology** on $\mathbf{Sch}/k$ (for a field $k$) uses etale morphisms as covers, but with a stronger condition than surjectivity. A family $\{U_i \to U\}$ is a Nisnevich cover if each $U_i \to U$ is etale and for every point $x \in U$, there exists $i$ and a point $y \in U_i$ mapping to $x$ with $k(x) \xrightarrow{\sim} k(y)$ (an isomorphism on residue fields).
+
+The Nisnevich topology sits strictly between Zariski and etale:
+$$\text{Zariski} \subsetneq \text{Nisnevich} \subsetneq \text{etale} \subsetneq \text{fppf} \subsetneq \text{fpqc}$$
+
+It is the natural topology for algebraic K-theory and motivic homotopy theory (Morel--Voevodsky $\mathbb{A}^1$-homotopy theory).
+</Example>
+
+<Example id="cdh-topology" title="cdh topology">
+The **cdh topology** is generated by Nisnevich covers together with **abstract blowup squares**: if $Z \hookrightarrow X$ is a closed immersion and $\pi: X' \to X$ is a proper morphism such that $\pi^{-1}(X \setminus Z) \to X \setminus Z$ is an isomorphism, then $\{X' \to X, Z \to X\}$ is a cdh cover.
+
+This topology is used in the study of algebraic K-theory of singular schemes, particularly in the work of Voevodsky on motivic cohomology.
+</Example>
+
+---
+
+## Comparison of Standard Topologies
+
+The standard algebraic topologies form a hierarchy, ordered by fineness:
+
+$$\text{Zariski} \subseteq \text{Nisnevich} \subseteq \text{etale} \subseteq \text{smooth} \subseteq \text{syntomic} \subseteq \text{fppf} \subseteq \text{fpqc}$$
+
+<Example id="comparison-zariski-etale" title="Zariski vs. etale: what etale detects">
+Consider $X = \operatorname{Spec}(\mathbb{R})$. In the Zariski topology, $X$ is a single point with no nontrivial covers. But in the etale topology, the morphism $\operatorname{Spec}(\mathbb{C}) \to \operatorname{Spec}(\mathbb{R})$ is an etale cover (it is finite etale of degree 2).
+
+The etale fundamental group $\pi_1^{\text{et}}(\operatorname{Spec}(\mathbb{R}))$ is $\operatorname{Gal}(\mathbb{C}/\mathbb{R}) \cong \mathbb{Z}/2\mathbb{Z}$, detecting the nontrivial extension $\mathbb{C}/\mathbb{R}$. The Zariski topology sees nothing.
+
+Similarly, for $X = \operatorname{Spec}(\mathbb{F}_q)$, the etale fundamental group is $\hat{\mathbb{Z}}$ (the profinite completion of $\mathbb{Z}$), generated by the Frobenius. Etale cohomology with $\ell$-adic coefficients on varieties over $\mathbb{F}_q$ is the key to the Weil conjectures.
+</Example>
+
+<Example id="comparison-etale-fppf" title="Etale vs. fppf: inseparable phenomena">
+Over a field $k$ of characteristic $p > 0$, consider the group scheme $\alpha_p = \operatorname{Spec}(k[t]/(t^p))$ with the additive group structure. The map $x \mapsto x^p$ (Frobenius) $\mathbb{G}_a \to \mathbb{G}_a$ has kernel $\alpha_p$.
+
+The sequence $0 \to \alpha_p \to \mathbb{G}_a \xrightarrow{F} \mathbb{G}_a \to 0$ is exact in the fppf topology but **not** in the etale topology, because $\alpha_p$ is not etale (it is infinitesimal).
+
+To classify $\alpha_p$-torsors, one must use the fppf topology: $H^1_{\text{fppf}}(X, \alpha_p) \neq H^1_{\text{et}}(X, \alpha_p)$ in general.
+</Example>
+
+<Example id="comparison-fppf-fpqc" title="fppf vs. fpqc: non-finitely-presented phenomena">
+The inclusion of topologies $\text{fppf} \subseteq \text{fpqc}$ is strict. For example, if $k$ is a field and $\overline{k}$ is its algebraic closure, the morphism $\operatorname{Spec}(\overline{k}) \to \operatorname{Spec}(k)$ is faithfully flat but not of finite presentation (when $[k^{\text{sep}}:k] = \infty$), so it is an fpqc cover but not an fppf cover.
+
+However, for most sheaves arising in algebraic geometry (representable functors, quasi-coherent sheaves), the sheaf condition for fpqc and fppf agree: a presheaf satisfying the fppf sheaf condition automatically satisfies the fpqc condition as well (a deep result of Gabber and others).
+</Example>
+
+---
+
+## The Canonical Topology
+
+<Definition title="Canonical topology" number="1.4">
+The **canonical topology** on a category $\mathcal{C}$ is the finest Grothendieck topology for which all representable presheaves $h_U = \operatorname{Hom}(-, U)$ are sheaves.
+
+Concretely, a sieve $S$ on $U$ is a covering sieve in the canonical topology if and only if for every presheaf $F$ on $\mathcal{C}$, if $F$ is a sheaf for the sieve $S$ (i.e., the sheaf condition holds for $S$), then $F(U) \to \varprojlim_{(V \to U) \in S} F(V)$ is an isomorphism whenever $F$ is representable.
+</Definition>
+
+<Example id="canonical-on-top" title="Canonical topology on Top">
+On the category $\mathbf{Top}$ of topological spaces, the canonical topology consists of families $\{U_i \to U\}$ that are effective epimorphic: the diagram $\coprod_{i,j} U_i \times_U U_j \rightrightarrows \coprod_i U_i \to U$ is a coequalizer.
+
+Open covers are effective epimorphic families, but so are some other families (e.g., surjective local homeomorphisms). The canonical topology on $\mathbf{Top}$ is thus finer than the standard open cover topology.
+</Example>
+
+<Example id="fpqc-is-subcanonical" title="Subcanonical topologies in algebraic geometry">
+A topology $J$ on a category $\mathcal{C}$ is **subcanonical** if every representable presheaf is a $J$-sheaf. All the standard algebraic topologies (Zariski, Nisnevich, etale, fppf, fpqc) are subcanonical on the category of schemes.
+
+That is, for any scheme $Y$, the functor $h_Y(T) = \operatorname{Hom}(T, Y)$ satisfies the sheaf condition for any Zariski/etale/fppf/fpqc cover. For the fpqc topology, this is the content of **fpqc descent for morphisms**: given an fpqc cover $\{U_i \to U\}$ and compatible morphisms $U_i \to Y$, there is a unique morphism $U \to Y$ restricting to each $U_i \to Y$.
+
+This is a nontrivial theorem. It means we can "test" morphisms to $Y$ locally in any of these topologies.
+</Example>
+
+---
+
+## Examples of Covering Families in Practice
+
+<Example id="spec-z-covers" title="Covers of Spec(Z)">
+Consider $U = \operatorname{Spec}(\mathbb{Z})$.
+
+**Zariski cover**: $\{\operatorname{Spec}(\mathbb{Z}[1/p]) \to \operatorname{Spec}(\mathbb{Z})\}_{p \text{ prime}}$ together with $\operatorname{Spec}(\mathbb{Q}) \to \operatorname{Spec}(\mathbb{Z})$ do not form a finite Zariski cover. But $\{\operatorname{Spec}(\mathbb{Z}[1/6]), \operatorname{Spec}(\mathbb{Z}[1/10]), \operatorname{Spec}(\mathbb{Z}[1/15])\}$ is a Zariski cover since $\gcd(6, 10, 15) = 1$.
+
+**Etale cover**: $\{\operatorname{Spec}(\mathbb{Z}[i]) \to \operatorname{Spec}(\mathbb{Z})\}$ is not an etale cover (the map is not etale at $p = 2$ since $2 = -i(1+i)^2$ is ramified). However, $\{\operatorname{Spec}(\mathbb{Z}[\sqrt{-1}, 1/2]) \to \operatorname{Spec}(\mathbb{Z}[1/2])\}$ is an etale cover.
+
+**fpqc cover**: $\{\operatorname{Spec}(\mathbb{Z}_p) \to \operatorname{Spec}(\mathbb{Z})\}_{p \text{ prime}}$ is not even jointly surjective (missing the generic point). But $\operatorname{Spec}(\prod_p \mathbb{Z}_p \times \mathbb{Q}) \to \operatorname{Spec}(\mathbb{Z})$ is faithfully flat, hence an fpqc cover.
+</Example>
+
+<Example id="galois-cover-as-etale" title="Galois extensions as etale covers">
+Let $K/k$ be a finite Galois extension with Galois group $G$. Then $\operatorname{Spec}(K) \to \operatorname{Spec}(k)$ is a finite etale cover, and the fiber product is
+
+$$\operatorname{Spec}(K) \times_{\operatorname{Spec}(k)} \operatorname{Spec}(K) \cong \operatorname{Spec}(K \otimes_k K) \cong \coprod_{g \in G} \operatorname{Spec}(K)$$
+
+where the isomorphism $K \otimes_k K \cong \prod_{g \in G} K$ sends $a \otimes b \mapsto (a \cdot g(b))_g$. This is the scheme-theoretic version of the fact that a Galois cover is "trivial over itself."
+
+This example is fundamental: etale cohomology of $\operatorname{Spec}(k)$ with coefficients in a sheaf $\mathcal{F}$ computes Galois cohomology $H^i(G_k, \mathcal{F})$ where $G_k = \operatorname{Gal}(k^{\text{sep}}/k)$.
+</Example>
+
+---
+
+## Topologies on Small and Big Sites
+
+<Definition title="Small and big sites" number="1.5">
+For a scheme $X$, there are two natural sites to consider:
+
+The **small etale site** $X_{\text{et}}$ has as objects the etale $X$-schemes $U \to X$ (etale morphisms to $X$), and coverings are surjective families of etale morphisms.
+
+The **big etale site** $(\mathbf{Sch}/X)_{\text{et}}$ has as objects all $X$-schemes, and coverings are surjective families of etale morphisms.
+
+Similarly for the small/big Zariski, fppf, fpqc sites. The small site is often sufficient for computing cohomology, while the big site is needed for functorial constructions.
+</Definition>
+
+<Example id="small-site-point" title="Small etale site of a point">
+For $X = \operatorname{Spec}(k)$, the small etale site $X_{\text{et}}$ has objects $\operatorname{Spec}(L)$ where $L/k$ is a finite separable extension. A covering family of $\operatorname{Spec}(L)$ is a finite family $\{\operatorname{Spec}(L_i)\}$ with $\prod L_i$ faithfully flat over $L$.
+
+The category of sheaves on $X_{\text{et}}$ is equivalent to the category of continuous discrete $G_k$-sets, where $G_k = \operatorname{Gal}(k^{\text{sep}}/k)$ is the absolute Galois group. This fundamental equivalence connects etale cohomology to Galois cohomology.
+</Example>
+
+---
+
+## Topological Axioms and Saturation
+
+<Remark title="Saturation property">
+A Grothendieck topology is **saturated** if a sieve $S$ on $U$ is covering whenever it contains a covering sieve. Equivalently, saturation means that the topology is maximal among topologies with the same category of sheaves.
+
+Every Grothendieck topology has a unique saturation. For practical purposes, we usually work with a convenient pretopology and pass to the generated topology when needed.
+
+Key saturation results:
+- If $\{U_i \to U\}$ is a covering family and each $U_i \to U$ factors through $V \to U$, then $\{V \to U\}$ is a covering family (in the saturated topology).
+- If $\{V \to U\}$ and $\{W \to U\}$ are both covering sieves, then $\{V \times_U W \to U\}$ is a covering sieve.
+</Remark>
+
+---
+
+## Continuous and Cocontinuous Functors
+
+<Definition title="Continuous functor" number="1.6">
+Let $(\mathcal{C}, J)$ and $(\mathcal{D}, K)$ be sites. A functor $u: \mathcal{C} \to \mathcal{D}$ is **continuous** (or a **morphism of sites**) if it preserves covering families: for every $\{U_i \to U\} \in J(U)$, the family $\{u(U_i) \to u(U)\}$ is in $K(u(U))$ (possibly after applying a suitable pullback).
+
+More precisely, $u$ is continuous if for every sheaf $\mathcal{G}$ on $(\mathcal{D}, K)$, the presheaf $u^p\mathcal{G} = \mathcal{G} \circ u$ is a sheaf on $(\mathcal{C}, J)$.
+</Definition>
+
+<Example id="change-of-topology" title="Comparison maps between topologies">
+The identity functor $\operatorname{id}: \mathbf{Sch}/S \to \mathbf{Sch}/S$ is continuous from the etale site to the Zariski site (every Zariski cover is an etale cover, so etale sheaves restrict to Zariski sheaves). This gives a **comparison morphism** of sites $\epsilon: X_{\text{et}} \to X_{\text{Zar}}$.
+
+For any etale sheaf $\mathcal{F}$, we get a natural map
+
+$$H^i_{\text{Zar}}(X, \epsilon_*\mathcal{F}) \to H^i_{\text{et}}(X, \mathcal{F})$$
+
+This is generally **not** an isomorphism. For example, $H^1_{\text{Zar}}(\operatorname{Spec}(k), \mathbb{G}_m) = 0$ but $H^1_{\text{et}}(\operatorname{Spec}(k), \mathbb{G}_m) = 0$ as well (Hilbert's Theorem 90). However, $H^2_{\text{et}}(\operatorname{Spec}(k), \mathbb{G}_m) = \operatorname{Br}(k)$ (the Brauer group), which is invisible to Zariski cohomology.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The main ideas of Grothendieck topologies are:
+
+1. **Covering families** generalize open covers. They are specified by a pretopology (covering families) or a topology (covering sieves).
+
+2. **Different topologies** detect different geometric information. The hierarchy Zariski $\subseteq$ Nisnevich $\subseteq$ etale $\subseteq$ fppf $\subseteq$ fpqc gives progressively finer topologies.
+
+3. **Subcanonical** topologies (all standard algebraic topologies) ensure representable functors are sheaves.
+
+4. **The choice of topology** affects cohomology: etale cohomology, fppf cohomology, and Zariski cohomology of the same sheaf can differ drastically.
+
+5. Grothendieck topologies provide the foundation for **descent theory**, which is the algebraic geometer's tool for gluing constructions along covers in these more refined topologies.
+</Remark>

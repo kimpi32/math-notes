@@ -1,0 +1,220 @@
+export const metadata = {
+  title: 'Quotient Singularities and McKay Correspondence — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Theorem — Quotient Singularities" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quotient Singularities: Resolution and McKay Correspondence
+
+Quotient singularities -- singularities of the form $\mathbb{A}^n/G$ for a finite group $G$ acting linearly -- are among the most natural singularities in algebraic geometry. The McKay correspondence provides a deep connection between the representation theory of $G$ and the geometry of the resolution of $\mathbb{A}^n/G$. From the stacky perspective, the quotient stack $[\mathbb{A}^n/G]$ is always smooth, and the McKay correspondence can be interpreted as an equivalence between the derived category of the stack and that of the resolution.
+
+---
+
+## Quotient singularities
+
+<Definition title="Quotient Singularity" number="4.21">
+A **quotient singularity** is a singularity of the form $(X, p) = (\mathbb{A}^n/G, 0)$ where $G \subset \mathrm{GL}(n, k)$ is a finite group acting linearly on $\mathbb{A}^n$ and $0$ is the image of the origin. The singularity type depends on the group $G$ and its representation.
+
+The local ring at $p$ is $\mathcal{O}_{X,p} = k[x_1, \ldots, x_n]^G$ (the ring of invariants), and the completion is $k[[x_1, \ldots, x_n]]^G$.
+</Definition>
+
+---
+
+## The ADE classification (dimension 2)
+
+<Theorem title="Classification of Surface Quotient Singularities" number="4.5">
+Let $G \subset \mathrm{SL}(2, k)$ be a finite subgroup (with $\operatorname{char} k = 0$ or $\operatorname{char} k \nmid |G|$). The quotient $\mathbb{A}^2/G$ has a surface singularity classified by the ADE Dynkin diagrams:
+
+| Group $G$ | Type | Equation | Order $|G|$ |
+|---|---|---|---|
+| $\mu_n$ (cyclic) | $A_{n-1}$ | $x^2 + y^2 + z^n = 0$ | $n$ |
+| $BD_{4n}$ (binary dihedral) | $D_{n+2}$ | $x^2 + y^2 z + z^{n+1} = 0$ | $4n$ |
+| $\tilde{A}_4$ (binary tetrahedral) | $E_6$ | $x^2 + y^3 + z^4 = 0$ | $24$ |
+| $\tilde{S}_4$ (binary octahedral) | $E_7$ | $x^2 + y^3 + yz^3 = 0$ | $48$ |
+| $\tilde{A}_5$ (binary icosahedral) | $E_8$ | $x^2 + y^3 + z^5 = 0$ | $120$ |
+
+These are also called **Du Val singularities**, **rational double points**, or **simple singularities**.
+</Theorem>
+
+<Example id="a1-singularity" title="The A_1 singularity">
+$G = \mu_2 = \{1, -1\}$ acting on $\mathbb{A}^2$ by $(x, y) \mapsto (-x, -y)$. The invariant ring is $k[x^2, xy, y^2] \cong k[u, v, w]/(uw - v^2)$. The quotient $\mathbb{A}^2/\mu_2$ is the quadric cone, with a node at the origin.
+
+The minimal resolution is the blowup at the origin: one exceptional $(-2)$-curve $E \cong \mathbb{P}^1$. The dual graph is a single vertex: $A_1$.
+
+The stack $[\mathbb{A}^2/\mu_2]$ is smooth of dimension 2, with a single $\mu_2$-stacky point at the origin.
+</Example>
+
+<Example id="a2-singularity" title="The A_2 singularity">
+$G = \mu_3$ acting by $\zeta \cdot (x, y) = (\zeta x, \zeta^{-1} y)$ where $\zeta^3 = 1$. The invariant ring is $k[x^3, xy, y^3] \cong k[u, v, w]/(uw - v^3)$. The minimal resolution has two exceptional $(-2)$-curves $E_1, E_2$ with $E_1 \cdot E_2 = 1$: the $A_2$ Dynkin diagram.
+</Example>
+
+<Example id="d4-singularity" title="The D_4 singularity">
+$G = BD_8$ (the quaternion group $Q_8$, which is the binary dihedral group of order 8), acting on $\mathbb{A}^2$. The quotient singularity is $D_4$: $x^2 + y^2 z + z^3 = 0$.
+
+The minimal resolution has four exceptional $(-2)$-curves meeting in the $D_4$ pattern: one central curve meeting three others. The $BD_8$ group has 5 irreducible representations (4 of dimension 1 and 1 of dimension 2), and by the McKay correspondence, these correspond to vertices of the extended $D_4$ diagram (with the trivial representation corresponding to the affine node).
+</Example>
+
+<Example id="e8-singularity" title="The E_8 singularity">
+$G = \tilde{A}_5$ (binary icosahedral, order 120), the double cover of the icosahedral group $A_5 \subset \mathrm{SO}(3)$ lifted to $\mathrm{SL}(2)$. The quotient is
+$$x^2 + y^3 + z^5 = 0$$
+with a minimal resolution having 8 exceptional $(-2)$-curves in the $E_8$ pattern. The group $\tilde{A}_5$ has 9 irreducible representations, matching the 9 nodes of the extended $E_8$ diagram.
+
+This is the most "complex" surface singularity: the resolution has the largest exceptional fiber, and the Milnor number is $\mu = 8$.
+</Example>
+
+---
+
+## The McKay correspondence
+
+<Theorem title="Classical McKay Correspondence" number="4.6">
+Let $G \subset \mathrm{SL}(2, k)$ be a finite subgroup (with $\operatorname{char} k \nmid |G|$). Let $\rho_0 = \mathbf{1}, \rho_1, \ldots, \rho_r$ be the irreducible representations of $G$, and let $Q$ be the natural 2-dimensional representation. Define the **McKay quiver** by: the vertex set is $\{0, 1, \ldots, r\}$ and the number of arrows from $i$ to $j$ is the multiplicity of $\rho_j$ in $Q \otimes \rho_i$.
+
+Then:
+1. The McKay quiver (ignoring orientation) is the **extended Dynkin diagram** $\tilde{\Gamma}$ of the ADE type of $\mathbb{A}^2/G$.
+2. Removing the vertex corresponding to the trivial representation $\rho_0$ gives the ordinary Dynkin diagram $\Gamma$.
+3. The dimensions $\dim \rho_i$ are the components of the **minimal positive imaginary root** of $\tilde{\Gamma}$.
+4. There is a bijection between non-trivial irreducible representations $\rho_i$ and exceptional divisors $E_i$ in the minimal resolution $\tilde{X} \to X = \mathbb{A}^2/G$.
+</Theorem>
+
+<Example id="mckay-a2" title="McKay correspondence for A_2">
+$G = \mu_3$ with irreducible representations $\rho_0 = \mathbf{1}$, $\rho_1$, $\rho_2$ (the three cube roots of unity characters). The natural representation is $Q = \rho_1 \oplus \rho_2$. Computing $Q \otimes \rho_i$:
+
+- $Q \otimes \rho_0 = \rho_1 \oplus \rho_2$
+- $Q \otimes \rho_1 = \rho_2 \oplus \rho_0$
+- $Q \otimes \rho_2 = \rho_0 \oplus \rho_1$
+
+The McKay quiver is: $0 - 1 - 2 - 0$ (a cycle), which is the extended $\tilde{A}_2$ diagram. Removing vertex 0 gives $1 - 2$, the $A_2$ diagram. The two exceptional curves $E_1, E_2$ in the resolution correspond to $\rho_1, \rho_2$.
+</Example>
+
+<Example id="mckay-a-general" title="McKay correspondence for Aₙ₋₁">
+$G = \mu_n$ with characters $\rho_0, \ldots, \rho_{n-1}$. The McKay quiver is the extended $\tilde{A}_{n-1}$ diagram (a cycle of $n$ vertices). The $n - 1$ nontrivial representations correspond to the $n - 1$ exceptional $(-2)$-curves in the minimal resolution of the $A_{n-1}$ singularity. Each representation has dimension 1, matching the fact that all components of the minimal imaginary root of $\tilde{A}_{n-1}$ are 1.
+</Example>
+
+<Example id="mckay-d4-detail" title="McKay correspondence for D_4 (detailed)">
+$G = Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$. The irreducible representations are:
+- $\rho_0 = \mathbf{1}$ (trivial), $\dim = 1$
+- $\rho_1, \rho_2, \rho_3$ (three non-trivial 1-dimensional), $\dim = 1$ each
+- $\rho_4$ (the natural 2-dimensional representation), $\dim = 2$
+
+The McKay graph: $\rho_1, \rho_2, \rho_3$ each connect to $\rho_4$, and $\rho_0$ connects to $\rho_4$. This is exactly the extended $\tilde{D}_4$ diagram. Removing $\rho_0$ gives $D_4$: one central node ($\rho_4$, corresponding to the central exceptional curve of self-intersection $-2$) connected to three outer nodes ($\rho_1, \rho_2, \rho_3$, the three "legs" of $D_4$).
+
+The dimensions $(1, 1, 1, 1, 2)$ are the coefficients of the null vector of $\tilde{D}_4$: $\rho_0 + \rho_1 + \rho_2 + \rho_3 + 2\rho_4 = 0$ in the root lattice.
+</Example>
+
+---
+
+## The derived McKay correspondence
+
+<Theorem title="Bridgeland--King--Reid Theorem" number="4.7">
+Let $G \subset \mathrm{SL}(n, k)$ be a finite subgroup (with $\operatorname{char} k = 0$) such that the **$G$-Hilbert scheme** $\operatorname{Hilb}^G(\mathbb{A}^n) = Y$ is a crepant resolution of $X = \mathbb{A}^n/G$ (i.e., $\omega_Y \cong \mathcal{O}_Y$). Then there is an equivalence of derived categories:
+$$D^b(\operatorname{Coh}^G(\mathbb{A}^n)) \cong D^b(\operatorname{Coh}(Y)).$$
+
+Equivalently, using the quotient stack $\mathcal{X} = [\mathbb{A}^n/G]$:
+$$D^b(\operatorname{Coh}(\mathcal{X})) \cong D^b(\operatorname{Coh}(Y)).$$
+
+For $n = 2$: $Y = \operatorname{Hilb}^G(\mathbb{A}^2)$ is always a crepant resolution (this is the minimal resolution), so the equivalence holds for all $G \subset \mathrm{SL}(2)$.
+
+For $n = 3$: $Y = \operatorname{Hilb}^G(\mathbb{A}^3)$ is a crepant resolution when $G$ is abelian (Nakamura, Craw--Ishii), but this may fail for non-abelian groups.
+</Theorem>
+
+<Example id="bkr-a1" title="BKR for A_1">
+$G = \mu_2 \subset \mathrm{SL}(2)$. The $G$-Hilbert scheme $Y = \operatorname{Hilb}^{\mu_2}(\mathbb{A}^2)$ is the minimal resolution of $\mathbb{A}^2/\mu_2$ (the blowup at the node). The BKR equivalence gives:
+$$D^b(\operatorname{Coh}^{\mu_2}(\mathbb{A}^2)) \cong D^b(\operatorname{Coh}(Y)).$$
+
+Under this equivalence, the non-trivial representation $\rho_1$ of $\mu_2$ corresponds to the line bundle $\mathcal{O}_Y(-E)$ (twisted by the exceptional divisor), and the regular representation corresponds to the structure sheaf $\mathcal{O}_Y$.
+</Example>
+
+<Example id="bkr-dim3" title="BKR in dimension 3">
+For $G = \mu_3 \subset \mathrm{SL}(3)$ acting by $\zeta \cdot (x,y,z) = (\zeta x, \zeta y, \zeta z)$, the quotient $\mathbb{A}^3/\mu_3$ has a terminal singularity. The $G$-Hilbert scheme $Y = \operatorname{Hilb}^{\mu_3}(\mathbb{A}^3)$ is a crepant resolution (it exists because $G$ is abelian), and BKR gives:
+$$D^b(\operatorname{Coh}^{\mu_3}(\mathbb{A}^3)) \cong D^b(\operatorname{Coh}(Y)).$$
+The resolution $Y$ has two exceptional divisors, corresponding to the two non-trivial representations of $\mu_3$.
+</Example>
+
+---
+
+## Resolution of quotient singularities
+
+<Definition title="Crepant Resolution" number="4.22">
+A resolution $f : Y \to X$ is **crepant** (="non-discrepant") if $f^*\omega_X \cong \omega_Y$, i.e., the canonical class is preserved. For quotient singularities $X = \mathbb{A}^n/G$ with $G \subset \mathrm{SL}(n)$, $\omega_X$ is trivial, so a crepant resolution has $\omega_Y \cong \mathcal{O}_Y$.
+
+Crepant resolutions exist for:
+- $n = 2$: always (the minimal resolution).
+- $n = 3$: always for $G \subset \mathrm{SL}(3)$ (by work of Bridgeland--King--Reid, Roan, and Ito--Reid).
+- $n \geq 4$: not always (some quotient singularities have no crepant resolution).
+</Definition>
+
+<Example id="resolution-An" title="Resolution of Aₙ₋₁">
+The $A_{n-1}$ singularity $\operatorname{Spec} k[u,v,w]/(uv - w^n)$ is resolved by a sequence of blowups, producing $n-1$ exceptional $(-2)$-curves $E_1, \ldots, E_{n-1}$ in a chain:
+$$E_1 - E_2 - \cdots - E_{n-1}$$
+with intersection matrix $E_i \cdot E_j = -2\delta_{ij} + \delta_{|i-j|,1}$ (the negative of the $A_{n-1}$ Cartan matrix).
+
+Alternatively, the resolution can be described as the toric resolution associated to subdividing the cone $\sigma = \operatorname{Cone}(e_1, e_1 + ne_2)$ by inserting rays $e_1 + ke_2$ for $k = 1, \ldots, n-1$.
+</Example>
+
+<Example id="non-crepant-dim4" title="Non-existence in dimension 4">
+The group $G = \mu_2$ acting on $\mathbb{A}^4$ by $(x_1, x_2, x_3, x_4) \mapsto (-x_1, -x_2, -x_3, -x_4)$ gives $G \subset \mathrm{SL}(4)$ (the determinant of $-I_4$ is $(-1)^4 = 1$). The quotient $\mathbb{A}^4/\mu_2$ has a singularity that admits **no crepant resolution**: any resolution must introduce discrepancy. However, the quotient stack $[\mathbb{A}^4/\mu_2]$ is still smooth.
+
+This motivates the use of stacks as "non-commutative resolutions" or "stacky resolutions" in higher dimensions.
+</Example>
+
+<Example id="mckay-k-theory" title="K-theoretic McKay correspondence">
+The McKay correspondence has a K-theoretic formulation: there is an isomorphism
+$$K^G_0(\mathbb{A}^n) \cong K_0(Y)$$
+for a crepant resolution $Y \to \mathbb{A}^n/G$. In the stacky language:
+$$K_0([\mathbb{A}^n/G]) \cong K_0(Y).$$
+
+For $G \subset \mathrm{SL}(2)$: $K^G_0(\mathbb{A}^2) \cong K^G_0(\mathrm{pt}) = R(G)$ (the representation ring), and $K_0(Y)$ is free abelian of rank $|G|$ (the number of irreducible representations). The basis of $R(G)$ given by irreducible representations maps to a basis of $K_0(Y)$ given by the exceptional divisors plus the structure sheaf.
+</Example>
+
+---
+
+## Higher-dimensional quotients
+
+<Example id="threefold-terminal" title="Threefold terminal quotient singularities">
+The classification of terminal quotient singularities in dimension 3 (by Mori and Morrison--Stevens): these are of the form $\mathbb{A}^3/\mu_r$ where $\mu_r$ acts by $\zeta \cdot (x,y,z) = (\zeta^a x, \zeta^b y, \zeta^c z)$ with $a + b + c \equiv 0 \pmod{r}$ and $\gcd(a, r) = \gcd(b, r) = \gcd(c, r) = 1$. The simplest is $\frac{1}{2}(1, 1, 1)$: $\mu_2$ acting by negation on $\mathbb{A}^3$.
+
+Terminal singularities are precisely those quotient singularities that have no crepant **partial** resolution (except the identity). They play a key role in the minimal model program for threefolds.
+</Example>
+
+<Example id="symplectic-resolution" title="Symplectic resolutions">
+If $G \subset \mathrm{Sp}(2n, k)$ acts on $\mathbb{A}^{2n}$ preserving the symplectic form, the quotient $\mathbb{A}^{2n}/G$ is a **symplectic singularity**. A resolution $Y \to \mathbb{A}^{2n}/G$ is **symplectic** if $Y$ carries a holomorphic symplectic form extending the one on the smooth locus.
+
+For $n = 1$: $G \subset \mathrm{SL}(2) = \mathrm{Sp}(2)$, and the minimal resolution is always symplectic (=crepant). The ADE classification applies.
+
+For $n = 2$: examples include wreath product quotients $(\mathbb{A}^2)^n / (G \wr S_n)$, whose symplectic resolutions are the Hilbert schemes $\operatorname{Hilb}^n(\tilde{S})$ where $\tilde{S} \to \mathbb{A}^2/G$ is the minimal resolution. This connects to Nakajima quiver varieties and the representation theory of affine Lie algebras.
+</Example>
+
+---
+
+## The stacky perspective
+
+<Remark title="Stacks as smooth resolutions">
+From the stack-theoretic viewpoint, the quotient stack $[\mathbb{A}^n/G]$ is always smooth, regardless of whether $\mathbb{A}^n/G$ has singularities or whether a crepant resolution exists. The derived McKay correspondence can be phrased as:
+
+$$D^b(\mathcal{X}) \cong D^b(Y)$$
+
+where $\mathcal{X} = [\mathbb{A}^n/G]$ (the smooth stack) and $Y$ is a crepant resolution (when it exists). This shows that the stack $\mathcal{X}$ and the resolution $Y$ carry "the same" algebraic information, despite having very different geometric descriptions.
+
+When no crepant resolution exists (e.g., in dimension $\geq 4$), the stack $[\mathbb{A}^n/G]$ serves as a **non-commutative crepant resolution** (NCCR) in the sense of Van den Bergh. The endomorphism algebra of a certain generator of $D^b([\mathbb{A}^n/G])$ is a non-commutative algebra $\Lambda$ with $D^b(\mathrm{mod}\text{-}\Lambda) \cong D^b([\mathbb{A}^n/G])$.
+</Remark>
+
+---
+
+## Summary
+
+Quotient singularities $\mathbb{A}^n/G$ provide a rich testing ground for the interplay between representation theory, birational geometry, and stack theory. The McKay correspondence (classical, derived, K-theoretic) establishes precise dictionaries between the representation theory of $G$ and the resolution geometry of $\mathbb{A}^n/G$. The quotient stack $[\mathbb{A}^n/G]$ always provides a smooth "resolution" at the level of stacks, and the BKR theorem shows this is equivalent (in the derived category) to a geometric resolution when one exists.

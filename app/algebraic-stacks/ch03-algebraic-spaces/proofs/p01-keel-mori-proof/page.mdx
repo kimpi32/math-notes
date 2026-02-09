@@ -1,0 +1,292 @@
+export const metadata = {
+  title: 'Proof of Keel-Mori Theorem — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "증명 — Proof of Keel-Mori" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Keel-Mori Theorem
+
+We present a detailed proof sketch of the Keel-Mori theorem, following the approach of Conrad (which streamlines the original proof of Keel and Mori). The theorem states that every separated Deligne-Mumford stack with finite inertia admits a coarse moduli space as an algebraic space.
+
+---
+
+## 1. Setup and Notation
+
+<Theorem title="Keel-Mori Theorem (recalled)">
+Let $S$ be a locally noetherian scheme and $\mathcal{X}$ a separated Deligne-Mumford stack of finite type over $S$ with finite inertia $I_\mathcal{X} \to \mathcal{X}$. Then there exists a coarse moduli space $\pi: \mathcal{X} \to X$ where $X$ is a separated algebraic space of finite type over $S$, and:
+1. $\pi$ is proper and quasi-finite.
+2. $\pi_*\mathcal{O}_\mathcal{X} = \mathcal{O}_X$.
+3. For every algebraically closed field $k$, the map $|\mathcal{X}(k)| \to X(k)$ is bijective.
+</Theorem>
+
+Throughout, we fix a separated DM stack $\mathcal{X}$ of finite type over $S$ with finite inertia $I_\mathcal{X} \to \mathcal{X}$.
+
+---
+
+## 2. Step 1 — Étale-Local Reduction to Quotient Stacks
+
+The first key step is to reduce the problem to quotient stacks $[U/G]$ where $G$ is a finite group acting on an affine scheme $U$.
+
+<Theorem title="Étale-local structure of DM stacks">
+Let $\mathcal{X}$ be a separated DM stack with finite inertia and $x \in \mathcal{X}$ a geometric point with automorphism group $G_x = \mathrm{Aut}(x)$. Then there exists an affine scheme $U$ with a $G_x$-action, a $G_x$-fixed point $u \in U$ mapping to $x$, and an étale morphism
+
+$$
+[U/G_x] \to \mathcal{X}
+$$
+
+that induces an isomorphism on residual gerbes at $x$.
+</Theorem>
+
+<Proof>
+Since $\mathcal{X}$ is DM, there exists an étale atlas $p: W \to \mathcal{X}$ with $W$ a scheme. Choose a geometric point $w \in W$ mapping to $x$. The fiber $W \times_\mathcal{X} W$ over the diagonal is an étale equivalence relation, and the stabilizer group at $w$ is the finite group $G_x$.
+
+By the theory of étale groupoids, we can find an étale neighborhood $(V, v)$ of $(W, w)$ such that $V \times_\mathcal{X} V \cong G_x \times V$ étale-locally near $v$. Shrinking $V$ (and possibly replacing by a henselian local scheme), we get $[V/G_x] \xrightarrow{\sim} \mathcal{X} \times_X U'$ for some étale neighborhood $U'$ of $\pi(x)$.
+
+Taking $U$ to be an affine $G_x$-invariant neighborhood of $v$ in $V$ gives the desired étale-local description.
+</Proof>
+
+This reduction is crucial: it means we only need to construct the coarse moduli space for quotient stacks $[U/G]$ and then glue.
+
+---
+
+## 3. Step 2 — Coarse Moduli Space for $[U/G]$ (Finite Group Quotients)
+
+For a finite group $G$ acting on an affine scheme $U = \mathrm{Spec}(A)$, the coarse moduli space is the classical GIT quotient:
+
+<Theorem title="GIT quotient as coarse moduli space">
+Let $G$ be a finite group acting on an affine scheme $U = \mathrm{Spec}(A)$. Then the coarse moduli space of $[U/G]$ is $U/G = \mathrm{Spec}(A^G)$, where $A^G$ is the ring of invariants.
+</Theorem>
+
+<Proof>
+We verify the coarse moduli space axioms:
+
+**Universality**: Let $f: [U/G] \to Y$ be a morphism to an algebraic space $Y$. The composite $U \to [U/G] \to Y$ is $G$-invariant, hence factors through a $G$-invariant morphism $U \to Y$. Since $U \to U/G$ is the categorical quotient in the category of affine schemes, the map factors uniquely as $U \to U/G \to Y$.
+
+To extend this to the non-affine case, we use that $Y$ is a sheaf for the étale topology and that $U \to U/G$ is a categorical quotient for the étale topology on the category of algebraic spaces.
+
+**Geometric bijectivity**: For an algebraically closed field $k$, we have
+
+$$
+|[U/G](k)| = U(k)/G \quad \text{and} \quad (U/G)(k) = U(k)/G
+$$
+
+since over algebraically closed fields, $G$-orbits on $k$-points are exactly the $k$-points of the GIT quotient (by Hilbert's theorem on invariants). These sets are naturally in bijection.
+
+**Structure sheaf**: The map $A^G \to A$ induces $\mathcal{O}_{U/G} \to \pi_*\mathcal{O}_{[U/G]}$, and the latter equals $(\pi_*\mathcal{O}_U)^G = A^G$ (since $G$ is finite and acts on $A$). Thus $\pi_*\mathcal{O}_{[U/G]} = \mathcal{O}_{U/G}$.
+</Proof>
+
+<Remark>
+The finiteness of $G$ is essential: $A^G$ is a finitely generated $\mathcal{O}_S$-algebra when $A$ is (by Noether's theorem on invariants, or more generally by finiteness of the integral closure for finite group actions). This ensures $U/G$ is of finite type over $S$.
+</Remark>
+
+---
+
+## 4. Step 3 — Constructing the Coarse Moduli Space Globally
+
+The global construction proceeds by gluing the local quotients $U_i/G_i$ obtained in Step 1. The key challenge is to show the gluing is well-defined.
+
+**Gluing strategy**: Cover $\mathcal{X}$ by étale-local quotient presentations $\{[U_i/G_i] \to \mathcal{X}\}$. Each $[U_i/G_i]$ has a coarse moduli space $U_i/G_i$. On overlaps, the coarse moduli spaces are canonically isomorphic (by the uniqueness of the coarse moduli space for any open substack).
+
+More precisely:
+
+<Proof title="Global construction">
+**Step 3a: Choose an étale cover.** For each geometric point $x$ of $\mathcal{X}$, choose an étale neighborhood $[U_x / G_x] \to \mathcal{X}$ as in Step 1. By quasi-compactness of $\mathcal{X}$, finitely many of these cover: $\{[U_i/G_i] \to \mathcal{X}\}_{i=1}^n$.
+
+**Step 3b: Form local coarse moduli spaces.** For each $i$, set $X_i = U_i / G_i = \mathrm{Spec}(A_i^{G_i})$. By Step 2, $[U_i/G_i] \to X_i$ is a coarse moduli map.
+
+**Step 3c: Construct gluing data.** For each pair $(i, j)$, consider the fiber product $\mathcal{U}_{ij} = [U_i/G_i] \times_\mathcal{X} [U_j/G_j]$. This is an étale equivalence relation on $\coprod_i [U_i/G_i]$. The coarse moduli space functor, applied to $\mathcal{U}_{ij}$, gives an étale equivalence relation on $\coprod_i X_i$.
+
+Specifically, define $R_{ij}$ as the coarse moduli space of $\mathcal{U}_{ij}$. The projections $R_{ij} \to X_i$ and $R_{ij} \to X_j$ are étale (because the original projections $\mathcal{U}_{ij} \to [U_i/G_i]$ are étale, and the coarse moduli space functor preserves étaleness in appropriate situations).
+
+**Step 3d: Verify the cocycle condition.** On triple overlaps, the transitivity of the equivalence relation on $\mathcal{X}$ descends to transitivity for the equivalence relation $R$ on $\coprod_i X_i$.
+
+**Step 3e: Form the quotient.** The algebraic space $X$ is defined as the quotient
+
+$$
+X = \left(\coprod_i X_i\right) / R
+$$
+
+where $R = \coprod_{i,j} R_{ij}$. Since $R \rightrightarrows \coprod_i X_i$ is an étale equivalence relation on schemes, the quotient $X$ is an algebraic space.
+</Proof>
+
+---
+
+## 5. Step 4 — Verifying the Universal Property
+
+<Proof title="Universality of pi">
+Let $f: \mathcal{X} \to Y$ be a morphism to an algebraic space $Y$. We need to show $f$ factors uniquely through $\pi: \mathcal{X} \to X$.
+
+**Étale-locally**: On each $[U_i/G_i]$, the morphism $f|_{[U_i/G_i]}: [U_i/G_i] \to Y$ factors uniquely through $X_i = U_i/G_i$ (by Step 2). This gives maps $g_i: X_i \to Y$.
+
+**Compatibility**: On overlaps, the two factorizations $g_i|_{R_{ij}}$ and $g_j|_{R_{ij}}$ must agree. This follows from the uniqueness of the factorization on $\mathcal{U}_{ij}$: the coarse moduli map for $\mathcal{U}_{ij}$ is $R_{ij}$, and $f|_{\mathcal{U}_{ij}}$ factors uniquely through $R_{ij}$.
+
+**Gluing**: The compatible family $\{g_i: X_i \to Y\}$ descends to a unique morphism $g: X \to Y$ with $f = g \circ \pi$.
+</Proof>
+
+---
+
+## 6. Step 5 — Properties of the Coarse Moduli Map
+
+### Properness of $\pi$
+
+<Proof title="Pi is proper">
+We verify properness using the valuative criterion.
+
+**Finite type**: $\pi$ is of finite type because étale-locally it is $U_i \to U_i/G_i$, which is finite (hence of finite type).
+
+**Separatedness**: The diagonal $\mathcal{X} \to \mathcal{X} \times_X \mathcal{X}$ is representable and proper. Since $\mathcal{X}$ is separated, this is a closed immersion, giving separatedness of $\pi$.
+
+**Universal closedness**: Let $A$ be a DVR with fraction field $K$ and consider a commutative diagram
+
+$$
+\mathrm{Spec}(K) \to \mathcal{X}
+$$
+$$
+\downarrow \qquad\qquad \downarrow \pi
+$$
+$$
+\mathrm{Spec}(A) \to X
+$$
+
+We need to find a lift $\mathrm{Spec}(A) \to \mathcal{X}$. Étale-locally on $X$, the stack $\mathcal{X}$ is $[U/G]$ and $X = U/G$. The map $\mathrm{Spec}(A) \to U/G$ lifts to $U$ after a finite extension of $A$ (since $U \to U/G$ is finite surjective). The composite $\mathrm{Spec}(A') \to U \to [U/G]$ gives the required lift (after possibly replacing $A$ by a finite extension, which is allowed for properness).
+
+More carefully: the stack $\mathcal{X}$ is proper over $X$ because étale-locally the map $[U/G] \to U/G$ is proper (it is a finite gerbe). A morphism that is étale-locally proper is proper.
+</Proof>
+
+### The Structure Sheaf Property
+
+<Proof title="Pi_* O_X = O_X">
+Étale-locally on $X$, we have $\mathcal{X} \cong [U/G]$ and $X \cong U/G$. Then
+
+$$
+\pi_*\mathcal{O}_{[U/G]} = (\mathcal{O}_U)^G = A^G = \mathcal{O}_{U/G}
+$$
+
+The first equality uses that pushforward from $[U/G]$ to $U/G$ is taking $G$-invariants. The second is the definition of $A^G$. Since this holds étale-locally, it holds globally.
+</Proof>
+
+---
+
+## 7. Step 6 — Geometric Bijectivity
+
+<Proof title="Bijection on geometric points">
+Let $k$ be an algebraically closed field. We need to show $|\mathcal{X}(k)| \to X(k)$ is bijective.
+
+**Surjectivity**: Let $x \in X(k)$. Étale-locally, $X = U/G$ and $x$ lifts to a $k$-point $u \in U(k)$ (since $k$ is algebraically closed and $U \to U/G$ is surjective). The image of $u$ in $[U/G](k)$ maps to $x$, giving surjectivity.
+
+**Injectivity**: Let $\xi_1, \xi_2 \in \mathcal{X}(k)$ with $\pi(\xi_1) = \pi(\xi_2) = x \in X(k)$. Étale-locally, $\xi_1, \xi_2$ correspond to $k$-points $u_1, u_2 \in U(k)$ with the same image in $U/G$. This means $u_1$ and $u_2$ lie in the same $G$-orbit: $u_2 = g \cdot u_1$ for some $g \in G$. Therefore $\xi_1 \cong \xi_2$ in $[U/G](k)$ (they are isomorphic as objects of the groupoid), so they represent the same isomorphism class in $|\mathcal{X}(k)|$.
+</Proof>
+
+---
+
+## 8. The Hilbert Scheme Trick
+
+The original proof of Keel and Mori uses the "Hilbert scheme trick" to reduce from general DM stacks to quotient stacks. This technique deserves special attention.
+
+<Theorem title="Hilbert scheme trick (Keel-Mori)">
+Let $\mathcal{X}$ be a separated DM stack of finite type over $S$ with finite inertia. Then there exists a scheme $Z$ with a finite flat groupoid $R \rightrightarrows Z$ such that $\mathcal{X} \cong [Z/R]$ étale-locally on $\mathcal{X}$.
+</Theorem>
+
+The idea: choose an étale atlas $p: W \to \mathcal{X}$ and consider the Hilbert scheme (or more precisely, the Weil restriction) that parametrizes liftings of geometric points of $\mathcal{X}$ to $W$. This produces a finite flat cover of $\mathcal{X}$ by a scheme, giving the desired groupoid presentation.
+
+<Proof title="Sketch of the Hilbert scheme trick">
+Let $p: W \to \mathcal{X}$ be an étale atlas. Consider the representable morphism $\mathcal{H}om_\mathcal{X}(W, W) \to \mathcal{X}$ whose fiber over a point $\xi \in \mathcal{X}(T)$ is the set of automorphisms of the pullback of the atlas to $\xi$.
+
+Since $\mathcal{X}$ has finite inertia, the groupoid $R = W \times_\mathcal{X} W \rightrightarrows W$ has finite fibers. The key observation: the morphism $R \to W \times_S W$ is finite (because the diagonal of $\mathcal{X}$ is finite, being the composition of the unramified diagonal of a DM stack with the finite inertia map).
+
+Now consider the "symmetrized" version: define $Z = \mathrm{Spec}(\mathrm{Sym}^n(\mathcal{O}_R))$ (informally, the $n$-th symmetric product where $n$ is the degree of $R \to W$). This $Z$ carries a natural finite flat equivalence relation, and the quotient recovers $\mathcal{X}$ étale-locally.
+</Proof>
+
+---
+
+## 9. Technical Lemmas
+
+Several technical results are needed in the proof:
+
+<Theorem title="Finite groupoid quotients exist">
+Let $R \rightrightarrows U$ be a finite flat groupoid in schemes (with $U$ of finite type over $S$). Then the quotient sheaf $U/R$ (in the fppf topology) is an algebraic space.
+</Theorem>
+
+<Proof>
+The quotient $U/R$ is an fppf sheaf by descent. The diagonal is representable because $R$ is a scheme (the diagonal is the map $R \to U \times_{U/R} U$, which is an isomorphism by effectivity of the groupoid). The atlas $U \to U/R$ is finite (hence in particular surjective), giving condition (3).
+</Proof>
+
+<Theorem title="Coarse moduli spaces commute with flat base change">
+Let $\pi: \mathcal{X} \to X$ be the coarse moduli map and $Y \to X$ a flat morphism of algebraic spaces. Then $\pi_Y: \mathcal{X} \times_X Y \to Y$ is the coarse moduli map for $\mathcal{X} \times_X Y$.
+</Theorem>
+
+This is important for the étale-local verification: once we know the coarse moduli space étale-locally, flat base change ensures compatibility.
+
+---
+
+## 10. Separatedness of the Coarse Moduli Space
+
+<Proof title="X is separated">
+We verify the valuative criterion for separatedness of $X \to S$.
+
+Let $A$ be a DVR with fraction field $K$, and $g_1, g_2: \mathrm{Spec}(A) \to X$ two morphisms agreeing on $\mathrm{Spec}(K)$. We need $g_1 = g_2$.
+
+Pull back to $\mathcal{X}$: the fiber products $\mathcal{X} \times_{X, g_i} \mathrm{Spec}(A)$ are DM stacks proper over $\mathrm{Spec}(A)$ (since $\pi$ is proper). The generic fibers are isomorphic (since $g_1 = g_2$ on $\mathrm{Spec}(K)$).
+
+Since $\mathcal{X}$ is separated, the isomorphism on generic fibers extends to a morphism of the whole stacks over $\mathrm{Spec}(A)$. Applying $\pi$ to both sides, we get $g_1 = g_2$ (using $\pi_*\mathcal{O} = \mathcal{O}$, which implies $\pi$ detects equality of maps from reduced schemes).
+</Proof>
+
+---
+
+## 11. Summary of the Proof Architecture
+
+The proof has the following logical structure:
+
+1. **Local structure**: Show $\mathcal{X}$ is étale-locally a quotient stack $[U/G]$ (using the DM condition and finite inertia).
+
+2. **Local quotient**: Construct $U/G = \mathrm{Spec}(A^G)$ as the coarse moduli space of $[U/G]$.
+
+3. **Glue**: Use the étale descent of the coarse moduli spaces $U_i/G_i$ to form a global algebraic space $X$.
+
+4. **Verify properties**: Check universality, geometric bijectivity, properness, and $\pi_*\mathcal{O} = \mathcal{O}$ by reducing to the étale-local (quotient stack) case.
+
+<Remark>
+The original Keel-Mori proof uses a somewhat different approach: instead of the étale-local reduction, they directly construct the coarse moduli space using the Hilbert scheme trick and a careful analysis of finite flat groupoids. Conrad's approach, which we followed, is more conceptual and generalizes more readily.
+</Remark>
+
+---
+
+## 12. Example: Walking Through the Proof for $\mathcal{M}_{1,1}$
+
+Let us illustrate the proof for $\mathcal{M}_{1,1}$, the moduli stack of elliptic curves.
+
+<Example title="Coarse moduli space of M₁,₁">
+**Setup**: $\mathcal{M}_{1,1}$ is a smooth DM stack over $\mathrm{Spec}(\mathbb{Z}[1/6])$. The generic automorphism group is $\mathbb{Z}/2\mathbb{Z}$ (the involution $[-1]$), with enhanced automorphisms at $j = 0$ (group $\mathbb{Z}/6\mathbb{Z}$) and $j = 1728$ (group $\mathbb{Z}/4\mathbb{Z}$).
+
+**Step 1**: Near a generic point (say $j \neq 0, 1728$), the stack is étale-locally $[U / (\mathbb{Z}/2\mathbb{Z})]$ where $U$ is an affine open in the $j$-line.
+
+**Step 2**: The quotient $U / (\mathbb{Z}/2\mathbb{Z})$ is $U$ itself (since $\mathbb{Z}/2\mathbb{Z}$ acts trivially on the $j$-line — the $j$-invariant is already an invariant). So the coarse moduli space is the $j$-line.
+
+**Step 3**: Near $j = 0$, the local picture is $[\mathrm{Spec}(A) / (\mathbb{Z}/6\mathbb{Z})]$ where $A$ is a local ring at $j = 0$. The invariant ring $A^{\mathbb{Z}/6\mathbb{Z}}$ is again the local ring at $j = 0$ (since $j$ is the invariant coordinate).
+
+**Step 4**: Gluing gives $X = \mathbb{A}^1_j$ (the $j$-line), with $\pi: \mathcal{M}_{1,1} \to \mathbb{A}^1_j$ the map sending an elliptic curve to its $j$-invariant. The property $\pi_*\mathcal{O} = \mathcal{O}$ holds because the automorphism groups act trivially on functions (they act on the curve, not the base).
+</Example>
+
+---
+
+## References
+
+- S. Keel and S. Mori, "Quotients by groupoids," Ann. of Math. 145 (1997), 193-213.
+- B. Conrad, "The Keel-Mori theorem via stacks," preprint, 2005.
+- J. Alper, J. Hall, and D. Rydh, "A Luna étale slice theorem for algebraic stacks," Ann. of Math. 191 (2020), 675-738.
+- M. Olsson, *Algebraic Spaces and Stacks*, AMS Colloquium Publications, 2016, Chapter 11.

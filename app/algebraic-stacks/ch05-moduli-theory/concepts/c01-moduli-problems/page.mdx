@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Moduli Problems — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Concept — Moduli Problems" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Moduli Problems
+
+The fundamental question of moduli theory is: **how do we parametrize families of geometric objects?** A moduli problem asks for a geometric space whose points correspond to isomorphism classes of a given type of object, and whose geometry reflects how these objects vary in families.
+
+---
+
+## 1. The Functor of Points Perspective
+
+The modern approach to moduli theory begins with Grothendieck's functor of points. Rather than constructing a space directly, we define what it means for a family of objects to be parametrized by a given base scheme.
+
+<Definition title="Moduli Functor">
+A **moduli functor** (or **moduli problem**) is a functor
+$$\mathcal{F} : (\mathsf{Sch}/S)^{\mathrm{op}} \to \mathsf{Sets}$$
+from the opposite category of $S$-schemes to sets. For a scheme $T$ over $S$, the set $\mathcal{F}(T)$ parametrizes families of objects over $T$, considered up to a suitable equivalence relation.
+</Definition>
+
+More precisely, for a morphism $f: T' \to T$ of $S$-schemes, the pullback map $\mathcal{F}(f): \mathcal{F}(T) \to \mathcal{F}(T')$ corresponds to pulling back families along $f$.
+
+<Definition title="Representable Functor">
+A moduli functor $\mathcal{F}$ is **representable** if there exists a scheme $M$ over $S$ and a natural isomorphism
+$$\mathcal{F} \cong h_M = \mathrm{Hom}_S(-, M).$$
+The scheme $M$ is called a **fine moduli space** for the problem, and the element $\xi \in \mathcal{F}(M)$ corresponding to $\mathrm{id}_M$ under the isomorphism is called the **universal family**.
+</Definition>
+
+---
+
+## 2. Fine Moduli Spaces
+
+When a fine moduli space exists, the situation is ideal: every family over any base $T$ is obtained by pulling back the universal family along a unique morphism $T \to M$.
+
+<Theorem title="Universal Property of Fine Moduli">
+If $M$ represents $\mathcal{F}$ with universal family $\xi_{\mathrm{univ}} \in \mathcal{F}(M)$, then for any scheme $T$ and any family $\xi \in \mathcal{F}(T)$, there exists a unique morphism $\phi: T \to M$ such that $\phi^*\xi_{\mathrm{univ}} = \xi$.
+</Theorem>
+
+<Example title="Projective Space as Fine Moduli">
+The projective space $\mathbb{P}^n_S$ represents the functor
+$$T \mapsto \left\lbrace \text{line bundle quotients } \mathcal{O}_T^{n+1} \twoheadrightarrow \mathcal{L} \right\rbrace / \cong$$
+The universal family is the tautological quotient $\mathcal{O}_{\mathbb{P}^n}^{n+1} \twoheadrightarrow \mathcal{O}(1)$.
+</Example>
+
+<Example title="Grassmannian">
+The Grassmannian $\mathrm{Gr}(k, n)$ is a fine moduli space for the functor
+$$T \mapsto \left\lbrace \text{locally free quotients } \mathcal{O}_T^n \twoheadrightarrow \mathcal{E}, \; \mathrm{rank}(\mathcal{E}) = k \right\rbrace / \cong$$
+The universal family is the tautological quotient bundle of rank $k$ on $\mathrm{Gr}(k,n)$.
+</Example>
+
+<Example title="Affine Space Parametrizing Polynomials">
+The affine space $\mathbb{A}^{n+1}$ is a fine moduli space for monic polynomials of degree $n$:
+$$T \mapsto \left\lbrace f(x) = x^n + a_{n-1}x^{n-1} + \cdots + a_0 \;\middle|\; a_i \in \mathcal{O}(T) \right\rbrace$$
+The universal polynomial is $x^n + t_{n-1}x^{n-1} + \cdots + t_0$ over $\mathbb{A}^n = \mathrm{Spec}\, k[t_0, \ldots, t_{n-1}]$.
+</Example>
+
+---
+
+## 3. Obstructions to Representability
+
+Many natural moduli problems fail to be representable. The key obstruction is the existence of nontrivial automorphisms.
+
+<Theorem title="Automorphism Obstruction">
+If a moduli functor $\mathcal{F}$ is representable and the objects being parametrized have no nontrivial automorphisms (i.e., for each $\xi \in \mathcal{F}(\mathrm{Spec}\, k)$ we have $\mathrm{Aut}(\xi) = \lbrace \mathrm{id} \rbrace$), then representability is not obstructed by automorphisms. Conversely, if generic objects have nontrivial automorphisms, then $\mathcal{F}$ is typically **not** representable.
+</Theorem>
+
+<Example title="Non-Representability of Elliptic Curves">
+Consider the moduli functor $\mathcal{M}_{1,1}$ of elliptic curves (genus 1 curves with a marked point). Every elliptic curve $E$ has the automorphism $[-1]: E \to E$ (the inverse map), so $|\mathrm{Aut}(E)| \geq 2$. This functor is not representable by a scheme.
+
+More precisely, if $\mathcal{M}_{1,1}$ were represented by a scheme $M$, then for any field $k$, the set of $k$-points $M(k)$ would be in bijection with isomorphism classes of elliptic curves over $k$. But one can construct a family $E \to \mathbb{P}^1 \setminus \lbrace 0,1,\infty \rbrace$ that is locally trivial in the etale topology but not globally trivial, contradicting representability.
+</Example>
+
+<Example title="Line Bundles on a Fixed Curve">
+Let $C$ be a smooth projective curve. The functor
+$$T \mapsto \left\lbrace \text{line bundles on } C \times T \right\rbrace / \cong$$
+is not representable because every line bundle $\mathcal{L}$ has $\mathrm{Aut}(\mathcal{L}) = \mathbb{G}_m$. However, if we rigidify by fixing a point $p \in C$ and requiring a trivialization along $\lbrace p \rbrace \times T$, we obtain the representable Picard scheme $\mathrm{Pic}_C$.
+</Example>
+
+---
+
+## 4. Coarse Moduli Spaces
+
+When representability fails, we can often find a weaker substitute.
+
+<Definition title="Coarse Moduli Space">
+A **coarse moduli space** for a moduli functor $\mathcal{F}$ is a scheme $M$ together with a natural transformation $\pi: \mathcal{F} \to h_M$ such that:
+1. For every algebraically closed field $k$, the map $\pi(\mathrm{Spec}\, k): \mathcal{F}(\mathrm{Spec}\, k) \to M(k)$ is a bijection.
+2. For any scheme $N$ and natural transformation $\psi: \mathcal{F} \to h_N$, there exists a unique morphism $f: M \to N$ such that $\psi = h_f \circ \pi$.
+</Definition>
+
+The first condition says that closed points of $M$ are in bijection with isomorphism classes. The second condition says $M$ is the "best approximation" to a fine moduli space.
+
+<Example title="j-line as Coarse Moduli for Elliptic Curves">
+The affine line $\mathbb{A}^1_j = \mathrm{Spec}\, \mathbb{Z}[j]$ is a coarse moduli space for elliptic curves over algebraically closed fields. The $j$-invariant provides the natural transformation. However, this is **not** a fine moduli space: there is no universal elliptic curve over $\mathbb{A}^1_j$.
+
+Over a non-algebraically closed field $k$, there can exist non-isomorphic elliptic curves with the same $j$-invariant (twists), demonstrating the failure of the fine moduli property.
+</Example>
+
+<Example title="Moduli of Curves of Genus g ≥ 2">
+The coarse moduli space $M_g$ of smooth curves of genus $g \geq 2$ exists as a quasi-projective variety of dimension $3g - 3$. However, it is not a fine moduli space because:
+- Curves can have nontrivial automorphisms (e.g., hyperelliptic involutions).
+- The hyperelliptic locus in $M_g$ parametrizes curves with $\mathrm{Aut}(C) \supseteq \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+---
+
+## 5. Rigidification and Level Structure
+
+One approach to obtaining a fine moduli space is to add extra structure that kills automorphisms.
+
+<Definition title="Level Structure">
+A **level-$n$ structure** on an abelian variety $A$ of dimension $g$ over a field $k$ (with $\mathrm{char}(k) \nmid n$) is an isomorphism
+$$\alpha: (\mathbb{Z}/n\mathbb{Z})^{2g} \xrightarrow{\sim} A[n]$$
+of group schemes, where $A[n]$ is the $n$-torsion subgroup.
+</Definition>
+
+<Example title="Modular Curves with Level Structure">
+For $n \geq 3$, the moduli functor $\mathcal{M}_{1,1}[n]$ of elliptic curves with full level-$n$ structure is representable by a smooth affine curve $Y(n)$ over $\mathbb{Z}[1/n]$. The key point: a level-$n$ structure with $n \geq 3$ has no nontrivial automorphisms compatible with it, since $[-1]$ acts nontrivially on $A[n]$ for $n \geq 3$.
+</Example>
+
+<Example title="Hilbert Schemes">
+The Hilbert scheme $\mathrm{Hilb}^P_{X/S}$ is a fine moduli space for closed subschemes of $X$ with Hilbert polynomial $P$. This works because closed subschemes (as opposed to abstract varieties) have no nontrivial automorphisms: they are rigidified by their embedding.
+</Example>
+
+---
+
+## 6. Groupoid-Valued Functors and Stacks
+
+The correct framework for moduli problems with automorphisms is to keep track of the automorphisms rather than quotienting them out.
+
+<Definition title="Groupoid-Valued Functor">
+A **groupoid-valued moduli functor** (or **category fibered in groupoids**) is a functor
+$$\mathcal{F} : (\mathsf{Sch}/S)^{\mathrm{op}} \to \mathsf{Groupoids}$$
+where $\mathcal{F}(T)$ is the groupoid of families over $T$ (objects are families, morphisms are isomorphisms of families). When this satisfies descent (effective descent for morphisms and objects), it is a **stack**.
+</Definition>
+
+<Example title="Stack of Vector Bundles">
+The stack $\mathcal{B}un_n$ assigns to a scheme $T$ the groupoid of rank-$n$ vector bundles on $T$. This is a stack for the fpqc topology. For a vector bundle $\mathcal{E}$, the automorphism group is $\mathrm{GL}(\mathcal{E})$, which is never trivial, so $\mathcal{B}un_n$ is not representable.
+
+The coarse moduli space is a single point $\mathrm{Spec}\, k$ (since all vector bundles of rank $n$ over $\mathrm{Spec}\, k$ are isomorphic), which is essentially useless. The stack, however, captures the rich geometry.
+</Example>
+
+<Example title="Moduli Stack vs Coarse Space for Genus 2">
+For genus 2 curves, every curve is hyperelliptic, so $\mathrm{Aut}(C) \supseteq \mathbb{Z}/2\mathbb{Z}$. The stack $\mathcal{M}_2$ is a smooth Deligne-Mumford stack of dimension 3. The coarse moduli space $M_2$ has quotient singularities at points corresponding to curves with extra automorphisms (e.g., the curve $y^2 = x^5 - x$ has $\mathrm{Aut}(C) \cong \mathbb{Z}/10\mathbb{Z}$, contributing a $\mathbb{Z}/5\mathbb{Z}$-singularity to $M_2$).
+</Example>
+
+---
+
+## 7. Equivalence Relations and Quotient Problems
+
+<Definition title="Quotient Moduli Problem">
+Given a scheme $X$ with an action of a group scheme $G$, the **quotient moduli problem** is the functor
+$$T \mapsto \left\lbrace (P, \phi) \;\middle|\; P \to T \text{ is a } G\text{-torsor}, \; \phi: P \to X \text{ is } G\text{-equivariant} \right\rbrace / \cong$$
+This is the functor of points of the quotient stack $[X/G]$.
+</Definition>
+
+<Example title="Weighted Projective Space">
+Consider $\mathbb{A}^{n+1} \setminus \lbrace 0 \rbrace$ with the $\mathbb{G}_m$-action given by weights $(w_0, \ldots, w_n)$:
+$$\lambda \cdot (x_0, \ldots, x_n) = (\lambda^{w_0} x_0, \ldots, \lambda^{w_n} x_n).$$
+The quotient stack $[(\mathbb{A}^{n+1} \setminus \lbrace 0 \rbrace) / \mathbb{G}_m]$ is the stacky weighted projective space $\mathcal{P}(w_0, \ldots, w_n)$. When all $w_i = 1$, this is $\mathbb{P}^n$ (which is a scheme). For general weights, the coarse moduli space is the usual weighted projective space, which may have quotient singularities.
+</Example>
+
+---
+
+## 8. Families, Base Change, and Descent
+
+<Definition title="Family of Objects">
+A **family of objects parametrized by $T$** in a moduli problem $\mathcal{F}$ is an element $\xi \in \mathcal{F}(T)$. For a morphism $f: T' \to T$, the **pullback family** is $f^*\xi = \mathcal{F}(f)(\xi) \in \mathcal{F}(T')$.
+</Definition>
+
+<Example title="Families of Conics">
+A family of conics in $\mathbb{P}^2$ parametrized by $T$ is a closed subscheme $\mathcal{C} \subset \mathbb{P}^2_T$ flat over $T$ with fibers being conics. The moduli space is $\mathbb{P}^5$ (the space of homogeneous quadratic forms in 3 variables up to scalar). Over the point $[a:b:c:d:e:f] \in \mathbb{P}^5$, the fiber is the conic $\lbrace ax^2 + bxy + cy^2 + dxz + eyz + fz^2 = 0 \rbrace$.
+</Example>
+
+---
+
+## 9. Summary of Moduli Hierarchy
+
+<Remark title="Hierarchy of Moduli Structures">
+For a moduli problem $\mathcal{F}$, the possible outcomes form a hierarchy:
+
+1. **Fine moduli space** (representable by a scheme): Best case. Universal family exists. Requires no automorphisms.
+2. **Fine moduli algebraic space**: Representable by an algebraic space. Slightly weaker.
+3. **Deligne-Mumford stack**: Objects have finite, reduced automorphism groups. Etale local charts.
+4. **Artin (algebraic) stack**: Objects may have positive-dimensional automorphism groups. Smooth local charts.
+5. **Coarse moduli space**: Always a weaker substitute. Points correspond to isomorphism classes, but no universal family.
+6. **Higher stack / derived stack**: Needed for derived or higher-categorical enhancements.
+</Remark>
+
+<Example title="Summary Table of Classical Moduli Problems">
+| Problem | Type | Reason |
+|---------|------|--------|
+| $\mathrm{Hilb}^P_{X/S}$ | Fine moduli scheme | No automorphisms (subschemes) |
+| $\mathrm{Gr}(k,n)$ | Fine moduli scheme | No automorphisms (quotients) |
+| $\mathcal{M}_g$ ($g \geq 2$) | DM stack | Finite automorphism groups |
+| $\mathcal{M}_{1,1}$ | DM stack | $\mathrm{Aut}(E) \supseteq \lbrace \pm 1 \rbrace$ |
+| $\mathcal{B}un_n(C)$ | Artin stack | $\mathrm{Aut}(\mathcal{E}) \supseteq \mathbb{G}_m$ |
+| $[*/G]$ | Artin stack | $\mathrm{Aut}(*) = G$ |
+</Example>

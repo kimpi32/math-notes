@@ -1,0 +1,254 @@
+export const metadata = {
+  title: 'Sheafification on Sites — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "1. 위치와 하강", href: "/algebraic-stacks/ch01-sites-descent" },
+  { label: "Theorem — Sheafification on Sites" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sheafification on Sites
+
+Sheafification is the process of universally turning a presheaf into a sheaf, and it exists for presheaves on any Grothendieck site. This theorem provides the foundation for constructing sheaves from presheaves in the etale, fppf, and fpqc topologies, and is essential for defining the associated sheaf of a moduli functor, computing cokernels and images in the category of sheaves, and constructing derived functors.
+
+---
+
+## Statement of the Theorem
+
+<Theorem title="Existence of Sheafification" number="1.7">
+Let $(\mathcal{C}, J)$ be a site. For every presheaf $F: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$, there exists a sheaf $F^{\sharp}$ (or $aF$, or $F^{\mathrm{sh}}$) and a morphism of presheaves $\theta: F \to F^{\sharp}$ satisfying the following **universal property**:
+
+For every sheaf $G$ on $(\mathcal{C}, J)$ and every morphism of presheaves $\varphi: F \to G$, there exists a unique morphism of sheaves $\bar{\varphi}: F^{\sharp} \to G$ such that $\bar{\varphi} \circ \theta = \varphi$.
+
+$$F \xrightarrow{\theta} F^{\sharp} \xrightarrow{\exists! \bar{\varphi}} G$$
+
+Moreover:
+1. $\theta$ induces an isomorphism on stalks: $F_p \xrightarrow{\sim} F^{\sharp}_p$ for every point $p$ of the topos.
+2. The functor $F \mapsto F^{\sharp}$ is left adjoint to the inclusion $\operatorname{Sh}(\mathcal{C}, J) \hookrightarrow \operatorname{PSh}(\mathcal{C})$.
+3. If $F$ is already a sheaf, then $\theta: F \to F^{\sharp}$ is an isomorphism.
+</Theorem>
+
+<Theorem title="Sheafification for abelian presheaves" number="1.8">
+For presheaves of abelian groups (or $\mathcal{O}$-modules on a ringed site), sheafification preserves the abelian group (or module) structure:
+
+$$a: \operatorname{PAb}(\mathcal{C}) \to \operatorname{Ab}(\mathcal{C}, J)$$
+
+is an exact functor (preserves finite limits and all colimits). In particular:
+- $a$ preserves kernels: $(aF \to aG)$ has kernel $a(\ker(F \to G))$.
+- $a$ preserves cokernels: $\operatorname{coker}(aF \to aG) = a(\operatorname{coker}(F \to G))$.
+- $a$ preserves exact sequences.
+</Theorem>
+
+---
+
+## Construction: The Plus Construction
+
+<Definition title="The plus construction" number="1.9">
+For a presheaf $F$ on $(\mathcal{C}, J)$, the **plus construction** (or **associated separated presheaf**) $F^+$ is defined as follows. For each object $U \in \mathcal{C}$:
+
+$$F^+(U) = \varinjlim_{S \in J(U)} \operatorname{Hom}_{\operatorname{PSh}}(S, F)$$
+
+where the colimit is over all covering sieves $S \in J(U)$ (ordered by inclusion), and $\operatorname{Hom}_{\operatorname{PSh}}(S, F)$ denotes the set of natural transformations (compatible families of sections).
+
+Equivalently, an element of $F^+(U)$ is represented by a covering sieve $S$ on $U$ together with a compatible family of sections $(s_f \in F(V))_{(f: V \to U) \in S}$ satisfying $F(g)(s_f) = s_{f \circ g}$ for all $g: W \to V$.
+</Definition>
+
+<Remark title="Two-step construction">
+The sheafification $F^{\sharp}$ is obtained by applying the plus construction **twice**:
+
+$$F^{\sharp} = (F^+)^+$$
+
+The first application $F \to F^+$ yields a **separated presheaf** (satisfying the locality/injectivity axiom but not necessarily gluing). The second application $F^+ \to (F^+)^+ = F^{\sharp}$ yields a **sheaf**.
+
+If $F$ is already separated, a single application of $+$ suffices: $F^{\sharp} = F^+$.
+</Remark>
+
+---
+
+## Why Two Steps Are Needed
+
+<Example id="two-steps-needed" title="A presheaf requiring two plus constructions">
+Consider the site $\mathcal{C} = \{a \to b, c \to b\}$ (a category with three objects where $a$ and $c$ both map to $b$, and $\{a \to b, c \to b\}$ is a covering family of $b$).
+
+Define the presheaf $F$ by $F(a) = \{0, 1\}$, $F(c) = \{0, 1\}$, $F(b) = \{*\}$ (a single element), with restriction maps $F(b) \to F(a)$ and $F(b) \to F(c)$ both sending $* \mapsto 0$.
+
+This presheaf is not separated: the section $* \in F(b)$ restricts to $0$ in both $F(a)$ and $F(c)$, but the section that should "be" $1 \in F(a), 1 \in F(c)$ would require a section of $F(b)$ restricting to $1$ on both sides, which does not exist in $F(b)$.
+
+After the first plus construction, $F^+(b)$ has two elements (the compatible pairs $(0,0)$ and $(1,1)$), making $F^+$ separated. After the second plus construction, $(F^+)^+ = F^{\sharp}$ is a sheaf with $F^{\sharp}(b) = \{(s_a, s_c) \in F(a) \times F(c) \mid \text{compatible on overlaps}\}$.
+</Example>
+
+---
+
+## The Plus Construction via Cech Cohomology
+
+<Example id="plus-via-cech" title="Plus construction via covering families">
+When the topology is given by a pretopology, the plus construction can be described using covering families rather than sieves. For a covering family $\mathcal{U} = \{U_i \to U\}$:
+
+$$\check{H}^0(\mathcal{U}, F) = \ker\left(\prod_i F(U_i) \rightrightarrows \prod_{i,j} F(U_i \times_U U_j)\right)$$
+
+Then $F^+(U) = \varinjlim_{\mathcal{U}} \check{H}^0(\mathcal{U}, F)$ where the colimit is over all covering families of $U$, ordered by refinement.
+
+For the sheafification: $F^{\sharp}(U)$ consists of elements of $\check{H}^0(\mathcal{U}, F^+)$ for some covering $\mathcal{U}$, i.e., compatible families of elements in $F^+$ on a cover.
+</Example>
+
+<Example id="plus-construction-concrete" title="Sheafification of a constant presheaf">
+Let $A$ be an abelian group and $F^{\mathrm{pre}}$ the constant presheaf on $X_{\text{et}}$ with value $A$ (i.e., $F^{\mathrm{pre}}(U) = A$ for all connected $U$, with identity restriction maps).
+
+The presheaf $F^{\mathrm{pre}}$ is not a sheaf: if $U = U_1 \sqcup U_2$ is disconnected, then the sheaf condition requires $F(U) = F(U_1) \times F(U_2) = A \times A$, but $F^{\mathrm{pre}}(U) = A$.
+
+After the first plus construction: $F^+(U) = A^{\pi_0(U)}$ (functions from connected components to $A$). This is already a sheaf (the constant sheaf $\underline{A}$), so $F^{\sharp} = F^+ = \underline{A}$.
+
+The map $\theta: F^{\mathrm{pre}} \to \underline{A}$ on a connected $U$ is the identity $A \to A$, and on disconnected $U = U_1 \sqcup U_2$ is the diagonal $A \to A \times A$, $a \mapsto (a, a)$.
+</Example>
+
+<Example id="sheafification-presheaf-image" title="Sheafification of the presheaf image">
+For a morphism $\varphi: \mathcal{F} \to \mathcal{G}$ of sheaves on a site, the presheaf image $U \mapsto \operatorname{im}(\varphi(U)) \subseteq \mathcal{G}(U)$ may not be a sheaf. The **image sheaf** $\operatorname{im}(\varphi) = (\text{presheaf image})^{\sharp}$ is its sheafification.
+
+On the etale site, this means: a section $s \in \mathcal{G}(U)$ lies in $\operatorname{im}(\varphi)(U)$ if and only if there exists an etale cover $\{U_i \to U\}$ such that each $s|_{U_i} \in \operatorname{im}(\varphi(U_i))$. That is, $s$ is "locally in the image."
+
+**Example**: The map $\exp: \mathcal{O} \to \mathcal{O}^*$ on a complex manifold has presheaf image $\{f \in \mathcal{O}^*(U) : f \text{ has a global logarithm on } U\}$, which is not a sheaf. The image sheaf is all of $\mathcal{O}^*$ (since every nonvanishing function locally has a logarithm).
+</Example>
+
+---
+
+## Properties of Sheafification
+
+<Example id="sheafification-stalks" title="Sheafification preserves stalks">
+For any point $p$ of the topos (e.g., a geometric point $\bar{x} \to X$ for the etale site), the stalk map $\theta_p: F_p \to F^{\sharp}_p$ is a bijection. This means:
+
+- Sheafification does not change the "local" data at any point.
+- It only affects the "global" assembly of local data.
+
+For the constant presheaf example: the stalk of $F^{\mathrm{pre}}$ at any point is $A$ (since every point has connected neighborhoods), and the stalk of $\underline{A}$ is also $A$. Sheafification changed the global sections but not the stalks.
+</Example>
+
+<Example id="sheafification-exact" title="Exactness of sheafification">
+Sheafification is exact: if $0 \to F' \to F \to F'' \to 0$ is an exact sequence of presheaves of abelian groups (i.e., exact objectwise), then $0 \to F'^{\sharp} \to F^{\sharp} \to F''^{\sharp} \to 0$ is an exact sequence of sheaves.
+
+This is essential for the theory: it means we can compute kernels, cokernels, and images in the category of sheaves by first computing them as presheaves and then sheafifying. The category of abelian sheaves inherits its abelian structure from presheaves via this exactness.
+</Example>
+
+<Example id="sheafification-colimits" title="Sheafification preserves colimits">
+The sheafification functor $a: \operatorname{PSh}(\mathcal{C}) \to \operatorname{Sh}(\mathcal{C}, J)$ preserves all colimits (being a left adjoint). In particular:
+
+- Sheafification of a coproduct: $(F_1 \sqcup F_2)^{\sharp} = F_1^{\sharp} \sqcup_{\operatorname{Sh}} F_2^{\sharp}$ (coproduct in sheaves, which may differ from presheaf coproduct).
+- Sheafification of a filtered colimit: $(\varinjlim F_i)^{\sharp} = \varinjlim F_i^{\sharp}$.
+- Sheafification of a pushout: $(F_1 \sqcup_{F_0} F_2)^{\sharp} = F_1^{\sharp} \sqcup_{F_0^{\sharp}} F_2^{\sharp}$.
+
+However, sheafification does **not** preserve all limits. It preserves finite limits (since it is left exact) but not infinite products in general.
+</Example>
+
+---
+
+## Sheafification in Different Topologies
+
+<Example id="sheafification-zariski" title="Sheafification in the Zariski topology">
+For the Zariski site of $X$, sheafification of a presheaf $F$ at a section level is:
+
+$$F^{\sharp}(U) = \{(s_p)_{p \in U} \in \prod_{p \in U} F_p \mid \text{locally induced by sections of } F\}$$
+
+This is the classical construction: an element of $F^{\sharp}(U)$ is a function assigning a germ $s_p \in F_p$ to each point $p \in U$, such that around every point there is an open neighborhood where the germs come from a single section of $F$.
+</Example>
+
+<Example id="sheafification-etale" title="Sheafification in the etale topology">
+For the etale site $X_{\text{et}}$, sheafification is more subtle. An element of $F^{\sharp}(U)$ is represented by an etale cover $\{U_i \to U\}$ and a compatible family $(s_i \in F(U_i))$ satisfying $s_i|_{U_i \times_U U_j} = s_j|_{U_i \times_U U_j}$ (where this is computed in the plus construction $F^+$).
+
+**Example**: The presheaf $U \mapsto \operatorname{Pic}(U)$ on $(\mathbf{Sch}/S)_{\text{et}}$ is not a sheaf (the Picard group does not satisfy etale descent directly as a presheaf of sets). Its sheafification is the **Picard sheaf** $\mathbf{Pic}_{X/S}$, which assigns to $T$ the group $\operatorname{Pic}(X \times_S T) / \operatorname{Pic}(T)$ (or a variant thereof). The Picard scheme, when it exists, represents this sheaf.
+</Example>
+
+<Example id="sheafification-fppf" title="Sheafification in the fppf topology">
+The fppf sheafification of a presheaf can differ from its etale sheafification. For a smooth group scheme $G$, the etale and fppf sheafifications of $H^0(-, G)$ agree. But for non-smooth $G$ (like $\alpha_p$ or $\mu_p$ in characteristic $p$), they can differ.
+
+**Example**: The presheaf $U \mapsto \Gamma(U, \mathcal{O}_U)/(x \mapsto x^p)$ (the cokernel of Frobenius on $\mathbb{G}_a$) has different etale and fppf sheafifications in characteristic $p$. The fppf sheafification is zero (Frobenius is surjective on fppf stalks), while the etale sheafification is nonzero.
+</Example>
+
+---
+
+## Sheafification and Representable Functors
+
+<Example id="sheafification-representable" title="Sheafification of representable presheaves">
+If the topology is **subcanonical** (which includes Zariski, etale, fppf, fpqc), then every representable presheaf $h_X$ is already a sheaf, so $h_X^{\sharp} = h_X$.
+
+This means: the Yoneda embedding $\mathcal{C} \hookrightarrow \operatorname{PSh}(\mathcal{C})$ factors through $\operatorname{Sh}(\mathcal{C}, J)$ for subcanonical topologies. Geometric objects (schemes) are already sheaves; sheafification is needed only for functors that are not representable.
+
+For non-subcanonical topologies (which are rare in practice), sheafification of a representable presheaf produces a non-representable sheaf, and the Yoneda embedding does not factor through sheaves.
+</Example>
+
+<Example id="sheafification-moduli" title="Sheafification of moduli functors">
+Many moduli problems naturally define presheaves that are not sheaves. Sheafification gives the correct sheaf:
+
+**Example**: The presheaf $T \mapsto \{$iso classes of elliptic curves over $T\}$ is not an etale sheaf (isomorphism classes do not glue well due to automorphisms). The correct approach is to work with the **fibered category** of elliptic curves (groupoid-valued functor), leading to the moduli stack $\mathcal{M}_{1,1}$.
+
+**Example**: The presheaf $T \mapsto \{$isomorphism classes of rank-$n$ vector bundles on $T\}$ is a sheaf for the Zariski and etale topologies (by descent for vector bundles). This sheaf is represented by the classifying stack $BGL_n$.
+
+The distinction between "presheaf of isomorphism classes" (which often fails the sheaf condition) and "stack of objects" (which satisfies descent) is central to the theory of algebraic stacks.
+</Example>
+
+---
+
+## The Adjunction
+
+<Remark title="The adjunction in detail">
+The sheafification functor $a$ and the inclusion $i: \operatorname{Sh}(\mathcal{C}, J) \hookrightarrow \operatorname{PSh}(\mathcal{C})$ form an adjoint pair:
+
+$$a \dashv i: \quad \operatorname{Hom}_{\operatorname{Sh}}(aF, G) \cong \operatorname{Hom}_{\operatorname{PSh}}(F, iG)$$
+
+Properties of this adjunction:
+- $a$ is left exact (preserves finite limits) and cocontinuous (preserves all colimits).
+- $i$ is left exact and preserves all limits (but not colimits).
+- The unit $\eta: F \to iaF = F^{\sharp}$ is the sheafification map $\theta$.
+- The counit $\epsilon: aiG \to G$ is an isomorphism (since $G$ is already a sheaf, $aiG = G^{\sharp} = G$).
+- $a \circ i \cong \operatorname{id}$ (sheafification of a sheaf is the sheaf itself).
+
+This adjunction exhibits $\operatorname{Sh}(\mathcal{C}, J)$ as a **reflective subcategory** of $\operatorname{PSh}(\mathcal{C})$, and $a$ is the **reflection** (or localization) functor.
+</Remark>
+
+---
+
+## Sheafification and Topos Theory
+
+<Example id="topos-theoretic-view" title="Topos-theoretic perspective">
+From the topos-theoretic viewpoint, sheafification is the left adjoint to the geometric morphism $\operatorname{Sh}(\mathcal{C}, J) \hookrightarrow \operatorname{PSh}(\mathcal{C}) = \operatorname{Sh}(\mathcal{C}, J_{\text{trivial}})$ induced by the change of topology from the trivial topology (where only isomorphisms are covers) to $J$.
+
+The pair $(a, i)$ is a **geometric morphism** $f: \operatorname{Sh}(\mathcal{C}, J) \to \operatorname{PSh}(\mathcal{C})$ with $f^* = a$ and $f_* = i$. The property that $f^*$ is exact is the defining feature of geometric morphisms.
+
+This perspective generalizes: for any change of topology $J \to J'$ (with $J \subseteq J'$, i.e., $J'$ is finer), there is a geometric morphism $\operatorname{Sh}(\mathcal{C}, J') \to \operatorname{Sh}(\mathcal{C}, J)$, and the left adjoint is "further sheafification."
+</Example>
+
+<Example id="comparison-morphism" title="Comparison of topologies via sheafification">
+The comparison morphism $\epsilon: X_{\text{et}} \to X_{\text{Zar}}$ (viewing every Zariski cover as an etale cover) gives a geometric morphism $\epsilon_*: \operatorname{Sh}(X_{\text{et}}) \to \operatorname{Sh}(X_{\text{Zar}})$ with left adjoint $\epsilon^*: \operatorname{Sh}(X_{\text{Zar}}) \to \operatorname{Sh}(X_{\text{et}})$.
+
+For a Zariski sheaf $\mathcal{F}$, the etale sheaf $\epsilon^*\mathcal{F}$ is the sheafification of $\mathcal{F}$ (viewed as an etale presheaf) in the etale topology. For a quasi-coherent sheaf $\mathcal{F}$, this gives $\epsilon^*\mathcal{F} = \mathcal{F}$ (quasi-coherent sheaves are already etale sheaves), so $H^i_{\text{et}}(X, \epsilon^*\mathcal{F}) = H^i_{\text{Zar}}(X, \mathcal{F})$.
+
+For a constant sheaf $\underline{A}$, the etale sheafification agrees with the Zariski sheafification (both give the locally constant sheaf), but the cohomology differs: $H^i_{\text{et}}(X, \underline{A}) \neq H^i_{\text{Zar}}(X, \underline{A})$ in general.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. **Sheafification exists** for presheaves on any Grothendieck site and is universal (left adjoint to inclusion).
+
+2. **Construction**: Apply the plus construction twice: $F^{\sharp} = (F^+)^+$. The first step separates, the second glues.
+
+3. **Stalks are preserved**: $F_p \cong F^{\sharp}_p$ at every point.
+
+4. **Exactness**: Sheafification is exact for abelian presheaves, making $\operatorname{Ab}(\mathcal{C}, J)$ an abelian category with computable kernels and cokernels.
+
+5. **Subcanonical topologies**: Representable presheaves are already sheaves, so sheafification is only needed for non-representable functors (moduli problems, quotient constructions, etc.).
+
+6. Sheafification is the mechanism by which the **choice of topology** affects the category of sheaves: the same presheaf can have different sheafifications in the Zariski, etale, and fppf topologies.
+</Remark>

@@ -1,0 +1,235 @@
+export const metadata = {
+  title: 'Artin Representability — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Theorem — Artin Representability" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Artin Representability Theorem
+
+Artin's representability theorem provides verifiable criteria for a stack (or functor) to be algebraic. It is the fundamental existence theorem in the theory of algebraic stacks: rather than constructing an atlas explicitly, one checks a list of deformation-theoretic and set-theoretic conditions that together guarantee the existence of a smooth atlas. This theorem underlies the construction of virtually all moduli stacks in algebraic geometry.
+
+---
+
+## Statement
+
+<Theorem title="Artin Representability" number="4.1">
+Let $S$ be an excellent scheme and let $\mathcal{X}$ be a category fibered in groupoids over $(\mathrm{Sch}/S)_{\mathrm{fppf}}$. Suppose that:
+
+1. **(Stack axiom)** $\mathcal{X}$ is a stack for the fppf topology.
+
+2. **(Limit preservation)** $\mathcal{X}$ is **limit-preserving** (locally of finite presentation): for any filtered direct system $\{A_i\}$ of $S$-algebras,
+$$\mathcal{X}(\operatorname{Spec} \varinjlim A_i) \xrightarrow{\sim} \varprojlim \mathcal{X}(\operatorname{Spec} A_i)$$
+is an equivalence of categories.
+
+3. **(Homogeneity / Schlessinger-type conditions)** $\mathcal{X}$ satisfies Schlessinger's conditions (S1) and (S2) (or equivalently, Rim's condition): for every pair of morphisms $A' \to A$ and $A'' \to A$ of Artinian local $S$-algebras where $A'' \to A$ is surjective, the natural functor
+$$\mathcal{X}(A' \times_A A'') \to \mathcal{X}(A') \times_{\mathcal{X}(A)} \mathcal{X}(A'')$$
+is an equivalence of categories.
+
+4. **(Effectivity)** Formal deformations are **effective**: for every complete Noetherian local $S$-algebra $\hat{A}$ with $\hat{A} = \varprojlim A/\mathfrak{m}^n$, the functor
+$$\mathcal{X}(\hat{A}) \to \varprojlim \mathcal{X}(A/\mathfrak{m}^n)$$
+is an equivalence.
+
+5. **(Openness of versality)** If a morphism $\operatorname{Spec} A \to \mathcal{X}$ is formally smooth at a point $s \in \operatorname{Spec} A$, then it is formally smooth in a Zariski neighborhood of $s$.
+
+6. **(Deformation and obstruction theory)** $\mathcal{X}$ admits a **deformation theory**: there exist coherent sheaves (on the relevant base) that control the infinitesimal deformations and obstructions, satisfying the Artin axioms [4.1] through [4.5] of Artin's original paper.
+
+Then $\mathcal{X}$ is an **algebraic stack**, locally of finite presentation over $S$.
+</Theorem>
+
+<Remark title="The conditions in practice">
+The conditions fall into three groups:
+
+- **Algebraic conditions** (1, 2): $\mathcal{X}$ is an fppf stack of finite presentation.
+- **Formal conditions** (3, 4): The formal local structure is algebraizable.
+- **Openness condition** (5): Versality is open, connecting the formal and algebraic pictures.
+
+In modern formulations (e.g., following Lurie's derived algebraic geometry), conditions (3)--(6) are replaced by the existence of a **cotangent complex** $L_{\mathcal{X}/S}$ satisfying finiteness conditions.
+</Remark>
+
+---
+
+## Artin's criteria for algebraic spaces
+
+<Theorem title="Artin Representability for Algebraic Spaces" number="4.2">
+If in the above theorem $\mathcal{X}$ is a **sheaf of sets** (rather than a stack), then under the same conditions, $\mathcal{X}$ is representable by an **algebraic space** locally of finite presentation over $S$.
+
+More precisely, a functor $F : (\mathrm{Sch}/S)^{\mathrm{op}} \to \mathrm{Set}$ is an algebraic space if and only if:
+1. $F$ is an fppf sheaf.
+2. $F$ is locally of finite presentation.
+3. $F$ satisfies Schlessinger's conditions.
+4. Formal objects are effective.
+5. The formal smoothness locus is open.
+</Theorem>
+
+---
+
+## The deformation theory input
+
+<Definition title="Deformation theory for a stack" number="4.20">
+A **deformation theory** for a stack $\mathcal{X}$ over $S$ associates to each pair $(\xi_0, M)$ -- where $\xi_0$ is an object of $\mathcal{X}$ over a field $k$ and $M$ is a finite $k$-module -- the following data:
+
+- A **deformation space** $\operatorname{Def}(\xi_0, M)$: the set of isomorphism classes of lifts of $\xi_0$ to $k[M]$ (the trivial square-zero extension).
+- An **obstruction space** $\operatorname{Obs}(\xi_0, M)$: obstructions to lifting $\xi_0$ along surjections with square-zero kernel $M$.
+- An **automorphism space** $\operatorname{Aut}(\xi_0, M)$: infinitesimal automorphisms of $\xi_0$ over $k[M]$.
+
+These must satisfy:
+- They are functorial in $M$ and compatible with the cotangent complex.
+- There exist coherent sheaves $T^0, T^1, T^2$ on $\operatorname{Spec} k$ with $\operatorname{Aut}(\xi_0, M) \cong T^0 \otimes M$, $\operatorname{Def}(\xi_0, M) \cong T^1 \otimes M$, $\operatorname{Obs}(\xi_0, M) \subset T^2 \otimes M$.
+</Definition>
+
+---
+
+## Examples and applications
+
+<Example id="hilbert-scheme" title="Hilbert scheme">
+The Hilbert functor $\operatorname{Hilb}_{X/S}^P$ (parametrizing closed subschemes of $X/S$ with Hilbert polynomial $P$) satisfies Artin's criteria:
+
+- **Limit preservation**: A closed subscheme of $X \times \operatorname{Spec}(\varinjlim A_i)$ is determined by a closed subscheme of $X \times \operatorname{Spec} A_i$ for some $i$ (finite presentation of ideals).
+- **Deformations**: $T^1 = \operatorname{Hom}_{\mathcal{O}_Z}(\mathcal{I}/\mathcal{I}^2, \mathcal{O}_Z)$ (normal sheaf).
+- **Obstructions**: $T^2 \subseteq \operatorname{Ext}^1_{\mathcal{O}_Z}(\mathcal{I}/\mathcal{I}^2, \mathcal{O}_Z)$.
+- **Effectivity**: Grothendieck's formal GAGA.
+
+This proves that $\operatorname{Hilb}_{X/S}^P$ is an algebraic space -- in fact, a projective scheme (by Grothendieck's original argument using Castelnuovo--Mumford regularity).
+</Example>
+
+<Example id="picard-scheme" title="Picard scheme">
+The Picard functor $\operatorname{Pic}_{X/S}$ (parametrizing line bundles on $X/S$) satisfies Artin's criteria:
+
+- **Deformations**: $T^1 = H^1(X_s, \mathcal{O}_{X_s})$ (first cohomology of the structure sheaf).
+- **Obstructions**: $T^2 = H^2(X_s, \mathcal{O}_{X_s})$.
+- **Effectivity**: Formal GAGA again.
+
+When $H^2(X_s, \mathcal{O}_{X_s}) = 0$ (e.g., for curves, or for abelian varieties), the Picard functor is smooth. The result is that $\operatorname{Pic}_{X/S}$ is an algebraic space (and a group scheme when $X/S$ is proper with geometrically connected fibers).
+</Example>
+
+<Example id="moduli-curves-artin" title="Moduli of curves">
+The moduli stack $\mathcal{M}_g$ satisfies Artin's criteria:
+
+- **Deformations of a curve $C$**: $T^1 = H^1(C, \mathcal{T}_C)$, where $\mathcal{T}_C$ is the tangent sheaf. For $g \geq 2$, $\dim T^1 = 3g - 3$ (by Riemann--Roch: $\chi(\mathcal{T}_C) = 3 - 3g$ and $H^0(C, \mathcal{T}_C) = 0$).
+- **Obstructions**: $T^2 = H^2(C, \mathcal{T}_C) = 0$ (since $C$ is a curve). So $\mathcal{M}_g$ is **smooth**.
+- **Automorphisms**: $T^0 = H^0(C, \mathcal{T}_C) = 0$ for $g \geq 2$ (finite automorphism group $\Rightarrow$ no infinitesimal automorphisms).
+- **Effectivity**: Follows from formal GAGA for proper schemes.
+
+This proves $\mathcal{M}_g$ is an algebraic stack, smooth of dimension $3g - 3$.
+</Example>
+
+<Example id="moduli-vector-bundles" title="Moduli of vector bundles">
+Let $C$ be a smooth projective curve of genus $g$. For the stack $\operatorname{Bun}_n(C)$ of rank-$n$ vector bundles:
+
+- **Deformations of $E$**: $T^1 = H^1(C, \operatorname{End}(E)) = \operatorname{Ext}^1(E, E)$, with $\dim T^1 = n^2(g - 1) + \dim H^0(C, \operatorname{End}(E))$.
+- **Obstructions**: $T^2 = H^2(C, \operatorname{End}(E)) = 0$ (curve!). So $\operatorname{Bun}_n(C)$ is **smooth**.
+- **Automorphisms**: $T^0 = H^0(C, \operatorname{End}(E)) = \operatorname{End}(E)$. For a stable bundle, $\operatorname{End}(E) = k$ (Schur's lemma), so $\dim T^0 = 1$ and $\operatorname{Aut}(E) = \mathbb{G}_m$.
+
+The dimension is $\dim \operatorname{Bun}_n(C) = \dim T^1 - \dim T^0 = n^2(g-1)$ (as a stack).
+</Example>
+
+<Example id="moduli-sheaves-surface" title="Moduli of sheaves on a surface">
+For a smooth projective surface $X$ and the moduli stack of coherent sheaves with fixed numerical invariants:
+
+- **Deformations of $\mathcal{F}$**: $T^1 = \operatorname{Ext}^1(\mathcal{F}, \mathcal{F})$.
+- **Obstructions**: $T^2 = \operatorname{Ext}^2(\mathcal{F}, \mathcal{F})$. This is **nonzero** in general, so the moduli space may be singular.
+- By Serre duality, if $\omega_X \cong \mathcal{O}_X$ (K3 or abelian surface), then $\operatorname{Ext}^2(\mathcal{F}, \mathcal{F}) \cong \operatorname{Hom}(\mathcal{F}, \mathcal{F})^{\vee}$, and the **trace-free** obstructions lie in a space of dimension $\dim \operatorname{Ext}^2_0 = \dim \operatorname{Ext}^0_0$. The expected dimension is $\dim \operatorname{Ext}^1 - \dim \operatorname{Ext}^0 - \dim \operatorname{Ext}^2 + \dim \operatorname{Ext}^0 = 2n - (r^2 - 1)\chi(\mathcal{O}_X)$ by Riemann--Roch.
+</Example>
+
+<Example id="mapping-stack" title="Mapping stack (Hom stack)">
+For proper $X/S$ and separated $Y/S$ of finite presentation, the **mapping stack** $\operatorname{Map}_S(X, Y)$ (whose $T$-points are morphisms $X_T \to Y_T$) is an algebraic stack:
+
+- **Deformations of $f : X \to Y$**: $T^1 = H^0(X, f^*\mathcal{T}_Y)$ (sections of the pullback of the tangent bundle).
+- **Obstructions**: $T^2 \subseteq H^1(X, f^*\mathcal{T}_Y)$.
+- The expected dimension is $\chi(X, f^*\mathcal{T}_Y) = \deg(f^*\mathcal{T}_Y) + \dim Y \cdot (1-g)$ for $X$ a curve of genus $g$.
+
+Artin's theorem proves algebraicity. Properness (for the Kontsevich compactification with stable maps) requires additional arguments.
+</Example>
+
+<Example id="moduli-abelian" title="Moduli of abelian varieties">
+The moduli stack $\mathcal{A}_g$ of principally polarized abelian varieties satisfies Artin's criteria:
+
+- **Deformations of $(A, \lambda)$**: $T^1 = \operatorname{Sym}^2 H^1(A, \mathcal{O}_A) \cong \operatorname{Sym}^2(\operatorname{Lie}(A^{\vee}))$, with $\dim T^1 = g(g+1)/2$.
+- **Obstructions**: Unobstructed (the deformation space is smooth), $T^2 = 0$.
+- **Automorphisms**: $T^0 = \operatorname{Lie}(\operatorname{Aut}(A, \lambda))$. For a general ppav, $\operatorname{Aut}(A, \lambda) = \{\pm 1\}$, so $T^0 = 0$.
+
+Hence $\mathcal{A}_g$ is a smooth algebraic stack of dimension $g(g+1)/2$.
+</Example>
+
+<Example id="k3-moduli-artin" title="Moduli of K3 surfaces">
+For polarized K3 surfaces $(X, H)$ of degree $H^2 = 2d$:
+
+- **Deformations**: $T^1 = H^1(X, \mathcal{T}_X) \cong H^1(X, \Omega^1_X)$ (by $\mathcal{T}_X \cong \Omega^1_X$ since $\omega_X \cong \mathcal{O}_X$). By Hodge theory, $\dim T^1 = 20$.
+- **Obstructions**: $T^2 = H^2(X, \mathcal{T}_X) \cong H^0(X, \Omega^1_X) = 0$ (since $h^{1,0} = 0$ for K3). So the moduli is **unobstructed** and smooth of dimension 20.
+- The polarization condition cuts out a divisor, giving $\dim \mathcal{F}_{2d} = 19$.
+
+Artin's theorem proves that the moduli of polarized K3 surfaces is an algebraic stack (in fact a DM stack, since $\operatorname{Aut}(X, H)$ is finite).
+</Example>
+
+<Example id="derived-artin" title="Derived Artin representability (Lurie)">
+In derived algebraic geometry, Lurie proved a derived version of Artin representability: a functor $\mathcal{X} : \mathrm{CAlg}_k^{\mathrm{cn}} \to \mathcal{S}$ (from connective $E_\infty$-algebras to spaces) is a derived algebraic stack if and only if:
+
+1. $\mathcal{X}$ is a sheaf for the etale topology.
+2. $\mathcal{X}$ is nilcomplete, integrable, and infinitesimally cohesive.
+3. $\mathcal{X}$ has a cotangent complex $L_{\mathcal{X}}$ that is connective and almost of finite presentation.
+
+This dramatically simplifies Artin's criteria: the cotangent complex subsumes conditions (3)--(6) of the classical theorem. Many modern constructions of moduli spaces (e.g., derived moduli of perfect complexes, derived mapping stacks) use Lurie's version.
+</Example>
+
+<Example id="non-example" title="A functor that fails Artin's criteria">
+Consider the functor $F(T) = \{f \in \Gamma(T, \mathcal{O}_T) : f^2 = 0 \text{ everywhere}\}$. This is the functor of points of $\operatorname{Spec} k[x]/(x^2)$, which is representable by a scheme. But if we modify to $F(T) = \{f \in \Gamma(T, \mathcal{O}_T) : f \text{ is nilpotent}\}$ (nilpotent of unspecified order), this fails the finite presentation condition (limit preservation) and is not an algebraic space.
+
+The "formal completion functor" $\hat{F}(T) = \varprojlim F(T/\mathfrak{m}^n)$ (formal deformations without algebraization) satisfies Schlessinger's conditions but fails effectivity, and hence is not algebraic.
+</Example>
+
+<Example id="quot-scheme" title="Quot scheme">
+The Quot functor $\operatorname{Quot}_{E/X/S}^P$ (parametrizing quotients of a coherent sheaf $E$ on $X/S$ with Hilbert polynomial $P$) satisfies Artin's criteria:
+
+- **Deformations of $E \twoheadrightarrow F$**: $T^1 = \operatorname{Hom}(K, F)$ where $K = \ker(E \to F)$.
+- **Obstructions**: $T^2 \subseteq \operatorname{Ext}^1(K, F)$.
+- **Effectivity**: Formal GAGA.
+
+Grothendieck proved $\operatorname{Quot}_{E/X/S}^P$ is a projective scheme (stronger than just algebraic).
+</Example>
+
+<Example id="bun-g-artin" title="Bun_G for a reductive group">
+For a reductive group $G$ over a field $k$ and a smooth projective curve $C$, the moduli stack $\operatorname{Bun}_G(C)$ of principal $G$-bundles on $C$ satisfies Artin's criteria:
+
+- **Deformations of $P$**: $T^1 = H^1(C, \operatorname{Ad}(P))$, where $\operatorname{Ad}(P) = P \times^G \mathfrak{g}$ is the adjoint bundle.
+- **Obstructions**: $T^2 = H^2(C, \operatorname{Ad}(P)) = 0$.
+- **Dimension**: $\dim \operatorname{Bun}_G(C) = \dim G \cdot (g - 1)$.
+
+This is a smooth algebraic stack, locally of finite type, central to the geometric Langlands program.
+</Example>
+
+---
+
+## Historical context
+
+<Remark title="History">
+Artin's representability theorem was developed in a series of papers:
+
+- **Artin (1969)**: "Algebraization of formal moduli I" -- criteria for formal moduli to be algebraizable.
+- **Artin (1970)**: "Algebraization of formal moduli II" -- the full representability theorem for functors.
+- **Artin (1974)**: "Versal deformations and algebraic stacks" -- extension to stacks.
+
+These built on Schlessinger's (1968) criteria for pro-representability of formal deformation functors. Artin's key insight was that Schlessinger's formal criteria, combined with effectivity and openness of versality, suffice to produce a global algebraic structure.
+
+The modern perspective, particularly through derived algebraic geometry (Lurie, Toen--Vezzosi), reformulates the criteria in terms of the cotangent complex, providing a more conceptual and computationally effective approach.
+</Remark>
+
+---
+
+## Summary
+
+Artin's representability theorem reduces the problem of constructing algebraic stacks to verifying a finite list of deformation-theoretic conditions. The key inputs are: the stack axiom, finite presentation, Schlessinger-type conditions on infinitesimal deformations, effectivity of formal deformations, and openness of versality. In practice, these reduce to computing the tangent and obstruction spaces $T^1$ and $T^2$ of the moduli problem.

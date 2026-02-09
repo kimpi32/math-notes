@@ -1,0 +1,239 @@
+export const metadata = {
+  title: 'The Stack Condition -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Theorem -- The Stack Condition" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The Stack Condition
+
+The stack condition provides the precise formulation of descent for categories fibered in groupoids. It characterizes stacks as those CFGs for which the natural functor from the fiber over an object to the category of descent data (relative to any covering) is an equivalence of categories.
+
+---
+
+## Precise Statement
+
+<Theorem title="Stack condition (equivalence formulation)" number="2.6.1">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a category fibered in groupoids over a site $(\mathcal{C}, \tau)$. Then $\mathcal{F}$ is a **stack** if and only if for every object $U \in \mathcal{C}$ and every covering family $\{U_i \to U\}_{i \in I}$ in $\tau$, the natural functor
+
+$$\Phi : \mathcal{F}(U) \longrightarrow \operatorname{DD}(\{U_i \to U\}, \mathcal{F})$$
+
+from the fiber category $\mathcal{F}(U)$ to the category of descent data $\operatorname{DD}(\{U_i \to U\}, \mathcal{F})$ is an **equivalence of categories**.
+</Theorem>
+
+<Definition title="The functor Phi" number="2.6.2">
+The functor $\Phi$ is defined as follows. For an object $x \in \mathcal{F}(U)$, set:
+- $\Phi(x) = (\{x_i\}, \{\varphi_{ij}\})$ where $x_i = \operatorname{pr}_i^* x \in \mathcal{F}(U_i)$ (pullback along $\operatorname{pr}_i : U_i \to U$), and
+- $\varphi_{ij} : \operatorname{pr}_1^* x_i \xrightarrow{\sim} \operatorname{pr}_2^* x_j$ in $\mathcal{F}(U_i \times_U U_j)$ is the canonical isomorphism from the coherence of the cleavage (i.e., both sides are canonically isomorphic to the pullback of $x$ to $U_i \times_U U_j$).
+
+For a morphism $\alpha : x \to y$ in $\mathcal{F}(U)$, $\Phi(\alpha) = \{\alpha_i\}$ where $\alpha_i = \operatorname{pr}_i^*\alpha : x_i \to y_i$.
+</Definition>
+
+---
+
+## Decomposition into Two Conditions
+
+<Theorem title="Stack condition (two-part formulation)" number="2.6.3">
+A CFG $\mathcal{F}$ over $(\mathcal{C}, \tau)$ is a stack if and only if for every covering $\{U_i \to U\}$:
+
+**(S1) Fully faithful (Gluing for morphisms):** The functor $\Phi$ is fully faithful. Explicitly: for any $x, y \in \mathcal{F}(U)$, the map
+$$\operatorname{Hom}_{\mathcal{F}(U)}(x, y) \to \operatorname{Hom}_{\operatorname{DD}}(\Phi(x), \Phi(y))$$
+is a bijection. This means:
+
+- **(S1a) Injectivity:** If $\alpha, \beta : x \to y$ in $\mathcal{F}(U)$ satisfy $\alpha|_{U_i} = \beta|_{U_i}$ for all $i$, then $\alpha = \beta$.
+- **(S1b) Surjectivity:** If $\alpha_i : x|_{U_i} \to y|_{U_i}$ satisfy $\alpha_i|_{U_{ij}} = \alpha_j|_{U_{ij}}$ for all $i, j$, then there exists $\alpha : x \to y$ with $\alpha|_{U_i} = \alpha_i$.
+
+**(S2) Essentially surjective (Effective descent):** The functor $\Phi$ is essentially surjective. Every descent datum $(\{x_i\}, \{\varphi_{ij}\})$ is isomorphic to $\Phi(x)$ for some $x \in \mathcal{F}(U)$.
+</Theorem>
+
+<Remark title="Condition S1 is the prestack condition">
+Condition (S1) alone says that $\mathcal{F}$ is a **prestack**. It is equivalent to requiring that for all $x, y \in \mathcal{F}(U)$, the presheaf $\operatorname{Isom}(x, y)$ on $\mathcal{C}/U$ is a sheaf for the topology $\tau$.
+
+The full stack condition requires both (S1) and (S2).
+</Remark>
+
+---
+
+## The Category of Descent Data
+
+<Definition title="Descent data category" number="2.6.4">
+Given a covering $\{U_i \to U\}_{i \in I}$ and a CFG $\mathcal{F}$ over $\mathcal{C}$, the **category of descent data** $\operatorname{DD}(\{U_i \to U\}, \mathcal{F})$ is defined as follows.
+
+**Objects:** Tuples $(\{x_i\}_{i \in I}, \{\varphi_{ij}\}_{i,j \in I})$ where:
+- $x_i \in \mathcal{F}(U_i)$ for each $i$,
+- $\varphi_{ij} : \operatorname{pr}_1^* x_i \xrightarrow{\sim} \operatorname{pr}_2^* x_j$ is an isomorphism in $\mathcal{F}(U_i \times_U U_j)$,
+- The **cocycle condition** holds: on $U_i \times_U U_j \times_U U_k$,
+$$\operatorname{pr}_{23}^*\varphi_{jk} \circ \operatorname{pr}_{12}^*\varphi_{ij} = \operatorname{pr}_{13}^*\varphi_{ik}$$
+
+**Morphisms:** A morphism from $(\{x_i\}, \{\varphi_{ij}\})$ to $(\{y_i\}, \{\psi_{ij}\})$ is a collection $\{\alpha_i : x_i \to y_i\}_{i \in I}$ of isomorphisms in $\mathcal{F}(U_i)$ compatible with the gluing data:
+$$\psi_{ij} \circ \operatorname{pr}_1^*\alpha_i = \operatorname{pr}_2^*\alpha_j \circ \varphi_{ij}$$
+for all $i, j$.
+</Definition>
+
+<Example id="dd-sheaf-sets" title="Descent data for sheaves of sets">
+When $\mathcal{F}$ is a sheaf of sets $F$ (viewed as a CFG with discrete fibers), a descent datum is:
+- Elements $s_i \in F(U_i)$ satisfying $s_i|_{U_{ij}} = s_j|_{U_{ij}}$ (the cocycle condition reduces to equality since the isomorphisms in discrete groupoids are identities).
+
+A morphism of descent data requires $s_i = t_i$ for all $i$ (identity is the only isomorphism). So the category of descent data is a set (discrete groupoid), and the stack condition reduces to the usual sheaf condition:
+$$F(U) \xrightarrow{\sim} \operatorname{eq}\left(\prod_i F(U_i) \rightrightarrows \prod_{i,j} F(U_{ij})\right)$$
+</Example>
+
+<Example id="dd-vector-bundles-zariski" title="Descent data for vector bundles (Zariski)">
+Let $S$ be a scheme with Zariski cover $\{U_i\}$. A descent datum for rank-$n$ vector bundles consists of:
+- $\mathcal{E}_i$ on $U_i$: these are locally free sheaves of rank $n$.
+- Transition isomorphisms $g_{ij} : \mathcal{E}_i|_{U_{ij}} \xrightarrow{\sim} \mathcal{E}_j|_{U_{ij}}$.
+- Cocycle: $g_{jk} \circ g_{ij} = g_{ik}$ on $U_{ijk}$.
+
+This glues to a vector bundle $\mathcal{E}$ on $S$: take $\mathcal{E}|_{U_i} = \mathcal{E}_i$ and use $g_{ij}$ to identify on overlaps. Effectiveness is guaranteed, so $\mathbf{Vect}_n$ is a stack for the Zariski topology.
+
+In terms of matrices: after trivializing $\mathcal{E}_i \cong \mathcal{O}_{U_i}^n$, the transition maps become $g_{ij} \in GL_n(\mathcal{O}(U_{ij}))$ satisfying $g_{jk}g_{ij} = g_{ik}$. This is a Cech 1-cocycle with values in $GL_n$.
+</Example>
+
+<Example id="dd-etale-torsors" title="Descent data for torsors (etale)">
+Let $G$ be a smooth group scheme over $S$ and let $T \to S$ be a faithfully flat etale cover. A descent datum for $G$-torsors relative to $T \to S$ consists of:
+- A $G_T$-torsor $P$ over $T$.
+- An isomorphism $\varphi : \operatorname{pr}_1^*P \xrightarrow{\sim} \operatorname{pr}_2^*P$ over $T \times_S T$.
+- Cocycle: $\operatorname{pr}_{23}^*\varphi \circ \operatorname{pr}_{12}^*\varphi = \operatorname{pr}_{13}^*\varphi$ over $T \times_S T \times_S T$.
+
+By Grothendieck's faithfully flat descent, this descent datum is effective: it glues to a $G$-torsor $Q$ over $S$ with $Q|_T \cong P$. This proves $BG$ is a stack for the fppf (and hence etale) topology.
+</Example>
+
+---
+
+## Verification Examples
+
+<Example id="verify-QCoh" title="Quasi-coherent sheaves form a stack">
+The CFG $\mathbf{QCoh}$ over $\mathbf{Sch}$ (with the fppf topology) is a stack.
+
+**S1 (Isom is a sheaf):** For quasi-coherent sheaves $\mathcal{E}, \mathcal{F}$ on $S$, the Hom sheaf $\mathcal{H}om(\mathcal{E}, \mathcal{F})$ is quasi-coherent, hence a sheaf for any topology finer than Zariski. In particular, $\operatorname{Isom}(\mathcal{E}, \mathcal{F}) \subseteq \mathcal{H}om(\mathcal{E}, \mathcal{F})$ is a sheaf.
+
+**S2 (Effective descent):** This is Grothendieck's faithfully flat descent theorem (SGA1, Expose VIII): given a faithfully flat morphism $f : T \to S$, the functor $f^* : \mathbf{QCoh}(S) \to \mathbf{QCoh}(T)$ identifies $\mathbf{QCoh}(S)$ with the category of quasi-coherent sheaves on $T$ equipped with descent data relative to $f$.
+</Example>
+
+<Example id="verify-Mg" title="M_g is a stack">
+The CFG $\mathcal{M}_g$ ($g \geq 2$) is a stack for the etale topology.
+
+**S1:** For two families of curves $C, C' \to S$, the functor $\operatorname{Isom}(C, C')$ is representable by a quasi-projective $S$-scheme (an open subscheme of the Hilbert scheme). Representable functors on $\mathbf{Sch}/S$ are sheaves for the etale (and fppf) topology.
+
+**S2:** A smooth proper morphism of relative dimension 1 satisfies descent. Given a covering $\{S_i \to S\}$ and smooth curves $C_i \to S_i$ with compatible transition isomorphisms, the curves glue to a smooth curve $C \to S$ by descent for proper morphisms (EGA IV, or Grothendieck's general descent for morphisms of schemes).
+</Example>
+
+<Example id="verify-BG" title="BG is a stack">
+For a smooth affine group scheme $G/S$, the CFG $BG$ is a stack for the fppf topology.
+
+**S1:** $\operatorname{Isom}(P, Q)$ for $G$-torsors is representable by $P \times^G Q^{\mathrm{op}}$ (a twisted form of $G$), hence a sheaf.
+
+**S2:** Faithfully flat descent for affine morphisms. A $G$-torsor $P \to T$ is an affine morphism (since $G$ is affine), and affine morphisms descend effectively along faithfully flat morphisms.
+</Example>
+
+<Example id="verify-quotient" title="[X/G] is a stack">
+For $G$ acting on $X$ over $S$, the quotient $[X/G]$ is a stack for the fppf topology.
+
+**S1:** $\operatorname{Isom}((P_1, \sigma_1), (P_2, \sigma_2))$ parametrizes $G$-equivariant isomorphisms $P_1 \to P_2$ compatible with $\sigma_1, \sigma_2$. This is a closed subscheme of $\operatorname{Isom}(P_1, P_2)$, hence representable.
+
+**S2:** A descent datum for $[X/G]$ consists of torsors $P_i$ on $U_i$ with equivariant maps to $X$ and compatible transition data. Since torsors descend (by the $BG$ argument) and equivariant maps descend (morphisms of schemes descend), the full descent datum is effective.
+</Example>
+
+---
+
+## The Cech Nerve Formulation
+
+<Definition title="Cech nerve" number="2.6.5">
+For a covering morphism $\pi : V \to U$ in $\mathcal{C}$, the **Cech nerve** is the simplicial object:
+$$V_\bullet : \quad \cdots \;\substack{\to \\ \to \\ \to \\ \to}\; V \times_U V \times_U V \;\substack{\to \\ \to \\ \to}\; V \times_U V \;\substack{\to \\ \to}\; V$$
+
+with face maps $d_i : V^{n+1} \to V^n$ (omitting the $i$-th factor) and degeneracy maps $s_i : V^n \to V^{n+1}$ (repeating the $i$-th factor).
+</Definition>
+
+<Theorem title="Stack condition via Cech nerve" number="2.6.6">
+A CFG $\mathcal{F}$ over $(\mathcal{C}, \tau)$ is a stack if and only if for every covering $\pi : V \to U$ (in the topology generated by the pretopology), the natural functor
+$$\mathcal{F}(U) \to \operatorname{holim}_{[n] \in \Delta} \mathcal{F}(V^{n+1}_U)$$
+is an equivalence of categories, where $V^{n+1}_U = V \times_U \cdots \times_U V$ ($n+1$ copies) and $\operatorname{holim}$ denotes the 2-categorical limit (pseudo-limit) of the cosimplicial diagram.
+
+Unpacking, this says $\mathcal{F}(U)$ is equivalent to the category of:
+- Objects $x \in \mathcal{F}(V)$,
+- Isomorphisms $\varphi : d_0^*x \xrightarrow{\sim} d_1^*x$ in $\mathcal{F}(V \times_U V)$,
+- Satisfying $d_1^*\varphi = d_2^*\varphi \circ d_0^*\varphi$ in $\mathcal{F}(V \times_U V \times_U V)$.
+</Theorem>
+
+<Example id="cech-nerve-etale" title="Cech nerve for an etale cover">
+Let $S = \operatorname{Spec} \mathbb{R}$ and $T = \operatorname{Spec} \mathbb{C}$ with $\pi : T \to S$ the natural map. The Cech nerve is:
+- $T = \operatorname{Spec} \mathbb{C}$
+- $T \times_S T = \operatorname{Spec}(\mathbb{C} \otimes_\mathbb{R} \mathbb{C}) \cong \operatorname{Spec}(\mathbb{C} \times \mathbb{C})$ (two points, corresponding to $\operatorname{id}$ and complex conjugation)
+- $T \times_S T \times_S T = \operatorname{Spec}(\mathbb{C}^4)$ (four points)
+
+A descent datum for this covering is: an object $x$ over $\operatorname{Spec} \mathbb{C}$ with an isomorphism $\varphi : x \xrightarrow{\sim} \bar{x}$ (where $\bar{x}$ is the conjugate) satisfying $\bar{\varphi} \circ \varphi = \operatorname{id}$. This is precisely a **real form** of the complex object $x$.
+</Example>
+
+<Example id="cech-single-cover" title="Single covering morphism suffices">
+For the fppf topology, any covering family $\{U_i \to U\}$ can be refined to a single covering $V = \coprod U_i \to U$. So it suffices to check the stack condition for single covering morphisms $V \to U$. This simplifies computations.
+</Example>
+
+---
+
+## Relation to Cohomological Descent
+
+<Remark title="Higher categorical perspective">
+The stack condition can be viewed as a truncated form of **cohomological descent**. For a sheaf $F$ of abelian groups and a covering $V \to U$, the Cech complex computes $\check{H}^*(U, F)$. The stack condition is the analogue for groupoid-valued functors, involving only levels 0 and 1 of the Cech nerve.
+
+For **higher stacks** ($n$-stacks), one requires descent involving higher levels of the Cech nerve:
+- $n = 0$: Sheaves (sets). Descent uses levels 0, 1 of Cech nerve.
+- $n = 1$: Stacks (groupoids). Descent uses levels 0, 1, 2.
+- $n = 2$: 2-stacks (2-groupoids). Descent uses levels 0, 1, 2, 3.
+- $n = \infty$: $\infty$-stacks. Full Cech nerve (all levels).
+
+In the language of $\infty$-categories (Lurie), an $\infty$-stack is a presheaf of spaces $F : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ satisfying descent for all Cech nerves.
+</Remark>
+
+---
+
+## Practical Criteria
+
+<Example id="practical-representable-isom" title="Practical criterion: representable Isom">
+For algebraic applications, the most useful criterion is:
+
+A CFG $\mathcal{F}$ over $\mathbf{Sch}$ (with the fppf topology) is a stack if:
+1. For all $S$ and $x, y \in \mathcal{F}(S)$, $\operatorname{Isom}(x, y)$ is representable by an algebraic space (or scheme) over $S$. [This gives S1.]
+2. The objects parametrized by $\mathcal{F}$ satisfy effective fppf descent. [This gives S2.]
+
+Condition (1) is typically checked using the theory of Hilbert schemes or Artin's criteria. Condition (2) follows from descent theorems for specific types of objects (quasi-coherent sheaves, morphisms of schemes, etc.).
+</Example>
+
+<Example id="practical-check-prestack" title="Checking the prestack condition">
+To verify that a CFG $\mathcal{F}$ is a prestack (condition S1), it often suffices to show that $\operatorname{Isom}(x, y)$ is representable. In the fppf topology, representable functors are automatically sheaves.
+
+For $\mathcal{M}_g$: $\operatorname{Isom}(C, C')$ is a locally closed subscheme of $\operatorname{Hom}(C, C')$, which itself is a locally closed subscheme of the Hilbert scheme $\operatorname{Hilb}_{C \times C'/S}$. Since Hilbert schemes are projective (when the ambient space is projective), $\operatorname{Isom}(C, C')$ is a quasi-projective scheme.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The stack condition at a glance">
+The stack condition for a CFG $\mathcal{F}$ over $(\mathcal{C}, \tau)$ can be stated in several equivalent ways:
+
+1. **Equivalence**: $\mathcal{F}(U) \xrightarrow{\sim} \operatorname{DD}(\{U_i \to U\}, \mathcal{F})$ for all coverings.
+2. **Two conditions**: (S1) Isom is a sheaf + (S2) descent data are effective.
+3. **Cech nerve**: $\mathcal{F}(U) \xrightarrow{\sim} \operatorname{holim} \mathcal{F}(V_\bullet)$ for all Cech nerves.
+4. **Sheaf on fibers**: The pseudofunctor $U \mapsto \mathcal{F}(U)$ satisfies "sheaf-like" conditions valued in the 2-category of groupoids.
+
+For algebraic geometry, the key examples satisfying the stack condition are:
+- Quasi-coherent sheaves (by faithfully flat descent).
+- $G$-torsors for smooth affine $G$ (by fppf descent).
+- Smooth proper curves (by descent for proper morphisms).
+- Quotient constructions $[X/G]$ (combining torsor descent and scheme descent).
+</Remark>

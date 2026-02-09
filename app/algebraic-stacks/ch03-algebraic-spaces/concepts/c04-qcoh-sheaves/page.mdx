@@ -1,0 +1,248 @@
+export const metadata = {
+  title: 'QCoh Sheaves on Algebraic Spaces — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "개념 — QCoh Sheaves on Algebraic Spaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quasi-Coherent Sheaves on Algebraic Spaces
+
+The theory of quasi-coherent sheaves on algebraic spaces is developed using the étale topology, since algebraic spaces do not have a Zariski topology with the same good properties as schemes. A quasi-coherent sheaf on an algebraic space $X$ is essentially a quasi-coherent sheaf on an étale atlas $U$, equipped with descent data along the equivalence relation $R = U \times_X U$.
+
+---
+
+## 1. Sheaves on the Étale Site
+
+<Definition title="Étale site of an algebraic space">
+Let $X$ be an algebraic space. The **small étale site** $X_{\text{ét}}$ is the category whose objects are étale morphisms $U \to X$ with $U$ a scheme, and whose coverings are jointly surjective families of étale morphisms.
+</Definition>
+
+An **abelian sheaf** on $X_{\text{ét}}$ is a contravariant functor from $X_{\text{ét}}$ to abelian groups satisfying the sheaf condition: for every étale covering $\{U_i \to U\}$ in $X_{\text{ét}}$, the sequence
+
+$$
+0 \to \mathcal{F}(U) \to \prod_i \mathcal{F}(U_i) \rightrightarrows \prod_{i,j} \mathcal{F}(U_i \times_U U_j)
+$$
+
+is exact.
+
+<Definition title="Structure sheaf">
+The **structure sheaf** $\mathcal{O}_X$ on $X_{\text{ét}}$ is defined by $\mathcal{O}_X(U) = \Gamma(U, \mathcal{O}_U)$ for each étale $U \to X$.
+</Definition>
+
+---
+
+## 2. Quasi-Coherent Sheaves
+
+<Definition title="Quasi-coherent sheaf on an algebraic space">
+A sheaf of $\mathcal{O}_X$-modules $\mathcal{F}$ on $X_{\text{ét}}$ is **quasi-coherent** if for every étale morphism $\varphi: V \to U$ in $X_{\text{ét}}$, the natural map
+
+$$
+\varphi^* \mathcal{F}(U) = \mathcal{F}(U) \otimes_{\mathcal{O}_X(U)} \mathcal{O}_X(V) \to \mathcal{F}(V)
+$$
+
+is an isomorphism. We denote the category of quasi-coherent sheaves by $\mathrm{QCoh}(X)$.
+</Definition>
+
+Equivalently, using an étale presentation $R \rightrightarrows U$ of $X$:
+
+<Definition title="QCoh via descent data">
+A quasi-coherent sheaf on $X = U/R$ is a pair $(\mathcal{F}_U, \alpha)$ where:
+1. $\mathcal{F}_U$ is a quasi-coherent sheaf on $U$, and
+2. $\alpha: s^*\mathcal{F}_U \xrightarrow{\sim} t^*\mathcal{F}_U$ is an isomorphism of sheaves on $R$,
+satisfying the **cocycle condition**: on $R \times_{s,U,t} R$, the composite
+
+$$
+\mathrm{pr}_1^* \alpha \circ \mathrm{pr}_2^* \alpha = (m \circ (\mathrm{pr}_1, \mathrm{pr}_2))^* \alpha
+$$
+
+where $m: R \times_{s,U,t} R \to R$ is the composition in the groupoid, and the **unit condition**: $e^*\alpha = \mathrm{id}$ where $e: U \to R$ is the identity section.
+</Definition>
+
+---
+
+## 3. Coherent Sheaves
+
+<Definition title="Coherent sheaf on an algebraic space">
+Let $X$ be a locally noetherian algebraic space. A quasi-coherent sheaf $\mathcal{F}$ on $X$ is **coherent** if for some (hence every) étale atlas $U \to X$, the pullback $\mathcal{F}|_U$ is a coherent sheaf on $U$.
+</Definition>
+
+We denote the category of coherent sheaves by $\mathrm{Coh}(X)$.
+
+<Theorem title="Properties of QCoh(X)">
+Let $X$ be a quasi-separated algebraic space. Then:
+
+1. $\mathrm{QCoh}(X)$ is an abelian category.
+2. $\mathrm{QCoh}(X)$ is a Grothendieck abelian category (it has a generator and filtered colimits are exact).
+3. If $X$ is noetherian, $\mathrm{Coh}(X)$ is an abelian subcategory of $\mathrm{QCoh}(X)$, and every quasi-coherent sheaf is a filtered colimit of coherent subsheaves.
+</Theorem>
+
+---
+
+## 4. Examples of Quasi-Coherent Sheaves
+
+<Example title="Structure sheaf">
+The structure sheaf $\mathcal{O}_X$ is a quasi-coherent sheaf on any algebraic space $X$. In the descent-data formulation with presentation $R \rightrightarrows U$, it corresponds to $(\mathcal{O}_U, \mathrm{can})$ where $\mathrm{can}: s^*\mathcal{O}_U \cong \mathcal{O}_R \cong t^*\mathcal{O}_U$ is the canonical isomorphism.
+</Example>
+
+<Example title="Ideal sheaf of a closed subspace">
+Let $Z \hookrightarrow X$ be a closed immersion of algebraic spaces. The ideal sheaf $\mathcal{I}_Z \subset \mathcal{O}_X$ is a quasi-coherent sheaf. On an atlas $U \to X$, it restricts to the ideal sheaf of $Z \times_X U \hookrightarrow U$.
+</Example>
+
+<Example title="Pullback sheaves">
+Let $f: X \to Y$ be a morphism of algebraic spaces and $\mathcal{G} \in \mathrm{QCoh}(Y)$. The pullback $f^*\mathcal{G} \in \mathrm{QCoh}(X)$ is defined by choosing atlases and using the pullback on schemes. Concretely, if $U \to X$ and $V \to Y$ are atlases with $f$ lifting to $\tilde{f}: U \to V$, then $(f^*\mathcal{G})|_U = \tilde{f}^*(\mathcal{G}|_V)$ with appropriate descent data.
+</Example>
+
+<Example title="Pushforward sheaves">
+For a quasi-compact quasi-separated morphism $f: X \to Y$, the pushforward $f_*\mathcal{F}$ of a quasi-coherent sheaf $\mathcal{F}$ on $X$ is quasi-coherent on $Y$. This is computed via: for étale $V \to Y$, we have $f_*\mathcal{F}(V) = \mathcal{F}(X \times_Y V)$, using the global sections of $\mathcal{F}$ on the algebraic space $X \times_Y V$.
+</Example>
+
+<Example title="Line bundles on quotients">
+Let $X = U/G$ where $G$ is a finite group acting freely on a scheme $U$. A line bundle on $X$ corresponds to a $G$-linearized line bundle on $U$: a line bundle $\mathcal{L}$ on $U$ together with isomorphisms $g^*\mathcal{L} \cong \mathcal{L}$ for each $g \in G$, satisfying the cocycle condition. The Picard group $\mathrm{Pic}(X)$ fits in an exact sequence $0 \to \mathrm{Pic}(X) \to \mathrm{Pic}(U)^G \to H^2(G, \mathcal{O}(U)^\times)$.
+</Example>
+
+<Example title="Locally free sheaves">
+A quasi-coherent sheaf $\mathcal{E}$ on $X$ is **locally free of rank $r$** if $\mathcal{E}|_U$ is locally free of rank $r$ for some étale atlas $U \to X$. Vector bundles on $X$ correspond to locally free sheaves, just as for schemes.
+</Example>
+
+<Example title="Sheaf of differentials">
+For a smooth algebraic space $X$ of dimension $d$ over a field $k$, the sheaf of Kähler differentials $\Omega^1_{X/k}$ is a locally free sheaf of rank $d$. On an atlas $U \to X$, it restricts to $\Omega^1_{U/k}$, with descent data coming from the étale equivalence relation.
+</Example>
+
+<Example title="Skyscraper sheaves">
+Let $x \in |X|$ be a closed point of an algebraic space $X$ over a field $k$, with residue field $\kappa(x)$. The skyscraper sheaf $i_*\kappa(x)$ (where $i: \mathrm{Spec}(\kappa(x)) \to X$) is a coherent sheaf on $X$ supported at $x$.
+</Example>
+
+<Example title="QCoh on the quotient of A^1 by Z/2">
+Let $X = \mathbb{A}^1_k / (\mathbb{Z}/2\mathbb{Z})$ where the action is $x \mapsto -x$ (restricted to $\mathbb{A}^1 \setminus \{0\}$ for freeness). A quasi-coherent sheaf on $X$ is a $k[x, x^{-1}]$-module $M$ with an isomorphism $\sigma^* M \cong M$ satisfying the cocycle condition. This is the same as a module over the invariant ring $k[x^2, x^{-2}] = k[t, t^{-1}]$ where $t = x^2$.
+</Example>
+
+<Example title="Tensor products and internal hom">
+For $\mathcal{F}, \mathcal{G} \in \mathrm{QCoh}(X)$, the tensor product $\mathcal{F} \otimes_{\mathcal{O}_X} \mathcal{G}$ is quasi-coherent. When $\mathcal{F}$ is of finite presentation, $\mathcal{H}om(\mathcal{F}, \mathcal{G})$ is also quasi-coherent. These operations are computed on any atlas and then descended.
+</Example>
+
+<Example title="Flat quasi-coherent sheaves">
+A quasi-coherent sheaf $\mathcal{F}$ on $X$ is **flat** if $\mathcal{F}|_U$ is flat over $\mathcal{O}_U$ for some (hence any) atlas $U \to X$. Flatness is an étale-local property. For a morphism $f: X \to Y$ of algebraic spaces, $\mathcal{F}$ is **$f$-flat** if the stalks are flat over the corresponding local rings of $Y$.
+</Example>
+
+<Example title="Dualizing sheaf">
+For a proper Cohen-Macaulay algebraic space $X$ of pure dimension $d$ over a field $k$, the dualizing sheaf $\omega_X$ is a coherent sheaf that represents the functor $\mathcal{F} \mapsto H^d(X, \mathcal{F})^\vee$ on coherent sheaves. It exists as a consequence of Grothendieck duality for algebraic spaces.
+</Example>
+
+---
+
+## 5. Descent and Effectivity
+
+The key theorem underlying the theory of quasi-coherent sheaves on algebraic spaces is:
+
+<Theorem title="Faithfully flat descent for QCoh">
+Let $f: U \to X$ be an étale surjection from a scheme $U$ to an algebraic space $X$. Then the pullback functor
+
+$$
+f^*: \mathrm{QCoh}(X) \to \mathrm{QCoh}(U)^{\mathrm{desc}}
+$$
+
+is an equivalence of categories, where $\mathrm{QCoh}(U)^{\mathrm{desc}}$ is the category of quasi-coherent sheaves on $U$ with descent data relative to $f$.
+</Theorem>
+
+<Proof>
+This follows from faithfully flat descent for quasi-coherent sheaves (since étale morphisms are flat) combined with the fact that étale descent is effective for quasi-coherent sheaves. Given descent data $(\mathcal{F}_U, \alpha)$ on $R \rightrightarrows U$, the descended sheaf on $X$ is the equalizer of $s_*\mathcal{F}_U \rightrightarrows t_*\mathcal{F}_U$ in an appropriate sense. The cocycle condition ensures this construction gives a well-defined quasi-coherent sheaf on $X$.
+</Proof>
+
+---
+
+## 6. Global Sections and Cohomology
+
+<Definition title="Global sections">
+For a quasi-coherent sheaf $\mathcal{F}$ on an algebraic space $X$, the **global sections** are
+
+$$
+\Gamma(X, \mathcal{F}) = H^0(X_{\text{ét}}, \mathcal{F})
+$$
+
+computed as sections of $\mathcal{F}$ on the final object of $X_{\text{ét}}$.
+</Definition>
+
+For a quasi-compact quasi-separated algebraic space $X$ with atlas $U \to X$ and $R = U \times_X U$, the global sections can be computed as the equalizer:
+
+$$
+0 \to \Gamma(X, \mathcal{F}) \to \Gamma(U, \mathcal{F}|_U) \rightrightarrows \Gamma(R, \mathcal{F}|_R)
+$$
+
+Higher cohomology is computed using the étale topology:
+
+$$
+H^i(X, \mathcal{F}) = H^i(X_{\text{ét}}, \mathcal{F})
+$$
+
+<Theorem title="Cohomology via Cech complex">
+Let $X$ be a quasi-compact quasi-separated algebraic space with atlas $U \to X$. For $\mathcal{F} \in \mathrm{QCoh}(X)$, the étale cohomology $H^i(X, \mathcal{F})$ can be computed using the Cech complex associated to $U \to X$:
+
+$$
+0 \to \mathcal{F}(U) \to \mathcal{F}(U \times_X U) \to \mathcal{F}(U \times_X U \times_X U) \to \cdots
+$$
+</Theorem>
+
+---
+
+## 7. The Derived Category
+
+<Definition title="Derived category of an algebraic space">
+For a quasi-compact quasi-separated algebraic space $X$, the **derived category** $D_{\mathrm{qc}}(X)$ is the full subcategory of $D(\mathcal{O}_{X_{\text{ét}}}\text{-Mod})$ consisting of complexes with quasi-coherent cohomology sheaves.
+</Definition>
+
+<Theorem title="Properties of D_qc(X)">
+For $X$ quasi-compact and quasi-separated:
+
+1. $D_{\mathrm{qc}}(X)$ is a compactly generated triangulated category.
+2. If $X$ is noetherian, the compact objects in $D_{\mathrm{qc}}(X)$ are the perfect complexes.
+3. The natural functor $D(\mathrm{QCoh}(X)) \to D_{\mathrm{qc}}(X)$ is an equivalence.
+</Theorem>
+
+---
+
+## 8. Comparison with Scheme Theory
+
+<Theorem title="QCoh on schemes vs algebraic spaces">
+If $X$ is a scheme, then $\mathrm{QCoh}(X_{\text{ét}}) \cong \mathrm{QCoh}(X_{\mathrm{Zar}})$. That is, quasi-coherent sheaves on the étale site of a scheme are the same as quasi-coherent sheaves on the Zariski site.
+</Theorem>
+
+This comparison theorem ensures that the theory of quasi-coherent sheaves on algebraic spaces is a genuine generalization of the theory on schemes, with no unexpected discrepancies for the scheme case.
+
+<Example title="Comparison for affine schemes">
+For $X = \mathrm{Spec}(A)$, we have $\mathrm{QCoh}(X_{\text{ét}}) \cong \mathrm{QCoh}(X_{\mathrm{Zar}}) \cong A\text{-Mod}$. A quasi-coherent sheaf on the étale site is determined by its value on the affine scheme, which is just an $A$-module.
+</Example>
+
+---
+
+## 9. Picard Group and Line Bundles
+
+<Definition title="Picard group of an algebraic space">
+The **Picard group** $\mathrm{Pic}(X)$ of an algebraic space $X$ is the group of isomorphism classes of invertible sheaves (line bundles) on $X$, with the tensor product as group operation.
+</Definition>
+
+<Remark>
+For algebraic spaces that are not schemes, $\mathrm{Pic}(X)$ may behave differently than expected. In particular, an algebraic space need not admit any non-trivial line bundle. The non-existence of ample line bundles is precisely what prevents certain algebraic spaces from being schemes.
+</Remark>
+
+---
+
+## References
+
+- The Stacks Project, Tag 03LG: Cohomology of Algebraic Spaces.
+- D. Knutson, *Algebraic Spaces*, LNM 203, Chapter IV.
+- B. Conrad, *Cohomological Descent*, notes available online.
+- J. Lurie, *Derived Algebraic Geometry*, for the derived perspective.

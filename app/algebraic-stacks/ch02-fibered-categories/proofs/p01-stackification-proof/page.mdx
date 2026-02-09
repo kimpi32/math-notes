@@ -1,0 +1,306 @@
+export const metadata = {
+  title: 'Proof of Stackification -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Proof -- Stackification" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Stackification Existence
+
+We give a complete proof that every category fibered in groupoids over a site admits a stackification. The construction proceeds in two steps: first we sheafify the morphism presheaves (prestackification), then we formally adjoin effective descent data (effectivization). The result is a stack with the required universal property.
+
+---
+
+## Setup and Statement
+
+<Theorem title="Stackification Existence (restated)" number="2.9.1">
+Let $(\mathcal{C}, \tau)$ be a site and let $p : \mathcal{F} \to \mathcal{C}$ be a category fibered in groupoids. There exists a stack $\mathcal{F}^{\mathrm{st}}$ over $(\mathcal{C}, \tau)$ and a morphism $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$ such that for every stack $\mathcal{G}$ and morphism $F : \mathcal{F} \to \mathcal{G}$, there exists a morphism $\tilde{F} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$, unique up to unique 2-isomorphism, with $\tilde{F} \circ \eta \cong F$.
+</Theorem>
+
+<Remark title="Strategy">
+The proof follows two steps:
+
+**Step 1 (Prestackification):** Construct $\mathcal{F}^{\mathrm{ps}}$ from $\mathcal{F}$ by sheafifying the Hom presheaves. This ensures Axiom (S1): Isom is a sheaf.
+
+**Step 2 (Effectivization):** Construct $\mathcal{F}^{\mathrm{st}}$ from $\mathcal{F}^{\mathrm{ps}}$ by formally adding objects from descent data. This ensures Axiom (S2): descent data are effective.
+
+We then verify the universal property.
+</Remark>
+
+---
+
+## Step 1: Prestackification
+
+<Proof>
+**Construction of $\mathcal{F}^{\mathrm{ps}}$.**
+
+Define a CFG $\mathcal{F}^{\mathrm{ps}}$ over $\mathcal{C}$ as follows.
+
+**Objects:** $\operatorname{Ob}(\mathcal{F}^{\mathrm{ps}}) = \operatorname{Ob}(\mathcal{F})$. The objects are unchanged; we keep the same structure functor $p$.
+
+**Morphisms:** For objects $x, y \in \mathcal{F}^{\mathrm{ps}}$ lying over the same $U \in \mathcal{C}$ (i.e., $x, y \in \mathcal{F}(U)$), we define:
+
+$$\operatorname{Hom}_{\mathcal{F}^{\mathrm{ps}}(U)}(x, y) = \operatorname{Isom}_\mathcal{F}(x, y)^+(U)$$
+
+where $\operatorname{Isom}_\mathcal{F}(x, y)^+$ denotes the **sheafification** of the presheaf $\operatorname{Isom}_\mathcal{F}(x, y)$ on $\mathcal{C}/U$. Recall:
+
+$$\operatorname{Isom}_\mathcal{F}(x, y)(f : V \to U) = \operatorname{Isom}_{\mathcal{F}(V)}(f^*x, f^*y)$$
+
+An element of $\operatorname{Isom}_\mathcal{F}(x, y)^+(U)$ is a compatible family of local isomorphisms: a covering $\{U_i \to U\}$ together with isomorphisms $\alpha_i : x|_{U_i} \xrightarrow{\sim} y|_{U_i}$ that agree on overlaps $U_i \times_U U_j$ (in the sheafified sense).
+
+For morphisms between objects over different base objects, we use the general fiber structure: a morphism from $y$ (over $V$) to $x$ (over $U$) in $\mathcal{F}^{\mathrm{ps}}$ lying over $f : V \to U$ is an element of $\operatorname{Hom}_{\mathcal{F}^{\mathrm{ps}}(V)}(y, f^*x) = \operatorname{Isom}_\mathcal{F}(y, f^*x)^+(V)$.
+
+**Composition:** Given $\alpha \in \operatorname{Isom}(x, y)^+(U)$ and $\beta \in \operatorname{Isom}(y, z)^+(U)$, choose a common refinement $\{U_i\}$ on which both are represented by actual isomorphisms $\alpha_i : x|_{U_i} \to y|_{U_i}$ and $\beta_i : y|_{U_i} \to z|_{U_i}$. The compositions $\beta_i \circ \alpha_i : x|_{U_i} \to z|_{U_i}$ are compatible on overlaps and define an element $\beta \circ \alpha \in \operatorname{Isom}(x, z)^+(U)$. This is well-defined by the universal property of sheafification.
+
+**The functor $\eta_1 : \mathcal{F} \to \mathcal{F}^{\mathrm{ps}}$:** This is the identity on objects, and on morphisms it is the canonical map $\operatorname{Isom}_\mathcal{F}(x, y)(U) \to \operatorname{Isom}_\mathcal{F}(x, y)^+(U)$ (inclusion of sections into sheafification).
+</Proof>
+
+<Proof>
+**Verification that $\mathcal{F}^{\mathrm{ps}}$ is a prestack.**
+
+We need to show that $\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}(x, y)$ is a sheaf for all $x, y$. But by construction:
+
+$$\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}(x, y) = \operatorname{Isom}_\mathcal{F}(x, y)^+$$
+
+which is a sheaf (sheafification of a presheaf is always a sheaf). So (S1) holds.
+
+We also verify that $\mathcal{F}^{\mathrm{ps}}$ is fibered in groupoids. This follows from the fact that:
+- Pullbacks in $\mathcal{F}^{\mathrm{ps}}$ are the same as in $\mathcal{F}$ (since objects are unchanged).
+- Every morphism in a fiber is invertible: an element $\alpha \in \operatorname{Isom}(x, y)^+(U)$ is locally an isomorphism, and local inverses glue (by the sheaf property) to a global inverse $\alpha^{-1} \in \operatorname{Isom}(y, x)^+(U)$.
+</Proof>
+
+<Example id="step1-trivial" title="When Step 1 is trivial">
+If $\mathcal{F}$ is already a prestack (Isom is a sheaf), then $\operatorname{Isom}_\mathcal{F}(x, y)^+ = \operatorname{Isom}_\mathcal{F}(x, y)$ and $\mathcal{F}^{\mathrm{ps}} = \mathcal{F}$. Step 1 is the identity. This is the case for most geometric examples (e.g., $\mathcal{M}_g$, $BG$, $\mathbf{QCoh}$) where Isom is representable.
+</Example>
+
+---
+
+## Step 2: Effectivization
+
+<Proof>
+**Construction of $\mathcal{F}^{\mathrm{st}}$.**
+
+Starting from the prestack $\mathcal{F}^{\mathrm{ps}}$, we construct a stack $\mathcal{F}^{\mathrm{st}}$ by formally adding objects from descent data.
+
+**Objects of $\mathcal{F}^{\mathrm{st}}$ over $U$:** An object of $\mathcal{F}^{\mathrm{st}}(U)$ is a **descent datum** for $\mathcal{F}^{\mathrm{ps}}$ relative to some covering of $U$. Specifically, it is a triple:
+
+$$\xi = \left(\{U_i \to U\}_{i \in I}, \; \{x_i\}_{i \in I}, \; \{\varphi_{ij}\}_{i,j \in I}\right)$$
+
+where:
+- $\{U_i \to U\}$ is a covering family in $\tau$,
+- $x_i \in \mathcal{F}^{\mathrm{ps}}(U_i)$ for each $i$,
+- $\varphi_{ij} : \operatorname{pr}_1^* x_i \xrightarrow{\sim} \operatorname{pr}_2^* x_j$ is an isomorphism in $\mathcal{F}^{\mathrm{ps}}(U_i \times_U U_j)$,
+- The cocycle condition holds: $\operatorname{pr}_{23}^*\varphi_{jk} \circ \operatorname{pr}_{12}^*\varphi_{ij} = \operatorname{pr}_{13}^*\varphi_{ik}$ in $\mathcal{F}^{\mathrm{ps}}(U_i \times_U U_j \times_U U_k)$.
+
+**Morphisms in $\mathcal{F}^{\mathrm{st}}(U)$:** A morphism from $\xi = (\{U_i\}, \{x_i\}, \{\varphi_{ij}\})$ to $\xi' = (\{V_k\}, \{y_k\}, \{\psi_{kl}\})$ is defined as follows. Choose a **common refinement**: a covering $\{W_m \to U\}$ refining both $\{U_i\}$ and $\{V_k\}$, with maps $\sigma_m : W_m \to U_{i(m)}$ and $\tau_m : W_m \to V_{k(m)}$. Then a morphism consists of isomorphisms:
+
+$$\alpha_m : \sigma_m^* x_{i(m)} \xrightarrow{\sim} \tau_m^* y_{k(m)} \quad \text{in } \mathcal{F}^{\mathrm{ps}}(W_m)$$
+
+compatible with the gluing data: on $W_m \times_U W_n$, the diagram
+
+$$\sigma_{mn}^*\varphi_{i(m)i(n)} \quad \text{and} \quad \tau_{mn}^*\psi_{k(m)k(n)}$$
+
+are intertwined by $\alpha_m$ and $\alpha_n$ (where $\sigma_{mn}$ and $\tau_{mn}$ are the induced maps on overlaps).
+
+Two such morphisms (on possibly different refinements) are **identified** if they agree on a further common refinement.
+
+**Composition of morphisms:** Given morphisms $\alpha : \xi \to \xi'$ and $\beta : \xi' \to \xi''$ (on refinements $\{W_m\}$ and $\{W'_n\}$ respectively), take a common refinement of $\{W_m\}$ and $\{W'_n\}$ and compose the corresponding isomorphisms.
+</Proof>
+
+<Proof>
+**Well-definedness.**
+
+We must check that:
+1. The composition is well-defined (independent of the choice of common refinement).
+2. The identity morphism exists (use the refinement $\{U_i\}$ itself with $\alpha_i = \operatorname{id}$).
+3. Inverses exist (invert each $\alpha_m$, which is possible since all morphisms in groupoid fibers are invertible).
+4. Associativity holds (check on a common refinement of three morphisms).
+
+All of these follow from the fact that $\mathcal{F}^{\mathrm{ps}}$ is a prestack: the Isom sheaves detect local data, so checking equalities can be done on covers.
+
+**Structure functor:** The structure functor $p^{\mathrm{st}} : \mathcal{F}^{\mathrm{st}} \to \mathcal{C}$ sends a descent datum over $U$ to $U$.
+</Proof>
+
+---
+
+## Verification: $\mathcal{F}^{\mathrm{st}}$ is a CFG
+
+<Proof>
+**$\mathcal{F}^{\mathrm{st}}$ is fibered in groupoids.**
+
+Given a morphism $f : V \to U$ in $\mathcal{C}$ and a descent datum $\xi = (\{U_i \to U\}, \{x_i\}, \{\varphi_{ij}\})$ over $U$, the **pullback** $f^*\xi$ is the descent datum over $V$:
+
+$$f^*\xi = \left(\{U_i \times_U V \to V\}, \; \{\operatorname{pr}_1^* x_i\}, \; \{\operatorname{pr}_1^*\varphi_{ij}\}\right)$$
+
+where $\{U_i \times_U V \to V\}$ is the pulled-back covering (a covering of $V$ since coverings are stable under base change).
+
+The pullback map is functorial (up to canonical isomorphism), and every morphism in $\mathcal{F}^{\mathrm{st}}$ is cartesian (since all morphisms in fibers are invertible).
+</Proof>
+
+---
+
+## Verification: $\mathcal{F}^{\mathrm{st}}$ is a Stack
+
+<Proof>
+**Axiom (S1): Isom is a sheaf.**
+
+Let $\xi, \xi' \in \mathcal{F}^{\mathrm{st}}(U)$. We show $\operatorname{Isom}(\xi, \xi')$ is a sheaf on $\mathcal{C}/U$.
+
+For $f : V \to U$, the set $\operatorname{Isom}(\xi, \xi')(V) = \operatorname{Isom}_{\mathcal{F}^{\mathrm{st}}(V)}(f^*\xi, f^*\xi')$. Write $\xi = (\{U_i\}, \{x_i\}, \{\varphi_{ij}\})$ and $\xi' = (\{V_k\}, \{y_k\}, \{\psi_{kl}\})$.
+
+After pulling back to $V$ and choosing a common refinement $\{W_m \to V\}$, an isomorphism $f^*\xi \to f^*\xi'$ consists of compatible isomorphisms $\alpha_m$ in $\mathcal{F}^{\mathrm{ps}}(W_m)$.
+
+The sheaf property of $\operatorname{Isom}(\xi, \xi')$ follows from the fact that $\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}$ is a sheaf (by Step 1). Given a covering $\{V_j \to V\}$ and compatible local isomorphisms $\xi|_{V_j} \to \xi'|_{V_j}$, we can refine to a common cover and use the sheaf property of $\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}$ to glue the local isomorphisms.
+</Proof>
+
+<Proof>
+**Axiom (S2): Effective descent.**
+
+Let $\{V_j \to U\}$ be a covering and let $(\{\xi_j\}, \{\Phi_{jk}\})$ be a descent datum for $\mathcal{F}^{\mathrm{st}}$ relative to this covering. We must produce $\xi \in \mathcal{F}^{\mathrm{st}}(U)$ with $\xi|_{V_j} \cong \xi_j$.
+
+Each $\xi_j = (\{V_{j,i} \to V_j\}, \{x_{j,i}\}, \{\varphi^j_{ii'}\})$ is a descent datum for $\mathcal{F}^{\mathrm{ps}}$ over $V_j$. The transition data $\Phi_{jk} : \xi_j|_{V_{jk}} \xrightarrow{\sim} \xi_k|_{V_{jk}}$ provide compatible isomorphisms on overlaps.
+
+**Key construction:** Take the covering of $U$ to be $\{V_{j,i} \to V_j \to U\}_{j \in J, i \in I_j}$ (the composite covering). The objects are $x_{j,i} \in \mathcal{F}^{\mathrm{ps}}(V_{j,i})$. The gluing isomorphisms on overlaps $V_{j,i} \times_U V_{k,l}$ are assembled from:
+- The $\varphi^j_{ii'}$ (within a single $V_j$), and
+- The $\Phi_{jk}$ data (between different $V_j$ and $V_k$).
+
+The cocycle condition for the new descent datum follows from the cocycle conditions of the $\varphi^j$ data and the $\Phi_{jk}$ data, combined with the compatibility conditions of the descent datum $(\{\xi_j\}, \{\Phi_{jk}\})$.
+
+This produces a descent datum $\xi \in \mathcal{F}^{\mathrm{st}}(U)$, and by construction $\xi|_{V_j}$ is isomorphic to $\xi_j$ (via the identity on the refined cover). Hence descent for $\mathcal{F}^{\mathrm{st}}$ is effective.
+</Proof>
+
+<Remark title="The key insight">
+The effectivity proof works because "a descent datum of descent data is again a descent datum" -- we simply compose the covering refinements. This is the categorical analogue of the topological fact that "a cover of a cover is a cover" (transitivity of coverings in a Grothendieck topology).
+</Remark>
+
+---
+
+## The Morphism $\eta$
+
+<Proof>
+**Construction of $\eta : \mathcal{F} \to \mathcal{F}^{\mathrm{st}}$.**
+
+The morphism $\eta$ is the composition $\eta_2 \circ \eta_1 : \mathcal{F} \to \mathcal{F}^{\mathrm{ps}} \to \mathcal{F}^{\mathrm{st}}$.
+
+$\eta_1 : \mathcal{F} \to \mathcal{F}^{\mathrm{ps}}$ is the identity on objects and the sheafification map on morphisms.
+
+$\eta_2 : \mathcal{F}^{\mathrm{ps}} \to \mathcal{F}^{\mathrm{st}}$ sends an object $x \in \mathcal{F}^{\mathrm{ps}}(U)$ to the "trivial" descent datum:
+
+$$\eta_2(x) = (\{U \xrightarrow{\operatorname{id}} U\}, \{x\}, \{\operatorname{id}\})$$
+
+i.e., the one-element covering with trivial gluing data. On morphisms, $\eta_2(\alpha : x \to y) = \alpha$ (viewed as a morphism of trivial descent data).
+</Proof>
+
+---
+
+## Verification of Properties of $\eta$
+
+<Proof>
+**Property (i): $\eta$ is locally essentially surjective.**
+
+Let $\xi = (\{U_i \to U\}, \{x_i\}, \{\varphi_{ij}\}) \in \mathcal{F}^{\mathrm{st}}(U)$. Then $\xi|_{U_i}$ (the pullback to $U_i$) has the covering $\{U_j \times_U U_i \to U_i\}$ with objects $\operatorname{pr}_1^* x_j$. The transition map $\varphi_{ji}$ on $U_j \times_U U_i$ gives an isomorphism $\operatorname{pr}_1^* x_j|_{U_j \times_U U_i} \xrightarrow{\sim} \operatorname{pr}_2^* x_i|_{U_j \times_U U_i}$.
+
+In particular, $\xi|_{U_i}$ has $x_i$ as one of its local pieces, and the diagonal restriction $\varphi_{ii} = \operatorname{id}$ shows that $\xi|_{U_i}$ is isomorphic (in $\mathcal{F}^{\mathrm{st}}(U_i)$) to the trivial descent datum $\eta(x_i)$. Hence $\xi|_{U_i} \cong \eta(x_i)$ for each $i$, proving local essential surjectivity.
+
+More precisely: consider the descent datum $\xi|_{U_i}$. It has the covering $\{U_j \times_U U_i \to U_i\}$. Using the section $U_i \to U_i \times_U U_i$ (the diagonal), we can refine to the identity covering $\{U_i \to U_i\}$ with object $x_i$ and trivial gluing. This refinement isomorphism gives $\xi|_{U_i} \cong \eta_2(x_i)$.
+</Proof>
+
+<Proof>
+**Property (ii): $\eta$ induces isomorphisms on sheafified Isom.**
+
+For $x, y \in \mathcal{F}(U)$, we need to show:
+$$\operatorname{Isom}_\mathcal{F}(x, y)^+ \xrightarrow{\sim} \operatorname{Isom}_{\mathcal{F}^{\mathrm{st}}}(\eta(x), \eta(y))$$
+
+The left side is $\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}(x, y)$ (by Step 1). The right side is $\operatorname{Isom}_{\mathcal{F}^{\mathrm{st}}}(\eta_2(x), \eta_2(y))$.
+
+A morphism $\eta_2(x) \to \eta_2(y)$ in $\mathcal{F}^{\mathrm{st}}(U)$ consists of (on some refinement $\{U_i\}$) isomorphisms $\alpha_i : x|_{U_i} \xrightarrow{\sim} y|_{U_i}$ compatible with the trivial gluing data, i.e., $\alpha_i|_{U_{ij}} = \alpha_j|_{U_{ij}}$ in $\mathcal{F}^{\mathrm{ps}}(U_{ij})$.
+
+This is exactly an element of $\operatorname{Isom}_{\mathcal{F}^{\mathrm{ps}}}(x, y)(U) = \operatorname{Isom}_\mathcal{F}(x, y)^+(U)$.
+
+The map is clearly a bijection, establishing property (ii).
+</Proof>
+
+---
+
+## The Universal Property
+
+<Proof>
+**Proof of the universal property.**
+
+Let $\mathcal{G}$ be a stack and $F : \mathcal{F} \to \mathcal{G}$ a morphism of CFGs. We construct $\tilde{F} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$.
+
+**On objects:** Let $\xi = (\{U_i \to U\}, \{x_i\}, \{\varphi_{ij}\}) \in \mathcal{F}^{\mathrm{st}}(U)$. Applying $F$ (via $\eta_1$) to the $x_i$, we get objects $F(x_i) \in \mathcal{G}(U_i)$ with isomorphisms $F(\varphi_{ij}) : F(x_i)|_{U_{ij}} \xrightarrow{\sim} F(x_j)|_{U_{ij}}$ satisfying the cocycle condition.
+
+Since $\mathcal{G}$ is a stack, this descent datum is **effective**: there exists an object $z \in \mathcal{G}(U)$ with $z|_{U_i} \cong F(x_i)$ compatibly. We set $\tilde{F}(\xi) = z$.
+
+More precisely, because $F$ maps into $\mathcal{G}^{\mathrm{ps}}$ (which equals $\mathcal{G}$ since $\mathcal{G}$ is a prestack), and since $\mathcal{G}$ has effective descent, the descent datum $(F(x_i), F(\varphi_{ij}))$ glues to a unique (up to unique isomorphism) object in $\mathcal{G}(U)$.
+
+**On morphisms:** A morphism $\alpha : \xi \to \xi'$ in $\mathcal{F}^{\mathrm{st}}(U)$, given by local isomorphisms $\alpha_m$ on a common refinement, maps to local isomorphisms $F(\alpha_m)$ in $\mathcal{G}$. Since $\mathcal{G}$ satisfies (S1) (Isom is a sheaf), these glue to a unique morphism $\tilde{F}(\alpha) : \tilde{F}(\xi) \to \tilde{F}(\xi')$ in $\mathcal{G}(U)$.
+
+**Compatibility $\tilde{F} \circ \eta \cong F$:** For $x \in \mathcal{F}(U)$, $\eta(x)$ is the trivial descent datum $(\{U \to U\}, \{x\}, \{\operatorname{id}\})$. The descent datum in $\mathcal{G}$ is $(F(x), \operatorname{id})$, which glues trivially to $F(x)$. So $\tilde{F}(\eta(x)) \cong F(x)$.
+
+**Uniqueness:** Suppose $\tilde{G} : \mathcal{F}^{\mathrm{st}} \to \mathcal{G}$ also satisfies $\tilde{G} \circ \eta \cong F$. For any descent datum $\xi = (\{U_i\}, \{x_i\}, \{\varphi_{ij}\})$, we have $\xi|_{U_i} \cong \eta(x_i)$, so:
+
+$$\tilde{G}(\xi)|_{U_i} \cong \tilde{G}(\eta(x_i)) \cong F(x_i) \cong \tilde{F}(\xi)|_{U_i}$$
+
+Since $\mathcal{G}$ is a stack (Isom is a sheaf), local isomorphisms glue to $\tilde{G}(\xi) \cong \tilde{F}(\xi)$. This isomorphism is unique by the sheaf property, giving a unique 2-isomorphism $\tilde{G} \cong \tilde{F}$.
+</Proof>
+
+---
+
+## Summary of the Proof
+
+<Remark title="Proof structure">
+The complete proof consists of:
+
+1. **Step 1** (Prestackification): Replace morphisms by their sheafifications. This is straightforward once we have the sheafification construction for presheaves of sets.
+
+2. **Step 2** (Effectivization): Add descent data as formal objects. This is the more substantial step, requiring:
+   - Definition of the category of descent data.
+   - Verification that this is a CFG (pullback of descent data).
+   - Verification of (S1): Isom is a sheaf (follows from prestack property of $\mathcal{F}^{\mathrm{ps}}$).
+   - Verification of (S2): A descent datum of descent data is a descent datum (transitivity of coverings).
+
+3. **Universal property**: Uses effectiveness of descent in the target stack $\mathcal{G}$ to construct $\tilde{F}$, and uses the prestack property to establish uniqueness.
+
+The key categorical ingredients are:
+- Sheafification of presheaves (for Step 1).
+- Transitivity of coverings in a Grothendieck topology (for Step 2).
+- Effectiveness of descent in stacks (for the universal property).
+</Remark>
+
+<Example id="proof-verification-BG" title="Verification for BG">
+Let us trace the proof for $\mathcal{F}$ = the CFG with one object per fiber and $\operatorname{Aut} = G(S)$.
+
+**Step 1:** $\operatorname{Isom}(*, *) = G$ (the group scheme), which is already a sheaf. So $\mathcal{F}^{\mathrm{ps}} = \mathcal{F}$.
+
+**Step 2:** A descent datum in $\mathcal{F}^{\mathrm{st}}(S)$ is a covering $\{S_i \to S\}$ with the unique object $*$ on each $S_i$, and gluing isomorphisms $\varphi_{ij} \in G(S_i \times_S S_j)$ satisfying the cocycle condition. This is precisely a Cech 1-cocycle with values in $G$, which defines a $G$-torsor.
+
+Two descent data give isomorphic objects if and only if the cocycles differ by a coboundary. So $\pi_0(\mathcal{F}^{\mathrm{st}}(S)) \cong \check{H}^1(\{S_i\}, G)$.
+
+The universal property: for any stack $\mathcal{G}$ and morphism $F : \mathcal{F} \to \mathcal{G}$ (which amounts to choosing an object $z \in \mathcal{G}(S)$ for the trivial torsor), $\tilde{F}$ sends a torsor $P$ to the "twist" of $z$ by $P$, using the descent data.
+</Example>
+
+<Example id="proof-verification-sets" title="Verification for presheaves of sets">
+For a presheaf of sets $F$ (viewed as a CFG with discrete fibers):
+
+**Step 1:** Isom is already a sheaf (it takes values in $\{0, 1\} \subset \mathbf{Set}$). So $\mathcal{F}^{\mathrm{ps}} = \mathcal{F}$.
+
+**Step 2:** A descent datum is a covering $\{U_i\}$ with $s_i \in F(U_i)$ satisfying $s_i|_{U_{ij}} = s_j|_{U_{ij}}$. Two descent data are isomorphic iff they agree on a refinement.
+
+So $\mathcal{F}^{\mathrm{st}}(U)$ is the set of compatible families modulo refinement, which is exactly $F^+(U)$ (the sheafification). The proof reduces to the usual sheafification construction.
+</Example>

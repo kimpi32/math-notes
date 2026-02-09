@@ -1,0 +1,188 @@
+export const metadata = {
+  title: 'Deligne--Mumford Stacks — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Concept — Deligne--Mumford Stacks" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Deligne--Mumford Stacks
+
+Deligne--Mumford stacks are the "best-behaved" class of algebraic stacks, introduced in the foundational 1969 paper of Deligne and Mumford on the irreducibility of the moduli space of curves. They occupy a middle ground between algebraic spaces and general Artin stacks, admitting an etale atlas and requiring automorphism groups to be discrete (etale group schemes). Most moduli problems in classical algebraic geometry -- curves, abelian varieties, maps -- give rise to DM stacks.
+
+---
+
+## Definition and characterizations
+
+<Definition title="Deligne--Mumford Stack" number="4.8">
+An algebraic stack $\mathcal{X}$ over a scheme $S$ is a **Deligne--Mumford (DM) stack** if:
+
+1. The diagonal $\Delta : \mathcal{X} \to \mathcal{X} \times_S \mathcal{X}$ is representable, quasi-compact, and **unramified** (equivalently, formally unramified).
+2. There exists a scheme $U$ and a surjective **etale** morphism $U \to \mathcal{X}$ (an **etale atlas**).
+
+In fact, condition (1) implies that any smooth atlas can be refined to an etale atlas, so condition (2) is a consequence of (1) together with the algebraic stack axioms.
+</Definition>
+
+<Remark title="Equivalent characterizations">
+The following are equivalent for an algebraic stack $\mathcal{X}$ (assuming $\mathcal{X}$ is locally of finite presentation over $S$):
+
+1. $\mathcal{X}$ is DM.
+2. The diagonal $\Delta_{\mathcal{X}}$ is unramified.
+3. For every algebraically closed field $k$ and every object $\xi \in \mathcal{X}(k)$, the automorphism group scheme $\operatorname{Aut}_k(\xi)$ is an etale group scheme (i.e., reduced and zero-dimensional).
+4. In characteristic zero: for every geometric point $\xi$, $\operatorname{Aut}(\xi)$ is a finite group.
+5. $\mathcal{X}$ admits an etale atlas by a scheme.
+
+In positive characteristic, "etale group scheme" allows finite group schemes like $\alpha_p$ or $\mu_p$ that are not reduced, but condition (3) with "reduced" replaced by "unramified" still characterizes DM stacks correctly.
+</Remark>
+
+---
+
+## The etale atlas and its groupoid
+
+<Definition title="Etale atlas" number="4.9">
+An **etale atlas** for a DM stack $\mathcal{X}$ is a surjective etale morphism $p : U \to \mathcal{X}$ from a scheme $U$. Given such an atlas, the fiber product
+$$R = U \times_{\mathcal{X}} U$$
+is an algebraic space (in fact a scheme if $U$ is a scheme and the diagonal is separated), and $s, t : R \rightrightarrows U$ are etale morphisms. The groupoid $(U, R)$ is an **etale groupoid**, and $\mathcal{X} \simeq [U/R]$.
+</Definition>
+
+<Remark title="Relation to algebraic spaces">
+An algebraic space is a DM stack where the diagonal is a monomorphism (i.e., all automorphism groups are trivial). Equivalently, it is a DM stack that is also a sheaf of sets (not just groupoids).
+
+The hierarchy:
+$$\text{Schemes} \subset \text{Algebraic spaces} \subset \text{DM stacks} \subset \text{Artin stacks}.$$
+</Remark>
+
+---
+
+## Examples from moduli theory
+
+<Example id="moduli-curves-genus-g" title="Moduli of curves M_g">
+The moduli stack $\mathcal{M}_g$ ($g \geq 2$) of smooth projective curves of genus $g$ is a smooth, separated DM stack of dimension $3g - 3$ over $\operatorname{Spec} \mathbb{Z}$.
+
+**Why DM**: For $g \geq 2$, $\operatorname{Aut}(C)$ is a finite group for every smooth curve $C$ of genus $g$. By the Hurwitz bound, $|\operatorname{Aut}(C)| \leq 84(g-1)$.
+
+**Atlas construction**: Choose $n$ large enough so that $\omega_C^{\otimes n}$ is very ample. This embeds $C \hookrightarrow \mathbb{P}^N$ (where $N = n(2g-2) - g$). The Hilbert scheme $\mathcal{H}$ parametrizing such embedded curves with marking provides a scheme with a natural map $\mathcal{H} \to \mathcal{M}_g$. The group $\mathrm{PGL}_{N+1}$ acts on $\mathcal{H}$ and $\mathcal{M}_g \simeq [\mathcal{H} / \mathrm{PGL}_{N+1}]$ -- but this presentation is as an Artin stack. The DM property ensures we can find an etale atlas.
+</Example>
+
+<Example id="mg-bar-dm" title="Stable curves: the compactification">
+$\overline{\mathcal{M}}_g$ ($g \geq 2$) is the moduli stack of **stable curves**: connected, projective, at-worst-nodal curves of arithmetic genus $g$ with finite automorphism group. It is a proper, smooth DM stack.
+
+Deligne and Mumford proved that the coarse moduli space $\overline{M}_g$ is a projective variety, using the fact that $\overline{\mathcal{M}}_g$ is proper and the Keel--Mori theorem (existence of coarse moduli spaces for separated DM stacks with finite inertia).
+
+The boundary $\overline{\mathcal{M}}_g \setminus \mathcal{M}_g$ is a divisor with $\lfloor g/2 \rfloor$ irreducible components $\Delta_0, \Delta_1, \ldots, \Delta_{\lfloor g/2 \rfloor}$, where $\Delta_i$ parametrizes curves with a node separating components of genera $i$ and $g - i$ (with $\Delta_0$ for non-separating nodes).
+</Example>
+
+<Example id="pointed-curves" title="Pointed curves Mg,n">
+The stack $\mathcal{M}_{g,n}$ of smooth $n$-pointed genus-$g$ curves (where $2g - 2 + n > 0$) is a smooth DM stack of dimension $3g - 3 + n$. The stability condition ensures finite automorphism groups.
+
+Key cases:
+- $\mathcal{M}_{0,3} \cong \operatorname{Spec} k$ (three points on $\mathbb{P}^1$ are rigid).
+- $\mathcal{M}_{0,4}$ is an algebraic space isomorphic to $\mathbb{P}^1 \setminus \{0, 1, \infty\}$ via the cross-ratio.
+- $\overline{\mathcal{M}}_{0,n}$ is actually a smooth projective variety (not just a DM stack) for $n \geq 3$, since pointed rational curves have no nontrivial automorphisms.
+- $\mathcal{M}_{1,1}$ is a DM stack but not a scheme -- the curve $y^2 = x^3 - x$ (with $j = 1728$) has $\operatorname{Aut} \cong \mathbb{Z}/4\mathbb{Z}$ and $y^2 = x^3 - 1$ (with $j = 0$) has $\operatorname{Aut} \cong \mathbb{Z}/6\mathbb{Z}$.
+</Example>
+
+<Example id="abelian-varieties" title="Moduli of abelian varieties">
+The stack $\mathcal{A}_g$ of principally polarized abelian varieties of dimension $g$ is a separated DM stack of dimension $g(g+1)/2$. The automorphism group of a general principally polarized abelian variety is $\{\pm 1\}$ (finite), confirming the DM property.
+
+Over $\mathbb{C}$, the coarse moduli space is $A_g = \Gamma_g \backslash \mathfrak{H}_g$, where $\mathfrak{H}_g$ is the Siegel upper half-space and $\Gamma_g = \mathrm{Sp}(2g, \mathbb{Z})$. The Torelli map $\mathcal{M}_g \to \mathcal{A}_g$ sends a curve $C$ to its Jacobian $(\mathrm{Jac}(C), \Theta)$.
+</Example>
+
+<Example id="elliptic-curves-stack" title="The moduli stack of elliptic curves">
+The stack $\mathcal{M}_{1,1}$ of elliptic curves (genus-1 curves with a marked point) is a smooth DM stack of dimension 1 over $\operatorname{Spec} \mathbb{Z}[1/6]$. The $j$-invariant gives a map $j : \mathcal{M}_{1,1} \to \mathbb{A}^1$, which is the coarse moduli map.
+
+The stacky structure is concentrated at two points:
+- $j = 1728$: $E : y^2 = x^3 - x$, $\operatorname{Aut}(E) \cong \mu_4$ (generated by $(x,y) \mapsto (-x, iy)$).
+- $j = 0$: $E : y^2 = x^3 - 1$, $\operatorname{Aut}(E) \cong \mu_6$ (generated by $(x, y) \mapsto (\zeta_3 x, -y)$).
+- All other $j$: $\operatorname{Aut}(E) \cong \mu_2 = \{\pm 1\}$ (the elliptic involution).
+
+Over $\operatorname{Spec} \mathbb{Z}[1/6]$, we have $\mathcal{M}_{1,1} \cong [\operatorname{Spec} \mathbb{Z}[1/6][a_4, a_6, \Delta^{-1}] / \mathbb{G}_m]$, where the Weierstrass equation is $y^2 = x^3 + a_4 x + a_6$ with $\Delta = -16(4a_4^3 + 27a_6^2)$, and $\mathbb{G}_m$ acts by $\lambda \cdot (a_4, a_6) = (\lambda^4 a_4, \lambda^6 a_6)$. This is actually an Artin stack presentation; the DM structure comes from the fact that stabilizers are always finite subgroups of $\mathbb{G}_m$.
+</Example>
+
+<Example id="roots-line-bundle" title="Root stack as a DM stack">
+Given a scheme $X$, a line bundle $\mathcal{L}$, a section $s \in \Gamma(X, \mathcal{L})$, and an integer $r \geq 1$, the **$r$-th root stack** $\sqrt[r]{(X, \mathcal{L}, s)}$ is a DM stack. Over the locus where $s \neq 0$, the root stack is isomorphic to $X$. Over the zero locus $D = V(s)$, points acquire $\mu_r$-automorphisms.
+
+For example, $\sqrt[r]{\mathcal{O}_{\mathbb{P}^1}(p)/\mathbb{P}^1}$ (the $r$-th root at the point $p$) is a DM stack that looks like $\mathbb{P}^1$ away from $p$ and has a $\mu_r$-gerbe at $p$.
+</Example>
+
+<Example id="toric-dm" title="Toric DM stacks">
+A **toric DM stack** is a DM stack $\mathcal{X}$ with a dense open torus $T \subset \mathcal{X}$ and a $T$-action extending the multiplication on $T$. These are classified by **stacky fans** $(N, \Sigma, \beta)$, where $N$ is a finitely generated abelian group, $\Sigma$ is a fan in $N_{\mathbb{R}}$, and $\beta : \mathbb{Z}^n \to N$ encodes the stacky structure.
+
+For instance, the weighted projective stack $\mathcal{P}(1,1,2)$ is a toric DM stack. Its stacky fan is obtained from the fan of $\mathbb{P}^2$ by modifying the ray corresponding to the weight-2 coordinate.
+</Example>
+
+<Example id="rigidification" title="Rigidification of a DM stack">
+Given a DM stack $\mathcal{X}$ with a central subgroup $G \subset \operatorname{Aut}(\xi)$ for every object $\xi$ (a "common automorphism"), the **rigidification** $\mathcal{X} \!\sslash\! G$ is the DM stack obtained by removing these automorphisms.
+
+For example, $\mathcal{M}_{1,1} \!\sslash\! \mu_2$ is an algebraic space (the $j$-line $\mathbb{A}^1$) -- rigidifying by the elliptic involution removes the universal $\mu_2$-automorphism, converting the stack into its coarse space.
+</Example>
+
+<Example id="hurwitz-stack" title="Hurwitz stacks">
+The **Hurwitz stack** $\mathcal{H}_{d,g}$ parametrizes degree-$d$ covers $f : C \to \mathbb{P}^1$ where $C$ has genus $g$, with simple branching. This is a smooth DM stack (the automorphism group of a general cover is trivial).
+
+The Hurwitz stack connects to $\mathcal{M}_g$ via the source map $\mathcal{H}_{d,g} \to \mathcal{M}_g$ (sending $f$ to $C$). Hurwitz used the monodromy representation and the connectivity of $\mathcal{H}_{d,g}$ (proved using the transitivity of the braid group action on factorizations in $S_d$) to show that $\mathcal{M}_g$ is connected.
+</Example>
+
+<Example id="k3-moduli" title="Moduli of K3 surfaces (non-DM example)">
+The moduli stack of K3 surfaces is **not** DM: a general K3 surface $X$ has $\operatorname{Aut}(X) \supseteq \{\pm \mathrm{id}\}$ on $H^{2,0}(X)$, but this is finite (so one might expect DM). However, the period map shows that the moduli problem is better understood through the coarse moduli space $\mathcal{F}_d = \Gamma_d \backslash \Omega_d$ (an arithmetic quotient of a type IV domain). The full moduli stack has subtle issues with non-reduced automorphism schemes in positive characteristic and is typically studied via marked or polarized variants that are DM.
+</Example>
+
+<Example id="quot-finite-group" title="Quotient by a finite group">
+Let $X$ be a scheme and $G$ a finite group acting on $X$. Then $[X/G]$ is a DM stack. The etale atlas is $X \to [X/G]$, and the groupoid is $(X, G \times X)$ with source $s(g, x) = x$ and target $t(g, x) = g \cdot x$. Both $s$ and $t$ are etale since $G$ is etale.
+
+For $X = \mathbb{A}^2$ with $G = \mathbb{Z}/n\mathbb{Z}$ acting by $(x, y) \mapsto (\zeta x, \zeta^{-1} y)$ (where $\zeta$ is a primitive $n$-th root of unity), $[X/G]$ is a smooth DM stack. The coarse moduli space is $\operatorname{Spec} k[x,y]^G = \operatorname{Spec} k[u, v, w]/(uv - w^n)$, the $A_{n-1}$ surface singularity. The stack $[X/G]$ is the "stacky resolution" of this singularity.
+</Example>
+
+<Example id="stable-maps" title="Kontsevich stable maps">
+The moduli stack $\overline{\mathcal{M}}_{g,n}(X, \beta)$ of stable maps to a projective variety $X$ is a proper DM stack (assuming $2g - 2 + n > 0$ or $\beta \neq 0$). The key point is that stability (no infinitesimal automorphisms) ensures the DM property. The automorphism group of a stable map $(C, p_1, \ldots, p_n, f)$ is the finite group of automorphisms of $C$ commuting with $f$ and preserving the markings.
+
+When $X = \operatorname{Spec} k$ and $\beta = 0$, this reduces to $\overline{\mathcal{M}}_{g,n}$.
+</Example>
+
+---
+
+## Properties specific to DM stacks
+
+<Definition title="Inertia stack" number="4.10">
+The **inertia stack** of a DM stack $\mathcal{X}$ is
+$$\mathcal{I}_{\mathcal{X}} = \mathcal{X} \times_{\mathcal{X} \times \mathcal{X}} \mathcal{X}$$
+whose $T$-points are pairs $(\xi, \alpha)$ where $\xi \in \mathcal{X}(T)$ and $\alpha \in \operatorname{Aut}_T(\xi)$. For a DM stack, $\mathcal{I}_{\mathcal{X}} \to \mathcal{X}$ is an etale (finite if the diagonal is finite) morphism. The connected components of $\mathcal{I}_{\mathcal{X}}$ correspond to conjugacy classes of local automorphisms and play a central role in orbifold cohomology and the Chen--Ruan product.
+</Definition>
+
+<Remark title="DM stacks as orbifolds">
+Over $\mathbb{C}$, a smooth separated DM stack with finite stabilizers is essentially an **orbifold** (in the differential-geometric sense). The analytification gives a complex-analytic orbifold. Conversely, every compact complex orbifold that admits a projective coarse moduli space is the analytification of a smooth DM stack.
+
+This connection is fundamental for Gromov--Witten theory: the orbifold Gromov--Witten theory of a DM stack $\mathcal{X}$ (defined algebraically) matches the symplectic orbifold GW theory of its analytification.
+</Remark>
+
+---
+
+## Etale cohomology of DM stacks
+
+<Remark title="Cohomology">
+For a DM stack $\mathcal{X}$ with etale atlas $p : U \to \mathcal{X}$, etale sheaves on $\mathcal{X}$ can be described concretely as equivariant etale sheaves on $U$ (with descent data along the groupoid $R = U \times_{\mathcal{X}} U$).
+
+The etale cohomology $H^i_{\mathrm{et}}(\mathcal{X}, \mathcal{F})$ can be computed via the simplicial scheme $U_\bullet$ (the nerve of the atlas): there is a spectral sequence
+$$E_1^{p,q} = H^q_{\mathrm{et}}(U_p, \mathcal{F}) \Rightarrow H^{p+q}_{\mathrm{et}}(\mathcal{X}, \mathcal{F}).$$
+
+For $\mathcal{X} = [X/G]$ with $G$ finite, this recovers equivariant cohomology: $H^i_{\mathrm{et}}([X/G], \mathcal{F}) = H^i_G(X, \mathcal{F})$.
+</Remark>
+
+---
+
+## Summary
+
+Deligne--Mumford stacks are algebraic stacks with an etale atlas and unramified diagonal, characterized by having discrete (in characteristic zero, finite) automorphism groups. They provide the correct framework for virtually all classical moduli problems in algebraic geometry and admit a rich geometric theory closely paralleling that of schemes and algebraic spaces.

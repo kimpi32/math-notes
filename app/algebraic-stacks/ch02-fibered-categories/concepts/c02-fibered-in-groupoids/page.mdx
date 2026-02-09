@@ -1,0 +1,268 @@
+export const metadata = {
+  title: 'Categories Fibered in Groupoids -- Algebraic Stacks -- Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "2. 올 범주", href: "/algebraic-stacks/ch02-fibered-categories" },
+  { label: "Concept -- Categories Fibered in Groupoids" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Categories Fibered in Groupoids
+
+Categories fibered in groupoids (CFGs) are the natural categorical structures underlying moduli problems. The key insight is that in moduli theory, we classify objects **up to isomorphism**, meaning all morphisms between objects in the same fiber should be invertible. This is precisely the condition that the fibers are groupoids.
+
+---
+
+## Groupoids
+
+<Definition title="Groupoid" number="2.2.1">
+A **groupoid** is a category in which every morphism is an isomorphism. Equivalently, a groupoid is a category $\mathcal{G}$ such that for any two objects $x, y \in \mathcal{G}$, the set $\operatorname{Hom}_\mathcal{G}(x, y)$ is either empty or a torsor for $\operatorname{Aut}(x)$ (equivalently, for $\operatorname{Aut}(y)$).
+
+A groupoid is **connected** if any two objects are isomorphic. Every groupoid decomposes into connected components. A connected groupoid is determined up to equivalence by the automorphism group of any of its objects.
+</Definition>
+
+<Example id="groupoid-sets" title="Sets as groupoids">
+Any set $S$ can be viewed as a **discrete groupoid**: the objects are elements of $S$, and the only morphisms are identities. The isomorphism classes form the set $S$ itself. A discrete groupoid has trivial automorphism groups.
+</Example>
+
+<Example id="groupoid-group" title="Groups as groupoids">
+Any group $G$ defines a groupoid $BG$ with a single object $*$ and $\operatorname{Aut}(*) = G$. This is a connected groupoid with $|BG| = \{*\}$ (one isomorphism class). The groupoid cardinality is $|BG| = 1/|G|$ in the sense of Baez-Dolan.
+
+More generally, any group action $G \curvearrowright S$ defines a **translation groupoid** $[S/G]$ (or **action groupoid**): objects are elements of $S$, and $\operatorname{Hom}(s, t) = \{g \in G : g \cdot s = t\}$.
+</Example>
+
+<Example id="groupoid-fundamental" title="Fundamental groupoid">
+For a topological space $X$, the **fundamental groupoid** $\Pi_1(X)$ has points of $X$ as objects and homotopy classes of paths as morphisms. The automorphism group of $x \in X$ is $\pi_1(X, x)$. Connected components of $\Pi_1(X)$ correspond to path components of $X$.
+</Example>
+
+---
+
+## Definition of CFG
+
+<Definition title="Category fibered in groupoids" number="2.2.2">
+A fibered category $p : \mathcal{F} \to \mathcal{C}$ is **fibered in groupoids** if for every object $U \in \mathcal{C}$, the fiber category $\mathcal{F}_U$ is a groupoid -- that is, every morphism in $\mathcal{F}_U$ is an isomorphism.
+
+Equivalently, $p : \mathcal{F} \to \mathcal{C}$ is fibered in groupoids if and only if:
+1. For every morphism $f : V \to U$ in $\mathcal{C}$ and every $x \in \mathcal{F}_U$, there exists a morphism $\phi : y \to x$ with $p(\phi) = f$.
+2. **Every** morphism in $\mathcal{F}$ is cartesian.
+
+Condition (2) is the key simplification: in a CFG, one does not need to distinguish between cartesian and non-cartesian morphisms.
+</Definition>
+
+<Remark title="Why condition (2) is equivalent">
+If every morphism in $\mathcal{F}$ lying over an identity is an isomorphism (i.e., fibers are groupoids), then every morphism in $\mathcal{F}$ is automatically cartesian. The converse also holds. To see why: suppose $\phi : y \to x$ lies over $f : V \to U$ and we want to verify the cartesian property. Given $\psi : z \to x$ lying over $f \circ h$, we need a unique lift $\chi : z \to y$ over $h$. Since the fiber is a groupoid, any two lifts differ by an automorphism that maps to $\operatorname{id}$ in the base, and such an automorphism must be the identity (by the universal property inherited from the existence of some cartesian lift).
+</Remark>
+
+<Example id="cfg-alternative" title="Alternative characterization">
+A category $\mathcal{F}$ over $\mathcal{C}$ is fibered in groupoids if and only if for every commutative triangle in $\mathcal{C}$:
+$$W \xrightarrow{g} V \xrightarrow{f} U, \quad f \circ g = h$$
+and every pair of morphisms $\phi : y \to x$ over $f$ and $\psi : z \to x$ over $h$ in $\mathcal{F}$, there exists a **unique** morphism $\chi : z \to y$ over $g$ with $\phi \circ \chi = \psi$.
+
+This is a very practical criterion: given any diagram in the base and compatible lifts of two of the three arrows, the third lift exists uniquely.
+</Example>
+
+---
+
+## Examples from Moduli Problems
+
+<Example id="cfg-elliptic-curves" title="Elliptic curves">
+Define $\mathcal{M}_{1,1}$ over $\mathbf{Sch}$: objects over $S$ are elliptic curves $E \to S$ (smooth proper morphisms with geometrically connected fibers of genus 1, equipped with a section $e : S \to E$). Morphisms over $f : T \to S$ are isomorphisms $E_T \cong f^*E$ of elliptic curves over $T$ respecting the sections.
+
+This is fibered in groupoids because:
+- Pullback exists by base change.
+- Morphisms in each fiber are isomorphisms of elliptic curves.
+- The fiber $\mathcal{M}_{1,1}(\operatorname{Spec} k)$ is the groupoid of elliptic curves over $k$, where $\operatorname{Aut}(E) \neq \{1\}$ in general (e.g., $j = 0$ has extra automorphisms in characteristic $\neq 2, 3$).
+
+The fact that $\operatorname{Aut}(E)$ can be nontrivial is precisely why $\mathcal{M}_{1,1}$ is a stack rather than a scheme.
+</Example>
+
+<Example id="cfg-vector-bundles" title="Vector bundles of rank n">
+Define $\mathcal{B}un_n$ over $\mathbf{Sch}$: objects over $S$ are vector bundles (locally free sheaves) $\mathcal{E}$ of rank $n$ on $S$. Morphisms from $(T, \mathcal{F})$ to $(S, \mathcal{E})$ over $f : T \to S$ are isomorphisms $\mathcal{F} \cong f^*\mathcal{E}$.
+
+This is fibered in groupoids. The fiber over $S$ is the groupoid of rank-$n$ vector bundles on $S$. The automorphism group of $\mathcal{E}$ is $\operatorname{Aut}(\mathcal{E}) = GL_n(\Gamma(S, \operatorname{End}(\mathcal{E})))$.
+
+For $n = 1$, this is the Picard groupoid, and the set of isomorphism classes is $\operatorname{Pic}(S)$.
+</Example>
+
+<Example id="cfg-line-bundles" title="Line bundles (the Picard stack)">
+The special case $n = 1$ of the previous example: $\mathcal{P}ic$ over $\mathbf{Sch}$ with objects $(S, \mathcal{L})$ where $\mathcal{L}$ is an invertible sheaf on $S$. For any line bundle $\mathcal{L}$, $\operatorname{Aut}(\mathcal{L}) = \mathcal{O}_S(S)^{\times} = \mathbb{G}_m(S)$. So every object has automorphism group $\mathbb{G}_m$.
+
+As a stack, $\mathcal{P}ic \cong B\mathbb{G}_m$, the classifying stack of $\mathbb{G}_m$.
+</Example>
+
+<Example id="cfg-curves-genus-g" title="Smooth curves of genus g">
+The fibered category $\mathcal{M}_g$ over $\mathbf{Sch}$ parametrizes smooth proper curves of genus $g$. Objects over $S$ are smooth proper morphisms $C \to S$ with geometrically connected fibers of genus $g$. Morphisms are isomorphisms compatible with base change.
+
+- For $g = 0$: every fiber is $\mathbb{P}^1$, but $\operatorname{Aut}(\mathbb{P}^1) = PGL_2$. So $\mathcal{M}_0 \cong BPGL_2$.
+- For $g = 1$ (without marked point): $\operatorname{Aut}(E)$ contains the elliptic curve itself (translation), so automorphisms are large.
+- For $g \geq 2$: $\operatorname{Aut}(C)$ is a finite group (bounded by $84(g-1)$ by Hurwitz), and is trivial for a "general" curve.
+
+The Deligne-Mumford theorem states that $\mathcal{M}_g$ (for $g \geq 2$) is a smooth proper Deligne-Mumford stack over $\mathbb{Z}$, and its coarse moduli space $M_g$ is a quasi-projective variety.
+</Example>
+
+<Example id="cfg-classifying-stack" title="The classifying stack BG">
+For an algebraic group $G$ over $S$, the **classifying stack** $BG$ is the CFG over $\mathbf{Sch}/S$ where $BG(T) = \{\text{principal } G_T\text{-torsors over } T\}$. Morphisms are $G$-equivariant isomorphisms.
+
+Key features:
+- $BG(\operatorname{Spec} k) = \{G\text{-torsors over } k\} = H^1(k, G)$ (as a pointed set, first Galois cohomology).
+- Every object has $\operatorname{Aut}(P) = G(T)$ when $P$ is trivial (and a form of $G$ in general).
+- $BG$ is an Artin stack (algebraic stack in the sense of Artin).
+
+Specific instances:
+- $B\mathbb{G}_m$: classifies line bundles. The Picard stack.
+- $BGL_n$: classifies rank-$n$ vector bundles.
+- $B\mu_n$: classifies $\mu_n$-torsors, related to $n$-th roots of line bundles.
+- $B(\mathbb{Z}/2\mathbb{Z})$: classifies etale double covers.
+</Example>
+
+<Example id="cfg-pointed-curves" title="Pointed curves">
+The fibered category $\mathcal{M}_{g,n}$ over $\mathbf{Sch}$ parametrizes smooth curves of genus $g$ with $n$ distinct marked points. Objects over $S$ are tuples $(C \to S, \sigma_1, \ldots, \sigma_n)$ where $\sigma_i : S \to C$ are disjoint sections. Morphisms are isomorphisms respecting base change and marked points.
+
+The condition $2g - 2 + n > 0$ ensures stability (finite automorphisms). For example:
+- $\mathcal{M}_{0,3}$: genus 0 with 3 points. $\operatorname{Aut} = 1$ (3 points determine an isomorphism of $\mathbb{P}^1$), so $\mathcal{M}_{0,3} \cong \operatorname{Spec} \mathbb{Z}$.
+- $\mathcal{M}_{0,4}$: genus 0 with 4 points. $\mathcal{M}_{0,4} \cong \mathbb{P}^1 \setminus \{0, 1, \infty\}$ (the cross-ratio).
+- $\mathcal{M}_{1,1}$: the moduli of elliptic curves, a Deligne-Mumford stack with coarse space the $j$-line.
+</Example>
+
+---
+
+## The Fiber Functor and Its Properties
+
+<Definition title="Fiber functor" number="2.2.3">
+Given a CFG $p : \mathcal{F} \to \mathcal{C}$ with a cleavage, the associated **fiber functor** (or **pseudofunctor**) is:
+$$F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Grpd}$$
+$$U \mapsto \mathcal{F}_U, \quad (f : V \to U) \mapsto (f^* : \mathcal{F}_U \to \mathcal{F}_V)$$
+
+Since all fibers are groupoids, this is a pseudofunctor landing in the 2-category $\mathbf{Grpd}$ of groupoids, rather than $\mathbf{Cat}$.
+
+The **set of isomorphism classes** defines a presheaf of sets:
+$$\bar{F} : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}, \quad U \mapsto \pi_0(\mathcal{F}_U) = \operatorname{Ob}(\mathcal{F}_U)/\!\!\cong$$
+</Definition>
+
+<Example id="fiber-functor-moduli" title="From CFG to moduli functor">
+For $\mathcal{M}_g$, the set of isomorphism classes $\pi_0(\mathcal{M}_g(S))$ is the set of isomorphism classes of smooth genus-$g$ curves over $S$. Taking $S = \operatorname{Spec} k$ for an algebraically closed field $k$, this is the classical moduli set $M_g(k)$.
+
+However, the passage $\mathcal{F}_U \mapsto \pi_0(\mathcal{F}_U)$ **loses information** about automorphisms. Two CFGs can have the same isomorphism classes but different automorphism groups, hence different stacks. This is why working with the full groupoid-valued functor is essential.
+</Example>
+
+<Example id="fiber-functor-BG" title="Fiber functor for BG">
+For $BG$ where $G$ is a finite group over a field $k$, the fiber functor sends $S$ to the groupoid of $G$-torsors over $S$. The presheaf of isomorphism classes sends $S$ to $H^1_{\mathrm{et}}(S, G)$.
+
+Over $\operatorname{Spec} k$ with $k$ algebraically closed: every $G$-torsor is trivial, so $\pi_0(BG(k)) = \{*\}$ (a single point). But $BG(k) \simeq BG$ as a groupoid (one object with automorphism group $G$). The automorphism information is invisible at the level of isomorphism classes but crucial for the stack structure.
+</Example>
+
+---
+
+## CFGs vs. Fibered Categories
+
+<Remark title="Why groupoids suffice for moduli">
+In algebraic geometry, moduli problems naturally produce CFGs rather than arbitrary fibered categories because:
+
+1. **Moduli classify up to isomorphism**: The fundamental question is "what are the isomorphism classes of objects?" not "what are the homomorphisms?" This forces all fiber morphisms to be invertible.
+
+2. **Descent is for isomorphisms**: When gluing objects from local data, the compatibility condition involves isomorphisms on overlaps, not arbitrary morphisms.
+
+3. **Representability**: A CFG $\mathcal{F}$ over $\mathbf{Sch}$ is representable by a scheme $X$ if and only if $\mathcal{F}$ is equivalent to the CFG $h_X$ with $h_X(S) = \operatorname{Hom}(S, X)$ (viewed as a discrete groupoid). Schemes always give CFGs (in fact, sheaves of sets).
+
+However, for derived algebraic geometry and higher stacks, one works with fibered categories that are not necessarily groupoids (e.g., the category of perfect complexes has non-invertible morphisms in its fibers).
+</Remark>
+
+---
+
+## Morphisms of CFGs
+
+<Definition title="Morphisms and 2-morphisms of CFGs" number="2.2.4">
+Let $\mathcal{F}, \mathcal{G}$ be CFGs over $\mathcal{C}$.
+
+A **1-morphism** $F : \mathcal{F} \to \mathcal{G}$ is a functor commuting with the structure functors to $\mathcal{C}$ (not necessarily preserving cartesian arrows -- this is automatic for CFGs!).
+
+A **2-morphism** $\alpha : F \Rightarrow G$ is a natural transformation with vertical components (lying over identities in $\mathcal{C}$).
+
+CFGs over $\mathcal{C}$ form a **2-category** $\mathbf{CFG}(\mathcal{C})$. We say $F$ is an **equivalence** if there exists $G : \mathcal{G} \to \mathcal{F}$ with $G \circ F \cong \operatorname{id}_\mathcal{F}$ and $F \circ G \cong \operatorname{id}_\mathcal{G}$ (2-isomorphisms).
+</Definition>
+
+<Example id="morphism-forget-section" title="Forgetting the section">
+The morphism $\mathcal{M}_{1,1} \to \mathcal{M}_1$ that sends $(E, e)$ (an elliptic curve with origin) to $E$ (the underlying genus-1 curve, forgetting the marked point) is a morphism of CFGs. On fibers over $S$, this is the functor that forgets the section.
+
+This is not an equivalence because $\mathcal{M}_1$ has "more" automorphisms: the automorphism group of an elliptic curve in $\mathcal{M}_1$ includes all translations, while in $\mathcal{M}_{1,1}$ only origin-preserving automorphisms survive.
+</Example>
+
+<Example id="morphism-determinant" title="Determinant morphism">
+The **determinant** gives a morphism of CFGs:
+$$\det : \mathcal{B}un_n \to \mathcal{P}ic$$
+sending a rank-$n$ vector bundle $\mathcal{E}$ to its determinant line bundle $\det(\mathcal{E}) = \bigwedge^n \mathcal{E}$. This is compatible with pullback since $\det(f^*\mathcal{E}) \cong f^*\det(\mathcal{E})$.
+</Example>
+
+---
+
+## Fiber Products of CFGs
+
+<Definition title="2-fiber product" number="2.2.5">
+Given morphisms $F : \mathcal{X} \to \mathcal{Z}$ and $G : \mathcal{Y} \to \mathcal{Z}$ of CFGs over $\mathcal{C}$, the **2-fiber product** $\mathcal{X} \times_\mathcal{Z} \mathcal{Y}$ is the CFG over $\mathcal{C}$ whose fiber over $U \in \mathcal{C}$ is the groupoid:
+
+$$(\mathcal{X} \times_\mathcal{Z} \mathcal{Y})(U) = \{(x, y, \alpha) : x \in \mathcal{X}(U), y \in \mathcal{Y}(U), \alpha : F(x) \xrightarrow{\sim} G(y) \text{ in } \mathcal{Z}(U)\}$$
+
+Morphisms $(x, y, \alpha) \to (x', y', \alpha')$ are pairs $(\phi : x \to x', \psi : y \to y')$ with $\alpha' \circ F(\phi) = G(\psi) \circ \alpha$.
+
+This is the correct "homotopy pullback" -- it remembers the isomorphism $\alpha$ rather than requiring strict equality $F(x) = G(y)$.
+</Definition>
+
+<Example id="fiber-product-inertia" title="Inertia stack">
+Taking $F = G = \operatorname{id} : \mathcal{X} \to \mathcal{X}$ and forming the 2-fiber product $\mathcal{X} \times_{\mathcal{X} \times \mathcal{X}} \mathcal{X}$, we get the **inertia stack** $\mathcal{I}_\mathcal{X}$:
+
+$$\mathcal{I}_\mathcal{X}(U) = \{(x, \alpha) : x \in \mathcal{X}(U), \alpha \in \operatorname{Aut}(x)\}$$
+
+The inertia stack encodes the automorphism groups of objects. For a scheme $X$ (viewed as a CFG), $\mathcal{I}_X = X$ (all automorphisms are trivial). For $BG$, the inertia stack is $[G/G]$ where $G$ acts on itself by conjugation.
+</Example>
+
+<Example id="fiber-product-level" title="Level structures">
+Consider the morphism $\mathcal{M}_{1,1} \to B(\mathbb{Z}/n\mathbb{Z})^2$ that sends an elliptic curve $E$ to its $n$-torsion $E[n]$ (as a torsor). The fiber product $\mathcal{M}_{1,1}(n) = \mathcal{M}_{1,1} \times_{B(\mathbb{Z}/n\mathbb{Z})^2} \operatorname{Spec}\mathbb{Z}[1/n]$ parametrizes elliptic curves with full level-$n$ structure. For $n \geq 3$, the automorphisms are killed and $\mathcal{M}_{1,1}(n)$ is a scheme (the modular curve $Y(n)$).
+</Example>
+
+---
+
+## The Isom Presheaf
+
+<Definition title="Isom presheaf" number="2.2.6">
+Let $p : \mathcal{F} \to \mathcal{C}$ be a CFG over a site $\mathcal{C}$. For two objects $x, y \in \mathcal{F}_U$, the **Isom presheaf** is the presheaf on $\mathcal{C}/U$ defined by:
+
+$$\operatorname{Isom}(x, y)(f : V \to U) = \operatorname{Isom}_{\mathcal{F}_V}(f^*x, f^*y)$$
+
+This presheaf plays a central role in the definition of stacks: $\mathcal{F}$ is a **prestack** (or **separated prestack**) if $\operatorname{Isom}(x, y)$ is a sheaf for all $x, y$.
+</Definition>
+
+<Example id="isom-sheaf-BG" title="Isom sheaf for BG">
+For $BG$ with $G$ a smooth group scheme, let $P, Q$ be two $G$-torsors over $S$. Then $\operatorname{Isom}(P, Q)$ is the sheaf on $\mathbf{Sch}/S$ sending $T \to S$ to the set of $G$-equivariant isomorphisms $P_T \to Q_T$. This is representable by the scheme $\operatorname{Isom}_G(P, Q) = P \times^G Q^{\mathrm{op}}$ (a twisted form of $G$).
+
+In particular, $\operatorname{Aut}(P) = \operatorname{Isom}(P, P)$ is a form of $G$ (equal to $G$ when $P$ is trivial).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="CFGs in the landscape">
+Categories fibered in groupoids sit at a crucial position:
+
+$$\text{Presheaves of sets} \hookrightarrow \text{CFGs} \hookrightarrow \text{Fibered categories}$$
+
+- A presheaf of sets is a CFG where all fibers are discrete groupoids (only identity automorphisms).
+- A CFG is a fibered category where all fibers are groupoids.
+- General fibered categories allow non-invertible fiber morphisms.
+
+For the theory of algebraic stacks, CFGs are the right level of generality: they capture automorphisms (which schemes miss) without the extra complexity of non-invertible morphisms (which would require higher categorical technology).
+
+The next step is to impose **descent conditions** on a CFG, turning it from a "prestack" into a genuine **stack**.
+</Remark>

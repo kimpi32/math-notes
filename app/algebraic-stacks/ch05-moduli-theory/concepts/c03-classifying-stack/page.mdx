@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'Classifying Stack BG — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "5. 모듈라이 이론", href: "/algebraic-stacks/ch05-moduli-theory" },
+  { label: "Concept — Classifying Stack BG" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Classifying Stack $BG$
+
+The classifying stack $BG$ is a fundamental construction in the theory of algebraic stacks. It is the algebro-geometric analogue of the classifying space in topology and serves as the universal moduli stack for principal $G$-bundles (torsors).
+
+---
+
+## 1. Definition
+
+<Definition title="Classifying Stack">
+Let $G$ be a group scheme over a base scheme $S$. The **classifying stack** $BG = [S/G]$ is the stack over $(\mathsf{Sch}/S)$ defined by:
+- **Objects over $T$**: principal $G$-bundles (right $G$-torsors) $P \to T$.
+- **Morphisms**: $G$-equivariant isomorphisms of torsors.
+
+Equivalently, $BG$ is the quotient stack $[\mathrm{Spec}\, \mathcal{O}_S / G]$ where $G$ acts trivially on the point $\mathrm{Spec}\, \mathcal{O}_S$.
+</Definition>
+
+<Definition title="Principal G-Bundle (Torsor)">
+Let $G$ be a group scheme over $S$, and let $T$ be an $S$-scheme. A **principal $G$-bundle** (or **$G$-torsor**) over $T$ is a scheme $P \to T$ with a right $G$-action $P \times_S G \to P$ such that:
+1. $P \to T$ is faithfully flat and locally of finite presentation.
+2. The map $P \times_S G \to P \times_T P$ given by $(p, g) \mapsto (p, pg)$ is an isomorphism.
+
+The second condition says the action is simply transitive on fibers.
+</Definition>
+
+---
+
+## 2. Basic Properties
+
+<Theorem title="Properties of BG">
+Let $G$ be a smooth group scheme of finite type over $S$. Then:
+1. $BG$ is an algebraic stack (Artin stack) over $S$.
+2. The structure morphism $BG \to S$ is smooth of relative dimension $-\dim G$.
+3. The unique point $\mathrm{Spec}\, k \to BG$ (corresponding to the trivial torsor) has automorphism group $G$.
+4. $BG$ has a single point: every $G$-torsor over an algebraically closed field is trivial.
+</Theorem>
+
+<Remark title="Negative Dimension">
+The "dimension" of $BG$ is $-\dim G$. This makes sense in the stacky world: the atlas $\mathrm{Spec}\, k \to BG$ is a smooth cover of relative dimension $\dim G$, and the atlas has dimension 0, so $\dim BG = 0 - \dim G$.
+</Remark>
+
+<Example title="$B\mathbb{G}_m$ — Classifying Stack of Line Bundles">
+The classifying stack $B\mathbb{G}_m$ parametrizes line bundles:
+$$B\mathbb{G}_m(T) = \lbrace \text{line bundles on } T \rbrace / \cong$$
+This is because $\mathbb{G}_m$-torsors correspond exactly to line bundles: given a line bundle $\mathcal{L}$, the associated frame bundle $\underline{\mathrm{Isom}}(\mathcal{O}_T, \mathcal{L})$ is a $\mathbb{G}_m$-torsor.
+
+The Picard group $\mathrm{Pic}(T) = H^1(T, \mathbb{G}_m)$ classifies $\mathbb{G}_m$-torsors on $T$. Thus $[T, B\mathbb{G}_m] \cong \mathrm{Pic}(T)$ (where $[T, B\mathbb{G}_m]$ denotes isomorphism classes of maps).
+</Example>
+
+<Example title="$B\mathrm{GL}_n$ — Classifying Stack of Vector Bundles">
+The stack $B\mathrm{GL}_n$ classifies rank-$n$ vector bundles:
+$$B\mathrm{GL}_n(T) = \lbrace \text{rank-}n \text{ vector bundles on } T \rbrace / \cong$$
+A $\mathrm{GL}_n$-torsor $P \to T$ gives a vector bundle via the associated bundle construction: $\mathcal{E} = P \times^{\mathrm{GL}_n} \mathbb{A}^n$. Conversely, a vector bundle $\mathcal{E}$ gives the frame bundle $\underline{\mathrm{Isom}}(\mathcal{O}_T^n, \mathcal{E})$.
+
+We have $\dim B\mathrm{GL}_n = -n^2$.
+</Example>
+
+<Example title="$B(\mathbb{Z}/n\mathbb{Z})$ — Classifying Stack of Cyclic Covers">
+Over a base where $n$ is invertible, the stack $B(\mathbb{Z}/n\mathbb{Z})$ classifies etale $\mathbb{Z}/n\mathbb{Z}$-torsors, which correspond to degree-$n$ cyclic etale covers. For $T$ connected, these are classified by $H^1_{\text{et}}(T, \mathbb{Z}/n\mathbb{Z}) \cong \mathrm{Hom}(\pi_1^{\text{et}}(T), \mathbb{Z}/n\mathbb{Z})$.
+</Example>
+
+---
+
+## 3. Quotient Stack Interpretation
+
+<Definition title="Quotient Stack">
+If $G$ acts on a scheme $X$ over $S$, the **quotient stack** $[X/G]$ assigns to $T$ the groupoid of pairs $(P, \phi)$ where $P$ is a $G$-torsor over $T$ and $\phi: P \to X$ is a $G$-equivariant morphism. When $X = S$ with trivial action, $[S/G] = BG$.
+</Definition>
+
+<Example title="$[\mathbb{A}^1 / \mathbb{G}_m]$">
+Consider $\mathbb{G}_m$ acting on $\mathbb{A}^1$ by multiplication. The quotient stack $[\mathbb{A}^1/\mathbb{G}_m]$ has two points:
+- The open point $[(\mathbb{A}^1 \setminus \lbrace 0 \rbrace)/\mathbb{G}_m] \cong \mathrm{Spec}\, k$ (the orbit of any nonzero point, with trivial stabilizer).
+- The closed point $[\lbrace 0 \rbrace/\mathbb{G}_m] \cong B\mathbb{G}_m$ (the origin, with full $\mathbb{G}_m$ stabilizer).
+
+This stack is "the stacky point with a thickening direction" and provides a local model for understanding stacky structure near points with $\mathbb{G}_m$ stabilizer.
+</Example>
+
+<Example title="Projective Space as Quotient">
+The projective space $\mathbb{P}^n$ can be realized as the quotient stack
+$$\mathbb{P}^n = [(\mathbb{A}^{n+1} \setminus \lbrace 0 \rbrace) / \mathbb{G}_m]$$
+Since $\mathbb{G}_m$ acts freely on $\mathbb{A}^{n+1} \setminus \lbrace 0 \rbrace$, the quotient stack is actually a scheme. The tautological line bundle on $\mathbb{P}^n$ corresponds to the $\mathbb{G}_m$-torsor $\mathbb{A}^{n+1} \setminus \lbrace 0 \rbrace \to \mathbb{P}^n$.
+</Example>
+
+---
+
+## 4. Cohomology of $BG$
+
+<Theorem title="Cohomology Ring of $B\mathrm{GL}_n$">
+The Chow ring of $B\mathrm{GL}_n$ (in the sense of equivariant intersection theory) is the polynomial ring in the Chern classes:
+$$A^*(B\mathrm{GL}_n) \cong \mathbb{Z}[c_1, c_2, \ldots, c_n]$$
+where $c_i$ has degree $i$. This corresponds to the fact that characteristic classes of vector bundles are generated by Chern classes.
+</Theorem>
+
+<Example title="$A^*(B\mathbb{G}_m)$">
+Since $\mathbb{G}_m = \mathrm{GL}_1$, we have
+$$A^*(B\mathbb{G}_m) \cong \mathbb{Z}[c_1]$$
+where $c_1$ is the first Chern class. This is the algebraic analogue of $H^*(\mathbb{CP}^{\infty}; \mathbb{Z}) = \mathbb{Z}[c_1]$ in topology.
+
+Concretely, $A^*(B\mathbb{G}_m)$ can be computed as $\varprojlim A^*(\mathbb{P}^n) = \varprojlim \mathbb{Z}[h]/(h^{n+1}) = \mathbb{Z}[[h]]$, but properly interpreted as a polynomial ring.
+</Example>
+
+<Example title="$A^*(B\mathrm{PGL}_2)$">
+The Chow ring of $B\mathrm{PGL}_2$ is more subtle. We have
+$$A^*(B\mathrm{PGL}_2) \otimes \mathbb{Q} \cong \mathbb{Q}[c_2, c_3]$$
+where $c_2$ and $c_3$ have degrees 2 and 3 respectively. The integral Chow ring has 2-torsion phenomena reflecting the non-trivial center $\mu_2 \subset \mathrm{SL}_2 \to \mathrm{PGL}_2$.
+</Example>
+
+---
+
+## 5. Maps to $BG$ and Descent
+
+<Theorem title="Maps to BG as Torsors">
+For any algebraic stack $\mathcal{X}$, there is a natural equivalence of categories:
+$$\mathrm{Hom}(\mathcal{X}, BG) \simeq \lbrace \text{principal } G\text{-bundles on } \mathcal{X} \rbrace$$
+In particular, a morphism $X \to BG$ from a scheme $X$ is the same as a $G$-torsor $P \to X$.
+</Theorem>
+
+<Example title="Morphisms $\mathrm{Spec}\, k \to B\mathbb{G}_m$">
+A morphism $\mathrm{Spec}\, k \to B\mathbb{G}_m$ is a line bundle on $\mathrm{Spec}\, k$. Since all line bundles on $\mathrm{Spec}\, k$ are trivial, there is (up to isomorphism) a unique morphism $\mathrm{Spec}\, k \to B\mathbb{G}_m$, but its automorphism group is $\mathbb{G}_m(k) = k^{\times}$.
+</Example>
+
+<Example title="Maps from $\mathbb{P}^1$ to $B\mathbb{G}_m$">
+The set of isomorphism classes of maps $\mathbb{P}^1 \to B\mathbb{G}_m$ is $\mathrm{Pic}(\mathbb{P}^1) \cong \mathbb{Z}$, with the map of degree $n$ corresponding to $\mathcal{O}(n)$. The automorphism group of $\mathcal{O}(n)$ is $\mathbb{G}_m = \mathrm{Aut}(\mathcal{O}(n))$.
+</Example>
+
+---
+
+## 6. Extensions and Gerbes
+
+<Definition title="Gerbe">
+A **gerbe** over $S$ banded by an abelian group scheme $A$ is a stack $\mathcal{G} \to S$ such that:
+1. Locally in some topology (e.g., etale), $\mathcal{G}$ has a section.
+2. Any two objects are locally isomorphic.
+3. The automorphism group of any object is isomorphic to $A$.
+
+Gerbes banded by $A$ over $S$ are classified by $H^2(S, A)$.
+</Definition>
+
+<Example title="$\mathbb{G}_m$-Gerbe and Brauer Group">
+$\mathbb{G}_m$-gerbes over $S$ are classified by $H^2(S, \mathbb{G}_m)$, which is the cohomological Brauer group $\mathrm{Br}(S)$. For $S = \mathrm{Spec}\, k$ with $k$ a field, $\mathrm{Br}(k)$ classifies central simple algebras over $k$ up to Morita equivalence.
+
+The classifying stack $B\mathbb{G}_m$ is itself a $\mathbb{G}_m$-gerbe over the point, corresponding to the trivial element of $\mathrm{Br}(k) = 0$ (the Brauer group of a point is trivial).
+</Example>
+
+<Example title="Severi-Brauer Varieties">
+A Severi-Brauer variety of dimension $n$ over $k$ is a variety $X$ such that $X_{\bar{k}} \cong \mathbb{P}^n_{\bar{k}}$. These are classified by $H^1(k, \mathrm{PGL}_{n+1})$, which corresponds to maps $\mathrm{Spec}\, k \to B\mathrm{PGL}_{n+1}$. The Brauer group element associated to a Severi-Brauer variety via $H^1(k, \mathrm{PGL}_{n+1}) \to H^2(k, \mathbb{G}_m)$ is its **Brauer class**.
+</Example>
+
+---
+
+## 7. Fiber Sequences and Exact Sequences
+
+<Theorem title="Fiber Sequence for Group Extensions">
+Given a short exact sequence of group schemes
+$$1 \to N \to G \to Q \to 1,$$
+there is a fiber sequence of classifying stacks:
+$$BN \to BG \to BQ$$
+and a corresponding long exact sequence in non-abelian cohomology:
+$$\cdots \to H^0(S, Q) \to H^1(S, N) \to H^1(S, G) \to H^1(S, Q) \xrightarrow{\delta} H^2(S, N)$$
+(when $N$ is central in $G$).
+</Theorem>
+
+<Example title="$1 \to \mathbb{G}_m \to \mathrm{GL}_n \to \mathrm{PGL}_n \to 1$">
+The exact sequence of groups gives:
+$$B\mathbb{G}_m \to B\mathrm{GL}_n \to B\mathrm{PGL}_n$$
+At the level of cohomology over $\mathrm{Spec}\, k$:
+$$k^{\times} \to H^1(k, \mathbb{G}_m) \to H^1(k, \mathrm{GL}_n) \to H^1(k, \mathrm{PGL}_n) \xrightarrow{\delta} H^2(k, \mathbb{G}_m)$$
+Since $H^1(k, \mathrm{GL}_n) = 0$ (Hilbert 90), this gives an injection $H^1(k, \mathrm{PGL}_n) \hookrightarrow \mathrm{Br}(k)$, identifying $\mathrm{PGL}_n$-torsors with Brauer classes of degree $n$.
+</Example>
+
+<Example title="$1 \to \mu_n \to \mathbb{G}_m \xrightarrow{(\cdot)^n} \mathbb{G}_m \to 1$">
+The Kummer sequence gives a fiber sequence
+$$B\mu_n \to B\mathbb{G}_m \xrightarrow{(\cdot)^n} B\mathbb{G}_m$$
+Over a scheme $S$ (with $n$ invertible), this yields the Kummer exact sequence:
+$$\mathcal{O}(S)^{\times} \xrightarrow{(\cdot)^n} \mathcal{O}(S)^{\times} \to H^1(S, \mu_n) \to \mathrm{Pic}(S) \xrightarrow{(\cdot)^n} \mathrm{Pic}(S) \to H^2(S, \mu_n) \to \mathrm{Br}(S)$$
+</Example>
+
+---
+
+## 8. Applications
+
+<Example title="Moduli of Elliptic Curves as Quotient">
+Via the Weierstrass equation $y^2 = x^3 + ax + b$ (in characteristic $\neq 2, 3$), the moduli stack of elliptic curves can be presented as
+$$\mathcal{M}_{1,1} \cong [U / \mathbb{G}_m]$$
+where $U = \mathrm{Spec}\, \mathbb{Z}[1/6][a, b, \Delta^{-1}]$ with $\Delta = -16(4a^3 + 27b^2)$, and $\mathbb{G}_m$ acts by $\lambda \cdot (a, b) = (\lambda^4 a, \lambda^6 b)$.
+
+The map $U \to \mathcal{M}_{1,1}$ is a $\mathbb{G}_m$-torsor, giving the atlas. The $j$-invariant $j = -1728 \cdot \frac{(4a)^3}{\Delta}$ is the $\mathbb{G}_m$-invariant function defining the coarse moduli $\mathbb{A}^1_j$.
+</Example>
+
+<Example title="Vector Bundles on a Curve and $\mathrm{Bun}_G$">
+For a smooth projective curve $C$ and a reductive group $G$, the moduli stack $\mathrm{Bun}_G(C)$ of principal $G$-bundles on $C$ is a smooth algebraic stack. It can be described via the uniformization theorem:
+$$\mathrm{Bun}_G(C) \cong G(\mathcal{K}) \backslash G(\mathbb{A}) / G(\mathcal{O})$$
+in the function field / adelic picture. Here $\mathcal{K}$ is the function field, $\mathbb{A}$ is the ring of adeles, and $\mathcal{O}$ is the ring of integral adeles.
+
+For $G = \mathrm{GL}_n$, $\mathrm{Bun}_G(C)$ is the stack of vector bundles of rank $n$ on $C$. This stack plays a central role in the geometric Langlands program.
+</Example>

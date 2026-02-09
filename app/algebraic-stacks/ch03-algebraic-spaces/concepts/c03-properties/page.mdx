@@ -1,0 +1,266 @@
+export const metadata = {
+  title: 'Properties of Algebraic Spaces — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "3. 대수 공간", href: "/algebraic-stacks/ch03-algebraic-spaces" },
+  { label: "개념 — Properties of Algebraic Spaces" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Properties of Algebraic Spaces
+
+Algebraic spaces inherit many properties from schemes through their étale atlases. The key principle is: a property of an algebraic space $X$ is defined by requiring that the property holds for an étale atlas $U \to X$ (when the property is étale-local), or by imposing conditions on the diagonal or structure morphism. This section systematically develops the main properties.
+
+---
+
+## 1. Étale-Local Properties
+
+<Definition title="Étale-local property">
+A property $\mathcal{P}$ of schemes is **étale-local** if for any étale surjection $U \to X$ of schemes, $X$ has $\mathcal{P}$ if and only if $U$ has $\mathcal{P}$.
+</Definition>
+
+Many important properties are étale-local:
+- Reduced, normal, regular
+- Cohen-Macaulay, Gorenstein
+- Locally noetherian, locally of finite type
+- Dimension (locally)
+
+For an algebraic space $X$ with étale atlas $U \to X$, we say $X$ has an étale-local property $\mathcal{P}$ if $U$ has $\mathcal{P}$. The definition is independent of the choice of atlas.
+
+---
+
+## 2. Reduced Algebraic Spaces
+
+<Definition title="Reduced algebraic space">
+An algebraic space $X$ is **reduced** if there exists (equivalently, for every) étale atlas $U \to X$ such that $U$ is a reduced scheme.
+</Definition>
+
+<Example title="Reduced quotient">
+Let $X = \mathbb{A}^2_k$ with the free $\mathbb{Z}/2\mathbb{Z}$-action $(x,y) \mapsto (-x, -y)$, restricted to $\mathbb{A}^2 \setminus \{0\}$. The quotient algebraic space is reduced because $\mathbb{A}^2 \setminus \{0\}$ is reduced. The atlas is a reduced scheme, so the algebraic space inherits reducedness.
+</Example>
+
+<Example title="Non-reduced algebraic space">
+Let $U = \mathrm{Spec}(k[x]/(x^2))$ with the trivial equivalence relation. The resulting algebraic space is $U$ itself, which is non-reduced. More interestingly, one can form non-reduced algebraic spaces as quotients: let $V = \mathrm{Spec}(k[\epsilon]/(\epsilon^2))[t]$ with a free $\mathbb{Z}/2\mathbb{Z}$-action $t \mapsto -t$. The quotient is a non-reduced algebraic space.
+</Example>
+
+<Theorem title="Reduced subspace">
+For any algebraic space $X$, there exists a unique closed subspace $X_{\mathrm{red}} \hookrightarrow X$ that is reduced and has the same underlying topological space. It is defined by the nilradical sheaf.
+</Theorem>
+
+---
+
+## 3. Normal Algebraic Spaces
+
+<Definition title="Normal algebraic space">
+An algebraic space $X$ is **normal** if there exists an étale atlas $U \to X$ with $U$ a normal scheme (all local rings are integrally closed domains).
+</Definition>
+
+<Example title="Normal quotient surface">
+Let $A$ be an abelian surface over $k$ (which is smooth, hence normal). Let $G \subset A$ be a finite étale subgroup. Then $A/G$ is an abelian variety, hence normal. More generally, any quotient of a normal scheme by a free étale group action is normal.
+</Example>
+
+<Example title="Non-normal algebraic space">
+Consider the cuspidal cubic $C: y^2 = x^3$ in $\mathbb{A}^2_k$. Any algebraic space with atlas $C$ (for instance, a quotient of $C$ by a free action) will fail to be normal at the cusp point.
+</Example>
+
+<Theorem title="Normalization of algebraic spaces">
+Let $X$ be a reduced algebraic space locally of finite type over a field. Then there exists a normalization morphism $\nu: X^\nu \to X$ where $X^\nu$ is normal, the morphism is finite, and $\nu$ is an isomorphism over the normal locus of $X$.
+</Theorem>
+
+---
+
+## 4. Separated Algebraic Spaces
+
+<Definition title="Separated algebraic space">
+An algebraic space $X$ over $S$ is **separated** if the diagonal morphism $\Delta: X \to X \times_S X$ is a closed immersion.
+</Definition>
+
+Equivalently, $X$ is separated if and only if for any étale presentation $R \rightrightarrows U$, the map $R \hookrightarrow U \times_S U$ is a closed immersion.
+
+<Example title="Affine schemes are separated">
+Every affine scheme $\mathrm{Spec}(A)$ is separated. More generally, any algebraic space that is affine over a separated scheme is separated.
+</Example>
+
+<Example title="Quasi-projective varieties are separated">
+Every quasi-projective scheme over a field is separated. Therefore, any algebraic space that admits a quasi-projective atlas and whose equivalence relation is a closed subscheme of $U \times U$ is separated.
+</Example>
+
+<Example title="Non-separated algebraic space">
+The line with doubled origin is not separated: the diagonal image in $(\mathbb{A}^1 \sqcup \mathbb{A}^1) \times (\mathbb{A}^1 \sqcup \mathbb{A}^1)$ is not closed. More precisely, the closure of the diagonal contains additional points coming from the two origins.
+</Example>
+
+<Example title="Hironaka's non-separated example">
+Hironaka's example of a proper non-projective variety over $\mathbb{C}$ yields, after a suitable quotient, a proper algebraic space that is separated (properness implies separatedness for algebraic spaces over a field when the algebraic space is of finite type).
+</Example>
+
+---
+
+## 5. Quasi-Compact and Quasi-Separated
+
+<Definition title="Quasi-compact algebraic space">
+An algebraic space $X$ is **quasi-compact** if there exists an étale atlas $U \to X$ with $U$ a quasi-compact scheme (i.e., $U$ is a finite union of affine open subsets).
+</Definition>
+
+<Definition title="Quasi-separated algebraic space">
+An algebraic space $X$ over $S$ is **quasi-separated** if the diagonal $\Delta: X \to X \times_S X$ is quasi-compact.
+</Definition>
+
+<Example title="Noetherian algebraic spaces">
+Any algebraic space of finite type over a noetherian scheme is quasi-compact and quasi-separated. In particular, all algebraic spaces appearing in classical algebraic geometry (over fields) with finite type hypotheses are quasi-compact and quasi-separated.
+</Example>
+
+<Example title="Non-quasi-compact algebraic space">
+Let $U = \coprod_{n \in \mathbb{N}} \mathrm{Spec}(k)$ (a countably infinite disjoint union of points). With the trivial equivalence relation, this gives a non-quasi-compact algebraic space (it is just the scheme $U$, which is not quasi-compact).
+</Example>
+
+<Remark>
+The quasi-separated hypothesis is extremely important in the theory of algebraic spaces. Many fundamental results (e.g., the fact that $|X|$ is sober, the agreement of étale and fppf cohomology for quasi-coherent sheaves, representability of the Hilbert functor) require quasi-separatedness.
+</Remark>
+
+---
+
+## 6. Locally Noetherian
+
+<Definition title="Locally noetherian algebraic space">
+An algebraic space $X$ is **locally noetherian** if there exists an étale atlas $U \to X$ with $U$ a locally noetherian scheme.
+</Definition>
+
+<Definition title="Noetherian algebraic space">
+An algebraic space $X$ is **noetherian** if it is locally noetherian, quasi-compact, and quasi-separated.
+</Definition>
+
+<Example title="Finite type over a field">
+Let $k$ be a field. Any algebraic space $X$ locally of finite type over $k$ is locally noetherian. If additionally $X$ is quasi-compact and quasi-separated, then $X$ is noetherian.
+</Example>
+
+<Example title="Noetherian algebraic spaces and dimension">
+A noetherian algebraic space $X$ has a well-defined notion of dimension: $\dim(X) = \dim(U)$ for any étale atlas $U \to X$. Since étale morphisms preserve dimension, this is independent of the atlas.
+</Example>
+
+---
+
+## 7. Regular and Smooth
+
+<Definition title="Regular algebraic space">
+A locally noetherian algebraic space $X$ is **regular** if there exists an étale atlas $U \to X$ with $U$ regular (all local rings are regular local rings).
+</Definition>
+
+<Definition title="Smooth algebraic space">
+An algebraic space $X$ over $S$ is **smooth** if the structure morphism $X \to S$ is smooth (i.e., flat, locally of finite presentation, and with geometrically regular fibers).
+</Definition>
+
+<Example title="Smooth quotient">
+Let $X$ be a smooth $k$-scheme and $G$ a finite group acting freely on $X$ with $|G|$ invertible in $k$. Then $X/G$ is a smooth algebraic space. If $k$ is perfect, smoothness and regularity coincide.
+</Example>
+
+---
+
+## 8. Irreducibility and Connectedness
+
+<Definition title="Connected algebraic space">
+An algebraic space $X$ is **connected** if its topological space $|X|$ is connected.
+</Definition>
+
+<Definition title="Irreducible algebraic space">
+An algebraic space $X$ is **irreducible** if $|X|$ is irreducible (every two nonempty open subsets have nonempty intersection).
+</Definition>
+
+<Example title="Connected but reducible">
+Let $C_1$ and $C_2$ be two smooth curves meeting transversally at a point $p$. Take $U = C_1 \sqcup C_2$ with the equivalence relation identifying the two copies of $p$. The resulting algebraic space (which is a scheme) is connected but reducible.
+</Example>
+
+<Example title="Irreducible quotient">
+Let $A$ be an abelian variety (irreducible, connected) and $G$ a finite group acting freely. Then $A/G$ is an irreducible connected algebraic space. If $A/G$ is a scheme, it is an irreducible variety.
+</Example>
+
+---
+
+## 9. Properties of Morphisms
+
+Properties of morphisms of algebraic spaces are typically defined by requiring the corresponding property after base change to a scheme.
+
+<Definition title="Properties of morphisms via base change">
+Let $f: X \to Y$ be a morphism of algebraic spaces and $\mathcal{P}$ a property of morphisms of schemes that is stable under base change and étale-local on the target. We say $f$ has property $\mathcal{P}$ if for every scheme $V$ and morphism $V \to Y$, the base change $X \times_Y V \to V$ is a morphism of algebraic spaces that, after further base change to an atlas of $X \times_Y V$, has property $\mathcal{P}$.
+</Definition>
+
+Properties defined this way include:
+- Surjective, open immersion, closed immersion
+- Flat, smooth, étale, unramified
+- Locally of finite type, locally of finite presentation
+- Finite, proper, affine, quasi-affine
+- Separated, quasi-separated
+
+<Example title="Étale morphism of algebraic spaces">
+The atlas morphism $U \to X$ is étale by definition. A morphism $f: X \to Y$ is étale if for some (hence any) atlas $V \to Y$ and atlas $U' \to X \times_Y V$, the composite $U' \to V$ is étale.
+</Example>
+
+<Example title="Proper morphism of algebraic spaces">
+The morphism $X \to \mathrm{Spec}(k)$ is proper if $X$ is of finite type, separated, and universally closed over $k$. Hironaka's proper non-projective algebraic space is an example of a proper algebraic space that is not a scheme.
+</Example>
+
+---
+
+## 10. Dimension Theory
+
+<Definition title="Dimension of an algebraic space">
+Let $X$ be a locally noetherian algebraic space. The **dimension** of $X$ at a point $x \in |X|$ is defined as $\dim_x(X) = \dim_u(U)$ where $U \to X$ is any étale atlas and $u \in U$ maps to $x$. The **dimension** of $X$ is $\dim(X) = \sup_{x \in |X|} \dim_x(X)$.
+</Definition>
+
+<Example title="Dimension of quotients">
+If $U$ is a smooth $k$-scheme of dimension $d$ and $G$ acts freely on $U$, then $\dim(U/G) = d$. Étale morphisms preserve dimension, so the atlas and quotient have the same local dimension.
+</Example>
+
+<Example title="Zero-dimensional algebraic spaces">
+A zero-dimensional algebraic space over a field $k$ is necessarily a scheme: it is a disjoint union of spectra of fields. This follows from the fact that an étale equivalence relation on a zero-dimensional scheme is necessarily trivial (every étale morphism to a point is a disjoint union of isomorphisms).
+</Example>
+
+---
+
+## 11. The Structure Theorem for Algebraic Spaces
+
+<Theorem title="Algebraic spaces of dimension 1 are schemes">
+Every separated algebraic space of finite type over a field that has dimension $\leq 1$ is a scheme.
+</Theorem>
+
+This is a remarkable result showing that the distinction between algebraic spaces and schemes only manifests in dimension $\geq 2$. The proof uses the fact that proper curves are projective and that separated algebraic spaces of dimension 1 can be compactified to proper ones.
+
+<Theorem title="Quasi-separated + locally separated implies separated locally">
+A quasi-separated algebraic space $X$ admits a stratification by locally closed subspaces that are schemes.
+</Theorem>
+
+---
+
+## 12. Comparison of Topologies
+
+On an algebraic space $X$, one can consider several topologies:
+
+| Topology | Coverings | Usage |
+|----------|-----------|-------|
+| Zariski | Open immersions | Too coarse for general algebraic spaces |
+| Étale | Étale surjections | Natural topology for algebraic spaces |
+| fppf | Flat, locally finitely presented surjections | Needed for descent |
+| fpqc | Faithfully flat quasi-compact surjections | Strongest, rarely needed |
+
+<Remark>
+For a scheme, the Zariski topology suffices for many purposes. For algebraic spaces, the étale topology is the fundamental one. This is because algebraic spaces are defined as étale sheaves, and many properties (e.g., being a scheme) can be checked étale-locally but not Zariski-locally.
+</Remark>
+
+---
+
+## References
+
+- D. Knutson, *Algebraic Spaces*, LNM 203, Springer, 1971, Chapter III.
+- The Stacks Project, Tag 03BN: Properties of Algebraic Spaces.
+- M. Artin, "Algebraic Spaces," Yale Mathematical Monographs, 1971, Chapter 4.

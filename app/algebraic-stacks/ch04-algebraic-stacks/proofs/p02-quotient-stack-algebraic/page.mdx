@@ -1,0 +1,203 @@
+export const metadata = {
+  title: 'Proof that [X/G] is Algebraic — Algebraic Stacks — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "대수 스택", href: "/algebraic-stacks" },
+  { label: "4. 대수 스택", href: "/algebraic-stacks/ch04-algebraic-stacks" },
+  { label: "Proof — [X/G] is Algebraic" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof that $[X/G]$ is an Algebraic Stack
+
+We prove that if $G$ is a smooth algebraic group acting on an algebraic space $X$, then the quotient stack $[X/G]$ is an algebraic stack. This is one of the most fundamental and frequently-used results in the theory of algebraic stacks. The proof consists of two main parts: verifying that $[X/G]$ is a stack, that its diagonal is representable, and that it admits a smooth atlas.
+
+---
+
+## Statement
+
+<Theorem title="Quotient stacks are algebraic" number="4.12">
+Let $S$ be a scheme, $G$ a smooth algebraic group scheme over $S$, and $X$ an algebraic space over $S$ with a $G$-action $\sigma : G \times_S X \to X$. Then:
+
+1. $[X/G]$ is a stack over $(\mathrm{Sch}/S)_{\mathrm{fppf}}$.
+2. The diagonal $\Delta : [X/G] \to [X/G] \times_S [X/G]$ is representable by algebraic spaces.
+3. The natural morphism $\pi : X \to [X/G]$ is a smooth surjection (and is a $G$-torsor).
+
+In particular, $[X/G]$ is an algebraic (Artin) stack over $S$, with $\pi$ as a smooth atlas.
+</Theorem>
+
+---
+
+## Part 1: $[X/G]$ is a stack
+
+<Proof title="Part 1 -- Stack axioms">
+Recall that $[X/G]$ is the category fibered in groupoids over $(\mathrm{Sch}/S)$ whose objects over a scheme $T$ are pairs $(P \to T, \phi : P \to X)$ where $P$ is a $G$-torsor over $T$ and $\phi$ is $G$-equivariant.
+
+We verify the two stack axioms: descent for morphisms and descent for objects.
+
+**Axiom 1 (Descent for morphisms):** Let $(P_1, \phi_1)$ and $(P_2, \phi_2)$ be two objects over $T$. We need to show that the presheaf
+$$\operatorname{Isom}_T((P_1, \phi_1), (P_2, \phi_2))$$
+is a sheaf in the fppf topology on $(\mathrm{Sch}/T)$.
+
+An isomorphism $(P_1, \phi_1) \xrightarrow{\sim} (P_2, \phi_2)$ is a $G$-equivariant isomorphism $\psi : P_1 \xrightarrow{\sim} P_2$ over $T$ with $\phi_2 \circ \psi = \phi_1$. Consider the algebraic space
+$$I = \operatorname{Isom}_T^G(P_1, P_2) \times_{\operatorname{Mor}_T(P_1, X)} \{\phi_1\}$$
+where $\operatorname{Isom}_T^G(P_1, P_2)$ is the sheaf of $G$-equivariant isomorphisms from $P_1$ to $P_2$ (which is an algebraic space since $G$-torsors are algebraic spaces and isomorphisms between them form algebraic spaces) and the fiber product imposes $\phi_2 \circ \psi = \phi_1$.
+
+Since $I$ is represented by an algebraic space, its functor of points is an fppf sheaf. Hence $\operatorname{Isom}_T$ is a sheaf.
+
+**Axiom 2 (Descent for objects):** Let $\{T_i \to T\}$ be an fppf cover and let $(P_i, \phi_i) \in [X/G](T_i)$ be objects with descent data: isomorphisms $\alpha_{ij} : (P_i, \phi_i)|_{T_{ij}} \xrightarrow{\sim} (P_j, \phi_j)|_{T_{ij}}$ satisfying the cocycle condition on triple overlaps $T_{ijk}$.
+
+Since $G$-torsors satisfy fppf descent (a fundamental result in descent theory -- the stack $\mathrm{B}G$ is a stack for the fppf topology), the torsors $P_i$ with the descent data $\alpha_{ij}$ glue to a $G$-torsor $P$ over $T$.
+
+The equivariant maps $\phi_i : P_i \to X$ are compatible (since the $\alpha_{ij}$ respect the maps to $X$), so by descent for morphisms of algebraic spaces, they glue to a $G$-equivariant map $\phi : P \to X$.
+
+Thus $(P, \phi) \in [X/G](T)$ is the descended object. This proves $[X/G]$ is a stack. $\square$
+</Proof>
+
+---
+
+## Part 2: Representability of the diagonal
+
+<Proof title="Part 2 -- Representable diagonal">
+We must show: for any scheme $T$ and any two objects $(P_1, \phi_1), (P_2, \phi_2) \in [X/G](T)$, the sheaf $\operatorname{Isom}_T((P_1, \phi_1), (P_2, \phi_2))$ is represented by an algebraic space over $T$.
+
+**Step 2a: Reduce to trivial torsors.** An isomorphism from $(P_1, \phi_1)$ to $(P_2, \phi_2)$ is a $G$-equivariant isomorphism $\psi : P_1 \xrightarrow{\sim} P_2$ over $T$ with $\phi_2 \circ \psi = \phi_1$.
+
+First, consider the sheaf of all $G$-equivariant isomorphisms $\psi : P_1 \to P_2$ (without the condition on $\phi$). This is represented by the **contracted product**:
+$$\operatorname{Isom}_T^G(P_1, P_2) \cong P_1 \times^G P_2^{\mathrm{op}}$$
+where $P_2^{\mathrm{op}}$ is $P_2$ with the opposite $G$-action ($g$ acts by $g^{-1}$). Explicitly, this is $(P_1 \times_T P_2)/G$ where $G$ acts diagonally by $g \cdot (p_1, p_2) = (p_1 \cdot g^{-1}, g \cdot p_2)$.
+
+Since $P_1$ and $P_2$ are $G$-torsors (hence smooth over $T$), and $G$ acts freely on $P_1 \times_T P_2$, the quotient $P_1 \times^G P_2^{\mathrm{op}}$ is an algebraic space, smooth over $T$ (in fact, it is a $G$-torsor twisted by the "difference" of $P_1$ and $P_2$).
+
+**Step 2b: Impose the compatibility with $\phi$.** The condition $\phi_2 \circ \psi = \phi_1$ cuts out a closed subspace. More precisely, consider the two morphisms:
+$$\operatorname{Isom}_T^G(P_1, P_2) \xrightarrow{\psi \mapsto \phi_2 \circ \psi} \operatorname{Mor}_T^G(P_1, X) \xleftarrow{\phi_1} T$$
+The isomorphism sheaf $\operatorname{Isom}_T((P_1,\phi_1), (P_2,\phi_2))$ is the fiber product:
+$$\operatorname{Isom}_T((P_1,\phi_1), (P_2,\phi_2)) = T \times_{\operatorname{Mor}_T^G(P_1, X)} \operatorname{Isom}_T^G(P_1, P_2).$$
+
+Now, $\operatorname{Mor}_T^G(P_1, X) \cong X \times^G P_1^{\mathrm{op}}$ (equivariant maps from a torsor to $X$ correspond to sections of the associated $X$-bundle). This is an algebraic space over $T$. The map $\phi_1 : T \to \operatorname{Mor}_T^G(P_1, X)$ is a section of the structure map, hence a locally closed immersion.
+
+Therefore, the fiber product is an algebraic space over $T$ (as a base change of algebraic spaces). In fact, if $X$ is separated, the map $\phi_1 : T \to \operatorname{Mor}_T^G(P_1, X)$ is a closed immersion, so $\operatorname{Isom}_T$ is a closed subspace of $\operatorname{Isom}_T^G(P_1, P_2)$.
+
+**Explicit description**: Locally trivializing $P_1$ and $P_2$, the isomorphism sheaf becomes:
+$$\operatorname{Isom}_T((P_1,\phi_1), (P_2,\phi_2))(T') = \{g \in G(T') : g \cdot \phi_1|_{T'} = \phi_2|_{T'}\}$$
+which is the "transporter" from $\phi_1$ to $\phi_2$ in $G$. This is a closed subscheme of $G_{T'}$ (the fiber product $G \times_{X \times X, (\sigma, \phi_2) \times \phi_1} T$), hence an algebraic space. $\square$
+</Proof>
+
+---
+
+## Part 3: The atlas is smooth and surjective
+
+<Proof title="Part 3 -- Smooth atlas">
+We prove that the natural morphism $\pi : X \to [X/G]$ is representable, smooth, and surjective.
+
+**Definition of $\pi$**: The morphism $\pi$ sends a point $x \in X(T)$ (i.e., a $T$-valued point of $X$) to the object $(G \times T \xrightarrow{\mathrm{pr}_2} T, \; G \times T \xrightarrow{(g,t) \mapsto g \cdot x(t)} X)$ of $[X/G](T)$. That is, $\pi(x)$ is the trivial $G$-torsor with the equivariant map determined by the orbit of $x$.
+
+**Representability of $\pi$**: We need to show that for any scheme $T$ and any object $(P, \phi) \in [X/G](T)$, the fiber product $X \times_{[X/G]} T$ (via $\pi$ and the classifying map $T \to [X/G]$) is an algebraic space.
+
+The fiber product $X \times_{[X/G]} T$ parametrizes pairs: a point $x \in X(T')$ and an isomorphism between $\pi(x)$ and $(P, \phi)|_{T'}$ in $[X/G](T')$. Such an isomorphism is a $G$-equivariant isomorphism $\psi : G \times T' \xrightarrow{\sim} P|_{T'}$ with $\phi \circ \psi(1, t') = x(t')$.
+
+This is equivalent to: a section $s : T' \to P|_{T'}$ (given by $s(t') = \psi(1, t')$), which is the same as a trivialization of $P$ over $T'$. The condition $\phi \circ \psi(1, \cdot) = x$ means $x = \phi \circ s$.
+
+So:
+$$X \times_{[X/G]} T \cong P$$
+(the total space of the $G$-torsor $P$). Indeed, a point of $P$ over $T'$ is a pair (base point in $T'$, point in the fiber of $P$), and the map to $X$ sends it to $\phi$ of that point.
+
+**$\pi$ is a $G$-torsor**: The above shows $X \times_{[X/G]} T \cong P$, which is a $G$-torsor over $T$ by assumption. Since $P \to T$ is smooth (as $G$ is smooth), the morphism $\pi : X \to [X/G]$ is smooth.
+
+**$\pi$ is surjective**: For any algebraically closed field $k$ and any object $(P, \phi) \in [X/G](k)$, the $G$-torsor $P$ over $\operatorname{Spec} k$ is trivial (by Hilbert 90, since $k$ is algebraically closed and $G$ is smooth). A trivialization $s : \operatorname{Spec} k \to P$ gives a point $x = \phi \circ s \in X(k)$ with $\pi(x) \cong (P, \phi)$. Hence $\pi$ is surjective on geometric points.
+
+By the definition of surjective morphisms of stacks (surjective on geometric points), $\pi$ is surjective.
+
+**Conclusion**: $\pi : X \to [X/G]$ is a smooth, surjective, representable morphism from an algebraic space $X$. This is a smooth atlas for $[X/G]$, proving that $[X/G]$ is an algebraic (Artin) stack. $\square$
+</Proof>
+
+---
+
+## Verification of the groupoid structure
+
+<Remark title="The groupoid of the atlas">
+The smooth atlas $\pi : X \to [X/G]$ gives rise to the groupoid:
+$$R = X \times_{[X/G]} X \cong G \times X$$
+with:
+- Source: $s(g, x) = x$.
+- Target: $t(g, x) = g \cdot x$.
+- Composition: $c((h, g \cdot x), (g, x)) = (hg, x)$.
+- Identity: $e(x) = (1, x)$.
+- Inverse: $i(g, x) = (g^{-1}, g \cdot x)$.
+
+This is the **action groupoid** of the $G$-action on $X$. Both $s$ and $t$ are smooth (since $G$ is smooth and $\sigma$ is a morphism of algebraic spaces), confirming that $R \rightrightarrows X$ is a smooth groupoid and $[X/G] \cong [X / (G \times X)]$ in the groupoid notation.
+</Remark>
+
+---
+
+## Special cases and refinements
+
+<Example id="free-action" title="Free action: quotient is an algebraic space">
+If $G$ acts **freely** on $X$ (i.e., the stabilizer $G_x$ is trivial for all geometric points $x$), then the diagonal of $[X/G]$ is a monomorphism (since $\operatorname{Isom}$ is at most a singleton). This means $[X/G]$ is an algebraic space, not just a stack.
+
+The proof: the transporter $\{g \in G : g \cdot x_1 = x_2\}$ is either empty (if $x_1, x_2$ are in different orbits) or a single point (if they are in the same orbit, by freeness). So $\operatorname{Isom}$ is represented by a monomorphism, and $[X/G]$ is a sheaf of sets.
+
+When the action is free and proper, $[X/G]$ is a separated algebraic space, and in fact agrees with the geometric quotient $X/G$.
+</Example>
+
+<Example id="finite-group-case" title="Finite group: DM stack">
+If $G$ is a **finite** group scheme (e.g., a constant group $G$), then $G$ is etale (in characteristic zero or when $|G|$ is invertible), and the atlas $\pi : X \to [X/G]$ is etale (since $G$ is etale implies $G$-torsors are etale covers). Hence $[X/G]$ is a **Deligne--Mumford stack**.
+
+The groupoid $R = G \times X \rightrightarrows X$ has etale source and target maps, confirming the etale groupoid structure.
+</Example>
+
+<Example id="gm-action-case" title="G_m-action: Artin but not DM">
+For $G = \mathbb{G}_m$ acting on $X = \mathbb{A}^1$ by scaling, the atlas $\pi : \mathbb{A}^1 \to [\mathbb{A}^1/\mathbb{G}_m]$ is smooth (but not etale, since $\mathbb{G}_m$ has dimension 1). The stabilizer at the origin is $\mathbb{G}_m$ (positive-dimensional), so $[\mathbb{A}^1/\mathbb{G}_m]$ is an Artin stack but **not** DM.
+
+The groupoid is $R = \mathbb{G}_m \times \mathbb{A}^1 \rightrightarrows \mathbb{A}^1$ with $s(t, x) = x$ and $t(t, x) = tx$. Both source and target are smooth.
+</Example>
+
+<Example id="proper-action" title="Proper action: separated stack">
+If the action map $\Psi : G \times X \to X \times X$ defined by $(g, x) \mapsto (x, g \cdot x)$ is **proper**, then the diagonal of $[X/G]$ is proper (since the diagonal fibers are the stabilizers, which are the fibers of $\Psi$ along the diagonal). In particular, $[X/G]$ is a **separated** algebraic stack.
+
+For $G$ reductive acting on a proper variety $X$: the action is always proper (since $G$ is affine and $X$ is proper), so $[X/G]$ is separated.
+</Example>
+
+<Example id="non-separated-example" title="Non-separated quotient stack">
+Let $G = \mathbb{G}_a$ (the additive group) act on $\mathbb{A}^2$ by $t \cdot (x, y) = (x, y + tx)$. The orbits in $\{x \neq 0\}$ are the horizontal lines $\{x = c, c \neq 0\}$, while $\{x = 0\}$ consists of infinitely many fixed points (each $(0, y)$ is fixed). The action is not proper (the map $\mathbb{G}_a \times \mathbb{A}^2 \to \mathbb{A}^2 \times \mathbb{A}^2$ is not proper along $\{x = 0\}$).
+
+The quotient stack $[\mathbb{A}^2/\mathbb{G}_a]$ is an algebraic (Artin) stack, but it is **not separated**: the stabilizer at points $(0, y)$ is $\mathbb{G}_a$ (which is not proper).
+</Example>
+
+---
+
+## The role of smoothness of $G$
+
+<Remark title="Why G must be smooth">
+The proof crucially uses that $G$ is **smooth** over $S$:
+
+1. **$G$-torsors are smooth**: A $G$-torsor $P \to T$ is a smooth morphism (locally on $T$, $P \cong G \times T$, and $G$ is smooth).
+2. **The atlas is smooth**: $X \times_{[X/G]} T \cong P$ is smooth over $T$ since $P$ is a $G$-torsor.
+
+If $G$ is not smooth (e.g., $G = \mu_p$ in characteristic $p$, which is not smooth), then $G$-torsors are not smooth morphisms -- they are only finite flat. In this case, $\pi : X \to [X/G]$ is flat and surjective but not smooth, and $[X/G]$ may fail to be an Artin stack (in the sense requiring a smooth atlas).
+
+However, $[X/G]$ is still a stack, and for finite flat group schemes, it is an algebraic stack under a generalized definition (where the atlas is allowed to be fppf rather than smooth). The theory of algebraic stacks is sometimes extended to accommodate this.
+</Remark>
+
+---
+
+## Summary
+
+The proof that $[X/G]$ is an algebraic stack consists of three independent parts:
+
+1. **Stack axioms**: Verified using descent for $G$-torsors and equivariant morphisms.
+2. **Representable diagonal**: The isomorphism sheaf $\operatorname{Isom}_T((P_1,\phi_1), (P_2,\phi_2))$ is an algebraic space, constructed as a fiber product involving the contracted product $P_1 \times^G P_2^{\mathrm{op}}$.
+3. **Smooth atlas**: The map $\pi : X \to [X/G]$ is smooth and surjective because its base change along any test morphism $T \to [X/G]$ is a $G$-torsor (hence smooth).
+
+The smoothness of $G$ is essential for the atlas to be smooth. The result applies to all smooth group actions and produces the most important class of algebraic stacks in practice.
