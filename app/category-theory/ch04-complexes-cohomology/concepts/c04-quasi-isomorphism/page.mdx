@@ -1,0 +1,107 @@
+export const metadata = {
+  title: 'Quasi-isomorphism — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Concept — Quasi-isomorphism" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quasi-isomorphism
+
+A quasi-isomorphism is a chain map that induces isomorphisms on all cohomology groups. Unlike chain homotopy equivalences, quasi-isomorphisms need not have inverses as chain maps. The derived category is constructed precisely by formally inverting quasi-isomorphisms.
+
+---
+
+## Definition
+
+<Definition title="Quasi-isomorphism" number="4.9">
+A chain map $f : A^\bullet \to B^\bullet$ is a **quasi-isomorphism** (abbreviated **qis**) if $H^n(f) : H^n(A^\bullet) \to H^n(B^\bullet)$ is an isomorphism for all $n \in \mathbb{Z}$.
+</Definition>
+
+<Remark title="Quasi-isomorphism vs homotopy equivalence">
+Every chain homotopy equivalence is a quasi-isomorphism, but the converse fails. In the derived category $D(\mathcal{A})$, quasi-isomorphisms become isomorphisms, but in the homotopy category $K(\mathcal{A})$, only homotopy equivalences are isomorphisms. The passage from $K(\mathcal{A})$ to $D(\mathcal{A})$ is precisely the localization at quasi-isomorphisms.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Projective resolution as a qis" id="proj-res-qis">
+A projective resolution $P_\bullet \to M$ gives a quasi-isomorphism $P_\bullet \to M[0]$: the cohomology of $P_\bullet$ is $M$ in degree $0$ and $0$ elsewhere.
+</Example>
+
+<Example title="Injective resolution as a qis" id="inj-res-qis">
+An injective resolution $M \to I^\bullet$ gives a quasi-isomorphism $M[0] \to I^\bullet$: the cohomology of $I^\bullet$ is $M$ in degree $0$.
+</Example>
+
+<Example title="Qis that is not a homotopy equivalence" id="qis-not-he">
+The augmentation $\varepsilon : \cdots \to \mathbb{Z} \xrightarrow{2} \mathbb{Z} \xrightarrow{0} \mathbb{Z} \to 0$ (a free resolution of $\mathbb{Z}/2\mathbb{Z}$) gives a quasi-isomorphism to $\mathbb{Z}/2\mathbb{Z}[0]$, but this is not a homotopy equivalence since $\mathbb{Z}/2\mathbb{Z}$ has no projective resolution of length zero.
+</Example>
+
+<Example title="Acyclic complex = qis to zero" id="acyclic-qis">
+$A^\bullet$ is acyclic iff the zero map $A^\bullet \to 0$ is a quasi-isomorphism, equivalently iff $0 \to A^\bullet$ is a quasi-isomorphism.
+</Example>
+
+<Example title="Mapping cone and qis" id="cone-qis">
+A chain map $f : A^\bullet \to B^\bullet$ is a quasi-isomorphism iff $\mathrm{Cone}(f)$ is acyclic. This follows from the long exact sequence $\cdots \to H^n(A) \xrightarrow{H^n(f)} H^n(B) \to H^n(\mathrm{Cone}(f)) \to \cdots$.
+</Example>
+
+<Example title="Quasi-isomorphism of de Rham and singular complexes" id="derham-singular">
+The de Rham theorem states that integration of differential forms over singular chains gives a quasi-isomorphism $\Omega^\bullet(M) \to C^\bullet_{\mathrm{sing}}(M; \mathbb{R})^*$, establishing $H^n_{\mathrm{dR}}(M) \cong H^n_{\mathrm{sing}}(M; \mathbb{R})$.
+</Example>
+
+<Example title="Cech resolution" id="cech-resolution">
+For a good cover $\mathcal{U}$ of $X$ and a sheaf $\mathcal{F}$, the natural map from the Cech complex $\check{C}^\bullet(\mathcal{U}, \mathcal{F})$ to the Godement resolution computes the same cohomology, connected by quasi-isomorphisms.
+</Example>
+
+<Example title="Flat resolution" id="flat-resolution">
+For a module $M$, a flat resolution $F_\bullet \to M$ gives a quasi-isomorphism $F_\bullet \to M[0]$. While not projective, flat resolutions suffice for computing Tor.
+</Example>
+
+<Example title="Truncation functors" id="truncation">
+The **stupid truncation** $\sigma_{\geq n} A^\bullet$ (set $A^k = 0$ for $k < n$) is not a quasi-isomorphism in general. The **canonical truncation** $\tau_{\leq n} A^\bullet$ (replace $A^n$ by $\ker d^n$ and set higher terms to zero) satisfies $H^k(\tau_{\leq n} A) = H^k(A)$ for $k \leq n$ and $= 0$ for $k > n$.
+</Example>
+
+<Example title="Quasi-isomorphism between resolutions" id="qis-resolutions">
+If $P_\bullet \to M$ and $Q_\bullet \to M$ are projective resolutions, the comparison theorem gives a chain map $f : P_\bullet \to Q_\bullet$ that is a quasi-isomorphism (and in fact a homotopy equivalence). However, this $f$ need not be a degreewise isomorphism.
+</Example>
+
+<Example title="Derived equivalence" id="derived-equiv">
+An exact equivalence $D^b(\mathcal{A}) \simeq D^b(\mathcal{B})$ of bounded derived categories sends quasi-isomorphisms to quasi-isomorphisms (since they become isomorphisms in both derived categories).
+</Example>
+
+<Example title="Quasi-isomorphism and spectral sequences" id="qis-spectral">
+A morphism of filtered complexes that is a quasi-isomorphism on each graded piece induces an isomorphism on the associated spectral sequences (from the $E_1$ page onward).
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Properties of quasi-isomorphisms" number="4.4">
+1. The composition of quasi-isomorphisms is a quasi-isomorphism.
+2. A chain homotopy equivalence is a quasi-isomorphism.
+3. A quasi-isomorphism between bounded below complexes of projectives is a homotopy equivalence.
+4. A quasi-isomorphism between bounded above complexes of injectives is a homotopy equivalence.
+</Theorem>
+
+<Remark title="Whitehead's theorem for complexes">
+Property (3) is the algebraic analogue of Whitehead's theorem in topology: a weak homotopy equivalence between CW-complexes (= cofibrant objects) is a homotopy equivalence. In the model category structure on $\mathbf{Ch}(\mathcal{A})$, projective complexes are cofibrant and injective complexes are fibrant.
+</Remark>
+
+<Remark title="Looking ahead">
+The [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category) $D(\mathcal{A}) = K(\mathcal{A})[\mathrm{qis}^{-1}]$ is obtained by formally inverting all quasi-isomorphisms in the homotopy category. This is the [Verdier localization](/category-theory/ch05-triangulated-categories/theorems/t02-verdier-localization).
+</Remark>

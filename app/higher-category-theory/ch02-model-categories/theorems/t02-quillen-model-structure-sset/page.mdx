@@ -1,0 +1,173 @@
+export const metadata = {
+  title: 'Kan--Quillen Model Structure on sSet — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Theorem — Kan--Quillen Model Structure on sSet" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Kan--Quillen Model Structure on sSet
+
+The Kan--Quillen model structure on the category of simplicial sets is one of the most important model structures in mathematics. It provides a purely combinatorial framework for homotopy theory that is Quillen equivalent to topological spaces. Every simplicial set is cofibrant, fibrant objects are Kan complexes, and the model structure is cofibrantly generated with explicit generating sets.
+
+---
+
+## Statement
+
+<Theorem title="Kan--Quillen Model Structure" number="2.1">
+The category $\mathbf{sSet}$ of simplicial sets admits a cofibrantly generated model structure, called the **Kan--Quillen model structure**, with:
+
+- **Weak equivalences**: Maps $f: X \to Y$ such that $|f|: |X| \to |Y|$ is a weak homotopy equivalence.
+- **Cofibrations**: Monomorphisms (levelwise injective maps).
+- **Fibrations**: Kan fibrations (maps with the RLP against all horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$).
+
+The generating sets are:
+- **Generating cofibrations**: $I = \{\partial\Delta[n] \hookrightarrow \Delta[n] : n \geq 0\}$.
+- **Generating trivial cofibrations**: $J = \{\Lambda^n_k \hookrightarrow \Delta[n] : n \geq 1, 0 \leq k \leq n\}$.
+</Theorem>
+
+---
+
+## Key Properties
+
+<Example id="all-cofibrant" title="Every simplicial set is cofibrant">
+Since the initial object $\emptyset$ maps to any $X$ by the unique map $\emptyset \hookrightarrow X$ (which is a monomorphism = cofibration), every simplicial set is cofibrant. This is a major technical advantage of $\mathbf{sSet}$ over $\mathbf{Top}$ (where not every space is cofibrant).
+
+Consequently, to compute $[X, Y]$ in the homotopy category, we only need a fibrant replacement of $Y$: $[X, Y] = \pi_0 \operatorname{Map}(X, RY)$ where $RY$ is a Kan complex weakly equivalent to $Y$.
+</Example>
+
+<Example id="fibrant-objects" title="Fibrant objects are Kan complexes">
+An object $X$ is fibrant (i.e., $X \to \Delta[0]$ is a Kan fibration) if and only if $X$ is a Kan complex. Not every simplicial set is fibrant: for instance, $\Delta[2]$ is not a Kan complex (the outer horn $\Lambda^2_0$ with $d_1 = \mathrm{id}_{01}$ and $d_2 = $ identity at $0$ has a unique filler, but for a general $X$ with edges that are not composable in the nerve sense, outer horns may fail to fill).
+
+Actually, $\Delta[n]$ is always a Kan complex since every horn in a representable has a filler (it is the nerve of a groupoid completion). The simplicial set $\Delta[1] \sqcup_{\Delta[0]} \Delta[1]$ (two edges glued at a vertex) is NOT a Kan complex.
+</Example>
+
+<Example id="trivial-fibrations" title="Trivial fibrations are surjective">
+A map $p: X \to Y$ is a trivial fibration if and only if it has the RLP against all boundary inclusions $\partial\Delta[n] \hookrightarrow \Delta[n]$. This is equivalent to: for every $n \geq 0$ and every compatible system of $(n-1)$-simplices in $X$ over an $n$-simplex in $Y$, there exists an $n$-simplex in $X$ mapping to the given simplex in $Y$ with the given faces.
+
+In particular, trivial fibrations are surjective on all levels: $X_n \twoheadrightarrow Y_n$ for all $n \geq 0$.
+</Example>
+
+---
+
+## Verification of Axioms
+
+<Example id="verify-mc2" title="Two-out-of-three for weak equivalences">
+The weak equivalences (maps whose geometric realization is a weak homotopy equivalence) satisfy two-out-of-three because weak homotopy equivalences in $\mathbf{Top}$ satisfy two-out-of-three, and geometric realization is a functor: if $|f|$ and $|g|$ are weak homotopy equivalences, so is $|g| \circ |f| = |g \circ f|$.
+</Example>
+
+<Example id="verify-mc4" title="Lifting axiom">
+The lifting axiom (MC4) states:
+- Trivial cofibrations (anodyne extensions = monomorphisms that are weak equivalences) have the LLP against Kan fibrations.
+- Cofibrations (monomorphisms) have the LLP against trivial Kan fibrations.
+
+The first is essentially the definition of Kan fibration composed with the characterization of anodyne extensions. The second follows from the characterization of trivial fibrations via boundary inclusions.
+</Example>
+
+<Example id="verify-mc5" title="Factorization axiom">
+Both factorizations are constructed via the **small object argument**:
+
+1. **Cofibration + trivial fibration**: Given $f: X \to Y$, iteratively solve all lifting problems for $\partial\Delta[n] \hookrightarrow \Delta[n]$ by attaching cells. After $\omega$ steps, obtain $X \hookrightarrow Z \xrightarrow{\sim} Y$ where $Z \to Y$ has the RLP against all boundary inclusions.
+
+2. **Trivial cofibration + fibration**: Given $f: X \to Y$, iteratively solve all lifting problems for $\Lambda^n_k \hookrightarrow \Delta[n]$ by attaching cells. After $\omega$ steps, obtain $X \xrightarrow{\sim} Z \twoheadrightarrow Y$ where $Z \to Y$ has the RLP against all horns (is a Kan fibration).
+</Example>
+
+---
+
+## Simplicial Model Category Structure
+
+<Example id="simplicial-enrichment" title="sSet is a simplicial model category">
+The Kan--Quillen model structure makes $\mathbf{sSet}$ a **simplicial model category**: it is enriched, tensored, and cotensored over itself, and the **pushout-product axiom** holds.
+
+The mapping space $\operatorname{Map}(X, Y)_n = \operatorname{Hom}_{\mathbf{sSet}}(X \times \Delta[n], Y)$ is a simplicial set. When $Y$ is a Kan complex, $\operatorname{Map}(X, Y)$ is also a Kan complex.
+
+The pushout-product axiom states: if $i: A \hookrightarrow B$ and $j: C \hookrightarrow D$ are cofibrations, then the pushout-product $A \times D \sqcup_{A \times C} B \times C \hookrightarrow B \times D$ is a cofibration, which is trivial if either $i$ or $j$ is.
+</Example>
+
+<Example id="properness" title="Properness">
+The Kan--Quillen model structure is both **left proper** and **right proper**:
+
+- **Left proper**: Pushouts of weak equivalences along cofibrations are weak equivalences. Since every simplicial set is cofibrant, this says pushouts preserve weak equivalences along monomorphisms.
+
+- **Right proper**: Pullbacks of weak equivalences along fibrations are weak equivalences. This says pulling back a weak equivalence along a Kan fibration gives a weak equivalence.
+
+Right properness is used extensively in the theory of Bousfield localizations and in the construction of model structures on functor categories.
+</Example>
+
+---
+
+## Comparison with Other Model Structures
+
+<Example id="compare-joyal" title="Comparison with Joyal model structure">
+The category $\mathbf{sSet}$ also supports the **Joyal model structure**:
+
+- **Weak equivalences**: Categorical equivalences (maps inducing equivalences on fundamental $\infty$-categories).
+- **Cofibrations**: Monomorphisms (same as Kan--Quillen).
+- **Fibrations**: Inner fibrations between quasi-categories (maps with RLP against inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 < k < n$).
+
+Every Kan--Quillen weak equivalence is a Joyal weak equivalence, but not conversely. The Kan--Quillen fibrant objects (Kan complexes) form a proper subset of Joyal fibrant objects (quasi-categories).
+
+The identity functor $\mathrm{id}: \mathbf{sSet}_{\mathrm{KQ}} \to \mathbf{sSet}_{\mathrm{Joyal}}$ is a left Quillen functor.
+</Example>
+
+<Example id="compare-reedy" title="Reedy model structure">
+For simplicial objects in a model category $\mathcal{M}$ (functors $\Delta^{\mathrm{op}} \to \mathcal{M}$), there is a **Reedy model structure** where:
+- Weak equivalences are levelwise.
+- Cofibrations and fibrations use matching and latching maps.
+
+This interacts with the Kan--Quillen model structure on $\mathbf{sSet} = \mathbf{Fun}(\Delta^{\mathrm{op}}, \mathbf{Set})$ via the discrete model structure on $\mathbf{Set}$ (every map is a fibration and cofibration, isomorphisms are weak equivalences).
+</Example>
+
+<Example id="monoidal-model" title="Monoidal model structure">
+The Kan--Quillen model structure makes $\mathbf{sSet}$ a **monoidal model category** with the Cartesian product $\times$. The unit is $\Delta[0]$, and the pushout-product axiom is satisfied. This means:
+
+- The product $X \times Y$ of a cofibrant $X$ with any $Y$ preserves weak equivalences in $Y$ (homotopy invariance of products).
+- The internal hom $\operatorname{Map}(X, Y)$ preserves fibrations and trivial fibrations in $Y$ when $X$ is cofibrant.
+
+The monoidal structure is crucial for developing the theory of simplicial categories, simplicial algebras, and operads.
+</Example>
+
+---
+
+## Applications
+
+<Example id="fibrant-replacement-methods" title="Methods of fibrant replacement">
+Several methods produce fibrant replacements (Kan complexes weakly equivalent to a given simplicial set):
+
+1. **Kan's $\operatorname{Ex}^\infty$**: Iterate the subdivision right adjoint. $\operatorname{Ex}^\infty(X)$ is always a Kan complex.
+2. **Small object argument**: Iteratively fill all horns.
+3. **Localization**: For quasi-categories, the maximal sub-Kan-complex $X^{\simeq} \hookrightarrow X$ extracts the underlying $\infty$-groupoid (space of objects with equivalences).
+
+Each method has its uses: $\operatorname{Ex}^\infty$ is functorial and explicit, the small object argument is general, and localization methods are conceptually clean.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The Kan--Quillen model structure on $\mathbf{sSet}$:
+
+1. Has **monomorphisms** as cofibrations, **Kan fibrations** as fibrations, and **weak homotopy equivalences** (via geometric realization) as weak equivalences.
+
+2. Is **cofibrantly generated** with explicit generating sets (boundary and horn inclusions).
+
+3. Every simplicial set is **cofibrant**; fibrant objects are **Kan complexes**.
+
+4. Is a **simplicial**, **monoidal**, **proper** model category.
+
+5. Is **Quillen equivalent** to $\mathbf{Top}$, justifying simplicial sets as a complete framework for homotopy theory.
+</Remark>

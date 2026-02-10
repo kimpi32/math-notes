@@ -1,0 +1,100 @@
+export const metadata = {
+  title: 'Homotopy Invariance of Cohomology — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Theorem — Homotopy Invariance of Cohomology" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Homotopy Invariance of Cohomology
+
+Homotopy invariance states that chain homotopic maps induce identical maps on cohomology. This is the fundamental reason why cohomology is a computable invariant: it does not depend on the specific choice of representative chain map, only on its homotopy class.
+
+---
+
+## Statement
+
+<Theorem title="Homotopy Invariance" number="4.7">
+If $f, g : A^\bullet \to B^\bullet$ are chain homotopic ($f \sim g$), then $H^n(f) = H^n(g) : H^n(A^\bullet) \to H^n(B^\bullet)$ for all $n$.
+
+Consequently, if $f : A^\bullet \to B^\bullet$ is a chain homotopy equivalence, then $f$ is a quasi-isomorphism.
+</Theorem>
+
+<Proof>
+Let $s = \{s^n : A^n \to B^{n-1}\}$ be a chain homotopy: $f^n - g^n = d^{n-1} s^n + s^{n+1} d^n$. For $[a] \in H^n(A)$ (so $d^n a = 0$):
+
+$$f^n(a) - g^n(a) = d^{n-1}(s^n(a)) + s^{n+1}(d^n(a)) = d^{n-1}(s^n(a)) + 0 = d^{n-1}(s^n(a))$$
+
+So $f^n(a) - g^n(a) \in B^n(B^\bullet)$ (is a coboundary), hence $[f^n(a)] = [g^n(a)]$ in $H^n(B^\bullet)$.
+</Proof>
+
+---
+
+## Examples and Consequences
+
+<Example title="Singular cohomology is homotopy invariant" id="singular-homotopy">
+If $f, g : X \to Y$ are homotopic continuous maps, then $f_* = g_* : H_n(X) \to H_n(Y)$. This follows because topological homotopy induces a chain homotopy via the prism operator, and then the theorem applies.
+</Example>
+
+<Example title="Contractible spaces have trivial cohomology" id="contractible">
+If $X$ is contractible, then $\mathrm{id}_X \sim c$ (constant map). So $H_n(\mathrm{id}_X) = H_n(c)$, giving $H_n(X) \cong H_n(\mathrm{pt})$, which is $\mathbb{Z}$ for $n = 0$ and $0$ for $n > 0$.
+</Example>
+
+<Example title="Derived functors are well-defined" id="derived-well-defined">
+Any two projective resolutions $P_\bullet, Q_\bullet$ of $M$ are chain homotopy equivalent. By homotopy invariance, $H^n(F(P_\bullet)) \cong H^n(F(Q_\bullet))$ for any additive functor $F$. So $R^nF(M)$ is independent of the resolution.
+</Example>
+
+<Example title="Comparison theorem" id="comparison">
+If $f : P_\bullet \to Q_\bullet$ lifts $\mathrm{id}_M$ (where both are projective resolutions of $M$), then $f$ is a chain homotopy equivalence. By homotopy invariance, $f$ is a quasi-isomorphism.
+</Example>
+
+<Example title="Poincare lemma" id="poincare">
+On $\mathbb{R}^n$, the identity and the constant map to the origin are homotopic. The prism operator gives a chain homotopy on the de Rham complex, proving $H^k_{\mathrm{dR}}(\mathbb{R}^n) = 0$ for $k > 0$.
+</Example>
+
+<Example title="Homotopy invariance of Ext" id="ext-homotopy">
+$\mathrm{Ext}^n_R(M, N)$ is independent of the choice of projective resolution of $M$ and injective resolution of $N$, by homotopy invariance applied to the Hom complex.
+</Example>
+
+<Example title="Null-homotopic implies zero on cohomology" id="null-homotopic">
+If $f \sim 0$, then $H^n(f) = 0$ for all $n$. Conversely, $H^n(f) = 0$ for all $n$ does not imply $f \sim 0$ in general (only that $f$ is a quasi-isomorphism to/from zero).
+</Example>
+
+<Example title="Homotopy transfer" id="homotopy-transfer">
+The homotopy transfer theorem states that if $A^\bullet$ is a DGA (differential graded algebra) and $A \sim B$ as complexes, then $H^\bullet(A)$ carries an $A_\infty$-algebra structure transferred from $A$. This relies on homotopy invariance at a deeper level.
+</Example>
+
+<Example title="Chain homotopy in the derived category" id="chain-derived">
+In the derived category $D(\mathcal{A})$, chain homotopic maps become equal (since they already are equal in $K(\mathcal{A})$). Additionally, quasi-isomorphisms become isomorphisms. So $D(\mathcal{A})$ sees "even less" than $K(\mathcal{A})$.
+</Example>
+
+<Example title="Homotopy invariance of sheaf cohomology" id="sheaf-homotopy">
+If $\mathcal{F} \to \mathcal{I}^\bullet$ and $\mathcal{F} \to \mathcal{J}^\bullet$ are two injective resolutions of a sheaf $\mathcal{F}$, then $H^n(X, \mathcal{F})$ computed via either resolution gives the same answer, by homotopy invariance.
+</Example>
+
+<Example title="Eilenberg-Zilber and Alexander-Whitney" id="eilenberg-zilber">
+The Eilenberg-Zilber map $C_\bullet(X) \otimes C_\bullet(Y) \to C_\bullet(X \times Y)$ and the Alexander-Whitney map in the opposite direction are chain homotopy inverses. By homotopy invariance, $H_n(X \times Y) \cong H_n(C_\bullet(X) \otimes C_\bullet(Y))$.
+</Example>
+
+<Example title="Functoriality consequences" id="functoriality">
+Since $H^n$ factors through $K(\mathcal{A})$ (by homotopy invariance), any construction that depends only on the homotopy class of a chain map is well-defined on $K(\mathcal{A})$. This includes cup products, cap products, and Massey products.
+</Example>
+
+---
+
+<Remark title="Significance">
+Homotopy invariance is the bridge between algebra and topology: it ensures that algebraic invariants computed from complexes (cohomology, derived functors) do not depend on auxiliary choices (resolutions, chain-level representatives). This is why the [homotopy category](/category-theory/ch04-complexes-cohomology/concepts/c05-homotopy-category) and [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category) are the natural settings for homological algebra.
+</Remark>

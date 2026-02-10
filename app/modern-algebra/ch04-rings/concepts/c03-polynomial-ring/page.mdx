@@ -1,0 +1,243 @@
+export const metadata = {
+  title: 'Polynomial Rings — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Concept — Polynomial Rings" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Polynomial Rings
+
+Polynomial rings are among the most important constructions in algebra. They serve as the free commutative algebras, provide the setting for factorization theory, and form the coordinate rings of algebraic varieties.
+
+---
+
+## Definition and Basic Properties
+
+<Definition title="Polynomial ring" number="4.17">
+Let $R$ be a commutative ring. The **polynomial ring** $R[x]$ consists of formal expressions
+
+$$f(x) = a_0 + a_1 x + a_2 x^2 + \cdots + a_n x^n$$
+
+where $a_i \in R$ and $a_n \neq 0$ (or $f = 0$). The element $a_i$ is the **coefficient** of $x^i$, and $a_n$ is the **leading coefficient**.
+
+Addition and multiplication are defined by:
+
+$$(a_0 + a_1 x + \cdots) + (b_0 + b_1 x + \cdots) = (a_0 + b_0) + (a_1 + b_1)x + \cdots$$
+
+$$(a_0 + a_1 x + \cdots)(b_0 + b_1 x + \cdots) = c_0 + c_1 x + \cdots, \quad c_k = \sum_{i+j=k} a_i b_j$$
+</Definition>
+
+<Definition title="Degree of a polynomial" number="4.18">
+The **degree** of a nonzero polynomial $f = a_0 + a_1 x + \cdots + a_n x^n$ with $a_n \neq 0$ is $\deg(f) = n$. By convention, $\deg(0) = -\infty$.
+
+A polynomial is **monic** if its leading coefficient is $1$.
+</Definition>
+
+<Theorem title="Degree formula" number="4.10">
+Let $R$ be an integral domain and $f, g \in R[x]$ be nonzero. Then:
+
+$$\deg(fg) = \deg(f) + \deg(g)$$
+
+In particular, $R[x]$ is also an integral domain.
+
+If $R$ is not an integral domain, we only have $\deg(fg) \leq \deg(f) + \deg(g)$. For example, in $\mathbb{Z}/4\mathbb{Z}[x]$, $(2x)(2x) = 4x^2 = 0$.
+</Theorem>
+
+---
+
+## The Universal Property
+
+<Theorem title="Universal property of polynomial rings" number="4.11">
+Let $R$ be a commutative ring. For any commutative $R$-algebra $S$ and any element $s \in S$, there exists a unique $R$-algebra homomorphism $\varphi: R[x] \to S$ with $\varphi(x) = s$. This map is the **evaluation homomorphism** $\mathrm{ev}_s$:
+
+$$\mathrm{ev}_s\left(\sum a_i x^i\right) = \sum a_i s^i$$
+</Theorem>
+
+<Remark title="Polynomial ring as free algebra">
+The universal property says that $R[x]$ is the **free commutative $R$-algebra on one generator**. Similarly, $R[x_1, \ldots, x_n]$ is the free commutative $R$-algebra on $n$ generators.
+</Remark>
+
+---
+
+## Examples
+
+<Example id="Z-poly" title="Polynomials over the integers">
+$\mathbb{Z}[x]$ is an integral domain. Some notable elements:
+- $2x^3 - 3x + 1$ has degree $3$ and leading coefficient $2$.
+- Units of $\mathbb{Z}[x]$ are exactly $\{1, -1\} = \mathbb{Z}^\times$ (since the degree of a product of units is $0$, and a degree-$0$ unit in $\mathbb{Z}[x]$ is a unit in $\mathbb{Z}$).
+</Example>
+
+<Example id="field-poly" title="Polynomials over a field">
+If $k$ is a field, $k[x]$ is a Euclidean domain (hence a PID and UFD). The **division algorithm** holds: for $f, g \in k[x]$ with $g \neq 0$, there exist unique $q, r \in k[x]$ with $f = qg + r$ and $\deg(r) < \deg(g)$.
+</Example>
+
+<Example id="multivariable" title="Multivariate polynomial rings">
+$R[x_1, \ldots, x_n]$ can be defined inductively as $R[x_1, \ldots, x_{n-1}][x_n]$. For a field $k$:
+- $k[x, y]$ is a UFD but NOT a PID (the ideal $(x, y)$ is not principal).
+- $k[x, y, z]/(xy - z^2)$ is an integral domain but NOT a UFD.
+</Example>
+
+<Example id="poly-subring" title="Polynomial subrings">
+$\mathbb{Z}[i] = \mathbb{Z}[x]/(x^2 + 1)$: the Gaussian integers are a quotient of a polynomial ring.
+
+$\mathbb{Z}[\sqrt{2}] = \mathbb{Z}[x]/(x^2 - 2)$: adjoin $\sqrt{2}$ to $\mathbb{Z}$.
+
+$\mathbb{Q}[\sqrt[3]{2}] = \mathbb{Q}[x]/(x^3 - 2)$: a degree-3 field extension of $\mathbb{Q}$.
+</Example>
+
+---
+
+## Division Algorithm and Consequences
+
+<Theorem title="Division algorithm in F[x]" number="4.12">
+Let $F$ be a field and $f, g \in F[x]$ with $g \neq 0$. Then there exist unique polynomials $q, r \in F[x]$ such that
+
+$$f = qg + r \quad \text{and} \quad \deg(r) < \deg(g)$$
+</Theorem>
+
+<Remark title="Division algorithm over general rings">
+The division algorithm does NOT hold over arbitrary rings. In $\mathbb{Z}[x]$, we cannot divide $x$ by $2x - 1$ with remainder of smaller degree. However, if the leading coefficient of $g$ is a unit, then division is possible. This is why $F[x]$ (for $F$ a field) has much nicer factorization properties than $\mathbb{Z}[x]$.
+</Remark>
+
+<Theorem title="F[x] is a PID" number="4.13">
+If $F$ is a field, then $F[x]$ is a principal ideal domain. Every ideal $I \subseteq F[x]$ is of the form $I = (f)$ for some $f \in F[x]$, unique up to scalar multiple.
+</Theorem>
+
+<Theorem title="Roots and factors" number="4.14">
+Let $F$ be a field and $f \in F[x]$. Then $\alpha \in F$ is a root of $f$ (i.e., $f(\alpha) = 0$) if and only if $(x - \alpha)$ divides $f$ in $F[x]$.
+
+Consequently, a polynomial of degree $n$ over a field has at most $n$ roots.
+</Theorem>
+
+<Example id="root-factor" title="Factoring via roots">
+$x^2 - 5x + 6 \in \mathbb{Q}[x]$ has roots $2$ and $3$, so $x^2 - 5x + 6 = (x-2)(x-3)$.
+
+$x^2 + 1 \in \mathbb{R}[x]$ has no real roots, so it is irreducible over $\mathbb{R}$.
+
+$x^2 + 1 \in \mathbb{C}[x]$ factors as $(x - i)(x + i)$.
+
+$x^2 + 1 \in \mathbb{F}_2[x]$ factors as $(x+1)^2$ since $1$ is a root (and $\mathrm{char} = 2$).
+</Example>
+
+---
+
+## Irreducible Polynomials
+
+<Definition title="Irreducible polynomial" number="4.19">
+A polynomial $f \in R[x]$ of degree $\geq 1$ is **irreducible** over $R$ if whenever $f = gh$ in $R[x]$, either $g$ or $h$ is a unit.
+
+Over a field $F$, this means: $f$ is irreducible if $\deg(f) \geq 1$ and $f$ cannot be written as a product of two polynomials of smaller degree.
+</Definition>
+
+<Example id="irreducible-examples" title="Irreducible polynomials">
+- $x^2 + 1$ is irreducible over $\mathbb{R}$ but reducible over $\mathbb{C}$.
+- $x^2 - 2$ is irreducible over $\mathbb{Q}$ (since $\sqrt{2} \notin \mathbb{Q}$).
+- $x^3 + x + 1$ is irreducible over $\mathbb{F}_2$ (check: $f(0) = 1 \neq 0$ and $f(1) = 1 \neq 0$, so no roots; and a degree-3 polynomial with no roots is irreducible).
+- Every degree-1 polynomial is irreducible over any field.
+</Example>
+
+<Theorem title="Irreducible polynomials generate maximal ideals" number="4.15">
+Let $F$ be a field and $f \in F[x]$ with $\deg(f) \geq 1$. Then $f$ is irreducible if and only if $(f)$ is a maximal ideal of $F[x]$, equivalently, $F[x]/(f)$ is a field.
+</Theorem>
+
+<Example id="constructing-fields" title="Constructing field extensions">
+Since $x^2 + 1$ is irreducible over $\mathbb{R}$, $\mathbb{R}[x]/(x^2 + 1) \cong \mathbb{C}$ is a field.
+
+Since $x^2 - 2$ is irreducible over $\mathbb{Q}$, $\mathbb{Q}[x]/(x^2 - 2) \cong \mathbb{Q}(\sqrt{2})$ is a field. Elements are $a + b\sqrt{2}$ with $a, b \in \mathbb{Q}$.
+
+Since $x^3 + x + 1$ is irreducible over $\mathbb{F}_2$, $\mathbb{F}_2[x]/(x^3 + x + 1) \cong \mathbb{F}_8$ is the field with $8$ elements.
+</Example>
+
+---
+
+## Polynomial Rings in Several Variables
+
+<Definition title="Multivariate polynomial ring" number="4.20">
+For a commutative ring $R$, the polynomial ring $R[x_1, \ldots, x_n]$ consists of finite sums
+
+$$f = \sum_{\alpha} c_\alpha x_1^{\alpha_1} \cdots x_n^{\alpha_n}$$
+
+where $\alpha = (\alpha_1, \ldots, \alpha_n) \in \mathbb{Z}_{\geq 0}^n$ and $c_\alpha \in R$ with only finitely many $c_\alpha \neq 0$. We write $x^\alpha$ for the monomial $x_1^{\alpha_1} \cdots x_n^{\alpha_n}$.
+
+The **total degree** of a monomial $x^\alpha$ is $|\alpha| = \alpha_1 + \cdots + \alpha_n$. The **total degree** of $f$ is $\max\{|\alpha| : c_\alpha \neq 0\}$.
+</Definition>
+
+<Example id="two-variable" title="Two-variable polynomials">
+In $\mathbb{Q}[x, y]$:
+- $f = x^2 y + 3xy^2 - y^3 + 1$ has total degree $3$.
+- The ideal $(x, y)$ consists of polynomials with no constant term.
+- $(x, y)$ is a maximal ideal since $\mathbb{Q}[x,y]/(x,y) \cong \mathbb{Q}$ is a field.
+- $(x, y)$ is NOT principal: if $(x, y) = (f)$, then $f \mid x$ and $f \mid y$, forcing $\deg(f) = 0$, so $f$ is a unit, giving $(f) = \mathbb{Q}[x,y] \neq (x,y)$.
+</Example>
+
+<Example id="symmetric" title="Symmetric polynomials">
+The **elementary symmetric polynomials** in $x_1, \ldots, x_n$ are:
+
+$$e_1 = \sum x_i, \quad e_2 = \sum_{i < j} x_i x_j, \quad \ldots, \quad e_n = x_1 x_2 \cdots x_n$$
+
+The **Fundamental Theorem of Symmetric Polynomials** states that every symmetric polynomial in $R[x_1, \ldots, x_n]$ can be uniquely expressed as a polynomial in $e_1, \ldots, e_n$.
+</Example>
+
+---
+
+## The Formal Power Series Ring
+
+<Definition title="Formal power series" number="4.21">
+The **formal power series ring** $R[[x]]$ consists of infinite sums $\sum_{n=0}^\infty a_n x^n$ with $a_n \in R$. Addition and multiplication are defined by the same formulas as for polynomials:
+
+$$\left(\sum a_n x^n\right)\left(\sum b_n x^n\right) = \sum c_n x^n, \quad c_n = \sum_{i+j=n} a_i b_j$$
+
+Unlike polynomials, an element of $R[[x]]$ is a unit if and only if its constant term $a_0$ is a unit in $R$.
+</Definition>
+
+<Example id="power-series-units" title="Units in power series rings">
+In $\mathbb{Z}[[x]]$, $1 - x$ is a unit since $(1-x)(1 + x + x^2 + \cdots) = 1$. But $2 + x$ is NOT a unit since $2 \notin \mathbb{Z}^\times$.
+
+In $\mathbb{Q}[[x]]$, $2 + x$ IS a unit since $2 \in \mathbb{Q}^\times$.
+
+In $k[[x]]$ for a field $k$, the maximal ideal is $(x)$ and $k[[x]]/(x^n) \cong k[x]/(x^n)$.
+</Example>
+
+<Example id="Laurent-series" title="Laurent series">
+The **Laurent series ring** $k((x)) = k[[x]][x^{-1}]$ consists of series $\sum_{n \geq N} a_n x^n$ for some $N \in \mathbb{Z}$. When $k$ is a field, $k((x))$ is also a field. It is the fraction field of $k[[x]]$.
+</Example>
+
+<Example id="polynomial-gcd" title="GCD of polynomials via Euclidean algorithm">
+In $\mathbb{Q}[x]$, compute $\gcd(x^3 - 1, x^2 + x + 1)$. By the Euclidean algorithm:
+
+$$x^3 - 1 = (x - 1)(x^2 + x + 1) + 0$$
+
+So $\gcd(x^3 - 1, x^2 + x + 1) = x^2 + x + 1$. This shows $(x^2 + x + 1) \mid (x^3 - 1)$, which reflects the factorization $x^3 - 1 = (x-1)(x^2 + x + 1)$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key properties of polynomial rings">
+The polynomial ring $R[x]$ inherits many properties from $R$:
+
+| Property of $R$ | Property of $R[x]$ |
+|---|---|
+| Integral domain | Integral domain |
+| Field | PID (and Euclidean domain) |
+| UFD | UFD (by Gauss's lemma) |
+| Noetherian | Noetherian (by Hilbert Basis Theorem) |
+| PID | NOT necessarily PID ($\mathbb{Z}[x]$ is not a PID) |
+
+The last point is important: even though $\mathbb{Z}$ is a PID, $\mathbb{Z}[x]$ is not (the ideal $(2, x)$ is not principal). However, $\mathbb{Z}[x]$ is still a UFD and Noetherian.
+</Remark>

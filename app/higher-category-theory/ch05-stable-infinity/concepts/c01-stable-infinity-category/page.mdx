@@ -1,0 +1,150 @@
+export const metadata = {
+  title: 'Stable Infinity-Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Concept — Stable Infinity-Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Stable $\infty$-Category
+
+A stable $\infty$-category is an $\infty$-category in which finite limits and finite colimits agree, and the suspension functor is an equivalence. Stable $\infty$-categories are the natural home for homological algebra and stable homotopy theory. Their homotopy categories are triangulated, but the stable $\infty$-categorical structure is strictly richer, resolving many pathologies of the triangulated framework.
+
+---
+
+## Definition
+
+<Definition title="Stable infinity-category" number="5.1">
+A pointed $\infty$-category $\mathcal{C}$ (i.e., one with a zero object) is **stable** if:
+
+1. $\mathcal{C}$ has all finite limits and finite colimits.
+2. A square in $\mathcal{C}$ is a pushout if and only if it is a pullback.
+
+Equivalently, $\mathcal{C}$ is stable if:
+- $\mathcal{C}$ has a zero object.
+- $\mathcal{C}$ has all finite colimits.
+- The suspension functor $\Sigma: \mathcal{C} \to \mathcal{C}$ (defined by $\Sigma X = 0 \sqcup_X 0$) is an equivalence.
+
+The inverse of $\Sigma$ is the loop functor $\Omega$.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="stable-spectra" title="Spectra">
+The $\infty$-category $\operatorname{Sp}$ of spectra is the prototypical stable $\infty$-category. It is the stabilization of pointed spaces: $\operatorname{Sp} = \lim(\cdots \xrightarrow{\Omega} \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_*)$.
+
+In $\operatorname{Sp}$, the suspension $\Sigma$ is an equivalence by design. The homotopy groups of a spectrum $E$ are $\pi_n(E) = \operatorname{colim}_k \pi_{n+k}(E_k)$, which can be negative.
+</Example>
+
+<Example id="stable-derived" title="Derived categories">
+For a ring $R$, the derived $\infty$-category $D(R)$ (the $\infty$-categorical enhancement of the derived category) is a stable $\infty$-category. The suspension is the shift functor $\Sigma = [1]$, and the loop functor is $\Omega = [-1]$.
+
+Pushout-pullback squares in $D(R)$ correspond to exact triangles: $A \to B \to C \to A[1]$ is an exact triangle iff the square with $A \to B$, $0 \to C$, and the connecting map is both a pushout and a pullback.
+</Example>
+
+<Example id="stable-modules" title="Module spectra">
+For a ring spectrum $R$ (an $E_1$-ring in the $\infty$-categorical sense), the $\infty$-category $\operatorname{Mod}_R$ of $R$-module spectra is stable. When $R$ is an Eilenberg--MacLane spectrum $HR$ for an ordinary ring $R$, $\operatorname{Mod}_{HR} \simeq D(R)$.
+</Example>
+
+<Example id="stable-sheaves" title="Stable sheaves">
+For a scheme $X$, the $\infty$-category $\operatorname{QCoh}(X)$ of quasi-coherent complexes is stable. The suspension is the shift $[1]$, and exact triangles correspond to short exact sequences of complexes.
+</Example>
+
+<Example id="stable-functor-cat" title="Functor categories">
+If $\mathcal{C}$ is stable and $K$ is any simplicial set, then $\operatorname{Fun}(K, \mathcal{C})$ is stable. In particular, the $\infty$-category $\operatorname{Fun}(\mathcal{A}, \operatorname{Sp})$ of "spectral presheaves" is stable.
+
+The zero object is the constant functor at $0$, and suspension/loop are computed pointwise.
+</Example>
+
+---
+
+## Exact Sequences and Fiber/Cofiber
+
+<Definition title="Fiber and cofiber sequences" number="5.2">
+In a stable $\infty$-category $\mathcal{C}$, a **fiber sequence** (or **exact triangle**) is a pullback-pushout square:
+
+$$A \to B \to C$$
+
+where $A = \operatorname{fib}(B \to C)$ (the fiber) and $C = \operatorname{cofib}(A \to B)$ (the cofiber). These extend to long exact sequences:
+
+$$\cdots \to \Omega C \to A \to B \to C \to \Sigma A \to \Sigma B \to \cdots$$
+
+Since pushouts and pullbacks coincide, there is no distinction between fiber and cofiber sequences. This is the key simplification of stable $\infty$-categories over general pointed $\infty$-categories.
+</Definition>
+
+<Example id="exact-triangle-chain" title="Exact triangles in D(R)">
+In $D(R)$, a fiber sequence $A \to B \to C$ gives the familiar long exact sequence in homology:
+
+$$\cdots \to H_{n+1}(C) \to H_n(A) \to H_n(B) \to H_n(C) \to H_{n-1}(A) \to \cdots$$
+
+The connecting homomorphism $H_{n+1}(C) \to H_n(A)$ comes from the boundary map in the exact triangle.
+</Example>
+
+<Example id="exact-triangle-spectra" title="Exact triangles in spectra">
+In $\operatorname{Sp}$, the cofiber sequence $S^0 \xrightarrow{2} S^0 \to M(2)$ (where $M(2)$ is the mod-$2$ Moore spectrum) gives the long exact sequence:
+
+$$\cdots \to \pi_{n+1}(M(2)) \to \pi_n(S^0) \xrightarrow{2} \pi_n(S^0) \to \pi_n(M(2)) \to \cdots$$
+
+relating the homotopy groups of the sphere spectrum to those of the Moore spectrum.
+</Example>
+
+---
+
+## Properties
+
+<Example id="stable-additive" title="Stable implies additive">
+In a stable $\infty$-category, the homotopy category $\operatorname{h}\mathcal{C}$ is automatically **additive**: for any objects $X, Y$, the map $X \sqcup Y \to X \times Y$ (from coproduct to product) is an equivalence. The common value is the **biproduct** $X \oplus Y$.
+
+The hom-sets $[X, Y] = \pi_0 \operatorname{Map}(X, Y)$ acquire an abelian group structure (from the loop space structure on $Y$), making $\operatorname{h}\mathcal{C}$ a preadditive category.
+</Example>
+
+<Example id="stable-enrichment" title="Enrichment in spectra">
+A stable $\infty$-category $\mathcal{C}$ is naturally enriched in spectra: for objects $X, Y$, there is a mapping spectrum
+
+$$\operatorname{map}_{\mathcal{C}}(X, Y) \in \operatorname{Sp}$$
+
+with $\Omega^\infty \operatorname{map}_{\mathcal{C}}(X, Y) \simeq \operatorname{Map}_{\mathcal{C}}(X, Y)$. The homotopy groups are:
+
+$$\pi_n(\operatorname{map}_{\mathcal{C}}(X, Y)) \cong [X, \Sigma^{-n} Y] \cong [\Sigma^n X, Y]$$
+
+For $\mathcal{C} = D(R)$: $\pi_n(\operatorname{map}(C, D)) = \operatorname{Ext}^{-n}_R(C, D)$.
+</Example>
+
+<Example id="stable-exact-functors" title="Exact functors">
+A functor $F: \mathcal{C} \to \mathcal{D}$ between stable $\infty$-categories is **exact** if it preserves finite limits (equivalently, finite colimits, equivalently, zero objects and pushouts, equivalently, zero objects and pullbacks). Exact functors preserve fiber and cofiber sequences.
+
+The $\infty$-category $\operatorname{Fun}^{\mathrm{ex}}(\mathcal{C}, \mathcal{D})$ of exact functors is itself stable.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Stable $\infty$-categories unify homological algebra and stable homotopy theory:
+
+1. A stable $\infty$-category has a zero object, and **pushouts = pullbacks**.
+
+2. The **suspension** $\Sigma$ is an equivalence, with inverse the **loop functor** $\Omega$.
+
+3. **Fiber sequences = cofiber sequences**: there is a single notion of exact sequence.
+
+4. The homotopy category is **additive** (in fact, triangulated).
+
+5. Key examples: spectra $\operatorname{Sp}$, derived categories $D(R)$, quasi-coherent sheaves $\operatorname{QCoh}(X)$.
+</Remark>

@@ -1,0 +1,96 @@
+export const metadata = {
+  title: 'Long Exact Sequence in Cohomology — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Theorem — Long Exact Sequence in Cohomology" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Long Exact Sequence in Cohomology
+
+The long exact sequence in cohomology is the fundamental theorem connecting short exact sequences of complexes to their cohomology. It is the primary computational tool in homological algebra, underlying the long exact sequences for Ext, Tor, sheaf cohomology, and group cohomology.
+
+---
+
+## Statement
+
+<Theorem title="Long Exact Sequence in Cohomology" number="4.6">
+Let $0 \to A^\bullet \xrightarrow{f} B^\bullet \xrightarrow{g} C^\bullet \to 0$ be a short exact sequence of cochain complexes in an abelian category $\mathcal{A}$. Then there exist connecting homomorphisms $\delta^n : H^n(C^\bullet) \to H^{n+1}(A^\bullet)$ for each $n$, and the sequence
+
+$$\cdots \to H^n(A) \xrightarrow{H^n(f)} H^n(B) \xrightarrow{H^n(g)} H^n(C) \xrightarrow{\delta^n} H^{n+1}(A) \xrightarrow{H^{n+1}(f)} H^{n+1}(B) \to \cdots$$
+
+is exact. Moreover, $\delta^n$ is natural: a morphism of short exact sequences of complexes induces a morphism of long exact sequences.
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="Mayer-Vietoris in singular cohomology" id="mayer-vietoris">
+For $X = U \cup V$ open, the short exact sequence $0 \to C^\bullet(X) \to C^\bullet(U) \oplus C^\bullet(V) \to C^\bullet(U \cap V) \to 0$ gives the Mayer-Vietoris long exact sequence.
+</Example>
+
+<Example title="Long exact sequence of a pair" id="pair">
+For $A \subseteq X$, the sequence $0 \to C^\bullet(A) \to C^\bullet(X) \to C^\bullet(X, A) \to 0$ gives $\cdots \to H^n(A) \to H^n(X) \to H^n(X, A) \xrightarrow{\delta} H^{n+1}(A) \to \cdots$.
+</Example>
+
+<Example title="Long exact sequence for Ext" id="les-ext">
+From $0 \to M' \to M \to M'' \to 0$ in $R\text{-}\mathbf{Mod}$, applying $\mathrm{Hom}(-, N)$ gives $0 \to \mathrm{Hom}(M'', N) \to \mathrm{Hom}(M, N) \to \mathrm{Hom}(M', N) \to \mathrm{Ext}^1(M'', N) \to \cdots$.
+</Example>
+
+<Example title="Long exact sequence for Tor" id="les-tor">
+From $0 \to M' \to M \to M'' \to 0$, applying $- \otimes N$ gives $\cdots \to \mathrm{Tor}_1(M'', N) \to M' \otimes N \to M \otimes N \to M'' \otimes N \to 0$.
+</Example>
+
+<Example title="Long exact sequence in sheaf cohomology" id="les-sheaf">
+For $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ on $X$: $0 \to \Gamma(\mathcal{F}') \to \Gamma(\mathcal{F}) \to \Gamma(\mathcal{F}'') \xrightarrow{\delta} H^1(X, \mathcal{F}') \to \cdots$.
+</Example>
+
+<Example title="Exponential sequence" id="exponential">
+$0 \to \underline{\mathbb{Z}} \to \mathcal{O}_X \to \mathcal{O}_X^* \to 0$ gives $\cdots \to H^1(X, \mathcal{O}) \to H^1(X, \mathcal{O}^*) \xrightarrow{c_1} H^2(X, \mathbb{Z}) \to H^2(X, \mathcal{O}) \to \cdots$.
+</Example>
+
+<Example title="Group cohomology" id="les-group">
+For $0 \to M' \to M \to M'' \to 0$ as $G$-modules: $\cdots \to H^n(G, M') \to H^n(G, M) \to H^n(G, M'') \xrightarrow{\delta} H^{n+1}(G, M') \to \cdots$.
+</Example>
+
+<Example title="Bockstein homomorphism" id="bockstein">
+From $0 \to \mathbb{Z}/p \to \mathbb{Z}/p^2 \to \mathbb{Z}/p \to 0$, the connecting homomorphism $\beta : H^n(X; \mathbb{Z}/p) \to H^{n+1}(X; \mathbb{Z}/p)$ is the Bockstein homomorphism, used in Steenrod operations.
+</Example>
+
+<Example title="Gysin sequence" id="gysin">
+For an oriented sphere bundle $S^n \to E \to B$, the Gysin sequence $\cdots \to H^k(B) \to H^{k+n}(E) \to H^{k+n}(B) \xrightarrow{e \cup} H^{k+n+1}(B) \to \cdots$ arises from a long exact sequence.
+</Example>
+
+<Example title="Wang sequence" id="wang">
+For a fiber bundle $F \to E \to S^n$ with $n \geq 2$: $\cdots \to H^k(E) \to H^k(F) \to H^{k-n+1}(F) \to H^{k+1}(E) \to \cdots$.
+</Example>
+
+<Example title="Naturality of delta" id="naturality">
+Given a morphism of SES of complexes, the connecting homomorphisms commute with the induced maps. This is essential for functoriality of long exact sequences and comparison arguments using the Five Lemma.
+</Example>
+
+<Example title="LES from a distinguished triangle" id="les-triangle">
+In a triangulated category, a distinguished triangle $A \to B \to C \to A[1]$ and a cohomological functor $H$ give a long exact sequence $\cdots \to H^n(A) \to H^n(B) \to H^n(C) \to H^{n+1}(A) \to \cdots$. The LES in cohomology of complexes is the special case where the triangulated category is $K(\mathcal{A})$ or $D(\mathcal{A})$.
+</Example>
+
+---
+
+## Proof Reference
+
+<Remark title="Proof">
+The proof uses the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma) applied to the diagram relating cocycles/coboundaries in degrees $n$ and $n+1$. See the [detailed proof](/category-theory/ch04-complexes-cohomology/proofs/p01-long-exact-seq-proof).
+</Remark>

@@ -1,0 +1,322 @@
+export const metadata = {
+  title: 'Proof of Sylow Theorems — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Proof — Proof of the Sylow Theorems" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Sylow Theorems
+
+We present complete proofs of all three Sylow theorems using group actions. The proofs illustrate the power of the counting techniques developed in this chapter: the orbit-stabilizer theorem, the class equation, and the fixed-point congruence for $p$-groups.
+
+## Statements
+
+<Theorem>
+Let $G$ be a finite group with $|G| = p^n m$ where $p$ is prime and $\gcd(p, m) = 1$.
+
+**Sylow I (Existence)**: $G$ has a subgroup of order $p^n$.
+
+**Sylow II (Conjugacy)**: Any two Sylow $p$-subgroups are conjugate. Every $p$-subgroup is contained in a Sylow $p$-subgroup.
+
+**Sylow III (Counting)**: The number $n_p$ of Sylow $p$-subgroups satisfies $n_p \equiv 1 \pmod{p}$ and $n_p \mid m$.
+</Theorem>
+
+---
+
+## Proof of Sylow I (Existence)
+
+We give two proofs: one using the action on subsets, and one by induction using the class equation.
+
+### Proof 1: Action on Subsets (Wielandt's proof)
+
+<Proof>
+Let $|G| = p^n m$ with $\gcd(p, m) = 1$. Consider the set
+
+$$\mathcal{X} = \{S \subseteq G : |S| = p^n\}$$
+
+of all subsets of $G$ of size $p^n$. The group $G$ acts on $\mathcal{X}$ by left multiplication: $g \cdot S = gS = \{gs : s \in S\}$.
+
+**Step 1: Count $|\mathcal{X}|$ modulo $p$.**
+
+We have $|\mathcal{X}| = \binom{p^n m}{p^n}$. We claim that $p \nmid |\mathcal{X}|$.
+
+To see this, note that for $0 \leq j \leq p^n - 1$:
+
+$$\frac{p^n m - j}{p^n - j}$$
+
+and both $p^n m - j$ and $p^n - j$ have the same $p$-adic valuation (they differ by $p^n(m-1)$, and for $0 \leq j < p^n$, $v_p(p^n m - j) = v_p(j) = v_p(p^n - j)$ when $j > 0$, and both equal $n$ when $j = 0$).
+
+More precisely, for $j \geq 1$, write $j = p^a c$ with $\gcd(p,c) = 1$ and $a < n$. Then $v_p(p^n m - j) = a = v_p(p^n - j)$. Therefore
+
+$$\binom{p^n m}{p^n} = \prod_{j=0}^{p^n - 1} \frac{p^n m - j}{p^n - j} \equiv m \pmod{p}$$
+
+where the $j = 0$ factor contributes $m$ and all other factors contribute values coprime to $p$. Since $\gcd(p, m) = 1$, we have $p \nmid |\mathcal{X}|$.
+
+**Step 2: Find an orbit of size $p^n$.**
+
+Since $G$ acts on $\mathcal{X}$ and $|\mathcal{X}|$ is not divisible by $p^{n+1}$ (in fact not even by $p$), there exists an orbit $\mathcal{O}$ whose size is not divisible by $p^{n+1}$. But every orbit size divides $|G| = p^n m$, so $|\mathcal{O}|$ divides $p^n m$. Since $p^{n+1} \nmid |\mathcal{O}|$ and $\gcd(p,m) = 1$, we conclude that $p^n$ does not divide $|\mathcal{O}|$ any more than $p^n$ divides $|G|$. Actually, since orbit sizes divide $|G| = p^n m$, we need $|\mathcal{O}| = p^a \cdot d$ with $a \leq n$ and $d \mid m$.
+
+By Orbit-Stabilizer: $|\mathcal{O}| = |G|/|\operatorname{Stab}(S)|$ for any $S \in \mathcal{O}$. So $|\operatorname{Stab}(S)| = p^n m / |\mathcal{O}|$. Since there is an orbit with $|\mathcal{O}|$ not divisible by more than $p^0$ copies of $p$ beyond what divides $m$ ... let us be more direct.
+
+Since $p \nmid |\mathcal{X}|$ and $|\mathcal{X}| = \sum_{\text{orbits}} |\mathcal{O}_i|$, there exists an orbit $\mathcal{O}$ with $p \nmid |\mathcal{O}|$. Since $|\mathcal{O}|$ divides $|G| = p^n m$, $p \nmid |\mathcal{O}|$ means $|\mathcal{O}| \mid m$.
+
+**Step 3: The stabilizer has order at least $p^n$.**
+
+Pick $S$ in this orbit. $|\operatorname{Stab}(S)| = |G|/|\mathcal{O}|$, and since $|\mathcal{O}| \mid m$, we get $|\operatorname{Stab}(S)| \geq p^n m / m = p^n$. Actually, $|\operatorname{Stab}(S)| = p^n m / |\mathcal{O}|$ and $|\mathcal{O}| \mid m$, so $p^n \mid |\operatorname{Stab}(S)|$, giving $|\operatorname{Stab}(S)| \geq p^n$.
+
+**Step 4: The stabilizer has order exactly $p^n$.**
+
+The stabilizer $H = \operatorname{Stab}(S) = \{g \in G : gS = S\}$. For any $s \in S$, the map $h \mapsto hs$ is an injection $H \hookrightarrow S$ (since $H$ permutes $S$, and $hs \in S$ for $h \in H$). Wait, more precisely: $H$ acts on $S$ by left multiplication (since $hS = S$). For a fixed $s_0 \in S$, the orbit map $H \to S$ given by $h \mapsto hs_0$ is injective (since left multiplication is injective). So $|H| \leq |S| = p^n$.
+
+Combined with $|H| \geq p^n$, we get $|H| = p^n$. Therefore $H$ is a subgroup of order $p^n$, i.e., a Sylow $p$-subgroup.
+</Proof>
+
+### Proof 2: Induction using the Class Equation
+
+<Proof>
+We prove by strong induction on $|G|$ that $G$ has a subgroup of order $p^n$.
+
+**Base case**: $|G| = 1$, trivially true (empty product).
+
+**Inductive step**: Assume the result for all groups of order less than $|G|$. Write $|G| = p^n m$.
+
+**Case 1: $p$ divides $|Z(G)|$.**
+
+By Cauchy's theorem (which can be proved independently using the cyclic rotation action), $Z(G)$ contains an element $z$ of order $p$. Let $N = \langle z \rangle \trianglelefteq G$ (normal since $z$ is central). Then $|G/N| = p^{n-1} m$.
+
+By induction, $G/N$ has a subgroup $\bar{H}$ of order $p^{n-1}$. Let $H = \pi^{-1}(\bar{H})$ where $\pi: G \to G/N$ is the projection. Then $|H| = |\bar{H}| \cdot |N| = p^{n-1} \cdot p = p^n$.
+
+**Case 2: $p$ does not divide $|Z(G)|$.**
+
+By the class equation: $|G| = |Z(G)| + \sum [G : C_G(a_i)]$. Since $p \mid |G|$ and $p \nmid |Z(G)|$, there exists a non-central conjugacy class with $p \nmid [G : C_G(a_i)]$. For such $a_i$, let $H = C_G(a_i)$. Since $[G : H]$ is coprime to $p$ and $|H| = |G|/[G:H]$, we have $v_p(|H|) = v_p(|G|) = n$.
+
+Since $a_i \notin Z(G)$, we have $H \neq G$, so $|H| < |G|$. By induction, $H$ (and hence $G$) contains a subgroup of order $p^n$.
+</Proof>
+
+---
+
+## Proof of Sylow II (Conjugacy)
+
+<Proof>
+**Claim**: If $P$ is a Sylow $p$-subgroup and $Q$ is any $p$-subgroup of $G$, then $Q$ is contained in some conjugate of $P$. In particular, if $Q$ is also a Sylow $p$-subgroup, then $Q$ is conjugate to $P$.
+
+**Step 1: Action of $Q$ on $G/P$.**
+
+Let $P$ be a Sylow $p$-subgroup. Consider the set of left cosets $G/P = \{gP : g \in G\}$. The group $Q$ acts on $G/P$ by left multiplication: $q \cdot (gP) = (qg)P$.
+
+**Step 2: Count fixed points.**
+
+$|G/P| = [G : P] = m$, and $\gcd(p, m) = 1$ since $|P| = p^n$ and $|G| = p^n m$.
+
+Since $Q$ is a $p$-group, the fixed-point congruence gives:
+
+$$|G/P| \equiv |\{gP \in G/P : Q \cdot gP = gP\}| \pmod{p}.$$
+
+Since $|G/P| = m$ and $p \nmid m$, there is at least one fixed point.
+
+**Step 3: A fixed point gives containment in a conjugate.**
+
+If $gP$ is a fixed point of $Q$, then $qgP = gP$ for all $q \in Q$. This means $g^{-1}qg \in P$ for all $q \in Q$, i.e., $g^{-1}Qg \subseteq P$. Therefore $Q \subseteq gPg^{-1}$.
+
+**Step 4: Conjugacy of Sylow subgroups.**
+
+If $Q$ is itself a Sylow $p$-subgroup (so $|Q| = p^n$), then $Q \subseteq gPg^{-1}$ and $|Q| = |gPg^{-1}| = p^n$, so $Q = gPg^{-1}$.
+</Proof>
+
+---
+
+## Proof of Sylow III (Counting)
+
+<Proof>
+**Step 1: $n_p = [G : N_G(P)]$.**
+
+By Sylow II, the Sylow $p$-subgroups are exactly the conjugates of $P$. The number of conjugates of $P$ is the index of the normalizer:
+
+$$n_p = |\{gPg^{-1} : g \in G\}| = [G : N_G(P)].$$
+
+**Step 2: $n_p$ divides $m$.**
+
+Since $P \leq N_G(P)$, we have $n_p = [G : N_G(P)]$ divides $[G : P] = m$.
+
+**Step 3: $n_p \equiv 1 \pmod{p}$.**
+
+Let $\operatorname{Syl}_p(G) = \{P_1, P_2, \ldots, P_{n_p}\}$ be the set of all Sylow $p$-subgroups. Fix $P = P_1$ and let $P$ act on $\operatorname{Syl}_p(G)$ by conjugation: $g \cdot P_i = gP_ig^{-1}$ for $g \in P$.
+
+**The fixed points of this action**: $P_i$ is fixed by $P$ if and only if $gP_ig^{-1} = P_i$ for all $g \in P$, i.e., $P \leq N_G(P_i)$.
+
+If $P \leq N_G(P_i)$, then both $P$ and $P_i$ are Sylow $p$-subgroups of $N_G(P_i)$. By Sylow II applied to $N_G(P_i)$, they are conjugate in $N_G(P_i)$. But $P_i$ is normal in $N_G(P_i)$ (by definition of normalizer), so the only conjugate of $P_i$ in $N_G(P_i)$ is $P_i$ itself. Therefore $P = P_i$.
+
+So the only fixed point of $P$ acting on $\operatorname{Syl}_p(G)$ is $P$ itself. By the fixed-point congruence for $p$-groups:
+
+$$n_p \equiv |\{\text{fixed points}\}| = 1 \pmod{p}.$$
+</Proof>
+
+---
+
+## Verification with Examples
+
+<Example id="sylow-verify-s3" title="Verification for S_3">
+$|S_3| = 6 = 2 \cdot 3$.
+
+**Sylow 2-subgroups** (order 2): $\langle(1\;2)\rangle$, $\langle(1\;3)\rangle$, $\langle(2\;3)\rangle$. So $n_2 = 3$.
+
+Check: $n_2 \equiv 1 \pmod{2}$? $3 \equiv 1$, yes. $n_2 \mid 3$? $3 \mid 3$, yes.
+
+These are conjugate: $(1\;3)(1\;2)(1\;3) = (2\;3)$, so $\langle(1\;2)\rangle$ and $\langle(2\;3)\rangle$ are conjugate. Similarly for $\langle(1\;3)\rangle$.
+
+**Sylow 3-subgroups** (order 3): $\langle(1\;2\;3)\rangle = A_3$. So $n_3 = 1$.
+
+Check: $n_3 \equiv 1 \pmod{3}$? $1 \equiv 1$, yes. $n_3 \mid 2$? $1 \mid 2$, yes.
+
+Since $n_3 = 1$, the Sylow 3-subgroup $A_3$ is normal in $S_3$.
+</Example>
+
+<Example id="sylow-verify-a4" title="Verification for A_4">
+$|A_4| = 12 = 2^2 \cdot 3$.
+
+**Sylow 2-subgroups** (order 4): There is one, $V_4 = \{e, (1\;2)(3\;4), (1\;3)(2\;4), (1\;4)(2\;3)\}$, which is normal. So $n_2 = 1$.
+
+Check: $n_2 \mid 3$ and $n_2 \equiv 1 \pmod{2}$. Both satisfied.
+
+**Sylow 3-subgroups** (order 3): $\langle(1\;2\;3)\rangle$, $\langle(1\;2\;4)\rangle$, $\langle(1\;3\;4)\rangle$, $\langle(2\;3\;4)\rangle$. So $n_3 = 4$.
+
+Check: $n_3 \mid 4$ and $n_3 \equiv 1 \pmod{3}$. Indeed, $4 \mid 4$ and $4 \equiv 1 \pmod{3}$. Both satisfied.
+</Example>
+
+<Example id="sylow-verify-s4" title="Verification for S_4">
+$|S_4| = 24 = 2^3 \cdot 3$.
+
+**Sylow 2-subgroups** (order 8): Three copies of $D_4$, so $n_2 = 3$.
+
+Check: $n_2 \mid 3$ and $n_2 \equiv 1 \pmod{2}$. Both hold.
+
+**Sylow 3-subgroups** (order 3): Four cyclic subgroups generated by the four 3-cycles (up to inverses), so $n_3 = 4$.
+
+Check: $n_3 \mid 8$ and $n_3 \equiv 1 \pmod{3}$. Indeed $4 \mid 8$ and $4 \equiv 1 \pmod{3}$.
+</Example>
+
+<Example id="sylow-verify-z30" title="Verification for Z/30Z">
+$|\mathbb{Z}/30\mathbb{Z}| = 30 = 2 \cdot 3 \cdot 5$.
+
+Since $\mathbb{Z}/30\mathbb{Z}$ is abelian, every subgroup is normal, so $n_p = 1$ for all primes $p$.
+
+- Sylow 2-subgroup: $\{0, 15\} \cong \mathbb{Z}/2\mathbb{Z}$. Unique.
+- Sylow 3-subgroup: $\{0, 10, 20\} \cong \mathbb{Z}/3\mathbb{Z}$. Unique.
+- Sylow 5-subgroup: $\{0, 6, 12, 18, 24\} \cong \mathbb{Z}/5\mathbb{Z}$. Unique.
+
+Checks: $n_2 = 1 \equiv 1 \pmod{2}$, $n_2 \mid 15$. $n_3 = 1 \equiv 1 \pmod{3}$, $n_3 \mid 10$. $n_5 = 1 \equiv 1 \pmod{5}$, $n_5 \mid 6$. All satisfied.
+</Example>
+
+<Example id="sylow-verify-gl2f3" title="Verification for GL_2(F_3)">
+$|GL_2(\mathbb{F}_3)| = (9-1)(9-3) = 48 = 2^4 \cdot 3$.
+
+**Sylow 2-subgroups** (order 16): $n_2 \equiv 1 \pmod{2}$ and $n_2 \mid 3$, so $n_2 \in \{1, 3\}$. In fact $n_2 = 3$.
+
+**Sylow 3-subgroups** (order 3): $n_3 \equiv 1 \pmod{3}$ and $n_3 \mid 16$, so $n_3 \in \{1, 4, 16\}$. In fact $n_3 = 4$.
+
+Both can be verified by explicit computation in $GL_2(\mathbb{F}_3)$.
+</Example>
+
+---
+
+## Applications of the Proofs
+
+<Example id="every-p-subgroup-in-sylow" title="Every p-subgroup lies in a Sylow subgroup">
+The conjugacy proof (Sylow II) shows more than just conjugacy: it shows that **every $p$-subgroup $Q$ is contained in some Sylow $p$-subgroup**. The proof constructs this explicitly: $Q$ acts on $G/P$, finds a fixed point $gP$, and then $Q \subseteq gPg^{-1}$.
+
+This is useful in practice: given a $p$-subgroup $H$ of $G$, we know it sits inside a Sylow $p$-subgroup, which constrains the structure of $H$.
+</Example>
+
+<Example id="unique-sylow-normal" title="Unique Sylow p-subgroup is normal">
+If $n_p = 1$, the unique Sylow $p$-subgroup $P$ is normal in $G$. This follows immediately from Sylow II: $P$ is the only Sylow $p$-subgroup, so $gPg^{-1} = P$ for all $g \in G$.
+
+Conversely, if $P$ is a normal Sylow $p$-subgroup, then $n_p = 1$ (since all Sylow $p$-subgroups are conjugate to $P$, and conjugation preserves $P$, there is only one).
+
+This criterion ($n_p = 1 \iff P \trianglelefteq G$) is the most common way the Sylow theorems are applied: if the Sylow constraints force $n_p = 1$, we immediately get a normal subgroup.
+</Example>
+
+---
+
+## Summary of Proof Techniques
+
+<Remark title="Key proof ideas">
+1. **Sylow I (Wielandt)**: $G$ acts on size-$p^n$ subsets. A binomial coefficient computation shows not all orbit sizes are divisible by $p$. The stabilizer of a "good" subset has exactly $p^n$ elements.
+
+2. **Sylow I (Class equation)**: Induction using either a central element of order $p$ or a centralizer whose order has the same $p$-part as $|G|$.
+
+3. **Sylow II**: A $p$-subgroup $Q$ acts on $G/P$. Since $|G/P|$ is coprime to $p$, the fixed-point congruence forces a fixed point, yielding $Q \subseteq gPg^{-1}$.
+
+4. **Sylow III**: $P$ acts on $\operatorname{Syl}_p(G)$ by conjugation. The only fixed point is $P$ itself. The fixed-point congruence gives $n_p \equiv 1 \pmod{p}$, and $n_p = [G : N_G(P)]$ gives divisibility.
+</Remark>
+
+---
+
+## Further Verification Examples
+
+<Example id="sylow-verify-d5" title="Verification for D_5">
+$|D_5| = 10 = 2 \cdot 5$.
+
+Sylow 5-subgroup: $\langle r \rangle \cong \mathbb{Z}/5\mathbb{Z}$, unique ($n_5 = 1$), hence normal. Check: $n_5 \equiv 1 \pmod{5}$, $n_5 \mid 2$. Satisfied.
+
+Sylow 2-subgroups: $\langle s \rangle, \langle sr \rangle, \langle sr^2 \rangle, \langle sr^3 \rangle, \langle sr^4 \rangle$. So $n_2 = 5$. Check: $n_2 \equiv 1 \pmod{2}$ ($5$ is odd), $n_2 \mid 5$. Both satisfied.
+
+These 5 Sylow 2-subgroups are all conjugate: $r \langle s \rangle r^{-1} = \langle rsr^{-1} \rangle = \langle sr^{-2} \rangle = \langle sr^3 \rangle$.
+</Example>
+
+<Example id="sylow-construction-z15" title="Constructing Sylow subgroups of Z/15Z">
+$|\mathbb{Z}/15\mathbb{Z}| = 15 = 3 \cdot 5$.
+
+The Sylow 3-subgroup is $\{0, 5, 10\} = \langle 5 \rangle \cong \mathbb{Z}/3\mathbb{Z}$. Unique.
+
+The Sylow 5-subgroup is $\{0, 3, 6, 9, 12\} = \langle 3 \rangle \cong \mathbb{Z}/5\mathbb{Z}$. Unique.
+
+In Wielandt's proof, we would look at subsets of $\mathbb{Z}/15\mathbb{Z}$ of the relevant size. For instance, for $p = 3$: subsets of size 3. The stabilizer of the coset $\{0, 5, 10\}$ under left-addition is exactly $\{0, 5, 10\}$ itself (elements $g$ with $g + \{0,5,10\} = \{0,5,10\}$).
+</Example>
+
+<Example id="sylow-abstract-group-60" title="Using Sylow III for groups of order 60">
+If $|G| = 60 = 2^2 \cdot 3 \cdot 5$, the Sylow constraints give:
+
+- $n_2 \mid 15$, $n_2 \equiv 1 \pmod{2}$: $n_2 \in \{1, 3, 5, 15\}$.
+- $n_3 \mid 20$, $n_3 \equiv 1 \pmod{3}$: $n_3 \in \{1, 4, 10\}$.
+- $n_5 \mid 12$, $n_5 \equiv 1 \pmod{5}$: $n_5 \in \{1, 6\}$.
+
+For $G = A_5$: $n_2 = 5$, $n_3 = 10$, $n_5 = 6$. None is 1, consistent with $A_5$ being simple.
+
+If $G$ is simple of order 60, one can show $G \cong A_5$ using the Sylow constraints and the action on Sylow subgroups.
+</Example>
+
+<Example id="sylow-semidirect" title="Using Sylow to build semidirect products">
+Let $|G| = 21 = 3 \cdot 7$. Then $n_7 \mid 3$ and $n_7 \equiv 1 \pmod{7}$, so $n_7 = 1$. Let $P \cong \mathbb{Z}/7\mathbb{Z}$ be the normal Sylow 7-subgroup.
+
+Also $n_3 \mid 7$ and $n_3 \equiv 1 \pmod{3}$, so $n_3 \in \{1, 7\}$.
+
+If $n_3 = 1$: $G \cong \mathbb{Z}/3\mathbb{Z} \times \mathbb{Z}/7\mathbb{Z} \cong \mathbb{Z}/21\mathbb{Z}$.
+
+If $n_3 = 7$: $G$ is a non-abelian semidirect product $\mathbb{Z}/7\mathbb{Z} \rtimes \mathbb{Z}/3\mathbb{Z}$. This exists because $\operatorname{Aut}(\mathbb{Z}/7\mathbb{Z}) \cong \mathbb{Z}/6\mathbb{Z}$ contains an element of order 3.
+
+So there are exactly 2 groups of order 21.
+</Example>
+
+<Example id="sylow-frattini-argument" title="Frattini argument">
+Let $G$ be a finite group, $N \trianglelefteq G$, and $P$ a Sylow $p$-subgroup of $N$. The **Frattini argument** states:
+
+$$G = N \cdot N_G(P).$$
+
+**Proof**: For any $g \in G$, $gPg^{-1} \leq gNg^{-1} = N$ (since $N$ is normal). So $gPg^{-1}$ is a Sylow $p$-subgroup of $N$. By Sylow II in $N$, $gPg^{-1} = nPn^{-1}$ for some $n \in N$. Then $n^{-1}g \in N_G(P)$, so $g = n(n^{-1}g) \in N \cdot N_G(P)$.
+
+This argument is used frequently in the theory of solvable groups and in proving results about normal subgroups.
+</Example>

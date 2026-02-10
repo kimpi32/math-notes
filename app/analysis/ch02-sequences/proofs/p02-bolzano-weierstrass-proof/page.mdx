@@ -1,0 +1,146 @@
+export const metadata = {
+  title: '볼차노-바이어슈트라스의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "증명 - 볼차노-바이어슈트라스의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 볼차노-바이어슈트라스의 증명 (Proof of Bolzano--Weierstrass)
+
+We present two proofs: the bisection (nested intervals) method and the peak-point (monotone subsequence) method.
+
+---
+
+## Theorem restated
+
+<Theorem title="Bolzano--Weierstrass Theorem">
+Every bounded sequence of real numbers has a convergent subsequence.
+</Theorem>
+
+---
+
+## Proof 1: Bisection method (Nested Intervals)
+
+<Proof>
+Let $(a_n)$ be bounded, say $a_n \in [A, B]$ for all $n$. We construct nested intervals containing infinitely many terms.
+
+**Step 1 (Bisection).** Set $I_0 = [A, B]$. Bisect $I_0$ into $[A, \frac{A+B}{2}]$ and $[\frac{A+B}{2}, B]$. At least one half contains infinitely many terms of $(a_n)$; call it $I_1 = [A_1, B_1]$. Note $B_1 - A_1 = \frac{B - A}{2}$.
+
+Repeat: bisect $I_1$ and choose the half $I_2 = [A_2, B_2]$ containing infinitely many terms, with $B_2 - A_2 = \frac{B - A}{4}$.
+
+Continuing, we obtain nested intervals $I_0 \supseteq I_1 \supseteq I_2 \supseteq \cdots$ with:
+- Each $I_k$ contains infinitely many terms of $(a_n)$.
+- $|I_k| = B_k - A_k = \frac{B - A}{2^k} \to 0$.
+
+**Step 2 (Extract subsequence).** Since $I_1$ contains infinitely many terms, choose $n_1$ with $a_{n_1} \in I_1$. Since $I_2$ contains infinitely many terms, choose $n_2 > n_1$ with $a_{n_2} \in I_2$. Continuing, we get $n_1 < n_2 < n_3 < \cdots$ with $a_{n_k} \in I_k$.
+
+**Step 3 (Convergence).** The sequences $(A_k)$ and $(B_k)$ are monotone and bounded (increasing and decreasing respectively). By the Monotone Convergence Theorem, both converge. Since $B_k - A_k \to 0$, they converge to the same limit $L$. Since $A_k \leq a_{n_k} \leq B_k$ and both bounds tend to $L$, the Squeeze Theorem gives $a_{n_k} \to L$.
+</Proof>
+
+---
+
+## Proof 2: Peak-point method (Monotone Subsequence)
+
+<Proof>
+We first establish a lemma.
+
+**Lemma (Every sequence has a monotone subsequence).** Call index $n$ a **peak** of $(a_n)$ if $a_n \geq a_m$ for all $m > n$.
+
+**Case 1**: There are infinitely many peaks $n_1 < n_2 < n_3 < \cdots$. Then $a_{n_1} \geq a_{n_2} \geq a_{n_3} \geq \cdots$, so $(a_{n_k})$ is a decreasing subsequence.
+
+**Case 2**: There are finitely many peaks (possibly none). Let $N$ be larger than all peak indices. Since $N$ is not a peak, there exists $n_1 > N$ with $a_{n_1} > a_N$. Since $n_1$ is not a peak, there exists $n_2 > n_1$ with $a_{n_2} > a_{n_1}$. Continuing, we get $a_{n_1} < a_{n_2} < a_{n_3} < \cdots$, an increasing subsequence.
+
+**Completing the proof.** Now let $(a_n)$ be bounded. By the Lemma, it has a monotone subsequence $(a_{n_k})$. This subsequence is also bounded (as a subsequence of a bounded sequence). By the Monotone Convergence Theorem, $(a_{n_k})$ converges.
+</Proof>
+
+---
+
+## Comparison of the two proofs
+
+<Remark>
+Both proofs use the Monotone Convergence Theorem (and hence completeness of $\mathbb{R}$).
+
+**Bisection method**: More constructive. Given the sequence, you can explicitly compute the nested intervals and extract the subsequence. However, which half to choose at each step requires checking infinitely many terms.
+
+**Peak-point method**: More elegant and conceptual. The monotone subsequence lemma is useful in its own right. The proof also generalizes more easily to other settings.
+</Remark>
+
+---
+
+## Detailed examples of the bisection method
+
+<Example title="Bisection applied to a_n = sin(n)">
+1. The sequence $(\sin(n))$ is bounded in $[-1, 1]$.
+- $I_0 = [-1, 1]$, midpoint $0$. Both halves contain infinitely many terms. Choose, say, $I_1 = [0, 1]$.
+- $I_1 = [0, 1]$, midpoint $0.5$. Choose $I_2$ to be whichever half has infinitely many terms.
+- After $k$ bisections, $|I_k| = 2^{1-k}$, and the subsequence converges.
+</Example>
+
+<Example title="Bisection applied to (-1)^n (1 + 1/n)">
+2. $a_n = (-1)^n (1 + \frac{1}{n})$: bounded in $[-2, 2]$.
+- $I_0 = [-2, 2]$. Both $[-2, 0]$ (odd terms) and $[0, 2]$ (even terms) have infinitely many elements.
+- Choosing $[0, 2]$: subsequence along even terms, $a_{2k} = 1 + \frac{1}{2k} \to 1$.
+- Choosing $[-2, 0]$: subsequence along odd terms, $a_{2k-1} = -(1 + \frac{1}{2k-1}) \to -1$.
+</Example>
+
+---
+
+## Detailed examples of the peak-point method
+
+<Example title="Peak points of 1/n">
+3. For $a_n = \frac{1}{n}$: every index is a peak (since $\frac{1}{n} > \frac{1}{m}$ for $m > n$). So we are in Case 1, and the full sequence is the decreasing subsequence, converging to $0$.
+</Example>
+
+<Example title="Peak points of n/(n+1)">
+4. For $a_n = \frac{n}{n+1}$: no index is a peak (since $a_{n+1} > a_n$ for all $n$). So we are in Case 2, and we get an increasing subsequence (the full sequence itself), converging to $1$.
+</Example>
+
+<Example title="Peak points of (-1)^n / n">
+5. For $a_n = \frac{(-1)^n}{n}$: the peaks are at $n = 2, 4, 6, \ldots$ (even indices), where $a_n = \frac{1}{n}$. This gives a decreasing subsequence $\frac{1}{2}, \frac{1}{4}, \frac{1}{6}, \ldots \to 0$.
+</Example>
+
+---
+
+## Applications of the proof technique
+
+<Example title="Bolzano--Weierstrass in R^n">
+6. To prove BW in $\mathbb{R}^2$: given bounded $((x_n, y_n))$, first apply BW to $(x_n)$ to get a subsequence with $x_{n_k} \to x^*$. Then $(y_{n_k})$ is bounded, so apply BW again to get a further subsequence with $y_{n_{k_j}} \to y^*$. Then $(x_{n_{k_j}}, y_{n_{k_j}}) \to (x^*, y^*)$.
+</Example>
+
+<Example title="Existence of cluster points">
+7. BW guarantees that every bounded sequence has at least one cluster point. For $a_n = \sin(n)$: every value in $[-1,1]$ is a cluster point (by equidistribution). The proof constructs one explicitly.
+</Example>
+
+<Example title="Compact sets and sequential compactness">
+8. BW implies: a subset $K \subseteq \mathbb{R}$ is compact (closed and bounded) if and only if every sequence in $K$ has a subsequence converging to a point in $K$. This is **sequential compactness**.
+</Example>
+
+<Example title="Convergence of bounded monotone-ish sequences">
+9. If $(a_n)$ is bounded and $a_{n+1} - a_n \to 0$, must $(a_n)$ converge? No! Example: $a_n = \sin(\sqrt{n})$. But BW still guarantees convergent subsequences.
+</Example>
+
+<Example title="Weak convergence in Hilbert spaces">
+10. The Bolzano--Weierstrass theorem generalizes: in a Hilbert space, every bounded sequence has a **weakly** convergent subsequence (Banach--Alaoglu in the separable case). This is the infinite-dimensional analog.
+</Example>
+
+<Example title="Ultrafilter proof">
+11. There is a non-constructive proof using ultrafilters: extend the Frechet filter to an ultrafilter $\mathcal{U}$, then define $L = \lim_{\mathcal{U}} a_n$. The subsequence is extracted from sets in $\mathcal{U}$.
+</Example>
+
+<Example title="Computational complexity">
+12. The bisection proof gives an algorithm: to find a convergent subsequence of $(a_n)_{n=1}^{N}$ within tolerance $\varepsilon$, we need $\lceil \log_2(\frac{B-A}{\varepsilon}) \rceil$ bisection steps, each requiring a scan of remaining terms. Total work: $O(N \log \frac{1}{\varepsilon})$.
+</Example>

@@ -1,0 +1,348 @@
+export const metadata = {
+  title: "Proof of Burnside's Lemma — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Proof — Proof of Burnside's Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Burnside's Lemma
+
+Burnside's Lemma (the Cauchy--Frobenius Lemma) counts the number of orbits by averaging the number of fixed points over all group elements. The proof is a clean application of double counting, using the fundamental duality between fixed points and stabilizers.
+
+## Statement
+
+<Theorem>
+Let $G$ be a finite group acting on a finite set $X$. The number of orbits is
+
+$$|X/G| = \frac{1}{|G|} \sum_{g \in G} |\operatorname{Fix}(g)|$$
+
+where $\operatorname{Fix}(g) = \{x \in X : g \cdot x = x\}$.
+</Theorem>
+
+---
+
+## The Proof
+
+<Proof>
+**Step 1: Set up the double counting.**
+
+Consider the set of "incidence pairs":
+
+$$S = \{(g, x) \in G \times X : g \cdot x = x\}.$$
+
+We will count $|S|$ in two different ways.
+
+**Step 2: Count by summing over $G$.**
+
+For each $g \in G$, the elements $x$ with $g \cdot x = x$ form the set $\operatorname{Fix}(g)$. So:
+
+$$|S| = \sum_{g \in G} |\operatorname{Fix}(g)|.$$
+
+**Step 3: Count by summing over $X$.**
+
+For each $x \in X$, the elements $g$ with $g \cdot x = x$ form the stabilizer $\operatorname{Stab}_G(x)$. So:
+
+$$|S| = \sum_{x \in X} |\operatorname{Stab}_G(x)|.$$
+
+**Step 4: Apply the Orbit-Stabilizer Theorem.**
+
+By the Orbit-Stabilizer Theorem, $|\operatorname{Stab}_G(x)| = |G| / |\operatorname{Orb}(x)|$. Substituting:
+
+$$|S| = \sum_{x \in X} \frac{|G|}{|\operatorname{Orb}(x)|} = |G| \sum_{x \in X} \frac{1}{|\operatorname{Orb}(x)|}.$$
+
+**Step 5: Evaluate the sum.**
+
+Group the sum by orbits. If $\mathcal{O}$ is an orbit, then summing $1/|\mathcal{O}|$ over all $x \in \mathcal{O}$ gives:
+
+$$\sum_{x \in \mathcal{O}} \frac{1}{|\mathcal{O}|} = \frac{|\mathcal{O}|}{|\mathcal{O}|} = 1.$$
+
+Therefore:
+
+$$\sum_{x \in X} \frac{1}{|\operatorname{Orb}(x)|} = \sum_{\text{orbits } \mathcal{O}} 1 = |\text{number of orbits}| = |X/G|.$$
+
+**Step 6: Combine.**
+
+From Steps 2 and 4-5:
+
+$$\sum_{g \in G} |\operatorname{Fix}(g)| = |S| = |G| \cdot |X/G|.$$
+
+Dividing both sides by $|G|$:
+
+$$|X/G| = \frac{1}{|G|} \sum_{g \in G} |\operatorname{Fix}(g)|.$$
+</Proof>
+
+---
+
+## Detailed Verification
+
+<Example id="verify-z3-triangle" title="Verification: Z/3Z acting on triangle colorings">
+Let $G = \mathbb{Z}/3\mathbb{Z}$ act by rotation on 2-colorings of a triangle's vertices. $|G| = 3$, $|X| = 2^3 = 8$.
+
+The incidence set $S$ consists of all pairs $(g, \text{coloring})$ where $g$ fixes the coloring:
+
+- $(e, \text{any coloring})$: $|\operatorname{Fix}(e)| = 8$ pairs.
+- $(r, \text{coloring})$: $r$ cycles all 3 vertices, so only monochromatic colorings are fixed. $|\operatorname{Fix}(r)| = 2$ pairs.
+- $(r^2, \text{coloring})$: same as $r$. $|\operatorname{Fix}(r^2)| = 2$ pairs.
+
+Total $|S| = 8 + 2 + 2 = 12$.
+
+Alternatively, summing over $X$:
+- BBB: $|\operatorname{Stab}| = 3$. BWW (and rotations): each has $|\operatorname{Stab}| = 1$. BBW (and rotations): each has $|\operatorname{Stab}| = 1$. WWW: $|\operatorname{Stab}| = 3$.
+- Sum: $3 + 1 + 1 + 1 + 1 + 1 + 1 + 3 = 12$. Matches!
+
+Number of orbits: $12/3 = 4$.
+</Example>
+
+<Example id="verify-d4-square" title="Verification: D_4 acting on square vertex colorings">
+$G = D_4$ (order 8), $X = $ 2-colorings of 4 vertices, $|X| = 16$.
+
+$|S| = \sum_{g \in G} |\operatorname{Fix}(g)|$:
+- $e$: 16.
+- $r$ (90°): all 4 must match: 2.
+- $r^2$ (180°): pairs $(1,3)$ and $(2,4)$ match: $2^2 = 4$.
+- $r^3$ (270°): all 4 must match: 2.
+- $s_1$ (reflection, 2 fixed vertices): $2^3 = 8$.
+- $s_2$ (reflection, 0 fixed vertices): $2^2 = 4$.
+- $s_3$ (reflection, 2 fixed vertices): $2^3 = 8$.
+- $s_4$ (reflection, 0 fixed vertices): $2^2 = 4$.
+
+$|S| = 16 + 2 + 4 + 2 + 8 + 4 + 8 + 4 = 48$.
+
+Now sum over $X$: list the 16 colorings and their stabilizer sizes. For example:
+- BBBB: $|\operatorname{Stab}| = 8$ (all of $D_4$).
+- BBBW: $|\operatorname{Stab}| = 2$ (identity and one reflection). 4 such colorings contribute $4 \times 2 = 8$.
+- BBWW (adjacent): $|\operatorname{Stab}| = 2$. 4 such colorings contribute $4 \times 2 = 8$.
+- BBWW (opposite, i.e., BWBW): $|\operatorname{Stab}| = 4$. 2 such colorings contribute $2 \times 4 = 8$.
+- BWWW: $|\operatorname{Stab}| = 2$. 4 such colorings contribute $4 \times 2 = 8$.
+- WWWW: $|\operatorname{Stab}| = 8$.
+
+Total: $8 + 8 + 8 + 8 + 8 + 8 = 48$. Matches!
+
+Orbits: $48/8 = 6$.
+</Example>
+
+---
+
+## Alternative Proof via Indicator Functions
+
+<Proof>
+Here is an alternative, more algebraic proof.
+
+**Step 1:** Define the indicator function $\chi: G \times X \to \{0, 1\}$ by $\chi(g, x) = 1$ if $g \cdot x = x$ and $\chi(g, x) = 0$ otherwise.
+
+**Step 2:** For each $x \in X$, define $\hat{x}: X \to \mathbb{Q}$ by
+
+$$\hat{x}(y) = \frac{1}{|G|} \sum_{g \in G} \chi(g \cdot x = y) = \frac{|\{g \in G : g \cdot x = y\}|}{|G|}.$$
+
+Note that $\hat{x}(y) > 0$ if and only if $y \in \operatorname{Orb}(x)$, and $\sum_{y \in X} \hat{x}(y) = 1$ (since every $g \in G$ sends $x$ to exactly one $y$).
+
+**Step 3:** For $x$ and $y$ in the same orbit, $\hat{x} = \hat{y}$ (as functions on $X$). Define $f_{\mathcal{O}} = \hat{x}$ for any $x \in \mathcal{O}$.
+
+**Step 4:** Summing $\hat{x}(x)$ over all $x$:
+
+$$\sum_{x \in X} \hat{x}(x) = \sum_{x \in X} \frac{|\operatorname{Stab}(x)|}{|G|} = \frac{1}{|G|} \sum_{x \in X} |\operatorname{Stab}(x)| = \frac{1}{|G|} \sum_{g \in G} |\operatorname{Fix}(g)|.$$
+
+**Step 5:** But also, grouping by orbits:
+
+$$\sum_{x \in X} \hat{x}(x) = \sum_{\mathcal{O}} \sum_{x \in \mathcal{O}} \frac{|\{g : g \cdot x = x\}|}{|G|} = \sum_{\mathcal{O}} \sum_{x \in \mathcal{O}} \frac{|G|/|\mathcal{O}|}{|G|} = \sum_{\mathcal{O}} \sum_{x \in \mathcal{O}} \frac{1}{|\mathcal{O}|} = \sum_{\mathcal{O}} 1 = |X/G|.$$
+
+Combining Steps 4 and 5 gives the result.
+</Proof>
+
+---
+
+## Generalizations
+
+<Remark title="Weighted Burnside lemma">
+The proof generalizes to weighted counting. If $w: X \to \mathbb{R}$ is a weight function that is constant on orbits (i.e., $w(g \cdot x) = w(x)$), then
+
+$$\sum_{\text{orbits } \mathcal{O}} w(\mathcal{O}) = \frac{1}{|G|} \sum_{g \in G} \sum_{x \in \operatorname{Fix}(g)} w(x).$$
+
+This is the starting point for Polya's Enumeration Theorem, where $w$ encodes the "type" of each coloring.
+</Remark>
+
+---
+
+## Applications of the Proof Technique
+
+<Example id="app-necklaces-6" title="Application: Necklaces with 6 beads, 2 colors">
+$G = \mathbb{Z}/6\mathbb{Z}$ acting on 2-colorings of a hexagonal necklace. $|X| = 2^6 = 64$.
+
+For each $g = r^k$ ($k = 0, 1, \ldots, 5$), a coloring is fixed by $r^k$ if and only if it is periodic with period $\gcd(k, 6)$:
+
+- $r^0 = e$: $|\operatorname{Fix}| = 2^6 = 64$.
+- $r^1$: period 1, all beads same. $|\operatorname{Fix}| = 2^1 = 2$.
+- $r^2$: period 2, beads repeat every 2. $|\operatorname{Fix}| = 2^2 = 4$.
+- $r^3$: period 3, beads repeat every 3. Wait, $\gcd(3,6)=3$, so 3 free choices among 2 colors. But actually: the cycle structure of $r^3$ on 6 positions is three 2-cycles: $(1\;4)(2\;5)(3\;6)$. So $|\operatorname{Fix}| = 2^3 = 8$.
+
+Let me reconsider. $r^k$ on positions $\{0,1,2,3,4,5\}$ sends $i \mapsto i + k \pmod{6}$. The cycles of $r^k$ have length $6/\gcd(k,6)$, and there are $\gcd(k,6)$ cycles. So $|\operatorname{Fix}(r^k)| = 2^{\gcd(k,6)}$.
+
+- $k=0$: $\gcd(0,6) = 6$, $|\operatorname{Fix}| = 2^6 = 64$.
+- $k=1$: $\gcd(1,6) = 1$, $|\operatorname{Fix}| = 2^1 = 2$.
+- $k=2$: $\gcd(2,6) = 2$, $|\operatorname{Fix}| = 2^2 = 4$.
+- $k=3$: $\gcd(3,6) = 3$, $|\operatorname{Fix}| = 2^3 = 8$.
+- $k=4$: $\gcd(4,6) = 2$, $|\operatorname{Fix}| = 2^2 = 4$.
+- $k=5$: $\gcd(5,6) = 1$, $|\operatorname{Fix}| = 2^1 = 2$.
+
+Total: $64 + 2 + 4 + 8 + 4 + 2 = 84$. Orbits: $84/6 = 14$.
+
+So there are **14 distinct necklaces** with 6 beads and 2 colors.
+</Example>
+
+<Example id="app-coloring-dodecahedron" title="Application: Coloring vertices of a regular tetrahedron">
+The rotation group of a regular tetrahedron is $A_4$ (order 12). Color the 4 vertices with $k$ colors.
+
+Cycle structure of each element of $A_4$ on the 4 vertices:
+
+- 1 identity: four 1-cycles. $|\operatorname{Fix}| = k^4$.
+- 8 elements of order 3 (rotations about vertex-to-opposite-face axis): one 1-cycle and one 3-cycle. $|\operatorname{Fix}| = k^2$ each.
+- 3 elements of order 2 (rotations by 180° about edge-midpoint axes): two 2-cycles. $|\operatorname{Fix}| = k^2$ each.
+
+Total: $k^4 + 8k^2 + 3k^2 = k^4 + 11k^2$.
+
+Number of distinct colorings: $(k^4 + 11k^2)/12$.
+
+For $k = 2$: $(16 + 44)/12 = 60/12 = 5$.
+For $k = 3$: $(81 + 99)/12 = 180/12 = 15$.
+For $k = 4$: $(256 + 176)/12 = 432/12 = 36$.
+</Example>
+
+<Example id="app-function-counting" title="Application: Counting functions up to symmetry">
+How many functions $f: \{1, 2, 3\} \to \{a, b\}$ are there up to permutation of the domain?
+
+$G = S_3$ acts on the set $X$ of functions by $(\sigma \cdot f)(i) = f(\sigma^{-1}(i))$. $|X| = 2^3 = 8$.
+
+- $e$: $|\operatorname{Fix}| = 8$.
+- $(1\;2)$: $f(1) = f(2)$, $f(3)$ free. $|\operatorname{Fix}| = 2^2 = 4$. Three such transpositions: total $3 \times 4 = 12$.
+- $(1\;2\;3)$ and $(1\;3\;2)$: $f(1) = f(2) = f(3)$. $|\operatorname{Fix}| = 2$ each. Total $2 \times 2 = 4$.
+
+Grand total: $8 + 12 + 4 = 24$. Orbits: $24/6 = 4$.
+
+The 4 orbits correspond to: all $a$, one $b$, two $b$'s, all $b$. (Equivalently, multisets of size 3 from $\{a,b\}$: $\binom{3+2-1}{2-1} = 4$.)
+</Example>
+
+<Example id="app-seating" title="Application: Seating arrangements">
+How many ways can 4 people sit around a circular table with 4 seats, up to rotation?
+
+$G = \mathbb{Z}/4\mathbb{Z}$ acts on the $4! = 24$ arrangements.
+
+- $e$: $|\operatorname{Fix}| = 24$.
+- $r$ (rotate 1 seat): no arrangement is fixed (no person maps to themselves under a shift by 1). $|\operatorname{Fix}| = 0$.
+- $r^2$ (rotate 2 seats): persons at seats 1,3 swap and persons at seats 2,4 swap. Fixed only if person at 1 = person at 3 and person at 2 = person at 4, which is impossible with distinct people. $|\operatorname{Fix}| = 0$.
+- $r^3$: same as $r$. $|\operatorname{Fix}| = 0$.
+
+Total: $24 + 0 + 0 + 0 = 24$. Orbits: $24/4 = 6$.
+
+This matches the well-known formula: $(n-1)! = 3! = 6$ for circular permutations of 4 people.
+</Example>
+
+<Example id="app-bracelet" title="Application: Bracelets vs. necklaces">
+A **necklace** with $n$ beads considers rotational symmetry only ($G = \mathbb{Z}/n\mathbb{Z}$). A **bracelet** also considers flips ($G = D_n$).
+
+For 4 beads and 3 colors:
+
+**Necklace** ($G = \mathbb{Z}/4\mathbb{Z}$):
+- $|\operatorname{Fix}(e)| = 3^4 = 81$.
+- $|\operatorname{Fix}(r)| = 3$.
+- $|\operatorname{Fix}(r^2)| = 3^2 = 9$.
+- $|\operatorname{Fix}(r^3)| = 3$.
+
+Total: $(81 + 3 + 9 + 3)/4 = 96/4 = 24$ necklaces.
+
+**Bracelet** ($G = D_4$): add the 4 reflections.
+- Two reflections through beads: $|\operatorname{Fix}| = 3^3 = 27$ each (2 fixed beads, 1 swapped pair).
+- Two reflections through edges: $|\operatorname{Fix}| = 3^2 = 9$ each (2 swapped pairs).
+
+Total: $(81 + 3 + 9 + 3 + 27 + 9 + 27 + 9)/8 = 168/8 = 21$ bracelets.
+</Example>
+
+<Example id="app-graph-coloring" title="Application: Coloring edges of a complete graph K_4">
+$K_4$ has 6 edges. The symmetry group is $S_4$ (order 24), acting by permuting vertices. Color each edge with 2 colors.
+
+$|X| = 2^6 = 64$. We compute $|\operatorname{Fix}(g)|$ by cycle type on edges:
+
+- Identity: 64.
+- Transpositions (6 elements, e.g., $(1\;2)$): fixes 3 edges (those not involving vertex 1 or 2 both... actually, $(1\;2)$ fixes the edge $\{1,2\}$, swaps $\{1,3\} \leftrightarrow \{2,3\}$, swaps $\{1,4\} \leftrightarrow \{2,4\}$, fixes $\{3,4\}$). So 2 fixed edges and 2 pairs swap: $|\operatorname{Fix}| = 2^4 = 16$. Total: $6 \times 16 = 96$.
+- 3-cycles (8 elements): 3 edges among the 3 cycling vertices form one 3-cycle, and 3 remaining edges form another 3-cycle. $|\operatorname{Fix}| = 2^2 = 4$. Total: $8 \times 4 = 32$.
+- 4-cycles (6 elements): edges form cycles of lengths 4, 1, 1 (actually need careful analysis; 2 edges fixed and 4 in a cycle). $|\operatorname{Fix}| = 2^3 = 8$. Wait, let me reconsider: $(1\;2\;3\;4)$ on edges maps $\{1,2\}\to\{2,3\}\to\{3,4\}\to\{1,4\}\to\{1,2\}$ (4-cycle) and $\{1,3\}\to\{2,4\}\to\{1,3\}$... no, $\{1,3\}\to\{2,4\}$ (2-cycle). So: one 4-cycle and one 2-cycle. $|\operatorname{Fix}| = 2^1 = 2$. Wait, for a coloring to be fixed, the 4-cycle edges must all have the same color and the 2-cycle edges must have the same color. So $|\operatorname{Fix}| = 2^2 = 4$. Total: $6 \times 4 = 24$.
+- Double transpositions (3 elements, e.g., $(1\;2)(3\;4)$): maps $\{1,2\}\to\{1,2\}$, $\{3,4\}\to\{3,4\}$, $\{1,3\}\leftrightarrow\{2,4\}$, $\{1,4\}\leftrightarrow\{2,3\}$. Two fixed edges and two 2-cycles: $|\operatorname{Fix}| = 2^4 = 16$. Total: $3 \times 16 = 48$.
+
+Grand total: $64 + 96 + 32 + 24 + 48 = 264$. Orbits: $264/24 = 11$ distinct edge-colorings.
+</Example>
+
+<Example id="app-trivial-action" title="Trivial verification: trivial action">
+If $G$ acts trivially on $X$ (every element fixes everything), then $|\operatorname{Fix}(g)| = |X|$ for all $g$.
+
+Burnside: $|X/G| = \frac{1}{|G|} \cdot |G| \cdot |X| = |X|$.
+
+This is correct: every element is its own orbit.
+</Example>
+
+<Example id="app-free-action" title="Trivial verification: free transitive action">
+If $G$ acts freely and transitively on $X$, then $|X| = |G|$ and $|\operatorname{Fix}(g)| = 0$ for $g \neq e$, $|\operatorname{Fix}(e)| = |X| = |G|$.
+
+Burnside: $|X/G| = \frac{1}{|G|} \cdot |G| = 1$.
+
+This is correct: there is one orbit.
+</Example>
+
+<Example id="app-subsets-of-n" title="Application: Subsets up to permutation">
+How many "types" of $k$-element subsets of $\{1, \ldots, n\}$ are there, up to permutation by $S_n$?
+
+$S_n$ acts transitively on $\binom{[n]}{k}$ (any $k$-subset can be sent to any other), so there is always exactly 1 orbit for each $k$.
+
+Burnside confirms: $\sum_{g \in S_n} |\operatorname{Fix}(g)| / n! = 1$.
+
+But if instead we ask about multisets or labeled structures, the answer is richer.
+</Example>
+
+<Example id="app-s3-on-functions" title="Application: Maps f: X to Y up to domain symmetry">
+How many functions $f: \{1,2,3,4\} \to \{0,1\}$ are there, up to the action of $S_4$ permuting the domain?
+
+$|X| = 2^4 = 16$. A function is fixed by $\sigma \in S_4$ iff $f(\sigma(i)) = f(i)$ for all $i$, i.e., $f$ is constant on each cycle of $\sigma$.
+
+If $\sigma$ has $c$ cycles, then $|\operatorname{Fix}(\sigma)| = 2^c$.
+
+For $S_4$, we compute by cycle type:
+
+Actually: by cycle type in $S_4$:
+- $(1^4)$: $c=4$, count 1, $|\operatorname{Fix}|=16$.
+- $(2,1^2)$: $c=3$, count 6, $|\operatorname{Fix}|=8$ each.
+- $(2^2)$: $c=2$, count 3, $|\operatorname{Fix}|=4$ each.
+- $(3,1)$: $c=2$, count 8, $|\operatorname{Fix}|=4$ each.
+- $(4)$: $c=1$, count 6, $|\operatorname{Fix}|=2$ each.
+
+Total: $16 + 48 + 12 + 32 + 12 = 120$. Orbits: $120/24 = 5$.
+
+These are the 5 multisets: $\{0^4\}, \{0^3 1\}, \{0^2 1^2\}, \{0 1^3\}, \{1^4\}$. Equivalently $\binom{4+2-1}{2-1} = 5$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key proof ideas">
+1. The proof of Burnside's Lemma is a **double counting** argument: count the set $S = \{(g,x) : g \cdot x = x\}$ in two ways.
+
+2. Summing over $G$ gives $\sum |\operatorname{Fix}(g)|$; summing over $X$ gives $\sum |\operatorname{Stab}(x)| = |G| \cdot |X/G|$.
+
+3. The Orbit-Stabilizer Theorem provides the bridge: $|\operatorname{Stab}(x)| = |G|/|\operatorname{Orb}(x)|$.
+
+4. The formula $|X/G| = \frac{1}{|G|} \sum |\operatorname{Fix}(g)|$ reduces orbit counting to the much easier problem of counting fixed points of individual group elements.
+
+5. The proof technique (double counting on an incidence set) is a ubiquitous method in combinatorics.
+</Remark>

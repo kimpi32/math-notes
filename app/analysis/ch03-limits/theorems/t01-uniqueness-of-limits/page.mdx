@@ -1,0 +1,130 @@
+export const metadata = {
+  title: '극한의 유일성 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "3. 함수의 극한", href: "/analysis/ch03-limits" },
+  { label: "정리 - 극한의 유일성" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 극한의 유일성 (Uniqueness of Limits)
+
+The uniqueness theorem ensures that the notation $\lim_{x \to c} f(x) = L$ is well-defined: a function cannot approach two different values simultaneously.
+
+---
+
+## Statement
+
+<Theorem title="Uniqueness of Limits" number="3.2">
+Let $f : A \to \mathbb{R}$ and let $c$ be a limit point of $A$. If $\lim_{x \to c} f(x) = L_1$ and $\lim_{x \to c} f(x) = L_2$, then $L_1 = L_2$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+Suppose $L_1 \neq L_2$. Let $\varepsilon = \frac{|L_1 - L_2|}{2} > 0$.
+
+Since $\lim_{x \to c} f(x) = L_1$, there exists $\delta_1 > 0$ such that $0 < |x - c| < \delta_1$ implies $|f(x) - L_1| < \varepsilon$.
+
+Since $\lim_{x \to c} f(x) = L_2$, there exists $\delta_2 > 0$ such that $0 < |x - c| < \delta_2$ implies $|f(x) - L_2| < \varepsilon$.
+
+Let $\delta = \min(\delta_1, \delta_2) > 0$. Since $c$ is a limit point of $A$, there exists $x_0 \in A$ with $0 < |x_0 - c| < \delta$. Then:
+
+$$|L_1 - L_2| \leq |L_1 - f(x_0)| + |f(x_0) - L_2| < \varepsilon + \varepsilon = |L_1 - L_2|.$$
+
+This is a contradiction, so $L_1 = L_2$.
+</Proof>
+
+---
+
+## Discussion
+
+<Remark>
+The proof uses two key facts:
+1. The **triangle inequality**: $|L_1 - L_2| \leq |L_1 - f(x_0)| + |f(x_0) - L_2|$.
+2. The existence of $x_0$ near $c$: this requires $c$ to be a **limit point** of $A$. If $c$ were an isolated point, the punctured neighborhood might be empty, and the limit would be trivially anything.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Verifying uniqueness concretely">
+1. For $f(x) = 2x + 1$ near $x = 3$: suppose $\lim f = 7$ and $\lim f = 8$. Then $\varepsilon = 1/2$, and for $x$ near $3$, $f(x) \approx 7$, which is more than $1/2$ away from $8$. Contradiction.
+</Example>
+
+<Example title="Uniqueness for one-sided limits">
+2. One-sided limits are also unique. If $\lim_{x \to c^+} f(x) = L_1$ and $\lim_{x \to c^+} f(x) = L_2$, the same argument applies using only $x > c$.
+</Example>
+
+<Example title="Two-sided limit requires agreement">
+3. $f(x) = |x|/x$ near $x = 0$: $\lim_{x \to 0^+} f = 1$ and $\lim_{x \to 0^-} f = -1$. The two-sided limit does not exist. This is not a violation of uniqueness --- it is a non-existence result.
+</Example>
+
+<Example title="Limit exists implies one-sided limits agree">
+4. If $\lim_{x \to c} f(x) = L$ exists, then both $\lim_{x \to c^+} f(x) = L$ and $\lim_{x \to c^-} f(x) = L$. Conversely, if both one-sided limits exist and equal $L$, then the two-sided limit is $L$.
+</Example>
+
+<Example title="Rational/irrational function">
+5. Define $f(x) = x$ for $x \in \mathbb{Q}$ and $f(x) = 0$ for $x \notin \mathbb{Q}$. At $c = 0$: for rational $x_n \to 0$, $f(x_n) = x_n \to 0$. For irrational $x_n \to 0$, $f(x_n) = 0 \to 0$. So $\lim_{x \to 0} f(x) = 0$ (unique!). At any $c \neq 0$: rational and irrational sequences give different limits, so the limit does not exist.
+</Example>
+
+---
+
+## Uniqueness for limits at infinity
+
+<Example title="Limit at infinity is unique">
+6. If $\lim_{x \to \infty} f(x) = L_1$ and $\lim_{x \to \infty} f(x) = L_2$, then $L_1 = L_2$. The same triangle inequality argument works: for large enough $x$, $f(x)$ is within $\varepsilon$ of both $L_1$ and $L_2$.
+</Example>
+
+---
+
+## Sequential characterization and uniqueness
+
+<Example title="Uniqueness via sequences">
+7. Suppose $\lim_{x \to c} f(x) = L_1$ and $\lim_{x \to c} f(x) = L_2$. Take any sequence $x_n \to c$, $x_n \neq c$. Then $f(x_n) \to L_1$ and $f(x_n) \to L_2$. By uniqueness of sequential limits, $L_1 = L_2$.
+</Example>
+
+<Example title="Non-existence via two sequences">
+8. To show a limit does not exist, find two sequences $x_n \to c$ and $y_n \to c$ with $f(x_n) \to L_1 \neq L_2 \leftarrow f(y_n)$. By uniqueness, the limit cannot exist. For example, $f(x) = \sin(1/x)$ with $x_n = 1/(2\pi n) \to 0$ and $y_n = 1/(2\pi n + \pi/2) \to 0$.
+</Example>
+
+---
+
+## Algebraic consequences
+
+<Example title="Well-defined arithmetic">
+9. Uniqueness ensures that the **algebraic limit theorem** is well-defined: if $\lim f = L$ and $\lim g = M$, then $\lim(f + g) = L + M$. Without uniqueness, $L$ and $M$ might not be determined, making the sum ambiguous.
+</Example>
+
+<Example title="Well-defined substitution">
+10. Uniqueness ensures that **limit substitution** works: if $\lim_{x \to c} g(x) = L$ and $\lim_{y \to L} f(y) = M$, then under appropriate conditions $\lim_{x \to c} f(g(x)) = M$. This requires $L$ to be unique.
+</Example>
+
+---
+
+## Topological perspective
+
+<Example title="Hausdorff property">
+11. Uniqueness of limits in $\mathbb{R}$ reflects the fact that $\mathbb{R}$ is a **Hausdorff space**: any two distinct points can be separated by disjoint open sets. In a non-Hausdorff space, limits need not be unique.
+
+For example, in the "line with two origins" $\mathbb{R} \cup \{0'\}$ (where $0$ and $0'$ cannot be separated), the constant function $f(x) = x$ has $\lim_{x \to 0} f(x) = 0$ and $\lim_{x \to 0} f(x) = 0'$ simultaneously.
+</Example>
+
+<Example title="Nets and filters">
+12. In general topology, one uses nets or filters instead of sequences. The uniqueness of limits for nets characterizes Hausdorff spaces: a topological space is Hausdorff if and only if every convergent net has a unique limit. For $\mathbb{R}$ with the standard topology, this always holds.
+</Example>

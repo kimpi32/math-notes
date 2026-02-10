@@ -1,0 +1,137 @@
+export const metadata = {
+  title: '조임 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "3. 함수의 극한", href: "/analysis/ch03-limits" },
+  { label: "정리 - 조임 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 조임 정리 (Squeeze Theorem)
+
+The Squeeze Theorem (also called the Sandwich Theorem or Pinching Theorem) is a fundamental tool for evaluating limits when direct computation is difficult but good bounds are available.
+
+---
+
+## Statement
+
+<Theorem title="Squeeze Theorem for Functions" number="3.3">
+Let $f, g, h$ be functions defined on a set $A$ and let $c$ be a limit point of $A$. Suppose:
+
+1. $g(x) \leq f(x) \leq h(x)$ for all $x \in A$ with $x \neq c$ (or at least for $x$ in some punctured neighborhood of $c$).
+2. $\lim_{x \to c} g(x) = \lim_{x \to c} h(x) = L$.
+
+Then $\lim_{x \to c} f(x) = L$.
+</Theorem>
+
+<Remark>
+The theorem also holds for one-sided limits ($x \to c^+$, $x \to c^-$) and limits at infinity ($x \to \infty$, $x \to -\infty$) with the obvious modifications. See the [proof](/analysis/ch03-limits/proofs/p01-squeeze-proof) for details.
+</Remark>
+
+---
+
+## Classic applications
+
+<Example title="The fundamental trigonometric limit">
+1. $\lim_{x \to 0} \frac{\sin x}{x} = 1$.
+
+For $0 < |x| < \pi/2$, geometric arguments give $\cos x \leq \frac{\sin x}{x} \leq 1$. Since $\lim_{x \to 0} \cos x = 1$ and the upper bound is $1$, the Squeeze Theorem gives $\frac{\sin x}{x} \to 1$.
+</Example>
+
+<Example title="Cosine limit from sine">
+2. $\lim_{x \to 0} \frac{1 - \cos x}{x^2} = \frac{1}{2}$.
+
+Using $1 - \cos x = 2\sin^2(x/2)$:
+
+$$\frac{1 - \cos x}{x^2} = \frac{2\sin^2(x/2)}{x^2} = \frac{1}{2} \cdot \left(\frac{\sin(x/2)}{x/2}\right)^2 \to \frac{1}{2} \cdot 1^2 = \frac{1}{2}.$$
+</Example>
+
+<Example title="Squeeze with oscillation">
+3. $\lim_{x \to 0} x^2 \sin(1/x) = 0$.
+
+Since $-1 \leq \sin(1/x) \leq 1$, we have $-x^2 \leq x^2 \sin(1/x) \leq x^2$. Both bounds tend to $0$, so $x^2\sin(1/x) \to 0$.
+</Example>
+
+<Example title="x cos(1/x) at zero">
+4. $\lim_{x \to 0} x\cos(1/x) = 0$.
+
+$|x\cos(1/x)| \leq |x| \to 0$. Equivalently: $-|x| \leq x\cos(1/x) \leq |x|$, and both bounds tend to $0$.
+</Example>
+
+---
+
+## Squeeze with exponential and logarithmic bounds
+
+<Example title="Exponential dominates polynomial">
+5. $\lim_{x \to \infty} \frac{x^n}{e^x} = 0$ for any $n \in \mathbb{N}$.
+
+For $x > 2n$: $e^x > \frac{x^{2n}}{(2n)!}$ (from the Taylor series), so $0 < \frac{x^n}{e^x} < \frac{(2n)!}{x^n} \to 0$.
+</Example>
+
+<Example title="Logarithm grows slower than any power">
+6. $\lim_{x \to \infty} \frac{\ln x}{x^\alpha} = 0$ for any $\alpha > 0$.
+
+Set $x = e^t$: $\frac{\ln x}{x^\alpha} = \frac{t}{e^{\alpha t}} \to 0$ as $t \to \infty$ by Example 5 (with $n = 1$).
+</Example>
+
+---
+
+## Squeeze at infinity
+
+<Example title="Bounded oscillation at infinity">
+7. $\lim_{x \to \infty} \frac{\sin x}{x} = 0$.
+
+$-\frac{1}{x} \leq \frac{\sin x}{x} \leq \frac{1}{x}$, and $\frac{1}{x} \to 0$ as $x \to \infty$.
+</Example>
+
+<Example title="Cesaro-type limit">
+8. $\lim_{x \to \infty} \frac{\sin(x) + \cos(x)}{x^2 + 1} = 0$.
+
+$|\sin x + \cos x| \leq 2$, so $\left|\frac{\sin x + \cos x}{x^2 + 1}\right| \leq \frac{2}{x^2 + 1} \to 0$.
+</Example>
+
+---
+
+## Squeeze for one-sided limits
+
+<Example title="Right-hand squeeze">
+9. $\lim_{x \to 0^+} \sqrt{x} \sin(1/x) = 0$.
+
+$|\sqrt{x}\sin(1/x)| \leq \sqrt{x} \to 0$ as $x \to 0^+$.
+</Example>
+
+<Example title="Left-hand squeeze">
+10. $\lim_{x \to 0^-} x \cdot e^{1/x} = 0$.
+
+For $x < 0$: $e^{1/x} = e^{-|1/x|} < 1$, so $|x \cdot e^{1/x}| < |x| \to 0$.
+</Example>
+
+---
+
+## When squeeze does not apply directly
+
+<Example title="Need matching bounds">
+11. For $\lim_{x \to 0} \frac{\sin x}{x}$, the naive bound $-1 \leq \frac{\sin x}{x} \leq 1$ does not help (it does not squeeze to a single value). We need the sharper bound $\cos x \leq \frac{\sin x}{x} \leq 1$, which requires geometric reasoning with the unit circle.
+</Example>
+
+<Example title="Squeeze combined with algebraic manipulation">
+12. $\lim_{x \to \infty} \left(\sqrt{x^2 + x} - x\right) = \frac{1}{2}$.
+
+Multiply by the conjugate: $\sqrt{x^2 + x} - x = \frac{x}{\sqrt{x^2 + x} + x}$. For $x > 0$:
+
+$$\frac{x}{x\sqrt{1 + 1/x} + x} = \frac{1}{\sqrt{1 + 1/x} + 1}.$$
+
+Since $\frac{1}{x} \to 0$, the denominator $\to \sqrt{1} + 1 = 2$, so the limit is $\frac{1}{2}$. The squeeze provides: for $x > 1$, $\frac{1}{2 + 1/\sqrt{x}} < \frac{1}{\sqrt{1+1/x}+1} < \frac{1}{2}$, and the lower bound $\to \frac{1}{2}$.
+</Example>

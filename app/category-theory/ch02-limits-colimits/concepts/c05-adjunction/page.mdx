@@ -1,0 +1,145 @@
+export const metadata = {
+  title: 'Adjoint Functors — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Concept — Adjoint Functors" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Adjoint Functors
+
+Adjunctions are arguably the most important concept in category theory after the notion of a category itself. An adjunction $F \dashv G$ captures the idea that $F$ is a "best approximation" from the left and $G$ from the right. Free constructions, forgetful functors, tensor-hom duality, and sheafification are all instances of adjunctions.
+
+---
+
+## Definition
+
+<Definition title="Adjunction" number="2.16">
+An **adjunction** between categories $\mathcal{C}$ and $\mathcal{D}$ consists of functors $F : \mathcal{C} \to \mathcal{D}$ (the **left adjoint**) and $G : \mathcal{D} \to \mathcal{C}$ (the **right adjoint**), written $F \dashv G$, together with a natural bijection
+
+$$\mathrm{Hom}_{\mathcal{D}}(F(C), D) \cong \mathrm{Hom}_{\mathcal{C}}(C, G(D))$$
+
+natural in both $C \in \mathcal{C}$ and $D \in \mathcal{D}$.
+</Definition>
+
+<Definition title="Unit and Counit" number="2.17">
+An adjunction $F \dashv G$ determines natural transformations:
+
+- **Unit:** $\eta : \mathrm{Id}_{\mathcal{C}} \Rightarrow G \circ F$, with $\eta_C : C \to GF(C)$ corresponding to $\mathrm{id}_{F(C)}$ under the adjunction bijection.
+- **Counit:** $\varepsilon : F \circ G \Rightarrow \mathrm{Id}_{\mathcal{D}}$, with $\varepsilon_D : FG(D) \to D$ corresponding to $\mathrm{id}_{G(D)}$.
+
+These satisfy the **triangle identities**:
+
+$$\varepsilon_{F(C)} \circ F(\eta_C) = \mathrm{id}_{F(C)}, \qquad G(\varepsilon_D) \circ \eta_{G(D)} = \mathrm{id}_{G(D)}$$
+</Definition>
+
+<Theorem title="Equivalent formulations of adjunctions" number="2.6">
+The following data are equivalent:
+
+1. A natural bijection $\mathrm{Hom}(FC, D) \cong \mathrm{Hom}(C, GD)$.
+2. A pair of natural transformations $\eta : \mathrm{Id} \Rightarrow GF$ and $\varepsilon : FG \Rightarrow \mathrm{Id}$ satisfying the triangle identities.
+3. For each $C$, a universal arrow from $C$ to $G$ (i.e., an initial object in the comma category $(C \downarrow G)$).
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="Free-Forgetful adjunction for groups" id="free-forget-grp">
+The free group functor $F : \mathbf{Set} \to \mathbf{Grp}$ is left adjoint to the forgetful functor $U : \mathbf{Grp} \to \mathbf{Set}$:
+
+$$\mathrm{Hom}_{\mathbf{Grp}}(F(S), G) \cong \mathrm{Hom}_{\mathbf{Set}}(S, U(G))$$
+
+A group homomorphism from the free group on $S$ is determined by a function from $S$ to $U(G)$. The unit $\eta_S : S \to U(F(S))$ is the inclusion of generators.
+</Example>
+
+<Example title="Free-Forgetful for modules" id="free-forget-mod">
+$F : \mathbf{Set} \to R\text{-}\mathbf{Mod}$ (free module) is left adjoint to the forgetful functor $U$: $\mathrm{Hom}_R(R^{(S)}, M) \cong \mathrm{Hom}_{\mathbf{Set}}(S, U(M))$.
+</Example>
+
+<Example title="Tensor-Hom adjunction" id="tensor-hom">
+For a ring $R$ and a right $R$-module $M$, the functors $M \otimes_R - : R\text{-}\mathbf{Mod} \to \mathbf{Ab}$ and $\mathrm{Hom}_{\mathbb{Z}}(M, -) : \mathbf{Ab} \to R\text{-}\mathbf{Mod}$ form an adjunction:
+
+$$\mathrm{Hom}_{\mathbb{Z}}(M \otimes_R N, A) \cong \mathrm{Hom}_R(N, \mathrm{Hom}_{\mathbb{Z}}(M, A))$$
+
+This is the **tensor-Hom adjunction**, fundamental in homological algebra.
+</Example>
+
+<Example title="Abelianization" id="abelianization-adj">
+The abelianization functor $\mathrm{ab} : \mathbf{Grp} \to \mathbf{Ab}$ sending $G \mapsto G/[G,G]$ is left adjoint to the inclusion $\iota : \mathbf{Ab} \hookrightarrow \mathbf{Grp}$:
+
+$$\mathrm{Hom}_{\mathbf{Ab}}(G^{\mathrm{ab}}, A) \cong \mathrm{Hom}_{\mathbf{Grp}}(G, \iota(A))$$
+</Example>
+
+<Example title="Sheafification" id="sheafification-adj">
+Sheafification $a : \mathbf{PSh}(X) \to \mathbf{Sh}(X)$ is left adjoint to the inclusion $\iota : \mathbf{Sh}(X) \hookrightarrow \mathbf{PSh}(X)$. The unit $\eta_{\mathcal{F}} : \mathcal{F} \to \iota(a\mathcal{F})$ is the canonical map from a presheaf to its sheafification.
+</Example>
+
+<Example title="Product-Diagonal adjunction" id="prod-diag">
+The diagonal functor $\Delta : \mathcal{C} \to \mathcal{C} \times \mathcal{C}$ sending $A \mapsto (A, A)$ has a right adjoint (when products exist): the product functor $\times : \mathcal{C} \times \mathcal{C} \to \mathcal{C}$. We have $\Delta \dashv \times$:
+
+$$\mathrm{Hom}((A,A), (B,C)) \cong \mathrm{Hom}(A, B \times C)$$
+</Example>
+
+<Example title="Localization" id="localization-adj">
+For a multiplicative set $S \subseteq R$, the localization functor $S^{-1}(-) : R\text{-}\mathbf{Mod} \to S^{-1}R\text{-}\mathbf{Mod}$ is left adjoint to the restriction of scalars $S^{-1}R\text{-}\mathbf{Mod} \to R\text{-}\mathbf{Mod}$.
+</Example>
+
+<Example title="Direct image and inverse image of sheaves" id="sheaf-adjunction">
+For a continuous map $f : X \to Y$, the inverse image functor $f^{-1} : \mathbf{Sh}(Y) \to \mathbf{Sh}(X)$ is left adjoint to the direct image $f_* : \mathbf{Sh}(X) \to \mathbf{Sh}(Y)$:
+
+$$\mathrm{Hom}_{\mathbf{Sh}(X)}(f^{-1}\mathcal{G}, \mathcal{F}) \cong \mathrm{Hom}_{\mathbf{Sh}(Y)}(\mathcal{G}, f_*\mathcal{F})$$
+</Example>
+
+<Example title="Galois connection" id="galois-connection">
+An adjunction between poset categories (viewed as categories) is a **Galois connection**: $f(a) \leq b \iff a \leq g(b)$ for order-preserving maps $f : P \to Q$ and $g : Q \to P$. The classical Galois correspondence between subfields and subgroups is a Galois connection.
+</Example>
+
+<Example title="Stone-Cech compactification" id="stone-cech">
+The Stone-Cech compactification functor $\beta : \mathbf{Top} \to \mathbf{CHaus}$ is left adjoint to the inclusion $\iota : \mathbf{CHaus} \hookrightarrow \mathbf{Top}$: $\mathrm{Hom}_{\mathbf{CHaus}}(\beta X, K) \cong \mathrm{Hom}_{\mathbf{Top}}(X, K)$ for compact Hausdorff $K$.
+</Example>
+
+<Example title="Forgetful functor from Top to Set" id="top-set">
+The forgetful functor $U : \mathbf{Top} \to \mathbf{Set}$ has both a left adjoint (discrete topology) and a right adjoint (indiscrete topology). This means $\mathrm{Disc} \dashv U \dashv \mathrm{Indisc}$.
+</Example>
+
+<Example title="Suspension-Loop adjunction" id="susp-loop">
+In pointed topological spaces, the suspension functor $\Sigma$ is left adjoint to the loop space functor $\Omega$: $[\Sigma X, Y]_* \cong [X, \Omega Y]_*$. This adjunction is the foundation of stable homotopy theory.
+</Example>
+
+---
+
+## Key Properties
+
+<Theorem title="RAPL (Right Adjoints Preserve Limits)" number="2.7">
+If $G : \mathcal{D} \to \mathcal{C}$ has a left adjoint $F$, then $G$ preserves all limits that exist in $\mathcal{D}$. Dually, left adjoints preserve all colimits.
+</Theorem>
+
+<Proof>
+For a diagram $D : \mathcal{J} \to \mathcal{D}$ with limit $L$, we have
+
+$$\mathrm{Hom}(C, G(L)) \cong \mathrm{Hom}(FC, L) \cong \varprojlim_j \mathrm{Hom}(FC, D(j)) \cong \varprojlim_j \mathrm{Hom}(C, GD(j))$$
+
+so $G(L)$ satisfies the universal property of $\varprojlim G \circ D$.
+</Proof>
+
+<Remark title="Uniqueness of adjoints">
+Left (or right) adjoints, when they exist, are unique up to natural isomorphism. This follows from the Yoneda Lemma: if $F \dashv G$ and $F' \dashv G$, then $\mathrm{Hom}(FC, -) \cong \mathrm{Hom}(C, G-) \cong \mathrm{Hom}(F'C, -)$, so $FC \cong F'C$ naturally.
+</Remark>
+
+<Remark title="Looking ahead">
+The [Freyd Adjoint Functor Theorem](/category-theory/ch02-limits-colimits/theorems/t01-freyd-adjoint) provides conditions guaranteeing the existence of an adjoint. In homological algebra, the most important adjunction is the tensor-Hom adjunction, which underlies the relationship between $\mathrm{Tor}$ and $\mathrm{Ext}$ as [derived functors](/category-theory/ch07-derived-functors/concepts/c02-classical-derived).
+</Remark>

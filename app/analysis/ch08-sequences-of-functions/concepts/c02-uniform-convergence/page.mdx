@@ -1,0 +1,154 @@
+export const metadata = {
+  title: 'Uniform Convergence — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "8. 함수열과 함수급수", href: "/analysis/ch08-sequences-of-functions" },
+  { label: "개념 — 균등수렴" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Uniform Convergence
+
+Uniform convergence is the "right" notion of convergence for sequences of functions: it is strong enough to preserve continuity, integrability, and (with care) differentiability.
+
+---
+
+## Definition
+
+<Definition title="Uniform convergence" number="8.3">
+A sequence $(f_n)$ **converges uniformly** to $f$ on $D$ if for every $\varepsilon > 0$, there exists $N \in \mathbb{N}$ such that
+
+$$n \geq N \implies |f_n(x) - f(x)| < \varepsilon \quad \text{for all } x \in D.$$
+
+Equivalently: $\sup_{x \in D} |f_n(x) - f(x)| \to 0$ as $n \to \infty$.
+
+The key difference from pointwise convergence: the single $N$ works for **all** $x$ simultaneously.
+</Definition>
+
+<Example title="f_n(x) = x/n converges uniformly on [0,1]">
+$\sup_{x \in [0,1]} |x/n - 0| = 1/n \to 0$. So $f_n \to 0$ uniformly on $[0,1]$.
+</Example>
+
+<Example title="f_n(x) = x/n does NOT converge uniformly on R">
+$\sup_{x \in \mathbb{R}} |x/n| = \infty$ for all $n$. So convergence is only pointwise on $\mathbb{R}$, not uniform.
+</Example>
+
+<Example title="x^n on [0,1] — not uniform">
+$f_n(x) = x^n \to f(x)$ pointwise where $f(x) = 0$ for $x < 1$ and $f(1) = 1$. Since $f$ is not continuous, the convergence cannot be uniform (as we will see, uniform limits of continuous functions are continuous).
+
+Alternatively: $\sup_{x \in [0,1]} |x^n - f(x)| \geq \sup_{x \in [0,1)} x^n = 1$ (approach $x = 1$), so the sup norm does not go to $0$.
+</Example>
+
+<Example title="x^n on [0, a] for a less than 1 — uniform">
+For any fixed $0 < a < 1$: $\sup_{x \in [0,a]} x^n = a^n \to 0$. So $f_n(x) = x^n \to 0$ uniformly on $[0, a]$.
+</Example>
+
+---
+
+## Uniform convergence preserves continuity
+
+<Theorem title="Uniform limit of continuous functions is continuous" number="8.1">
+If each $f_n$ is continuous on $D$ and $f_n \to f$ uniformly on $D$, then $f$ is continuous on $D$.
+</Theorem>
+
+<Example title="Showing non-uniform convergence via discontinuity">
+Since $f_n(x) = x^n$ are continuous on $[0,1]$ but converge to a discontinuous $f$, the convergence cannot be uniform. This gives a quick indirect proof of non-uniformity.
+</Example>
+
+<Example title="Uniform convergence on a compact set">
+$f_n(x) = \frac{x}{1 + nx^2}$ on $\mathbb{R}$. The maximum of $|f_n|$ occurs at $x = 1/\sqrt{n}$ where $f_n(1/\sqrt{n}) = \frac{1}{2\sqrt{n}}$.
+
+So $\sup_x |f_n(x)| = \frac{1}{2\sqrt{n}} \to 0$. The convergence $f_n \to 0$ is uniform on all of $\mathbb{R}$, and the limit $0$ is indeed continuous.
+</Example>
+
+---
+
+## Uniform convergence and integration
+
+<Theorem title="Interchange of limit and integral" number="8.2">
+If $f_n \to f$ uniformly on $[a,b]$ and each $f_n \in \mathcal{R}[a,b]$, then $f \in \mathcal{R}[a,b]$ and
+
+$$\lim_{n\to\infty} \int_a^b f_n(x)\,dx = \int_a^b f(x)\,dx.$$
+</Theorem>
+
+<Example title="Uniform convergence allows integral interchange">
+$f_n(x) = \frac{nx}{1+n^2x^2}$ on $[0,1]$. We have $f_n \to 0$ pointwise (for $x > 0$, $f_n(x) \sim \frac{1}{nx} \to 0$).
+
+$\int_0^1 f_n = \frac{1}{2n}\ln(1 + n^2) \to \infty$? Actually $\frac{\ln(1+n^2)}{2n} \to 0$ (logarithm grows slower than linearly). So $\int f_n \to 0 = \int 0$. But is the convergence uniform?
+
+$\sup_x f_n(x) = f_n(1/n) = \frac{n \cdot 1/n}{1 + 1} = \frac{1}{2} \not\to 0$. Not uniform! Yet the integral interchange still holds in this case (by a different argument). Uniform convergence is sufficient but not necessary for integral interchange.
+</Example>
+
+<Example title="When uniform convergence is needed">
+Recall $f_n(x) = n \cdot \mathbf{1}_{(0, 1/n)}(x)$ on $[0,1]$. $f_n \to 0$ pointwise, $\int f_n = 1$, but $\int f = 0$. Here the convergence is not uniform ($\sup |f_n| = n \to \infty$), and the integral interchange fails.
+</Example>
+
+---
+
+## Uniform convergence and differentiation
+
+<Theorem title="Interchange of limit and derivative" number="8.3">
+Let $(f_n)$ be a sequence of differentiable functions on $[a,b]$ such that:
+1. $(f_n(x_0))$ converges for some $x_0 \in [a,b]$.
+2. $(f_n')$ converges uniformly on $[a,b]$.
+
+Then $(f_n)$ converges uniformly on $[a,b]$ to a differentiable function $f$, and
+
+$$f'(x) = \lim_{n\to\infty} f_n'(x) \quad \text{for all } x \in [a,b].$$
+</Theorem>
+
+<Example title="Successful derivative interchange">
+$f_n(x) = \frac{\sin(nx)}{n^2}$ on $\mathbb{R}$. $f_n \to 0$ uniformly (since $|f_n| \leq 1/n^2$). $f_n'(x) = \frac{\cos(nx)}{n}$. Does $f_n' \to 0$ uniformly? $\sup |f_n'| = 1/n \to 0$. Yes. So $f' = \lim f_n' = 0$, consistent with $f = 0$.
+</Example>
+
+<Example title="Derivative interchange fails without uniform convergence of derivatives">
+$f_n(x) = \frac{\sin(nx)}{n}$ on $\mathbb{R}$. $f_n \to 0$ uniformly. But $f_n'(x) = \cos(nx)$, which does not converge pointwise (for most $x$). The hypotheses of the theorem are not met, and indeed $(\lim f_n)' = 0' = 0 \neq \lim f_n'$ (the latter does not even exist).
+</Example>
+
+---
+
+## Cauchy criterion for uniform convergence
+
+<Theorem title="Cauchy criterion" number="8.4">
+$(f_n)$ converges uniformly on $D$ if and only if for every $\varepsilon > 0$, there exists $N$ such that
+
+$$m, n \geq N \implies \sup_{x \in D} |f_m(x) - f_n(x)| < \varepsilon.$$
+</Theorem>
+
+<Example title="Using Cauchy criterion">
+$f_n(x) = \sum_{k=1}^n \frac{\sin(kx)}{k^2}$ on $\mathbb{R}$. For $m > n$:
+
+$$\sup_x |f_m(x) - f_n(x)| = \sup_x \left|\sum_{k=n+1}^m \frac{\sin(kx)}{k^2}\right| \leq \sum_{k=n+1}^m \frac{1}{k^2} \to 0$$
+
+as $n, m \to \infty$ (since $\sum 1/k^2$ converges). By the Cauchy criterion, $f_n$ converges uniformly, so $\sum \frac{\sin(kx)}{k^2}$ is a continuous function.
+</Example>
+
+---
+
+## Uniform convergence of series
+
+<Definition title="Uniform convergence of a function series" number="8.4">
+$\sum_{n=1}^\infty g_n$ converges uniformly on $D$ if the partial sums $S_N = \sum_{n=1}^N g_n$ converge uniformly on $D$, i.e.,
+
+$$\sup_{x \in D} \left|f(x) - \sum_{n=1}^N g_n(x)\right| \to 0.$$
+</Definition>
+
+<Example title="The Weierstrass M-test preview">
+The main tool for proving uniform convergence of series is the [Weierstrass M-test](/analysis/ch08-sequences-of-functions/theorems/t01-weierstrass-m-test): if $|g_n(x)| \leq M_n$ for all $x \in D$ and $\sum M_n < \infty$, then $\sum g_n$ converges uniformly on $D$.
+</Example>
+
+<Remark>
+Uniform convergence is the bridge between pointwise convergence (too weak) and stronger notions like $L^p$ convergence. It is precisely the condition needed to interchange limits with continuous operations like integration. For differentiation, one needs uniform convergence of the derivatives rather than the functions themselves.
+</Remark>

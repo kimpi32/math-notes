@@ -1,0 +1,168 @@
+export const metadata = {
+  title: 'Convergence of Series — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "7. 급수", href: "/analysis/ch07-series" },
+  { label: "개념 — 급수의 수렴" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Convergence of Series
+
+An infinite series is, at its core, a sequence of partial sums. The question of whether an infinite sum "makes sense" reduces to whether this sequence converges.
+
+---
+
+## Definition
+
+<Definition title="Infinite series" number="7.1">
+Let $(a_n)_{n=1}^\infty$ be a sequence of real numbers. The **infinite series** $\sum_{n=1}^\infty a_n$ is defined as the limit of the **partial sums**
+
+$$S_N = \sum_{n=1}^{N} a_n = a_1 + a_2 + \cdots + a_N.$$
+
+If the sequence $(S_N)$ converges to a limit $S \in \mathbb{R}$, we say the series **converges** and write $\sum_{n=1}^\infty a_n = S$. If $(S_N)$ diverges, the series **diverges**.
+</Definition>
+
+<Example title="Geometric series">
+The geometric series $\sum_{n=0}^\infty r^n$ has partial sums $S_N = \frac{1 - r^{N+1}}{1 - r}$ for $r \neq 1$.
+
+- If $|r| < 1$: $r^{N+1} \to 0$, so $S_N \to \frac{1}{1-r}$. The series converges to $\frac{1}{1-r}$.
+- If $|r| \geq 1$: $S_N$ diverges.
+
+Concrete cases: $\sum_{n=0}^\infty \frac{1}{2^n} = \frac{1}{1 - 1/2} = 2$, $\sum_{n=0}^\infty \frac{1}{3^n} = \frac{3}{2}$, $\sum_{n=0}^\infty (-\frac{1}{2})^n = \frac{2}{3}$.
+</Example>
+
+<Example title="Telescoping series">
+$\sum_{n=1}^\infty \frac{1}{n(n+1)}$. By partial fractions: $\frac{1}{n(n+1)} = \frac{1}{n} - \frac{1}{n+1}$.
+
+$$S_N = \sum_{n=1}^N \left(\frac{1}{n} - \frac{1}{n+1}\right) = 1 - \frac{1}{N+1} \to 1.$$
+
+So $\sum_{n=1}^\infty \frac{1}{n(n+1)} = 1$.
+</Example>
+
+<Example title="Harmonic series diverges">
+The harmonic series $\sum_{n=1}^\infty \frac{1}{n}$ diverges. Proof: group the terms:
+
+$$S_{2^k} = 1 + \frac{1}{2} + \left(\frac{1}{3} + \frac{1}{4}\right) + \left(\frac{1}{5} + \cdots + \frac{1}{8}\right) + \cdots \geq 1 + \frac{1}{2} + \frac{2}{4} + \frac{4}{8} + \cdots = 1 + \frac{k}{2}.$$
+
+Since $S_{2^k} \geq 1 + k/2 \to \infty$, the series diverges.
+</Example>
+
+---
+
+## Necessary condition
+
+<Theorem title="Divergence test (nth term test)" number="7.1">
+If $\sum_{n=1}^\infty a_n$ converges, then $\lim_{n \to \infty} a_n = 0$.
+
+Equivalently: if $a_n \not\to 0$, then $\sum a_n$ diverges.
+</Theorem>
+
+<Example title="Applying the divergence test">
+- $\sum_{n=1}^\infty \frac{n}{n+1}$: since $\frac{n}{n+1} \to 1 \neq 0$, the series diverges.
+- $\sum_{n=1}^\infty (-1)^n$: since $|a_n| = 1 \not\to 0$, diverges.
+- $\sum_{n=1}^\infty \sin(n)$: since $\sin(n) \not\to 0$ (the sequence is dense in $[-1,1]$), diverges.
+</Example>
+
+<Remark>
+The converse is **false**: $a_n \to 0$ does not imply convergence. The harmonic series is the classic counterexample. The condition $a_n \to 0$ is necessary but not sufficient.
+</Remark>
+
+---
+
+## p-series
+
+<Theorem title="p-series test" number="7.2">
+The p-series $\sum_{n=1}^\infty \frac{1}{n^p}$ converges if and only if $p > 1$.
+</Theorem>
+
+<Example title="p-series examples">
+- $p = 2$: $\sum \frac{1}{n^2}$ converges. (Euler proved the sum is $\frac{\pi^2}{6}$.)
+- $p = 3$: $\sum \frac{1}{n^3}$ converges. (This is $\zeta(3)$, Apery's constant.)
+- $p = 1$: $\sum \frac{1}{n}$ is the harmonic series, diverges.
+- $p = 1/2$: $\sum \frac{1}{\sqrt{n}}$ diverges.
+- $p = 0$: $\sum 1$ diverges (terms do not approach $0$).
+</Example>
+
+---
+
+## Cauchy criterion for series
+
+<Theorem title="Cauchy criterion" number="7.3">
+$\sum_{n=1}^\infty a_n$ converges if and only if for every $\varepsilon > 0$, there exists $N$ such that for all $m > n \geq N$:
+
+$$\left|\sum_{k=n+1}^{m} a_k\right| < \varepsilon.$$
+</Theorem>
+
+<Example title="Using Cauchy criterion to show divergence">
+For the harmonic series: take $m = 2n$. Then
+
+$$\sum_{k=n+1}^{2n} \frac{1}{k} \geq \sum_{k=n+1}^{2n} \frac{1}{2n} = \frac{n}{2n} = \frac{1}{2}.$$
+
+This does not go to $0$, so the Cauchy criterion fails and $\sum 1/n$ diverges.
+</Example>
+
+---
+
+## Alternating series
+
+<Theorem title="Alternating series test (Leibniz test)" number="7.4">
+If $(a_n)$ is a decreasing sequence of positive reals with $a_n \to 0$, then the alternating series $\sum_{n=1}^\infty (-1)^{n+1} a_n$ converges.
+
+Moreover, the partial sums satisfy $|S - S_N| \leq a_{N+1}$ (the error is bounded by the first omitted term).
+</Theorem>
+
+<Example title="Alternating harmonic series">
+$\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots$
+
+Here $a_n = 1/n$ is decreasing and $a_n \to 0$, so the series converges. The sum equals $\ln 2$ (provable via Taylor series for $\ln(1+x)$ at $x = 1$).
+
+After $N = 10$ terms: error $\leq a_{11} = 1/11 \approx 0.091$.
+</Example>
+
+<Example title="Alternating series with 1/n²">
+$\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n^2}$ converges by the alternating series test. But it also converges absolutely (since $\sum 1/n^2$ converges). The sum equals $\frac{\pi^2}{12}$.
+</Example>
+
+<Example title="Alternating series test does not apply">
+$\sum_{n=1}^\infty (-1)^n a_n$ where $a_n = \frac{1}{n}$ if $n$ is odd and $a_n = \frac{1}{n^2}$ if $n$ is even. The sequence $(a_n)$ is not monotone decreasing, so the alternating series test does not directly apply (though the series may still converge by other methods).
+</Example>
+
+---
+
+## Algebra of convergent series
+
+<Theorem title="Linearity of convergent series" number="7.5">
+If $\sum a_n = A$ and $\sum b_n = B$, then:
+
+- $\sum (a_n + b_n) = A + B$
+- $\sum c \cdot a_n = c \cdot A$ for any $c \in \mathbb{R}$
+</Theorem>
+
+<Example title="Combining series">
+$\sum_{n=0}^\infty \left(\frac{1}{2^n} + \frac{1}{3^n}\right) = \sum_{n=0}^\infty \frac{1}{2^n} + \sum_{n=0}^\infty \frac{1}{3^n} = 2 + \frac{3}{2} = \frac{7}{2}.$
+</Example>
+
+<Example title="Telescoping with partial fractions">
+$\sum_{n=1}^\infty \frac{1}{n^2 + n} = \sum_{n=1}^\infty \left(\frac{1}{n} - \frac{1}{n+1}\right) = 1$. This is the same as $\sum 1/(n(n+1))$ from before, written in a different form.
+</Example>
+
+<Example title="A convergent series with slow decay">
+$\sum_{n=2}^\infty \frac{1}{n(\ln n)^2}$ converges (by the integral test), even though $\frac{1}{n(\ln n)^2}$ decays much more slowly than $1/n^p$ for any $p > 1$. The partial sums grow very slowly: $S_{1000} \approx 2.02$.
+</Example>
+
+<Remark>
+Adding or removing finitely many terms does not affect convergence (though it may change the sum). Grouping terms (inserting parentheses) preserves convergence but removing parentheses may not. Rearranging terms is safe only for absolutely convergent series, as we discuss in the [next section](/analysis/ch07-series/concepts/c02-absolute-convergence).
+</Remark>

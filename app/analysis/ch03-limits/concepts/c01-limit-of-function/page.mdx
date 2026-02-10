@@ -1,0 +1,160 @@
+export const metadata = {
+  title: '함수의 극한 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "3. 함수의 극한", href: "/analysis/ch03-limits" },
+  { label: "개념 - 함수의 극한" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 함수의 극한 (Limit of a Function)
+
+The limit of a function extends the idea of sequential convergence to the setting of real-valued functions. It is the gateway to continuity, differentiation, and integration.
+
+---
+
+## Limit points
+
+<Definition title="Limit point of a set" number="3.1">
+A point $c \in \mathbb{R}$ is a **limit point** (or **accumulation point**) of a set $A \subseteq \mathbb{R}$ if for every $\delta > 0$, the punctured neighborhood $(c - \delta, c + \delta) \setminus \{c\}$ contains at least one point of $A$.
+
+Equivalently, $c$ is a limit point of $A$ if there exists a sequence $(x_n)$ in $A \setminus \{c\}$ with $x_n \to c$.
+</Definition>
+
+<Example title="Limit points of sets">
+1. The limit points of $(0, 1)$ are the closed interval $[0, 1]$. Every point in $[0,1]$ can be approached by a sequence in $(0,1) \setminus \{c\}$.
+
+2. The limit points of $\mathbb{N} = \{1, 2, 3, \ldots\}$ form the empty set. No real number can be approached by a sequence of distinct natural numbers in a punctured neighborhood.
+
+3. The limit points of $\{1/n : n \in \mathbb{N}\}$ are $\{0\}$. The point $0$ is approached by $1/n \to 0$.
+</Example>
+
+---
+
+## Definition of limit
+
+<Definition title="Limit of a function (epsilon-delta)" number="3.2">
+Let $f : A \to \mathbb{R}$ and let $c$ be a limit point of $A$. We say $\lim_{x \to c} f(x) = L$ if:
+
+$$\forall \varepsilon > 0, \quad \exists \delta > 0, \quad \forall x \in A : \quad 0 < |x - c| < \delta \implies |f(x) - L| < \varepsilon.$$
+
+Note: the value $f(c)$ is irrelevant (and $f$ need not even be defined at $c$). Only the behavior of $f$ near $c$ matters.
+</Definition>
+
+<Example title="Basic limit computations">
+4. $\lim_{x \to 2} (3x + 1) = 7$.
+
+**Proof**: Let $\varepsilon > 0$. We need $|3x + 1 - 7| = 3|x - 2| < \varepsilon$. Choose $\delta = \varepsilon / 3$. Then $0 < |x - 2| < \delta$ implies $|3x + 1 - 7| = 3|x-2| < 3\delta = \varepsilon$.
+
+5. $\lim_{x \to 3} x^2 = 9$.
+
+**Proof**: $|x^2 - 9| = |x-3| \cdot |x+3|$. If $|x - 3| < 1$, then $|x+3| < 7$. Choose $\delta = \min(1, \varepsilon/7)$. Then $|x^2 - 9| < 7 \cdot \varepsilon/7 = \varepsilon$.
+</Example>
+
+---
+
+## Sequential characterization
+
+<Theorem title="Sequential characterization of limits" number="3.1">
+Let $c$ be a limit point of $A$ and $f : A \to \mathbb{R}$. Then
+
+$$\lim_{x \to c} f(x) = L$$
+
+if and only if for every sequence $(x_n)$ in $A \setminus \{c\}$ with $x_n \to c$, we have $f(x_n) \to L$.
+</Theorem>
+
+<Example title="Using sequences to find limits">
+6. $\lim_{x \to 0} x \sin(1/x) = 0$.
+
+For any $x_n \to 0$ with $x_n \neq 0$: $|x_n \sin(1/x_n)| \leq |x_n| \to 0$.
+</Example>
+
+<Example title="Using sequences to prove nonexistence">
+7. $\lim_{x \to 0} \sin(1/x)$ does not exist.
+
+Take $x_n = \frac{1}{2\pi n} \to 0$: $f(x_n) = \sin(2\pi n) = 0$.
+Take $y_n = \frac{1}{2\pi n + \pi/2} \to 0$: $f(y_n) = \sin(2\pi n + \pi/2) = 1$.
+Since $0 \neq 1$, the limit does not exist.
+</Example>
+
+---
+
+## One-sided limits
+
+<Definition title="One-sided limits" number="3.3">
+The **right-hand limit** $\lim_{x \to c^+} f(x) = L$ means:
+
+$$\forall \varepsilon > 0, \quad \exists \delta > 0, \quad \forall x \in A: \quad 0 < x - c < \delta \implies |f(x) - L| < \varepsilon.$$
+
+The **left-hand limit** $\lim_{x \to c^-} f(x) = L$ is defined analogously with $0 < c - x < \delta$.
+
+The two-sided limit exists if and only if both one-sided limits exist and are equal.
+</Definition>
+
+<Example title="One-sided limits">
+8. $f(x) = \frac{|x|}{x}$ (the sign function for $x \neq 0$):
+
+$\lim_{x \to 0^+} f(x) = 1$ and $\lim_{x \to 0^-} f(x) = -1$.
+
+The two-sided limit $\lim_{x \to 0} f(x)$ does not exist.
+</Example>
+
+<Example title="Floor function limits">
+9. $f(x) = \lfloor x \rfloor$ (floor function):
+
+$\lim_{x \to 2^+} \lfloor x \rfloor = 2$ and $\lim_{x \to 2^-} \lfloor x \rfloor = 1$.
+
+At non-integers, both one-sided limits equal the floor value.
+</Example>
+
+---
+
+## Limits at infinity
+
+<Definition title="Limit at infinity" number="3.4">
+$\lim_{x \to \infty} f(x) = L$ means:
+
+$$\forall \varepsilon > 0, \quad \exists M > 0, \quad \forall x > M : \quad |f(x) - L| < \varepsilon.$$
+
+Similarly, $\lim_{x \to -\infty} f(x) = L$ uses $x < -M$.
+</Definition>
+
+<Example title="Limits at infinity">
+10. $\lim_{x \to \infty} \frac{1}{x} = 0$: given $\varepsilon > 0$, choose $M = 1/\varepsilon$.
+
+11. $\lim_{x \to \infty} \frac{x^2 + 1}{2x^2 - 3} = \frac{1}{2}$: divide numerator and denominator by $x^2$.
+</Example>
+
+---
+
+## Infinite limits
+
+<Definition title="Infinite limits" number="3.5">
+$\lim_{x \to c} f(x) = +\infty$ means:
+
+$$\forall M > 0, \quad \exists \delta > 0, \quad \forall x : \quad 0 < |x - c| < \delta \implies f(x) > M.$$
+</Definition>
+
+<Example title="Infinite limit example">
+12. $\lim_{x \to 0} \frac{1}{x^2} = +\infty$: given $M > 0$, choose $\delta = 1/\sqrt{M}$. Then $0 < |x| < \delta$ implies $\frac{1}{x^2} > \frac{1}{\delta^2} = M$.
+</Example>
+
+---
+
+## Summary of limit types
+
+<Remark>
+The different types of limits ($x \to c$, $x \to c^\pm$, $x \to \pm\infty$, $f(x) \to L$, $f(x) \to \pm\infty$) all follow the same logical pattern: a quantifier alternation $\forall \varepsilon\; \exists \delta$ (or $\forall M\; \exists \delta$, etc.). Mastering this pattern for one case makes all others straightforward.
+</Remark>

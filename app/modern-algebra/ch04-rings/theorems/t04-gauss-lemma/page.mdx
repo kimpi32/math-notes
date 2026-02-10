@@ -1,0 +1,227 @@
+export const metadata = {
+  title: "Gauss's Lemma — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Theorem — Gauss's Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Gauss's Lemma
+
+Gauss's Lemma is a fundamental result connecting factorization in a UFD $R$ with factorization in its polynomial ring $R[x]$. It shows that the "content" of a polynomial behaves multiplicatively, which leads to the crucial fact that $R[x]$ is a UFD whenever $R$ is.
+
+---
+
+## Content and Primitivity
+
+<Definition title="Content and primitive polynomial" number="4.32">
+Let $R$ be a UFD and $f = a_n x^n + \cdots + a_0 \in R[x]$ a nonzero polynomial. The **content** of $f$ is
+
+$$c(f) = \gcd(a_0, a_1, \ldots, a_n)$$
+
+defined up to associates. A polynomial $f$ is **primitive** if $c(f) \sim 1$ (i.e., the coefficients share no common non-unit factor).
+
+Every nonzero polynomial $f \in R[x]$ can be written as $f = c(f) \cdot f^*$ where $f^*$ is primitive.
+</Definition>
+
+---
+
+## Statement
+
+<Theorem title="Gauss's Lemma (product of primitives)" number="4.40">
+Let $R$ be a UFD. The product of two primitive polynomials in $R[x]$ is primitive.
+</Theorem>
+
+<Theorem title="Content is multiplicative" number="4.41">
+Let $R$ be a UFD and $f, g \in R[x]$ nonzero. Then
+
+$$c(fg) \sim c(f) \cdot c(g)$$
+</Theorem>
+
+<Proof>
+It suffices to prove Theorem 4.40, since Theorem 4.41 follows by writing $f = c(f) f^*$ and $g = c(g) g^*$ with $f^*, g^*$ primitive, giving $fg = c(f)c(g) f^* g^*$ where $f^* g^*$ is primitive by Theorem 4.40.
+
+**Proof of Theorem 4.40.** Let $f = \sum a_i x^i$ and $g = \sum b_j x^j$ be primitive, and let $h = fg = \sum c_k x^k$ where $c_k = \sum_{i+j=k} a_i b_j$.
+
+Suppose for contradiction that $h$ is not primitive. Then there exists an irreducible (hence prime) element $p \in R$ dividing all coefficients $c_k$.
+
+Since $f$ is primitive, $p$ does not divide all $a_i$. Let $a_s$ be the first coefficient not divisible by $p$: $p \mid a_0, \ldots, p \mid a_{s-1}$, $p \nmid a_s$.
+
+Similarly, let $b_t$ be the first coefficient of $g$ not divisible by $p$: $p \mid b_0, \ldots, p \mid b_{t-1}$, $p \nmid b_t$.
+
+Now consider $c_{s+t} = \sum_{i+j=s+t} a_i b_j$. We have $p \mid c_{s+t}$. For $i < s$, $p \mid a_i$. For $j < t$, $p \mid b_j$. The only term with $i \geq s$ and $j \geq t$ in the constraint $i + j = s + t$ is $i = s, j = t$. So:
+
+$$c_{s+t} = a_s b_t + \underbrace{\sum_{\substack{i+j=s+t \\ i \neq s}} a_i b_j}_{\text{divisible by } p}$$
+
+Since $p \mid c_{s+t}$ and $p$ divides the remaining sum, $p \mid a_s b_t$. Since $p$ is prime, $p \mid a_s$ or $p \mid b_t$. Both contradict our choice. Hence $h$ is primitive.
+</Proof>
+
+---
+
+## The Key Corollary: Irreducibility Transfer
+
+<Theorem title="Gauss's Lemma (irreducibility version)" number="4.42">
+Let $R$ be a UFD with fraction field $K$, and let $f \in R[x]$ be a primitive polynomial of degree $\geq 1$. Then:
+
+$$f \text{ is irreducible in } R[x] \iff f \text{ is irreducible in } K[x]$$
+</Theorem>
+
+<Proof>
+($\Rightarrow$) Suppose $f$ is irreducible in $R[x]$ and $f = g \cdot h$ in $K[x]$ with $\deg(g), \deg(h) \geq 1$. Clear denominators: write $g = \frac{a}{b} g_0$ and $h = \frac{c}{d} h_0$ where $g_0, h_0 \in R[x]$ are primitive and $a, b, c, d \in R$. Then $bdf = ac \cdot g_0 h_0$. By Theorem 4.41: $c(bdf) = bd \cdot c(f) \sim bd$ (since $f$ is primitive) and $c(ac \cdot g_0 h_0) = ac \cdot c(g_0 h_0) \sim ac$ (since $g_0 h_0$ is primitive by Gauss's Lemma). So $bd \sim ac$, and $f = g_0 h_0$ up to a unit. This contradicts $f$ being irreducible in $R[x]$.
+
+($\Leftarrow$) Suppose $f$ is irreducible in $K[x]$ and $f = g \cdot h$ in $R[x]$. Then in $K[x]$, either $g$ or $h$ is a unit (i.e., a nonzero constant in $K$). Since $g, h \in R[x]$ and $f$ is primitive, this forces $g$ or $h$ to be a unit in $R$.
+</Proof>
+
+---
+
+## R[x] is a UFD
+
+<Theorem title="Polynomial ring over a UFD is a UFD" number="4.43">
+If $R$ is a UFD, then $R[x]$ is a UFD.
+</Theorem>
+
+<Proof>
+Let $K$ be the fraction field of $R$. Since $K$ is a field, $K[x]$ is a PID, hence a UFD.
+
+Let $f \in R[x]$ be a nonzero non-unit. Write $f = c(f) \cdot f^*$ where $f^*$ is primitive. Factor $c(f)$ into irreducibles in $R$ and $f^*$ into irreducibles in $K[x]$ (which exist since $K[x]$ is a UFD). Clear denominators and extract content from each factor to get a factorization of $f^*$ into primitive irreducible polynomials in $R[x]$ (using Gauss's Lemma to show these are irreducible in $R[x]$).
+
+Uniqueness follows from: (1) unique factorization of $c(f)$ in $R$, (2) unique factorization of $f^*$ in $K[x]$, and (3) the fact that primitive irreducibles in $R[x]$ correspond to irreducibles in $K[x]$ up to units.
+</Proof>
+
+<Theorem title="Iterated polynomial rings" number="4.44">
+If $R$ is a UFD, then $R[x_1, x_2, \ldots, x_n]$ is a UFD for every $n \geq 1$.
+</Theorem>
+
+---
+
+## Examples
+
+<Example id="gauss-Z-x" title="Factoring over integers vs rationals">
+Consider $f(x) = 2x^2 + 4x + 2 \in \mathbb{Z}[x]$. We have $c(f) = 2$ and $f^* = x^2 + 2x + 1 = (x+1)^2$. So $f = 2(x+1)^2$, and the irreducible factorization in $\mathbb{Z}[x]$ is $2 \cdot (x+1) \cdot (x+1)$.
+
+In $\mathbb{Q}[x]$: $f = 2(x+1)^2$, but $2$ is a unit in $\mathbb{Q}$, so the factorization is just $(x+1)^2$ (up to units).
+</Example>
+
+<Example id="gauss-irreducibility" title="Using Gauss to test irreducibility">
+Is $f(x) = 2x^3 + x^2 + 2x + 1$ irreducible over $\mathbb{Z}$?
+
+First, $c(f) = 1$ so $f$ is primitive. By Gauss's Lemma, we need only check irreducibility over $\mathbb{Q}$. The rational root theorem gives possible roots $\pm 1, \pm 1/2$. Check: $f(1) = 6 \neq 0$, $f(-1) = 0$! So $x + 1$ divides $f$. Dividing: $f = (x+1)(2x^2 - x + 1)$ over $\mathbb{Z}$. Now check: $2x^2 - x + 1$ has discriminant $1 - 8 = -7 < 0$, so it has no real roots, hence irreducible over $\mathbb{Q}$ (degree 2). So the irreducible factorization is $(x+1)(2x^2 - x + 1)$.
+</Example>
+
+<Example id="gauss-content" title="Content computation examples">
+- $f = 6x^3 + 4x^2 + 10x + 8 \in \mathbb{Z}[x]$: $c(f) = \gcd(6,4,10,8) = 2$, $f^* = 3x^3 + 2x^2 + 5x + 4$.
+- $f = 3x^2 + 5x + 7 \in \mathbb{Z}[x]$: $c(f) = 1$, $f$ is primitive.
+- $f = (2x + 1)(3x + 1) = 6x^2 + 5x + 1 \in \mathbb{Z}[x]$: $c(f) = 1$, confirming Gauss's Lemma ($c(2x+1) = 1$, $c(3x+1) = 1$, so $c(fg) = 1$).
+</Example>
+
+<Example id="gauss-rational-coefficients" title="Rational polynomials and clearing denominators">
+Is $f(x) = \frac{1}{2}x^3 + \frac{3}{4}x + \frac{1}{6}$ irreducible over $\mathbb{Q}$?
+
+Multiply by $12$ (the LCD): $g(x) = 6x^3 + 9x + 2$. Since $\gcd(6, 9, 2) = 1$, $g$ is primitive. By Gauss's Lemma, $g$ is irreducible over $\mathbb{Q}$ iff it is irreducible over $\mathbb{Z}$. The rational root test: possible roots are $\pm 1, \pm 2, \pm 1/2, \pm 1/3, \pm 2/3, \pm 1/6$. Checking: $g(1) = 17, g(-1) = -13$, none are roots. Since $\deg(g) = 3$ and it has no rational roots, $g$ is irreducible over $\mathbb{Q}$, hence $f$ is also irreducible over $\mathbb{Q}$.
+</Example>
+
+<Example id="gauss-multivariate" title="Gauss's Lemma for multivariate polynomials">
+In $\mathbb{Z}[x, y] = \mathbb{Z}[x][y]$: is $f = y^2 + x$ irreducible?
+
+View $f$ as an element of $R[y]$ where $R = \mathbb{Z}[x]$. Then $c(f) = \gcd(1, x) = 1$ in $\mathbb{Z}[x]$, so $f$ is primitive. By Gauss's Lemma, $f$ is irreducible over $\mathbb{Z}[x]$ iff it is irreducible over $\mathbb{Q}(x)$. Over $\mathbb{Q}(x)$, $y^2 + x = y^2 - (-x)$ is irreducible since $-x$ is not a square in $\mathbb{Q}(x)$. So $f$ is irreducible.
+</Example>
+
+<Example id="gauss-gaussian" title="Gauss's Lemma for Gaussian integers">
+$\mathbb{Z}[i]$ is a UFD (it is a Euclidean domain), so $\mathbb{Z}[i][x]$ is a UFD by Gauss's Lemma.
+
+Is $x^2 + 1$ irreducible in $\mathbb{Z}[i][x]$? No: $x^2 + 1 = (x + i)(x - i)$.
+
+Is $x^2 + 2$ irreducible in $\mathbb{Z}[i][x]$? By Gauss, check over $\mathbb{Q}(i)$: $x^2 + 2$ has roots $\pm\sqrt{-2} = \pm i\sqrt{2}$. Since $\sqrt{2} \notin \mathbb{Q}(i)$ (because $[\mathbb{Q}(i, \sqrt{2}):\mathbb{Q}] = 4$), $x^2 + 2$ is irreducible over $\mathbb{Q}(i)$, hence over $\mathbb{Z}[i]$.
+</Example>
+
+---
+
+## Connection to Other Results
+
+<Remark title="Gauss's Lemma enables Eisenstein">
+Eisenstein's criterion uses Gauss's Lemma implicitly: it proves irreducibility over $\mathbb{Z}$, and Gauss's Lemma then gives irreducibility over $\mathbb{Q}$. More precisely, the proof of Eisenstein works in $\mathbb{Z}[x]$ (showing a primitive polynomial cannot factor into two polynomials of positive degree), and Gauss's Lemma lifts this to $\mathbb{Q}[x]$.
+</Remark>
+
+<Remark title="The factorization chain">
+Gauss's Lemma is the key link in the chain:
+
+$$R \text{ is a UFD} \Rightarrow R[x] \text{ is a UFD} \Rightarrow R[x_1, \ldots, x_n] \text{ is a UFD}$$
+
+Combined with the fact that every field is a UFD and every PID is a UFD, this gives:
+
+$$F \text{ field} \Rightarrow F[x_1, \ldots, x_n] \text{ is a UFD}$$
+
+Note: $F[x_1, \ldots, x_n]$ is a UFD but not a PID for $n \geq 2$.
+</Remark>
+
+---
+
+## Further Examples
+
+<Example id="gauss-cyclotomic" title="Cyclotomic polynomials are irreducible">
+The polynomial $\Phi_5(x) = x^4 + x^3 + x^2 + x + 1$ is primitive in $\mathbb{Z}[x]$. By Gauss's Lemma, it is irreducible over $\mathbb{Z}$ if and only if it is irreducible over $\mathbb{Q}$. Substituting $x = y + 1$ and applying Eisenstein at $p = 5$ gives irreducibility over $\mathbb{Q}$, hence over $\mathbb{Z}$.
+</Example>
+
+<Example id="gauss-factorization-Z" title="Full factorization in integers adjoin x">
+Factor $f(x) = 6x^4 - 3x^2 - 3 \in \mathbb{Z}[x]$. Content: $c(f) = \gcd(6, 3, 3) = 3$, so $f = 3(2x^4 - x^2 - 1)$. Now $g = 2x^4 - x^2 - 1$ is primitive. Over $\mathbb{Q}$: $g = (2x^2 + 1)(x^2 - 1) = (2x^2+1)(x-1)(x+1)$. All three factors are primitive, so by Gauss's Lemma, the irreducible factorization in $\mathbb{Z}[x]$ is $3 \cdot (2x^2 + 1) \cdot (x - 1) \cdot (x + 1)$.
+</Example>
+
+<Example id="gauss-UFD-chain" title="The UFD chain for polynomial rings">
+Starting from $\mathbb{Z}$ (a UFD), Gauss's Lemma gives:
+- $\mathbb{Z}[x]$ is a UFD.
+- $\mathbb{Z}[x, y] = \mathbb{Z}[x][y]$ is a UFD.
+- $\mathbb{Z}[x, y, z]$ is a UFD.
+- $\mathbb{Z}[x_1, \ldots, x_n]$ is a UFD for all $n$.
+
+Similarly, starting from any field $k$: $k[x_1, \ldots, x_n]$ is a UFD.
+</Example>
+
+<Example id="gauss-non-primitive" title="Factoring non-primitive polynomials">
+Consider $f = 4x^2 - 4 \in \mathbb{Z}[x]$. We have $c(f) = 4$ and $f = 4(x^2 - 1) = 4(x-1)(x+1)$. In $\mathbb{Z}[x]$, the complete factorization into irreducibles is $2 \cdot 2 \cdot (x-1) \cdot (x+1)$, where $2$ is irreducible in $\mathbb{Z}$ and $x \pm 1$ are irreducible in $\mathbb{Z}[x]$.
+</Example>
+
+<Example id="gauss-eisenstein-connection" title="Gauss enables Eisenstein">
+Consider $f = 3x^3 + 6x + 3 \in \mathbb{Z}[x]$. We have $c(f) = 3$, so $f = 3(x^3 + 2x + 1)$. Now $g = x^3 + 2x + 1$ is primitive. We cannot apply Eisenstein directly to $g$. The rational root test: $g(\pm 1) = 4, 0$... actually $g(-1) = -1 - 2 + 1 = -2 \neq 0$. So $g$ has no rational roots and is therefore irreducible over $\mathbb{Q}$ (degree 3 with no roots), hence irreducible over $\mathbb{Z}$ by Gauss.
+</Example>
+
+---
+
+## A Non-UFD Example
+
+<Example id="non-ufd-gauss-fails" title="What goes wrong in non-UFDs">
+In $R = \mathbb{Z}[\sqrt{-5}]$, consider $f(x) = x^2 - \sqrt{-5} \cdot x \in R[x]$. We can factor $f = x(x - \sqrt{-5})$, and each factor is irreducible.
+
+But the content of $f$ is $c(f) = \gcd(1, \sqrt{-5}) = 1$ (no common non-unit factor), so $f$ is primitive. Gauss's Lemma holds in UFDs, but $R$ is NOT a UFD, so we cannot use it to conclude anything about irreducibility over the fraction field.
+
+This illustrates why the UFD hypothesis in Gauss's Lemma is essential.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+Gauss's Lemma has three main forms:
+
+1. **Product of primitives is primitive**: $c(fg) = c(f)c(g)$ in a UFD.
+2. **Irreducibility transfer**: A primitive polynomial is irreducible over $R$ iff it is irreducible over the fraction field $K$.
+3. **UFD preservation**: $R$ UFD implies $R[x]$ UFD.
+
+These results are foundational for:
+- Testing irreducibility of polynomials (reduce to checking over a field).
+- Establishing that polynomial rings $k[x_1, \ldots, x_n]$ are UFDs.
+- Understanding the relationship between factorization in $R$ and in $R[x]$.
+</Remark>

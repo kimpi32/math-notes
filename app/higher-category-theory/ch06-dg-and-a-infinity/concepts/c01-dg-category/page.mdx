@@ -1,0 +1,174 @@
+export const metadata = {
+  title: 'DG Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "6. DG 범주와 A∞ 범주", href: "/higher-category-theory/ch06-dg-and-a-infinity" },
+  { label: "Concept — DG Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# DG Category
+
+A DG (differential graded) category is a category enriched in chain complexes. DG categories provide an algebraic framework for enhanced triangulated categories, serving as a bridge between classical homological algebra and higher category theory. They encode not just morphisms between objects but the full chain complex of maps, including homotopies and higher homotopies.
+
+---
+
+## Definition
+
+<Definition title="DG category" number="6.1">
+A **DG category** $\mathcal{A}$ over a commutative ring $k$ consists of:
+
+1. A class of objects $\operatorname{Ob}(\mathcal{A})$.
+2. For each pair of objects $X, Y$, a chain complex $\operatorname{Hom}_{\mathcal{A}}(X, Y) \in \mathbf{Ch}(k)$.
+3. For each triple $X, Y, Z$, a composition chain map $\operatorname{Hom}(Y, Z) \otimes_k \operatorname{Hom}(X, Y) \to \operatorname{Hom}(X, Z)$.
+4. For each $X$, an identity element $\operatorname{id}_X \in \operatorname{Hom}^0(X, X)$ with $d(\operatorname{id}_X) = 0$.
+
+These satisfy the usual associativity and unit axioms strictly. In degree $n$, $\operatorname{Hom}^n(X, Y)$ consists of "morphisms of degree $n$" and the differential $d: \operatorname{Hom}^n(X, Y) \to \operatorname{Hom}^{n+1}(X, Y)$ satisfies the Leibniz rule:
+
+$$d(g \circ f) = d(g) \circ f + (-1)^{|g|} g \circ d(f)$$
+</Definition>
+
+<Definition title="Homotopy category of a DG category" number="6.2">
+The **homotopy category** $H^0(\mathcal{A})$ of a DG category $\mathcal{A}$ is the ordinary category with the same objects and morphisms:
+
+$$\operatorname{Hom}_{H^0(\mathcal{A})}(X, Y) = H^0(\operatorname{Hom}_{\mathcal{A}}(X, Y))$$
+
+the zeroth cohomology of the Hom complex. A degree-$0$ closed morphism $f \in \operatorname{Hom}^0(X, Y)$ with $d(f) = 0$ represents a class in $H^0$. Two closed morphisms $f, g$ are **homotopic** if $f - g = d(h)$ for some $h \in \operatorname{Hom}^{-1}(X, Y)$.
+</Definition>
+
+<Definition title="DG functor" number="6.3">
+A **DG functor** $F: \mathcal{A} \to \mathcal{B}$ between DG categories consists of a map on objects and chain maps $F: \operatorname{Hom}_{\mathcal{A}}(X, Y) \to \operatorname{Hom}_{\mathcal{B}}(F(X), F(Y))$ compatible with composition and identities.
+
+A DG functor is a **quasi-equivalence** if:
+1. For all $X, Y$, the chain map $\operatorname{Hom}_{\mathcal{A}}(X, Y) \to \operatorname{Hom}_{\mathcal{B}}(F(X), F(Y))$ is a quasi-isomorphism.
+2. The induced functor $H^0(F): H^0(\mathcal{A}) \to H^0(\mathcal{B})$ is essentially surjective.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="dg-chain-complexes" title="The DG category of chain complexes">
+For a ring $R$, the DG category $\mathbf{C}_{\mathrm{dg}}(R)$ has:
+- Objects: chain complexes of $R$-modules.
+- $\operatorname{Hom}^n(C, D) = \prod_{p \in \mathbb{Z}} \operatorname{Hom}_R(C_p, D_{p+n})$ (degree $n$ graded maps).
+- Differential: $(df)(x) = d_D(f(x)) - (-1)^{|f|} f(d_C(x))$.
+
+A closed degree-$0$ element is a chain map. The homotopy category $H^0(\mathbf{C}_{\mathrm{dg}}(R))$ is the classical homotopy category $K(R)$ of chain complexes.
+</Example>
+
+<Example id="dg-single-object" title="DG algebras as one-object DG categories">
+A DG algebra $(A, d)$ over $k$ can be viewed as a DG category with a single object $*$ and $\operatorname{Hom}(*, *) = A$. Composition is the multiplication of $A$.
+
+Conversely, every DG category with a single object is a DG algebra. DG modules over $A$ correspond to DG functors $\mathcal{A} \to \mathbf{C}_{\mathrm{dg}}(k)$.
+</Example>
+
+<Example id="dg-modules-over-algebra" title="DG modules over a DG algebra">
+For a DG algebra $A$, the DG category $\operatorname{Mod}_A^{\mathrm{dg}}$ has:
+- Objects: right DG $A$-modules (graded $A$-modules $M$ with differential satisfying $d(ma) = d(m)a + (-1)^{|m|}md(a)$).
+- $\operatorname{Hom}^n(M, N) = \operatorname{Hom}_{A\text{-gr}}^n(M, N)$ (degree $n$ graded $A$-module maps).
+
+The homotopy category $H^0(\operatorname{Mod}_A^{\mathrm{dg}})$ is the homotopy category of DG modules. The derived category $D(A)$ is obtained by further localizing at quasi-isomorphisms.
+</Example>
+
+<Example id="dg-endomorphism" title="Endomorphism DG algebras">
+For an object $E$ in a DG category $\mathcal{A}$, the endomorphism DG algebra is $\operatorname{End}_{\mathcal{A}}(E) = \operatorname{Hom}_{\mathcal{A}}(E, E)$. The DG category is "generated" by $E$ if every object can be built from $E$ using shifts, cones, and direct summands.
+
+For a scheme $X$ with a tilting generator $E \in D^b(\operatorname{Coh}(X))$, the endomorphism DG algebra $A = \operatorname{End}(E)$ determines the derived category: $D^b(\operatorname{Coh}(X)) \simeq D^{\mathrm{perf}}(A)$.
+</Example>
+
+<Example id="dg-sheaves" title="DG category of sheaves">
+For a topological space $X$ and a ring $k$, the DG category $\operatorname{Shv}_{\mathrm{dg}}(X; k)$ of sheaves of $k$-modules on $X$ has:
+- Objects: complexes of sheaves of $k$-modules.
+- Hom complexes: $\operatorname{Hom}^n(\mathcal{F}, \mathcal{G}) = \Gamma(X, \underline{\operatorname{Hom}}^n(\mathcal{F}, \mathcal{G}))$.
+
+The homotopy category $H^0(\operatorname{Shv}_{\mathrm{dg}}(X; k))$ is the homotopy category of complexes of sheaves, and localizing at quasi-isomorphisms gives $D(X; k)$.
+</Example>
+
+<Example id="dg-matrix-factorizations" title="Matrix factorizations as a DG category">
+For a regular ring $R$ and $w \in R$ (a "potential"), the DG category of **matrix factorizations** $\operatorname{MF}(R, w)$ has:
+- Objects: pairs $(M_0 \xrightarrow{\phi_0} M_1 \xrightarrow{\phi_1} M_0)$ with $\phi_1 \phi_0 = w \cdot \operatorname{id}$ and $\phi_0 \phi_1 = w \cdot \operatorname{id}$.
+- Hom complexes: $\mathbb{Z}/2$-graded morphisms with a differential induced by $\phi$.
+
+Matrix factorizations appear in the Landau--Ginzburg model of mirror symmetry and Knorrer periodicity.
+</Example>
+
+<Example id="dg-fukaya-wrap" title="Wrapped Fukaya categories (DG version)">
+The wrapped Fukaya category of a symplectic manifold $(M, \omega)$ can be modeled as a DG category (or more naturally as an $A_\infty$-category). Objects are Lagrangian submanifolds with additional data (grading, spin structure), and the Hom complex is generated by intersection points with differential counting pseudo-holomorphic strips.
+
+Homological mirror symmetry (Kontsevich) asserts a quasi-equivalence between the DG category of coherent sheaves on $X$ and the Fukaya DG category of the mirror $\check{X}$.
+</Example>
+
+---
+
+## DG Modules and Bimodules
+
+<Example id="dg-yoneda" title="DG Yoneda embedding">
+For a small DG category $\mathcal{A}$, the DG Yoneda embedding sends $X \in \mathcal{A}$ to the representable DG module $\hat{X} = \operatorname{Hom}_{\mathcal{A}}(-, X)$. This gives a fully faithful DG functor:
+
+$$\mathcal{A} \hookrightarrow \operatorname{Mod}_{\mathcal{A}}^{\mathrm{dg}}$$
+
+The image consists of the representable modules. The derived category $D(\mathcal{A})$ is obtained by localizing $\operatorname{Mod}_{\mathcal{A}}^{\mathrm{dg}}$ at quasi-isomorphisms, and $\mathcal{A}$ embeds into $D(\mathcal{A})$ via the Yoneda functor.
+</Example>
+
+<Example id="dg-bimodules" title="DG bimodules and Morita theory">
+A DG bimodule over DG categories $\mathcal{A}$ and $\mathcal{B}$ is a DG functor $\mathcal{A}^{\mathrm{op}} \otimes \mathcal{B} \to \mathbf{C}_{\mathrm{dg}}(k)$. DG bimodules serve as morphisms in the "Morita $\infty$-category" of DG categories:
+
+Two DG categories $\mathcal{A}$ and $\mathcal{B}$ are **Morita equivalent** if their derived categories of modules are equivalent: $D(\mathcal{A}) \simeq D(\mathcal{B})$. This is equivalent to the existence of a DG bimodule $M$ such that the tensor functor $- \otimes_{\mathcal{A}} M: D(\mathcal{A}) \to D(\mathcal{B})$ is an equivalence.
+</Example>
+
+<Example id="dg-tensor-product" title="Tensor product of DG categories">
+The tensor product $\mathcal{A} \otimes_k \mathcal{B}$ of DG categories has objects $\operatorname{Ob}(\mathcal{A}) \times \operatorname{Ob}(\mathcal{B})$ and Hom complexes:
+
+$$\operatorname{Hom}_{\mathcal{A} \otimes \mathcal{B}}((X_1, Y_1), (X_2, Y_2)) = \operatorname{Hom}_{\mathcal{A}}(X_1, X_2) \otimes_k \operatorname{Hom}_{\mathcal{B}}(Y_1, Y_2)$$
+
+This gives the category of DG categories a symmetric monoidal structure (over $k$). DG bimodules are equivalent to DG functors $\mathcal{A}^{\mathrm{op}} \otimes \mathcal{B} \to \mathbf{C}_{\mathrm{dg}}(k)$.
+</Example>
+
+---
+
+## Relation to Higher Categories
+
+<Example id="dg-nerve-relation" title="DG nerve and infinity-categories">
+The DG nerve construction (Lurie) sends a DG category $\mathcal{A}$ over a field $k$ to a $k$-linear stable $\infty$-category $N_{\mathrm{dg}}(\mathcal{A})$. The homotopy category of $N_{\mathrm{dg}}(\mathcal{A})$ recovers $H^0(\mathcal{A})$.
+
+For a DG category $\mathcal{A}$ over $\mathbb{Q}$, the DG nerve is equivalent to the simplicial nerve of the simplicial category obtained by the Dold--Kan correspondence: applying the Dold--Kan functor to each Hom complex gives a simplicial category, whose nerve is a quasi-category.
+</Example>
+
+<Example id="dg-localization" title="DG localization">
+The $\infty$-category of DG categories (up to quasi-equivalence) is obtained by localizing the $1$-category $\mathbf{dgCat}_k$ at quasi-equivalences. Tabuada and Toen showed that $\mathbf{dgCat}_k$ admits a model structure where:
+- Weak equivalences: quasi-equivalences.
+- Fibrations: DG functors surjective on Hom complexes.
+
+The underlying $\infty$-category $\mathbf{dgCat}_k[W^{-1}]$ is equivalent to the $\infty$-category of $k$-linear stable $\infty$-categories (when $k$ is a field of characteristic zero).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+DG categories provide an algebraic approach to higher categories:
+
+1. A DG category is a category **enriched in chain complexes**, with Hom chain complexes encoding morphisms, homotopies, and higher homotopies.
+
+2. The **homotopy category** $H^0(\mathcal{A})$ retains only $0$-th cohomology of Hom complexes.
+
+3. Key examples: chain complexes $\mathbf{C}_{\mathrm{dg}}(R)$, DG modules over DG algebras, sheaves, matrix factorizations.
+
+4. **DG Morita theory** classifies DG categories up to derived equivalence via bimodules.
+
+5. The **DG nerve** connects DG categories to stable $\infty$-categories, providing a concrete algebraic model.
+</Remark>

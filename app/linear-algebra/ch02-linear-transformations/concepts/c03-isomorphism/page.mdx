@@ -1,0 +1,138 @@
+export const metadata = {
+  title: 'Isomorphism — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "2. 선형변환", href: "/linear-algebra/ch02-linear-transformations" },
+  { label: "Concept — Isomorphism" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Isomorphisms of Vector Spaces
+
+An **isomorphism** is a bijective linear map. Two isomorphic vector spaces are "the same" from the viewpoint of linear algebra -- they have identical algebraic structure.
+
+---
+
+## Definition
+
+<Definition title="Isomorphism" number="2.5">
+A linear transformation $T : V \to W$ is an **isomorphism** if $T$ is bijective (both injective and surjective). We say $V$ and $W$ are **isomorphic** and write $V \cong W$.
+</Definition>
+
+<Remark title="Inverse is linear">
+If $T : V \to W$ is an isomorphism, then the inverse function $T^{-1} : W \to V$ is also linear (and hence an isomorphism). For linearity of $T^{-1}$: if $w_1 = T(v_1)$ and $w_2 = T(v_2)$, then $T^{-1}(aw_1 + bw_2) = T^{-1}(T(av_1 + bv_2)) = av_1 + bv_2 = aT^{-1}(w_1) + bT^{-1}(w_2)$.
+</Remark>
+
+---
+
+## The classification theorem
+
+<Theorem title="Dimension classifies vector spaces" number="2.5">
+Two finite-dimensional vector spaces over the same field $F$ are isomorphic if and only if they have the same dimension:
+
+$$V \cong W \iff \dim V = \dim W.$$
+
+In particular, every $n$-dimensional vector space over $F$ is isomorphic to $F^n$.
+</Theorem>
+
+<Proof>
+($\Rightarrow$) If $T : V \to W$ is an isomorphism and $\{v_1, \ldots, v_n\}$ is a basis for $V$, then $\{T(v_1), \ldots, T(v_n)\}$ is a basis for $W$ (injectivity preserves independence; surjectivity gives spanning). So $\dim W = n = \dim V$.
+
+($\Leftarrow$) If $\dim V = \dim W = n$, choose bases $\beta_V = \{v_1, \ldots, v_n\}$ for $V$ and $\beta_W = \{w_1, \ldots, w_n\}$ for $W$. Define $T(v_i) = w_i$ and extend linearly. Then $T$ is an isomorphism.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="rn-pn" title="R^n is isomorphic to P_{n-1}(R)">
+$\mathbb{R}^n \cong P_{n-1}(\mathbb{R})$ since both have dimension $n$. An explicit isomorphism: $T(a_1, \ldots, a_n) = a_1 + a_2 x + \cdots + a_n x^{n-1}$.
+</Example>
+
+<Example id="r4-m22" title="R^4 is isomorphic to M_{2x2}(R)">
+$\mathbb{R}^4 \cong M_{2 \times 2}(\mathbb{R})$ since both have dimension 4. An explicit isomorphism:
+
+$$T(a, b, c, d) = \begin{pmatrix} a & b \\ c & d \end{pmatrix}.$$
+</Example>
+
+<Example id="coordinate-map" title="The coordinate map">
+Fix a basis $\beta = \{v_1, \ldots, v_n\}$ for $V$. The **coordinate map** $\phi_\beta : V \to F^n$ sending $v = \sum a_i v_i \mapsto (a_1, \ldots, a_n)$ is an isomorphism. This is the canonical isomorphism $V \cong F^n$.
+</Example>
+
+<Example id="symmetric-iso" title="Sym_2(R) is isomorphic to R^3">
+$\text{Sym}_2(\mathbb{R}) \cong \mathbb{R}^3$ since $\dim \text{Sym}_2(\mathbb{R}) = 3$. An explicit isomorphism:
+
+$$T\begin{pmatrix} a & b \\ b & c \end{pmatrix} = (a, b, c).$$
+</Example>
+
+<Example id="not-isomorphic" title="R^2 is not isomorphic to R^3">
+$\mathbb{R}^2 \not\cong \mathbb{R}^3$ because $\dim \mathbb{R}^2 = 2 \neq 3 = \dim \mathbb{R}^3$.
+</Example>
+
+<Example id="complex-real" title="C is isomorphic to R^2 (as real vector spaces)">
+$\mathbb{C} \cong \mathbb{R}^2$ as vector spaces over $\mathbb{R}$: $T(a + bi) = (a, b)$. Both have $\dim_{\mathbb{R}} = 2$.
+
+However, $\mathbb{C} \not\cong \mathbb{R}^2$ as **rings** (the ring structure of $\mathbb{C}$ has no zero divisors, but this is irrelevant for the vector space isomorphism).
+</Example>
+
+<Example id="dual-space" title="V is isomorphic to V*">
+The **dual space** $V^* = \mathcal{L}(V, F)$ (space of linear functionals) has $\dim V^* = \dim V$. So $V \cong V^*$ in finite dimensions. However, the isomorphism $V \cong V^*$ is **not canonical** (it depends on a choice of basis).
+
+The double dual $V^{**} \cong V$ canonically via $v \mapsto \hat{v}$ where $\hat{v}(f) = f(v)$.
+</Example>
+
+<Example id="function-spaces" title="Infinite-dimensional non-isomorphism">
+$P(\mathbb{R})$ and $C[0,1]$ are both infinite-dimensional real vector spaces. As real vector spaces, they are not isomorphic: $P(\mathbb{R})$ has a countable basis $\{1, x, x^2, \ldots\}$, but $C[0,1]$ has no countable basis (its dimension is uncountable).
+</Example>
+
+<Example id="automorphism" title="Automorphisms">
+An isomorphism from $V$ to itself is called an **automorphism**. The set of all automorphisms of $V$ forms a group under composition, denoted $\text{GL}(V)$ (the **general linear group**). When $V = F^n$, this is $\text{GL}_n(F) = \{A \in M_{n \times n}(F) \mid \det A \neq 0\}$.
+</Example>
+
+<Example id="hom-space-dim" title="Dimension of Hom spaces">
+$\dim \mathcal{L}(V, W) = \dim V \cdot \dim W$. If $\dim V = m$ and $\dim W = n$, then $\mathcal{L}(V, W) \cong M_{n \times m}(F) \cong F^{nm}$.
+</Example>
+
+<Example id="polynomial-iso" title="Derivative shift">
+$D : P_n(\mathbb{R}) \to P_{n-1}(\mathbb{R})$ (differentiation) is surjective but **not** an isomorphism since $\ker(D) \neq \{0\}$ (constants map to zero). We have $\dim P_n = n + 1 \neq n = \dim P_{n-1}$.
+</Example>
+
+<Example id="finite-dim-bijection" title="In finite dimensions: injective iff surjective">
+For a linear map $T : V \to V$ (same finite-dimensional space):
+
+$T$ is injective $\iff$ $T$ is surjective $\iff$ $T$ is an isomorphism.
+
+This follows from $\dim V = \text{rank}(T) + \text{nullity}(T)$: if $\text{nullity} = 0$ then $\text{rank} = \dim V$ (surjective), and vice versa.
+
+This fails in infinite dimensions: the left shift $L : F^\infty \to F^\infty$ is surjective but not injective.
+</Example>
+
+---
+
+## Isomorphism as an equivalence relation
+
+<Remark title="Equivalence relation">
+Isomorphism is an equivalence relation on vector spaces:
+
+- **Reflexive**: $V \cong V$ via $\text{id}_V$.
+- **Symmetric**: If $V \cong W$ via $T$, then $W \cong V$ via $T^{-1}$.
+- **Transitive**: If $V \cong W$ via $T$ and $W \cong U$ via $S$, then $V \cong U$ via $S \circ T$.
+
+The equivalence classes are determined by a single invariant: the dimension.
+</Remark>
+
+<Remark title="Looking ahead">
+Isomorphic vector spaces are indistinguishable by linear-algebraic properties. Additional structure (inner products, norms, topologies) can distinguish spaces of the same dimension. For instance, all $n$-dimensional real inner product spaces are isomorphic as inner product spaces, but infinite-dimensional Hilbert spaces are classified by a different notion of dimension.
+</Remark>

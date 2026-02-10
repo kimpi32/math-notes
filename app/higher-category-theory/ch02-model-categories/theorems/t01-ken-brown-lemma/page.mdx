@@ -1,0 +1,145 @@
+export const metadata = {
+  title: "Ken Brown's Lemma — Higher Category Theory — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Theorem — Ken Brown's Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ken Brown's Lemma
+
+Ken Brown's lemma is a fundamental tool in model category theory that reduces the problem of verifying a Quillen adjunction to a much simpler check. It states that a functor preserving weak equivalences between fibrant objects (or cofibrant objects) automatically produces well-defined derived functors. This lemma is used constantly in establishing Quillen adjunctions and constructing derived functors.
+
+---
+
+## Statement
+
+<Theorem title="Ken Brown's Lemma" number="2.1">
+Let $\mathcal{M}$ be a model category and $F: \mathcal{M} \to \mathcal{D}$ a functor to a category $\mathcal{D}$ with a class of weak equivalences satisfying two-out-of-three. Then:
+
+**(Cofibrant version)** If $F$ sends trivial cofibrations between cofibrant objects to weak equivalences, then $F$ sends all weak equivalences between cofibrant objects to weak equivalences.
+
+**(Fibrant version)** If $F$ sends trivial fibrations between fibrant objects to weak equivalences, then $F$ sends all weak equivalences between fibrant objects to weak equivalences.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+We prove the cofibrant version. Let $f: X \xrightarrow{\sim} Y$ be a weak equivalence between cofibrant objects. Factor $f$ using the factorization axiom:
+
+$$X \xrightarrow{i} Z \xrightarrow{p} Y$$
+
+where $i$ is a cofibration and $p$ is a trivial fibration.
+
+Since $f = p \circ i$ and both $f$ and $p$ are weak equivalences, two-out-of-three gives that $i$ is a weak equivalence. So $i$ is a trivial cofibration.
+
+Now $X$ is cofibrant and $i: X \to Z$ is a cofibration, so $Z$ is also cofibrant (cofibrations are closed under composition with the initial map). Similarly, $Y$ is cofibrant by hypothesis.
+
+We need to show $F(f)$ is a weak equivalence. We have:
+- $F(i)$ is a weak equivalence (since $i$ is a trivial cofibration between cofibrant objects).
+- $p$ is a trivial fibration, so it is also a weak equivalence. But we need $F(p)$ to be a weak equivalence.
+
+For $p$, factor the map $(\mathrm{id}_Y, p): Y \sqcup X \to Y$ using the fold map and $i$. Consider the pushout: since $X$ is cofibrant, the map $Y \to Z$ obtained from pushing out $i$ along $X \to Y$ gives a trivial cofibration $Y \hookrightarrow Z'$ (trivial cofibrations are preserved by pushout) with a retraction to $p$. By two-out-of-three in $\mathcal{D}$, $F(p)$ is a weak equivalence.
+
+More precisely, form the coproduct inclusion $\mathrm{in}_Y: Y \hookrightarrow Y \sqcup_X Z$ (pushout along $i$). This is a trivial cofibration (pushout of the trivial cofibration $i$), and $Y$ is cofibrant, so $F(\mathrm{in}_Y)$ is a weak equivalence. The projection $Y \sqcup_X Z \to Y$ composed with $\mathrm{in}_Y$ is the identity, so by two-out-of-three, both are weak equivalences under $F$. Since $f = p \circ i$ and $F(i)$ is a weak equivalence, $F(p)$ is also a weak equivalence by two-out-of-three. Hence $F(f) = F(p) \circ F(i)$ is a weak equivalence.
+</Proof>
+
+---
+
+## Applications
+
+<Example id="ken-brown-quillen-adj" title="Verifying Quillen adjunctions">
+To show that an adjunction $F \dashv G$ is a Quillen adjunction, it suffices to check:
+- $F$ preserves cofibrations between cofibrant objects and trivial cofibrations between cofibrant objects.
+
+By Ken Brown's lemma, if $F$ sends trivial cofibrations between cofibrant objects to weak equivalences, then $F$ sends all weak equivalences between cofibrant objects to weak equivalences. Combined with preserving cofibrations, this gives a Quillen adjunction.
+
+In practice, one often checks the even simpler condition that $F$ sends generating (trivial) cofibrations to (trivial) cofibrations.
+</Example>
+
+<Example id="ken-brown-derived" title="Existence of derived functors">
+Ken Brown's lemma guarantees the existence of total left derived functors. If $F: \mathcal{M} \to \mathcal{N}$ preserves trivial cofibrations between cofibrant objects, then the composition
+
+$$\mathcal{M} \xrightarrow{Q} \mathcal{M}_c \xrightarrow{F} \mathcal{N} \xrightarrow{\gamma} \operatorname{Ho}(\mathcal{N})$$
+
+factors through $\operatorname{Ho}(\mathcal{M})$, giving $\mathbf{L}F: \operatorname{Ho}(\mathcal{M}) \to \operatorname{Ho}(\mathcal{N})$.
+
+This is the standard way to construct derived functors in homological algebra: one checks that the functor preserves quasi-isomorphisms between projective complexes.
+</Example>
+
+<Example id="ken-brown-homotopy-invariance" title="Homotopy invariance of homology">
+The singular chain complex functor $C_*: \mathbf{Top} \to \mathbf{Ch}(\mathbb{Z})$ sends weak homotopy equivalences to quasi-isomorphisms. By Ken Brown's lemma, it suffices to check this for trivial cofibrations (which are homotopy equivalences of CW complexes), where it follows from the homotopy invariance of singular homology.
+
+More generally, any functor that sends trivial cofibrations between CW complexes to quasi-isomorphisms automatically sends all weak homotopy equivalences between CW complexes to quasi-isomorphisms.
+</Example>
+
+<Example id="ken-brown-sheaves" title="Application to sheaf cohomology">
+In the model category of chain complexes of sheaves, the global sections functor $\Gamma(X, -)$ sends trivial fibrations between injective complexes to quasi-isomorphisms. By the fibrant version of Ken Brown's lemma, $\Gamma$ sends all weak equivalences between injective complexes to quasi-isomorphisms, establishing the well-definedness of $\mathbf{R}\Gamma$.
+</Example>
+
+<Example id="ken-brown-localization" title="Localization functors">
+Consider a left Bousfield localization $L_S \mathcal{M}$ of a model category. The identity functor $\mathrm{id}: \mathcal{M} \to L_S\mathcal{M}$ is a left Quillen functor. By Ken Brown's lemma, it suffices to check that the identity sends $S$-local trivial cofibrations (which include the old trivial cofibrations plus the $S$-equivalences) to weak equivalences in $L_S\mathcal{M}$.
+</Example>
+
+---
+
+## Variants
+
+<Example id="ken-brown-simplicial" title="Simplicial version">
+In a **simplicial model category**, Ken Brown's lemma has a simplicial enrichment: if $F: \mathcal{M} \to \mathbf{sSet}$ is a simplicial functor that sends trivial cofibrations between cofibrant objects to weak equivalences, then $F$ sends all weak equivalences between cofibrant objects to weak equivalences.
+
+This is used to verify that mapping spaces $\operatorname{Map}_{\mathcal{M}}(-, Y)$ and $\operatorname{Map}_{\mathcal{M}}(X, -)$ are homotopy invariant in their cofibrant/fibrant arguments.
+</Example>
+
+<Example id="ken-brown-relative" title="Relative version">
+A **relative** version of Ken Brown's lemma works for functors between model categories: if $F: \mathcal{M} \to \mathcal{N}$ preserves trivial cofibrations between cofibrant objects, then $F$ preserves all weak equivalences between cofibrant objects. This does not require $F$ to be a left adjoint; it works for any functor.
+
+This is useful for functors that are not part of an adjunction, such as certain geometric constructions or composite functors.
+</Example>
+
+<Example id="ken-brown-infty" title="Infinity-categorical analogue">
+In the $\infty$-categorical setting, Ken Brown's lemma becomes essentially tautological: a functor $F: \mathcal{C} \to \mathcal{D}$ between $\infty$-categories automatically preserves equivalences (by definition of functor between $\infty$-categories). The model-categorical lemma is the technical tool that makes this automatic preservation work at the level of ordinary categories with model structures.
+</Example>
+
+---
+
+## Historical Context
+
+<Remark title="History">
+Ken Brown's lemma appeared in Kenneth Brown's 1973 paper "Abstract homotopy theory and generalized sheaf cohomology." The lemma was originally formulated for categories of fibrant objects (a weaker structure than model categories), where it played a crucial role in constructing sheaf cohomology via resolutions.
+
+The lemma is sometimes called the "factorization trick" because the proof uses the factorization axiom to reduce a general weak equivalence to a trivial cofibration followed by a trivial fibration, each of which can be handled separately.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Ken Brown's lemma is a workhorse of model category theory:
+
+1. **Statement**: A functor preserving trivial cofibrations between cofibrant objects automatically preserves all weak equivalences between cofibrant objects.
+
+2. **Key use**: Verifying that adjunctions are Quillen adjunctions (reduces to checking on generators).
+
+3. **Derived functors**: Guarantees existence of total left/right derived functors.
+
+4. **Proof technique**: Uses the factorization axiom to decompose weak equivalences into trivial cofibrations and trivial fibrations.
+
+5. **$\infty$-categorical perspective**: In the $\infty$-categorical world, the lemma becomes automatic, reflecting the deeper truth that homotopy-coherent functors preserve equivalences by definition.
+</Remark>

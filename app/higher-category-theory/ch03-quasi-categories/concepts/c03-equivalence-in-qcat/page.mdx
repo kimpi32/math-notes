@@ -1,0 +1,147 @@
+export const metadata = {
+  title: 'Equivalences in Quasi-categories — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Concept — Equivalences in Quasi-categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Equivalences in Quasi-categories
+
+In a quasi-category, the notion of isomorphism is replaced by equivalence: a morphism is an equivalence if it has a homotopy inverse. Unlike strict isomorphisms, equivalences need not satisfy $g \circ f = \mathrm{id}$ on the nose -- instead, $g \circ f \simeq \mathrm{id}$ via a specified homotopy. Understanding equivalences is crucial for the internal structure of $\infty$-categories.
+
+---
+
+## Equivalences Between Objects
+
+<Definition title="Equivalence in a quasi-category" number="3.1">
+Let $\mathcal{C}$ be a quasi-category. A morphism $f: x \to y$ (a $1$-simplex with $d_1(f) = x$, $d_0(f) = y$) is an **equivalence** if there exists a morphism $g: y \to x$ such that $g \circ f \simeq \mathrm{id}_x$ and $f \circ g \simeq \mathrm{id}_y$.
+
+More precisely, $f$ is an equivalence if the $1$-simplex $f$ becomes an isomorphism in the homotopy category $\operatorname{h}\mathcal{C}$.
+
+Equivalently, $f$ is an equivalence if and only if $f$ can be extended to a map $J \to \mathcal{C}$ where $J$ is the nerve of the groupoid with two objects and a unique isomorphism between them.
+</Definition>
+
+<Example id="equiv-nerve" title="Equivalences in nerves">
+In the nerve $N(\mathcal{C})$ of an ordinary category, a $1$-simplex $f$ is an equivalence if and only if $f$ is an isomorphism in $\mathcal{C}$. There is no distinction between "equivalence" and "isomorphism" for ordinary categories.
+</Example>
+
+<Example id="equiv-kan" title="Equivalences in Kan complexes">
+In a Kan complex $X$ (an $\infty$-groupoid), every morphism (every $1$-simplex) is an equivalence. This is because outer horn fillers provide homotopy inverses: given $f: x \to y$, the outer horn $\Lambda^2_0$ with $d_1 = f$ and $d_2 = \mathrm{id}_x$ can be filled, producing $g: y \to x$ with $g \circ f \simeq \mathrm{id}_x$.
+</Example>
+
+<Example id="equiv-derived" title="Equivalences in derived infinity-categories">
+In the derived $\infty$-category $D(R)$ of a ring $R$, a morphism $f: C \to D$ of chain complexes is an equivalence if and only if $f$ is a quasi-isomorphism. The homotopy inverse is provided by the mapping cone construction and the long exact sequence in homology.
+</Example>
+
+<Example id="equiv-spaces" title="Equivalences in the infinity-category of spaces">
+In the $\infty$-category $\mathcal{S}$ of spaces, a map $f: X \to Y$ is an equivalence if and only if $f$ is a weak homotopy equivalence. This is the $\infty$-categorical incarnation of Whitehead's theorem (for Kan complexes).
+</Example>
+
+---
+
+## The Core Groupoid
+
+<Definition title="Core (maximal sub-Kan-complex)" number="3.2">
+For a quasi-category $\mathcal{C}$, the **core** $\mathcal{C}^\simeq$ is the largest sub-Kan-complex of $\mathcal{C}$. Its $n$-simplices are the $n$-simplices $\sigma$ of $\mathcal{C}$ such that every edge of $\sigma$ is an equivalence.
+
+$\mathcal{C}^\simeq$ is the **$\infty$-groupoid of objects and equivalences** of $\mathcal{C}$. It is the $\infty$-categorical analogue of the maximal subgroupoid of an ordinary category.
+</Definition>
+
+<Example id="core-nerve" title="Core of a nerve">
+For $N(\mathcal{C})$, the core $N(\mathcal{C})^\simeq = N(\mathcal{C}^{\cong})$ is the nerve of the maximal subgroupoid of $\mathcal{C}$ (the groupoid of objects and isomorphisms).
+</Example>
+
+<Example id="core-kan" title="Core of a Kan complex">
+For a Kan complex $X$, the core is $X$ itself: $X^\simeq = X$, since every morphism is already an equivalence.
+</Example>
+
+<Example id="core-derived" title="Core of the derived category">
+The core of the derived $\infty$-category $D(R)^\simeq$ is the $\infty$-groupoid of chain complexes and quasi-isomorphisms between them. This is a "space" that classifies chain complexes up to quasi-isomorphism.
+</Example>
+
+---
+
+## Categorical Equivalences
+
+<Definition title="Categorical equivalence" number="3.3">
+A map $F: \mathcal{C} \to \mathcal{D}$ of simplicial sets is a **categorical equivalence** (or **equivalence of $\infty$-categories**) if it satisfies one of the following equivalent conditions:
+
+1. $F$ induces an equivalence of homotopy categories $\operatorname{h}\mathcal{C} \xrightarrow{\sim} \operatorname{h}\mathcal{D}$ and homotopy equivalences on all mapping spaces.
+
+2. $F$ is a weak equivalence in the Joyal model structure on $\mathbf{sSet}$.
+
+3. For every quasi-category $\mathcal{E}$, the induced map $\operatorname{Fun}(\mathcal{D}, \mathcal{E}) \to \operatorname{Fun}(\mathcal{C}, \mathcal{E})$ is an equivalence of quasi-categories.
+</Definition>
+
+<Example id="cat-equiv-nerve" title="Categorical equivalences between nerves">
+A functor $F: \mathcal{C} \to \mathcal{D}$ of ordinary categories induces a categorical equivalence $N(F): N(\mathcal{C}) \to N(\mathcal{D})$ if and only if $F$ is an equivalence of categories (fully faithful and essentially surjective).
+</Example>
+
+<Example id="cat-equiv-localization" title="Localization as categorical equivalence">
+If $\mathcal{M}$ is a model category with weak equivalences $W$, the localization map $N(\mathcal{M}) \to N(\mathcal{M})[W^{-1}]$ is a categorical equivalence when restricted to bifibrant objects. More precisely, the inclusion of bifibrant objects $\mathcal{M}^{cf} \hookrightarrow \mathcal{M}$ induces an equivalence $N(\mathcal{M}^{cf})[W^{-1}] \xrightarrow{\sim} N(\mathcal{M})[W^{-1}]$.
+</Example>
+
+<Example id="cat-equiv-vs-we" title="Categorical equivalence vs. weak homotopy equivalence">
+A categorical equivalence $F: \mathcal{C} \to \mathcal{D}$ between Kan complexes is the same as a weak homotopy equivalence (since both are fibrant in both the Joyal and Kan--Quillen model structures).
+
+For general quasi-categories, categorical equivalences are strictly weaker than Kan--Quillen weak equivalences. For instance, the inclusion $\{0\} \hookrightarrow J$ (where $J$ is the walking isomorphism) is a categorical equivalence but not a Kan--Quillen weak equivalence (since $|J| \simeq [0,1] \not\simeq \{0\}$... actually $J$ is contractible, so this is a bad example). A better distinction: $\Delta[0] \to N(B\mathbb{Z})$ is a Kan--Quillen weak equivalence iff $B\mathbb{Z}$ is contractible (it is not: $\pi_1 = \mathbb{Z}$), so these two notions genuinely differ.
+</Example>
+
+---
+
+## The Homotopy Category
+
+<Definition title="Homotopy category of a quasi-category" number="3.4">
+The **homotopy category** $\operatorname{h}\mathcal{C}$ of a quasi-category $\mathcal{C}$ is the ordinary category with:
+
+- Objects: $\mathcal{C}_0$ (the $0$-simplices).
+- Morphisms: $\operatorname{Hom}_{\operatorname{h}\mathcal{C}}(x, y) = \pi_0(\operatorname{Map}_{\mathcal{C}}(x, y))$ (homotopy classes of morphisms).
+
+Composition is well-defined because the space of composites is contractible (connected components are well-defined). The identity on $x$ is the class of $s_0(x)$.
+
+$\operatorname{h}\mathcal{C}$ is the "shadow" of $\mathcal{C}$ in ordinary category theory.
+</Definition>
+
+<Example id="h-cat-kan" title="Homotopy category of a Kan complex">
+For a Kan complex $X$, the homotopy category $\operatorname{h}X$ is the fundamental groupoid $\Pi_1(X)$: objects are points, morphisms are homotopy classes of paths. This is a groupoid because every morphism in a Kan complex is an equivalence.
+</Example>
+
+<Example id="h-cat-spaces" title="Homotopy category of spaces">
+The homotopy category $\operatorname{h}\mathcal{S}$ of the $\infty$-category of spaces is equivalent to the classical homotopy category $\operatorname{Ho}(\mathbf{Top})$. Morphisms are homotopy classes of continuous maps between CW complexes.
+</Example>
+
+<Example id="h-cat-derived" title="Homotopy category of derived infinity-category">
+$\operatorname{h}D(R)$ is the classical derived category as an ordinary triangulated category.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Equivalences in quasi-categories generalize isomorphisms:
+
+1. A morphism $f$ is an **equivalence** if it has a homotopy inverse (not necessarily a strict inverse).
+
+2. The **core** $\mathcal{C}^\simeq$ extracts the maximal $\infty$-groupoid (sub-Kan-complex) of equivalences.
+
+3. **Categorical equivalences** between quasi-categories are the Joyal weak equivalences.
+
+4. The **homotopy category** $\operatorname{h}\mathcal{C}$ captures $\pi_0$ of mapping spaces, losing higher homotopical information.
+
+5. In specific settings: equivalences = isomorphisms (categories), = weak homotopy equivalences (spaces), = quasi-isomorphisms (chain complexes).
+</Remark>

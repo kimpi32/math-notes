@@ -1,0 +1,135 @@
+export const metadata = {
+  title: 'Limits from Products and Equalizers — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Theorem — Limits from Products and Equalizers" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Limits from Products and Equalizers
+
+This theorem shows that all limits can be built from just two primitive constructions: products and equalizers. It is the categorical analogue of saying that all set-theoretic constructions can be reduced to Cartesian products and subsets.
+
+---
+
+## Statement
+
+<Theorem title="Construction of limits via products and equalizers" number="2.10">
+Let $\mathcal{C}$ be a category and $D : \mathcal{J} \to \mathcal{C}$ a diagram. If $\mathcal{C}$ has all products (indexed by $\mathrm{Ob}(\mathcal{J})$ and by $\mathrm{Mor}(\mathcal{J})$) and all equalizers, then $\varprojlim D$ exists and can be computed as:
+
+$$\varprojlim D = \mathrm{eq}\left(\prod_{j \in \mathrm{Ob}(\mathcal{J})} D(j) \xrightarrow{s} \prod_{u : j \to j'} D(j') \xleftarrow{t} \prod_{j \in \mathrm{Ob}(\mathcal{J})} D(j)\right)$$
+
+where for each morphism $u : j \to j'$ in $\mathcal{J}$:
+- The map $s$ has component $s_u = D(u) \circ \pi_j : \prod_k D(k) \to D(j')$
+- The map $t$ has component $t_u = \pi_{j'} : \prod_k D(k) \to D(j')$
+</Theorem>
+
+<Proof>
+We verify the universal property. An element of the equalizer is an element $(x_j)_{j \in \mathcal{J}} \in \prod_j D(j)$ such that $s((x_j)) = t((x_j))$, which means $D(u)(x_j) = x_{j'}$ for every $u : j \to j'$. This is exactly a compatible family — i.e., a cone over $D$.
+
+Given any cone $(N, \{\lambda_j\})$, the family $\lambda_j : N \to D(j)$ defines a unique map $N \to \prod_j D(j)$. The cone condition $D(u) \circ \lambda_j = \lambda_{j'}$ ensures this map lands in the equalizer. Uniqueness follows from the universal properties of the product and equalizer.
+</Proof>
+
+---
+
+## Corollary
+
+<Theorem title="Completeness criterion" number="2.11">
+A category $\mathcal{C}$ is complete (has all small limits) if and only if it has all small products and all equalizers.
+
+Dually, $\mathcal{C}$ is cocomplete if and only if it has all small coproducts and all coequalizers.
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="Pullback from product and equalizer" id="pullback-construction">
+The pullback of $f : A \to C$ and $g : B \to C$ can be constructed as:
+
+$$A \times_C B = \mathrm{eq}(A \times B \xrightarrow{f \circ \pi_A} C \xleftarrow{g \circ \pi_B} A \times B) = \mathrm{eq}(f \circ \pi_A, g \circ \pi_B)$$
+
+In $\mathbf{Set}$, this gives $\{(a,b) \in A \times B : f(a) = g(b)\}$, confirming the formula.
+</Example>
+
+<Example title="Kernel from equalizer" id="kernel-equalizer">
+In an additive category, the kernel of $f : A \to B$ is the equalizer of $f$ and the zero map $0 : A \to B$:
+
+$$\ker f = \mathrm{eq}(f, 0)$$
+</Example>
+
+<Example title="Inverse limit from products and equalizers" id="inverse-limit">
+The inverse limit $\varprojlim_{n} A_n$ of a tower $\cdots \to A_2 \to A_1 \to A_0$ is the equalizer:
+
+$$\varprojlim A_n = \mathrm{eq}\left(\prod_n A_n \rightrightarrows \prod_n A_n\right)$$
+
+where one map is the identity on each factor and the other applies the transition maps. In $R\text{-}\mathbf{Mod}$, this gives $\{(a_n)_{n \geq 0} : \varphi_n(a_{n+1}) = a_n\}$.
+</Example>
+
+<Example title="Completeness of R-Mod" id="rmod-complete">
+$R\text{-}\mathbf{Mod}$ has all products (direct products) and all equalizers (submodules), so it is complete. It also has all coproducts (direct sums) and coequalizers (quotient modules), so it is cocomplete.
+</Example>
+
+<Example title="Completeness of Set" id="set-complete">
+$\mathbf{Set}$ has all products (Cartesian products) and all equalizers (subsets), hence is complete. It also has all coproducts (disjoint unions) and coequalizers (quotients by equivalence relations), hence is cocomplete.
+</Example>
+
+<Example title="Completeness of presheaf categories" id="presheaf-complete">
+For any small category $\mathcal{C}$, the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is complete and cocomplete. Limits and colimits are computed pointwise: $(\varprojlim F_i)(A) = \varprojlim F_i(A)$.
+</Example>
+
+<Example title="Ab is abelian, hence complete and cocomplete" id="ab-abelian">
+$\mathbf{Ab}$ has: products (direct products), coproducts (direct sums), kernels, cokernels, and every mono is a kernel. This makes it an abelian category. In particular, it is complete and cocomplete.
+</Example>
+
+<Example title="Top is complete and cocomplete" id="top-complete">
+$\mathbf{Top}$ has all products (with the product topology) and all equalizers (with the subspace topology). Hence it is complete. It is also cocomplete: coproducts are disjoint unions, coequalizers are quotients.
+</Example>
+
+<Example title="Limits in functor categories" id="functor-limits">
+If $\mathcal{D}$ is complete, then $[\mathcal{C}, \mathcal{D}]$ is complete, with limits computed objectwise. Explicitly: if $F_i : \mathcal{C} \to \mathcal{D}$ is a diagram of functors, then $(\varprojlim F_i)(A) = \varprojlim F_i(A)$ in $\mathcal{D}$, with the functoriality given by the universal property.
+</Example>
+
+<Example title="Dually: colimits from coproducts and coequalizers" id="colimit-construction">
+Every colimit can be computed as a coequalizer of a pair of maps between coproducts:
+
+$$\varinjlim D = \mathrm{coeq}\left(\coprod_{u : j \to j'} D(j) \rightrightarrows \coprod_{j} D(j)\right)$$
+
+In $\mathbf{Set}$, this becomes a quotient of a disjoint union.
+</Example>
+
+<Example title="Existence of fiber products of schemes" id="fiber-product-schemes">
+The category of affine schemes has all fiber products (via tensor products of rings). The existence of fiber products for general schemes follows by gluing, using the fact that schemes are locally affine.
+</Example>
+
+<Example title="Completeness of the category of sheaves" id="sheaf-complete">
+$\mathbf{Sh}(X)$ is complete: limits of sheaves are computed as limits of presheaves (which are pointwise limits of sets), and the limit of sheaves is automatically a sheaf. Colimits require sheafification: the colimit is the sheafification of the presheaf colimit.
+</Example>
+
+---
+
+## Significance
+
+<Remark title="Reduction of complexity">
+This theorem reduces the problem of constructing arbitrary limits to two "atomic" constructions. It is used systematically:
+1. To prove a category is complete, one only needs to verify products and equalizers exist.
+2. To show a functor preserves all limits, one only needs to check it preserves products and equalizers.
+3. To construct specific limits, one can use the explicit formula.
+</Remark>
+
+<Remark title="Connection to abelian categories">
+In [abelian categories](/category-theory/ch03-abelian-categories/concepts/c02-abelian-category), the existence of kernels and cokernels (which are special equalizers and coequalizers) together with finite products/coproducts gives all finite limits and colimits. This is one of the key structural properties of abelian categories.
+</Remark>

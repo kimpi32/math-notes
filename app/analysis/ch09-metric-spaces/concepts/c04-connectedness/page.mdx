@@ -1,0 +1,142 @@
+export const metadata = {
+  title: 'Connectedness — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "개념 — 연결성" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Connectedness
+
+Connectedness captures the intuitive idea that a space is "in one piece." It is the topological property underlying the Intermediate Value Theorem.
+
+---
+
+## Definition
+
+<Definition title="Connected space" number="9.13">
+A metric space $(X, d)$ is **connected** if it cannot be written as the union of two nonempty disjoint open sets. That is, if $X = U \cup V$ with $U, V$ open and $U \cap V = \emptyset$, then $U = \emptyset$ or $V = \emptyset$.
+
+A subset $A \subseteq X$ is connected if it is connected as a metric space with the induced metric.
+
+Equivalently, $X$ is connected if and only if the only subsets that are both open and closed are $\emptyset$ and $X$.
+</Definition>
+
+<Example title="Connected subsets of R">
+A subset of $\mathbb{R}$ is connected if and only if it is an interval (open, closed, half-open, or all of $\mathbb{R}$).
+
+- $[0,1]$ is connected.
+- $(0,1)$ is connected.
+- $[0,1] \cup [2,3]$ is not connected: $U = [0,1]$ and $V = [2,3]$ are both open in the relative topology.
+- $\mathbb{Q}$ is not connected: $U = \mathbb{Q} \cap (-\infty, \sqrt{2})$ and $V = \mathbb{Q} \cap (\sqrt{2}, \infty)$ are open in $\mathbb{Q}$ with $\mathbb{Q} = U \cup V$.
+</Example>
+
+<Example title="R^n is connected">
+$\mathbb{R}^n$ is connected for all $n \geq 1$. More generally, any convex subset of $\mathbb{R}^n$ is connected. If $U$ and $V$ partition a convex set, the line segment from a point in $U$ to a point in $V$ would have to "jump" from $U$ to $V$, contradicting the Intermediate Value Theorem applied to the indicator function.
+</Example>
+
+<Example title="The discrete metric space">
+If $X$ has more than one point with the discrete metric, $X$ is **not** connected: $\{x_0\}$ is both open and closed for any $x_0 \in X$.
+</Example>
+
+---
+
+## Connected components
+
+<Definition title="Connected component" number="9.14">
+The **connected component** of a point $x \in X$ is the largest connected subset of $X$ containing $x$. It equals the union of all connected subsets containing $x$.
+</Definition>
+
+<Example title="Connected components of Q">
+Every connected component of $\mathbb{Q}$ is a single point, since no interval of $\mathbb{Q}$ is connected. $\mathbb{Q}$ is **totally disconnected**.
+</Example>
+
+<Example title="Connected components of R minus a point">
+$\mathbb{R} \setminus \{0\}$ has two connected components: $(-\infty, 0)$ and $(0, \infty)$.
+
+$\mathbb{R} \setminus \mathbb{Z}$ has countably many connected components: the intervals $(n, n+1)$ for $n \in \mathbb{Z}$.
+</Example>
+
+<Example title="The Cantor set is totally disconnected">
+The Cantor set $C$ is totally disconnected: for any two points $x < y$ in $C$, there exists a point $z \in (x,y) \setminus C$ (since the removed intervals are dense in $[0,1]$). So $C \cap (-\infty, z)$ and $C \cap (z, \infty)$ disconnect $C$ between $x$ and $y$.
+</Example>
+
+---
+
+## Path connectedness
+
+<Definition title="Path connected" number="9.15">
+A metric space $X$ is **path connected** if for any $x, y \in X$, there exists a continuous function $\gamma: [0,1] \to X$ (a **path**) with $\gamma(0) = x$ and $\gamma(1) = y$.
+</Definition>
+
+<Theorem title="Path connected implies connected" number="9.8">
+If $X$ is path connected, then $X$ is connected.
+</Theorem>
+
+<Example title="Path connected spaces">
+- $\mathbb{R}^n$ is path connected: $\gamma(t) = (1-t)x + ty$ is a path from $x$ to $y$.
+- Any convex set in $\mathbb{R}^n$ is path connected (same linear path).
+- The unit circle $S^1 \subseteq \mathbb{R}^2$ is path connected.
+- $\mathbb{R}^n \setminus \{0\}$ for $n \geq 2$ is path connected (go around the origin).
+</Example>
+
+<Example title="Connected but not path connected">
+The **topologist's sine curve**: $A = \{(x, \sin(1/x)) : x > 0\} \cup \{(0,y) : -1 \leq y \leq 1\}$.
+
+$A$ is connected (it is the closure of the graph of $\sin(1/x)$ for $x > 0$, which is connected). But $A$ is not path connected: there is no continuous path from $(0,0)$ to $(1/\pi, 0)$ that stays in $A$, because the oscillations near $x = 0$ prevent any continuous path from reaching the vertical segment.
+</Example>
+
+---
+
+## Connectedness and continuous functions
+
+<Theorem title="Continuous image of a connected set is connected" number="9.9">
+If $f: X \to Y$ is continuous and $X$ is connected, then $f(X)$ is connected.
+</Theorem>
+
+<Example title="Intermediate Value Theorem as a consequence">
+The classical IVT follows: if $f: [a,b] \to \mathbb{R}$ is continuous, then $f([a,b])$ is a connected subset of $\mathbb{R}$, hence an interval. So $f$ takes every value between $f(a)$ and $f(b)$.
+</Example>
+
+<Example title="No continuous surjection from [0,1] to [0,1] x [0,1]... wait">
+Actually, space-filling curves DO exist (Peano curve, Hilbert curve). A continuous surjection $[0,1] \to [0,1]^2$ exists. However, no continuous BIJECTION exists (that would be a homeomorphism, but $[0,1]$ minus a point is disconnected while $[0,1]^2$ minus a point is connected).
+</Example>
+
+<Example title="Fixed point via connectedness">
+Let $f: [0,1] \to [0,1]$ be continuous. Consider $g(x) = f(x) - x$. Then $g(0) = f(0) \geq 0$ and $g(1) = f(1) - 1 \leq 0$. By IVT, $g(c) = 0$ for some $c$, so $f(c) = c$. Every continuous function from $[0,1]$ to itself has a fixed point.
+</Example>
+
+---
+
+## Products and unions
+
+<Theorem title="Union of connected sets" number="9.10">
+If $\{A_\alpha\}$ is a collection of connected subsets of $X$ with $\bigcap A_\alpha \neq \emptyset$, then $\bigcup A_\alpha$ is connected.
+</Theorem>
+
+<Example title="Star-shaped sets are connected">
+A set $A \subseteq \mathbb{R}^n$ is **star-shaped** with respect to $p$ if for every $x \in A$, the segment $[p, x] \subseteq A$. Each segment $[p, x]$ is connected and they all contain $p$, so $A = \bigcup_{x \in A} [p, x]$ is connected.
+</Example>
+
+<Example title="The deletion of a point and connectedness">
+$\mathbb{R}$ minus a point is disconnected. $\mathbb{R}^2$ minus a point is connected. This topological difference shows $\mathbb{R}$ and $\mathbb{R}^2$ are not homeomorphic.
+
+More generally, $\mathbb{R}^n$ and $\mathbb{R}^m$ are homeomorphic if and only if $n = m$ (topological invariance of dimension, a deep theorem).
+</Example>
+
+<Remark>
+Connectedness and compactness are the two pillars of point-set topology. While compactness generalizes "closed and bounded," connectedness generalizes "interval." Together they characterize much of the topology of $\mathbb{R}^n$ and underlie the fundamental theorems of analysis (IVT, EVT, uniform continuity).
+</Remark>

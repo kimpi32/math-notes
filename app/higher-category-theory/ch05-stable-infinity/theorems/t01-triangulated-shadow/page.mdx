@@ -1,0 +1,145 @@
+export const metadata = {
+  title: 'Triangulated Shadow — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Theorem — Triangulated Shadow" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Triangulated Shadow
+
+The homotopy category of a stable $\infty$-category is canonically a triangulated category. This fundamental result shows that classical triangulated categories (Verdier, 1963) arise as "shadows" of the richer stable $\infty$-categorical structure. The stable $\infty$-category determines the triangulated structure, but not conversely: stable $\infty$-categories contain strictly more information than their homotopy categories.
+
+---
+
+## Statement
+
+<Theorem title="Triangulated shadow theorem" number="5.1">
+Let $\mathcal{C}$ be a stable $\infty$-category. Then its homotopy category $\operatorname{h}\mathcal{C}$ is canonically a **triangulated category**, where:
+
+1. The **shift functor** $[1]: \operatorname{h}\mathcal{C} \to \operatorname{h}\mathcal{C}$ is induced by the suspension $\Sigma: \mathcal{C} \to \mathcal{C}$.
+2. The **distinguished triangles** are the images of fiber/cofiber sequences in $\mathcal{C}$: a triangle $X \to Y \to Z \to X[1]$ in $\operatorname{h}\mathcal{C}$ is distinguished if and only if it arises from a cofiber sequence $X \to Y \to Z$ in $\mathcal{C}$.
+
+Moreover, an exact functor $F: \mathcal{C} \to \mathcal{D}$ between stable $\infty$-categories induces an exact (triangulated) functor $\operatorname{h}F: \operatorname{h}\mathcal{C} \to \operatorname{h}\mathcal{D}$.
+</Theorem>
+
+<Theorem title="Information loss" number="5.2">
+The functor $\mathcal{C} \mapsto \operatorname{h}\mathcal{C}$ from stable $\infty$-categories to triangulated categories is **not** an equivalence:
+
+1. There exist triangulated categories that do not arise as the homotopy category of any stable $\infty$-category.
+2. There exist non-equivalent stable $\infty$-categories with equivalent homotopy categories.
+3. There exist non-isomorphic exact functors $F, G: \mathcal{C} \to \mathcal{D}$ that induce the same triangulated functor $\operatorname{h}F = \operatorname{h}G$.
+
+The passage $\mathcal{C} \mapsto \operatorname{h}\mathcal{C}$ retains only $\pi_0$ of the mapping spaces.
+</Theorem>
+
+---
+
+## Construction of the Shift Functor
+
+<Proof title="Construction of shift and exact triangles">
+We verify the axioms of a triangulated category (TR1)--(TR4) for $\operatorname{h}\mathcal{C}$.
+
+**Step 1 (Shift functor).** The suspension $\Sigma: \mathcal{C} \to \mathcal{C}$ (defined by $\Sigma X = 0 \sqcup_X 0$, the pushout of $0 \leftarrow X \to 0$) is an equivalence with inverse $\Omega$. It induces an automorphism $[1] = \operatorname{h}\Sigma$ of $\operatorname{h}\mathcal{C}$.
+
+**Step 2 (TR1: Extension to triangles).** Given $f: X \to Y$ in $\operatorname{h}\mathcal{C}$, lift to a morphism in $\mathcal{C}$ and take the cofiber $Z = \operatorname{cofib}(f)$. Then $X \to Y \to Z \to \Sigma X$ is a distinguished triangle.
+
+**Step 3 (TR2: Rotation).** Given a cofiber sequence $X \to Y \to Z$ in $\mathcal{C}$, the square $X \to Y$, $0 \to Z$ is a pushout. In a stable $\infty$-category, pushout equals pullback, so rotating gives $Y \to Z \to \Sigma X$ as another cofiber sequence.
+
+**Step 4 (TR3: Morphism of triangles).** Given a commutative square between the first two terms of two distinguished triangles, the fill at the cone level exists at the $\pi_0$-level because the cofiber is functorial in $\mathcal{C}$.
+
+**Step 5 (TR4: Octahedral axiom).** Given $X \xrightarrow{f} Y \xrightarrow{g} Z$, the octahedral axiom follows from iterated pushouts: a $3 \times 3$ grid where all rows and columns are cofiber sequences. This is automatic in the $\infty$-categorical setting.
+</Proof>
+
+---
+
+## Key Examples
+
+<Example id="shadow-derived" title="Classical derived category as shadow">
+For a ring $R$, the stable $\infty$-category $\mathcal{D}(R)$ has homotopy category $\operatorname{h}\mathcal{D}(R) = D(R)$, the classical derived category. The triangulated structure is:
+
+- Shift: $C[1]$ (shift chain complex indices).
+- Distinguished triangles: arise from short exact sequences $0 \to A \to B \to C \to 0$ of chain complexes, giving $A \to B \to C \to A[1]$.
+
+The stable $\infty$-category $\mathcal{D}(R)$ resolves the well-known pathologies: non-functorial cones, non-existence of homotopy limits, failure of descent.
+</Example>
+
+<Example id="shadow-spectra" title="Stable homotopy category as shadow">
+The homotopy category $\operatorname{h}\operatorname{Sp}$ of the $\infty$-category of spectra is the classical **stable homotopy category**. The triangulated structure has:
+
+- Shift: $\Sigma E$ (suspension).
+- Distinguished triangles: cofiber sequences of spectra.
+
+The stable homotopy category was among the earliest triangulated categories studied, predating Verdier's axiomatization. The $\infty$-categorical enhancement $\operatorname{Sp}$ provides the correct framework for the smash product monoidal structure.
+</Example>
+
+<Example id="shadow-non-functorial" title="Non-functoriality of cones">
+In a triangulated category $\mathcal{T}$, the cone of $f: X \to Y$ exists but is not functorial: given a morphism of triangles, the fill at the cone level exists but is not unique. In $\mathcal{C}$ the cofiber is a functor $\operatorname{cofib}: \operatorname{Fun}(\Delta^1, \mathcal{C}) \to \mathcal{C}$, fully functorial.
+
+For example, in $D(\mathbb{Z})$, the exact triangle $\mathbb{Z} \xrightarrow{2} \mathbb{Z} \to \mathbb{Z}/2 \to \mathbb{Z}[1]$ has cone $\mathbb{Z}/2$. A morphism of this triangle to itself by $(\operatorname{id}, \operatorname{id})$ admits any element of $\operatorname{End}(\mathbb{Z}/2) = \mathbb{Z}/2$ as the fill, demonstrating non-uniqueness.
+</Example>
+
+<Example id="shadow-holim-failure" title="Homotopy limits fail in triangulated categories">
+The homotopy limit of a tower $\cdots \to X_2 \to X_1 \to X_0$ does not generally exist in a triangulated category. The Milnor exact sequence
+
+$$0 \to \lim{}^1 [-, X_n] \to [-, \operatorname{holim} X_n] \to \lim [-, X_n] \to 0$$
+
+requires $\operatorname{holim}$ to exist, which triangulated axioms alone do not guarantee. In a stable $\infty$-category with appropriate completeness, homotopy limits are well-defined by universal properties.
+</Example>
+
+<Example id="shadow-octahedral" title="The octahedral axiom is automatic">
+In a stable $\infty$-category, given composable morphisms $X \xrightarrow{f} Y \xrightarrow{g} Z$, taking iterated cofibers produces a $3 \times 3$ diagram where all rows and columns are cofiber sequences. The octahedral axiom is simply the assertion that this diagram exists.
+
+The proof is completely formal: no choices are involved, unlike the triangulated setting where the octahedral axiom must be verified separately and often with significant effort.
+</Example>
+
+<Example id="shadow-descent" title="Descent fails for triangulated categories">
+For a Zariski covering of a scheme $X$, descent requires:
+
+$$\operatorname{QCoh}(X) \simeq \lim\left(\prod_i \operatorname{QCoh}(U_i) \rightrightarrows \prod_{i,j} \operatorname{QCoh}(U_{ij}) \cdots\right)$$
+
+This limit makes sense in the $\infty$-category of stable $\infty$-categories but not at the triangulated level. Triangulated categories form only a $2$-category, without good limit properties.
+</Example>
+
+<Example id="shadow-k-theory" title="K-theory sees beyond the shadow">
+Algebraic K-theory $K(\mathcal{C})$ of a stable $\infty$-category $\mathcal{C}$ is defined via the $S_\bullet$-construction (Waldhausen). K-theory is **not** a triangulated invariant: there exist triangulated equivalences $\operatorname{h}\mathcal{C} \simeq \operatorname{h}\mathcal{D}$ with $K(\mathcal{C}) \not\simeq K(\mathcal{D})$.
+
+Schlichting showed that certain triangulated categories of the form $D^b(\mathcal{A})$ and $D^b(\mathcal{B})$ can be equivalent as triangulated categories while having different $K_1$-groups.
+</Example>
+
+<Example id="shadow-no-enhancement" title="Triangulated categories without enhancements">
+Muro, Schwede, and Strickland (2007) constructed triangulated categories admitting no stable $\infty$-categorical enhancement at all. Specifically, certain "exotic" triangulated structures on categories of $\mathbb{Z}/p$-modules violate necessary conditions for liftability.
+
+Conversely, Canonaco and Stellari proved uniqueness of DG enhancements for the bounded derived category $D^b(\operatorname{Coh}(X))$ of a smooth projective variety $X$, showing that in algebro-geometric situations, the stable enhancement is often unique.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The triangulated shadow theorem reveals the precise relationship:
+
+1. The homotopy category $\operatorname{h}\mathcal{C}$ of a stable $\infty$-category is **canonically triangulated**, with shift $= \Sigma$ and exact triangles $=$ cofiber sequences.
+
+2. The triangulated structure encodes cofiber sequences but **loses coherence** (higher homotopy of mapping spaces).
+
+3. The passage $\mathcal{C} \mapsto \operatorname{h}\mathcal{C}$ is **not faithful**: different stable $\infty$-categories can have equivalent homotopy categories.
+
+4. Key failures at the triangulated level: **non-functorial cones**, no homotopy limits, no descent, K-theory not invariant.
+
+5. Stable $\infty$-categories are the correct framework; triangulated categories are their **shadows**.
+</Remark>

@@ -1,0 +1,143 @@
+export const metadata = {
+  title: 'Comparison Test — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "7. 급수", href: "/analysis/ch07-series" },
+  { label: "정리 — 비교판정법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Comparison Test
+
+The comparison test is the most basic convergence test for series with nonnegative terms: if a series is dominated term-by-term by a convergent series, it converges; if it dominates a divergent series, it diverges.
+
+---
+
+## Direct comparison
+
+<Theorem title="Comparison test" number="7.15">
+Let $0 \leq a_n \leq b_n$ for all $n \geq N_0$ (for some $N_0$).
+
+1. If $\sum b_n$ converges, then $\sum a_n$ converges.
+2. If $\sum a_n$ diverges, then $\sum b_n$ diverges.
+</Theorem>
+
+<Proof>
+**(1)** The partial sums $S_N = \sum_{n=1}^N a_n$ form an increasing sequence (since $a_n \geq 0$) bounded above by $\sum b_n$. By the Monotone Convergence Theorem, $S_N$ converges.
+
+**(2)** is the contrapositive of (1).
+</Proof>
+
+<Example title="Comparison with a p-series">
+$\sum_{n=1}^\infty \frac{1}{n^2 + 1}$: since $\frac{1}{n^2+1} < \frac{1}{n^2}$ and $\sum \frac{1}{n^2}$ converges ($p = 2 > 1$), the series converges.
+</Example>
+
+<Example title="Comparison with the harmonic series">
+$\sum_{n=1}^\infty \frac{1}{2n+1}$: since $\frac{1}{2n+1} > \frac{1}{3n} = \frac{1}{3} \cdot \frac{1}{n}$ for $n \geq 1$, and $\sum \frac{1}{n}$ diverges, the series diverges.
+</Example>
+
+<Example title="Comparison with a geometric series">
+$\sum_{n=1}^\infty \frac{1}{3^n + n}$: since $3^n + n > 3^n$, we have $\frac{1}{3^n+n} < \frac{1}{3^n}$. Since $\sum \frac{1}{3^n}$ converges (geometric, $r = 1/3 < 1$), the series converges.
+</Example>
+
+<Example title="Using comparison to bound a sum">
+$\sum_{n=1}^\infty \frac{1}{n!}$: for $n \geq 1$, $n! \geq 2^{n-1}$ (provable by induction). So $\frac{1}{n!} \leq \frac{2}{2^n}$, and $\sum \frac{2}{2^n} = 2$. Thus $\sum \frac{1}{n!} \leq 2$. (The exact sum is $e - 1 \approx 1.718$.)
+</Example>
+
+---
+
+## Limit comparison
+
+<Theorem title="Limit comparison test" number="7.16">
+Let $a_n > 0$ and $b_n > 0$ for all $n$. If
+
+$$L = \lim_{n \to \infty} \frac{a_n}{b_n}$$
+
+exists and $0 < L < \infty$, then $\sum a_n$ and $\sum b_n$ either both converge or both diverge.
+</Theorem>
+
+<Example title="Limit comparison with 1/n²">
+$\sum \frac{n}{n^3 + 5}$: compare with $b_n = \frac{1}{n^2}$.
+
+$$\frac{a_n}{b_n} = \frac{n/(n^3+5)}{1/n^2} = \frac{n^3}{n^3 + 5} \to 1.$$
+
+Since $0 < 1 < \infty$ and $\sum \frac{1}{n^2}$ converges, $\sum \frac{n}{n^3+5}$ converges.
+</Example>
+
+<Example title="Limit comparison with 1/n">
+$\sum \frac{1}{\sqrt{n^2 + n}}$: compare with $b_n = \frac{1}{n}$.
+
+$$\frac{a_n}{b_n} = \frac{n}{\sqrt{n^2+n}} = \frac{1}{\sqrt{1 + 1/n}} \to 1.$$
+
+Since $\sum \frac{1}{n}$ diverges, $\sum \frac{1}{\sqrt{n^2+n}}$ diverges.
+</Example>
+
+<Example title="Limit comparison for a product">
+$\sum \frac{\ln n}{n^2}$: compare with $b_n = \frac{1}{n^{3/2}}$.
+
+$$\frac{a_n}{b_n} = \frac{\ln n}{n^{1/2}} \to 0.$$
+
+Since $L = 0$, the limit comparison test in its standard form does not immediately apply. But since $L = 0$ and $\sum b_n$ converges, we can use the extended version: if $L = 0$ and $\sum b_n$ converges, then $\sum a_n$ converges. So $\sum \frac{\ln n}{n^2}$ converges.
+</Example>
+
+<Example title="When the limit is infinite">
+$\sum \frac{n}{n+1}$ compared with $b_n = 1$: $a_n/b_n = \frac{n}{n+1} \to 1$. Both diverge (since $a_n \to 1 \neq 0$).
+
+If $a_n/b_n \to \infty$ and $\sum b_n$ diverges, then $\sum a_n$ diverges (since eventually $a_n > b_n$).
+</Example>
+
+---
+
+## Integral test
+
+<Theorem title="Integral test" number="7.17">
+Let $f: [1, \infty) \to [0, \infty)$ be decreasing. Then $\sum_{n=1}^\infty f(n)$ converges if and only if $\int_1^\infty f(x)\,dx$ converges. Moreover,
+
+$$\int_1^\infty f(x)\,dx \leq \sum_{n=1}^\infty f(n) \leq f(1) + \int_1^\infty f(x)\,dx.$$
+</Theorem>
+
+<Example title="p-series via the integral test">
+$f(x) = 1/x^p$. $\int_1^\infty \frac{1}{x^p}\,dx$ converges iff $p > 1$:
+
+For $p \neq 1$: $\int_1^\infty x^{-p}\,dx = \frac{x^{1-p}}{1-p}\Big|_1^\infty$, which converges iff $1-p < 0$, i.e., $p > 1$.
+
+For $p = 1$: $\int_1^\infty \frac{1}{x}\,dx = \ln x\big|_1^\infty = \infty$.
+
+This proves the p-series test: $\sum 1/n^p$ converges iff $p > 1$.
+</Example>
+
+<Example title="Series involving ln n">
+$\sum_{n=2}^\infty \frac{1}{n(\ln n)^2}$: let $f(x) = \frac{1}{x(\ln x)^2}$.
+
+$$\int_2^\infty \frac{1}{x(\ln x)^2}\,dx = \left[-\frac{1}{\ln x}\right]_2^\infty = 0 + \frac{1}{\ln 2} = \frac{1}{\ln 2} < \infty.$$
+
+So the series converges.
+</Example>
+
+<Example title="Estimating the sum of 1/n²">
+By the integral test: $\int_1^\infty \frac{1}{x^2}\,dx = 1 \leq \sum_{n=1}^\infty \frac{1}{n^2} \leq 1 + 1 = 2$.
+
+The exact value is $\pi^2/6 \approx 1.6449$, which is indeed between $1$ and $2$.
+
+For a tighter bound, use $N$ terms exactly plus the integral tail: $\sum_{n=1}^N \frac{1}{n^2} + \frac{1}{N+1} \leq \sum_{n=1}^\infty \frac{1}{n^2} \leq \sum_{n=1}^N \frac{1}{n^2} + \frac{1}{N}$.
+</Example>
+
+<Example title="Integral test for convergence of 1/n^(3/2)">
+$f(x) = x^{-3/2}$: $\int_1^\infty x^{-3/2}\,dx = [-2x^{-1/2}]_1^\infty = 2$. So $\sum 1/n^{3/2}$ converges, with $2 \leq \sum_{n=1}^\infty \frac{1}{n^{3/2}} \leq 3$ (the exact value is $\zeta(3/2) \approx 2.612$).
+</Example>
+
+<Remark>
+The comparison test is conceptually the simplest: it just says "smaller than convergent implies convergent." The limit comparison test is more practical when the inequality direction is hard to establish. The integral test connects series convergence to the calculus of improper integrals. All three are workhorses of series analysis.
+</Remark>

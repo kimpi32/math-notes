@@ -1,0 +1,170 @@
+export const metadata = {
+  title: 'Spectrum — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Concept — Spectrum" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Spectrum (Stable Homotopy Theory)
+
+A spectrum is the fundamental object of stable homotopy theory. Classically, a spectrum is a sequence of pointed spaces $E_n$ with structure maps $\Sigma E_n \to E_{n+1}$. In the $\infty$-categorical framework, spectra form the initial stable presentable $\infty$-category: the universal home for homological algebra. Spectra represent generalized cohomology theories and provide the natural coefficient system for stable phenomena.
+
+---
+
+## Definition
+
+<Definition title="Spectrum (infinity-categorical)" number="5.1">
+The $\infty$-category of **spectra** $\operatorname{Sp}$ is defined as the stabilization of the $\infty$-category of pointed spaces:
+
+$$\operatorname{Sp} = \operatorname{Sp}(\mathcal{S}_*) = \lim\left(\cdots \xrightarrow{\Omega} \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_*\right)$$
+
+A spectrum $E$ is a sequence of pointed spaces $(E_0, E_1, E_2, \ldots)$ with equivalences $E_n \simeq \Omega E_{n+1}$ for all $n$. The $\infty$-category $\operatorname{Sp}$ is stable and presentable.
+</Definition>
+
+<Definition title="Homotopy groups of a spectrum" number="5.2">
+For a spectrum $E$, the **$n$-th homotopy group** is:
+
+$$\pi_n(E) = \operatorname{colim}_k \pi_{n+k}(E_k) \cong \pi_0(\Omega^n E_0) \text{ for } n \geq 0$$
+
+and $\pi_n(E) = \pi_0(E_{-n})$ for $n < 0$. Note that $\pi_n(E)$ is defined for all $n \in \mathbb{Z}$, including negative values. This is the hallmark of stable homotopy theory.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="sphere-spectrum" title="The sphere spectrum">
+The **sphere spectrum** $\mathbb{S}$ has $\mathbb{S}_n = S^n$ with the standard structure maps $\Sigma S^n \to S^{n+1}$ (identity maps). Its homotopy groups are the stable homotopy groups of spheres:
+
+$$\pi_n(\mathbb{S}) = \pi_n^s = \operatorname{colim}_k \pi_{n+k}(S^k)$$
+
+For example: $\pi_0(\mathbb{S}) = \mathbb{Z}$, $\pi_1(\mathbb{S}) = \mathbb{Z}/2$, $\pi_2(\mathbb{S}) = \mathbb{Z}/2$, $\pi_3(\mathbb{S}) = \mathbb{Z}/24$.
+
+The sphere spectrum is the unit for the smash product monoidal structure on $\operatorname{Sp}$.
+</Example>
+
+<Example id="eilenberg-maclane-spectrum" title="Eilenberg--MacLane spectra">
+For an abelian group $A$, the **Eilenberg--MacLane spectrum** $HA$ has $(HA)_n = K(A, n)$. Its homotopy groups are:
+
+$$\pi_n(HA) = \begin{cases} A & n = 0 \\ 0 & n \neq 0 \end{cases}$$
+
+$HA$ represents ordinary cohomology: $H^n(X; A) \cong [X, \Sigma^n HA] = [\Sigma^\infty X, \Sigma^n HA]$.
+
+For a ring $R$, $HR$ is a ring spectrum and $\operatorname{Mod}_{HR} \simeq D(R)$ (the derived $\infty$-category).
+</Example>
+
+<Example id="suspension-spectrum" title="Suspension spectra">
+For a pointed space $X$, the **suspension spectrum** $\Sigma^\infty X$ has $(\Sigma^\infty X)_n = \Sigma^n X$. This gives the left adjoint $\Sigma^\infty \dashv \Omega^\infty: \mathcal{S}_* \rightleftarrows \operatorname{Sp}$.
+
+$\Sigma^\infty S^0 = \mathbb{S}$ is the sphere spectrum. The stable homotopy groups $\pi_n^s(X) = \pi_n(\Sigma^\infty X)$ are the "stable limit" of $\pi_{n+k}(\Sigma^k X)$.
+</Example>
+
+<Example id="ko-ku" title="Topological K-theory spectra">
+The complex K-theory spectrum $KU$ has $KU_{2n} = \mathbb{Z} \times BU$ and $KU_{2n+1} = U$ (Bott periodicity: $\Omega^2 (BU \times \mathbb{Z}) \simeq BU \times \mathbb{Z}$). Its homotopy groups are $2$-periodic:
+
+$$\pi_n(KU) = \begin{cases} \mathbb{Z} & n \text{ even} \\ 0 & n \text{ odd} \end{cases}$$
+
+$KU$ represents complex topological K-theory: $KU^0(X) = K^0(X)$, the Grothendieck group of complex vector bundles on $X$.
+
+Similarly, $KO$ represents real K-theory with $8$-periodic homotopy groups.
+</Example>
+
+<Example id="mU" title="Complex cobordism spectrum">
+The complex cobordism spectrum $MU$ has $(MU)_n = \operatorname{Thom}(BU(n), \gamma_n)$ (the Thom space of the universal bundle). Its homotopy ring $\pi_*(MU)$ is a polynomial ring:
+
+$$\pi_*(MU) \cong \mathbb{Z}[x_1, x_2, x_3, \ldots], \quad |x_i| = 2i$$
+
+$MU$ is central to chromatic homotopy theory: the formal group law associated to $MU$ classifies all complex-oriented cohomology theories.
+</Example>
+
+---
+
+## The Smash Product
+
+<Example id="smash-product" title="Symmetric monoidal structure">
+The $\infty$-category $\operatorname{Sp}$ has a symmetric monoidal structure given by the **smash product** $\wedge$ (or $\otimes$). The unit is the sphere spectrum $\mathbb{S}$.
+
+Key properties:
+- $HA \wedge HB \simeq H(A \otimes_{\mathbb{Z}} B)$ for abelian groups.
+- $\Sigma^\infty X \wedge \Sigma^\infty Y \simeq \Sigma^\infty(X \wedge Y)$ for pointed spaces.
+- $\mathbb{S} \wedge E \simeq E$ for any spectrum.
+
+Ring spectra (also called $E_1$-rings or $A_\infty$-rings) are monoid objects in $(\operatorname{Sp}, \wedge)$. Commutative ring spectra ($E_\infty$-rings) are commutative monoids.
+</Example>
+
+<Example id="module-spectra" title="Module spectra">
+For a ring spectrum $R$, the $\infty$-category $\operatorname{Mod}_R$ of (left) $R$-module spectra is a stable presentable $\infty$-category. When $R = H\mathbb{Z}$:
+
+$$\operatorname{Mod}_{H\mathbb{Z}} \simeq D(\mathbb{Z})$$
+
+The derived tensor product and derived Hom of chain complexes correspond to the smash product and function spectrum of $H\mathbb{Z}$-modules.
+
+More generally, for any ordinary ring $A$, $\operatorname{Mod}_{HA} \simeq D(A)$.
+</Example>
+
+---
+
+## Connective and Nonconnective Spectra
+
+<Definition title="Connective spectrum" number="5.3">
+A spectrum $E$ is **connective** if $\pi_n(E) = 0$ for $n < 0$. The full subcategory of connective spectra $\operatorname{Sp}_{\geq 0} \subset \operatorname{Sp}$ is a presentable $\infty$-category but is NOT stable (the suspension of a connective spectrum is connective, but the loop of a connective spectrum may not be).
+
+There is an adjunction $\tau_{\geq 0} \dashv i: \operatorname{Sp}_{\geq 0} \rightleftarrows \operatorname{Sp}$ where $\tau_{\geq 0}$ truncates to the connective cover.
+</Definition>
+
+<Example id="connective-examples" title="Connective vs. nonconnective">
+- $H\mathbb{Z}$ is connective ($\pi_n = 0$ for $n \neq 0$).
+- $\mathbb{S}$ is connective ($\pi_n^s = 0$ for $n < 0$).
+- $KU$ is NOT connective ($\pi_{-2}(KU) = \mathbb{Z}$).
+- The Eilenberg--MacLane spectrum $\Sigma^{-n} HA$ (for $n > 0$) is not connective.
+
+Connective spectra are equivalent to grouplike $E_\infty$-spaces (infinite loop spaces), via $\Omega^\infty$.
+</Example>
+
+---
+
+## Relation to Spaces
+
+<Example id="infinite-loop-space" title="Infinite loop spaces">
+The functor $\Omega^\infty: \operatorname{Sp} \to \mathcal{S}_*$ sends a spectrum $E$ to its underlying infinite loop space $\Omega^\infty E = E_0$. The left adjoint $\Sigma^\infty: \mathcal{S}_* \to \operatorname{Sp}$ is the suspension spectrum.
+
+$\Omega^\infty$ does NOT preserve the stable structure: it only sees the "connective part" of a spectrum. But it is an equivalence on connective spectra (up to group completion): $\operatorname{Sp}_{\geq 0} \simeq \operatorname{Mon}_{E_\infty}^{\mathrm{gp}}(\mathcal{S})$ (grouplike $E_\infty$-spaces).
+</Example>
+
+<Example id="thom-spectra" title="Thom spectra">
+Given a map $f: X \to BGL_1(\mathbb{S})$ (the classifying space for stable spherical fibrations), the **Thom spectrum** $Mf = X^f$ is the colimit of the induced diagram of suspension spectra. Important examples:
+- $MO$, $MSO$, $MU$, $MSp$: cobordism spectra classifying manifolds.
+- The Thom isomorphism: $H_*(Mf) \cong H_{*-n}(X)$ (when $f$ is orientable of rank $n$).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Spectra are the objects of stable homotopy theory:
+
+1. A spectrum is a sequence of pointed spaces with $E_n \simeq \Omega E_{n+1}$; homotopy groups $\pi_n(E)$ exist for all $n \in \mathbb{Z}$.
+
+2. $\operatorname{Sp}$ is the **initial stable presentable** $\infty$-category (the stabilization of $\mathcal{S}_*$).
+
+3. The **smash product** gives $\operatorname{Sp}$ a symmetric monoidal structure; ring spectra and their modules generalize rings and modules.
+
+4. $\operatorname{Mod}_{HA} \simeq D(A)$: module spectra over Eilenberg--MacLane spectra recover derived categories.
+
+5. Key examples: sphere spectrum $\mathbb{S}$, Eilenberg--MacLane $HA$, K-theory $KU$, cobordism $MU$.
+</Remark>

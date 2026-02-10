@@ -1,0 +1,141 @@
+export const metadata = {
+  title: 'Infinity-Adjunction — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "4. ∞-극한과 수반", href: "/higher-category-theory/ch04-limits-colimits-infinity" },
+  { label: "Concept — Infinity-Adjunction" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# $\infty$-Adjunction
+
+An $\infty$-adjunction between $\infty$-categories is the homotopy-coherent generalization of an adjunction between ordinary categories. It consists of two functors $F: \mathcal{C} \rightleftarrows \mathcal{D} : G$ together with a natural equivalence of mapping spaces $\operatorname{Map}_{\mathcal{D}}(F(c), d) \simeq \operatorname{Map}_{\mathcal{C}}(c, G(d))$, coherent in both variables.
+
+---
+
+## Definition
+
+<Definition title="Infinity-adjunction" number="4.1">
+Let $\mathcal{C}$ and $\mathcal{D}$ be quasi-categories. An **$\infty$-adjunction** consists of functors $F: \mathcal{C} \to \mathcal{D}$ (the **left adjoint**) and $G: \mathcal{D} \to \mathcal{C}$ (the **right adjoint**) together with a natural equivalence of mapping spaces:
+
+$$\operatorname{Map}_{\mathcal{D}}(F(c), d) \simeq \operatorname{Map}_{\mathcal{C}}(c, G(d))$$
+
+for all $c \in \mathcal{C}$ and $d \in \mathcal{D}$, natural in both variables.
+
+Equivalently, there exists a unit transformation $\eta: \mathrm{id}_{\mathcal{C}} \to G \circ F$ and a counit $\varepsilon: F \circ G \to \mathrm{id}_{\mathcal{D}}$ satisfying the triangle identities up to coherent homotopy.
+
+We write $F \dashv G: \mathcal{C} \rightleftarrows \mathcal{D}$.
+</Definition>
+
+<Example id="adj-free-forget" title="Free-forgetful adjunction">
+The free-forgetful adjunction between groups and sets lifts to an $\infty$-adjunction: $F \dashv U: \mathcal{S} \rightleftarrows \operatorname{Mon}_{E_1}(\mathcal{S})$ where $F$ is the free $E_1$-algebra functor and $U$ is the forgetful functor from $E_1$-algebras (associative monoids up to coherent homotopy) to spaces.
+</Example>
+
+<Example id="adj-suspension-loop" title="Suspension-loop adjunction">
+For pointed spaces, the suspension-loop adjunction $\Sigma \dashv \Omega: \mathcal{S}_* \rightleftarrows \mathcal{S}_*$ is an $\infty$-adjunction:
+
+$$\operatorname{Map}_*({\Sigma X, Y}) \simeq \operatorname{Map}_*({X, \Omega Y})$$
+
+This is the $\infty$-categorical version of the classical adjunction $[\Sigma X, Y] \cong [X, \Omega Y]$.
+</Example>
+
+<Example id="adj-nerve" title="Nerve-fundamental category">
+The nerve-fundamental category adjunction $\tau_1 \dashv N: \mathbf{sSet} \rightleftarrows \mathbf{Cat}$ lifts to an $\infty$-adjunction between the $\infty$-category of $\infty$-categories and the $\infty$-category of $1$-categories.
+</Example>
+
+<Example id="adj-localization" title="Localization adjunction">
+For any localization $L: \mathcal{C} \to \mathcal{C}_L$ (left adjoint to the inclusion $\mathcal{C}_L \hookrightarrow \mathcal{C}$ of local objects), the pair $L \dashv i$ is an $\infty$-adjunction.
+
+Example: $n$-truncation $\tau_{\leq n}: \mathcal{S} \to \mathcal{S}_{\leq n}$ is left adjoint to the inclusion of $n$-truncated spaces.
+</Example>
+
+---
+
+## Unit and Counit
+
+<Example id="unit-counit" title="Unit and counit transformations">
+An $\infty$-adjunction $F \dashv G$ has:
+- **Unit**: $\eta: \mathrm{id}_{\mathcal{C}} \to G \circ F$ (a natural transformation, i.e., a $1$-simplex in $\operatorname{Fun}(\mathcal{C}, \mathcal{C})$).
+- **Counit**: $\varepsilon: F \circ G \to \mathrm{id}_{\mathcal{D}}$.
+
+The **triangle identities** hold up to homotopy:
+- $(\varepsilon F) \circ (F\eta) \simeq \mathrm{id}_F$
+- $(G\varepsilon) \circ (\eta G) \simeq \mathrm{id}_G$
+
+In an $\infty$-category, "up to homotopy" means the space of witnesses for the triangle identity is contractible, not just nonempty.
+</Example>
+
+<Example id="adj-uniqueness" title="Uniqueness of adjoints">
+In an $\infty$-category, if $F$ has a right adjoint, the right adjoint is unique up to **contractible choice** (unique up to a canonical equivalence). This is stronger than uniqueness up to isomorphism in ordinary categories: the space of right adjoints to $F$ is either empty or contractible.
+
+Similarly, the unit and counit are essentially unique: the space of adjunction data for a given pair $(F, G)$ is either empty or contractible.
+</Example>
+
+---
+
+## Properties
+
+<Example id="adj-preserves-limits" title="Adjoints preserve limits/colimits">
+As in ordinary category theory:
+- **Left adjoints** preserve colimits: if $F \dashv G$, then $F$ preserves all colimits that exist in $\mathcal{C}$.
+- **Right adjoints** preserve limits: $G$ preserves all limits that exist in $\mathcal{D}$.
+
+This is proved using the mapping space characterization:
+$$\operatorname{Map}(F(\operatorname{colim} X_i), d) \simeq \operatorname{Map}(\operatorname{colim} X_i, Gd) \simeq \lim \operatorname{Map}(X_i, Gd) \simeq \lim \operatorname{Map}(FX_i, d) \simeq \operatorname{Map}(\operatorname{colim} FX_i, d)$$
+</Example>
+
+<Example id="adj-derived" title="Derived adjunctions from Quillen adjunctions">
+Every Quillen adjunction $F \dashv G: \mathcal{M} \rightleftarrows \mathcal{N}$ induces an $\infty$-adjunction $\mathbf{L}F \dashv \mathbf{R}G: \mathcal{M}_\infty \rightleftarrows \mathcal{N}_\infty$ between the underlying $\infty$-categories. This captures strictly more information than the derived adjunction on homotopy categories: the mapping space equivalence is a full equivalence of Kan complexes, not just a bijection of $\pi_0$.
+</Example>
+
+<Example id="adj-pullback-pushforward" title="Pullback-pushforward in geometry">
+For a morphism $f: X \to Y$ of schemes (or derived schemes), there is an $\infty$-adjunction:
+
+$$f^*: \operatorname{QCoh}(Y) \rightleftarrows \operatorname{QCoh}(X) : f_*$$
+
+where $f^*$ is the derived pullback and $f_*$ is the derived pushforward. These are $\infty$-categorical adjunctions between the $\infty$-categories of quasi-coherent sheaves.
+</Example>
+
+<Example id="adj-kan-extension" title="Kan extensions as adjunctions">
+Left and right Kan extensions along a functor $f: \mathcal{C} \to \mathcal{D}$ give $\infty$-adjunctions:
+
+$$f_!: \operatorname{Fun}(\mathcal{C}, \mathcal{E}) \rightleftarrows \operatorname{Fun}(\mathcal{D}, \mathcal{E}) : f^*$$
+
+$$f^*: \operatorname{Fun}(\mathcal{D}, \mathcal{E}) \rightleftarrows \operatorname{Fun}(\mathcal{C}, \mathcal{E}) : f_*$$
+
+where $f_! \dashv f^* \dashv f_*$. These generalize the six-functor formalism of sheaf theory.
+</Example>
+
+<Example id="adj-monadic" title="Monadic adjunctions">
+An $\infty$-adjunction $F \dashv G: \mathcal{C} \rightleftarrows \mathcal{D}$ is **monadic** if $\mathcal{D}$ is equivalent to the $\infty$-category of $T$-algebras, where $T = G \circ F$ is the associated monad. The $\infty$-categorical Barr--Beck theorem (Lurie) characterizes monadic adjunctions: $F \dashv G$ is monadic iff $G$ is conservative and preserves $G$-split simplicial colimits.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+$\infty$-adjunctions generalize ordinary adjunctions:
+
+1. Defined by a natural equivalence of **mapping spaces**, not just hom-sets.
+
+2. **Left adjoints** preserve colimits; **right adjoints** preserve limits.
+
+3. Adjoints are **unique up to contractible choice**.
+
+4. Quillen adjunctions induce $\infty$-adjunctions, with more information than derived adjunctions on homotopy categories.
+
+5. Examples include suspension-loop, pullback-pushforward, Kan extensions, and localization.
+</Remark>

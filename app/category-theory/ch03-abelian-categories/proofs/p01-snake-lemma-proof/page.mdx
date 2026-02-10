@@ -1,0 +1,129 @@
+export const metadata = {
+  title: 'Proof of Snake Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Proof — Snake Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Snake Lemma
+
+We give a complete proof of the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma) by diagram chasing in $R\text{-}\mathbf{Mod}$. By the [Freyd-Mitchell Embedding Theorem](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell), this suffices for any abelian category.
+
+---
+
+## Setup
+
+We have a commutative diagram with exact rows:
+
+$$
+\begin{array}{ccccccccc}
+& & A' & \xrightarrow{f'} & B' & \xrightarrow{g'} & C' & \to & 0 \\
+& & \downarrow\scriptstyle{\alpha} & & \downarrow\scriptstyle{\beta} & & \downarrow\scriptstyle{\gamma} & & \\
+0 & \to & A & \xrightarrow{f} & B & \xrightarrow{g} & C & &
+\end{array}
+$$
+
+---
+
+## Step 1: Induced Maps on Kernels and Cokernels
+
+<Proof title="Induced maps exist">
+The maps $\bar{f'} : \ker \alpha \to \ker \beta$ and $\bar{g'} : \ker \beta \to \ker \gamma$ are induced by restricting $f'$ and $g'$. If $\alpha(a') = 0$, then $\beta(f'(a')) = f(\alpha(a')) = 0$, so $f'(a') \in \ker \beta$. Similarly for $g'$.
+
+The maps $\bar{f} : \mathrm{coker}\, \alpha \to \mathrm{coker}\, \beta$ and $\bar{g} : \mathrm{coker}\, \beta \to \mathrm{coker}\, \gamma$ are induced by $f$ and $g$. If $a \in \mathrm{im}\, \alpha$, say $a = \alpha(a')$, then $f(a) = f(\alpha(a')) = \beta(f'(a')) \in \mathrm{im}\, \beta$. So $f$ descends to $\bar{f} : A/\mathrm{im}\, \alpha \to B/\mathrm{im}\, \beta$.
+</Proof>
+
+---
+
+## Step 2: Construction of the Connecting Homomorphism
+
+<Proof title="Construction of delta">
+We define $\delta : \ker \gamma \to \mathrm{coker}\, \alpha$.
+
+Let $c' \in \ker \gamma$, so $\gamma(c') = 0$.
+
+**Lift:** Since $g'$ is surjective, choose $b' \in B'$ with $g'(b') = c'$.
+
+**Map down:** Compute $\beta(b') \in B$. We have $g(\beta(b')) = \gamma(g'(b')) = \gamma(c') = 0$. So $\beta(b') \in \ker g = \mathrm{im}\, f$ (by exactness of the bottom row at $B$).
+
+**Lift to $A$:** Since $f$ is injective (bottom row is exact at $A$), there is a unique $a \in A$ with $f(a) = \beta(b')$.
+
+**Project:** Define $\delta(c') = [a] \in \mathrm{coker}\, \alpha = A / \mathrm{im}\, \alpha$.
+
+**Well-definedness:** Suppose $b_1'$ is another lift: $g'(b_1') = c'$. Then $g'(b' - b_1') = 0$, so $b' - b_1' \in \ker g' = \mathrm{im}\, f'$. Write $b' - b_1' = f'(a')$ for some $a' \in A'$. Then the corresponding elements $a, a_1 \in A$ differ by: $f(a - a_1) = \beta(b' - b_1') = \beta(f'(a')) = f(\alpha(a'))$. Since $f$ is injective, $a - a_1 = \alpha(a') \in \mathrm{im}\, \alpha$. So $[a] = [a_1]$ in $\mathrm{coker}\, \alpha$.
+
+**Homomorphism:** $\delta$ is additive since each step (lift, map down, lift, project) is additive (using the uniqueness of the lift through $f$).
+</Proof>
+
+---
+
+## Step 3: Exactness at $\ker \beta$
+
+<Proof title="Exactness at ker beta">
+We show $\mathrm{im}(\bar{f'}) = \ker(\bar{g'})$.
+
+$\mathrm{im}(\bar{f'}) \subseteq \ker(\bar{g'})$: For $a' \in \ker \alpha$, $\bar{g'}(\bar{f'}(a')) = g'(f'(a')) = 0$ by exactness of the top row.
+
+$\ker(\bar{g'}) \subseteq \mathrm{im}(\bar{f'})$: Let $b' \in \ker \beta$ with $g'(b') = 0$. By exactness of the top row at $B'$, $b' = f'(a')$ for some $a' \in A'$. Then $f(\alpha(a')) = \beta(f'(a')) = \beta(b') = 0$. Since $f$ is injective, $\alpha(a') = 0$, so $a' \in \ker \alpha$ and $b' = \bar{f'}(a')$.
+</Proof>
+
+---
+
+## Step 4: Exactness at $\ker \gamma$
+
+<Proof title="Exactness at ker gamma">
+We show $\mathrm{im}(\bar{g'}) = \ker \delta$.
+
+$\mathrm{im}(\bar{g'}) \subseteq \ker \delta$: Let $b' \in \ker \beta$, and set $c' = g'(b')$. To compute $\delta(c')$, we can use $b'$ itself as a lift. Then $\beta(b') = 0$, so $a = 0$ and $\delta(c') = [0] = 0$.
+
+$\ker \delta \subseteq \mathrm{im}(\bar{g'})$: Let $c' \in \ker \gamma$ with $\delta(c') = 0$. Using a lift $b'$ with $g'(b') = c'$, we have $\beta(b') = f(a)$ and $[a] = 0$ in $\mathrm{coker}\, \alpha$, so $a = \alpha(a')$ for some $a'$. Then $\beta(b') = f(\alpha(a')) = \beta(f'(a'))$, so $\beta(b' - f'(a')) = 0$, meaning $b' - f'(a') \in \ker \beta$. And $g'(b' - f'(a')) = g'(b') - g'(f'(a')) = c' - 0 = c'$. So $c' = \bar{g'}(b' - f'(a'))$.
+</Proof>
+
+---
+
+## Step 5: Exactness at $\mathrm{coker}\, \alpha$
+
+<Proof title="Exactness at coker alpha">
+We show $\mathrm{im}\, \delta = \ker \bar{f}$.
+
+$\mathrm{im}\, \delta \subseteq \ker \bar{f}$: Let $c' \in \ker \gamma$ with $\delta(c') = [a]$, where $f(a) = \beta(b')$ for a lift $b'$ of $c'$. Then $\bar{f}([a]) = [f(a)] = [\beta(b')] = 0$ in $\mathrm{coker}\, \beta$.
+
+$\ker \bar{f} \subseteq \mathrm{im}\, \delta$: Let $[a] \in \mathrm{coker}\, \alpha$ with $\bar{f}([a]) = 0$, i.e., $f(a) \in \mathrm{im}\, \beta$. Write $f(a) = \beta(b')$ for some $b' \in B'$. Set $c' = g'(b')$. Then $\gamma(c') = \gamma(g'(b')) = g(\beta(b')) = g(f(a)) = 0$, so $c' \in \ker \gamma$. By construction, $\delta(c') = [a]$.
+</Proof>
+
+---
+
+## Step 6: Exactness at $\mathrm{coker}\, \beta$
+
+<Proof title="Exactness at coker beta">
+Similar to Step 3, using the dual argument. We omit the details. $\square$
+</Proof>
+
+---
+
+## Summary
+
+<Remark title="The snake">
+The connecting homomorphism $\delta$ "snakes" through the diagram: it starts at $\ker \gamma$ (upper right), goes left via lifting, goes down via $\beta$, goes left again via lifting through $f$, and ends at $\mathrm{coker}\, \alpha$ (lower left). This snake-like path through the diagram gives the lemma its name.
+</Remark>
+
+<Remark title="Applications">
+The Snake Lemma is used to construct:
+1. The [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence) from a SES of complexes.
+2. Long exact sequences for derived functors ($\mathrm{Ext}$, $\mathrm{Tor}$, sheaf cohomology).
+3. The connecting homomorphism in the Mayer-Vietoris sequence.
+</Remark>

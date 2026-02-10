@@ -1,0 +1,217 @@
+export const metadata = {
+  title: 'Group Actions — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Concept — Group Actions" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Group Actions
+
+A group action is a formal way of describing symmetries of a mathematical object. When a group $G$ "acts" on a set $X$, each element of $G$ corresponds to a permutation of $X$, and the group operation corresponds to composing these permutations. This concept unifies an enormous range of mathematical phenomena: rotational symmetry of geometric figures, permutation representations, conjugation within a group, and much more.
+
+---
+
+## Definition and Basic Properties
+
+<Definition title="Group action (left action)" number="3.1">
+Let $G$ be a group and $X$ a set. A **left action** of $G$ on $X$ is a function $\cdot : G \times X \to X$, written $(g, x) \mapsto g \cdot x$, satisfying:
+
+1. **(Identity)** $e \cdot x = x$ for all $x \in X$, where $e$ is the identity of $G$.
+
+2. **(Compatibility)** $(gh) \cdot x = g \cdot (h \cdot x)$ for all $g, h \in G$ and $x \in X$.
+
+We say $G$ **acts on** $X$, or $X$ is a **$G$-set**.
+</Definition>
+
+<Definition title="Right action" number="3.2">
+A **right action** of $G$ on $X$ is a function $X \times G \to X$, written $(x, g) \mapsto x \cdot g$, satisfying:
+
+1. $x \cdot e = x$ for all $x \in X$.
+2. $x \cdot (gh) = (x \cdot g) \cdot h$ for all $g, h \in G$ and $x \in X$.
+
+Every left action gives a right action via $x \cdot g = g^{-1} \cdot x$, and vice versa. We will primarily work with left actions.
+</Definition>
+
+<Definition title="Equivalent formulation via homomorphisms" number="3.3">
+A left action of $G$ on $X$ is equivalent to a group homomorphism $\varphi: G \to \operatorname{Sym}(X)$, where $\operatorname{Sym}(X)$ is the symmetric group on $X$ (the group of all bijections $X \to X$). The correspondence is $\varphi(g)(x) = g \cdot x$.
+
+When $X$ is finite with $|X| = n$, we have $\operatorname{Sym}(X) \cong S_n$, so a $G$-action on an $n$-element set is a homomorphism $G \to S_n$.
+</Definition>
+
+---
+
+## Fundamental Examples
+
+<Example id="left-multiplication" title="Left multiplication (regular action)">
+Every group $G$ acts on itself by left multiplication: $g \cdot x = gx$ for $g, x \in G$.
+
+The corresponding homomorphism $\varphi: G \to \operatorname{Sym}(G)$ sends $g$ to the map $x \mapsto gx$. This homomorphism is injective (if $gx = x$ for all $x$, then $g = e$). This is precisely the content of **Cayley's Theorem**: every group embeds into a symmetric group.
+
+For $G = \mathbb{Z}/3\mathbb{Z} = \{0, 1, 2\}$, the element $1$ acts as the permutation $(0\;1\;2)$, and $2$ acts as $(0\;2\;1)$.
+</Example>
+
+<Example id="conjugation-action" title="Conjugation action">
+Every group $G$ acts on itself by conjugation: $g \cdot x = gxg^{-1}$.
+
+The identity axiom holds since $exe^{-1} = x$. For compatibility: $(gh) \cdot x = (gh)x(gh)^{-1} = g(hxh^{-1})g^{-1} = g \cdot (h \cdot x)$.
+
+The corresponding homomorphism $\varphi: G \to \operatorname{Aut}(G)$ maps $g$ to the inner automorphism $\iota_g: x \mapsto gxg^{-1}$. The kernel of $\varphi$ is $\ker(\varphi) = \{g \in G : gxg^{-1} = x \text{ for all } x\} = Z(G)$, the center of $G$.
+
+By the First Isomorphism Theorem, $G/Z(G) \cong \operatorname{Inn}(G) \leq \operatorname{Aut}(G)$.
+</Example>
+
+<Example id="conjugation-on-subgroups" title="Action on subgroups by conjugation">
+$G$ acts on the set of all subgroups of $G$ by conjugation: $g \cdot H = gHg^{-1}$.
+
+This is well-defined because $gHg^{-1}$ is always a subgroup when $H$ is. The stabilizer of $H$ under this action is the **normalizer** $N_G(H) = \{g \in G : gHg^{-1} = H\}$.
+
+For $G = S_3$ and $H = \{e, (1\;2)\}$, the conjugate $(1\;3)H(1\;3)^{-1} = \{e, (1\;3)(1\;2)(1\;3)\} = \{e, (2\;3)\}$. So $H$ and $\{e, (2\;3)\}$ are in the same orbit.
+</Example>
+
+<Example id="dihedral-on-polygon" title="Dihedral group acting on vertices of a polygon">
+The dihedral group $D_n$ (of order $2n$) acts on the set $\{1, 2, \ldots, n\}$ of vertices of a regular $n$-gon. The rotation $r$ acts as the $n$-cycle $(1\;2\;3\;\cdots\;n)$, and a reflection $s$ acts as a permutation depending on $n$.
+
+For $D_4$ (symmetries of a square) with vertices $\{1,2,3,4\}$: the rotation by $90°$ sends $1 \mapsto 2 \mapsto 3 \mapsto 4 \mapsto 1$, and one reflection sends $1 \mapsto 1$, $2 \mapsto 4$, $3 \mapsto 3$, $4 \mapsto 2$.
+
+This gives an injective homomorphism $D_n \hookrightarrow S_n$.
+</Example>
+
+<Example id="matrix-on-vector-space" title="Linear group acting on a vector space">
+The general linear group $GL_n(\mathbb{R})$ acts on $\mathbb{R}^n$ by matrix multiplication: $A \cdot v = Av$ for $A \in GL_n(\mathbb{R})$ and $v \in \mathbb{R}^n$.
+
+More generally, any group $G$ with a representation $\rho: G \to GL(V)$ acts on the vector space $V$ by $g \cdot v = \rho(g)(v)$. The study of group actions on vector spaces is the subject of **representation theory**.
+
+For $G = \mathbb{Z}/n\mathbb{Z}$ acting on $\mathbb{R}^2$ via rotation by $2\pi/n$, the generator $1$ maps to the matrix $\left(\cos(2\pi/n), -\sin(2\pi/n); \sin(2\pi/n), \cos(2\pi/n)\right)$.
+</Example>
+
+<Example id="left-cosets" title="Action on cosets">
+Let $H \leq G$ be a subgroup. Then $G$ acts on the set of left cosets $G/H = \{gH : g \in G\}$ by left multiplication: $g \cdot (aH) = (ga)H$.
+
+This is well-defined: if $aH = bH$, then $gaH = gbH$. The corresponding homomorphism $\varphi: G \to \operatorname{Sym}(G/H)$ has kernel $\ker(\varphi) = \bigcap_{g \in G} gHg^{-1}$, which is the largest normal subgroup of $G$ contained in $H$.
+
+This gives an important tool: if $[G : H] = n$, then there is a homomorphism $G \to S_n$, which allows us to study $G$ via its permutation action.
+</Example>
+
+---
+
+## Types of Actions
+
+<Definition title="Faithful action" number="3.4">
+An action of $G$ on $X$ is **faithful** (or **effective**) if the corresponding homomorphism $\varphi: G \to \operatorname{Sym}(X)$ is injective. That is, the only element of $G$ that fixes every point of $X$ is the identity.
+
+Equivalently, $\bigcap_{x \in X} \operatorname{Stab}_G(x) = \{e\}$.
+</Definition>
+
+<Definition title="Transitive action" number="3.5">
+An action of $G$ on $X$ is **transitive** if for every pair $x, y \in X$, there exists $g \in G$ such that $g \cdot x = y$. Equivalently, there is only one orbit (the entire set $X$).
+</Definition>
+
+<Definition title="Free action" number="3.6">
+An action of $G$ on $X$ is **free** if the only element of $G$ with a fixed point is the identity. That is, if $g \cdot x = x$ for some $x \in X$, then $g = e$.
+
+Equivalently, $\operatorname{Stab}_G(x) = \{e\}$ for every $x \in X$.
+</Definition>
+
+<Example id="free-transitive" title="Free and transitive actions (torsors)">
+The left multiplication action of $G$ on itself is both free and transitive. An action that is simultaneously free and transitive is called a **regular action** or a **$G$-torsor**.
+
+The right multiplication action $x \cdot g = xg$ is also free and transitive. These two actions commute with each other, which is the essence of the regular representation.
+
+If $G$ acts freely and transitively on $X$, then after choosing any point $x_0 \in X$, the map $G \to X$ given by $g \mapsto g \cdot x_0$ is a bijection. So $|X| = |G|$.
+</Example>
+
+<Example id="trivial-action" title="Trivial action">
+The **trivial action** of $G$ on $X$ is defined by $g \cdot x = x$ for all $g \in G$ and $x \in X$. Every element fixes every point, so the corresponding homomorphism sends every element to the identity permutation.
+
+This action is faithful only when $G$ is the trivial group. Every point is a fixed point, and every singleton forms an orbit.
+</Example>
+
+<Example id="faithful-not-free" title="Faithful but not free">
+Consider $S_3$ acting on $\{1, 2, 3\}$ by permutation. This action is faithful (distinct permutations give distinct bijections) and transitive (any element can be sent to any other). However, it is not free: the transposition $(1\;2)$ fixes the element $3$.
+
+In general, a transitive faithful action of $G$ on a set with $|X| < |G|$ cannot be free.
+</Example>
+
+<Example id="natural-action-sn" title="Natural action of S_n">
+The symmetric group $S_n$ acts naturally on $\{1, 2, \ldots, n\}$ by $\sigma \cdot i = \sigma(i)$. This action is faithful (by definition of $S_n$) and transitive (for any $i, j$ there exists a permutation sending $i$ to $j$).
+
+The stabilizer of $n$ in $S_n$ is isomorphic to $S_{n-1}$ (permutations of $\{1, \ldots, n-1\}$ that fix $n$). The index is $[S_n : S_{n-1}] = n$, consistent with the orbit having $n$ elements.
+</Example>
+
+---
+
+## Kernel and Fixed Points
+
+<Definition title="Kernel of an action" number="3.7">
+The **kernel** of an action of $G$ on $X$ is the kernel of the corresponding homomorphism $\varphi: G \to \operatorname{Sym}(X)$:
+
+$$\ker(\text{action}) = \{g \in G : g \cdot x = x \text{ for all } x \in X\}.$$
+
+The kernel is always a normal subgroup of $G$. The action is faithful if and only if the kernel is trivial.
+</Definition>
+
+<Definition title="Fixed point set" number="3.8">
+For $g \in G$, the **fixed point set** of $g$ is $X^g = \{x \in X : g \cdot x = x\}$.
+
+For a subgroup $H \leq G$, the **fixed point set** of $H$ is $X^H = \{x \in X : h \cdot x = x \text{ for all } h \in H\}$.
+</Definition>
+
+<Example id="fixed-points-conjugation" title="Fixed points of conjugation">
+For the conjugation action of $G$ on itself, $g \cdot x = gxg^{-1}$:
+
+The fixed point set of $g$ is $G^g = \{x \in G : gxg^{-1} = x\} = \{x \in G : gx = xg\} = C_G(g)$, the centralizer of $g$.
+
+The fixed point set of all of $G$ is $G^G = \{x \in G : gxg^{-1} = x \text{ for all } g\} = Z(G)$, the center.
+
+The kernel of the conjugation action is the center $Z(G)$, confirming that conjugation is faithful if and only if $Z(G) = \{e\}$ (i.e., $G$ is centerless).
+</Example>
+
+---
+
+## $G$-Equivariant Maps
+
+<Definition title="G-equivariant map (G-map)" number="3.9">
+Let $X$ and $Y$ be $G$-sets. A function $f: X \to Y$ is **$G$-equivariant** (or a **$G$-map**) if $f(g \cdot x) = g \cdot f(x)$ for all $g \in G$ and $x \in X$.
+
+A bijective $G$-equivariant map is called a **$G$-isomorphism**. The $G$-sets $X$ and $Y$ are **isomorphic** as $G$-sets if there exists a $G$-isomorphism between them.
+</Definition>
+
+<Example id="g-equivariant-example" title="Example of G-equivariant maps">
+Let $G = S_3$ act on $X = \{1, 2, 3\}$ naturally, and act on $Y = \{\{1,2\}, \{1,3\}, \{2,3\}\}$ (the set of 2-element subsets) by $\sigma \cdot S = \{\sigma(i) : i \in S\}$.
+
+The map $f: X \to Y$ defined by $f(i) = \{1,2,3\} \setminus \{i\}$ (sending each element to the complementary pair) is $G$-equivariant: $f(\sigma(i)) = \{1,2,3\} \setminus \{\sigma(i)\} = \sigma(\{1,2,3\} \setminus \{i\}) = \sigma \cdot f(i)$.
+
+Since $f$ is a bijection, $X$ and $Y$ are isomorphic $S_3$-sets.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The main ideas about group actions are:
+
+1. A **group action** of $G$ on $X$ is the same as a homomorphism $G \to \operatorname{Sym}(X)$.
+
+2. Key properties are **faithfulness** (injective homomorphism), **transitivity** (one orbit), and **freeness** (trivial stabilizers).
+
+3. Standard actions include **left multiplication**, **conjugation**, and **action on cosets** $G/H$.
+
+4. The **kernel** of an action is a normal subgroup; the action modulo the kernel is faithful.
+
+5. Group actions provide a powerful tool for studying groups through their symmetries on sets, leading to orbit counting, Sylow theory, and classification results.
+</Remark>

@@ -1,0 +1,155 @@
+export const metadata = {
+  title: '도함수 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "5. 미분", href: "/analysis/ch05-differentiation" },
+  { label: "개념 - 도함수" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 도함수 (Derivative)
+
+The derivative measures the instantaneous rate of change of a function. In rigorous analysis, it is defined as a limit, making precise the intuition of "slope of the tangent line."
+
+---
+
+## Definition
+
+<Definition title="Derivative at a point" number="5.1">
+Let $f : (a, b) \to \mathbb{R}$ and $c \in (a, b)$. The **derivative** of $f$ at $c$ is
+
+$$f'(c) = \lim_{h \to 0} \frac{f(c + h) - f(c)}{h} = \lim_{x \to c} \frac{f(x) - f(c)}{x - c},$$
+
+provided this limit exists. If it exists, we say $f$ is **differentiable** at $c$.
+</Definition>
+
+<Definition title="Derivative function" number="5.2">
+If $f$ is differentiable at every point of $(a, b)$, the function $f' : (a, b) \to \mathbb{R}$ defined by $c \mapsto f'(c)$ is called the **derivative** of $f$ (or the **derived function**).
+</Definition>
+
+---
+
+## Basic examples via the definition
+
+<Example title="Derivative of x squared">
+1. $f(x) = x^2$, compute $f'(c)$:
+
+$$f'(c) = \lim_{h \to 0} \frac{(c+h)^2 - c^2}{h} = \lim_{h \to 0} \frac{2ch + h^2}{h} = \lim_{h \to 0} (2c + h) = 2c.$$
+
+So $f'(x) = 2x$.
+</Example>
+
+<Example title="Derivative of 1/x">
+2. $f(x) = \frac{1}{x}$ for $x \neq 0$:
+
+$$f'(c) = \lim_{h \to 0} \frac{\frac{1}{c+h} - \frac{1}{c}}{h} = \lim_{h \to 0} \frac{c - (c+h)}{h \cdot c(c+h)} = \lim_{h \to 0} \frac{-1}{c(c+h)} = -\frac{1}{c^2}.$$
+</Example>
+
+<Example title="Derivative of sqrt(x)">
+3. $f(x) = \sqrt{x}$ for $x > 0$:
+
+$$f'(c) = \lim_{h \to 0} \frac{\sqrt{c+h} - \sqrt{c}}{h} = \lim_{h \to 0} \frac{1}{\sqrt{c+h} + \sqrt{c}} = \frac{1}{2\sqrt{c}}.$$
+</Example>
+
+<Example title="Derivative of |x| at 0">
+4. $f(x) = |x|$. At $c = 0$:
+
+$$\lim_{h \to 0^+} \frac{|h|}{h} = 1, \quad \lim_{h \to 0^-} \frac{|h|}{h} = -1.$$
+
+The one-sided limits differ, so $f'(0)$ does not exist. The function $|x|$ is continuous but not differentiable at $0$.
+</Example>
+
+---
+
+## Differentiation rules
+
+<Theorem title="Differentiation rules">
+If $f$ and $g$ are differentiable at $c$, then:
+1. **Sum**: $(f + g)'(c) = f'(c) + g'(c)$.
+2. **Scalar multiple**: $(\alpha f)'(c) = \alpha f'(c)$.
+3. **Product**: $(fg)'(c) = f'(c)g(c) + f(c)g'(c)$.
+4. **Quotient**: $(f/g)'(c) = \frac{f'(c)g(c) - f(c)g'(c)}{g(c)^2}$, provided $g(c) \neq 0$.
+5. **Chain rule**: If $g$ is differentiable at $c$ and $f$ is differentiable at $g(c)$, then $(f \circ g)'(c) = f'(g(c)) \cdot g'(c)$.
+</Theorem>
+
+<Example title="Product rule from definition">
+5. To prove the product rule from the definition:
+
+$$\frac{f(x)g(x) - f(c)g(c)}{x - c} = f(x) \cdot \frac{g(x) - g(c)}{x - c} + g(c) \cdot \frac{f(x) - f(c)}{x - c}.$$
+
+As $x \to c$: $f(x) \to f(c)$ (differentiable implies continuous), so the limit is $f(c)g'(c) + g(c)f'(c)$.
+</Example>
+
+<Example title="Chain rule application">
+6. $f(x) = \sin(x^2)$: $f'(x) = \cos(x^2) \cdot 2x = 2x\cos(x^2)$.
+
+$g(x) = e^{\sin x}$: $g'(x) = e^{\sin x} \cdot \cos x$.
+</Example>
+
+---
+
+## Higher-order derivatives
+
+<Definition title="Higher derivatives" number="5.3">
+The $n$-th derivative $f^{(n)}$ is defined inductively: $f^{(0)} = f$, $f^{(n)} = (f^{(n-1)})'$. We also write $f''$, $f'''$, etc. A function is **$C^n$** if $f^{(n)}$ exists and is continuous. It is **$C^\infty$** (smooth) if all derivatives exist.
+</Definition>
+
+<Example title="Higher derivatives of polynomials">
+7. $f(x) = x^n$: $f'(x) = nx^{n-1}$, $f''(x) = n(n-1)x^{n-2}$, $\ldots$, $f^{(n)}(x) = n!$, $f^{(n+1)}(x) = 0$.
+</Example>
+
+<Example title="Higher derivatives of exponential">
+8. $f(x) = e^x$: $f^{(n)}(x) = e^x$ for all $n \geq 0$. The exponential is its own derivative at every order.
+</Example>
+
+---
+
+## One-sided derivatives
+
+<Definition title="One-sided derivatives" number="5.4">
+The **right derivative** $f'_+(c) = \lim_{h \to 0^+} \frac{f(c+h) - f(c)}{h}$ and **left derivative** $f'_-(c) = \lim_{h \to 0^-} \frac{f(c+h) - f(c)}{h}$. The derivative $f'(c)$ exists if and only if both one-sided derivatives exist and are equal.
+</Definition>
+
+<Example title="One-sided derivatives of |x|">
+9. $f(x) = |x|$ at $c = 0$: $f'_+(0) = 1$ and $f'_-(0) = -1$. Since they differ, $f'(0)$ does not exist.
+</Example>
+
+---
+
+## Local extrema and the derivative
+
+<Theorem title="Interior extremum theorem">
+If $f$ is differentiable at an interior point $c$ and $f$ has a local extremum at $c$, then $f'(c) = 0$.
+</Theorem>
+
+<Example title="Critical points">
+10. $f(x) = x^3 - 3x$ on $\mathbb{R}$: $f'(x) = 3x^2 - 3 = 3(x-1)(x+1)$. Critical points at $x = \pm 1$. $f(-1) = 2$ is a local max, $f(1) = -2$ is a local min.
+</Example>
+
+<Example title="Critical point without extremum">
+11. $f(x) = x^3$: $f'(0) = 0$ but $x = 0$ is neither a local max nor min (inflection point). The converse of the interior extremum theorem is false.
+</Example>
+
+---
+
+## Derivative as a linear approximation
+
+<Remark>
+Differentiability at $c$ means $f(c + h) = f(c) + f'(c) \cdot h + o(h)$ as $h \to 0$, where $o(h)/h \to 0$. The linear function $L(h) = f(c) + f'(c) \cdot h$ is the **best linear approximation** to $f$ near $c$. This is the starting point for Taylor's theorem.
+</Remark>
+
+<Example title="Linear approximation">
+12. $f(x) = \sqrt{x}$ near $c = 4$: $f(4) = 2$, $f'(4) = \frac{1}{4}$. So $\sqrt{x} \approx 2 + \frac{1}{4}(x - 4)$ near $x = 4$. For example, $\sqrt{4.1} \approx 2 + 0.025 = 2.025$ (actual: $2.02485\ldots$).
+</Example>

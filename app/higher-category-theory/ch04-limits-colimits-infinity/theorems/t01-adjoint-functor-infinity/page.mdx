@@ -1,0 +1,135 @@
+export const metadata = {
+  title: 'Adjoint Functor Theorem for Infinity-Categories — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "4. ∞-극한과 수반", href: "/higher-category-theory/ch04-limits-colimits-infinity" },
+  { label: "Theorem — Adjoint Functor Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Adjoint Functor Theorem for $\infty$-Categories
+
+The adjoint functor theorem for $\infty$-categories states that a functor between presentable $\infty$-categories has a right adjoint if and only if it preserves small colimits. This is the $\infty$-categorical analogue of the classical adjoint functor theorem and is one of the most powerful and frequently used results in higher category theory.
+
+---
+
+## Statement
+
+<Theorem title="Adjoint Functor Theorem (Lurie)" number="4.1">
+Let $F: \mathcal{C} \to \mathcal{D}$ be a functor between presentable $\infty$-categories.
+
+**(Left adjoint version)** $F$ has a **right adjoint** if and only if $F$ preserves small colimits.
+
+**(Right adjoint version)** $F$ has a **left adjoint** if and only if $F$ preserves small limits and is **accessible** (preserves $\kappa$-filtered colimits for some regular cardinal $\kappa$).
+</Theorem>
+
+<Example id="aft-spaces" title="Application: tensor product adjunction">
+The smash product functor $X \wedge -: \mathcal{S}_* \to \mathcal{S}_*$ preserves colimits (being a left adjoint of the mapping space functor). By the adjoint functor theorem, it has a right adjoint, which is the pointed mapping space $\operatorname{Map}_*(X, -)$.
+
+More generally, for any presentable $\infty$-category $\mathcal{C}$ tensored over $\mathcal{S}$, the tensor $X \otimes -: \mathcal{C} \to \mathcal{C}$ has a right adjoint (the cotensor/mapping object) whenever it preserves colimits.
+</Example>
+
+<Example id="aft-derived" title="Application: derived functors exist">
+For a ring homomorphism $\varphi: R \to S$, the extension of scalars functor $S \otimes_R^{\mathbf{L}} -: D(R) \to D(S)$ preserves all colimits. By the adjoint functor theorem, it has a right adjoint: the forgetful/restriction functor $\operatorname{Res}: D(S) \to D(R)$.
+
+This gives the $\infty$-categorical version of the extension-restriction adjunction without needing to construct the right adjoint explicitly.
+</Example>
+
+<Example id="aft-localization" title="Application: localization adjunctions">
+If $L: \mathcal{C} \to \mathcal{C}$ is an accessible localization functor (preserves colimits and is accessible), then $L$ has a right adjoint (the inclusion of local objects). This is immediate from the adjoint functor theorem.
+
+Example: the truncation functor $\tau_{\leq n}: \mathcal{S} \to \mathcal{S}_{\leq n}$ preserves colimits and is accessible, so it has a right adjoint (the inclusion of $n$-truncated spaces into all spaces).
+</Example>
+
+---
+
+## Proof Ideas
+
+<Proof>
+The proof uses the theory of accessible $\infty$-categories. Key steps:
+
+1. **Representability**: A functor $G: \mathcal{D} \to \mathcal{S}$ is representable (i.e., $G \simeq \operatorname{Map}_{\mathcal{D}}(-, d)$ for some $d$) if and only if $G$ preserves small limits and is accessible. This is the $\infty$-categorical version of the representable functor theorem.
+
+2. **Construction of right adjoint**: For $F: \mathcal{C} \to \mathcal{D}$ preserving colimits, define $G: \mathcal{D} \to \mathcal{C}$ by $G(d) = $ the object representing the functor $c \mapsto \operatorname{Map}_{\mathcal{D}}(F(c), d)$. This functor preserves limits (as a representable functor in $c$) and is accessible (because $\mathcal{C}$ is presentable). By representability, $G(d)$ exists for each $d$.
+
+3. **Naturality**: The construction of $G$ is natural in $d$, giving a functor $G: \mathcal{D} \to \mathcal{C}$. The adjunction $F \dashv G$ follows from the universal property.
+
+The accessibility condition in the right adjoint version is needed to ensure the "solution set condition" is satisfied, analogous to the classical Freyd adjoint functor theorem.
+</Proof>
+
+---
+
+## Applications
+
+<Example id="aft-sheafification" title="Sheafification">
+The inclusion $\operatorname{Shv}(\mathcal{C}) \hookrightarrow \operatorname{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$ preserves limits and is accessible. By the adjoint functor theorem, it has a left adjoint: the **sheafification** functor $L: \operatorname{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S}) \to \operatorname{Shv}(\mathcal{C})$.
+</Example>
+
+<Example id="aft-kan-extension" title="Kan extensions">
+For a functor $f: \mathcal{A} \to \mathcal{B}$ between small $\infty$-categories, the restriction functor $f^*: \operatorname{Fun}(\mathcal{B}, \mathcal{C}) \to \operatorname{Fun}(\mathcal{A}, \mathcal{C})$ preserves all limits and colimits. When $\mathcal{C}$ is presentable:
+
+- $f^*$ has a left adjoint $f_!$ (left Kan extension) because $f^*$ preserves limits and is accessible.
+- $f^*$ has a right adjoint $f_*$ (right Kan extension) because $f^*$ preserves colimits.
+
+This gives the full adjunction $f_! \dashv f^* \dashv f_*$.
+</Example>
+
+<Example id="aft-stabilization" title="Stabilization adjunction">
+The forgetful functor $\Omega^\infty: \operatorname{Sp} \to \mathcal{S}_*$ (from spectra to pointed spaces) preserves limits and is accessible. By the adjoint functor theorem, it has a left adjoint $\Sigma^\infty: \mathcal{S}_* \to \operatorname{Sp}$ (the suspension spectrum functor).
+
+The resulting adjunction $\Sigma^\infty \dashv \Omega^\infty$ is the fundamental link between unstable and stable homotopy theory.
+</Example>
+
+<Example id="aft-internal-hom" title="Internal hom in presentable categories">
+In a closed monoidal presentable $\infty$-category $(\mathcal{C}, \otimes)$, for each object $X$, the tensor functor $X \otimes -: \mathcal{C} \to \mathcal{C}$ preserves colimits. By the adjoint functor theorem, it has a right adjoint $\underline{\operatorname{Hom}}(X, -): \mathcal{C} \to \mathcal{C}$, the internal hom.
+
+This gives the tensor-hom adjunction $\operatorname{Map}(X \otimes Y, Z) \simeq \operatorname{Map}(Y, \underline{\operatorname{Hom}}(X, Z))$ automatically.
+</Example>
+
+<Example id="aft-limits-from-products" title="Limits from products and equalizers">
+If a presentable $\infty$-category $\mathcal{C}$ has products and equalizers, then it has all limits. By the adjoint functor theorem, the diagonal functor $\Delta: \mathcal{C} \to \operatorname{Fun}(K, \mathcal{C})$ (for any $K$) has a right adjoint (the limit functor) if and only if it preserves colimits, which it does.
+</Example>
+
+<Example id="aft-recognition" title="Recognition of presentable categories">
+The adjoint functor theorem provides a recognition principle: an $\infty$-category $\mathcal{C}$ is presentable if and only if it is accessible and has all colimits. The theorem then guarantees that $\mathcal{C}$ also has all limits and that colimit-preserving functors from $\mathcal{C}$ always have right adjoints.
+</Example>
+
+---
+
+## Historical Notes
+
+<Remark title="Classical vs. infinity-categorical">
+The $\infty$-categorical adjoint functor theorem (Lurie, HTT 5.5.2.9) is cleaner than its classical counterpart because the accessibility condition replaces the "solution set condition" of Freyd's theorem. In the presentable setting, accessibility is automatic for functors defined by natural constructions, making the theorem particularly easy to apply.
+
+The classical adjoint functor theorem (Freyd, 1964) required an explicit solution set, which was often hard to verify. The $\infty$-categorical version avoids this by working within the well-behaved class of presentable $\infty$-categories.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The adjoint functor theorem is the central existence theorem for $\infty$-category theory:
+
+1. Between presentable $\infty$-categories, **colimit-preserving functors have right adjoints**.
+
+2. **Limit-preserving accessible functors** have left adjoints.
+
+3. Applications include: sheafification, Kan extensions, stabilization, internal hom, derived functors.
+
+4. The theorem reduces existence of adjoints to easily checkable conditions (colimit/limit preservation).
+
+5. This is one of the most frequently used results in modern homotopy theory and derived algebraic geometry.
+</Remark>

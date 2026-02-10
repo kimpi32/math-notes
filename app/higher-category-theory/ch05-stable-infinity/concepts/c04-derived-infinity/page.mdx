@@ -1,0 +1,202 @@
+export const metadata = {
+  title: 'Derived Infinity-Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Concept — Derived Infinity-Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Derived $\infty$-Category
+
+The derived $\infty$-category $\mathcal{D}(\mathcal{A})$ of an abelian category $\mathcal{A}$ is the stable $\infty$-category obtained by inverting quasi-isomorphisms in the $\infty$-categorical sense. It enhances the classical derived category by remembering the full mapping spaces (not just $\pi_0$). This enhancement resolves the non-functoriality problems of the classical derived category, provides the correct framework for derived algebraic geometry, and allows for well-behaved t-structures whose hearts recover the original abelian category.
+
+---
+
+## Definition
+
+<Definition title="Derived infinity-category" number="5.7">
+For an abelian category $\mathcal{A}$ (with enough injectives or enough projectives), the **derived $\infty$-category** $\mathcal{D}(\mathcal{A})$ is the $\infty$-categorical localization of the $\infty$-category of chain complexes at the quasi-isomorphisms:
+
+$$\mathcal{D}(\mathcal{A}) = N_{\mathrm{dg}}(\mathbf{Ch}(\mathcal{A}))[W_{\mathrm{qis}}^{-1}]$$
+
+Equivalently, $\mathcal{D}(\mathcal{A})$ is the underlying $\infty$-category of the model category $\mathbf{Ch}(\mathcal{A})$ with the injective or projective model structure. For a ring $R$, we write $\mathcal{D}(R) = \mathcal{D}(\operatorname{Mod}_R)$.
+</Definition>
+
+<Definition title="Bounded variants" number="5.8">
+The bounded derived $\infty$-categories are full subcategories:
+
+- $\mathcal{D}^+(\mathcal{A})$: objects $X$ with $\pi_n(X) = 0$ for $n \ll 0$ (bounded below).
+- $\mathcal{D}^-(\mathcal{A})$: objects $X$ with $\pi_n(X) = 0$ for $n \gg 0$ (bounded above).
+- $\mathcal{D}^b(\mathcal{A})$: objects $X$ with $\pi_n(X) = 0$ for $|n| \gg 0$ (bounded).
+
+Each of these inherits a stable $\infty$-category structure from $\mathcal{D}(\mathcal{A})$.
+</Definition>
+
+<Definition title="t-structure on the derived infinity-category" number="5.9">
+The **standard t-structure** on $\mathcal{D}(\mathcal{A})$ is:
+
+- $\mathcal{D}(\mathcal{A})_{\geq 0}$: complexes $C$ with $H_n(C) = 0$ for $n < 0$.
+- $\mathcal{D}(\mathcal{A})_{\leq 0}$: complexes $C$ with $H_n(C) = 0$ for $n > 0$.
+
+The heart of this t-structure recovers the original abelian category: $\mathcal{D}(\mathcal{A})^\heartsuit \simeq \mathcal{A}$.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="derived-of-ring" title="Derived category of a ring">
+For a ring $R$, $\mathcal{D}(R)$ is the prototypical derived $\infty$-category. The mapping spaces encode Ext groups:
+
+$$\pi_n(\operatorname{Map}_{\mathcal{D}(R)}(M, N)) \cong \operatorname{Ext}_R^{-n}(M, N)$$
+
+for $R$-modules $M, N$ (viewed as complexes in degree $0$). In particular, $\pi_0 = \operatorname{Hom}_R(M, N)$ and $\pi_{-n} = \operatorname{Ext}_R^n(M, N)$ for $n > 0$. The homotopy category $\operatorname{h}\mathcal{D}(R)$ recovers the classical derived category $D(R)$.
+</Example>
+
+<Example id="derived-of-abelian-sheaves" title="Derived category of abelian sheaves">
+For a topological space $X$ (or a site), the abelian category $\operatorname{Sh}(X, \mathbf{Ab})$ of sheaves of abelian groups has derived $\infty$-category $\mathcal{D}(\operatorname{Sh}(X))$. Sheaf cohomology is computed as:
+
+$$H^n(X, \mathcal{F}) \cong \pi_0 \operatorname{Map}_{\mathcal{D}(\operatorname{Sh}(X))}(\mathbb{Z}_X, \mathcal{F}[n])$$
+
+The standard t-structure has heart $\operatorname{Sh}(X, \mathbf{Ab})$, and the derived global sections functor $R\Gamma: \mathcal{D}(\operatorname{Sh}(X)) \to \mathcal{D}(\mathbb{Z})$ is an exact functor of stable $\infty$-categories.
+</Example>
+
+<Example id="derived-vs-classical" title="Derived infinity-category vs. classical derived category">
+The classical derived category $D^{\mathrm{cl}}(\mathcal{A}) = \operatorname{h}\mathcal{D}(\mathcal{A})$ records only $\pi_0$ of mapping spaces. The full $\infty$-category $\mathcal{D}(\mathcal{A})$ gains:
+
+1. **Functorial cones**: the cofiber is a functor, not just defined up to non-canonical isomorphism.
+2. **Homotopy limits and colimits**: these exist and are computed by the universal property.
+3. **Descent**: sheaves of $\mathcal{D}(\mathcal{A})$-valued objects satisfy descent, while triangulated-valued sheaves do not.
+4. **Multiplicative structures**: $E_\infty$-ring objects, module objects, and algebra objects make sense in $\mathcal{D}(\mathcal{A})$.
+</Example>
+
+<Example id="derived-qcoh" title="Quasi-coherent complexes on a scheme">
+For a scheme $X$, the $\infty$-category $\operatorname{QCoh}(X)$ of quasi-coherent complexes is the derived $\infty$-category associated to the abelian category of quasi-coherent sheaves. For affine $X = \operatorname{Spec} R$:
+
+$$\operatorname{QCoh}(\operatorname{Spec} R) \simeq \mathcal{D}(R)$$
+
+For general $X$, $\operatorname{QCoh}(X)$ satisfies Zariski descent: for a Zariski cover $X = \bigcup U_i$,
+
+$$\operatorname{QCoh}(X) \simeq \lim \left( \prod_i \operatorname{QCoh}(U_i) \rightrightarrows \prod_{i,j} \operatorname{QCoh}(U_i \cap U_j) \cdots \right)$$
+
+This limit is taken in the $\infty$-category of stable $\infty$-categories.
+</Example>
+
+<Example id="derived-perfect" title="Perfect complexes and compact objects">
+The compact objects in $\mathcal{D}(R)$ are the **perfect complexes**: those quasi-isomorphic to bounded complexes of finitely generated projective $R$-modules. The full subcategory of perfect complexes $\operatorname{Perf}(R) \subset \mathcal{D}(R)$ is the smallest stable subcategory containing $R$ and closed under retracts.
+
+$\mathcal{D}(R)$ is compactly generated: $\mathcal{D}(R) \simeq \operatorname{Ind}(\operatorname{Perf}(R))$. This characterization is central to noncommutative algebraic geometry (Kontsevich).
+</Example>
+
+<Example id="derived-morita" title="Morita equivalence via derived categories">
+Two rings $R$ and $S$ are **derived Morita equivalent** if $\mathcal{D}(R) \simeq \mathcal{D}(S)$ as stable $\infty$-categories. This is equivalent to the existence of a tilting complex: a perfect complex $T \in \mathcal{D}(R)$ that generates $\mathcal{D}(R)$ and satisfies $\operatorname{End}_{\mathcal{D}(R)}(T) \cong S$.
+
+For example, the path algebra of the Kronecker quiver $A = k(1 \rightrightarrows 2)$ is derived Morita equivalent to the category of coherent sheaves on $\mathbb{P}^1$, established through the tilting bundle $\mathcal{O} \oplus \mathcal{O}(1)$.
+</Example>
+
+---
+
+## Mapping Spaces and Ext
+
+<Example id="mapping-spectrum" title="Mapping spectra in the derived category">
+The derived $\infty$-category $\mathcal{D}(R)$ is enriched in spectra. The mapping spectrum satisfies:
+
+$$\pi_n(\operatorname{map}_{\mathcal{D}(R)}(C, D)) \cong H^{-n}(\mathbf{R}\operatorname{Hom}_R(C, D)) = \operatorname{Ext}_R^{-n}(C, D)$$
+
+This means the mapping spectrum is simply $\mathbf{R}\operatorname{Hom}_R(C, D)$ viewed as a spectrum. The underlying space is $\Omega^\infty \mathbf{R}\operatorname{Hom}_R(C, D)$.
+</Example>
+
+<Example id="derived-tensor" title="Derived tensor product">
+The derived tensor product $- \otimes_R^{\mathbf{L}} -: \mathcal{D}(R) \times \mathcal{D}(R) \to \mathcal{D}(R)$ gives $\mathcal{D}(R)$ a symmetric monoidal structure (when $R$ is commutative). One has:
+
+$$H_n(C \otimes_R^{\mathbf{L}} D) \cong \operatorname{Tor}_n^R(C, D)$$
+
+No explicit projective resolutions are needed: the $\infty$-categorical structure handles the derived corrections automatically. The unit is $R[0]$, and $\mathbf{R}\operatorname{Hom}_R(-, -)$ is the internal hom right adjoint to $\otimes_R^{\mathbf{L}}$.
+</Example>
+
+---
+
+## Derived Functors as $\infty$-Categorical Functors
+
+<Example id="derived-pullback" title="Derived pullback and pushforward">
+For a morphism of schemes $f: X \to Y$, the pullback and pushforward are exact functors:
+
+$$f^*: \operatorname{QCoh}(Y) \rightleftarrows \operatorname{QCoh}(X) : f_*$$
+
+where $f^*$ is left adjoint to $f_*$. At the $\infty$-categorical level, these are simply functors between stable $\infty$-categories; no need to derive separately. When $f$ is not flat, $f^*$ is automatically the "derived pullback" $Lf^*$ in the classical sense.
+</Example>
+
+<Example id="derived-six-functors" title="Six-functor formalism">
+For morphisms $f: X \to Y$ of schemes (with appropriate finiteness), the six functors $(f^*, f_*, f^!, f_!, \otimes, \underline{\operatorname{Hom}})$ are all exact functors between stable $\infty$-categories. The key adjunctions are:
+
+- $f^* \dashv f_*$ (pullback--pushforward)
+- $f_! \dashv f^!$ (proper pushforward--exceptional pullback)
+- $(-) \otimes E \dashv \underline{\operatorname{Hom}}(E, -)$ (tensor--internal hom)
+
+The $\infty$-categorical framework resolves the classical difficulties: all base-change formulas $f^* g_* \simeq g'_* f'^*$ hold as natural equivalences of functors, not just isomorphisms that must be checked for compatibility.
+</Example>
+
+<Example id="derived-hochschild" title="Hochschild homology as derived tensor">
+For a $k$-algebra $A$, Hochschild homology is computed as:
+
+$$\operatorname{HH}(A/k) \simeq A \otimes^{\mathbf{L}}_{A \otimes_k A^{\mathrm{op}}} A$$
+
+in $\mathcal{D}(k)$. The $\infty$-categorical framework gives $\operatorname{HH}(A/k)$ the structure of an $S^1$-object (a spectrum with circle action), leading naturally to cyclic homology $\operatorname{HC}(A/k) \simeq \operatorname{HH}(A/k)_{hS^1}$ as homotopy orbits. This $S^1$-structure is invisible at the level of chain complexes and requires the $\infty$-categorical enhancement.
+</Example>
+
+---
+
+## Heart of t-Structure
+
+<Example id="heart-recovery" title="Heart recovers the abelian category">
+The heart $\mathcal{D}(\mathcal{A})^\heartsuit$ of the standard t-structure is equivalent to $\mathcal{A}$ itself. This means the derived $\infty$-category $\mathcal{D}(\mathcal{A})$ "remembers" the abelian category it came from, via the t-structure.
+
+However, different abelian categories can give rise to equivalent derived $\infty$-categories: if $\mathcal{D}(\mathcal{A}) \simeq \mathcal{D}(\mathcal{B})$, the derived equivalence may not respect the standard t-structures. In that case, $\mathcal{B}$ appears as the heart of a different t-structure on $\mathcal{D}(\mathcal{A})$.
+</Example>
+
+<Example id="tilting-t-structure" title="Tilting and t-structures">
+A classical example: for the path algebra $A$ of the quiver $1 \to 2$ over a field $k$, one has $\mathcal{D}^b(\operatorname{mod}\text{-}A) \simeq \mathcal{D}^b(\operatorname{mod}\text{-}k^2)$. The standard t-structure on the left has heart $\operatorname{mod}\text{-}A$ (representations of $1 \to 2$), while the standard t-structure on the right has heart $\operatorname{mod}\text{-}k^2$ (pairs of vector spaces). These abelian categories are non-equivalent, but their derived categories coincide.
+
+More generally, the Happel--Reiten--Smalo construction shows that bounded t-structures on $\mathcal{D}^b(\mathcal{A})$ with length heart correspond to torsion pairs on $\mathcal{A}$.
+</Example>
+
+---
+
+## Derived Algebraic Geometry
+
+<Example id="derived-ag" title="Derived schemes and stacks">
+In derived algebraic geometry (Lurie, Toen--Vezzosi), a derived scheme is a locally ringed $\infty$-topos $(X, \mathcal{O}_X)$ where $\mathcal{O}_X$ is a sheaf of $E_\infty$-rings. The derived $\infty$-category $\operatorname{QCoh}(X)$ of quasi-coherent sheaves is a stable presentable $\infty$-category, serving as the primary invariant.
+
+The cotangent complex $\mathbb{L}_{X/S} \in \operatorname{QCoh}(X)$ is naturally an object of the derived $\infty$-category, controlling deformation theory. Virtual fundamental classes in enumerative geometry arise from the obstruction theory encoded in $\mathbb{L}_{X/S}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The derived $\infty$-category enhances the classical derived category:
+
+1. $\mathcal{D}(\mathcal{A})$ is a **stable presentable $\infty$-category** with mapping spaces encoding Ext groups.
+
+2. It resolves the **non-functoriality** and descent problems of triangulated categories.
+
+3. **Derived functors** (tensor, Hom, pullback, pushforward) are naturally exact functors between derived $\infty$-categories.
+
+4. The **standard t-structure** has heart $\mathcal{A}$; different t-structures yield different abelian categories (tilting).
+
+5. It provides the foundation for **derived algebraic geometry** and the six-functor formalism.
+</Remark>

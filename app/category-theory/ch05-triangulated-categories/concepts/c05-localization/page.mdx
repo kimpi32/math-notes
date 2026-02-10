@@ -1,0 +1,103 @@
+export const metadata = {
+  title: 'Localization of Categories — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Concept — Localization of Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Localization of Categories
+
+Localization of a category at a class of morphisms formally inverts those morphisms, making them isomorphisms. This is the categorical analogue of localizing a ring at a multiplicative set. The derived category $D(\mathcal{A})$ is constructed by localizing the homotopy category $K(\mathcal{A})$ at quasi-isomorphisms.
+
+---
+
+## Definition
+
+<Definition title="Localization of a Category" number="5.7">
+Let $\mathcal{C}$ be a category and $\mathcal{S}$ a class of morphisms in $\mathcal{C}$. The **localization** $\mathcal{C}[\mathcal{S}^{-1}]$ is a category equipped with a functor $Q : \mathcal{C} \to \mathcal{C}[\mathcal{S}^{-1}]$ such that:
+
+1. $Q(s)$ is an isomorphism for every $s \in \mathcal{S}$.
+2. $Q$ is universal: for any functor $F : \mathcal{C} \to \mathcal{D}$ sending $\mathcal{S}$ to isomorphisms, there exists a unique $\bar{F} : \mathcal{C}[\mathcal{S}^{-1}] \to \mathcal{D}$ with $\bar{F} \circ Q = F$.
+</Definition>
+
+<Definition title="Calculus of Fractions" number="5.8">
+A class $\mathcal{S}$ admits a **left calculus of fractions** if:
+
+1. $\mathcal{S}$ contains all identities and is closed under composition.
+2. Every diagram $X' \xleftarrow{s} X \xrightarrow{f} Y$ with $s \in \mathcal{S}$ can be completed to a commutative square with $s' \in \mathcal{S}$.
+3. If $f \circ s = g \circ s$ for $s \in \mathcal{S}$, there exists $t \in \mathcal{S}$ with $t \circ f = t \circ g$.
+
+When $\mathcal{S}$ admits a calculus of fractions, morphisms in $\mathcal{C}[\mathcal{S}^{-1}]$ can be represented as "fractions" $f \circ s^{-1}$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Derived category as localization" id="derived-localization">
+$D(\mathcal{A}) = K(\mathcal{A})[\mathrm{qis}^{-1}]$: the derived category is the localization of the homotopy category at quasi-isomorphisms. The quasi-isomorphisms in $K(\mathcal{A})$ satisfy the calculus of fractions conditions.
+</Example>
+
+<Example title="Localization of a ring" id="ring-localization">
+For a commutative ring $R$ and multiplicative set $S$, the localization $R \to S^{-1}R$ is the localization of the one-object Ab-enriched category $\mathbf{B}R$ at the morphisms $S$.
+</Example>
+
+<Example title="Ore localization" id="ore">
+A non-commutative ring $R$ with a multiplicative set $S$ satisfying the **Ore condition** (for each $r \in R$, $s \in S$, there exist $r', s'$ with $s'r = r's$) admits a localization $S^{-1}R$. This is the ring-theoretic analogue of the calculus of fractions.
+</Example>
+
+<Example title="Localization of Top at homotopy equivalences" id="top-localization">
+Localizing $\mathbf{Top}$ at homotopy equivalences gives the **homotopy category** $\mathbf{hTop}$. However, this localization is difficult to work with directly, which motivates the use of model categories.
+</Example>
+
+<Example title="Verdier quotient" id="verdier-quotient">
+For a triangulated category $\mathcal{T}$ and a thick subcategory $\mathcal{S}$, the [Verdier quotient](/category-theory/ch05-triangulated-categories/theorems/t02-verdier-localization) $\mathcal{T}/\mathcal{S}$ is the localization at morphisms whose cone lies in $\mathcal{S}$.
+</Example>
+
+<Example title="Gabriel localization" id="gabriel">
+For an abelian category $\mathcal{A}$ and a Serre subcategory $\mathcal{S}$, the quotient $\mathcal{A}/\mathcal{S}$ is the localization at morphisms whose kernel and cokernel lie in $\mathcal{S}$. This is used in non-commutative algebraic geometry.
+</Example>
+
+<Example title="Bousfield localization" id="bousfield">
+In stable homotopy theory, Bousfield localization at a homology theory $E_*$ inverts all $E_*$-equivalences. The localized category $L_E \mathbf{SHC}$ retains only the $E$-local information.
+</Example>
+
+<Example title="Set-theoretic issues" id="set-theory">
+The localization $\mathcal{C}[\mathcal{S}^{-1}]$ may have proper-class hom-sets even if $\mathcal{C}$ is locally small. The calculus of fractions ensures local smallness for the derived category.
+</Example>
+
+<Example title="Localization and model categories" id="model-localization">
+In a model category $\mathcal{M}$, the homotopy category $\mathrm{Ho}(\mathcal{M}) = \mathcal{M}[W^{-1}]$ is the localization at weak equivalences $W$. The model structure provides a concrete description of this localization via fibrant/cofibrant replacements.
+</Example>
+
+<Example title="Localization sequence" id="localization-sequence">
+For $\mathcal{S} \subseteq \mathcal{T}$ thick, the localization sequence $\mathcal{S} \to \mathcal{T} \to \mathcal{T}/\mathcal{S}$ is analogous to a short exact sequence of triangulated categories. It induces long exact sequences on K-theory.
+</Example>
+
+<Example title="Derived category of sheaves" id="derived-sheaf">
+$D^b(\mathbf{Sh}(X))$ is the localization of $K^b(\mathbf{Sh}(X))$ at quasi-isomorphisms. Alternatively, it is the Verdier quotient $K^b(\mathbf{Sh}(X)) / K^b_{\mathrm{ac}}(\mathbf{Sh}(X))$ where the denominator is the subcategory of acyclic complexes.
+</Example>
+
+<Example title="Localization at a single morphism" id="single-morphism">
+Localizing a category at a single morphism $f : A \to B$ means formally adding an inverse $f^{-1} : B \to A$. In the resulting category, $A \cong B$.
+</Example>
+
+---
+
+<Remark title="Localization and the derived category">
+The entire construction of the [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category) can be summarized as: start with an abelian category $\mathcal{A}$, form complexes $\mathbf{Ch}(\mathcal{A})$, mod out by homotopy to get $K(\mathcal{A})$, and localize at quasi-isomorphisms to get $D(\mathcal{A})$. The [Verdier localization theorem](/category-theory/ch05-triangulated-categories/theorems/t02-verdier-localization) ensures this localization inherits a triangulated structure.
+</Remark>

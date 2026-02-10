@@ -1,0 +1,165 @@
+export const metadata = {
+  title: 'Mapping Space — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Concept — Mapping Space" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Mapping Space
+
+In a quasi-category $\mathcal{C}$, the mapping space $\operatorname{Map}_{\mathcal{C}}(x, y)$ between two objects is a Kan complex (an $\infty$-groupoid or "space") whose points are morphisms from $x$ to $y$, whose paths are homotopies between morphisms, and so on. Mapping spaces replace the hom-sets of ordinary categories with homotopy-coherent objects, capturing the full higher structure of $\infty$-categories.
+
+---
+
+## Definition
+
+<Definition title="Mapping space (via simplicial enrichment)" number="3.1">
+Let $\mathcal{C}$ be a quasi-category and $x, y \in \mathcal{C}_0$ two objects. The **mapping space** $\operatorname{Map}_{\mathcal{C}}(x, y)$ is a Kan complex whose $n$-simplices are maps $\Delta[n] \times \Delta[1] \to \mathcal{C}$ that restrict to the constant map at $x$ on $\Delta[n] \times \{0\}$ and the constant map at $y$ on $\Delta[n] \times \{1\}$.
+
+More precisely, there are several equivalent models:
+
+1. **Right mapping space**: $\operatorname{Hom}^R_{\mathcal{C}}(x, y)_n = \{f: \Delta[n] \star \Delta[0] \to \mathcal{C} : f|_{\Delta[n]} = x, f(\Delta[0]) = y\}$ where $\star$ is the join.
+
+2. **Left mapping space**: $\operatorname{Hom}^L_{\mathcal{C}}(x, y)_n = \{f: \Delta[0] \star \Delta[n] \to \mathcal{C} : f(\Delta[0]) = x, f|_{\Delta[n]} = y\}$.
+
+3. **Maximal Kan complex of the slice**: $\operatorname{Map}_{\mathcal{C}}(x, y) \simeq (\mathcal{C}_{x/} \times_{\mathcal{C}} \{y\})^\simeq$.
+
+All three models are Kan complexes that are naturally weakly equivalent.
+</Definition>
+
+---
+
+## Low-Dimensional Structure
+
+<Example id="map-0-simplices" title="0-simplices: morphisms">
+The $0$-simplices of $\operatorname{Map}_{\mathcal{C}}(x, y)$ are precisely the morphisms from $x$ to $y$ in $\mathcal{C}$: the $1$-simplices $f \in \mathcal{C}_1$ with $d_1(f) = x$ and $d_0(f) = y$.
+
+$$\pi_0(\operatorname{Map}_{\mathcal{C}}(x, y)) = \operatorname{Hom}_{\operatorname{h}\mathcal{C}}(x, y)$$
+
+where $\operatorname{h}\mathcal{C}$ is the homotopy category of $\mathcal{C}$.
+</Example>
+
+<Example id="map-1-simplices" title="1-simplices: homotopies">
+A $1$-simplex in $\operatorname{Map}_{\mathcal{C}}(x, y)$ is a homotopy between two morphisms $f, g: x \to y$. Concretely, it is a $2$-simplex $\sigma \in \mathcal{C}_2$ with $d_2(\sigma) = \mathrm{id}_x$ (or $\mathrm{id}_y$, depending on the model), $d_0(\sigma) = g$ and $d_1(\sigma) = f$.
+
+Two morphisms are in the same connected component of $\operatorname{Map}_{\mathcal{C}}(x, y)$ if and only if they are homotopic.
+</Example>
+
+<Example id="map-2-simplices" title="2-simplices: homotopies between homotopies">
+A $2$-simplex in $\operatorname{Map}_{\mathcal{C}}(x, y)$ is a homotopy between homotopies. This higher structure is essential: while the homotopy category only sees $\pi_0$ of the mapping spaces, the full mapping space retains information about $\pi_1, \pi_2, \ldots$
+
+For instance, in $\mathcal{S}$ (the $\infty$-category of spaces), $\operatorname{Map}_{\mathcal{S}}(X, Y) \simeq \operatorname{Map}(X, Y)$, the topological mapping space. Its higher homotopy groups $\pi_n(\operatorname{Map}(X, Y), f)$ record obstructions to deforming maps.
+</Example>
+
+---
+
+## Examples
+
+<Example id="map-nerve" title="Mapping spaces in nerves">
+For a nerve $N(\mathcal{C})$, the mapping space $\operatorname{Map}_{N(\mathcal{C})}(x, y)$ is the discrete simplicial set $\operatorname{Hom}_{\mathcal{C}}(x, y)$: a set with no higher homotopical information. This is because $N(\mathcal{C})$ has unique inner horn fillers, so there is no room for non-trivial homotopies between morphisms.
+
+$\pi_0(\operatorname{Map}_{N(\mathcal{C})}(x, y)) = \operatorname{Hom}_{\mathcal{C}}(x, y)$ and $\pi_n = 0$ for $n \geq 1$.
+</Example>
+
+<Example id="map-kan" title="Mapping spaces in Kan complexes">
+For a Kan complex $X$, the mapping space $\operatorname{Map}_X(x, y)$ is the space of paths from $x$ to $y$. This is the based loop space $\Omega_{x,y} X$ when $x = y$: $\operatorname{Map}_X(x, x) \simeq \Omega_x X$.
+
+$$\pi_n(\operatorname{Map}_X(x, x)) \cong \pi_{n+1}(X, x)$$
+
+So the mapping space in a Kan complex records the shifted homotopy groups.
+</Example>
+
+<Example id="map-spaces" title="Mapping spaces in the infinity-category of spaces">
+In the $\infty$-category $\mathcal{S}$ of spaces, the mapping space is the usual mapping space:
+
+$$\operatorname{Map}_{\mathcal{S}}(X, Y) \simeq \operatorname{Map}(X, Y)$$
+
+For $X = S^1$ and $Y = S^2$: $\operatorname{Map}(S^1, S^2) \simeq \Omega S^2 \times S^2$, which has $\pi_0 = \mathbb{Z}$ (winding number is trivial for maps $S^1 \to S^2$, so only one component) and higher homotopy groups related to those of $S^2$.
+
+For $X = S^n$ and $Y = K(\mathbb{Z}, n)$: $\operatorname{Map}(S^n, K(\mathbb{Z}, n)) \simeq \mathbb{Z} \times K(\mathbb{Z}, n)$, with $\pi_0 = \mathbb{Z}$ classifying cohomology classes.
+</Example>
+
+<Example id="map-derived" title="Mapping spaces in derived categories">
+For the $\infty$-category $D(R)$ (derived $\infty$-category of $R$-modules), the mapping space between complexes $C$ and $D$ is:
+
+$$\operatorname{Map}_{D(R)}(C, D) \simeq \operatorname{DK}(\tau_{\geq 0} \mathbf{R}\operatorname{Hom}_R(C, D))$$
+
+where $\operatorname{DK}$ is the Dold--Kan functor. The connected components give:
+
+$$\pi_0(\operatorname{Map}_{D(R)}(C, D)) = \operatorname{Hom}_{D(R)}(C, D) = H^0(\mathbf{R}\operatorname{Hom}(C, D))$$
+$$\pi_n(\operatorname{Map}_{D(R)}(C, D)) = \operatorname{Ext}^{-n}_R(C, D)$$
+
+So the higher homotopy groups of the mapping space are the negative Ext groups.
+</Example>
+
+---
+
+## Composition of Mapping Spaces
+
+<Example id="map-composition" title="Composition maps">
+For objects $x, y, z$ in a quasi-category $\mathcal{C}$, there is a composition map:
+
+$$\operatorname{Map}_{\mathcal{C}}(x, y) \times \operatorname{Map}_{\mathcal{C}}(y, z) \to \operatorname{Map}_{\mathcal{C}}(x, z)$$
+
+This map is well-defined up to coherent homotopy (not a strict map, but a map in the $\infty$-categorical sense). It is associative and unital up to coherent homotopy, making $\mathcal{C}$ into a category "enriched in spaces" in the homotopy-coherent sense.
+
+This composition law is extracted from the $2$-simplex fillers in $\mathcal{C}$.
+</Example>
+
+<Example id="map-homotopy-cat" title="The homotopy category via mapping spaces">
+The **homotopy category** $\operatorname{h}\mathcal{C}$ of a quasi-category $\mathcal{C}$ is the ordinary category with:
+
+$$\operatorname{Ob}(\operatorname{h}\mathcal{C}) = \mathcal{C}_0, \quad \operatorname{Hom}_{\operatorname{h}\mathcal{C}}(x, y) = \pi_0(\operatorname{Map}_{\mathcal{C}}(x, y))$$
+
+Composition in $\operatorname{h}\mathcal{C}$ is induced by the composition of mapping spaces at the $\pi_0$ level. This is well-defined because the space of composites is connected (contractible, in fact).
+
+The homotopy category loses information: it forgets the higher homotopy groups of the mapping spaces.
+</Example>
+
+---
+
+## Enrichment in Spaces
+
+<Remark title="Enrichment perspective">
+A quasi-category can be viewed as a "category enriched in spaces (Kan complexes)" in a homotopy-coherent sense. More precisely:
+
+1. For each pair of objects $(x, y)$, there is a mapping space $\operatorname{Map}(x, y)$ (a Kan complex).
+2. For each triple $(x, y, z)$, there is a composition map $\operatorname{Map}(x, y) \times \operatorname{Map}(y, z) \to \operatorname{Map}(x, z)$.
+3. Associativity and unitality hold up to coherent homotopy.
+
+This viewpoint connects quasi-categories to the theory of **Segal categories** (simplicial spaces with a homotopy Segal condition) and to **enriched $\infty$-categories**.
+
+The passage from strict enrichment (ordinary categories enriched in $\mathbf{Set}$) to homotopy-coherent enrichment (quasi-categories enriched in $\mathbf{Kan}$) is the central theme of higher category theory.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Mapping spaces are the fundamental invariant of $\infty$-categories:
+
+1. $\operatorname{Map}_{\mathcal{C}}(x, y)$ is a **Kan complex** encoding morphisms, homotopies, and higher homotopies.
+
+2. $\pi_0$ of the mapping space gives the **hom-set** in the homotopy category; higher $\pi_n$ encode **higher coherence data**.
+
+3. In derived categories, the mapping spaces recover **Ext groups**: $\pi_n \operatorname{Map} = \operatorname{Ext}^{-n}$.
+
+4. **Composition** is a map of mapping spaces, well-defined up to contractible choice.
+
+5. Mapping spaces make quasi-categories into "categories enriched in spaces," capturing the essence of homotopy-coherent algebra.
+</Remark>

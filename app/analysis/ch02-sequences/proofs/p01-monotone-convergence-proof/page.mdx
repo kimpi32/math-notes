@@ -1,0 +1,142 @@
+export const metadata = {
+  title: '단조수렴정리의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "증명 - 단조수렴정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 단조수렴정리의 증명 (Proof of the Monotone Convergence Theorem)
+
+This proof directly uses the completeness axiom (least upper bound property) of $\mathbb{R}$.
+
+---
+
+## Theorem restated
+
+<Theorem title="Monotone Convergence Theorem">
+If $(a_n)$ is increasing and bounded above, then $(a_n)$ converges and $\lim_{n \to \infty} a_n = \sup\{a_n : n \in \mathbb{N}\}$.
+</Theorem>
+
+---
+
+## Full proof
+
+<Proof>
+**Setting up.** Let $(a_n)$ be an increasing sequence bounded above. Define $S = \{a_n : n \in \mathbb{N}\}$. Since $(a_n)$ is bounded above, $S$ is a nonempty subset of $\mathbb{R}$ bounded above.
+
+**Applying completeness.** By the completeness axiom, $s = \sup S$ exists in $\mathbb{R}$.
+
+**Verifying the limit.** We claim $a_n \to s$.
+
+Let $\varepsilon > 0$. Since $s = \sup S$, the value $s - \varepsilon$ is **not** an upper bound for $S$. Therefore there exists $N \in \mathbb{N}$ with $a_N > s - \varepsilon$.
+
+Since $(a_n)$ is increasing, for all $n \geq N$:
+
+$$s - \varepsilon < a_N \leq a_n \leq s.$$
+
+The right inequality holds because $s = \sup S$ is an upper bound. Therefore:
+
+$$|a_n - s| = s - a_n < \varepsilon \quad \text{for all } n \geq N.$$
+
+This proves $a_n \to s = \sup\{a_n : n \in \mathbb{N}\}$.
+</Proof>
+
+---
+
+## The decreasing case
+
+<Proof>
+**Decreasing case.** If $(a_n)$ is decreasing and bounded below, consider the sequence $b_n = -a_n$. Then $(b_n)$ is increasing and bounded above (by $-\inf\{a_n\}$). By the increasing case, $b_n \to \sup\{b_n\} = -\inf\{a_n\}$. Therefore $a_n = -b_n \to \inf\{a_n\}$.
+</Proof>
+
+---
+
+## Key steps analyzed
+
+<Remark>
+The proof has three essential ingredients:
+
+1. **Nonempty bounded set**: the range $\{a_n\}$ is nonempty (the sequence exists) and bounded above (by hypothesis).
+
+2. **Completeness**: the least upper bound $s = \sup\{a_n\}$ exists. This is the **only** point where the completeness of $\mathbb{R}$ is used. The theorem fails in $\mathbb{Q}$.
+
+3. **Monotonicity**: the increasing property ensures that once $a_N > s - \varepsilon$, all subsequent terms remain above $s - \varepsilon$. Without monotonicity, a term could dip back below $s - \varepsilon$.
+</Remark>
+
+---
+
+## Why this fails in Q
+
+<Example title="Failure in Q">
+1. In $\mathbb{Q}$, define $a_n$ as the decimal approximation of $\sqrt{2}$ to $n$ digits: $a_1 = 1.4$, $a_2 = 1.41$, $a_3 = 1.414$, etc. This is increasing and bounded above (by $1.5$), and every $a_n \in \mathbb{Q}$. But $\sup\{a_n\} = \sqrt{2} \notin \mathbb{Q}$. The sequence does not converge in $\mathbb{Q}$.
+</Example>
+
+---
+
+## Verification with examples
+
+<Example title="Verifying the proof for e">
+2. $a_n = (1 + \frac{1}{n})^n$ is increasing and bounded above by $3$. The proof tells us $\lim a_n = \sup\{a_n\}$, which is $e \approx 2.71828$.
+
+For $\varepsilon = 0.01$: we need $N$ with $a_N > e - 0.01 = 2.70828$. Computing: $a_{100} \approx 2.7048$, $a_{200} \approx 2.7115$, so $N = 200$ works.
+</Example>
+
+<Example title="Verifying for nested radicals">
+3. $a_1 = \sqrt{2}$, $a_{n+1} = \sqrt{2 + a_n}$, limit is $2$. For $\varepsilon = 0.1$: we need $a_N > 1.9$. Since $a_3 = \sqrt{2 + \sqrt{2 + \sqrt{2}}} \approx 1.9616$, $N = 3$ suffices.
+</Example>
+
+<Example title="Verifying for partial sums">
+4. $s_n = \sum_{k=1}^n \frac{1}{2^k} = 1 - \frac{1}{2^n}$. Here $\sup = 1$, and $|s_n - 1| = 2^{-n}$. For $\varepsilon = 0.001$, we need $2^{-N} < 0.001$, so $N = 10$ suffices.
+</Example>
+
+<Example title="Recursive sequence verification">
+5. $a_1 = 0$, $a_{n+1} = \sqrt{a_n + 2}$. Increasing (induction) and bounded above by $2$. Limit $L$ satisfies $L = \sqrt{L + 2}$, so $L^2 = L + 2$, giving $L = 2$.
+</Example>
+
+---
+
+## Equivalence with completeness
+
+<Example title="MCT implies completeness">
+6. One can prove the reverse: assuming MCT, show every nonempty set bounded above has a supremum. Given $S$ bounded above by $M$, with $a \in S$, use a bisection procedure to construct an increasing sequence converging to $\sup S$.
+
+Start with $[a, M]$. At each step, test the midpoint: if it is an upper bound for $S$, take the left half; otherwise, take the right half. The left endpoints form an increasing bounded sequence, converging to $\sup S$ by MCT.
+</Example>
+
+<Example title="MCT implies Nested Interval Property">
+7. Given nested intervals $[a_n, b_n]$ with $a_n \leq a_{n+1}$ and $b_{n+1} \leq b_n$: $(a_n)$ is increasing and bounded above by $b_1$. By MCT, $a_n \to a^*$. Similarly $b_n \to b^*$. Since $a_n \leq b_n$, we get $a^* \leq b^*$, so $[a^*, b^*] \subseteq \bigcap [a_n, b_n] \neq \emptyset$.
+</Example>
+
+<Example title="Density argument">
+8. MCT can prove the density of rationals: given $a < b$ reals, the sequence $a_n = \frac{\lfloor na \rfloor + 1}{n}$ is eventually in $(a, b)$, providing a rational in every open interval.
+</Example>
+
+<Example title="MCT for decimal expansions">
+9. Every real number has a decimal expansion: construct $a_n$ (the $n$-digit truncation) as an increasing sequence bounded above by $x$. MCT guarantees $a_n \to x$.
+</Example>
+
+<Example title="MCT and infinite products">
+10. The infinite product $\prod_{n=1}^{\infty}(1 + \frac{1}{n^2})$ converges: the partial products $P_N = \prod_{n=1}^{N}(1+\frac{1}{n^2})$ are increasing and bounded above by $\exp(\sum \frac{1}{n^2}) = e^{\pi^2/6}$. By MCT, $P_N$ converges.
+</Example>
+
+<Example title="MCT and probability">
+11. In probability, if $A_1 \subseteq A_2 \subseteq \cdots$ are events, then $P(A_n)$ is an increasing sequence bounded above by $1$. By MCT, $\lim P(A_n)$ exists and equals $P(\bigcup A_n)$ (continuity of probability from below).
+</Example>
+
+<Example title="MCT and integration">
+12. The Monotone Convergence Theorem for sequences directly inspires the Lebesgue Monotone Convergence Theorem for integrals: if $0 \leq f_1 \leq f_2 \leq \cdots$ are measurable functions, then $\int \lim f_n = \lim \int f_n$. The sequence version is a special case (for step functions).
+</Example>

@@ -1,0 +1,246 @@
+export const metadata = {
+  title: 'Orthogonality — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "6. 내적공간", href: "/linear-algebra/ch06-inner-product-spaces" },
+  { label: "Concept — Orthogonality" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Orthogonality
+
+Orthogonality is the generalization of perpendicularity to abstract inner product spaces. Two vectors are orthogonal when their inner product vanishes. This simple condition has profound consequences: orthogonal sets are always linearly independent, orthogonal decompositions split spaces into complementary pieces, and orthogonal complements provide canonical complements to subspaces.
+
+---
+
+## Definition
+
+<Definition title="Orthogonal vectors" number="6.5">
+Two vectors $u, v$ in an inner product space $V$ are **orthogonal** (written $u \perp v$) if:
+
+$$\langle u, v \rangle = 0.$$
+
+A set of vectors $\{v_1, \ldots, v_k\}$ is an **orthogonal set** if $\langle v_i, v_j \rangle = 0$ for all $i \neq j$.
+</Definition>
+
+<Example id="standard-basis-orth" title="Standard basis is orthogonal">
+In $\mathbb{R}^n$ with the dot product, the standard basis $\{e_1, \ldots, e_n\}$ is orthogonal: $\langle e_i, e_j \rangle = \delta_{ij}$ (the Kronecker delta).
+
+In $\mathbb{R}^3$: $e_1 \cdot e_2 = 0$, $e_1 \cdot e_3 = 0$, $e_2 \cdot e_3 = 0$.
+</Example>
+
+<Example id="non-standard-orth" title="Non-standard orthogonal vectors">
+In $\mathbb{R}^3$: $u = (1, 1, 0)$ and $v = (1, -1, 0)$.
+
+$\langle u, v \rangle = 1 - 1 + 0 = 0$, so $u \perp v$.
+
+But $u$ and $v$ are not standard basis vectors -- orthogonality just means their dot product vanishes.
+</Example>
+
+<Example id="fourier-orthogonality" title="Orthogonality of trigonometric functions">
+On $C[-\pi, \pi]$ with $\langle f, g \rangle = \int_{-\pi}^{\pi} f(x)g(x)\,dx$:
+
+$\langle \sin(mx), \sin(nx) \rangle = 0$ for $m \neq n$ (by orthogonality of Fourier modes).
+
+$\langle \sin(mx), \cos(nx) \rangle = 0$ for all $m, n$ (sine is odd, cosine is even).
+
+$\langle 1, \cos(nx) \rangle = \int_{-\pi}^{\pi} \cos(nx)\,dx = 0$ for $n \geq 1$.
+
+This orthogonality is the foundation of Fourier analysis.
+</Example>
+
+---
+
+## Properties of orthogonal sets
+
+<Theorem title="Orthogonal sets are linearly independent">
+If $\{v_1, \ldots, v_k\}$ is an orthogonal set of nonzero vectors, then $v_1, \ldots, v_k$ are linearly independent.
+</Theorem>
+
+<Proof title="Proof">
+Suppose $c_1 v_1 + \cdots + c_k v_k = 0$. Take the inner product with $v_j$:
+
+$$0 = \langle c_1 v_1 + \cdots + c_k v_k, v_j \rangle = c_j \langle v_j, v_j \rangle.$$
+
+Since $v_j \neq 0$, $\langle v_j, v_j \rangle > 0$, so $c_j = 0$. This holds for all $j$.
+</Proof>
+
+<Example id="orthogonal-independent" title="Orthogonality implies independence">
+$v_1 = (1, 1, 0)$, $v_2 = (1, -1, 0)$, $v_3 = (0, 0, 1)$ in $\mathbb{R}^3$.
+
+Check pairwise orthogonality: $v_1 \cdot v_2 = 0$, $v_1 \cdot v_3 = 0$, $v_2 \cdot v_3 = 0$ ✓.
+
+These are automatically linearly independent and form a basis of $\mathbb{R}^3$.
+</Example>
+
+<Theorem title="Pythagorean theorem">
+If $u \perp v$, then $\|u + v\|^2 = \|u\|^2 + \|v\|^2$.
+
+More generally, if $v_1, \ldots, v_k$ are pairwise orthogonal:
+
+$$\|v_1 + \cdots + v_k\|^2 = \|v_1\|^2 + \cdots + \|v_k\|^2.$$
+</Theorem>
+
+<Example id="pythagorean" title="Pythagorean theorem in R^3">
+$u = (3, 0, 0)$ and $v = (0, 4, 0)$: $u \perp v$, $\|u + v\| = \|(3, 4, 0)\| = 5 = \sqrt{9 + 16} = \sqrt{\|u\|^2 + \|v\|^2}$ ✓.
+
+This is the classical Pythagorean theorem for right triangles.
+</Example>
+
+---
+
+## Orthogonal complement
+
+<Definition title="Orthogonal complement" number="6.6">
+For a subset $S \subseteq V$, the **orthogonal complement** of $S$ is:
+
+$$S^\perp = \{v \in V : \langle v, s \rangle = 0 \text{ for all } s \in S\}.$$
+
+$S^\perp$ is always a subspace of $V$, even if $S$ is not.
+</Definition>
+
+<Example id="orth-complement-R3" title="Orthogonal complement in R^3">
+Let $W = \operatorname{span}\{(1, 0, 0)\}$ (the $x$-axis) in $\mathbb{R}^3$.
+
+$W^\perp = \{(x, y, z) : x = 0\} = \operatorname{span}\{(0, 1, 0), (0, 0, 1)\}$ (the $yz$-plane).
+
+$\dim W + \dim W^\perp = 1 + 2 = 3 = \dim \mathbb{R}^3$.
+</Example>
+
+<Example id="orth-complement-plane" title="Orthogonal complement of a plane">
+$W = \operatorname{span}\{(1, 1, 0), (0, 1, 1)\}$ in $\mathbb{R}^3$.
+
+$W^\perp = \{(x, y, z) : x + y = 0 \text{ and } y + z = 0\} = \{(x, -x, x) : x \in \mathbb{R}\} = \operatorname{span}\{(1, -1, 1)\}$.
+
+Check: $(1, -1, 1) \cdot (1, 1, 0) = 1 - 1 + 0 = 0$ ✓ and $(1, -1, 1) \cdot (0, 1, 1) = 0 - 1 + 1 = 0$ ✓.
+</Example>
+
+<Example id="orth-complement-row" title="Orthogonal complement and null space">
+The orthogonal complement of the row space of $A$ is the null space of $A$:
+
+$$\operatorname{Row}(A)^\perp = \operatorname{Null}(A).$$
+
+For $A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}$: $\operatorname{Row}(A) = \operatorname{span}\{(1,2,3), (4,5,6)\}$ is a $2$-dimensional subspace of $\mathbb{R}^3$.
+
+$\operatorname{Null}(A) = \operatorname{span}\{(1, -2, 1)\}$, which has dimension $1 = 3 - 2$. And $(1, -2, 1) \cdot (1, 2, 3) = 1 - 4 + 3 = 0$ ✓.
+</Example>
+
+---
+
+## Fundamental properties of orthogonal complements
+
+<Theorem title="Properties of orthogonal complements">
+Let $V$ be a finite-dimensional inner product space and $W$ a subspace.
+
+1. $V = W \oplus W^\perp$ (orthogonal direct sum).
+2. $\dim W + \dim W^\perp = \dim V$.
+3. $(W^\perp)^\perp = W$.
+4. $W_1 \subseteq W_2 \implies W_2^\perp \subseteq W_1^\perp$.
+5. $(W_1 + W_2)^\perp = W_1^\perp \cap W_2^\perp$ and $(W_1 \cap W_2)^\perp = W_1^\perp + W_2^\perp$.
+</Theorem>
+
+<Example id="double-complement" title="Double complement">
+$W = \operatorname{span}\{(1, 0, 0)\}$ in $\mathbb{R}^3$: $W^\perp = \operatorname{span}\{(0,1,0), (0,0,1)\}$, $(W^\perp)^\perp = \{(x,y,z): y = 0, z = 0\} = W$ ✓.
+</Example>
+
+<Example id="four-subspaces" title="The four fundamental subspaces">
+For $A \in M_{m \times n}(\mathbb{R})$, the four fundamental subspaces are:
+
+1. $\operatorname{Col}(A) \subseteq \mathbb{R}^m$ (column space), dimension $r$.
+2. $\operatorname{Null}(A^T) \subseteq \mathbb{R}^m$ (left null space), dimension $m - r$.
+3. $\operatorname{Row}(A) \subseteq \mathbb{R}^n$ (row space), dimension $r$.
+4. $\operatorname{Null}(A) \subseteq \mathbb{R}^n$ (null space), dimension $n - r$.
+
+The orthogonal complement relationships: $\operatorname{Col}(A)^\perp = \operatorname{Null}(A^T)$ and $\operatorname{Row}(A)^\perp = \operatorname{Null}(A)$.
+
+For $A = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 0 & 0 \end{pmatrix}$: $r = 2$, $\operatorname{Col}(A) = \operatorname{span}\{e_1, e_2\}$, $\operatorname{Null}(A^T) = \operatorname{span}\{e_3\}$, and $\mathbb{R}^3 = \operatorname{Col}(A) \oplus \operatorname{Null}(A^T)$.
+</Example>
+
+---
+
+## Orthogonal decomposition
+
+<Theorem title="Orthogonal decomposition theorem">
+If $W$ is a subspace of a finite-dimensional inner product space $V$, then every vector $v \in V$ can be uniquely written as:
+
+$$v = w + w^\perp, \quad w \in W, \quad w^\perp \in W^\perp.$$
+
+The component $w = \operatorname{proj}_W(v)$ is the **orthogonal projection** of $v$ onto $W$.
+</Theorem>
+
+<Example id="decomp-line" title="Projecting onto a line">
+$W = \operatorname{span}\{(1, 1)\}$ in $\mathbb{R}^2$, $v = (3, 1)$.
+
+$w = \operatorname{proj}_W(v) = \frac{\langle v, (1,1) \rangle}{\|(1,1)\|^2}(1,1) = \frac{4}{2}(1,1) = (2, 2)$.
+
+$w^\perp = v - w = (3, 1) - (2, 2) = (1, -1)$.
+
+Check: $(2, 2) \cdot (1, -1) = 2 - 2 = 0$ ✓ and $v = (2, 2) + (1, -1)$ ✓.
+</Example>
+
+<Example id="decomp-plane" title="Projecting onto a plane in R^3">
+$W = \operatorname{span}\{(1,0,0), (0,1,0)\}$ (the $xy$-plane), $v = (3, 4, 5)$.
+
+$\operatorname{proj}_W(v) = (3, 4, 0)$, $v - \operatorname{proj}_W(v) = (0, 0, 5) \in W^\perp$ ✓.
+</Example>
+
+<Example id="decomp-polynomial" title="Projecting polynomials">
+$V = \mathcal{P}_2$ (polynomials of degree $\leq 2$) with $\langle f, g \rangle = \int_0^1 f(x)g(x)\,dx$.
+
+$W = \operatorname{span}\{1\}$. The projection of $f(x) = x$ onto $W$:
+
+$\operatorname{proj}_W(x) = \frac{\langle x, 1 \rangle}{\langle 1, 1 \rangle} \cdot 1 = \frac{1/2}{1} = \frac{1}{2}$.
+
+The orthogonal component is $x - \frac{1}{2}$, and $\langle x - 1/2, 1 \rangle = \int_0^1 (x - 1/2)\,dx = 0$ ✓.
+</Example>
+
+---
+
+## Orthogonal matrices
+
+<Definition title="Orthogonal matrix" number="6.7">
+A real $n \times n$ matrix $Q$ is **orthogonal** if $Q^T Q = I$, equivalently $Q^{-1} = Q^T$. The columns of $Q$ form an orthonormal basis.
+
+For complex matrices, the analogous notion is **unitary**: $U^*U = I$ where $U^* = \bar{U}^T$.
+</Definition>
+
+<Example id="orthogonal-rotation" title="Rotation matrices are orthogonal">
+$Q = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$. Then $Q^T Q = I$ ✓ (the columns $(\cos\theta, \sin\theta)$ and $(-\sin\theta, \cos\theta)$ are orthonormal).
+
+Orthogonal matrices preserve inner products: $\langle Qu, Qv \rangle = (Qu)^T(Qv) = u^T Q^T Q v = u^T v = \langle u, v \rangle$.
+</Example>
+
+<Example id="orthogonal-reflection" title="Reflection matrices are orthogonal">
+Reflection across the line through $(1, 0)$: $Q = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}$. Then $Q^T Q = I$ and $\det Q = -1$ (orthogonal but not a rotation).
+
+Reflection across the line $y = x$: $Q = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$, $Q^T Q = I$ ✓.
+</Example>
+
+<Example id="orthogonal-3d" title="3D orthogonal matrix">
+$Q = \frac{1}{3}\begin{pmatrix} 2 & -1 & 2 \\ 2 & 2 & -1 \\ -1 & 2 & 2 \end{pmatrix}$. One can verify $Q^TQ = I$ and $\det Q = 1$, so $Q$ is a rotation in $\mathbb{R}^3$. The axis of rotation is the eigenvector for $\lambda = 1$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Orthogonality as the central concept">
+Orthogonality provides the geometric backbone of inner product spaces:
+- Orthogonal sets are automatically linearly independent.
+- Every finite-dimensional inner product space decomposes as $V = W \oplus W^\perp$.
+- The four fundamental subspaces of a matrix are related by orthogonal complement.
+- Orthogonal (unitary) matrices preserve inner products and are the "symmetries" of the inner product.
+- The Gram--Schmidt process converts any basis to an orthogonal one, and orthogonal projections solve least-squares problems.
+</Remark>

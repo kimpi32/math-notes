@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'Triangulated Category — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Concept — Triangulated Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Triangulated Category
+
+A triangulated category is the axiomatic framework for the homotopy category $K(\mathcal{A})$ and the derived category $D(\mathcal{A})$. It captures the essential features of these categories: a shift functor and a class of distinguished triangles replacing short exact sequences, without requiring the full abelian structure.
+
+---
+
+## Definition
+
+<Definition title="Triangulated Category" number="5.1">
+A **triangulated category** is an additive category $\mathcal{T}$ equipped with:
+
+1. An additive autoequivalence $[1] : \mathcal{T} \to \mathcal{T}$ called the **shift functor** (or **translation functor**, or **suspension**).
+2. A class of **distinguished triangles** $X \xrightarrow{u} Y \xrightarrow{v} Z \xrightarrow{w} X[1]$, subject to the axioms (TR1)-(TR4) below.
+</Definition>
+
+<Definition title="Axioms TR1-TR4" number="5.2">
+**(TR1)** (a) Every morphism $u : X \to Y$ can be completed to a distinguished triangle $X \to Y \to Z \to X[1]$. (b) The triangle $X \xrightarrow{\mathrm{id}} X \to 0 \to X[1]$ is distinguished. (c) Any triangle isomorphic to a distinguished triangle is distinguished.
+
+**(TR2) Rotation.** $X \xrightarrow{u} Y \xrightarrow{v} Z \xrightarrow{w} X[1]$ is distinguished if and only if $Y \xrightarrow{v} Z \xrightarrow{w} X[1] \xrightarrow{-u[1]} Y[1]$ is distinguished.
+
+**(TR3) Morphisms of triangles.** Given distinguished triangles and a commutative square $(\alpha, \beta)$ on the first two terms, there exists (not necessarily uniquely) a morphism $\gamma$ completing the morphism of triangles.
+
+**(TR4) Octahedral axiom.** See the [octahedral axiom page](/category-theory/ch05-triangulated-categories/theorems/t01-octahedral-axiom).
+</Definition>
+
+---
+
+## Examples
+
+<Example title="K(A) is triangulated" id="k-triangulated">
+For an abelian category $\mathcal{A}$, $K(\mathcal{A})$ is triangulated with shift $A^\bullet \mapsto A^\bullet[1]$ and distinguished triangles $A \xrightarrow{f} B \to \mathrm{Cone}(f) \to A[1]$.
+</Example>
+
+<Example title="D(A) is triangulated" id="d-triangulated">
+The derived category $D(\mathcal{A})$ inherits a triangulated structure from $K(\mathcal{A})$ via [Verdier localization](/category-theory/ch05-triangulated-categories/theorems/t02-verdier-localization). Distinguished triangles in $D(\mathcal{A})$ are images of distinguished triangles in $K(\mathcal{A})$.
+</Example>
+
+<Example title="Stable homotopy category" id="stable-homotopy">
+The stable homotopy category $\mathbf{SHC}$ of spectra is triangulated with suspension as the shift functor and cofiber sequences as distinguished triangles.
+</Example>
+
+<Example title="Stable module category" id="stable-module">
+For a self-injective algebra $A$, the stable module category $\underline{\mathrm{mod}}\text{-}A$ (modding out maps factoring through projectives) is triangulated. The shift functor is $\Omega^{-1}$ (the cosyzygy).
+</Example>
+
+<Example title="Not triangulated: Ab" id="ab-not-triangulated">
+The abelian category $\mathbf{Ab}$ itself is not triangulated. The notion of distinguished triangle does not make sense for abelian categories; instead, abelian categories have short exact sequences.
+</Example>
+
+<Example title="Singularity category" id="singularity">
+For a Noetherian ring $R$, the singularity category $D_{\mathrm{sg}}(R) = D^b(\mathrm{mod}\text{-}R) / \mathrm{Perf}(R)$ (bounded derived category modulo perfect complexes) is triangulated and measures the singularity of $R$.
+</Example>
+
+<Example title="Triangulated structure on K(Inj)" id="k-inj">
+$K(\mathrm{Inj}\, \mathcal{A})$ (homotopy category of injective complexes) is triangulated and equivalent to $D(\mathcal{A})$ when $\mathcal{A}$ has enough injectives.
+</Example>
+
+<Example title="Exact triangle = long exact sequence" id="exact-triangle-les">
+In a triangulated category, applying a [cohomological functor](/category-theory/ch05-triangulated-categories/concepts/c04-cohomological-functor) to a distinguished triangle gives a long exact sequence. This is how long exact sequences arise in derived categories.
+</Example>
+
+<Example title="Distinguished triangles are not short exact sequences" id="triangle-vs-ses">
+A distinguished triangle $A \to B \to C \to A[1]$ is NOT a short exact sequence. The third map $C \to A[1]$ has no analogue in the abelian setting. Moreover, the "third vertex" $C$ (the cone) is determined only up to non-unique isomorphism.
+</Example>
+
+<Example title="Triangulated categories from DG categories" id="dg-triangulated">
+The homotopy category $H^0(\mathcal{C})$ of a pretriangulated DG category $\mathcal{C}$ is triangulated. This provides a source of triangulated categories beyond homotopy/derived categories.
+</Example>
+
+<Example title="Compact objects" id="compact">
+In a triangulated category with coproducts, an object $X$ is **compact** if $\mathrm{Hom}(X, \bigoplus_i Y_i) \cong \bigoplus_i \mathrm{Hom}(X, Y_i)$. In $D(R)$, the compact objects are the perfect complexes.
+</Example>
+
+<Example title="Semi-orthogonal decomposition" id="sod">
+A triangulated category $\mathcal{T}$ has a **semi-orthogonal decomposition** $\mathcal{T} = \langle \mathcal{A}, \mathcal{B} \rangle$ if every object fits into a distinguished triangle $B \to X \to A \to B[1]$ with $A \in \mathcal{A}$, $B \in \mathcal{B}$, and $\mathrm{Hom}(\mathcal{A}, \mathcal{B}) = 0$. This is a key tool in algebraic geometry.
+</Example>
+
+---
+
+## Deficiencies of Triangulated Categories
+
+<Remark title="Non-functoriality of cones">
+The cone of a morphism in a triangulated category is not functorial: it is determined only up to non-unique isomorphism. This is a fundamental deficiency that motivates the use of stable $\infty$-categories and DG enhancements.
+</Remark>
+
+<Remark title="Looking ahead">
+The deficiencies of triangulated categories are addressed by:
+- [DG categories](/category-theory/ch05-triangulated-categories/concepts/c05-localization) (algebraic enhancement)
+- Stable $\infty$-categories (homotopical enhancement)
+- [t-structures](/category-theory/ch06-derived-categories/concepts/c03-t-structure) (recovering abelian structure from triangulated categories)
+</Remark>

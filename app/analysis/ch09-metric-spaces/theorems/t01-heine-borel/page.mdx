@@ -1,0 +1,146 @@
+export const metadata = {
+  title: 'Heine-Borel Theorem — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "정리 — 하이네-보렐 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Heine-Borel Theorem
+
+The Heine-Borel theorem characterizes compact subsets of $\mathbb{R}^n$: they are precisely the closed and bounded sets. This is one of the most frequently used results in real analysis.
+
+---
+
+## Statement
+
+<Theorem title="Heine-Borel theorem" number="9.11">
+A subset $K \subseteq \mathbb{R}^n$ is compact if and only if it is **closed** and **bounded**.
+</Theorem>
+
+<Remark>
+This theorem is specific to $\mathbb{R}^n$ (and more generally to finite-dimensional normed spaces). It fails in infinite-dimensional spaces and in general metric spaces.
+</Remark>
+
+---
+
+## Easy direction: compact implies closed and bounded
+
+<Theorem title="Compact implies closed" number="9.12">
+Every compact subset of a metric space is closed.
+</Theorem>
+
+<Example title="Proof sketch: compact implies closed">
+Let $K$ be compact and $x \notin K$. For each $y \in K$, choose disjoint open sets $U_y \ni x$ and $V_y \ni y$. The $V_y$ cover $K$; extract a finite subcover $V_{y_1}, \ldots, V_{y_m}$. Then $U = U_{y_1} \cap \cdots \cap U_{y_m}$ is an open neighborhood of $x$ disjoint from $K$. So $K^c$ is open.
+</Example>
+
+<Theorem title="Compact implies bounded" number="9.13">
+Every compact subset of a metric space is bounded.
+</Theorem>
+
+<Example title="Proof sketch: compact implies bounded">
+Fix $x_0 \in X$. The balls $B(x_0, n)$ for $n = 1, 2, 3, \ldots$ cover $X$, hence cover $K$. Extract a finite subcover: $K \subseteq B(x_0, N)$ for some $N$. So $K$ is bounded.
+</Example>
+
+---
+
+## Hard direction: closed and bounded implies compact
+
+<Example title="Why this direction is nontrivial">
+The claim is: if $K \subseteq \mathbb{R}^n$ is closed and bounded, then **every** open cover of $K$ has a finite subcover. This is a statement about all possible open covers (uncountably many possibilities), so it requires a real proof.
+
+The proof uses the completeness of $\mathbb{R}$ in an essential way. See the [full proof](/analysis/ch09-metric-spaces/proofs/p01-heine-borel-proof).
+</Example>
+
+---
+
+## Applications
+
+<Example title="[a,b] is compact">
+$[a,b]$ is closed and bounded in $\mathbb{R}$, hence compact by Heine-Borel. This justifies all theorems about continuous functions on $[a,b]$: the extreme value theorem, uniform continuity, and the Riemann integrability of continuous functions.
+</Example>
+
+<Example title="Closed disk in R²">
+$\overline{B}(0, R) = \{(x,y) : x^2 + y^2 \leq R^2\}$ is closed and bounded in $\mathbb{R}^2$, hence compact. Any continuous function $f: \overline{B}(0,R) \to \mathbb{R}$ attains its maximum and minimum.
+</Example>
+
+<Example title="The n-sphere is compact">
+$S^n = \{x \in \mathbb{R}^{n+1} : \|x\| = 1\}$ is closed (preimage of the closed set $\{1\}$ under the continuous function $\|x\|$) and bounded ($\|x\| = 1 \leq 1$). By Heine-Borel, $S^n$ is compact.
+</Example>
+
+<Example title="Closed subsets of compact sets">
+Any closed subset of $[0,1]$ is compact. For instance, the Cantor set $C \subseteq [0,1]$ is compact (closed subset of a compact set).
+
+If $f: K \to \mathbb{R}$ is continuous and $K$ is compact, then $f^{-1}(\{0\})$ is a closed subset of $K$, hence compact.
+</Example>
+
+---
+
+## Non-examples: why both conditions are needed
+
+<Example title="Bounded but not closed: not compact">
+$(0, 1)$ is bounded but not closed. The open cover $\{(1/n, 1) : n \geq 2\}$ has no finite subcover. Not compact.
+</Example>
+
+<Example title="Closed but not bounded: not compact">
+$\mathbb{R}$ is closed but not bounded. $\{(-n, n) : n \in \mathbb{N}\}$ has no finite subcover. Not compact.
+
+$\{n : n \in \mathbb{N}\}$ is closed but not bounded. The sequence $x_n = n$ has no convergent subsequence. Not compact.
+</Example>
+
+<Example title="Neither closed nor bounded: not compact">
+$\mathbb{Q} \cap [0,1]$ is bounded but not closed. Not compact.
+</Example>
+
+---
+
+## Failure in infinite dimensions
+
+<Example title="Closed unit ball in l² is not compact">
+$B = \{x \in \ell^2 : \|x\| \leq 1\}$ is closed and bounded in $\ell^2$, but not compact: the sequence $e_1, e_2, e_3, \ldots$ has no convergent subsequence (since $\|e_m - e_n\| = \sqrt{2}$ for $m \neq n$).
+
+Heine-Borel fails because $\ell^2$ is infinite-dimensional. In infinite-dimensional normed spaces, the closed unit ball is never compact.
+</Example>
+
+<Example title="Compact subsets of l²">
+By the general theorem, compact subsets of $\ell^2$ must be closed, bounded, AND have the property that coordinates decay uniformly: for every $\varepsilon > 0$, there exists $N$ such that $\sum_{n>N} x_n^2 < \varepsilon$ for all $x \in K$.
+
+For instance, $K = \{x \in \ell^2 : |x_n| \leq 1/n\}$ is compact in $\ell^2$ (it is closed, bounded, and the tail condition is satisfied).
+</Example>
+
+---
+
+## Equivalent formulations
+
+<Theorem title="Characterizations of compactness in R^n" number="9.14">
+For $K \subseteq \mathbb{R}^n$, the following are equivalent:
+
+1. $K$ is compact (every open cover has a finite subcover).
+2. $K$ is sequentially compact (every sequence has a convergent subsequence with limit in $K$).
+3. $K$ is closed and bounded (Heine-Borel).
+4. $K$ is complete and totally bounded.
+</Theorem>
+
+<Example title="Using the most convenient characterization">
+- To prove a set is compact: often easiest to check "closed and bounded" (criterion 3).
+- To prove a property holds for all compact sets: often easiest to use the open cover definition (criterion 1).
+- To extract convergent subsequences: use sequential compactness (criterion 2).
+- To prove a set is NOT compact: find a sequence with no convergent subsequence in $K$, or find an open cover with no finite subcover.
+</Example>
+
+<Remark>
+The Heine-Borel theorem is the foundation for much of real analysis on $\mathbb{R}^n$. It makes compactness easy to verify (just check closed and bounded) and connects the abstract topological notion to concrete metric properties. The [proof](/analysis/ch09-metric-spaces/proofs/p01-heine-borel-proof) illustrates a beautiful interplay between completeness, the Bolzano-Weierstrass theorem, and the structure of $\mathbb{R}^n$.
+</Remark>

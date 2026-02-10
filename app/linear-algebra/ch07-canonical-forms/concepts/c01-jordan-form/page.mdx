@@ -1,0 +1,224 @@
+export const metadata = {
+  title: 'Jordan Normal Form — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "7. 표준형", href: "/linear-algebra/ch07-canonical-forms" },
+  { label: "Concept — Jordan Normal Form" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Jordan Normal Form
+
+The Jordan normal form is the "next best thing" after diagonalization. When a matrix cannot be diagonalized, it can still be brought into a nearly diagonal form consisting of Jordan blocks. This form is unique (up to ordering of blocks) and completely classifies matrices up to similarity over an algebraically closed field.
+
+---
+
+## Jordan blocks
+
+<Definition title="Jordan block" number="7.1">
+A **Jordan block** of size $k$ with eigenvalue $\lambda$ is the $k \times k$ matrix:
+
+$$J_k(\lambda) = \lambda I_k + N_k,$$
+
+where $N_k$ is the $k \times k$ matrix with $1$s on the superdiagonal and $0$s elsewhere. Explicitly:
+
+$$J_k(\lambda) = \begin{pmatrix} \lambda & 1 & 0 & \cdots & 0 \\ 0 & \lambda & 1 & \cdots & 0 \\ \vdots & & \ddots & \ddots & \vdots \\ 0 & 0 & \cdots & \lambda & 1 \\ 0 & 0 & \cdots & 0 & \lambda \end{pmatrix}.$$
+</Definition>
+
+<Example id="jordan-blocks-small" title="Small Jordan blocks">
+- $J_1(\lambda) = (\lambda)$ -- a $1 \times 1$ block (just a scalar).
+- $J_2(3) = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$.
+- $J_3(0) = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}$ (a nilpotent Jordan block).
+- $J_4(2) = \begin{pmatrix} 2 & 1 & 0 & 0 \\ 0 & 2 & 1 & 0 \\ 0 & 0 & 2 & 1 \\ 0 & 0 & 0 & 2 \end{pmatrix}$.
+</Example>
+
+<Example id="jordan-block-powers" title="Powers of Jordan blocks">
+$(J_k(\lambda))^n = \sum_{j=0}^{k-1} \binom{n}{j} \lambda^{n-j} N_k^j$, so the $(i, i+j)$ entry of $J_k(\lambda)^n$ is $\binom{n}{j}\lambda^{n-j}$ for $j = 0, 1, \ldots, k-1$.
+
+For $J_2(3)^n = \begin{pmatrix} 3^n & n \cdot 3^{n-1} \\ 0 & 3^n \end{pmatrix}$.
+
+For $J_3(1)^n = \begin{pmatrix} 1 & n & \binom{n}{2} \\ 0 & 1 & n \\ 0 & 0 & 1 \end{pmatrix}$.
+</Example>
+
+---
+
+## Jordan normal form
+
+<Definition title="Jordan normal form" number="7.2">
+A matrix $A \in M_{n \times n}(F)$ (where $F$ is algebraically closed) is in **Jordan normal form** if it is a block diagonal matrix of Jordan blocks:
+
+$$J = \operatorname{diag}(J_{k_1}(\lambda_1), J_{k_2}(\lambda_2), \ldots, J_{k_r}(\lambda_r)),$$
+
+where $k_1 + k_2 + \cdots + k_r = n$.
+</Definition>
+
+<Theorem title="Jordan Normal Form Theorem" number="7.1">
+Let $A \in M_{n \times n}(F)$ where $F$ is algebraically closed (e.g., $F = \mathbb{C}$). Then $A$ is similar to a unique (up to permutation of blocks) Jordan normal form $J$. That is, there exists an invertible $P$ such that $P^{-1}AP = J$.
+</Theorem>
+
+<Example id="jnf-2x2" title="Jordan forms for 2x2 matrices">
+Every $2 \times 2$ matrix over $\mathbb{C}$ has one of two Jordan forms:
+
+- **Two distinct eigenvalues** $\lambda_1 \neq \lambda_2$: $J = \begin{pmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{pmatrix}$ (diagonal).
+
+- **One repeated eigenvalue** $\lambda$ with $m_g = 2$: $J = \begin{pmatrix} \lambda & 0 \\ 0 & \lambda \end{pmatrix} = \lambda I$ (already diagonal).
+
+- **One repeated eigenvalue** $\lambda$ with $m_g = 1$: $J = \begin{pmatrix} \lambda & 1 \\ 0 & \lambda \end{pmatrix}$ (a single Jordan block).
+</Example>
+
+<Example id="jnf-3x3" title="All Jordan forms for 3x3 matrices">
+The possible Jordan forms for $3 \times 3$ matrices (grouped by eigenvalue pattern):
+
+**Three distinct eigenvalues** $\lambda_1, \lambda_2, \lambda_3$: $\operatorname{diag}(\lambda_1, \lambda_2, \lambda_3)$.
+
+**One repeated eigenvalue** (say $\lambda$ with $m_a = 2$, plus $\mu \neq \lambda$):
+- $\operatorname{diag}(\lambda, \lambda, \mu)$ if $m_g(\lambda) = 2$.
+- $\operatorname{diag}(J_2(\lambda), \mu)$ if $m_g(\lambda) = 1$.
+
+**Triple eigenvalue** $\lambda$ (with $m_a = 3$):
+- $\lambda I_3$ if $m_g = 3$.
+- $\operatorname{diag}(J_2(\lambda), \lambda)$ if $m_g = 2$.
+- $J_3(\lambda)$ if $m_g = 1$.
+</Example>
+
+---
+
+## Computing Jordan form
+
+<Example id="compute-jnf-1" title="Finding the Jordan form">
+$A = \begin{pmatrix} 5 & 4 & 2 & 1 \\ 0 & 1 & -1 & -1 \\ -1 & -1 & 3 & 0 \\ 1 & 1 & -1 & 2 \end{pmatrix}$.
+
+Step 1: Characteristic polynomial. $p_A(\lambda) = (\lambda - 1)(\lambda - 2)(\lambda - 4)^2$... (assume after computation).
+
+Eigenvalues: $1, 2, 4$ (with $4$ having $m_a = 2$).
+
+Step 2: For $\lambda = 4$, compute $\dim\ker(A - 4I)$. If $m_g(4) = 2$: diagonal block $\operatorname{diag}(4, 4)$. If $m_g(4) = 1$: Jordan block $J_2(4)$.
+
+Step 3: The Jordan form is either $\operatorname{diag}(1, 2, 4, 4)$ or $\operatorname{diag}(1, 2, J_2(4))$.
+</Example>
+
+<Example id="compute-jnf-2" title="Nilpotent 3x3 matrix">
+$A = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+Eigenvalue: $0$ with $m_a = 3$. $\operatorname{rank}(A) = 1$, so $m_g(0) = \dim\ker A = 2$.
+
+Since $m_g = 2$, there are two Jordan blocks for $\lambda = 0$: one $J_2(0)$ and one $J_1(0)$.
+
+Jordan form: $\operatorname{diag}(J_2(0), 0) = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+The matrix is already in Jordan form.
+</Example>
+
+<Example id="compute-jnf-3" title="Jordan form with complex eigenvalues">
+$A = \begin{pmatrix} 0 & -1 \\ 1 & 0 \end{pmatrix}$ over $\mathbb{C}$.
+
+Eigenvalues: $i, -i$ (distinct), so the Jordan form is $\begin{pmatrix} i & 0 \\ 0 & -i \end{pmatrix}$.
+
+Over $\mathbb{R}$: $A$ is already in its real canonical form (a rotation block).
+</Example>
+
+---
+
+## Generalized eigenvectors
+
+<Definition title="Generalized eigenvector" number="7.3">
+A vector $v$ is a **generalized eigenvector** of $A$ for eigenvalue $\lambda$ of order $k$ if:
+
+$$(A - \lambda I)^k v = 0 \quad \text{but} \quad (A - \lambda I)^{k-1} v \neq 0.$$
+
+The **generalized eigenspace** is $G_\lambda = \ker(A - \lambda I)^{m_a(\lambda)}$, and $\dim G_\lambda = m_a(\lambda)$.
+</Definition>
+
+<Example id="gen-eigenvector" title="Finding generalized eigenvectors">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$, $\lambda = 2$, $m_a = 2$, $m_g = 1$.
+
+Eigenvector: $v_1 = (1, 0)$, with $(A - 2I)v_1 = 0$.
+
+Generalized eigenvector: solve $(A - 2I)v_2 = v_1$, i.e., $\begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} v_2 = \begin{pmatrix} 1 \\ 0 \end{pmatrix}$. Solution: $v_2 = (0, 1)$.
+
+$(A - 2I)^2 v_2 = (A-2I)v_1 = 0$ ✓, $(A-2I)v_2 = v_1 \neq 0$ ✓.
+
+Jordan chain: $v_1 \leftarrow v_2$. Transition matrix: $P = (v_1, v_2) = I$, $P^{-1}AP = J_2(2)$.
+</Example>
+
+<Example id="gen-eigenvector-3x3" title="Generalized eigenvectors for a 3x3 matrix">
+$A = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}$, $\lambda = 1$, $m_a = 3$, $m_g = 1$ (since $\operatorname{rank}(A - I) = 2$).
+
+$(A - I) = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}$, $(A-I)^2 = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}$, $(A-I)^3 = 0$.
+
+Jordan chain: start with $v_3 = (0, 0, 1)$ (in $\ker(A-I)^3 \setminus \ker(A-I)^2$).
+
+$v_2 = (A-I)v_3 = (0, 1, 0)$, $v_1 = (A-I)v_2 = (1, 0, 0)$.
+
+$P = (v_1, v_2, v_3) = I$, confirming $A$ is already in Jordan form $J_3(1)$.
+</Example>
+
+---
+
+## Properties of Jordan form
+
+<Example id="jnf-determinant" title="Invariants from Jordan form">
+$J = \operatorname{diag}(J_2(3), J_1(5))$:
+- $\det(J) = 3^2 \cdot 5 = 45$.
+- $\operatorname{tr}(J) = 3 + 3 + 5 = 11$.
+- Characteristic polynomial: $(\lambda - 3)^2(\lambda - 5)$.
+- Minimal polynomial: $(\lambda - 3)^2(\lambda - 5)$ (the largest Jordan block for $\lambda = 3$ has size $2$).
+</Example>
+
+<Example id="jnf-nilpotent-index" title="Nilpotent index from Jordan form">
+If $A$ has Jordan form $\operatorname{diag}(J_3(0), J_2(0), J_1(0))$:
+- $A^2 \neq 0$ (the $J_3(0)$ block needs $3$ applications to vanish).
+- $A^3 = 0$ (all blocks are killed by the third power).
+- The nilpotent index is the size of the largest Jordan block.
+</Example>
+
+<Example id="jnf-similarity" title="Jordan form classifies similarity">
+Two matrices are similar iff they have the same Jordan form (up to ordering of blocks).
+
+$A = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$ and $B = \begin{pmatrix} 3 & 2 \\ 0 & 3 \end{pmatrix}$: both have Jordan form $J_2(3)$. They are similar (any upper triangular matrix with eigenvalue $3$ and $m_g = 1$ in $2 \times 2$ is similar to $J_2(3)$). Indeed $P = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}$ gives $P^{-1}BP = J_2(3)$.
+
+$A = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$ and $C = \begin{pmatrix} 3 & 0 \\ 0 & 3 \end{pmatrix}$: different Jordan forms ($J_2(3)$ vs $\operatorname{diag}(3, 3)$), so not similar.
+</Example>
+
+---
+
+## Applications of Jordan form
+
+<Example id="jnf-matrix-exp" title="Matrix exponential via Jordan form">
+$e^{J_k(\lambda)t} = e^{\lambda t} \begin{pmatrix} 1 & t & t^2/2 & \cdots \\ 0 & 1 & t & \cdots \\ \vdots & & \ddots & \\ 0 & 0 & \cdots & 1 \end{pmatrix}$.
+
+For $J_2(3)$: $e^{J_2(3)t} = e^{3t}\begin{pmatrix} 1 & t \\ 0 & 1 \end{pmatrix}$.
+
+The solution to $x' = J_2(3)x$ is $x(t) = e^{3t}(c_1 + c_2 t, c_2)$ -- note the polynomial growth factor $t$ due to the Jordan block. Diagonal matrices give pure exponentials; Jordan blocks add polynomial factors.
+</Example>
+
+<Example id="jnf-long-term" title="Long-term behavior from Jordan form">
+For $A^n$ as $n \to \infty$: $J_k(\lambda)^n \to 0$ iff $|\lambda| < 1$, or $|\lambda| = 1$ and $k = 1$. If $|\lambda| > 1$, or $|\lambda| = 1$ and $k > 1$, then $J_k(\lambda)^n$ diverges.
+
+So $A^n \to 0$ iff all eigenvalues satisfy $|\lambda| < 1$ (the **spectral radius** $\rho(A) < 1$).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Jordan form as the complete similarity invariant">
+The Jordan normal form provides:
+- A **canonical representative** for each similarity class of matrices.
+- A **classification**: two matrices are similar iff they have the same Jordan form.
+- **Explicit formulas** for $A^n$ and $e^{At}$ in terms of eigenvalues and block sizes.
+- The **minimal polynomial** as $\prod_i (\lambda - \lambda_i)^{k_i}$ where $k_i$ is the largest block size for $\lambda_i$.
+- A decomposition of $\mathbb{C}^n$ into **generalized eigenspaces**: $\mathbb{C}^n = G_{\lambda_1} \oplus \cdots \oplus G_{\lambda_m}$.
+</Remark>

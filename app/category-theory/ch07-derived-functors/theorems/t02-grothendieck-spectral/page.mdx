@@ -1,0 +1,152 @@
+export const metadata = {
+  title: 'Grothendieck Spectral Sequence — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Theorem — Grothendieck Spectral Sequence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Grothendieck Spectral Sequence
+
+The Grothendieck spectral sequence relates the derived functors of a composition $G \circ F$ to the individual derived functors $R^pG$ and $R^qF$. It is the universal machine behind the Leray spectral sequence, the Hochschild-Serre spectral sequence, the local-to-global spectral sequence for Ext, and many others.
+
+---
+
+## Statement
+
+<Theorem title="Grothendieck Spectral Sequence" number="7.8">
+Let $F : \mathcal{A} \to \mathcal{B}$ and $G : \mathcal{B} \to \mathcal{C}$ be left exact functors between abelian categories. Suppose $\mathcal{A}$ and $\mathcal{B}$ have enough injectives, and $F$ sends injective objects of $\mathcal{A}$ to $G$-acyclic objects of $\mathcal{B}$ (i.e., $R^qG(F(I)) = 0$ for $q > 0$ when $I$ is injective in $\mathcal{A}$). Then for every object $A \in \mathcal{A}$, there is a convergent spectral sequence:
+
+$$E_2^{p,q} = R^pG(R^qF(A)) \Rightarrow R^{p+q}(G \circ F)(A)$$
+
+with differentials $d_r : E_r^{p,q} \to E_r^{p+r, q-r+1}$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+**Step 1: Setup.**
+
+Choose an injective resolution $A \to I^\bullet$ in $\mathcal{A}$. Apply $F$ to get a complex $F(I^\bullet)$ in $\mathcal{B}$. Since $G \circ F$ is left exact and $I^\bullet$ is an injective resolution:
+
+$$R^n(G \circ F)(A) = H^n(G(F(I^\bullet)))$$
+
+**Step 2: Resolve in $\mathcal{B}$.**
+
+For each $n$, choose an injective resolution $F(I^n) \to J^{n,\bullet}$ in $\mathcal{B}$. This gives a double complex $J^{\bullet, \bullet}$ with a map $F(I^\bullet) \to J^{\bullet, 0}$.
+
+**Step 3: Two filtrations on the total complex.**
+
+The total complex $\mathrm{Tot}(G(J^{\bullet,\bullet}))$ has two filtrations, giving two spectral sequences.
+
+**First filtration (rows first):** For fixed $q$, the row $G(J^{\bullet, q})$ computes $R^pG$ of the $q$-th term. The $E_1$ page is $E_1^{p,q} = R^pG(F(I^q))$. By hypothesis, $F(I^q)$ is $G$-acyclic, so $E_1^{p,q} = 0$ for $p > 0$ and $E_1^{0,q} = G(F(I^q))$. Hence $E_2^{0,q} = H^q(G(F(I^\bullet))) = R^q(G \circ F)(A)$ and $E_2^{p,q} = 0$ for $p > 0$. This spectral sequence degenerates, confirming the abutment is $R^n(G \circ F)(A)$.
+
+**Second filtration (columns first):** For fixed $p$, the column $G(J^{p, \bullet})$ computes derived functors of $G$ applied to $F(I^p)$. The $E_1$ page is $E_1^{p,q} = R^qG(F(I^p))$. The $E_2$ page is:
+
+$$E_2^{p,q} = H^p(R^qG(F(I^\bullet)))$$
+
+Since $R^qG$ is the $q$-th cohomology of $G$ applied to an injective resolution, and $I^\bullet$ is an injective resolution of $A$, we get $H^p(R^qG(F(I^\bullet))) = R^pG(R^qF(A))$ (by a standard argument using the universal delta-functor property).
+
+**Step 4: Convergence.**
+
+Both spectral sequences converge to $H^n(\mathrm{Tot}(G(J^{\bullet,\bullet})))$. The first shows this equals $R^n(G \circ F)(A)$. The second gives $E_2^{p,q} = R^pG(R^qF(A)) \Rightarrow R^{p+q}(G \circ F)(A)$.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Leray spectral sequence" id="leray">
+Take $F = f_* : \mathbf{Sh}(X) \to \mathbf{Sh}(Y)$ and $G = \Gamma(Y, -) : \mathbf{Sh}(Y) \to \mathbf{Ab}$. Then $G \circ F = \Gamma(X, -)$ and $R^qF = R^qf_*$, $R^pG = H^p(Y, -)$. The Grothendieck spectral sequence gives:
+
+$$E_2^{p,q} = H^p(Y, R^qf_*\mathcal{F}) \Rightarrow H^{p+q}(X, \mathcal{F})$$
+
+The acyclicity condition holds because $f_*$ preserves injective sheaves (as it has an exact left adjoint $f^{-1}$).
+</Example>
+
+<Example title="Hochschild-Serre spectral sequence" id="hochschild-serre">
+For $N \trianglelefteq G$, take $F = (-)^N : G\text{-}\mathbf{Mod} \to (G/N)\text{-}\mathbf{Mod}$ and $G = (-)^{G/N}$. Then $G \circ F = (-)^G$ and:
+
+$$E_2^{p,q} = H^p(G/N, H^q(N, M)) \Rightarrow H^{p+q}(G, M)$$
+
+The acyclicity condition holds: $(-)^N$ sends injective $G$-modules to injective $G/N$-modules.
+</Example>
+
+<Example title="Local-to-global Ext" id="local-global-ext">
+For sheaves $\mathcal{E}, \mathcal{F}$ on a scheme $X$, take $F = \mathcal{H}om(\mathcal{E}, -)$ (the sheaf Hom) and $G = \Gamma(X, -)$. Then:
+
+$$E_2^{p,q} = H^p(X, \mathcal{E}xt^q(\mathcal{E}, \mathcal{F})) \Rightarrow \mathrm{Ext}^{p+q}(\mathcal{E}, \mathcal{F})$$
+
+This relates the local Ext sheaves to the global Ext groups.
+</Example>
+
+<Example title="Lyndon-Hochschild-Serre for group extensions" id="lyndon">
+For a group extension $1 \to N \to G \to Q \to 1$ (not necessarily split), the spectral sequence $H^p(Q, H^q(N, M)) \Rightarrow H^{p+q}(G, M)$ reduces to the five-term exact sequence:
+
+$$0 \to H^1(Q, M^N) \xrightarrow{\mathrm{inf}} H^1(G, M) \xrightarrow{\mathrm{res}} H^1(N, M)^Q \xrightarrow{d_2} H^2(Q, M^N) \xrightarrow{\mathrm{inf}} H^2(G, M)$$
+</Example>
+
+<Example title="Cech-to-derived spectral sequence" id="cech-derived">
+For an open cover $\mathcal{U}$ of $X$, there is a spectral sequence $\check{H}^p(\mathcal{U}, \mathcal{H}^q(\mathcal{F})) \Rightarrow H^{p+q}(X, \mathcal{F})$ where $\mathcal{H}^q$ denotes the presheaf $U \mapsto H^q(U, \mathcal{F})$. For a Leray cover (where all intersections are acyclic), $\mathcal{H}^q = 0$ for $q > 0$ and the spectral sequence degenerates.
+</Example>
+
+<Example title="Composite of pushforwards" id="composite-push">
+For maps $X \xrightarrow{f} Y \xrightarrow{g} Z$:
+
+$$E_2^{p,q} = R^pg_*(R^qf_*\mathcal{F}) \Rightarrow R^{p+q}(g \circ f)_*\mathcal{F}$$
+
+This computes the higher direct images of the composite from those of $f$ and $g$ individually.
+</Example>
+
+<Example title="Degeneration at E_2" id="degenerate-e2">
+The Grothendieck spectral sequence degenerates at $E_2$ (i.e., $E_2 = E_\infty$) when $R^qF(A) = 0$ for $q \neq 0$ (so the aisle is concentrated on one line) or when $R^pG = 0$ for $p \neq 0$. In the first case, $R^n(G \circ F)(A) \cong R^nG(F(A))$. In the second, $R^n(G \circ F)(A) \cong G(R^nF(A))$.
+</Example>
+
+<Example title="Edge maps of Grothendieck SS" id="edge-maps">
+The edge maps are: $R^n(G \circ F)(A) \to R^nG(F(A))$ (the natural map from composite derived functors to $G$ derived at $F(A)$) and $G(R^nF(A)) \to R^n(G \circ F)(A)$. These are isomorphisms when the spectral sequence degenerates along the corresponding edge.
+</Example>
+
+<Example title="Acyclicity condition" id="acyclicity">
+The hypothesis that $F$ sends injectives to $G$-acyclics is essential. If $F$ does not preserve acyclicity, the spectral sequence still exists but with a more complicated $E_2$ page involving hyper-derived functors. In practice, the acyclicity condition is almost always satisfied in geometric situations.
+</Example>
+
+<Example title="Derived category interpretation" id="derived-interpretation">
+In derived categories: $R(G \circ F) \simeq RG \circ RF$ when $F$ preserves $G$-acyclics. The spectral sequence arises from the t-structure filtration on $RG(RF(A))$. The $E_2$ page $R^pG(R^qF(A))$ is the cohomology of the cohomology, and the spectral sequence converges to the cohomology of the total complex.
+</Example>
+
+<Example title="Failure of the acyclicity condition" id="failure">
+For $F : \mathcal{A} \to \mathcal{B}$ and $G : \mathcal{B} \to \mathcal{C}$ where $F$ does NOT send injectives to $G$-acyclics, one can still construct a spectral sequence using Cartan-Eilenberg resolutions (double injective resolutions). The resulting spectral sequence has the same $E_2$ page but the convergence proof is more delicate.
+</Example>
+
+<Example title="Spectral sequence for Tor" id="tor-ss">
+There is a dual version for left derived functors. For right exact functors $F, G$ with $F$ sending projectives to $G$-acyclics:
+
+$$E^2_{p,q} = L_pG(L_qF(A)) \Rightarrow L_{p+q}(G \circ F)(A)$$
+
+This gives the Kunneth spectral sequence and the universal coefficient spectral sequence as special cases.
+</Example>
+
+---
+
+<Remark title="Universality">
+The Grothendieck spectral sequence is the "mother of all spectral sequences" in algebra. Nearly every spectral sequence in homological algebra (Leray, Hochschild-Serre, Lyndon, local-to-global, Cech-to-derived) is a special case of the Grothendieck spectral sequence for an appropriate choice of $F$ and $G$.
+</Remark>
+
+<Remark title="Relationship to derived categories">
+In the language of derived categories, the Grothendieck spectral sequence arises from the canonical isomorphism $R(G \circ F) \cong RG \circ RF$ (under the acyclicity hypothesis). The spectral sequence is a computational tool for extracting the cohomology of $R(G \circ F)(A)$ from the cohomology of $RF(A)$ and the derived functors of $G$.
+</Remark>

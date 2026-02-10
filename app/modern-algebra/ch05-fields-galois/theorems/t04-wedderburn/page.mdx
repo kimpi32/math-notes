@@ -1,0 +1,165 @@
+export const metadata = {
+  title: "Wedderburn's Little Theorem — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "5. 체와 갈루아 이론", href: "/modern-algebra/ch05-fields-galois" },
+  { label: "Theorem — Wedderburn's Little Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Wedderburn's Little Theorem
+
+Wedderburn's little theorem is a surprising result that connects the theory of finite fields with the theory of division rings. It states that every finite division ring is necessarily commutative --- that is, every finite division ring is a field.
+
+---
+
+## Statement
+
+<Definition title="Division ring" number="5.24">
+A **division ring** (or **skew field**) is a ring $D$ in which every nonzero element has a multiplicative inverse. Equivalently, $D^\times = D \setminus \{0\}$ is a group under multiplication. A division ring is a field if and only if multiplication is commutative.
+</Definition>
+
+<Theorem title="Wedderburn's Little Theorem" number="5.27">
+Every finite division ring is a field. That is, if $D$ is a finite ring in which every nonzero element is invertible, then $D$ is commutative.
+</Theorem>
+
+<Remark title="History">
+This theorem was proved by Joseph Wedderburn in 1905. It is one of the first major results showing that finiteness imposes strong structural constraints. Several different proofs are known, including an elegant one using cyclotomic polynomials.
+</Remark>
+
+---
+
+## Proof
+
+<Proof>
+Let $D$ be a finite division ring with center $Z(D) = F$. Then $F$ is a finite field, so $|F| = q = p^r$ for some prime $p$ and integer $r$.
+
+$D$ is a finite-dimensional vector space over $F$. Let $[D : F] = n^2$ (we will show $n = 1$). Then $|D| = q^{n^2}$.
+
+**Step 1: Class equation.** The multiplicative group $D^\times$ acts on itself by conjugation: $a \cdot x = axa^{-1}$. The centralizer of $x$ is $C_{D^\times}(x) = \{a \in D^\times \mid ax = xa\}$. Each centralizer $C_{D^\times}(x)$ is the multiplicative group of a subdivision ring of $D$ containing $F$, so $|C_{D^\times}(x)| = q^{n_x^2} - 1$ for some $n_x$ dividing $n$.
+
+The class equation for $D^\times$ gives:
+
+$$q^{n^2} - 1 = q - 1 + \sum_{\text{nontrivial classes}} \frac{q^{n^2} - 1}{q^{n_x^2} - 1}$$
+
+where the sum runs over conjugacy classes of elements not in $F^\times$, and each $n_x$ properly divides $n$ (so $n_x < n$).
+
+**Step 2: Cyclotomic polynomial argument.** Consider the $n^2$-th cyclotomic polynomial evaluated appropriately. The key fact is: the cyclotomic polynomial $\Phi_{n^2}(q)$ divides $q^{n^2} - 1$ and divides each term $\frac{q^{n^2}-1}{q^{n_x^2}-1}$ (since $\Phi_{n^2}(q)$ divides $q^{n^2}-1$ but $\Phi_{n^2}(q)$ divides $\frac{q^{n^2}-1}{q^{n_x^2}-1}$ when $n_x < n$... actually we need to be more careful).
+
+Using the factorization $x^m - 1 = \prod_{d \mid m} \Phi_d(x)$: the term $\frac{q^{n^2}-1}{q^{n_x^2}-1} = \prod_{d \mid n^2, d \nmid n_x^2} \Phi_d(q)$. Since $n_x \mid n$ and $n_x < n$, the factor $\Phi_{n^2}(q)$ divides this quotient.
+
+From the class equation, $\Phi_{n^2}(q)$ divides $(q-1)$. But for $n > 1$:
+
+$$|\Phi_{n^2}(q)| = \prod_{\substack{\zeta^{n^2}=1 \\ \text{primitive}}} |q - \zeta| > (q-1)^1 \ge q - 1$$
+
+since each factor $|q - \zeta| > q - 1$ for $\zeta \neq 1$ a root of unity (because $|\zeta| = 1$ and $q \ge 2$). This contradicts $\Phi_{n^2}(q) \mid (q-1)$.
+
+**Conclusion**: $n = 1$, so $D = F$ is commutative.
+</Proof>
+
+---
+
+## Examples and consequences
+
+<Example id="no-finite-skew" title="No finite noncommutative division rings exist">
+The theorem says that objects like the quaternions $\mathbb{H}$ have no finite analogues. $\mathbb{H}$ is an infinite division ring that is genuinely noncommutative, but any finite sub-division-ring of $\mathbb{H}$ would have to be a field (and indeed the finite subgroups of $\mathbb{H}^\times$ are well-known: cyclic groups, binary dihedral, binary tetrahedral, binary octahedral, and binary icosahedral).
+</Example>
+
+<Example id="quaternions-infinite" title="The quaternions are infinite">
+The real quaternions $\mathbb{H} = \{a + bi + cj + dk \mid a,b,c,d \in \mathbb{R}\}$ with $i^2 = j^2 = k^2 = ijk = -1$ form an infinite noncommutative division ring. This is consistent with Wedderburn's theorem since $\mathbb{H}$ is infinite.
+</Example>
+
+<Example id="matrix-not-division" title="Matrix rings over finite fields are not division rings">
+$M_n(\mathbb{F}_q)$ for $n \ge 2$ is not a division ring: it has zero divisors (e.g., the matrix with a $1$ in position $(1,1)$ and zeros elsewhere is not invertible). So Wedderburn's theorem does not apply. Instead, Wedderburn's structure theorem (a different result) says that $M_n(\mathbb{F}_q)$ is a simple ring.
+</Example>
+
+<Example id="finite-field-verification" title="Direct verification for small cases">
+$\mathbb{F}_4$: A division ring of order $4$ must have characteristic $2$ (since $|D| = p^{n^2}$). The only possibility is $n = 1$, giving $\mathbb{F}_4$ itself. One can verify directly that $\mathbb{F}_4$ is commutative.
+
+$\mathbb{F}_8$: Similarly, $|D| = 8 = 2^3$. If $n > 1$, then $n^2 \ge 4$, but $3$ is not a perfect square times any integer. So $n = 1$ (or more precisely, $n^2 r = 3$ forces $n=1, r=3$), confirming $D = \mathbb{F}_8$.
+
+$\mathbb{F}_9$: $|D| = 9 = 3^2$. If $D$ were noncommutative, we would need $n^2 > 1$ and $p^{n^2 r} = 9$, so $n^2 r = 2$ with $n > 1$, which is impossible. So $D = \mathbb{F}_9$.
+</Example>
+
+---
+
+## Related results
+
+<Theorem title="Artin-Zorn theorem" number="5.28">
+Every finite **alternative** division ring is a field.
+</Theorem>
+
+<Remark title="Alternative rings">
+An alternative ring satisfies $x(xy) = (xx)y$ and $(yx)x = y(xx)$ (weaker than associativity). The octonions $\mathbb{O}$ form an infinite alternative division ring that is nonassociative. The Artin-Zorn theorem (1930) extends Wedderburn's result to this broader class.
+</Remark>
+
+<Example id="group-ring-connection" title="Connection to group theory">
+Wedderburn's theorem implies: every finite group that is the multiplicative group of a division ring is abelian (since the division ring must be a field, and $F^\times$ is cyclic for finite fields).
+
+More precisely: a finite group $G$ is isomorphic to $\mathbb{F}_q^\times$ for some $q$ if and only if $G$ is cyclic.
+</Example>
+
+<Example id="jacobson-density" title="Jacobson density theorem connection">
+Wedderburn's theorem can be deduced from the more general **Jacobson density theorem**: in a simple left Artinian ring $R \cong M_n(D)$ where $D$ is a division ring, if $R$ is finite then $D$ is finite and hence a field by Wedderburn's little theorem.
+</Example>
+
+---
+
+## Alternative proofs
+
+<Example id="witt-proof" title="Witt's proof (1931)">
+Ernst Witt gave a one-page proof using only the factorization $x^n - 1 = \prod_{d \mid n} \Phi_d(x)$ and the observation that $|\Phi_n(q)| > q - 1$ for $n > 1$ and $q \ge 2$. This is essentially the proof given above, distilled to its essence.
+</Example>
+
+<Example id="niven-proof" title="Proof using group actions">
+Another approach: if $D$ is a finite division ring with $|D| = q^{n^2}$, consider the action of $D^\times$ on $D$ by conjugation. Analyzing the conjugacy classes and using properties of cyclotomic polynomials shows $n = 1$.
+
+The elegance of these proofs lies in the interplay between:
+1. **Group theory** (the class equation for $D^\times$)
+2. **Number theory** (cyclotomic polynomials and their values)
+3. **Ring theory** (the structure of centralizers in division rings)
+</Example>
+
+<Example id="zassenhaus-proof" title="Zassenhaus's approach">
+Zassenhaus proved a stronger result: every finite group $G$ that acts **fixed-point-freely** on a finite abelian group $V$ (meaning $gv = v \Rightarrow g = 1$ or $v = 0$) has strong structural constraints. For the case where $G = D^\times$ acts on $(D, +)$ by conjugation, this yields Wedderburn's theorem as a special case.
+</Example>
+
+---
+
+## Impact and applications
+
+<Example id="coding-theory" title="Application to coding theory">
+Wedderburn's theorem guarantees that the only finite "field-like" structures available for linear codes over finite alphabets are the usual finite fields $\mathbb{F}_q$. Codes over finite rings (like $\mathbb{Z}/4\mathbb{Z}$) exist but have different properties because $\mathbb{Z}/4\mathbb{Z}$ is not a field (it has zero divisors: $2 \cdot 2 = 0$).
+</Example>
+
+<Example id="projective-planes" title="Finite projective planes">
+A finite projective plane of order $n$ can be coordinatized by a **planar ternary ring**. If this ring is a division ring, Wedderburn's theorem says it must be a field, and the projective plane is **Desarguesian** ($\cong \operatorname{PG}(2, \mathbb{F}_q)$). Non-Desarguesian projective planes exist but require non-associative or non-distributive coordinate structures.
+</Example>
+
+---
+
+## Summary
+
+| Division ring $D$ | Finite? | Commutative? |
+|---|---|---|
+| $\mathbb{F}_q$ ($q = p^n$) | Yes | **Yes** (by Wedderburn) |
+| $\mathbb{Q}, \mathbb{R}, \mathbb{C}$ | No | Yes |
+| $\mathbb{H}$ (quaternions) | No | No |
+| Any finite $D$ | Yes | **Yes** (by Wedderburn) |
+| $D \subset \mathbb{H}$ (finite sub-d.r.) | Cannot exist | N/A |
+
+<Remark title="Looking ahead">
+Wedderburn's little theorem completes the classification of finite division rings: they are exactly the finite fields $\mathbb{F}_{p^n}$. Combined with the [classification of finite fields](/modern-algebra/ch05-fields-galois/concepts/c04-finite-field), this gives a complete picture of all finite algebraic structures where every nonzero element is invertible.
+</Remark>

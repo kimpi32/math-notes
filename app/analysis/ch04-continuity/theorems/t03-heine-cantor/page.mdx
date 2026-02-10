@@ -1,0 +1,136 @@
+export const metadata = {
+  title: '하이네-칸토어 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "정리 - 하이네-칸토어 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 하이네-칸토어 정리 (Heine--Cantor Theorem)
+
+The Heine--Cantor theorem bridges pointwise continuity and uniform continuity. On compact domains, every continuous function is automatically uniformly continuous.
+
+---
+
+## Statement
+
+<Theorem title="Heine--Cantor Theorem" number="4.3">
+If $f : [a, b] \to \mathbb{R}$ is continuous, then $f$ is uniformly continuous on $[a, b]$.
+
+More generally: if $K$ is a compact subset of $\mathbb{R}$ (or any compact metric space) and $f : K \to \mathbb{R}$ is continuous, then $f$ is uniformly continuous.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+Suppose $f$ is continuous on $[a, b]$ but not uniformly continuous. Then there exists $\varepsilon_0 > 0$ and sequences $(x_n), (y_n)$ in $[a, b]$ with:
+
+$$|x_n - y_n| < \frac{1}{n} \quad \text{but} \quad |f(x_n) - f(y_n)| \geq \varepsilon_0.$$
+
+Since $(x_n) \subseteq [a, b]$ is bounded, the Bolzano--Weierstrass theorem gives a subsequence $x_{n_k} \to c \in [a, b]$. Since $|x_{n_k} - y_{n_k}| < \frac{1}{n_k} \to 0$, we also have $y_{n_k} \to c$.
+
+By continuity of $f$ at $c$: $f(x_{n_k}) \to f(c)$ and $f(y_{n_k}) \to f(c)$. Therefore:
+
+$$|f(x_{n_k}) - f(y_{n_k})| \to |f(c) - f(c)| = 0.$$
+
+This contradicts $|f(x_{n_k}) - f(y_{n_k})| \geq \varepsilon_0 > 0$. So $f$ must be uniformly continuous.
+</Proof>
+
+---
+
+## Key ingredients
+
+<Remark>
+The proof uses:
+1. **Bolzano--Weierstrass** (to extract a convergent subsequence from the bounded domain).
+2. **Continuity** (to conclude $f(x_{n_k})$ and $f(y_{n_k})$ converge to the same limit).
+
+Bolzano--Weierstrass requires the domain to be bounded, and the closed interval ensures the limit point stays in the domain.
+</Remark>
+
+---
+
+## Examples: Heine--Cantor in action
+
+<Example title="x squared on [0, 10]">
+1. $f(x) = x^2$ is continuous on $[0, 10]$, so by Heine--Cantor it is uniformly continuous on $[0, 10]$. Explicitly: $|x^2 - y^2| = |x+y| \cdot |x-y| \leq 20|x-y|$, so $\delta = \varepsilon/20$.
+
+Note: $f$ is not uniformly continuous on $\mathbb{R}$ (unbounded domain).
+</Example>
+
+<Example title="1/x on [1/2, 3]">
+2. $f(x) = 1/x$ is continuous on $[1/2, 3]$, so Heine--Cantor gives uniform continuity. $|1/x - 1/y| = \frac{|x-y|}{|xy|} \leq \frac{|x-y|}{(1/2)^2} = 4|x-y|$. Choose $\delta = \varepsilon/4$.
+
+Note: $f$ is not uniformly continuous on $(0, 1)$ (not closed at $0$).
+</Example>
+
+<Example title="sin(1/x) on [delta, 1]">
+3. For any fixed $\delta_0 > 0$, $\sin(1/x)$ is continuous on $[\delta_0, 1]$, hence uniformly continuous by Heine--Cantor. But on $(0, 1]$, it is not uniformly continuous (oscillates too rapidly near $0$).
+</Example>
+
+---
+
+## Why closed and bounded are both needed
+
+<Example title="Continuous on (0,1) but not uniformly continuous">
+4. $f(x) = 1/x$ on $(0, 1)$: continuous, bounded domain (inside $[0,1]$), but the domain is **not closed**. And $f$ is not uniformly continuous (as shown earlier).
+</Example>
+
+<Example title="Continuous on [0, infinity) but not uniformly continuous">
+5. $f(x) = x^2$ on $[0, \infty)$: continuous, closed domain, but the domain is **not bounded**. And $f$ is not uniformly continuous.
+</Example>
+
+<Example title="Continuous on (0, infinity) but not uniformly continuous">
+6. $f(x) = \sin(x^2)$ on $(0, \infty)$: the domain is neither closed at $0$ nor bounded. Not uniformly continuous.
+</Example>
+
+---
+
+## Constructive content
+
+<Example title="Finding delta explicitly">
+7. The proof is by contradiction and does not give an explicit formula for $\delta(\varepsilon)$. However, for specific functions on $[a,b]$, one can often find $\delta$ explicitly. The **modulus of continuity** $\omega(\delta) = \sup\{|f(x) - f(y)| : |x-y| \leq \delta, x,y \in [a,b]\}$ satisfies $\omega(\delta) \to 0$ as $\delta \to 0$ (this is Heine--Cantor). Given $\varepsilon$, choose any $\delta$ with $\omega(\delta) < \varepsilon$.
+</Example>
+
+---
+
+## Applications
+
+<Example title="Riemann integrability">
+8. If $f : [a, b] \to \mathbb{R}$ is continuous, then $f$ is Riemann integrable. The proof uses Heine--Cantor: uniform continuity ensures that the oscillation of $f$ on each subinterval can be made uniformly small, which controls the difference between upper and lower Riemann sums.
+</Example>
+
+<Example title="Uniform approximation">
+9. If $f$ is continuous on $[a, b]$, Heine--Cantor ensures that piecewise linear approximations converge **uniformly** to $f$ (not just pointwise). This is essential for the constructive aspects of the Weierstrass approximation theorem.
+</Example>
+
+<Example title="Numerical integration">
+10. For numerical quadrature of $\int_a^b f(x)\,dx$ with $f$ continuous: uniform continuity bounds the error of the midpoint rule: $|E_n| \leq (b-a) \cdot \omega(\frac{b-a}{n})$, where $\omega$ is the modulus of continuity. Heine--Cantor ensures $\omega(h) \to 0$, guaranteeing convergence.
+</Example>
+
+---
+
+## Metric space generalization
+
+<Example title="Compact metric spaces">
+11. In a general metric space $(X, d)$: if $K \subseteq X$ is compact and $f : K \to \mathbb{R}$ is continuous, then $f$ is uniformly continuous. The proof is identical: use sequential compactness (every sequence in $K$ has a convergent subsequence with limit in $K$) instead of Bolzano--Weierstrass.
+</Example>
+
+<Example title="Function spaces">
+12. In the space $C([0,1])$ with the sup norm, the map $\Phi(f) = \int_0^1 f(t)\,dt$ is Lipschitz ($|\Phi(f) - \Phi(g)| \leq \|f - g\|_\infty$), hence uniformly continuous on any subset. For nonlinear maps like $\Phi(f) = \max_{t \in [0,1]} f(t)^2$, Heine--Cantor applies on compact subsets of $C([0,1])$ (e.g., equicontinuous bounded families, by Arzela--Ascoli).
+</Example>

@@ -1,0 +1,201 @@
+export const metadata = {
+  title: 'Group Homomorphisms — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "2. 부분군과 준동형", href: "/modern-algebra/ch02-subgroups-homomorphisms" },
+  { label: "Concept — Group Homomorphisms" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Group Homomorphisms
+
+Homomorphisms are the structure-preserving maps between groups. They provide the natural framework for comparing groups, and their kernels and images reveal the internal structure of both source and target.
+
+---
+
+## Definition and basic properties
+
+<Definition title="Group homomorphism" number="2.16">
+A **homomorphism** from a group $(G, \cdot)$ to a group $(H, *)$ is a function $\varphi : G \to H$ satisfying
+
+$$\varphi(ab) = \varphi(a) * \varphi(b) \quad \text{for all } a, b \in G.$$
+</Definition>
+
+<Theorem title="Basic properties of homomorphisms" number="2.10">
+Let $\varphi : G \to H$ be a homomorphism. Then:
+
+1. $\varphi(e_G) = e_H$.
+2. $\varphi(a^{-1}) = \varphi(a)^{-1}$ for all $a \in G$.
+3. $\varphi(a^n) = \varphi(a)^n$ for all $a \in G$ and $n \in \mathbb{Z}$.
+4. If $|a|$ is finite, then $|\varphi(a)|$ divides $|a|$.
+</Theorem>
+
+<Proof>
+(1) $\varphi(e_G) = \varphi(e_G \cdot e_G) = \varphi(e_G)\varphi(e_G)$. Multiply both sides by $\varphi(e_G)^{-1}$ to get $e_H = \varphi(e_G)$.
+
+(2) $\varphi(a)\varphi(a^{-1}) = \varphi(aa^{-1}) = \varphi(e_G) = e_H$, so $\varphi(a^{-1}) = \varphi(a)^{-1}$.
+
+(4) If $a^n = e_G$, then $\varphi(a)^n = \varphi(a^n) = \varphi(e_G) = e_H$, so $|\varphi(a)|$ divides $n$. Taking $n = |a|$ gives the result.
+</Proof>
+
+---
+
+## Kernel and image
+
+<Definition title="Kernel and image" number="2.17">
+Let $\varphi : G \to H$ be a homomorphism.
+
+- The **kernel** of $\varphi$ is $\ker(\varphi) = \{g \in G \mid \varphi(g) = e_H\} \leq G$.
+- The **image** of $\varphi$ is $\operatorname{im}(\varphi) = \varphi(G) = \{\varphi(g) \mid g \in G\} \leq H$.
+</Definition>
+
+<Theorem title="Kernel and image are subgroups" number="2.11">
+$\ker(\varphi) \trianglelefteq G$ (a normal subgroup) and $\operatorname{im}(\varphi) \leq H$ (a subgroup, not necessarily normal).
+</Theorem>
+
+<Theorem title="Injectivity criterion" number="2.12">
+A homomorphism $\varphi : G \to H$ is injective if and only if $\ker(\varphi) = \{e_G\}$.
+</Theorem>
+
+<Proof>
+($\Rightarrow$) If $\varphi$ is injective and $\varphi(g) = e_H = \varphi(e_G)$, then $g = e_G$.
+
+($\Leftarrow$) If $\varphi(a) = \varphi(b)$, then $\varphi(ab^{-1}) = \varphi(a)\varphi(b)^{-1} = e_H$, so $ab^{-1} \in \ker(\varphi) = \{e_G\}$, giving $a = b$.
+</Proof>
+
+---
+
+## Types of homomorphisms
+
+<Definition title="Types" number="2.18">
+A homomorphism $\varphi : G \to H$ is called:
+
+- **Injective** (or a **monomorphism**) if $\ker(\varphi) = \{e\}$.
+- **Surjective** (or an **epimorphism**) if $\operatorname{im}(\varphi) = H$.
+- **Bijective** (or an **isomorphism**) if both injective and surjective; we write $G \cong H$.
+- An **endomorphism** if $G = H$.
+- An **automorphism** if $G = H$ and $\varphi$ is bijective.
+</Definition>
+
+---
+
+## Examples
+
+<Example id="trivial-hom" title="The trivial homomorphism">
+For any groups $G, H$: the map $\varphi(g) = e_H$ for all $g$ is a homomorphism. Its kernel is all of $G$ and its image is $\{e_H\}$.
+</Example>
+
+<Example id="inclusion" title="Inclusion homomorphism">
+If $H \leq G$, the inclusion $\iota : H \hookrightarrow G$, $\iota(h) = h$, is an injective homomorphism. $\ker(\iota) = \{e\}$ and $\operatorname{im}(\iota) = H$.
+</Example>
+
+<Example id="det-hom" title="Determinant as homomorphism">
+$\det : \mathrm{GL}(n, F) \to F^*$ is a surjective homomorphism (since $\det(AB) = \det(A)\det(B)$). Its kernel is $\mathrm{SL}(n, F)$ and its image is $F^*$.
+</Example>
+
+<Example id="sign-hom" title="Sign homomorphism">
+$\mathrm{sgn} : S_n \to \{+1, -1\}$ sends each permutation to its sign. $\ker(\mathrm{sgn}) = A_n$, $\operatorname{im}(\mathrm{sgn}) = \{+1, -1\}$ (for $n \geq 2$).
+</Example>
+
+<Example id="exp-hom" title="Exponential map">
+$\exp : (\mathbb{R}, +) \to (\mathbb{R}^{>0}, \times)$, $x \mapsto e^x$, is an isomorphism. $\ker(\exp) = \{0\}$ and $\exp$ is surjective. The inverse is $\ln$.
+</Example>
+
+<Example id="mod-n" title="Reduction mod n">
+$\pi : \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$, $k \mapsto k \bmod n$, is a surjective homomorphism with $\ker(\pi) = n\mathbb{Z}$.
+</Example>
+
+<Example id="conj-hom" title="Conjugation is an automorphism">
+For fixed $g \in G$, the map $\varphi_g : G \to G$, $x \mapsto gxg^{-1}$, is an automorphism. $\ker(\varphi_g) = \{e\}$ (since $gxg^{-1} = e$ iff $x = e$).
+</Example>
+
+<Example id="power-map" title="Power map on abelian groups">
+If $G$ is abelian, the map $\varphi : G \to G$, $g \mapsto g^n$, is a homomorphism (since $(ab)^n = a^n b^n$ in abelian groups). The kernel is $\{g \in G \mid g^n = e\}$, the set of elements whose order divides $n$.
+
+For $G = \mathbb{Z}/6\mathbb{Z}$ and $n = 2$: $\ker(\varphi) = \{\bar{0}, \bar{3}\}$ and $\operatorname{im}(\varphi) = \{\bar{0}, \bar{2}, \bar{4}\}$.
+</Example>
+
+<Example id="non-hom" title="Non-example: squaring in a non-abelian group">
+In a non-abelian group, $g \mapsto g^2$ is generally **not** a homomorphism. In $S_3$: $(12)(13) = (132)$, so $((12)(13))^2 = (132)^2 = (123)$. But $(12)^2 (13)^2 = e \cdot e = e \neq (123)$.
+</Example>
+
+---
+
+## Image of subgroups, preimage of subgroups
+
+<Theorem title="Subgroup correspondence under homomorphisms" number="2.13">
+Let $\varphi : G \to H$ be a homomorphism.
+
+1. If $K \leq G$, then $\varphi(K) \leq H$. If $K \trianglelefteq G$ and $\varphi$ is surjective, then $\varphi(K) \trianglelefteq H$.
+2. If $L \leq H$, then $\varphi^{-1}(L) \leq G$. If $L \trianglelefteq H$, then $\varphi^{-1}(L) \trianglelefteq G$.
+</Theorem>
+
+<Example id="preimage-subgroup" title="Preimage of a subgroup">
+Consider $\pi : \mathbb{Z} \to \mathbb{Z}/6\mathbb{Z}$. The subgroup $\langle \bar{2} \rangle = \{\bar{0}, \bar{2}, \bar{4}\} \leq \mathbb{Z}/6\mathbb{Z}$ has preimage $\pi^{-1}(\langle \bar{2} \rangle) = 2\mathbb{Z} \leq \mathbb{Z}$.
+</Example>
+
+<Example id="image-preserves" title="Images of cyclic are cyclic">
+If $G = \langle a \rangle$ is cyclic and $\varphi : G \to H$ is a homomorphism, then $\varphi(G) = \langle \varphi(a) \rangle$ is cyclic. Every homomorphic image of a cyclic group is cyclic.
+</Example>
+
+---
+
+## Counting with homomorphisms
+
+<Theorem title="Fibers have equal size" number="2.14">
+If $\varphi : G \to H$ is a homomorphism, then every fiber $\varphi^{-1}(\{h\})$ is either empty or a coset of $\ker(\varphi)$. In particular, all nonempty fibers have the same cardinality $|\ker(\varphi)|$, and
+
+$$|G| = |\ker(\varphi)| \cdot |\operatorname{im}(\varphi)|.$$
+</Theorem>
+
+<Example id="fiber-det" title="Fibers of the determinant">
+For $\det : \mathrm{GL}(2, \mathbb{F}_q) \to \mathbb{F}_q^*$: each fiber is a coset of $\mathrm{SL}(2, \mathbb{F}_q)$. So $|\mathrm{GL}(2, \mathbb{F}_q)| = |\mathrm{SL}(2, \mathbb{F}_q)| \cdot |\mathbb{F}_q^*|$, giving
+
+$$|\mathrm{SL}(2, \mathbb{F}_q)| = \frac{|\mathrm{GL}(2, \mathbb{F}_q)|}{q - 1} = \frac{(q^2 - 1)(q^2 - q)}{q-1} = q(q^2-1) = q^3 - q.$$
+</Example>
+
+<Example id="fiber-sign" title="Fibers of the sign map">
+$\mathrm{sgn} : S_n \to \{+1, -1\}$ has two fibers of equal size, so $|A_n| = n!/2$.
+</Example>
+
+---
+
+## Automorphism groups
+
+<Definition title="Automorphism group" number="2.19">
+The set $\mathrm{Aut}(G)$ of all automorphisms of $G$ forms a group under composition. The set $\mathrm{Inn}(G) = \{\varphi_g \mid g \in G\}$ of inner automorphisms is a normal subgroup of $\mathrm{Aut}(G)$.
+
+The quotient $\mathrm{Out}(G) = \mathrm{Aut}(G)/\mathrm{Inn}(G)$ is the **outer automorphism group**.
+</Definition>
+
+<Example id="aut-zn" title="Aut(Z/nZ)">
+An automorphism of $\mathbb{Z}/n\mathbb{Z}$ is determined by the image of $\bar{1}$, which must be a generator. The generators are $\bar{k}$ with $\gcd(k, n) = 1$, so
+
+$$\mathrm{Aut}(\mathbb{Z}/n\mathbb{Z}) \cong (\mathbb{Z}/n\mathbb{Z})^* \quad \text{(the group of units)}.$$
+
+For example, $|\mathrm{Aut}(\mathbb{Z}/12\mathbb{Z})| = \varphi(12) = 4$, and $\mathrm{Aut}(\mathbb{Z}/12\mathbb{Z}) \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. A homomorphism $\varphi : G \to H$ preserves the group operation: $\varphi(ab) = \varphi(a)\varphi(b)$.
+2. $\ker(\varphi) \trianglelefteq G$ and $\operatorname{im}(\varphi) \leq H$.
+3. $\varphi$ is injective iff $\ker(\varphi) = \{e\}$.
+4. $|G| = |\ker(\varphi)| \cdot |\operatorname{im}(\varphi)|$ for finite groups.
+5. The first isomorphism theorem (see Theorem page) says $G/\ker(\varphi) \cong \operatorname{im}(\varphi)$.
+</Remark>

@@ -1,0 +1,126 @@
+export const metadata = {
+  title: 'Snake Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Theorem — Snake Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Snake Lemma
+
+The Snake Lemma is one of the most important tools in homological algebra. It produces a long exact sequence from a morphism of short exact sequences, providing the connecting homomorphism that is the engine behind the long exact sequence in cohomology.
+
+---
+
+## Statement
+
+<Theorem title="Snake Lemma" number="3.6">
+In an abelian category, given a commutative diagram with exact rows:
+
+$$
+\begin{array}{ccccccccc}
+& & A' & \xrightarrow{f'} & B' & \xrightarrow{g'} & C' & \to & 0 \\
+& & \downarrow\scriptstyle{\alpha} & & \downarrow\scriptstyle{\beta} & & \downarrow\scriptstyle{\gamma} & & \\
+0 & \to & A & \xrightarrow{f} & B & \xrightarrow{g} & C & &
+\end{array}
+$$
+
+there exists an exact sequence:
+
+$$\ker \alpha \xrightarrow{\bar{f'}} \ker \beta \xrightarrow{\bar{g'}} \ker \gamma \xrightarrow{\delta} \mathrm{coker}\, \alpha \xrightarrow{\bar{f}} \mathrm{coker}\, \beta \xrightarrow{\bar{g}} \mathrm{coker}\, \gamma$$
+
+Moreover, if $f'$ is monic (top row is a SES), then $\bar{f'}$ is monic. If $g$ is epic (bottom row is a SES), then $\bar{g}$ is epic. In the case of a morphism of short exact sequences, we get:
+
+$$0 \to \ker \alpha \to \ker \beta \to \ker \gamma \xrightarrow{\delta} \mathrm{coker}\, \alpha \to \mathrm{coker}\, \beta \to \mathrm{coker}\, \gamma \to 0$$
+</Theorem>
+
+---
+
+## The Connecting Homomorphism
+
+<Remark title="Construction of delta">
+The connecting homomorphism $\delta : \ker \gamma \to \mathrm{coker}\, \alpha$ is constructed by "chasing the diagram": given $c' \in \ker \gamma$, lift to $b' \in B'$ (using surjectivity of $g'$), map to $\beta(b') \in B$, observe that $g(\beta(b')) = \gamma(g'(b')) = 0$, so $\beta(b') \in \ker g = \mathrm{im}\, f$, lift to $a \in A$, and project to $\mathrm{coker}\, \alpha$. Independence of choices follows from exactness.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Snake Lemma in R-Mod" id="snake-rmod">
+For $R$-modules and a commutative diagram with exact rows, the Snake Lemma gives an explicit long exact sequence. The connecting map $\delta$ traces elements through the diagram: start in $\ker \gamma$, go up, left, down, and project.
+</Example>
+
+<Example title="Long exact sequence from a SES of complexes" id="les-ses">
+The long exact sequence in cohomology $\cdots \to H^n(A) \to H^n(B) \to H^n(C) \xrightarrow{\delta} H^{n+1}(A) \to \cdots$ is derived by applying the Snake Lemma to the diagram of cokernels and kernels of the differentials. This is proved in detail in the [proof via Snake Lemma](/category-theory/ch04-complexes-cohomology/proofs/p01-long-exact-seq-proof).
+</Example>
+
+<Example title="Multiplication by n on abelian groups" id="mult-n">
+For the map $\times n : A \to A$ on an abelian group, applied to a SES $0 \to A \to B \to C \to 0$, the Snake Lemma gives:
+
+$$0 \to A[n] \to B[n] \to C[n] \xrightarrow{\delta} A/nA \to B/nB \to C/nC \to 0$$
+
+where $A[n] = \ker(\times n)$ is the $n$-torsion.
+</Example>
+
+<Example title="Snake Lemma and Tor" id="snake-tor">
+The long exact sequence for $\mathrm{Tor}$ arises from applying the Snake Lemma (or its derived version) to the tensor product of a flat resolution with a short exact sequence.
+</Example>
+
+<Example title="Cohomology of mapping cone" id="mapping-cone">
+The Snake Lemma applied to the mapping cone triangle gives the long exact sequence $\cdots \to H^n(A) \to H^n(B) \to H^n(\mathrm{Cone}(f)) \to H^{n+1}(A) \to \cdots$.
+</Example>
+
+<Example title="Kummer sequence in algebraic geometry" id="kummer">
+The Kummer sequence $0 \to \mu_n \to \mathbb{G}_m \xrightarrow{n} \mathbb{G}_m \to 0$ on an algebraic variety gives, via the long exact sequence in etale cohomology:
+
+$$\cdots \to H^1_{\mathrm{et}}(X, \mu_n) \to \mathrm{Pic}(X) \xrightarrow{n} \mathrm{Pic}(X) \to H^2_{\mathrm{et}}(X, \mu_n) \to \cdots$$
+</Example>
+
+<Example title="Snake Lemma for exact couples" id="exact-couple">
+The Snake Lemma is used in the construction of spectral sequences from exact couples: the connecting homomorphism provides the differential of the derived exact couple.
+</Example>
+
+<Example title="Snake Lemma in abelian category via Freyd-Mitchell" id="snake-freyd">
+In a general abelian category (not necessarily a module category), the Snake Lemma holds because the [Freyd-Mitchell embedding](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell) allows us to reduce to $R\text{-}\mathbf{Mod}$ and chase elements.
+</Example>
+
+<Example title="Snake Lemma and the 9-lemma" id="nine-lemma">
+The **9-lemma** (or $3 \times 3$ lemma) states that in a $3 \times 3$ commutative diagram with exact columns, if two rows are exact, so is the third. This follows from two applications of the Snake Lemma.
+</Example>
+
+<Example title="Snake Lemma applied to localization" id="snake-localization">
+For a ring $R$, prime $\mathfrak{p}$, and a SES $0 \to M' \to M \to M'' \to 0$, localization at $\mathfrak{p}$ gives $0 \to M'_\mathfrak{p} \to M_\mathfrak{p} \to M''_\mathfrak{p} \to 0$. The Snake Lemma (applied to the localization maps) relates the kernels and cokernels of localization.
+</Example>
+
+<Example title="Connecting homomorphism in sheaf cohomology" id="connecting-sheaf">
+For a SES of sheaves $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ on $X$, the global sections functor gives $0 \to \Gamma(\mathcal{F}') \to \Gamma(\mathcal{F}) \to \Gamma(\mathcal{F}'')$, and the connecting homomorphism $\delta : \Gamma(\mathcal{F}'') \to H^1(X, \mathcal{F}')$ measures the obstruction to lifting global sections.
+</Example>
+
+<Example title="Snake Lemma and Euler characteristic" id="euler-char">
+For a SES $0 \to A \to B \to C \to 0$ of finite-length modules, the Snake Lemma implies $\ell(B) = \ell(A) + \ell(C)$, where $\ell$ denotes length. More generally, exact sequences are additive with respect to Euler characteristic.
+</Example>
+
+---
+
+## Significance
+
+<Remark title="The engine of homological algebra">
+The Snake Lemma is used to:
+1. Construct the [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence).
+2. Prove the [Five Lemma](/category-theory/ch03-abelian-categories/theorems/t02-five-lemma).
+3. Build long exact sequences for derived functors ($\mathrm{Ext}$, $\mathrm{Tor}$, sheaf cohomology).
+4. Establish connecting homomorphisms in spectral sequences.
+</Remark>

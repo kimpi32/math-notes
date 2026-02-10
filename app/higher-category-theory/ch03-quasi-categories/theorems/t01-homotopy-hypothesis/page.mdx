@@ -1,0 +1,153 @@
+export const metadata = {
+  title: 'Homotopy Hypothesis — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Theorem — Homotopy Hypothesis" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Homotopy Hypothesis
+
+The homotopy hypothesis, originally conceived by Grothendieck, asserts that $\infty$-groupoids are the same thing as homotopy types of topological spaces. In the framework of quasi-categories, this is made precise by the Quillen equivalence between simplicial sets and topological spaces: Kan complexes model spaces up to weak homotopy equivalence. This principle is the philosophical cornerstone of higher category theory.
+
+---
+
+## Statement
+
+<Theorem title="Homotopy Hypothesis" number="3.1">
+The $\infty$-category of $\infty$-groupoids is equivalent to the $\infty$-category of spaces. More precisely:
+
+**(Quillen form)** The adjunction $|\cdot| \dashv \operatorname{Sing}: \mathbf{sSet}_{\mathrm{KQ}} \rightleftarrows \mathbf{Top}$ is a Quillen equivalence. The homotopy categories are equivalent: $\operatorname{Ho}(\operatorname{Kan}) \simeq \operatorname{Ho}(\mathbf{Top}_{\mathrm{CW}})$.
+
+**($\infty$-categorical form)** The $\infty$-category $\mathcal{S}$ of Kan complexes (with weak equivalences inverted) is equivalent to the $\infty$-category obtained from $\mathbf{Top}$ by inverting weak homotopy equivalences.
+
+**(Grothendieck's vision)** The functor $\Pi_\infty: \mathbf{Top} \to \infty\text{-}\mathbf{Gpd}$ sending a space $X$ to its fundamental $\infty$-groupoid $\operatorname{Sing}(X)$ is an equivalence of homotopy theories.
+</Theorem>
+
+---
+
+## Proof Outline
+
+<Proof>
+The Quillen equivalence $|\cdot| \dashv \operatorname{Sing}$ is established by verifying:
+
+1. **Quillen pair**: $|\cdot|$ preserves cofibrations (monomorphisms map to relative CW inclusions) and trivial cofibrations (anodyne extensions map to trivial cofibrations).
+
+2. **Counit is a weak equivalence**: For every space $Y$, the counit $\varepsilon_Y: |\operatorname{Sing}(Y)| \to Y$ induces isomorphisms on all homotopy groups. This uses the fact that $|\operatorname{Sing}(Y)|$ is a CW complex and the simplicial approximation theorem.
+
+3. **Unit on fibrant objects is a weak equivalence**: For every Kan complex $X$, the unit $\eta_X: X \to \operatorname{Sing}(|X|)$ is a weak equivalence. This follows because both $X$ and $\operatorname{Sing}(|X|)$ are Kan complexes with the same homotopy groups (via the compatibility of simplicial and topological homotopy groups).
+
+These three facts together show the adjunction is a Quillen equivalence.
+</Proof>
+
+---
+
+## Formulations and Evidence
+
+<Example id="pi-n-agreement" title="Homotopy groups agree">
+For a Kan complex $X$ with basepoint $x$, the simplicial homotopy groups $\pi_n(X, x)$ are isomorphic to the topological homotopy groups $\pi_n(|X|, x)$:
+
+$$\pi_n^{\mathrm{simp}}(X, x) \cong \pi_n^{\mathrm{top}}(|X|, x)$$
+
+This means the algebraic invariants of spaces are completely captured by the combinatorial structure of Kan complexes.
+</Example>
+
+<Example id="postnikov-agreement" title="Postnikov towers agree">
+The Postnikov tower of a Kan complex $X$ (constructed simplicially via coskeleton functors) corresponds exactly to the Postnikov tower of $|X|$ (constructed topologically). The $k$-invariants match under the correspondence $H^{n+1}_{\mathrm{simp}} \cong H^{n+1}_{\mathrm{top}}$.
+</Example>
+
+<Example id="fibration-agreement" title="Fibrations agree">
+Kan fibrations of simplicial sets correspond to Serre fibrations of topological spaces. The long exact sequence of homotopy groups for a Kan fibration $F \to E \to B$ corresponds to the long exact sequence for the Serre fibration $|F| \to |E| \to |B|$.
+</Example>
+
+<Example id="cohomology-agreement" title="Cohomology agrees">
+Eilenberg--MacLane spaces $K(A, n)$ can be constructed either as simplicial abelian groups (via Dold--Kan) or as topological spaces (via cell attachments). The resulting cohomology theories agree:
+
+$$H^n_{\mathrm{simp}}(X; A) = [X, K(A,n)]_{\mathrm{simp}} \cong [|X|, |K(A,n)|]_{\mathrm{top}} = H^n_{\mathrm{top}}(|X|; A)$$
+</Example>
+
+---
+
+## Historical Context
+
+<Example id="grothendieck-vision" title="Grothendieck's original vision">
+In his 1983 manuscript "Pursuing Stacks," Grothendieck proposed that homotopy types should be modeled by purely algebraic objects -- $\infty$-groupoids -- without reference to topology. He envisioned an equivalence:
+
+$$\{\text{homotopy types}\} \xleftrightarrow{\;\sim\;} \{\infty\text{-groupoids}\}$$
+
+The difficulty was making the notion of $\infty$-groupoid precise. Various definitions were proposed (globular, simplicial, operadic), and the homotopy hypothesis became a test: any good definition of $\infty$-groupoid should be equivalent to topological spaces.
+
+In the simplicial setting (Kan complexes), the homotopy hypothesis was already established by Quillen (1967) and Milnor (1957), predating Grothendieck's formulation.
+</Example>
+
+<Example id="other-models" title="Other models of infinity-groupoids">
+The homotopy hypothesis has been verified for various models of $\infty$-groupoids:
+
+1. **Kan complexes** (Quillen): Classical Quillen equivalence $\mathbf{sSet} \simeq_Q \mathbf{Top}$.
+2. **Globular sets with composition** (Batanin, Leinster): Shown to model homotopy types.
+3. **Algebraic Kan complexes** (Nikolaus): Kan complexes with chosen fillers, equivalent to spaces.
+4. **Topological categories** (groupoid-enriched): Equivalent via the nerve construction.
+
+Each verification confirms Grothendieck's insight that algebra and topology are fundamentally interchangeable at the level of homotopy types.
+</Example>
+
+---
+
+## Consequences
+
+<Example id="consequence-foundation" title="Foundational consequence">
+The homotopy hypothesis allows us to work entirely within the world of Kan complexes (or more generally, simplicial sets) without ever mentioning topological spaces. All of homotopy theory -- homotopy groups, fibrations, spectral sequences, obstruction theory -- can be developed purely combinatorially.
+
+This is practically important: simplicial sets are more amenable to algebraic manipulations and computations than topological spaces, and they interface better with algebraic structures (chain complexes, ring spectra, etc.).
+</Example>
+
+<Example id="consequence-univalence" title="Connection to univalent foundations">
+In homotopy type theory (HoTT), the homotopy hypothesis takes a different form: types (in the type-theoretic sense) are interpreted as $\infty$-groupoids via their identity types. The univalence axiom (Voevodsky) states that equivalence of types is equivalent to identity of types, which is closely related to the structure of the $\infty$-category of spaces.
+
+The homotopy hypothesis thus connects three worlds: topology, higher category theory, and foundations of mathematics.
+</Example>
+
+<Example id="consequence-classifying" title="Classifying spaces">
+The homotopy hypothesis gives a clean interpretation of classifying spaces:
+
+- $BG = K(G, 1)$ for a discrete group $G$: the $\infty$-groupoid with one object and automorphism group $G$.
+- $B^n A = K(A, n)$ for an abelian group $A$: the $\infty$-groupoid with one object, trivial automorphisms, and $\pi_n = A$.
+- The classifying space of a topological group: the delooping of $G$ viewed as an $\infty$-group.
+
+These are naturally $\infty$-groupoids, and the homotopy hypothesis tells us they are "the same" as topological spaces.
+</Example>
+
+<Example id="consequence-descent" title="Descent and stacks">
+A key consequence is that descent data for $\infty$-groupoids (homotopy-coherent gluing data for spaces) is the same as descent data for topological spaces. This justifies the use of stacks and higher stacks: a higher stack is a functor valued in $\infty$-groupoids, which is the same as a functor valued in spaces.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The homotopy hypothesis is the foundation of higher category theory:
+
+1. **$\infty$-groupoids = spaces**: Kan complexes model homotopy types via the Quillen equivalence $\mathbf{sSet} \simeq_Q \mathbf{Top}$.
+
+2. All homotopy invariants (homotopy groups, cohomology, Postnikov towers) agree between the simplicial and topological worlds.
+
+3. Grothendieck's vision of purely algebraic homotopy theory is realized by working with Kan complexes.
+
+4. The principle extends to various models of $\infty$-groupoids (globular, operadic, etc.).
+
+5. The homotopy hypothesis connects topology, higher category theory, and foundations of mathematics (HoTT).
+</Remark>

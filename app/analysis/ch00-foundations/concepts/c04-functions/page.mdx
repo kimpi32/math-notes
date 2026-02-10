@@ -1,0 +1,228 @@
+export const metadata = {
+  title: '함수 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "개념 - 함수" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 함수 (Functions)
+
+Functions are the central objects of analysis. The notions of continuity, differentiability, and integrability are all properties of functions. This section establishes the precise definitions and terminology.
+
+---
+
+## Definition of a Function
+
+<Definition title="Function" number="0.14">
+A **function** $f$ from a set $A$ to a set $B$, written $f : A \to B$, is a rule that assigns to each element $a \in A$ exactly one element $f(a) \in B$.
+
+- $A$ is called the **domain** of $f$, denoted $\operatorname{dom}(f)$.
+- $B$ is called the **codomain** of $f$.
+- The **range** (or **image**) of $f$ is $\operatorname{ran}(f) = f(A) = \lbrace f(a) : a \in A \rbrace \subseteq B$.
+
+Two functions $f, g : A \to B$ are **equal** if $f(a) = g(a)$ for every $a \in A$.
+</Definition>
+
+<Example title="Basic functions">
+1. $f : \mathbb{R} \to \mathbb{R}$ defined by $f(x) = x^2$. The domain is $\mathbb{R}$, the codomain is $\mathbb{R}$, and the range is $[0, \infty)$.
+2. $g : \mathbb{R} \to \mathbb{R}$ defined by $g(x) = e^x$. The range is $(0, \infty) \subsetneq \mathbb{R}$.
+3. The **identity function** $\operatorname{id}_A : A \to A$ defined by $\operatorname{id}_A(a) = a$ for all $a \in A$.
+4. A **constant function** $f : A \to B$ where $f(a) = c$ for some fixed $c \in B$ and all $a \in A$.
+</Example>
+
+<Remark>
+In analysis, the domain matters. The function $f : \mathbb{R} \to \mathbb{R}$, $f(x) = x^2$ and the function $g : [0, \infty) \to \mathbb{R}$, $g(x) = x^2$ are **different functions** because they have different domains. The function $g$ has an inverse but $f$ does not.
+</Remark>
+
+---
+
+## Injectivity, Surjectivity, and Bijectivity
+
+<Definition title="Injective function" number="0.15">
+A function $f : A \to B$ is **injective** (one-to-one) if
+
+$$\forall a_1, a_2 \in A,\quad f(a_1) = f(a_2) \;\Rightarrow\; a_1 = a_2.$$
+
+Equivalently (by contrapositive): $a_1 \neq a_2 \Rightarrow f(a_1) \neq f(a_2)$.
+</Definition>
+
+<Definition title="Surjective function" number="0.16">
+A function $f : A \to B$ is **surjective** (onto) if
+
+$$\forall b \in B,\; \exists a \in A\colon f(a) = b.$$
+
+That is, $\operatorname{ran}(f) = B$.
+</Definition>
+
+<Definition title="Bijective function" number="0.17">
+A function $f : A \to B$ is **bijective** if it is both injective and surjective. A bijection establishes a one-to-one correspondence between $A$ and $B$.
+</Definition>
+
+<Example title="Classifying functions">
+5. $f : \mathbb{R} \to \mathbb{R}$, $f(x) = x^2$: **neither** injective nor surjective. Not injective: $f(1) = f(-1) = 1$. Not surjective: $-1$ is not in the range.
+6. $f : \mathbb{R} \to \mathbb{R}$, $f(x) = x^3$: **bijective**. Injective: if $x_1^3 = x_2^3$ then $x_1 = x_2$ (the cube root is well-defined). Surjective: for any $y \in \mathbb{R}$, take $x = y^{1/3}$.
+7. $f : \mathbb{R} \to [0, \infty)$, $f(x) = x^2$: **surjective** but not injective.
+8. $f : [0, \infty) \to \mathbb{R}$, $f(x) = x^2$: **injective** but not surjective.
+9. $f : [0, \infty) \to [0, \infty)$, $f(x) = x^2$: **bijective**.
+</Example>
+
+---
+
+## Composition
+
+<Definition title="Composition of functions" number="0.18">
+Given $f : A \to B$ and $g : B \to C$, the **composition** $g \circ f : A \to C$ is defined by
+
+$$(g \circ f)(a) = g(f(a)) \quad \text{for all } a \in A.$$
+</Definition>
+
+<Example title="Composition">
+10. Let $f(x) = x^2$ and $g(x) = \sin(x)$. Then $(g \circ f)(x) = \sin(x^2)$ and $(f \circ g)(x) = (\sin x)^2 = \sin^2 x$. Note that $g \circ f \neq f \circ g$ in general: composition is **not** commutative.
+</Example>
+
+<Theorem title="Composition preserves injectivity and surjectivity" number="0.3">
+Let $f : A \to B$ and $g : B \to C$.
+
+1. If $f$ and $g$ are injective, then $g \circ f$ is injective.
+2. If $f$ and $g$ are surjective, then $g \circ f$ is surjective.
+3. If $f$ and $g$ are bijective, then $g \circ f$ is bijective.
+</Theorem>
+
+<Proof>
+(1) Suppose $(g \circ f)(a_1) = (g \circ f)(a_2)$, i.e., $g(f(a_1)) = g(f(a_2))$. Since $g$ is injective, $f(a_1) = f(a_2)$. Since $f$ is injective, $a_1 = a_2$.
+
+(2) Let $c \in C$. Since $g$ is surjective, $\exists b \in B$ with $g(b) = c$. Since $f$ is surjective, $\exists a \in A$ with $f(a) = b$. Then $(g \circ f)(a) = g(f(a)) = g(b) = c$.
+
+(3) Follows from (1) and (2).
+</Proof>
+
+---
+
+## Inverse Functions
+
+<Definition title="Inverse function" number="0.19">
+A function $f : A \to B$ has an **inverse** $f^{-1} : B \to A$ if and only if $f$ is bijective. In this case, $f^{-1}$ is the unique function satisfying
+
+$$f^{-1} \circ f = \operatorname{id}_A \quad \text{and} \quad f \circ f^{-1} = \operatorname{id}_B.$$
+
+Explicitly, $f^{-1}(b) = a$ if and only if $f(a) = b$.
+</Definition>
+
+<Example title="Inverse functions">
+11. $f : \mathbb{R} \to \mathbb{R}$, $f(x) = 2x + 3$ is bijective with $f^{-1}(y) = \frac{y - 3}{2}$.
+12. $f : (0, \infty) \to \mathbb{R}$, $f(x) = \ln x$ is bijective with $f^{-1}(y) = e^y$.
+</Example>
+
+<Remark>
+The notation $f^{-1}$ for the inverse function must not be confused with the preimage notation $f^{-1}(S)$ for sets (defined below). The inverse function $f^{-1}$ exists only when $f$ is bijective, while the preimage $f^{-1}(S)$ is defined for **any** function $f$ and any subset $S$ of the codomain.
+</Remark>
+
+---
+
+## Image and Preimage of Sets
+
+<Definition title="Image and preimage" number="0.20">
+Let $f : A \to B$.
+
+- The **image** (or **direct image**) of a subset $S \subseteq A$ is
+
+$$f(S) = \lbrace f(a) : a \in S \rbrace \subseteq B.$$
+
+- The **preimage** (or **inverse image**) of a subset $T \subseteq B$ is
+
+$$f^{-1}(T) = \lbrace a \in A : f(a) \in T \rbrace \subseteq A.$$
+
+Note: $f^{-1}(T)$ is defined for any function $f$, whether or not $f$ is bijective.
+</Definition>
+
+<Example title="Image and preimage">
+13. Let $f : \mathbb{R} \to \mathbb{R}$, $f(x) = x^2$.
+    - $f(\lbrace -2, -1, 0, 1, 3 \rbrace) = \lbrace 0, 1, 4, 9 \rbrace$.
+    - $f([-1, 2]) = [0, 4]$.
+    - $f^{-1}(\lbrace 4 \rbrace) = \lbrace -2, 2 \rbrace$.
+    - $f^{-1}([0, 1]) = [-1, 1]$.
+    - $f^{-1}(\lbrace -1 \rbrace) = \emptyset$ (no real number squares to $-1$).
+</Example>
+
+<Theorem title="Preimage preserves set operations" number="0.4">
+Let $f : A \to B$ and let $S, T \subseteq B$. Then:
+
+1. $f^{-1}(S \cup T) = f^{-1}(S) \cup f^{-1}(T)$.
+2. $f^{-1}(S \cap T) = f^{-1}(S) \cap f^{-1}(T)$.
+3. $f^{-1}(B \setminus S) = A \setminus f^{-1}(S)$.
+</Theorem>
+
+<Proof>
+(1) We have $x \in f^{-1}(S \cup T) \Leftrightarrow f(x) \in S \cup T \Leftrightarrow f(x) \in S \text{ or } f(x) \in T \Leftrightarrow x \in f^{-1}(S) \text{ or } x \in f^{-1}(T) \Leftrightarrow x \in f^{-1}(S) \cup f^{-1}(T)$.
+
+The proofs of (2) and (3) are similar.
+</Proof>
+
+<Remark>
+The forward image $f(S)$ does **not** preserve intersections in general. If $f(x) = x^2$, $S = \lbrace -1 \rbrace$, and $T = \lbrace 1 \rbrace$, then $f(S) \cap f(T) = \lbrace 1 \rbrace$ but $f(S \cap T) = f(\emptyset) = \emptyset$. This asymmetry between image and preimage is important in topology and analysis.
+</Remark>
+
+---
+
+## Restriction and Extension
+
+<Definition title="Restriction" number="0.21">
+Let $f : A \to B$ and $S \subseteq A$. The **restriction** of $f$ to $S$ is the function $f|_S : S \to B$ defined by $f|_S(x) = f(x)$ for all $x \in S$.
+</Definition>
+
+<Example title="Restriction creating injectivity">
+14. $f : \mathbb{R} \to \mathbb{R}$, $f(x) = x^2$ is not injective. But $f|_{[0,\infty)} : [0, \infty) \to \mathbb{R}$ is injective. In analysis, we often restrict a function's domain to obtain an invertible function.
+</Example>
+
+---
+
+## Characteristic Functions
+
+<Definition title="Characteristic function" number="0.22">
+Let $A \subseteq X$. The **characteristic function** (or **indicator function**) of $A$ is $\chi_A : X \to \lbrace 0, 1 \rbrace$ defined by
+
+$$\chi_A(x) = \begin{cases} 1 & \text{if } x \in A, \\ 0 & \text{if } x \notin A. \end{cases}$$
+</Definition>
+
+<Example title="Dirichlet function">
+15. The **Dirichlet function** $D : \mathbb{R} \to \lbrace 0, 1 \rbrace$ is $D = \chi_{\mathbb{Q}}$:
+
+$$D(x) = \begin{cases} 1 & \text{if } x \in \mathbb{Q}, \\ 0 & \text{if } x \in \mathbb{R} \setminus \mathbb{Q}. \end{cases}$$
+
+This function is discontinuous at every point. It serves as an important counterexample throughout analysis, particularly in the study of Riemann integrability.
+</Example>
+
+---
+
+## Families of Functions
+
+<Example title="Sequences as functions">
+16. A sequence $(a_n)_{n \in \mathbb{N}}$ is precisely a function $a : \mathbb{N} \to \mathbb{R}$. Viewing sequences as functions connects the set-theoretic framework to the analytic one.
+</Example>
+
+---
+
+## Summary
+
+<Remark>
+The function concepts introduced here form the vocabulary of analysis:
+
+1. **Injectivity** ensures uniqueness of preimages and is needed for the existence of inverse functions.
+2. **Surjectivity** ensures that the codomain is completely "hit" and is essential for establishing that functions have well-defined inverses.
+3. **Preimage** preserves all set operations (union, intersection, complement) while **image** preserves only unions. This asymmetry explains why preimages are preferred in topology and measure theory.
+4. **Composition** of functions is associative: $(h \circ g) \circ f = h \circ (g \circ f)$. This is the basis for many algebraic structures that appear later.
+</Remark>

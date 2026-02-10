@@ -1,0 +1,211 @@
+export const metadata = {
+  title: 'Minimal Polynomial — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "7. 표준형", href: "/linear-algebra/ch07-canonical-forms" },
+  { label: "Concept — Minimal Polynomial" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Minimal Polynomial
+
+The minimal polynomial of a matrix is the monic polynomial of smallest degree that annihilates the matrix. While the characteristic polynomial tells us the eigenvalues and their algebraic multiplicities, the minimal polynomial reveals the sizes of the largest Jordan blocks -- it is the finer invariant needed to distinguish similarity classes.
+
+---
+
+## Definition
+
+<Definition title="Minimal polynomial" number="7.4">
+The **minimal polynomial** $m_A(\lambda)$ of a matrix $A \in M_{n \times n}(F)$ is the unique monic polynomial of smallest degree such that $m_A(A) = 0$.
+
+Equivalently, $m_A$ is the monic generator of the ideal $\{p \in F[\lambda] : p(A) = 0\}$.
+</Definition>
+
+<Theorem title="Properties of the minimal polynomial" number="7.2">
+1. $m_A$ divides $p_A$ (the characteristic polynomial), by Cayley--Hamilton.
+2. $m_A$ and $p_A$ have the same roots: every eigenvalue of $A$ is a root of $m_A$, and vice versa.
+3. $A$ is diagonalizable iff $m_A$ splits into distinct linear factors (no repeated roots).
+4. The degree of $m_A$ equals the dimension of $F[A] = \operatorname{span}\{I, A, A^2, \ldots\}$.
+</Theorem>
+
+---
+
+## Computing minimal polynomials
+
+<Example id="min-poly-diagonal" title="Minimal polynomial of a diagonal matrix">
+$A = \operatorname{diag}(2, 3, 2, 5)$. Eigenvalues: $2, 3, 5$.
+
+$p_A(\lambda) = (\lambda - 2)^2(\lambda - 3)(\lambda - 5)$.
+
+$m_A(\lambda) = (\lambda - 2)(\lambda - 3)(\lambda - 5)$ (each eigenvalue appears once, since diagonal matrices are diagonalizable).
+
+Verify: $(A - 2I)(A - 3I)(A - 5I)$. The $(1,1)$ entry: $(2-2)(2-3)(2-5) = 0$. The $(2,2)$ entry: $(3-2)(3-3)(3-5) = 0$. All diagonal entries are $0$ ✓.
+</Example>
+
+<Example id="min-poly-scalar" title="Minimal polynomial of a scalar matrix">
+$A = cI$: $m_A(\lambda) = \lambda - c$.
+
+$p_A(\lambda) = (\lambda - c)^n$, but $m_A$ has degree just $1$.
+
+This is the extreme case where $m_A$ is much smaller than $p_A$.
+</Example>
+
+<Example id="min-poly-jordan" title="Minimal polynomial from Jordan form">
+The minimal polynomial of a Jordan form $J = \operatorname{diag}(J_{k_1}(\lambda_1), \ldots, J_{k_r}(\lambda_r))$ is:
+
+$$m_J(\lambda) = \prod_i (\lambda - \lambda_i)^{s_i}$$
+
+where $s_i$ is the size of the **largest** Jordan block for eigenvalue $\lambda_i$.
+
+For $J = \operatorname{diag}(J_3(2), J_1(2), J_2(5))$: $m_J(\lambda) = (\lambda - 2)^3(\lambda - 5)^2$.
+For $J = \operatorname{diag}(J_2(2), J_2(2), J_1(5))$: $m_J(\lambda) = (\lambda - 2)^2(\lambda - 5)$.
+</Example>
+
+<Example id="min-poly-companion" title="Minimal polynomial of a companion matrix">
+The companion matrix of $p(\lambda) = \lambda^n + c_{n-1}\lambda^{n-1} + \cdots + c_0$ has $m_A = p_A = p$. For companion matrices, the minimal and characteristic polynomials coincide.
+</Example>
+
+---
+
+## Relationship to diagonalizability
+
+<Theorem title="Diagonalizability criterion via minimal polynomial" number="7.3">
+$A$ is diagonalizable over $F$ if and only if $m_A(\lambda)$ splits into distinct linear factors over $F$:
+
+$$m_A(\lambda) = (\lambda - \lambda_1)(\lambda - \lambda_2) \cdots (\lambda - \lambda_k)$$
+
+with $\lambda_i$ pairwise distinct.
+</Theorem>
+
+<Example id="diag-criterion" title="Using minimal polynomial to test diagonalizability">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$: $p_A(\lambda) = (\lambda - 2)^2$. Is $(A - 2I) = 0$? No: $A - 2I = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \neq 0$.
+
+So $m_A(\lambda) = (\lambda - 2)^2$ (has a repeated root). Conclusion: $A$ is **not** diagonalizable.
+
+$B = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix} = 2I$: $m_B(\lambda) = \lambda - 2$ (no repeated roots). Conclusion: $B$ is diagonalizable.
+</Example>
+
+<Example id="diag-criterion-3" title="3x3 examples">
+$A = \begin{pmatrix} 3 & 0 & 0 \\ 0 & 3 & 1 \\ 0 & 0 & 3 \end{pmatrix}$: $p_A = (\lambda - 3)^3$. Check: $(A - 3I) = \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix} \neq 0$. $(A-3I)^2 = 0$. So $m_A = (\lambda - 3)^2$ (repeated root). Not diagonalizable.
+
+$B = \operatorname{diag}(3, 3, 3) = 3I$: $m_B = \lambda - 3$. Diagonalizable.
+
+$C = \operatorname{diag}(3, 3, 5)$: $m_C = (\lambda - 3)(\lambda - 5)$ (distinct linear factors). Diagonalizable.
+</Example>
+
+---
+
+## Computing the minimal polynomial systematically
+
+<Example id="compute-min-poly" title="Systematic computation">
+$A = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 2 \end{pmatrix}$.
+
+$p_A(\lambda) = (\lambda - 1)^2(\lambda - 2)$.
+
+The candidates for $m_A$ (monic divisors of $p_A$ sharing the same roots) are:
+- $(\lambda - 1)(\lambda - 2)$ (degree $2$),
+- $(\lambda - 1)^2(\lambda - 2)$ (degree $3$, same as $p_A$).
+
+Test $(\lambda - 1)(\lambda - 2)$: $(A - I)(A - 2I) = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}\begin{pmatrix} -1 & 1 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 0 \end{pmatrix} = \begin{pmatrix} 0 & -1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix} \neq 0$.
+
+So $m_A \neq (\lambda - 1)(\lambda - 2)$, hence $m_A = (\lambda - 1)^2(\lambda - 2) = p_A$.
+</Example>
+
+<Example id="compute-min-poly-2" title="When m_A is strictly smaller than p_A">
+$A = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 2 \end{pmatrix}$.
+
+$p_A(\lambda) = (\lambda - 1)^2(\lambda - 2)$.
+
+Test $(\lambda - 1)(\lambda - 2)$: $(A - I)(A - 2I) = \begin{pmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 1 \end{pmatrix}\begin{pmatrix} -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 0 \end{pmatrix} = 0$.
+
+So $m_A = (\lambda - 1)(\lambda - 2)$, which is strictly smaller than $p_A$. The matrix is diagonalizable (it already is diagonal).
+</Example>
+
+---
+
+## Minimal polynomial and Jordan form relationship
+
+<Example id="jordan-determines-min" title="Reading minimal polynomial from Jordan form">
+**Jordan form $\operatorname{diag}(J_2(1), J_1(1), J_3(2))$:**
+- Largest block for $\lambda = 1$: size $2$.
+- Largest block for $\lambda = 2$: size $3$.
+- $m_A = (\lambda - 1)^2(\lambda - 2)^3$.
+- $p_A = (\lambda - 1)^3(\lambda - 2)^3$ (sum of block sizes for each eigenvalue).
+
+**Jordan form $\operatorname{diag}(J_2(0), J_2(0))$:**
+- $p_A = \lambda^4$, $m_A = \lambda^2$.
+- The matrix is nilpotent with index $2$: $A^2 = 0$ but $A \neq 0$.
+
+**Jordan form $\operatorname{diag}(J_3(0), J_2(0), J_1(0))$:**
+- $p_A = \lambda^6$, $m_A = \lambda^3$.
+- Nilpotent index $3$.
+</Example>
+
+<Example id="same-char-diff-min" title="Same characteristic polynomial, different minimal polynomials">
+$A = \operatorname{diag}(J_2(0), J_1(0))$ and $B = \operatorname{diag}(J_1(0), J_1(0), J_1(0))$:
+
+Both have $p(\lambda) = \lambda^3$. But $m_A = \lambda^2$ while $m_B = \lambda$.
+
+The minimal polynomial distinguishes the two similarity classes that the characteristic polynomial cannot.
+</Example>
+
+---
+
+## The algebra F[A]
+
+<Example id="algebra-FA" title="The algebra generated by a matrix">
+$A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$: $m_A = \lambda^2$, so $\dim F[A] = 2$.
+
+$F[A] = \operatorname{span}\{I, A\} = \left\{\begin{pmatrix} a & b \\ 0 & a \end{pmatrix} : a, b \in F\right\}$.
+
+This is a $2$-dimensional commutative subalgebra of $M_2(F)$.
+</Example>
+
+<Example id="algebra-diag" title="Algebra of a diagonalizable matrix">
+$A = \operatorname{diag}(1, 2, 3)$: $m_A = (\lambda - 1)(\lambda - 2)(\lambda - 3)$, $\deg m_A = 3$.
+
+$F[A] = \{p(A) : p \in F[\lambda]\}$ has dimension $3$, spanned by $I, A, A^2$.
+
+$F[A] = \{\operatorname{diag}(a, b, c) : a, b, c \in F\}$ (all diagonal matrices), which has dimension $3$.
+</Example>
+
+<Example id="algebra-identity" title="When F[A] is as small as possible">
+$A = 5I$ ($n \times n$): $m_A = \lambda - 5$, $\dim F[A] = 1$. $F[A] = \{cI : c \in F\}$, the scalar matrices.
+</Example>
+
+---
+
+## Application: testing nilpotency
+
+<Example id="nilpotency-test" title="Minimal polynomial determines nilpotent index">
+If $A$ is nilpotent, then $m_A = \lambda^k$ where $k$ is the smallest positive integer with $A^k = 0$ (the nilpotent index). By Cayley--Hamilton, $k \leq n$.
+
+For the $n \times n$ shift matrix: $m_A = \lambda^n$ (the maximum possible). For $A = 0$: $m_A = \lambda$ (the minimum for a nilpotent matrix).
+
+The number of Jordan blocks of size $\geq j$ equals $\operatorname{rank}(A^{j-1}) - \operatorname{rank}(A^j)$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The minimal polynomial as the refined invariant">
+The minimal polynomial refines the characteristic polynomial:
+- Same **roots** (eigenvalues), but the exponents encode **largest Jordan block sizes** instead of total algebraic multiplicities.
+- $A$ is diagonalizable iff $m_A$ has no repeated roots.
+- $m_A$ divides $p_A$, and they agree iff $A$ has a cyclic vector (i.e., $A$ is similar to a companion matrix).
+- The algebra $F[A]$ has dimension $\deg m_A$, measuring the "complexity" of the matrix.
+- Together, $p_A$ and $m_A$ determine the Jordan form for matrices up to $4 \times 4$; for larger matrices, additional invariants (the full list of elementary divisors) may be needed.
+</Remark>

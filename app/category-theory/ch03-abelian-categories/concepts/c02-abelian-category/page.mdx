@@ -1,0 +1,126 @@
+export const metadata = {
+  title: 'Abelian Category — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Concept — Abelian Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Abelian Category
+
+An abelian category is the natural setting for homological algebra. It axiomatizes the properties of module categories that make diagram chasing, exact sequences, and derived functors possible. The Freyd-Mitchell embedding theorem guarantees that every small abelian category embeds into a module category, so element-wise arguments remain valid.
+
+---
+
+## Definition
+
+<Definition title="Abelian Category" number="3.4">
+An additive category $\mathcal{A}$ is **abelian** if:
+
+1. Every morphism has a [kernel and a cokernel](/category-theory/ch03-abelian-categories/concepts/c03-kernel-cokernel).
+2. Every monomorphism is the kernel of some morphism (equivalently, of its cokernel).
+3. Every epimorphism is the cokernel of some morphism (equivalently, of its kernel).
+</Definition>
+
+<Remark title="Equivalent formulations">
+Condition (2) can be rephrased: the canonical morphism $\mathrm{coim}\, f \to \mathrm{im}\, f$ is an isomorphism for every morphism $f$. Here $\mathrm{coim}\, f = \mathrm{coker}(\ker f)$ and $\mathrm{im}\, f = \ker(\mathrm{coker}\, f)$.
+</Remark>
+
+<Definition title="Grothendieck Category" number="3.5">
+An abelian category $\mathcal{A}$ is a **Grothendieck category** if:
+
+1. $\mathcal{A}$ is cocomplete (has all small colimits).
+2. Filtered colimits are exact (the AB5 condition).
+3. $\mathcal{A}$ has a generator.
+
+Grothendieck categories have enough injectives, making them ideal for derived functor theory.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="R-Mod is abelian" id="rmod-abelian">
+For any ring $R$, the category $R\text{-}\mathbf{Mod}$ of left $R$-modules is abelian. Kernels and cokernels are the usual module-theoretic ones, and monomorphisms/epimorphisms correspond to injective/surjective homomorphisms. It is also a Grothendieck category with generator $R$.
+</Example>
+
+<Example title="Ab is abelian" id="ab-abelian">
+$\mathbf{Ab} = \mathbb{Z}\text{-}\mathbf{Mod}$ is abelian. It is the prototypical abelian category and a Grothendieck category with generator $\mathbb{Z}$.
+</Example>
+
+<Example title="Vect_k is abelian" id="vect-abelian">
+$\mathbf{Vect}_k$ is abelian: every linear map has a kernel (null space) and cokernel (quotient by the image). Every injective map is a kernel, and every surjective map is a cokernel.
+</Example>
+
+<Example title="Sheaves of abelian groups" id="sheaves-abelian">
+For a topological space $X$, the category $\mathbf{Sh}(X)$ of sheaves of abelian groups on $X$ is abelian. Kernels are computed as presheaf kernels; cokernels require sheafification. $\mathbf{Sh}(X)$ is a Grothendieck category.
+</Example>
+
+<Example title="Coherent sheaves on a scheme" id="coh-abelian">
+For a Noetherian scheme $X$, $\mathbf{Coh}(X)$ (coherent sheaves) is abelian. The category $\mathbf{QCoh}(X)$ of quasi-coherent sheaves is a Grothendieck abelian category.
+</Example>
+
+<Example title="Functor category into an abelian category" id="functor-abelian">
+If $\mathcal{A}$ is abelian and $\mathcal{C}$ is small, then the functor category $[\mathcal{C}, \mathcal{A}]$ is abelian with pointwise kernels, cokernels, and exact sequences.
+</Example>
+
+<Example title="Ch(A) is abelian" id="ch-abelian">
+If $\mathcal{A}$ is abelian, then the category of chain complexes $\mathbf{Ch}(\mathcal{A})$ is abelian. Kernels and cokernels are computed degreewise: $(\ker f)^n = \ker(f^n)$ and $(\mathrm{coker}\, f)^n = \mathrm{coker}(f^n)$.
+</Example>
+
+<Example title="Category of finite abelian groups" id="finab-abelian">
+$\mathbf{FinAb}$ is abelian. However, it is NOT a Grothendieck category (it does not have all small coproducts: the direct sum of infinitely many copies of $\mathbb{Z}/2\mathbb{Z}$ is not a finite group).
+</Example>
+
+<Example title="Grp is NOT abelian" id="grp-not-abelian">
+$\mathbf{Grp}$ is not abelian. The cokernel of $f : H \to G$ is $G/N(f(H))$ (quotient by the normal closure), but not every monomorphism is a kernel: the inclusion $A_3 \hookrightarrow S_3$ is monic but is not the kernel of any homomorphism out of $S_3$ (since $A_3$ is normal, it is, but this fails for non-normal subgroups like $\{e, (12)\} \hookrightarrow S_3$).
+</Example>
+
+<Example title="Top is NOT abelian" id="top-not-abelian">
+$\mathbf{Top}$ is not even additive (no abelian group structure on hom-sets), hence far from abelian.
+</Example>
+
+<Example title="Opposite of an abelian category is abelian" id="op-abelian">
+If $\mathcal{A}$ is abelian, then $\mathcal{A}^{\mathrm{op}}$ is abelian. Kernels in $\mathcal{A}^{\mathrm{op}}$ are cokernels in $\mathcal{A}$, and vice versa. This gives the principle of **abelian duality**: every theorem in an abelian category has a dual.
+</Example>
+
+<Example title="Representations of a quiver" id="quiver-rep">
+For a quiver $Q$ and a field $k$, the category $\mathrm{Rep}_k(Q)$ of finite-dimensional representations is abelian. It is equivalent to $\mathrm{mod}\text{-}kQ$ (finitely generated modules over the path algebra), hence abelian by the general theory.
+</Example>
+
+---
+
+## Key Properties
+
+<Theorem title="Properties of abelian categories" number="3.2">
+In an abelian category $\mathcal{A}$:
+
+1. A morphism is an isomorphism if and only if it is both monic and epic.
+2. Every morphism $f : A \to B$ factors as $A \twoheadrightarrow \mathrm{im}\, f \rightarrowtail B$.
+3. The [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma) and [Five Lemma](/category-theory/ch03-abelian-categories/theorems/t02-five-lemma) hold.
+4. Finite limits and colimits exist and can be expressed in terms of kernels, cokernels, and biproducts.
+</Theorem>
+
+<Remark title="The Freyd-Mitchell embedding">
+The [Freyd-Mitchell Embedding Theorem](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell) states that every small abelian category admits an exact, fully faithful embedding into $R\text{-}\mathbf{Mod}$ for some ring $R$. This means that diagram chasing with elements is always valid in small abelian categories — a crucial tool for homological algebra.
+</Remark>
+
+<Remark title="Looking ahead">
+Abelian categories are the starting point for:
+- [Exact sequences](/category-theory/ch03-abelian-categories/concepts/c04-exact-sequence) and homological algebra
+- [Chain complexes](/category-theory/ch04-complexes-cohomology/concepts/c01-chain-complex) and cohomology
+- [Derived categories](/category-theory/ch06-derived-categories/concepts/c01-derived-category) and derived functors
+</Remark>

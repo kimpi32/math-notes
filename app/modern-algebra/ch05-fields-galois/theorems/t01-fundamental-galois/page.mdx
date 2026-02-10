@@ -1,0 +1,210 @@
+export const metadata = {
+  title: 'Fundamental Theorem of Galois Theory — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "5. 체와 갈루아 이론", href: "/modern-algebra/ch05-fields-galois" },
+  { label: "Theorem — Fundamental Theorem of Galois Theory" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Fundamental Theorem of Galois Theory
+
+The Fundamental Theorem of Galois Theory (FTGT) is one of the most beautiful results in algebra. It establishes a perfect dictionary between the intermediate fields of a Galois extension and the subgroups of the Galois group, reversing inclusion.
+
+---
+
+## Statement
+
+<Theorem title="Fundamental Theorem of Galois Theory" number="5.20">
+Let $E/F$ be a finite Galois extension with Galois group $G = \operatorname{Gal}(E/F)$. Then there is an inclusion-reversing bijection
+
+$$\Phi: \{\text{intermediate fields } F \subseteq K \subseteq E\} \longleftrightarrow \{\text{subgroups } H \le G\}$$
+
+given by:
+
+$$\Phi(K) = \operatorname{Gal}(E/K) = \{\sigma \in G \mid \sigma|_K = \operatorname{id}\}$$
+
+$$\Phi^{-1}(H) = E^H = \{a \in E \mid \sigma(a) = a \text{ for all } \sigma \in H\}$$
+
+Moreover, this bijection satisfies:
+1. **Degree-index relation**: $[E : K] = |\operatorname{Gal}(E/K)|$ and $[K : F] = [G : \operatorname{Gal}(E/K)]$.
+2. **Normality criterion**: $K/F$ is a normal extension if and only if $\operatorname{Gal}(E/K) \trianglelefteq G$.
+3. **Galois group of quotient**: When $K/F$ is normal, $\operatorname{Gal}(K/F) \cong G / \operatorname{Gal}(E/K)$.
+</Theorem>
+
+<Remark title="Inclusion reversal">
+The bijection **reverses** inclusions: larger subgroups correspond to smaller intermediate fields. If $H_1 \le H_2 \le G$, then $E^{H_2} \subseteq E^{H_1}$. The full group $G$ fixes only $F$ (the smallest field), while the trivial group $\{e\}$ fixes all of $E$ (the largest field).
+</Remark>
+
+---
+
+## First examples
+
+<Example id="ftgt-z2" title="The simplest case: degree 2">
+$E = \mathbb{Q}(\sqrt{2})/\mathbb{Q}$, with $G = \operatorname{Gal}(E/\mathbb{Q}) \cong \mathbb{Z}/2\mathbb{Z}$.
+
+Subgroups of $G$: $\{e\}$ and $G$.
+
+Intermediate fields: $E$ and $\mathbb{Q}$.
+
+The correspondence is simply: $\{e\} \leftrightarrow E$ and $G \leftrightarrow \mathbb{Q}$. There are no nontrivial intermediate fields, as expected (since $[E:\mathbb{Q}] = 2$ is prime).
+</Example>
+
+<Example id="ftgt-v4" title="Biquadratic extension: V_4">
+$E = \mathbb{Q}(\sqrt{2}, \sqrt{3})/\mathbb{Q}$ with $G = \operatorname{Gal}(E/\mathbb{Q}) \cong V_4 = \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+
+The subgroups of $V_4$ are: $\{e\}$, $\langle\sigma_1\rangle$, $\langle\sigma_2\rangle$, $\langle\sigma_3\rangle$, $V_4$, where:
+- $\sigma_1: \sqrt{2} \mapsto -\sqrt{2}, \sqrt{3} \mapsto \sqrt{3}$
+- $\sigma_2: \sqrt{2} \mapsto \sqrt{2}, \sqrt{3} \mapsto -\sqrt{3}$
+- $\sigma_3: \sqrt{2} \mapsto -\sqrt{2}, \sqrt{3} \mapsto -\sqrt{3}$
+
+The Galois correspondence:
+
+| Subgroup $H$ | $\|H\|$ | Fixed field $E^H$ | $[E^H : \mathbb{Q}]$ |
+|---|---|---|---|
+| $\{e\}$ | $1$ | $\mathbb{Q}(\sqrt{2},\sqrt{3})$ | $4$ |
+| $\langle\sigma_1\rangle$ | $2$ | $\mathbb{Q}(\sqrt{3})$ | $2$ |
+| $\langle\sigma_2\rangle$ | $2$ | $\mathbb{Q}(\sqrt{2})$ | $2$ |
+| $\langle\sigma_3\rangle$ | $2$ | $\mathbb{Q}(\sqrt{6})$ | $2$ |
+| $V_4$ | $4$ | $\mathbb{Q}$ | $1$ |
+
+All subgroups are normal in $V_4$ (since $V_4$ is abelian), so all intermediate fields are Galois over $\mathbb{Q}$.
+</Example>
+
+<Example id="ftgt-s3" title="Splitting field of x^3 - 2: S_3">
+$E = \mathbb{Q}(\sqrt[3]{2}, \omega)/\mathbb{Q}$ with $G \cong S_3$, order $6$.
+
+Subgroups of $S_3$: $\{e\}$, $\langle(123)\rangle \cong A_3$, $\langle(12)\rangle$, $\langle(13)\rangle$, $\langle(23)\rangle$, $S_3$.
+
+Identifying these with roots $\alpha_1 = \sqrt[3]{2}$, $\alpha_2 = \omega\sqrt[3]{2}$, $\alpha_3 = \omega^2\sqrt[3]{2}$:
+
+| Subgroup $H$ | $\|H\|$ | Fixed field $E^H$ | $[E^H:\mathbb{Q}]$ | Normal in $S_3$? |
+|---|---|---|---|---|
+| $\{e\}$ | $1$ | $E$ | $6$ | Yes |
+| $\langle(23)\rangle$ | $2$ | $\mathbb{Q}(\sqrt[3]{2})$ | $3$ | **No** |
+| $\langle(13)\rangle$ | $2$ | $\mathbb{Q}(\omega\sqrt[3]{2})$ | $3$ | **No** |
+| $\langle(12)\rangle$ | $2$ | $\mathbb{Q}(\omega^2\sqrt[3]{2})$ | $3$ | **No** |
+| $A_3 = \langle(123)\rangle$ | $3$ | $\mathbb{Q}(\omega)$ | $2$ | Yes |
+| $S_3$ | $6$ | $\mathbb{Q}$ | $1$ | Yes |
+
+The three subgroups of order $2$ are conjugate in $S_3$, and accordingly the three cubic subfields $\mathbb{Q}(\sqrt[3]{2})$, $\mathbb{Q}(\omega\sqrt[3]{2})$, $\mathbb{Q}(\omega^2\sqrt[3]{2})$ are conjugate (isomorphic but not equal).
+
+$\mathbb{Q}(\omega)/\mathbb{Q}$ is normal (corresponding to $A_3 \trianglelefteq S_3$), and $\operatorname{Gal}(\mathbb{Q}(\omega)/\mathbb{Q}) \cong S_3/A_3 \cong \mathbb{Z}/2\mathbb{Z}$.
+
+$\mathbb{Q}(\sqrt[3]{2})/\mathbb{Q}$ is **not** normal (corresponding to $\langle(23)\rangle$ not being normal in $S_3$).
+</Example>
+
+---
+
+## More examples
+
+<Example id="ftgt-d4" title="Splitting field of x^4 - 2: D_4">
+$E = \mathbb{Q}(\sqrt[4]{2}, i)/\mathbb{Q}$ with $G \cong D_4$, order $8$.
+
+$D_4$ has $10$ subgroups (including $\{e\}$ and $D_4$), giving $10$ intermediate fields. The lattice of subgroups of $D_4$ is:
+
+$D_4$ has $3$ subgroups of index $2$ (all normal): $\langle r \rangle \cong \mathbb{Z}/4\mathbb{Z}$, $\langle r^2, s \rangle \cong V_4$, $\langle r^2, rs \rangle \cong V_4$.
+
+Some key correspondences:
+- $\langle r \rangle$ corresponds to $\mathbb{Q}(i)$
+- $\langle r^2, s \rangle$ corresponds to $\mathbb{Q}(\sqrt{2})$
+- $\langle r^2, rs \rangle$ corresponds to $\mathbb{Q}(i\sqrt{2})$
+- $\langle r^2 \rangle$ corresponds to $\mathbb{Q}(\sqrt{2}, i)$
+</Example>
+
+<Example id="ftgt-cyclic" title="Cyclic Galois groups">
+If $G = \operatorname{Gal}(E/F) \cong \mathbb{Z}/n\mathbb{Z}$, the subgroup lattice is $\{d\mathbb{Z}/n\mathbb{Z} \mid d \text{ divides } n\}$, ordered by reverse inclusion. The intermediate fields are in bijection with divisors of $n$.
+
+For $\operatorname{Gal}(\mathbb{Q}(\zeta_7)/\mathbb{Q}) \cong \mathbb{Z}/6\mathbb{Z}$:
+- Divisors of $6$: $1, 2, 3, 6$
+- Intermediate fields: $\mathbb{Q}(\zeta_7)$, the unique cubic subfield, the unique quadratic subfield $\mathbb{Q}(\sqrt{-7})$, and $\mathbb{Q}$.
+</Example>
+
+<Example id="ftgt-a4" title="A_4 as Galois group">
+Consider a quartic $f(x) \in \mathbb{Q}[x]$ with $\operatorname{Gal}(E/\mathbb{Q}) \cong A_4$ (order $12$). $A_4$ has subgroups:
+- $\{e\}$ (order $1$)
+- Three subgroups $\cong \mathbb{Z}/2\mathbb{Z}$ (order $2$)
+- $V_4$ (order $4$, normal in $A_4$)
+- Four subgroups $\cong \mathbb{Z}/3\mathbb{Z}$ (order $3$)
+- $A_4$ (order $12$)
+
+The $V_4 \trianglelefteq A_4$ gives a normal intermediate extension of degree $[G:V_4] = 3$ over $\mathbb{Q}$.
+</Example>
+
+---
+
+## Applications
+
+<Example id="app-no-intermediate" title="No intermediate fields">
+If $[E:F] = p$ (prime) and $E/F$ is Galois, then $G \cong \mathbb{Z}/p\mathbb{Z}$, which has no nontrivial proper subgroups. By FTGT, there are no intermediate fields between $F$ and $E$.
+</Example>
+
+<Example id="app-unique-quadratic" title="Unique quadratic subfield">
+In $\mathbb{Q}(\zeta_p)/\mathbb{Q}$ with $p$ an odd prime, $G \cong (\mathbb{Z}/p\mathbb{Z})^\times \cong \mathbb{Z}/(p-1)\mathbb{Z}$. There is a unique subgroup of index $2$, corresponding to the unique quadratic subfield, which is $\mathbb{Q}(\sqrt{p^*})$ where $p^* = (-1)^{(p-1)/2} p$.
+</Example>
+
+<Example id="app-compositum" title="Compositum via FTGT">
+If $K_1/F$ and $K_2/F$ are Galois subextensions of $E/F$ with $K_1 \cap K_2 = F$, then $\operatorname{Gal}(K_1 K_2 / F) \cong \operatorname{Gal}(K_1/F) \times \operatorname{Gal}(K_2/F)$.
+
+For instance, in $E = \mathbb{Q}(\sqrt{2}, \sqrt{3})$: $\mathbb{Q}(\sqrt{2}) \cap \mathbb{Q}(\sqrt{3}) = \mathbb{Q}$, so $\operatorname{Gal}(E/\mathbb{Q}) \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="app-normal-closure" title="Normal closure">
+$\mathbb{Q}(\sqrt[3]{2})/\mathbb{Q}$ is not Galois. Its **normal closure** is $\mathbb{Q}(\sqrt[3]{2}, \omega)$, the smallest Galois extension of $\mathbb{Q}$ containing $\mathbb{Q}(\sqrt[3]{2})$.
+
+In terms of FTGT: $\mathbb{Q}(\sqrt[3]{2}) = E^H$ where $H = \langle (23) \rangle \le S_3$. The normal closure corresponds to the largest normal subgroup of $G$ contained in $H$, which is $\{e\}$, so the normal closure is $E^{\{e\}} = E$.
+</Example>
+
+---
+
+## The correspondence as a lattice anti-isomorphism
+
+<Theorem title="Lattice anti-isomorphism" number="5.21">
+The Galois correspondence $\Phi$ is a lattice anti-isomorphism:
+- $\Phi(K_1 \cap K_2) = \langle \Phi(K_1), \Phi(K_2) \rangle$ (intersection of fields $\leftrightarrow$ join of subgroups)
+- $\Phi(K_1 K_2) = \Phi(K_1) \cap \Phi(K_2)$ (compositum of fields $\leftrightarrow$ intersection of subgroups)
+</Theorem>
+
+<Example id="lattice-v4" title="Lattice for V_4">
+For $E = \mathbb{Q}(\sqrt{2}, \sqrt{3})$ with $G \cong V_4$:
+
+The subgroup lattice of $V_4$ (ordered by inclusion) is "flipped" compared to the field lattice (ordered by inclusion):
+
+$$\mathbb{Q} \subset \mathbb{Q}(\sqrt{2}), \mathbb{Q}(\sqrt{3}), \mathbb{Q}(\sqrt{6}) \subset E$$
+
+corresponds to
+
+$$V_4 \supset \langle\sigma_1\rangle, \langle\sigma_2\rangle, \langle\sigma_3\rangle \supset \{e\}.$$
+
+Every $\subset$ becomes $\supset$.
+</Example>
+
+---
+
+## Summary
+
+The FTGT transforms questions about fields into questions about groups:
+
+| Field-theoretic question | Group-theoretic translation |
+|---|---|
+| How many intermediate fields? | How many subgroups of $G$? |
+| Is $K/F$ normal? | Is $\operatorname{Gal}(E/K) \trianglelefteq G$? |
+| What is $\operatorname{Gal}(K/F)$? | $G/\operatorname{Gal}(E/K)$ (when normal) |
+| What is $[K:F]$? | $[G : \operatorname{Gal}(E/K)]$ |
+| Is $f$ solvable by radicals? | Is $G$ solvable? |
+
+<Remark title="Proof">
+For the full proof, see the [Proof of the Fundamental Theorem of Galois Theory](/modern-algebra/ch05-fields-galois/proofs/p01-fundamental-galois-proof).
+</Remark>

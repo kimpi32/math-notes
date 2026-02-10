@@ -1,0 +1,131 @@
+export const metadata = {
+  title: '부분수열 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "개념 - 부분수열" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 부분수열 (Subsequence)
+
+Subsequences extract infinite "sub-patterns" from a given sequence. They are essential tools for the Bolzano--Weierstrass theorem and for understanding convergence through accumulation points.
+
+---
+
+## Definition
+
+<Definition title="Subsequence" number="2.7">
+Let $(a_n)_{n=1}^{\infty}$ be a sequence. A **subsequence** of $(a_n)$ is a sequence of the form $(a_{n_k})_{k=1}^{\infty}$, where $n_1 < n_2 < n_3 < \cdots$ is a strictly increasing sequence of natural numbers.
+
+In other words, a subsequence is obtained by selecting infinitely many terms from $(a_n)$ while preserving their original order.
+</Definition>
+
+<Example title="Basic subsequences">
+1. From $a_n = \frac{1}{n}$: the subsequence $a_{2k} = \frac{1}{2k}$ picks every even-indexed term, giving $(\frac{1}{2}, \frac{1}{4}, \frac{1}{6}, \ldots)$.
+
+2. From $a_n = (-1)^n$: the subsequence $a_{2k} = (-1)^{2k} = 1$ (constant subsequence), and $a_{2k-1} = (-1)^{2k-1} = -1$ (constant subsequence).
+
+3. From $a_n = n^2$: the subsequence $a_{3k} = (3k)^2 = 9k^2$ picks every third term.
+</Example>
+
+<Remark>
+The key requirement is that $n_k$ is **strictly increasing**, which ensures that we are selecting a genuine infinite sub-pattern moving forward through the original sequence. Selecting finitely many terms does not produce a subsequence.
+</Remark>
+
+---
+
+## Subsequences and convergence
+
+<Theorem title="Subsequences of convergent sequences">
+If $a_n \to L$, then every subsequence $(a_{n_k})$ also converges to $L$.
+</Theorem>
+
+<Proof>
+Let $\varepsilon > 0$. Since $a_n \to L$, there exists $N$ with $|a_n - L| < \varepsilon$ for all $n \geq N$. Since $(n_k)$ is strictly increasing, $n_k \geq k$ for all $k$ (proved by induction: $n_1 \geq 1$, and $n_{k+1} > n_k \geq k$ gives $n_{k+1} \geq k + 1$). So for $k \geq N$: $n_k \geq k \geq N$, hence $|a_{n_k} - L| < \varepsilon$.
+</Proof>
+
+<Example title="Divergence via subsequences">
+4. $a_n = (-1)^n$ diverges because the subsequence $a_{2k} = 1 \to 1$ and the subsequence $a_{2k-1} = -1 \to -1$. Since $1 \neq -1$, the sequence cannot converge.
+
+5. $a_n = \sin(\frac{n\pi}{2})$ diverges: the subsequence $a_{4k+1} = \sin(\frac{(4k+1)\pi}{2}) = 1$ for all $k$, while $a_{4k+3} = \sin(\frac{(4k+3)\pi}{2}) = -1$ for all $k$.
+</Example>
+
+<Remark>
+This gives a powerful test for divergence: if a sequence has two subsequences converging to different limits, the original sequence diverges.
+</Remark>
+
+---
+
+## Subsequential limits and limit points
+
+<Definition title="Subsequential limit" number="2.8">
+A real number $L$ is a **subsequential limit** (or **accumulation point** or **limit point**) of a sequence $(a_n)$ if there exists a subsequence $(a_{n_k})$ with $a_{n_k} \to L$.
+
+The set of all subsequential limits of $(a_n)$ is denoted $\mathcal{L}(a_n)$ or sometimes $\operatorname{LIM}(a_n)$.
+</Definition>
+
+<Example title="Subsequential limits">
+6. For $a_n = (-1)^n$: $\mathcal{L}(a_n) = \{-1, 1\}$.
+
+7. For $a_n = \sin(n)$: the set $\mathcal{L}(a_n)$ is the entire interval $[-1, 1]$. This follows from the equidistribution of $n \mod 2\pi$ (Weyl's theorem).
+
+8. For $a_n = \frac{1}{n}$: $\mathcal{L}(a_n) = \{0\}$.
+</Example>
+
+---
+
+## Limsup and liminf
+
+<Definition title="Limit superior and limit inferior" number="2.9">
+For a bounded sequence $(a_n)$, define:
+
+$$\limsup_{n \to \infty} a_n = \lim_{N \to \infty} \sup_{n \geq N} a_n = \inf_{N \geq 1} \sup_{n \geq N} a_n$$
+
+$$\liminf_{n \to \infty} a_n = \lim_{N \to \infty} \inf_{n \geq N} a_n = \sup_{N \geq 1} \inf_{n \geq N} a_n$$
+
+These always exist for bounded sequences (as limits of monotone bounded sequences).
+</Definition>
+
+<Theorem title="Characterization of limsup/liminf">
+For a bounded sequence $(a_n)$:
+1. $\limsup a_n = \max \mathcal{L}(a_n)$ (the largest subsequential limit).
+2. $\liminf a_n = \min \mathcal{L}(a_n)$ (the smallest subsequential limit).
+3. $a_n \to L$ if and only if $\limsup a_n = \liminf a_n = L$.
+</Theorem>
+
+<Example title="Computing limsup and liminf">
+9. $a_n = (-1)^n \cdot \frac{n}{n+1}$: the subsequence of even terms gives $\frac{2k}{2k+1} \to 1$, and odd terms give $\frac{-(2k-1)}{2k} \to -1$. So $\limsup a_n = 1$ and $\liminf a_n = -1$.
+
+10. $a_n = \frac{1}{n} + (-1)^n$: even terms are $\frac{1}{2k} + 1 \to 1$, odd terms are $\frac{1}{2k-1} - 1 \to -1$. So $\limsup a_n = 1$, $\liminf a_n = -1$.
+
+11. $a_n = \frac{(-1)^n}{n}$: $\limsup a_n = 0 = \liminf a_n$, so $a_n \to 0$.
+</Example>
+
+---
+
+## Subsequences in proofs
+
+<Example title="Every sequence in a finite set has a constant subsequence">
+12. Let $(a_n)$ be a sequence taking values in a finite set $S = \{s_1, \ldots, s_m\}$. By the pigeonhole principle, at least one value $s_j$ appears infinitely often. The terms at those indices form a constant subsequence converging to $s_j$.
+</Example>
+
+<Example title="Peak points and the Bolzano--Weierstrass idea">
+13. Call index $n$ a **peak point** of $(a_n)$ if $a_n \geq a_m$ for all $m > n$ (i.e., no later term exceeds $a_n$). If there are infinitely many peak points $n_1 < n_2 < \cdots$, then $(a_{n_k})$ is a decreasing subsequence. If there are finitely many peak points, then beyond the last peak point, every term is exceeded by some later term, and iterating gives an increasing subsequence. Either way, every sequence has a monotone subsequence.
+</Example>
+
+<Remark>
+This "peak point" argument is the key idea behind the proof of the Bolzano--Weierstrass theorem. See [Bolzano--Weierstrass](/analysis/ch02-sequences/theorems/t02-bolzano-weierstrass) for the full statement and [its proof](/analysis/ch02-sequences/proofs/p02-bolzano-weierstrass-proof).
+</Remark>

@@ -1,0 +1,168 @@
+export const metadata = {
+  title: 'Open and Closed Sets — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "개념 — 열린집합과 닫힌집합" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Open and Closed Sets
+
+Open and closed sets are the fundamental building blocks of topology in metric spaces. They generalize the notions of open and closed intervals in $\mathbb{R}$.
+
+---
+
+## Open sets
+
+<Definition title="Open ball and open set" number="9.6">
+Let $(X, d)$ be a metric space. The **open ball** of radius $r > 0$ centered at $x$ is
+
+$$B(x, r) = \{y \in X : d(x, y) < r\}.$$
+
+A set $U \subseteq X$ is **open** if for every $x \in U$, there exists $r > 0$ such that $B(x, r) \subseteq U$.
+</Definition>
+
+<Example title="Open sets in R">
+- $(a, b)$ is open: for $x \in (a,b)$, take $r = \min(x-a, b-x)$.
+- $\mathbb{R}$ is open (take any $r > 0$).
+- $\emptyset$ is open (vacuously).
+- $[0, 1]$ is **not** open: the point $0$ has no open ball $B(0, r) \subseteq [0,1]$.
+- $(0, \infty)$ is open.
+- $\mathbb{R} \setminus \{0\}$ is open: for $x \neq 0$, take $r = |x|$.
+</Example>
+
+<Example title="Open balls in different metrics on R²">
+In $\mathbb{R}^2$ centered at the origin:
+
+- Euclidean ($d_2$): $B(0, 1)$ is the open disk.
+- Taxicab ($d_1$): $B(0, 1)$ is a diamond (square rotated $45°$).
+- Max ($d_\infty$): $B(0, 1)$ is an open square $(-1,1) \times (-1,1)$.
+- Discrete: $B(0, 1)$ is just the single point at the origin. $B(0, 2) = \mathbb{R}^2$.
+</Example>
+
+<Theorem title="Properties of open sets" number="9.1">
+In any metric space $(X, d)$:
+
+1. $\emptyset$ and $X$ are open.
+2. The union of any collection of open sets is open.
+3. The intersection of finitely many open sets is open.
+</Theorem>
+
+<Example title="Infinite intersection of open sets need not be open">
+$\bigcap_{n=1}^\infty (-1/n, 1/n) = \{0\}$. Each $(-1/n, 1/n)$ is open in $\mathbb{R}$, but their intersection $\{0\}$ is not open.
+</Example>
+
+---
+
+## Closed sets
+
+<Definition title="Closed set" number="9.7">
+A set $F \subseteq X$ is **closed** if its complement $X \setminus F$ is open. Equivalently, $F$ is closed if and only if it contains all its limit points.
+</Definition>
+
+<Example title="Closed sets in R">
+- $[a, b]$ is closed: $\mathbb{R} \setminus [a,b] = (-\infty, a) \cup (b, \infty)$ is open.
+- $\{x_0\}$ (a single point) is closed: $\mathbb{R} \setminus \{x_0\}$ is open.
+- $\mathbb{Z}$ is closed: $\mathbb{R} \setminus \mathbb{Z} = \bigcup_{n \in \mathbb{Z}} (n, n+1)$ is open.
+- $[0, 1)$ is neither open nor closed.
+- $\mathbb{R}$ and $\emptyset$ are both open and closed ("clopen").
+</Example>
+
+<Example title="Closed sets in the discrete metric">
+In the discrete metric, every set is both open and closed. For any $A \subseteq X$: each point $x \in A$ has $B(x, 1/2) = \{x\} \subseteq A$, so $A$ is open. Since $X \setminus A$ is also open, $A$ is closed.
+</Example>
+
+<Theorem title="Properties of closed sets" number="9.2">
+1. $\emptyset$ and $X$ are closed.
+2. The intersection of any collection of closed sets is closed.
+3. The union of finitely many closed sets is closed.
+</Theorem>
+
+<Example title="Infinite union of closed sets need not be closed">
+$\bigcup_{n=1}^\infty [1/n, 1] = (0, 1]$. Each $[1/n, 1]$ is closed, but $(0, 1]$ is not closed ($0$ is a limit point not in the set).
+</Example>
+
+---
+
+## Closure, interior, boundary
+
+<Definition title="Closure, interior, boundary" number="9.8">
+For $A \subseteq X$:
+
+- The **closure** $\overline{A}$ is the smallest closed set containing $A$: $\overline{A} = A \cup A'$ where $A'$ is the set of limit points.
+- The **interior** $\operatorname{int}(A)$ is the largest open set contained in $A$.
+- The **boundary** $\partial A = \overline{A} \setminus \operatorname{int}(A)$.
+
+Equivalently: $x \in \overline{A}$ iff every open ball $B(x, r)$ intersects $A$. And $x \in \operatorname{int}(A)$ iff some open ball $B(x, r)$ is contained in $A$.
+</Definition>
+
+<Example title="Closure, interior, boundary in R">
+For $A = (0, 1) \cup \{2\}$ in $\mathbb{R}$:
+
+- $\overline{A} = [0, 1] \cup \{2\}$ (add limit points $0$ and $1$).
+- $\operatorname{int}(A) = (0, 1)$ (the isolated point $2$ is not interior).
+- $\partial A = \{0, 1, 2\}$.
+</Example>
+
+<Example title="Closure of Q in R">
+$\overline{\mathbb{Q}} = \mathbb{R}$ since every real number is a limit of rationals. The interior is $\operatorname{int}(\mathbb{Q}) = \emptyset$ since no interval is contained in $\mathbb{Q}$. The boundary is $\partial \mathbb{Q} = \mathbb{R}$.
+</Example>
+
+<Example title="Dense sets">
+A set $A$ is **dense** in $X$ if $\overline{A} = X$. Examples: $\mathbb{Q}$ is dense in $\mathbb{R}$. The irrationals $\mathbb{R} \setminus \mathbb{Q}$ are also dense in $\mathbb{R}$. Polynomials are dense in $C[a,b]$ (Weierstrass approximation).
+</Example>
+
+---
+
+## Sequential characterization
+
+<Theorem title="Closed sets via sequences" number="9.3">
+A set $F \subseteq X$ is closed if and only if every convergent sequence in $F$ has its limit in $F$. That is: if $(x_n) \subseteq F$ and $x_n \to x$, then $x \in F$.
+</Theorem>
+
+<Example title="Closed set characterization">
+$F = [0,1]$ is closed: if $x_n \in [0,1]$ and $x_n \to x$, then $0 \leq x_n \leq 1$ for all $n$, so $0 \leq x \leq 1$, hence $x \in F$.
+
+$A = (0,1)$ is not closed: $x_n = 1/n \in (0,1)$ but $x_n \to 0 \notin (0,1)$.
+</Example>
+
+<Example title="Continuity via open sets">
+$f: X \to Y$ is continuous if and only if $f^{-1}(U)$ is open in $X$ for every open $U \subseteq Y$. Equivalently, $f^{-1}(F)$ is closed for every closed $F \subseteq Y$.
+
+For $f: \mathbb{R} \to \mathbb{R}$, $f(x) = x^2$: $f^{-1}((-\infty, 4)) = (-2, 2)$ is open. $f^{-1}(\{0\}) = \{0\}$ is closed.
+</Example>
+
+---
+
+## Equivalent metrics
+
+<Definition title="Equivalent metrics" number="9.9">
+Two metrics $d_1$ and $d_2$ on $X$ are **equivalent** if they generate the same open sets. This happens if and only if: every open ball in $d_1$ contains an open ball in $d_2$ (centered at the same point), and vice versa.
+
+They are **strongly equivalent** if there exist $c, C > 0$ with $c \cdot d_1 \leq d_2 \leq C \cdot d_1$.
+</Definition>
+
+<Example title="All p-metrics on R^n are equivalent">
+On $\mathbb{R}^n$, the metrics $d_1$, $d_2$ (Euclidean), and $d_\infty$ are all strongly equivalent:
+
+$$d_\infty(x,y) \leq d_2(x,y) \leq d_1(x,y) \leq n \cdot d_\infty(x,y).$$
+
+They generate the same open sets, so topological properties (convergence, continuity, compactness) are the same for all three.
+</Example>
+
+<Remark>
+The concepts of open and closed sets, together with their properties, form the basis of **topology**. A topological space is defined by specifying which subsets are "open," satisfying the three axioms (unions, finite intersections, whole space and empty set). Metric spaces provide the most concrete and intuitive examples, but the framework extends far beyond.
+</Remark>

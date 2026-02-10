@@ -1,0 +1,141 @@
+export const metadata = {
+  title: '평균값 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "5. 미분", href: "/analysis/ch05-differentiation" },
+  { label: "정리 - 평균값 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 평균값 정리 (Mean Value Theorem)
+
+The Mean Value Theorem (MVT) is arguably the most important theorem in differential calculus. It connects the local information (derivative at a point) with the global behavior (change over an interval).
+
+---
+
+## Statement
+
+<Theorem title="Mean Value Theorem" number="5.3">
+Let $f : [a, b] \to \mathbb{R}$ satisfy:
+1. $f$ is continuous on $[a, b]$,
+2. $f$ is differentiable on $(a, b)$.
+
+Then there exists $c \in (a, b)$ with
+
+$$f'(c) = \frac{f(b) - f(a)}{b - a}.$$
+</Theorem>
+
+<Remark>
+Geometrically: there is a point where the tangent line is parallel to the secant line connecting $(a, f(a))$ and $(b, f(b))$. See the [proof](/analysis/ch05-differentiation/proofs/p01-mvt-proof).
+</Remark>
+
+---
+
+## Immediate consequences
+
+<Theorem title="Zero derivative implies constant">
+If $f$ is differentiable on $(a, b)$ with $f'(x) = 0$ for all $x \in (a, b)$, then $f$ is constant.
+</Theorem>
+
+<Proof>
+For any $x_1, x_2 \in (a, b)$ with $x_1 < x_2$: by MVT, $f(x_2) - f(x_1) = f'(c)(x_2 - x_1) = 0$. So $f(x_1) = f(x_2)$.
+</Proof>
+
+<Theorem title="Monotonicity and the derivative">
+If $f$ is differentiable on $(a, b)$:
+- $f'(x) > 0$ for all $x \in (a, b)$ implies $f$ is strictly increasing.
+- $f'(x) < 0$ for all $x \in (a, b)$ implies $f$ is strictly decreasing.
+- $f'(x) \geq 0$ for all $x$ implies $f$ is nondecreasing.
+</Theorem>
+
+---
+
+## Specific computations
+
+<Example title="Linear function">
+1. $f(x) = 3x + 2$ on $[1, 4]$: $\frac{f(4) - f(1)}{3} = \frac{14 - 5}{3} = 3 = f'(x)$ for all $x$. Every point $c \in (1, 4)$ works.
+</Example>
+
+<Example title="Quadratic function">
+2. $f(x) = x^2$ on $[0, 2]$: $\frac{f(2) - f(0)}{2} = \frac{4}{2} = 2$. Need $f'(c) = 2c = 2$, so $c = 1$ (the midpoint).
+</Example>
+
+<Example title="Cubic function">
+3. $f(x) = x^3$ on $[0, 3]$: $\frac{27 - 0}{3} = 9$. Need $3c^2 = 9$, so $c = \sqrt{3} \approx 1.732$.
+</Example>
+
+<Example title="Exponential function">
+4. $f(x) = e^x$ on $[0, 1]$: $\frac{e - 1}{1} = e - 1 \approx 1.718$. Need $e^c = e - 1$, so $c = \ln(e - 1) \approx 0.541$.
+</Example>
+
+---
+
+## Inequality applications
+
+<Example title="sin(x) bound">
+5. $|\sin x - \sin y| \leq |x - y|$ for all $x, y$. By MVT: $\sin x - \sin y = \cos(c)(x - y)$ for some $c$. Since $|\cos c| \leq 1$: $|\sin x - \sin y| \leq |x - y|$.
+
+This proves $\sin$ is Lipschitz with constant $1$.
+</Example>
+
+<Example title="ln(1+x) bound">
+6. For $x > 0$: $\frac{x}{1+x} < \ln(1 + x) < x$.
+
+**Upper bound**: MVT applied to $f(t) = \ln(1+t)$ on $[0, x]$: $\ln(1+x) = \frac{1}{1+c} \cdot x < x$ since $c > 0$.
+
+**Lower bound**: $\ln(1+x) = \frac{1}{1+c} \cdot x > \frac{x}{1+x}$ since $c < x$.
+</Example>
+
+<Example title="Exponential inequality">
+7. For $x > 0$: $e^x > 1 + x$. By MVT on $[0, x]$: $e^x - 1 = e^c \cdot x > 1 \cdot x = x$ since $c > 0$ gives $e^c > 1$.
+</Example>
+
+---
+
+## Generalized MVT (Cauchy's MVT)
+
+<Theorem title="Cauchy's Mean Value Theorem" number="5.4">
+If $f, g$ are continuous on $[a, b]$ and differentiable on $(a, b)$ with $g'(x) \neq 0$ on $(a, b)$, then there exists $c \in (a, b)$ with
+
+$$\frac{f'(c)}{g'(c)} = \frac{f(b) - f(a)}{g(b) - g(a)}.$$
+</Theorem>
+
+<Example title="Cauchy MVT for L'Hopital">
+8. This is the key tool in proving L'Hopital's rule. If $\lim_{x \to a} f(x) = \lim_{x \to a} g(x) = 0$ and $\lim_{x \to a} f'(x)/g'(x) = L$, then by Cauchy's MVT, $\frac{f(x)}{g(x)} = \frac{f'(c)}{g'(c)}$ for some $c$ between $a$ and $x$, and as $x \to a$, $c \to a$, giving $\frac{f(x)}{g(x)} \to L$.
+</Example>
+
+---
+
+## L'Hopital's rule
+
+<Theorem title="L'Hopital's Rule">
+If $\lim_{x \to a} f(x) = \lim_{x \to a} g(x) = 0$ (or both $\to \pm\infty$), $g'(x) \neq 0$ near $a$, and $\lim_{x \to a} \frac{f'(x)}{g'(x)} = L$, then $\lim_{x \to a} \frac{f(x)}{g(x)} = L$.
+</Theorem>
+
+<Example title="Standard L'Hopital applications">
+9. $\lim_{x \to 0} \frac{\sin x}{x} = \lim_{x \to 0} \frac{\cos x}{1} = 1$.
+
+10. $\lim_{x \to 0} \frac{e^x - 1}{x} = \lim_{x \to 0} \frac{e^x}{1} = 1$.
+
+11. $\lim_{x \to \infty} \frac{\ln x}{x} = \lim_{x \to \infty} \frac{1/x}{1} = 0$.
+</Example>
+
+---
+
+## MVT and antiderivatives
+
+<Example title="Two antiderivatives differ by a constant">
+12. If $F'(x) = G'(x)$ for all $x \in (a, b)$, then $(F - G)'(x) = 0$, so $F - G$ is constant (by the MVT consequence). This fundamental fact underlies the Fundamental Theorem of Calculus: all antiderivatives of $f$ differ by a constant.
+</Example>

@@ -1,0 +1,210 @@
+export const metadata = {
+  title: '집합론 기본 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "개념 - 집합론 기본" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 집합론 기본 (Basic Set Theory)
+
+Sets are the foundational objects of mathematics. Every concept in analysis -- real numbers, sequences, functions, limits -- is built on set-theoretic language. This section introduces the notation and operations we use throughout.
+
+---
+
+## Set Notation
+
+<Definition title="Set" number="0.8">
+A **set** is a well-defined collection of distinct objects, called **elements** or **members**. We write $x \in A$ to mean "$x$ is an element of $A$," and $x \notin A$ to mean "$x$ is not an element of $A$."
+
+A set can be specified by:
+- **Roster notation**: listing elements explicitly, e.g., $A = \lbrace 1, 2, 3 \rbrace$.
+- **Set-builder notation**: $A = \lbrace x \in D : P(x) \rbrace$, the set of all $x$ in $D$ satisfying property $P(x)$.
+</Definition>
+
+<Example title="Standard number sets">
+1. $\mathbb{N} = \lbrace 1, 2, 3, \ldots \rbrace$ -- the natural numbers (we adopt the convention $0 \notin \mathbb{N}$ in this course).
+2. $\mathbb{Z} = \lbrace \ldots, -2, -1, 0, 1, 2, \ldots \rbrace$ -- the integers.
+3. $\mathbb{Q} = \lbrace p/q : p \in \mathbb{Z},\; q \in \mathbb{N} \rbrace$ -- the rational numbers.
+4. $\mathbb{R}$ -- the real numbers (constructed axiomatically as a complete ordered field).
+</Example>
+
+<Example title="Set-builder notation">
+5. $\lbrace n \in \mathbb{N} : n \text{ is even} \rbrace = \lbrace 2, 4, 6, 8, \ldots \rbrace$.
+6. $\lbrace x \in \mathbb{R} : x^2 < 4 \rbrace = (-2, 2)$, an open interval.
+7. $\lbrace x \in \mathbb{R} : x^2 + 1 = 0 \rbrace = \emptyset$, the empty set (no real solution exists).
+</Example>
+
+---
+
+## Subsets and Equality
+
+<Definition title="Subset and equality" number="0.9">
+Let $A$ and $B$ be sets.
+
+- $A \subseteq B$ ($A$ is a **subset** of $B$) means $\forall x,\; x \in A \Rightarrow x \in B$.
+- $A = B$ means $A \subseteq B$ and $B \subseteq A$.
+- $A \subsetneq B$ ($A$ is a **proper subset** of $B$) means $A \subseteq B$ and $A \neq B$.
+- The **empty set** $\emptyset$ satisfies $\emptyset \subseteq A$ for every set $A$ (vacuously true).
+</Definition>
+
+<Example title="Subset relations among number sets">
+8. $\mathbb{N} \subsetneq \mathbb{Z} \subsetneq \mathbb{Q} \subsetneq \mathbb{R}$. Each containment is strict: $0 \in \mathbb{Z} \setminus \mathbb{N}$, $\frac{1}{2} \in \mathbb{Q} \setminus \mathbb{Z}$, $\sqrt{2} \in \mathbb{R} \setminus \mathbb{Q}$.
+</Example>
+
+<Remark>
+To prove $A = B$, the standard technique is **double inclusion**: show $A \subseteq B$ and $B \subseteq A$ separately. This is used constantly in analysis, for instance when proving that two characterizations of a concept define the same set.
+</Remark>
+
+---
+
+## Set Operations
+
+<Definition title="Union, intersection, and complement" number="0.10">
+Let $A$ and $B$ be subsets of a universal set $U$.
+
+- **Union**: $A \cup B = \lbrace x : x \in A \text{ or } x \in B \rbrace$.
+- **Intersection**: $A \cap B = \lbrace x : x \in A \text{ and } x \in B \rbrace$.
+- **Complement**: $A^c = U \setminus A = \lbrace x \in U : x \notin A \rbrace$.
+- **Set difference**: $A \setminus B = \lbrace x \in A : x \notin B \rbrace = A \cap B^c$.
+- Two sets are **disjoint** if $A \cap B = \emptyset$.
+</Definition>
+
+<Example title="Set operations on intervals">
+9. Let $A = [0, 2]$ and $B = [1, 3]$.
+   - $A \cup B = [0, 3]$.
+   - $A \cap B = [1, 2]$.
+   - $A \setminus B = [0, 1)$.
+   - $B \setminus A = (2, 3]$.
+</Example>
+
+<Theorem title="De Morgan's laws for sets" number="0.1">
+For any sets $A, B \subseteq U$:
+
+$$(A \cup B)^c = A^c \cap B^c, \qquad (A \cap B)^c = A^c \cup B^c.$$
+
+More generally, for any collection of sets $\lbrace A_i \rbrace_{i \in I}$:
+
+$$\left(\bigcup_{i \in I} A_i\right)^c = \bigcap_{i \in I} A_i^c, \qquad \left(\bigcap_{i \in I} A_i\right)^c = \bigcup_{i \in I} A_i^c.$$
+</Theorem>
+
+<Proof>
+We prove $(A \cup B)^c = A^c \cap B^c$ by double inclusion.
+
+$(\subseteq)$: Let $x \in (A \cup B)^c$. Then $x \notin A \cup B$, so $x \notin A$ and $x \notin B$. Hence $x \in A^c$ and $x \in B^c$, giving $x \in A^c \cap B^c$.
+
+$(\supseteq)$: Let $x \in A^c \cap B^c$. Then $x \notin A$ and $x \notin B$, so $x \notin A \cup B$, giving $x \in (A \cup B)^c$.
+</Proof>
+
+---
+
+## Cartesian Product
+
+<Definition title="Cartesian product" number="0.11">
+The **Cartesian product** of sets $A$ and $B$ is
+
+$$A \times B = \lbrace (a, b) : a \in A,\; b \in B \rbrace.$$
+
+More generally, $A_1 \times A_2 \times \cdots \times A_n = \lbrace (a_1, a_2, \ldots, a_n) : a_i \in A_i \text{ for each } i \rbrace$.
+
+When all factors are the same, we write $A^n = A \times A \times \cdots \times A$ ($n$ times).
+</Definition>
+
+<Example title="Cartesian products">
+10. $\mathbb{R} \times \mathbb{R} = \mathbb{R}^2$ is the Euclidean plane.
+11. $\lbrace 0, 1 \rbrace \times \lbrace a, b, c \rbrace = \lbrace (0,a), (0,b), (0,c), (1,a), (1,b), (1,c) \rbrace$ has $2 \times 3 = 6$ elements.
+12. The unit square is $[0,1]^2 = [0,1] \times [0,1] = \lbrace (x, y) \in \mathbb{R}^2 : 0 \leq x \leq 1,\; 0 \leq y \leq 1 \rbrace$.
+</Example>
+
+---
+
+## Power Set
+
+<Definition title="Power set" number="0.12">
+The **power set** of $A$, denoted $\mathcal{P}(A)$ or $2^A$, is the set of all subsets of $A$:
+
+$$\mathcal{P}(A) = \lbrace S : S \subseteq A \rbrace.$$
+
+If $A$ has $n$ elements, then $\mathcal{P}(A)$ has $2^n$ elements.
+</Definition>
+
+<Example title="Power set computation">
+13. $\mathcal{P}(\lbrace 1, 2 \rbrace) = \lbrace \emptyset, \lbrace 1 \rbrace, \lbrace 2 \rbrace, \lbrace 1, 2 \rbrace \rbrace$, which has $2^2 = 4$ elements.
+14. $\mathcal{P}(\emptyset) = \lbrace \emptyset \rbrace$, which has $2^0 = 1$ element. Note that $\mathcal{P}(\emptyset) \neq \emptyset$.
+</Example>
+
+<Remark>
+The power set is relevant to analysis via measure theory: the Borel $\sigma$-algebra on $\mathbb{R}$ is a carefully chosen subcollection of $\mathcal{P}(\mathbb{R})$.
+</Remark>
+
+---
+
+## Indexed Families of Sets
+
+<Definition title="Indexed family" number="0.13">
+An **indexed family** of sets is a collection $\lbrace A_\alpha \rbrace_{\alpha \in I}$ where $I$ is an **index set** and for each $\alpha \in I$, $A_\alpha$ is a set.
+
+The union and intersection of an indexed family are:
+
+$$\bigcup_{\alpha \in I} A_\alpha = \lbrace x : \exists \alpha \in I,\; x \in A_\alpha \rbrace, \qquad \bigcap_{\alpha \in I} A_\alpha = \lbrace x : \forall \alpha \in I,\; x \in A_\alpha \rbrace.$$
+</Definition>
+
+<Example title="Nested intervals">
+15. Let $A_n = \left(0, \frac{1}{n}\right)$ for $n \in \mathbb{N}$. Then:
+
+$$\bigcup_{n=1}^{\infty} A_n = (0, 1), \qquad \bigcap_{n=1}^{\infty} A_n = \emptyset.$$
+
+The union is $(0,1)$ because for any $x \in (0,1)$, we have $x \in A_1 = (0,1)$. The intersection is empty because for any $x > 0$, by the Archimedean property there exists $N$ with $\frac{1}{N} < x$, so $x \notin A_N$.
+</Example>
+
+<Example title="Closed nested intervals">
+16. Let $B_n = \left[0, \frac{1}{n}\right]$ for $n \in \mathbb{N}$. Then:
+
+$$\bigcup_{n=1}^{\infty} B_n = [0, 1], \qquad \bigcap_{n=1}^{\infty} B_n = \lbrace 0 \rbrace.$$
+
+The intersection is $\lbrace 0 \rbrace$ because $0 \in B_n$ for every $n$, but any $x > 0$ eventually falls outside $B_n$ for large enough $n$. This is an instance of the **nested interval property**.
+</Example>
+
+---
+
+## Distributive Laws
+
+<Theorem title="Distributive laws" number="0.2">
+For any sets $A$, $B$, $C$:
+
+$$A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$$
+
+$$A \cup (B \cap C) = (A \cup B) \cap (A \cup C)$$
+</Theorem>
+
+<Proof>
+We prove the first law. Let $x \in A \cap (B \cup C)$. Then $x \in A$ and $x \in B \cup C$. If $x \in B$, then $x \in A \cap B \subseteq (A \cap B) \cup (A \cap C)$. If $x \in C$, then $x \in A \cap C \subseteq (A \cap B) \cup (A \cap C)$. In either case, $x \in (A \cap B) \cup (A \cap C)$.
+
+Conversely, let $x \in (A \cap B) \cup (A \cap C)$. If $x \in A \cap B$, then $x \in A$ and $x \in B \subseteq B \cup C$, so $x \in A \cap (B \cup C)$. Similarly if $x \in A \cap C$.
+</Proof>
+
+---
+
+## Summary
+
+<Remark>
+The set-theoretic language introduced here is not merely notation -- it is the medium in which analysis is conducted. Key takeaways:
+
+1. **Set-builder notation** $\lbrace x \in D : P(x) \rbrace$ connects sets to logic; every set operation corresponds to a logical connective.
+2. **De Morgan's laws** for sets mirror De Morgan's laws for logic, and are used whenever we negate set-theoretic statements.
+3. **Indexed families** and their unions/intersections appear in the definitions of open sets, compactness, $\sigma$-algebras, and throughout measure theory.
+4. **Cartesian products** give us $\mathbb{R}^n$ and are the setting for multivariable analysis.
+</Remark>

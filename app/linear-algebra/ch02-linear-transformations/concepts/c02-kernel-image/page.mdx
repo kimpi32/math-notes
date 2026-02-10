@@ -1,0 +1,174 @@
+export const metadata = {
+  title: 'Kernel and Image — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "2. 선형변환", href: "/linear-algebra/ch02-linear-transformations" },
+  { label: "Concept — Kernel and Image" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Kernel and Image
+
+The **kernel** (null space) and **image** (range) of a linear transformation are the two fundamental subspaces associated with it. They measure how much information the map "destroys" and "covers."
+
+---
+
+## Definitions
+
+<Definition title="Kernel (null space)" number="2.2">
+Let $T : V \to W$ be a linear transformation. The **kernel** (or **null space**) of $T$ is
+
+$$\ker(T) = N(T) = \{v \in V \mid T(v) = 0\}.$$
+</Definition>
+
+<Definition title="Image (range)" number="2.3">
+The **image** (or **range**) of $T$ is
+
+$$\text{im}(T) = R(T) = \{T(v) \mid v \in V\} = \{w \in W \mid w = T(v) \text{ for some } v \in V\}.$$
+</Definition>
+
+<Definition title="Rank and nullity" number="2.4">
+The **rank** of $T$ is $\text{rank}(T) = \dim(\text{im}(T))$.
+
+The **nullity** of $T$ is $\text{nullity}(T) = \dim(\ker(T))$.
+</Definition>
+
+<Theorem title="Kernel and image are subspaces" number="2.2">
+For $T : V \to W$ linear:
+1. $\ker(T)$ is a subspace of $V$.
+2. $\text{im}(T)$ is a subspace of $W$.
+</Theorem>
+
+<Proof>
+For (1): $T(0) = 0$, so $0 \in \ker(T)$. If $T(u) = 0$ and $T(v) = 0$, then $T(au + bv) = aT(u) + bT(v) = 0$, so $au + bv \in \ker(T)$.
+
+For (2): $T(0) = 0 \in \text{im}(T)$. If $w_1 = T(v_1)$ and $w_2 = T(v_2)$, then $aw_1 + bw_2 = T(av_1 + bv_2) \in \text{im}(T)$.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="matrix-kernel" title="Kernel of a matrix transformation">
+For $A = \begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix}$, $T_A : \mathbb{R}^3 \to \mathbb{R}^2$ with $T_A(x) = Ax$.
+
+Row reducing: $\begin{pmatrix} 1 & 2 & 3 \\ 0 & -3 & -6 \end{pmatrix} \to \begin{pmatrix} 1 & 0 & -1 \\ 0 & 1 & 2 \end{pmatrix}$.
+
+So $\ker(T_A) = \{t(1, -2, 1) \mid t \in \mathbb{R}\}$. Nullity $= 1$, rank $= 2$.
+</Example>
+
+<Example id="derivative-kernel" title="Kernel of differentiation">
+$D : P_n(\mathbb{R}) \to P_{n-1}(\mathbb{R})$, $D(p) = p'$.
+
+$\ker(D) = \{p \in P_n(\mathbb{R}) \mid p' = 0\} = \{c \mid c \in \mathbb{R}\}$ (the constant polynomials).
+
+So $\text{nullity}(D) = 1$ and $\text{im}(D) = P_{n-1}(\mathbb{R})$, giving $\text{rank}(D) = n$.
+</Example>
+
+<Example id="projection-kernel" title="Kernel and image of a projection">
+$\pi : \mathbb{R}^3 \to \mathbb{R}^2$, $\pi(x, y, z) = (x, y)$.
+
+$\ker(\pi) = \{(0, 0, z) \mid z \in \mathbb{R}\}$ (the $z$-axis), nullity $= 1$.
+
+$\text{im}(\pi) = \mathbb{R}^2$, rank $= 2$.
+</Example>
+
+<Example id="trace-kernel" title="Kernel of the trace">
+$\text{tr} : M_{2 \times 2}(F) \to F$, $\text{tr}\begin{pmatrix} a & b \\ c & d \end{pmatrix} = a + d$.
+
+$\ker(\text{tr}) = \{A \mid a + d = 0\}$, the trace-zero matrices. This has dimension $3$ (nullity $= 3$).
+
+$\text{im}(\text{tr}) = F$, rank $= 1$.
+
+Check: $3 + 1 = 4 = \dim M_{2 \times 2}(F)$.
+</Example>
+
+<Example id="rotation-kernel" title="Kernel of rotation">
+$R_\theta : \mathbb{R}^2 \to \mathbb{R}^2$ (rotation by $\theta \neq 0$).
+
+$\ker(R_\theta) = \{0\}$ (only the origin is fixed), nullity $= 0$.
+
+$\text{im}(R_\theta) = \mathbb{R}^2$ (rotation is surjective), rank $= 2$.
+</Example>
+
+<Example id="zero-map-kernel" title="Kernel of the zero map">
+$T_0 : V \to W$, $T_0(v) = 0$ for all $v$.
+
+$\ker(T_0) = V$, nullity $= \dim V$.
+
+$\text{im}(T_0) = \{0\}$, rank $= 0$.
+</Example>
+
+<Example id="identity-kernel" title="Kernel of the identity">
+$\text{id}_V : V \to V$, $\text{id}_V(v) = v$.
+
+$\ker(\text{id}_V) = \{0\}$, nullity $= 0$.
+
+$\text{im}(\text{id}_V) = V$, rank $= \dim V$.
+</Example>
+
+<Example id="transpose-kernel" title="Kernel and image of transpose">
+$T : M_{2 \times 2}(F) \to M_{2 \times 2}(F)$, $T(A) = A^T$.
+
+$\ker(T) = \{0\}$ (since $A^T = 0$ implies $A = 0$), nullity $= 0$.
+
+$\text{im}(T) = M_{2 \times 2}(F)$ (since $(B^T)^T = B$), rank $= 4$.
+</Example>
+
+<Example id="homogeneous-system" title="Null space of a matrix">
+For any $A \in M_{m \times n}(F)$, $N(A) = \ker(T_A)$ is the solution set of $Ax = 0$. The **column space** $C(A) = \text{im}(T_A)$ is spanned by the columns of $A$.
+</Example>
+
+<Example id="integration-kernel" title="Kernel of definite integration">
+$T : C[-1, 1] \to \mathbb{R}$, $T(f) = \int_{-1}^1 f(x)\,dx$.
+
+$\ker(T)$ is the set of continuous functions with zero integral over $[-1, 1]$. For instance, all odd functions belong to $\ker(T)$. This kernel is infinite-dimensional.
+</Example>
+
+<Example id="eval-kernel" title="Kernel of evaluation">
+$\text{ev}_c : P_n(F) \to F$, $\text{ev}_c(p) = p(c)$.
+
+$\ker(\text{ev}_c) = \{p \in P_n(F) \mid p(c) = 0\}$, i.e., polynomials with root at $c$. These are of the form $(x - c)q(x)$ with $\deg q \leq n - 1$, so nullity $= n$.
+</Example>
+
+<Example id="left-shift-kernel" title="Kernel of the left shift">
+$L : F^\infty \to F^\infty$, $L(a_1, a_2, a_3, \ldots) = (a_2, a_3, a_4, \ldots)$.
+
+$\ker(L) = \{(a_1, 0, 0, \ldots) \mid a_1 \in F\}$, which is 1-dimensional.
+
+$\text{im}(L) = F^\infty$ (surjective: for any $(b_1, b_2, \ldots)$, take $(0, b_1, b_2, \ldots)$).
+</Example>
+
+---
+
+## Injectivity and surjectivity
+
+<Theorem title="Kernel characterizes injectivity" number="2.3">
+A linear map $T : V \to W$ is **injective** (one-to-one) if and only if $\ker(T) = \{0\}$.
+</Theorem>
+
+<Proof>
+($\Rightarrow$) If $T$ is injective and $T(v) = 0 = T(0)$, then $v = 0$.
+
+($\Leftarrow$) If $\ker(T) = \{0\}$ and $T(u) = T(v)$, then $T(u - v) = 0$, so $u - v = 0$, i.e., $u = v$.
+</Proof>
+
+<Theorem title="Image characterizes surjectivity" number="2.4">
+$T : V \to W$ is **surjective** (onto) if and only if $\text{im}(T) = W$.
+</Theorem>
+
+<Remark title="Looking ahead">
+The precise relationship between kernel and image is given by the [Rank-Nullity Theorem](/linear-algebra/ch02-linear-transformations/theorems/t01-rank-nullity): $\dim V = \text{rank}(T) + \text{nullity}(T)$. A linear map that is both injective and surjective is an [isomorphism](/linear-algebra/ch02-linear-transformations/concepts/c03-isomorphism).
+</Remark>

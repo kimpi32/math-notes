@@ -1,0 +1,173 @@
+export const metadata = {
+  title: 'Invertible Matrix Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "3. 행렬", href: "/linear-algebra/ch03-matrices" },
+  { label: "Theorem — Invertible Matrix Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# The Invertible Matrix Theorem
+
+The Invertible Matrix Theorem collects a large number of equivalent conditions for a square matrix to be invertible. It is a grand unifying result that connects many concepts from linear algebra.
+
+---
+
+## Statement
+
+<Theorem title="Invertible Matrix Theorem" number="3.2">
+Let $A$ be an $n \times n$ matrix over a field $F$. The following are equivalent:
+
+**(a)** $A$ is invertible.
+
+**(b)** $A$ is row equivalent to $I_n$ (the RREF of $A$ is $I_n$).
+
+**(c)** $A$ has $n$ pivot positions.
+
+**(d)** The equation $Ax = 0$ has only the trivial solution ($\ker(T_A) = \{0\}$).
+
+**(e)** The columns of $A$ are linearly independent.
+
+**(f)** The linear transformation $T_A : F^n \to F^n$ is injective.
+
+**(g)** The equation $Ax = b$ has a solution for every $b \in F^n$.
+
+**(h)** The columns of $A$ span $F^n$.
+
+**(i)** The linear transformation $T_A : F^n \to F^n$ is surjective.
+
+**(j)** $T_A$ is an isomorphism (bijective).
+
+**(k)** There exists an $n \times n$ matrix $C$ with $CA = I_n$ (left inverse).
+
+**(l)** There exists an $n \times n$ matrix $D$ with $AD = I_n$ (right inverse).
+
+**(m)** $A^T$ is invertible.
+
+**(n)** The columns of $A$ form a basis for $F^n$.
+
+**(o)** $\text{rank}(A) = n$.
+
+**(p)** $\text{nullity}(A) = 0$.
+
+**(q)** $\det(A) \neq 0$ (see [Chapter 4](/linear-algebra/ch04-determinants/theorems/t01-det-invertibility)).
+
+**(r)** $0$ is **not** an eigenvalue of $A$ (see Chapter 5).
+
+**(s)** The row vectors of $A$ are linearly independent.
+
+**(t)** The row vectors of $A$ form a basis for $F^n$.
+</Theorem>
+
+---
+
+## Examples illustrating the equivalences
+
+<Example id="invertible-2x2" title="All conditions hold">
+$A = \begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix}$.
+
+- (a): $A^{-1} = \begin{pmatrix} 1 & -1 \\ -1 & 2 \end{pmatrix}$.
+- (b): RREF is $\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = I_2$.
+- (c): Two pivots.
+- (d): $Ax = 0 \implies x = 0$.
+- (e): $(2, 1)^T$ and $(1, 1)^T$ are independent.
+- (o): rank $= 2$.
+- (q): $\det A = 2 - 1 = 1 \neq 0$.
+</Example>
+
+<Example id="singular-2x2" title="All conditions fail">
+$A = \begin{pmatrix} 1 & 2 \\ 2 & 4 \end{pmatrix}$.
+
+- (a): Not invertible.
+- (b): RREF is $\begin{pmatrix} 1 & 2 \\ 0 & 0 \end{pmatrix} \neq I_2$.
+- (c): Only one pivot.
+- (d): $A(-2, 1)^T = 0$ (nontrivial solution).
+- (e): $(1, 2)^T = \frac{1}{2}(2, 4)^T$ (dependent).
+- (g): $Ax = (1, 0)^T$ has no solution ($(1, 0)^T \notin C(A)$).
+- (o): rank $= 1 < 2$.
+- (q): $\det A = 0$.
+</Example>
+
+<Example id="3x3-check" title="Checking invertibility of a 3 x 3 matrix">
+$A = \begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \\ 1 & 1 & 1 \end{pmatrix}$.
+
+Row reduce: $R_3 \to R_3 - R_1$: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \\ 0 & 1 & -1 \end{pmatrix}$. $R_3 \to R_3 - R_2$: $\begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+Only 2 pivots, rank $= 2 < 3$. Not invertible by (c) and (o).
+</Example>
+
+<Example id="determinant-quick" title="Quick test via determinant">
+For small matrices, computing $\det A$ is the fastest test:
+- $A = \begin{pmatrix} 3 & 4 \\ 6 & 8 \end{pmatrix}$: $\det = 24 - 24 = 0$. Singular.
+- $A = \begin{pmatrix} 3 & 4 \\ 5 & 7 \end{pmatrix}$: $\det = 21 - 20 = 1 \neq 0$. Invertible.
+</Example>
+
+<Example id="transpose-invertibility" title="A is invertible iff A^T is invertible">
+This follows from $\det(A^T) = \det(A)$. Alternatively: rank$(A) = $ rank$(A^T)$ (row rank $=$ column rank), so $A$ has rank $n$ iff $A^T$ does.
+</Example>
+
+<Example id="product-invertible" title="Product of invertible matrices">
+$AB$ is invertible iff both $A$ and $B$ are invertible. If $A$ or $B$ is singular, then $\det(AB) = \det(A)\det(B) = 0$.
+</Example>
+
+<Example id="diagonal-test" title="Diagonal matrices">
+$D = \text{diag}(d_1, \ldots, d_n)$ is invertible iff all $d_i \neq 0$. The rank is the number of nonzero diagonal entries.
+</Example>
+
+<Example id="triangular-test" title="Triangular matrices">
+An upper (or lower) triangular matrix is invertible iff all diagonal entries are nonzero. The determinant equals the product of the diagonal entries.
+</Example>
+
+<Example id="column-rank" title="Column rank perspective">
+$A$ is invertible iff its columns $\{a_1, \ldots, a_n\}$ form a basis for $F^n$. This means: every vector in $F^n$ can be expressed **uniquely** as a linear combination of the columns. The system $Ax = b$ always has a unique solution.
+</Example>
+
+<Example id="eigenvalue-zero" title="Eigenvalue perspective">
+$A$ is singular iff $0$ is an eigenvalue: $Av = 0v = 0$ for some $v \neq 0$, meaning $\ker(A) \neq \{0\}$. The characteristic polynomial $\det(A - \lambda I)$ vanishes at $\lambda = 0$ iff $\det(A) = 0$.
+</Example>
+
+<Example id="left-right" title="Left inverse = right inverse for square matrices">
+For square matrices, the existence of a left inverse (CA = I) automatically implies the existence of a right inverse (and they are equal). This is a consequence of the finite-dimensionality of $F^n$: injectivity implies surjectivity for square matrices.
+
+For non-square matrices, left and right inverses can exist independently and are generally different.
+</Example>
+
+<Example id="nearly-singular" title="Numerical sensitivity">
+$A = \begin{pmatrix} 1 & 1 \\ 1 & 1.0001 \end{pmatrix}$ is technically invertible ($\det = 0.0001$), but it is **ill-conditioned**: small changes in the input produce large changes in the solution. The **condition number** $\kappa(A) = \|A\| \cdot \|A^{-1}\|$ measures this sensitivity.
+</Example>
+
+---
+
+## Proof sketch
+
+<Remark title="Proof structure">
+The equivalences are proved by establishing a cycle of implications:
+
+(a) $\Rightarrow$ (d): $Ax = 0 \Rightarrow x = A^{-1}0 = 0$.
+
+(d) $\Leftrightarrow$ (e) $\Leftrightarrow$ (f) $\Leftrightarrow$ (p): Kernel is trivial iff columns are independent iff $T_A$ is injective iff nullity $= 0$.
+
+(f) $\Leftrightarrow$ (i) $\Leftrightarrow$ (j): For maps $F^n \to F^n$, injective $\Leftrightarrow$ surjective $\Leftrightarrow$ bijective (by Rank-Nullity).
+
+(j) $\Rightarrow$ (a): Bijective linear map has a linear inverse.
+
+(d) $\Leftrightarrow$ (b) $\Leftrightarrow$ (c): Trivial null space iff RREF has $n$ pivots iff RREF is $I_n$.
+
+The determinant characterization (q) follows from the properties of determinants ([Chapter 4](/linear-algebra/ch04-determinants/theorems/t01-det-invertibility)).
+</Remark>
+
+<Remark title="Looking ahead">
+The Invertible Matrix Theorem grows as we learn new concepts. The eigenvalue condition (r) is added in Chapter 5. After introducing determinants, condition (q) provides the most concise scalar criterion for invertibility.
+</Remark>

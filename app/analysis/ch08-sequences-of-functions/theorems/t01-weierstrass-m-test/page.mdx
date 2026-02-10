@@ -1,0 +1,148 @@
+export const metadata = {
+  title: 'Weierstrass M-test — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "8. 함수열과 함수급수", href: "/analysis/ch08-sequences-of-functions" },
+  { label: "정리 — 바이어슈트라스 M-판정법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Weierstrass M-test
+
+The Weierstrass M-test is the standard tool for establishing uniform convergence of a series of functions. It reduces the problem to checking convergence of a series of constants.
+
+---
+
+## Statement
+
+<Theorem title="Weierstrass M-test" number="8.5">
+Let $(g_n)$ be a sequence of functions defined on a set $D$ and let $(M_n)$ be a sequence of nonnegative constants such that
+
+$$|g_n(x)| \leq M_n \quad \text{for all } x \in D, \text{ for all } n.$$
+
+If $\sum_{n=1}^\infty M_n$ converges, then $\sum_{n=1}^\infty g_n$ converges **uniformly** (and absolutely) on $D$.
+</Theorem>
+
+<Proof>
+**Absolute convergence**: For each $x \in D$, $\sum |g_n(x)| \leq \sum M_n < \infty$, so $\sum g_n(x)$ converges absolutely by comparison.
+
+**Uniform convergence**: Let $f(x) = \sum_{n=1}^\infty g_n(x)$ and $S_N(x) = \sum_{n=1}^N g_n(x)$. Then
+
+$$|f(x) - S_N(x)| = \left|\sum_{n=N+1}^\infty g_n(x)\right| \leq \sum_{n=N+1}^\infty |g_n(x)| \leq \sum_{n=N+1}^\infty M_n.$$
+
+The right side is the tail of a convergent series, so $\sum_{n=N+1}^\infty M_n \to 0$ as $N \to \infty$, independent of $x$. Therefore
+
+$$\sup_{x \in D} |f(x) - S_N(x)| \leq \sum_{n=N+1}^\infty M_n \to 0.$$
+
+This proves uniform convergence.
+</Proof>
+
+---
+
+## Examples: series of functions
+
+<Example title="Trigonometric series">
+$\sum_{n=1}^\infty \frac{\sin(nx)}{n^2}$ on $\mathbb{R}$: take $M_n = \frac{1}{n^2}$. Since $|\sin(nx)| \leq 1$, we have $|g_n(x)| \leq M_n$, and $\sum M_n = \frac{\pi^2}{6} < \infty$.
+
+By the M-test, the series converges uniformly on $\mathbb{R}$. Since each term is continuous, the sum is continuous.
+</Example>
+
+<Example title="Another trigonometric series">
+$\sum_{n=1}^\infty \frac{\cos(nx)}{n^3}$: $M_n = 1/n^3$. Converges uniformly on $\mathbb{R}$.
+
+$\sum_{n=1}^\infty \frac{\sin(nx)}{n}$: $M_n = 1/n$, but $\sum 1/n$ diverges. The M-test does not apply. (The series does converge pointwise for each $x$, but the convergence is not uniform on $(0, 2\pi)$.)
+</Example>
+
+<Example title="Power series on compact subsets">
+$\sum_{n=0}^\infty \frac{x^n}{n!}$ on $[-R, R]$ for any $R > 0$: take $M_n = \frac{R^n}{n!}$. Since $\sum \frac{R^n}{n!} = e^R < \infty$, the M-test gives uniform convergence on $[-R, R]$.
+
+This is why $e^x = \sum x^n/n!$ is continuous: it converges uniformly on every bounded interval.
+</Example>
+
+<Example title="Geometric series of functions">
+$\sum_{n=0}^\infty x^n$ on $[-r, r]$ for $0 < r < 1$: $M_n = r^n$, $\sum r^n = \frac{1}{1-r} < \infty$. Uniform convergence on $[-r, r]$.
+
+On $(-1, 1)$: the M-test does not directly apply (no single $r < 1$ covers all of $(-1,1)$). The convergence is uniform on every $[-r, r] \subset (-1,1)$ but not on $(-1,1)$ itself.
+</Example>
+
+---
+
+## Applications to continuity and integration
+
+<Example title="Continuity of a uniformly convergent series">
+$f(x) = \sum_{n=1}^\infty \frac{x^n}{n \cdot 3^n}$ on $[-3, 3]$: $|g_n(x)| \leq \frac{3^n}{n \cdot 3^n} = \frac{1}{n}$. But $\sum 1/n$ diverges!
+
+Restrict to $[-r, r]$ with $r < 3$: $M_n = \frac{r^n}{n \cdot 3^n} = \frac{1}{n}(r/3)^n \leq (r/3)^n$. Since $r/3 < 1$, $\sum M_n < \infty$.
+
+So the series converges uniformly on $[-r, r]$ for every $r < 3$. Each partial sum is continuous, so $f$ is continuous on $(-3, 3)$.
+</Example>
+
+<Example title="Term-by-term integration justified">
+$\int_0^1 \sum_{n=0}^\infty (-1)^n x^{2n} \, dx$: on $[0, 1-\delta]$, $M_n = (1-\delta)^{2n}$ gives uniform convergence. So
+
+$$\int_0^{1-\delta} \frac{1}{1+x^2}\,dx = \sum_{n=0}^\infty (-1)^n \int_0^{1-\delta} x^{2n}\,dx = \sum_{n=0}^\infty \frac{(-1)^n (1-\delta)^{2n+1}}{2n+1}.$$
+
+Letting $\delta \to 0$: $\arctan(1) = \frac{\pi}{4} = \sum_{n=0}^\infty \frac{(-1)^n}{2n+1}$.
+</Example>
+
+---
+
+## When the M-test does not apply
+
+<Example title="The M-test is sufficient but not necessary">
+$g_n(x) = x^n(1 - x)$ on $[0,1]$. $\sum g_n(x)$ is telescoping: $S_N(x) = 1 - x^{N+1}$ for $x \in [0,1)$ and $S_N(1) = 0$. So $\sum g_n$ converges pointwise (but not uniformly on $[0,1]$ since the limit is discontinuous).
+
+On $[0, a]$ with $a < 1$: $|g_n(x)| \leq a^n$, and $\sum a^n < \infty$. M-test gives uniform convergence on $[0,a]$.
+</Example>
+
+<Example title="Alternating series that converge uniformly without M-test">
+$\sum_{n=1}^\infty \frac{(-1)^n}{n+x^2}$ on $\mathbb{R}$: the terms alternate and decrease (for fixed $x$), with $|g_n(x)| \leq 1/n$. But $\sum 1/n$ diverges, so the M-test does not apply.
+
+However, by the alternating series estimation: $|f(x) - S_N(x)| \leq \frac{1}{N+1+x^2} \leq \frac{1}{N+1}$ for all $x$. So the convergence is uniform. The M-test is not the only way to prove uniform convergence.
+</Example>
+
+---
+
+## Weierstrass approximation theorem
+
+<Theorem title="Weierstrass approximation theorem" number="8.6">
+Every continuous function $f: [a,b] \to \mathbb{R}$ can be uniformly approximated by polynomials. That is, for every $\varepsilon > 0$, there exists a polynomial $p$ such that
+
+$$\sup_{x \in [a,b]} |f(x) - p(x)| < \varepsilon.$$
+</Theorem>
+
+<Example title="Approximating |x| by polynomials">
+The function $|x|$ on $[-1,1]$ is continuous but not differentiable at $0$. By the Weierstrass approximation theorem, there exist polynomials $p_n$ with $\|p_n - |x|\|_\infty < 1/n$. Bernstein polynomials provide an explicit construction.
+</Example>
+
+<Example title="Implications of Weierstrass approximation">
+The space $C[a,b]$ (continuous functions with sup norm) has polynomials as a dense subset. Since polynomials form a countable union of finite-dimensional spaces, $C[a,b]$ is separable.
+
+By Stone-Weierstrass, the theorem generalizes: any subalgebra of $C(X)$ that separates points and contains constants is dense.
+</Example>
+
+<Example title="M-test for a Fourier-type series">
+$\sum_{n=1}^\infty \frac{\sin(nx) + \cos(nx)}{n^3}$ on $\mathbb{R}$: $|g_n(x)| \leq \frac{|\sin(nx)| + |\cos(nx)|}{n^3} \leq \frac{2}{n^3}$. Since $\sum \frac{2}{n^3} < \infty$, the M-test gives uniform convergence on $\mathbb{R}$.
+</Example>
+
+<Example title="M-test for a series involving exponentials">
+$\sum_{n=1}^\infty \frac{e^{-nx}}{n}$ on $[1, \infty)$: $|g_n(x)| \leq \frac{e^{-n}}{n}$ for $x \geq 1$. Since $\sum \frac{e^{-n}}{n} \leq \sum e^{-n} = \frac{1}{e-1} < \infty$, the M-test gives uniform convergence on $[1, \infty)$.
+
+On $(0, \infty)$: $|g_n(x)| \leq 1/n$ (from $e^{-nx} \leq 1$), but $\sum 1/n$ diverges. The M-test does not apply on $(0, \infty)$.
+</Example>
+
+<Remark>
+The Weierstrass M-test and the Weierstrass approximation theorem are two of Weierstrass's most important contributions to analysis. The M-test gives a practical criterion for uniform convergence of series, while the approximation theorem shows that continuous functions can always be uniformly approximated by "simple" functions (polynomials).
+</Remark>

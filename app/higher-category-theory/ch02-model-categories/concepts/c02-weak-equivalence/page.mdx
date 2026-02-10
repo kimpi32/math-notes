@@ -1,0 +1,182 @@
+export const metadata = {
+  title: 'Weak Equivalence — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Concept — Weak Equivalence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Weak Equivalence
+
+Weak equivalences are the morphisms in a model category that we wish to treat as "the same" -- they are the maps that become isomorphisms in the homotopy category. The choice of weak equivalences is the most important part of a model structure: it determines which objects are "homotopically indistinguishable" and which invariants matter. Different choices of weak equivalences on the same underlying category lead to different homotopy theories.
+
+---
+
+## Definition and Axioms
+
+<Definition title="Weak equivalence" number="2.1">
+In a model category $\mathcal{M}$, the **weak equivalences** are a class of morphisms $\mathcal{W}$ satisfying:
+
+1. **(Two-out-of-three)** If $f: X \to Y$ and $g: Y \to Z$ are composable, and two of $f, g, gf$ are in $\mathcal{W}$, then so is the third.
+
+2. **(Retract closure)** If $f$ is a retract of $g$ (in the arrow category) and $g \in \mathcal{W}$, then $f \in \mathcal{W}$.
+
+3. **(Includes all isomorphisms)** Every isomorphism is a weak equivalence.
+
+The weak equivalences contain the trivial cofibrations and trivial fibrations. Every trivial cofibration is both a cofibration and a weak equivalence; every trivial fibration is both a fibration and a weak equivalence.
+</Definition>
+
+---
+
+## Examples in Different Model Categories
+
+<Example id="we-top" title="Weak equivalences in Top">
+In $\mathbf{Top}$ (with the Quillen model structure), a map $f: X \to Y$ is a weak equivalence if it is a **weak homotopy equivalence**: for every basepoint $x \in X$ and every $n \geq 0$,
+
+$$f_*: \pi_n(X, x) \xrightarrow{\;\cong\;} \pi_n(Y, f(x))$$
+
+is an isomorphism. Note that this is weaker than being a homotopy equivalence: every homotopy equivalence is a weak homotopy equivalence, but not conversely (unless the spaces are CW complexes, by Whitehead's theorem).
+
+For example, the Warsaw circle (which is not locally path-connected) has the same homotopy groups as $S^1$ but is not homotopy equivalent to $S^1$. However, they are weakly homotopy equivalent.
+</Example>
+
+<Example id="we-sset" title="Weak equivalences in sSet">
+In $\mathbf{sSet}$ (Kan--Quillen), $f: X \to Y$ is a weak equivalence if $|f|: |X| \to |Y|$ is a weak homotopy equivalence. Equivalently (for Kan complexes), $f$ induces isomorphisms on all simplicial homotopy groups $\pi_n(X, x) \cong \pi_n(Y, f(x))$.
+
+For general simplicial sets (not necessarily Kan), the definition must use fibrant replacement: $f$ is a weak equivalence iff the induced map on fibrant replacements $Rf: RX \to RY$ induces isomorphisms on homotopy groups.
+</Example>
+
+<Example id="we-chain" title="Weak equivalences in chain complexes">
+In $\mathbf{Ch}(R)$, weak equivalences are **quasi-isomorphisms**: maps $f: C_\bullet \to D_\bullet$ inducing isomorphisms on all homology groups $H_n(f): H_n(C) \xrightarrow{\cong} H_n(D)$.
+
+A quasi-isomorphism need not be a chain homotopy equivalence. For example, the augmentation $\cdots \to \mathbb{Z} \xrightarrow{2} \mathbb{Z} \xrightarrow{0} \mathbb{Z} \to 0$ mapping to $\cdots \to 0 \to 0 \to \mathbb{Z}/2 \to 0$ is a quasi-isomorphism (both have homology $\mathbb{Z}/2$ in degree $0$) but not a chain homotopy equivalence.
+</Example>
+
+<Example id="we-cat" title="Weak equivalences in Cat">
+In $\mathbf{Cat}$ with the **canonical (folk) model structure**:
+- Weak equivalences are **equivalences of categories**: functors $F: \mathcal{C} \to \mathcal{D}$ that are fully faithful and essentially surjective.
+
+In the **Thomason model structure** on $\mathbf{Cat}$:
+- Weak equivalences are functors $F$ such that $|N(F)|$ is a weak homotopy equivalence.
+
+These are very different: an equivalence of categories is always a Thomason weak equivalence, but not conversely. The Thomason model structure sees the "homotopy type" of a category (as a space), while the folk model structure sees its categorical structure.
+</Example>
+
+---
+
+## Two-Out-of-Three Property
+
+<Example id="two-out-of-three-1" title="Two-out-of-three: composition">
+If $f: X \xrightarrow{\sim} Y$ and $g: Y \xrightarrow{\sim} Z$ are both weak equivalences, then $g \circ f: X \xrightarrow{\sim} Z$ is a weak equivalence.
+
+In $\mathbf{Top}$: if $f$ and $g$ induce isomorphisms on all $\pi_n$, then $g \circ f$ does too (composition of isomorphisms).
+</Example>
+
+<Example id="two-out-of-three-2" title="Two-out-of-three: cancellation">
+If $g \circ f$ and $f$ are weak equivalences, then $g$ is a weak equivalence. This is the "right cancellation" version.
+
+In $\mathbf{Ch}(R)$: if $f: A \to B$ and $gf: A \to C$ are quasi-isomorphisms, then $g: B \to C$ is a quasi-isomorphism. This follows from the five lemma applied to the long exact sequences.
+</Example>
+
+<Example id="two-out-of-three-3" title="Two-out-of-three: the crucial case">
+If $g \circ f$ and $g$ are weak equivalences, then $f$ is a weak equivalence. This is the "left cancellation" version.
+
+This is the most subtle case. In $\mathbf{Top}$: if $\pi_n(g)$ and $\pi_n(g \circ f)$ are isomorphisms for all $n$, then $\pi_n(f) = \pi_n(g)^{-1} \circ \pi_n(g \circ f)$ is an isomorphism.
+</Example>
+
+---
+
+## Relationship to Other Classes
+
+<Example id="we-and-fibrations" title="Trivial fibrations">
+A morphism that is both a weak equivalence and a fibration is called a **trivial fibration** (or **acyclic fibration**). These have the right lifting property against all cofibrations.
+
+In $\mathbf{sSet}$: a trivial fibration is a map with the RLP against all boundary inclusions $\partial\Delta[n] \hookrightarrow \Delta[n]$. Such maps are "surjective up to homotopy" -- they have contractible fibers over every simplex.
+
+In $\mathbf{Top}$: a trivial Serre fibration is a Serre fibration that is also a weak homotopy equivalence. Fibers of such maps are weakly contractible.
+</Example>
+
+<Example id="we-and-cofibrations" title="Trivial cofibrations">
+A morphism that is both a weak equivalence and a cofibration is a **trivial cofibration** (or **acyclic cofibration**). These have the left lifting property against all fibrations.
+
+In $\mathbf{sSet}$: trivial cofibrations are anodyne extensions (monomorphisms that are weak equivalences). They are built from horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$.
+
+Trivial cofibrations between cofibrant objects are particularly nice: they always have a homotopy inverse (any trivial cofibration between cofibrant objects is a strong deformation retract in the model-categorical sense).
+</Example>
+
+---
+
+## Detecting Weak Equivalences
+
+<Example id="detect-by-mapping" title="Detection via mapping spaces">
+In a simplicial model category $\mathcal{M}$, a map $f: X \to Y$ between cofibrant objects is a weak equivalence if and only if for every fibrant object $Z$, the induced map on mapping spaces
+
+$$f^*: \operatorname{Map}(Y, Z) \to \operatorname{Map}(X, Z)$$
+
+is a weak equivalence of simplicial sets. This is "Yoneda-like" detection of weak equivalences.
+</Example>
+
+<Example id="detect-whitehead" title="Whitehead theorem for model categories">
+In the homotopy category $\operatorname{Ho}(\mathcal{M})$, a morphism is an isomorphism if and only if it is represented by a weak equivalence. The **Whitehead theorem** for model categories states:
+
+A map $f: X \to Y$ between **bifibrant** objects is a weak equivalence if and only if it is a homotopy equivalence (i.e., has a homotopy inverse using cylinder/path objects).
+
+This generalizes the classical Whitehead theorem: a weak homotopy equivalence between CW complexes is a homotopy equivalence.
+</Example>
+
+<Example id="detect-homology" title="Homological detection">
+In $\mathbf{Ch}(R)$, weak equivalences (quasi-isomorphisms) are detected by homology functors: $f$ is a weak equivalence iff $H_n(f)$ is an isomorphism for all $n$. These homology functors play the role of homotopy groups in topological model categories.
+
+More generally, in any stable model category, weak equivalences can be detected by the homotopy groups $\pi_n(X) = [S^n, X]$ in the triangulated homotopy category.
+</Example>
+
+---
+
+## Localization
+
+<Definition title="Localization of a category" number="2.2">
+Given a category $\mathcal{M}$ and a class of morphisms $\mathcal{W}$, the **localization** $\mathcal{M}[\mathcal{W}^{-1}]$ is the category obtained by formally inverting all morphisms in $\mathcal{W}$. It has the same objects as $\mathcal{M}$ and morphisms are zigzags
+
+$$X \xleftarrow{\sim} \cdot \to \cdot \xleftarrow{\sim} \cdot \to \cdots \to Y$$
+
+where backward arrows are weak equivalences.
+
+The homotopy category $\operatorname{Ho}(\mathcal{M})$ is the localization $\mathcal{M}[\mathcal{W}^{-1}]$, but computed using the model structure (cofibrant/fibrant replacement) to avoid set-theoretic issues with zigzags.
+</Definition>
+
+<Example id="localization-chain" title="Localization of chain complexes">
+The localization $\mathbf{Ch}(R)[\text{qis}^{-1}]$ is the **derived category** $D(R)$. This is the fundamental construction of homological algebra, and it was historically one of the motivations for model categories.
+
+In $D(R)$, morphisms from $C$ to $D$ are computed as $\operatorname{Hom}_{D(R)}(C, D) \cong [PC, ID]$ where $PC$ is a projective resolution and $ID$ is an injective resolution.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Weak equivalences are the soul of a model category:
+
+1. The **two-out-of-three** property ensures weak equivalences form a well-behaved class for localization.
+
+2. The choice of weak equivalences **determines the homotopy theory**: the same category can have different model structures with different weak equivalences.
+
+3. Trivial fibrations/cofibrations are the **tools** for constructing fibrant/cofibrant replacements.
+
+4. The **homotopy category** is obtained by formally inverting weak equivalences; model structure provides a concrete way to compute it.
+
+5. Between bifibrant objects, weak equivalences coincide with **homotopy equivalences** (the model-categorical Whitehead theorem).
+</Remark>

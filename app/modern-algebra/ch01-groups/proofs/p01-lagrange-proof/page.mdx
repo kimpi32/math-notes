@@ -1,0 +1,249 @@
+export const metadata = {
+  title: "Proof of Lagrange's Theorem — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Proof — Lagrange's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Lagrange's Theorem
+
+We give a complete, detailed proof of Lagrange's theorem, together with several worked examples that illustrate each step of the argument.
+
+---
+
+## The Theorem
+
+<Theorem title="Lagrange's Theorem" number="1.26">
+Let $G$ be a finite group and $H \leq G$. Then $|H|$ divides $|G|$. More precisely:
+
+$$|G| = [G : H] \cdot |H|$$
+
+where $[G : H]$ is the number of distinct left cosets of $H$ in $G$.
+</Theorem>
+
+---
+
+## Proof
+
+The proof rests on three simple observations about cosets.
+
+<Proof title="Proof of Lagrange's Theorem">
+Let $G$ be a finite group and $H \leq G$.
+
+**Step 1: Left cosets partition $G$.**
+
+Define the relation $a \sim b$ iff $a^{-1}b \in H$. We verify this is an equivalence relation:
+
+- *Reflexive:* $a^{-1}a = e \in H$, so $a \sim a$.
+- *Symmetric:* If $a^{-1}b \in H$, then $b^{-1}a = (a^{-1}b)^{-1} \in H$, so $b \sim a$.
+- *Transitive:* If $a^{-1}b \in H$ and $b^{-1}c \in H$, then $a^{-1}c = (a^{-1}b)(b^{-1}c) \in H$, so $a \sim c$.
+
+The equivalence class of $a$ is $[a] = \{b \in G : a^{-1}b \in H\} = \{b \in G : b \in aH\} = aH$.
+
+Since equivalence classes partition a set, the distinct left cosets of $H$ partition $G$:
+
+$$G = a_1H \sqcup a_2H \sqcup \cdots \sqcup a_kH$$
+
+where $\sqcup$ denotes disjoint union and $k = [G : H]$.
+
+**Step 2: All cosets have the same size.**
+
+For any $a \in G$, the map $\varphi_a : H \to aH$ defined by $\varphi_a(h) = ah$ is a bijection:
+
+- *Injective:* If $ah_1 = ah_2$, then $h_1 = h_2$ (left cancellation in $G$).
+- *Surjective:* Every element of $aH$ has the form $ah$ for some $h \in H$.
+
+Therefore $|aH| = |H|$ for every $a \in G$.
+
+**Step 3: Count elements.**
+
+Since $G$ is the disjoint union of $[G : H]$ cosets, each of size $|H|$:
+
+$$|G| = \sum_{i=1}^{k} |a_i H| = \sum_{i=1}^{k} |H| = [G : H] \cdot |H|$$
+
+This completes the proof.
+</Proof>
+
+---
+
+## Detailed Verification with Examples
+
+<Example id="verify-z6" title="Verification: Z/6Z and H = {0, 2, 4}">
+$G = \mathbb{Z}/6\mathbb{Z}$, $H = \{0, 2, 4\} = \langle 2 \rangle$, $|H| = 3$.
+
+**Step 1 — Cosets:**
+
+- $0 + H = \{0, 2, 4\}$
+- $1 + H = \{1, 3, 5\}$
+
+These are disjoint: $\{0, 2, 4\} \cap \{1, 3, 5\} = \varnothing$.
+
+Their union is $\{0, 1, 2, 3, 4, 5\} = G$.
+
+**Step 2 — Equal sizes:** $|0 + H| = |1 + H| = 3 = |H|$.
+
+**Step 3 — Counting:** $|G| = 6 = 2 \cdot 3 = [G:H] \cdot |H|$. ✓
+</Example>
+
+<Example id="verify-s3" title="Verification: S_3 and H = A_3">
+$G = S_3$, $H = A_3 = \{e, (1\;2\;3), (1\;3\;2)\}$, $|H| = 3$.
+
+**Step 1 — Cosets:**
+
+- $eH = H = \{e, (1\;2\;3), (1\;3\;2)\}$
+- $(1\;2)H = \{(1\;2), (1\;2)(1\;2\;3), (1\;2)(1\;3\;2)\} = \{(1\;2), (2\;3), (1\;3)\}$ (the transpositions... wait, let us check: $(1\;2)(1\;2\;3) = ?$. Apply $(1\;2\;3)$ first: $1 \to 2 \to 2$, $2 \to 3 \to 3$, $3 \to 1 \to 1$... no, let us be careful. $(1\;2\;3)$: $1 \to 2$, $2 \to 3$, $3 \to 1$. Then $(1\;2)$: $2 \to 1$. So $1 \to 2 \to 1$ ... )
+
+Let me redo: $(1\;2) \circ (1\;2\;3)$: first $(1\;2\;3)$ sends $1 \to 2$, then $(1\;2)$ sends $2 \to 1$. So $1 \to 1$. $(1\;2\;3)$ sends $2 \to 3$, $(1\;2)$ fixes 3. So $2 \to 3$. $(1\;2\;3)$ sends $3 \to 1$, $(1\;2)$ sends $1 \to 2$. So $3 \to 2$. Result: $(2\;3)$.
+
+Similarly $(1\;2)(1\;3\;2) = (1\;3)$.
+
+So $(1\;2)H = \{(1\;2), (2\;3), (1\;3)\}$.
+
+**Step 2 — Equal sizes:** Both cosets have 3 elements.
+
+**Step 3 — Counting:** $6 = 2 \cdot 3$. ✓
+
+The 2 cosets correspond to even and odd permutations: $A_3$ (even) and $S_3 \setminus A_3$ (odd).
+</Example>
+
+<Example id="verify-d4" title="Verification: D_4 and H = <r>">
+$G = D_4 = \{e, r, r^2, r^3, s, rs, r^2s, r^3s\}$, $H = \langle r \rangle = \{e, r, r^2, r^3\}$, $|H| = 4$.
+
+**Cosets:**
+
+- $eH = \{e, r, r^2, r^3\}$ (the rotations)
+- $sH = \{s, sr, sr^2, sr^3\} = \{s, r^3s \cdot ?, \ldots\}$... using $sr^k = r^{-k}s = r^{n-k}s$: $sH = \{s, r^{n-1}s, r^{n-2}s, r^{n-3}s\} = \{s, r^3s, r^2s, rs\}$ (all reflections).
+
+So $sH = \{s, rs, r^2s, r^3s\}$.
+
+**Counting:** $8 = 2 \cdot 4 = [G:H] \cdot |H|$. ✓
+
+The two cosets are: rotations and reflections.
+</Example>
+
+<Example id="verify-gl2" title="Verification: GL_2(F_2) and a subgroup">
+$G = \mathrm{GL}_2(\mathbb{F}_2)$, the group of invertible $2 \times 2$ matrices over $\mathbb{F}_2 = \{0, 1\}$. This group has order 6 (isomorphic to $S_3$).
+
+Take $H$ to be the subgroup consisting of the identity matrix $I$ and the permutation matrix that swaps the two rows. This subgroup has order 2.
+
+By Lagrange: $[G : H] = 6 / 2 = 3$.
+
+The 3 cosets each contain 2 matrices, and their disjoint union gives all 6 elements of $G$.
+</Example>
+
+---
+
+## Why the Proof Works: The Key Insight
+
+<Remark title="The geometry of cosets">
+The proof of Lagrange's theorem is essentially a **tiling argument**. The subgroup $H$ is a "tile" of size $|H|$, and left multiplication by different elements $a$ produces translated copies $aH$ that cover $G$ without overlap. Since every tile has the same size and they perfectly tile $G$, the total size $|G|$ must be a multiple of the tile size $|H|$.
+
+This is analogous to how a rectangle of area $A$ tiled by identical squares of area $a$ requires $a \mid A$.
+</Remark>
+
+---
+
+## Extensions and Generalizations
+
+<Theorem title="Tower law for indices" number="1.39">
+If $K \leq H \leq G$ are all finite, then:
+
+$$[G : K] = [G : H] \cdot [H : K]$$
+</Theorem>
+
+<Proof>
+$|G| = [G : H] \cdot |H|$ and $|H| = [H : K] \cdot |K|$. So:
+
+$$|G| = [G : H] \cdot [H : K] \cdot |K|$$
+
+Since $|G| = [G : K] \cdot |K|$, we get $[G : K] = [G : H] \cdot [H : K]$.
+</Proof>
+
+<Example id="tower-example" title="Tower law in S_4">
+In $S_4$: $K = \{e, (1\;2)\} \leq H = \{e, (1\;2), (3\;4), (1\;2)(3\;4)\} \leq G = S_4$.
+
+- $|K| = 2$, $|H| = 4$, $|G| = 24$
+- $[H : K] = 4/2 = 2$
+- $[G : H] = 24/4 = 6$
+- $[G : K] = 24/2 = 12 = 6 \cdot 2$. ✓
+</Example>
+
+<Example id="converse-partial" title="Partial converse: Cauchy's theorem">
+While the full converse of Lagrange's theorem is false (no subgroup of order 6 in $A_4$), there is a partial converse:
+
+**Cauchy's Theorem:** If a prime $p$ divides $|G|$, then $G$ has an element of order $p$ (and hence a subgroup of order $p$).
+
+For $A_4$ with $|A_4| = 12$: $2 \mid 12$ (yes, $(1\;2)(3\;4)$ has order 2), $3 \mid 12$ (yes, $(1\;2\;3)$ has order 3). Cauchy guarantees subgroups of orders 2 and 3, but not 6.
+</Example>
+
+<Example id="sylow-preview" title="Beyond Lagrange: Sylow theorems">
+The **Sylow theorems** provide a much stronger partial converse to Lagrange:
+
+If $p^k$ divides $|G|$ (where $p$ is prime), then $G$ has a subgroup of order $p^k$.
+
+For $|G| = 12 = 2^2 \cdot 3$: Sylow guarantees subgroups of orders 1, 2, 3, and 4 — but not necessarily 6 or 12.
+</Example>
+
+---
+
+## Common Proof Patterns Using Lagrange
+
+<Example id="no-subgroup" title="Ruling out subgroups">
+**Claim:** $S_5$ has no subgroup of order 7.
+
+**Proof:** $|S_5| = 120$ and $7 \nmid 120$, so by Lagrange, no such subgroup exists.
+</Example>
+
+<Example id="prime-order-cyclic" title="Groups of prime order">
+**Claim:** If $|G| = 5$, then $G \cong \mathbb{Z}/5\mathbb{Z}$.
+
+**Proof:** Let $g \neq e$. Then $\mathrm{ord}(g) \mid 5$ and $\mathrm{ord}(g) > 1$, so $\mathrm{ord}(g) = 5$. Thus $G = \langle g \rangle \cong \mathbb{Z}/5\mathbb{Z}$.
+
+This works for any prime $p$: there is exactly one group of order $p$ (up to isomorphism).
+</Example>
+
+<Example id="squaring-map" title="The squaring map in odd-order groups">
+**Claim:** If $|G|$ is odd, then for every $g \in G$, the equation $x^2 = g$ has a unique solution.
+
+**Proof:** Since $|G|$ is odd, $\gcd(2, |G|) = 1$, so there exists $k$ with $2k \equiv 1 \pmod{|G|}$. Then $x = g^k$ satisfies $x^2 = g^{2k} = g^{2k \bmod |G|} = g^1 = g$.
+
+Uniqueness: if $x^2 = y^2$, then $(xy^{-1})^2 = e$, so $\mathrm{ord}(xy^{-1}) \mid 2$. Since $|G|$ is odd, $\mathrm{ord}(xy^{-1}) = 1$, so $x = y$.
+</Example>
+
+<Example id="group-order-4" title="Classification of groups of order 4">
+If $|G| = 4$, every non-identity element has order 2 or 4 (by Lagrange).
+
+**Case 1:** Some element $g$ has order 4. Then $G = \langle g \rangle \cong \mathbb{Z}/4\mathbb{Z}$.
+
+**Case 2:** Every non-identity element has order 2. Then $g^2 = e$ for all $g$, so $G$ is abelian (shown earlier). Write $G = \{e, a, b, c\}$ with $a^2 = b^2 = c^2 = e$. Then $ab \in G \setminus \{e, a, b\} = \{c\}$, and one verifies $G \cong V_4 = \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+
+So there are exactly 2 groups of order 4.
+</Example>
+
+<Example id="group-pq" title="Groups of order pq (distinct primes)">
+Let $|G| = pq$ with primes $p < q$ and $p \nmid (q - 1)$.
+
+By Lagrange, element orders divide $pq$, so each non-identity element has order $p$, $q$, or $pq$. If some element has order $pq$, then $G$ is cyclic. One can show (using Sylow theory) that under the condition $p \nmid (q-1)$, the group $G$ must be cyclic.
+
+For example, $|G| = 15 = 3 \cdot 5$ and $3 \nmid 4$, so every group of order 15 is cyclic: $G \cong \mathbb{Z}/15\mathbb{Z}$.
+</Example>
+
+---
+
+## Summary
+
+The proof of Lagrange's theorem is a clean counting argument: left cosets of $H$ partition $G$ into equal-sized pieces, so $|H|$ must divide $|G|$. This simple fact has enormous consequences: it constrains element orders, proves Fermat's Little Theorem, classifies groups of prime order, and provides the foundation for the Sylow theorems. The proof technique — partitioning via equivalence relations — is one of the most fundamental ideas in algebra.

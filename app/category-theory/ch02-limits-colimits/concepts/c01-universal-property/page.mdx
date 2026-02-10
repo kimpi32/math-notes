@@ -1,0 +1,116 @@
+export const metadata = {
+  title: 'Universal Property — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Concept — Universal Property" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Universal Property
+
+A universal property characterizes an object by specifying how it relates to all other objects. Rather than constructing an object explicitly, we describe it by a mapping property that determines it uniquely up to unique isomorphism. This is the central organizing principle of category theory.
+
+---
+
+## Initial and Terminal Objects
+
+<Definition title="Initial Object" number="2.1">
+An object $I$ in a category $\mathcal{C}$ is **initial** if for every object $X \in \mathcal{C}$, there exists a unique morphism $I \to X$.
+
+$$|\mathrm{Hom}(I, X)| = 1 \quad \text{for all } X$$
+</Definition>
+
+<Definition title="Terminal Object" number="2.2">
+An object $T$ in a category $\mathcal{C}$ is **terminal** if for every object $X \in \mathcal{C}$, there exists a unique morphism $X \to T$.
+
+$$|\mathrm{Hom}(X, T)| = 1 \quad \text{for all } X$$
+</Definition>
+
+<Definition title="Zero Object" number="2.3">
+A **zero object** is an object that is both initial and terminal. It is denoted $0$. The unique morphism $A \to 0 \to B$ is called the **zero morphism** and is denoted $0_{AB} : A \to B$.
+</Definition>
+
+<Theorem title="Uniqueness of universal objects" number="2.1">
+Any two initial objects in a category are uniquely isomorphic. Similarly for terminal objects and zero objects.
+</Theorem>
+
+<Proof>
+Let $I, I'$ be initial. There exist unique morphisms $f : I \to I'$ and $g : I' \to I$. Then $g \circ f : I \to I$ must equal $\mathrm{id}_I$ (since the only morphism $I \to I$ is the identity, by the initial property). Similarly $f \circ g = \mathrm{id}_{I'}$.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Initial and terminal in Set" id="set-init-term">
+In $\mathbf{Set}$: the empty set $\varnothing$ is initial (there is a unique function $\varnothing \to X$ for any set $X$ — the empty function). Any singleton $\{*\}$ is terminal (there is a unique function $X \to \{*\}$). There is no zero object in $\mathbf{Set}$.
+</Example>
+
+<Example title="Zero object in Ab" id="zero-ab">
+In $\mathbf{Ab}$, the trivial group $\{0\}$ is a zero object: it is both initial and terminal. For any abelian groups $A, B$, the zero morphism $0 : A \to B$ sending everything to $0$ factors through $\{0\}$.
+</Example>
+
+<Example title="Zero object in R-Mod" id="zero-rmod">
+In $R\text{-}\mathbf{Mod}$, the zero module $\{0\}$ is a zero object. Every module homomorphism $M \to N$ has an additive inverse, making $\mathrm{Hom}(M,N)$ an abelian group. The zero element is the zero morphism factoring through $\{0\}$.
+</Example>
+
+<Example title="Initial in Ring" id="initial-ring">
+In $\mathbf{Ring}$ (with unit), $\mathbb{Z}$ is the initial object: for every ring $R$, there is a unique ring homomorphism $\mathbb{Z} \to R$ sending $n \mapsto n \cdot 1_R$.
+</Example>
+
+<Example title="Terminal in Grp" id="terminal-grp">
+In $\mathbf{Grp}$, the trivial group $\{e\}$ is both initial and terminal (hence a zero object). The unique homomorphism $G \to \{e\}$ sends everything to $e$; the unique homomorphism $\{e\} \to G$ sends $e$ to $e$.
+</Example>
+
+<Example title="No initial object in Field" id="no-initial-field">
+The category $\mathbf{Field}$ of fields has neither an initial nor a terminal object. There is no field homomorphism $\mathbb{Q} \to \mathbb{F}_p$ (characteristics differ), and no field homomorphism $\mathbb{F}_2 \to \mathbb{F}_3$.
+</Example>
+
+<Example title="Universal property of the kernel" id="kernel-up">
+In an abelian category, the kernel of $f : A \to B$ is an object $K$ with a morphism $\iota : K \to A$ such that $f \circ \iota = 0$, and for every $g : X \to A$ with $f \circ g = 0$, there exists a unique $\bar{g} : X \to K$ with $\iota \circ \bar{g} = g$. This is a universal property: $K$ is the "largest subobject mapped to zero by $f$."
+</Example>
+
+<Example title="Universal property of the free group" id="free-group-up">
+The free group $F(S)$ on a set $S$ satisfies: for any group $G$ and function $f : S \to G$, there is a unique homomorphism $\bar{f} : F(S) \to G$ extending $f$. This is the universal property of the free-forgetful adjunction $F \dashv U$.
+</Example>
+
+<Example title="Universal property of the tensor product" id="tensor-up">
+$M \otimes_R N$ is universal for bilinear maps: any bilinear map $\beta : M \times N \to P$ factors uniquely through the canonical bilinear map $M \times N \to M \otimes_R N$.
+</Example>
+
+<Example title="Universal property of localization" id="localization-up">
+For a ring $R$ and a multiplicative set $S$, $S^{-1}R$ satisfies: any ring homomorphism $\varphi : R \to T$ sending $S$ to units factors uniquely through $R \to S^{-1}R$. This determines $S^{-1}R$ up to unique isomorphism.
+</Example>
+
+<Example title="Universal property of quotient" id="quotient-up">
+For a group $G$ and normal subgroup $N$, the quotient $\pi : G \to G/N$ satisfies: any homomorphism $\varphi : G \to H$ with $N \subseteq \ker \varphi$ factors uniquely as $\varphi = \bar{\varphi} \circ \pi$ for a unique $\bar{\varphi} : G/N \to H$. This is the universal property of the cokernel.
+</Example>
+
+<Example title="Universal property of polynomial ring" id="polynomial-up">
+The polynomial ring $R[x]$ represents the forgetful functor from $R$-algebras to sets: $\mathrm{Hom}_{R\text{-}\mathbf{Alg}}(R[x], A) \cong |A|$. For any $R$-algebra $A$ and any element $a \in A$, there is a unique $R$-algebra homomorphism $R[x] \to A$ sending $x \mapsto a$.
+</Example>
+
+---
+
+## The Pattern
+
+<Remark title="Universal properties as representability">
+Every universal property can be formulated as a representability statement. An object $A$ has a universal property with respect to a functor $F$ if and only if $F$ is represented by $A$. This is the content of the [Yoneda Lemma](/category-theory/ch01-categories-functors/theorems/t01-yoneda): the universal element $\xi \in F(A)$ determines and is determined by the natural isomorphism $\mathrm{Hom}(-, A) \cong F$.
+</Remark>
+
+<Remark title="Limits and colimits as universal properties">
+[Products, coproducts, pullbacks, pushouts, limits, and colimits](/category-theory/ch02-limits-colimits/concepts/c04-limit-colimit) are all instances of universal properties. A limit is a terminal object in a category of cones; a colimit is an initial object in a category of cocones. The [adjoint functor theorems](/category-theory/ch02-limits-colimits/theorems/t01-freyd-adjoint) give conditions for the existence of such universal objects.
+</Remark>

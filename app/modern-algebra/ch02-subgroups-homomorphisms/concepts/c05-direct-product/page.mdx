@@ -1,0 +1,199 @@
+export const metadata = {
+  title: 'Direct Products and Semidirect Products — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "2. 부분군과 준동형", href: "/modern-algebra/ch02-subgroups-homomorphisms" },
+  { label: "Concept — Direct Products and Semidirect Products" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Direct Products and Semidirect Products
+
+Direct products build new groups from old ones by taking the Cartesian product. Semidirect products generalize this by allowing a "twist" in how the factors interact.
+
+---
+
+## External direct product
+
+<Definition title="External direct product" number="2.20">
+Let $G_1, G_2, \ldots, G_n$ be groups. Their **(external) direct product** is the Cartesian product
+
+$$G_1 \times G_2 \times \cdots \times G_n = \{(g_1, g_2, \ldots, g_n) \mid g_i \in G_i\}$$
+
+with componentwise multiplication:
+
+$$(g_1, \ldots, g_n)(h_1, \ldots, h_n) = (g_1 h_1, \ldots, g_n h_n).$$
+
+The identity is $(e_1, \ldots, e_n)$ and the inverse is $(g_1^{-1}, \ldots, g_n^{-1})$.
+</Definition>
+
+<Example id="z2-z3" title="Z/2Z x Z/3Z">
+$\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$ has 6 elements. The element $(\bar{1}, \bar{1})$ has order $\mathrm{lcm}(2, 3) = 6$, so $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z} \cong \mathbb{Z}/6\mathbb{Z}$. This is cyclic because $\gcd(2, 3) = 1$.
+</Example>
+
+<Example id="z2-z2" title="Z/2Z x Z/2Z (Klein four-group)">
+$\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} = \{(\bar{0},\bar{0}), (\bar{1},\bar{0}), (\bar{0},\bar{1}), (\bar{1},\bar{1})\}$ has 4 elements, each of order $\leq 2$. This is the **Klein four-group** $V_4$. It is **not** cyclic (no element has order 4), so $V_4 \not\cong \mathbb{Z}/4\mathbb{Z}$.
+</Example>
+
+<Theorem title="Order in a direct product" number="2.15">
+The order of $(g_1, \ldots, g_n)$ in $G_1 \times \cdots \times G_n$ is $\mathrm{lcm}(|g_1|, \ldots, |g_n|)$.
+</Theorem>
+
+<Example id="order-product" title="Computing orders in Z/4Z x Z/6Z">
+In $\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}$:
+
+| Element | Order |
+|---------|-------|
+| $(\bar{1}, \bar{1})$ | $\mathrm{lcm}(4, 6) = 12$ |
+| $(\bar{2}, \bar{3})$ | $\mathrm{lcm}(2, 2) = 2$ |
+| $(\bar{1}, \bar{2})$ | $\mathrm{lcm}(4, 3) = 12$ |
+| $(\bar{0}, \bar{1})$ | $\mathrm{lcm}(1, 6) = 6$ |
+
+Since there is an element of order $12 = |\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}|/2$... actually $|\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}| = 24$ and the maximum order is 12, so this group is **not** cyclic.
+</Example>
+
+<Theorem title="When is the direct product cyclic?" number="2.16">
+$\mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$ is cyclic if and only if $\gcd(m, n) = 1$, in which case $\mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}/mn\mathbb{Z}$.
+</Theorem>
+
+<Example id="cyclic-criterion" title="Cyclic or not?">
+- $\mathbb{Z}/3\mathbb{Z} \times \mathbb{Z}/5\mathbb{Z} \cong \mathbb{Z}/15\mathbb{Z}$ — cyclic, since $\gcd(3,5)=1$.
+- $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/4\mathbb{Z}$ — not cyclic, since $\gcd(2,4)=2$.
+- $\mathbb{Z}/6\mathbb{Z} \times \mathbb{Z}/35\mathbb{Z} \cong \mathbb{Z}/210\mathbb{Z}$ — cyclic, since $\gcd(6,35)=1$.
+</Example>
+
+---
+
+## Internal direct product
+
+<Definition title="Internal direct product" number="2.21">
+A group $G$ is the **(internal) direct product** of normal subgroups $H, K \trianglelefteq G$ if:
+
+1. $G = HK = \{hk \mid h \in H, k \in K\}$,
+2. $H \cap K = \{e\}$.
+
+We write $G = H \times K$ (by a slight abuse of notation).
+</Definition>
+
+<Theorem title="Internal = External" number="2.17">
+If $G = H \times K$ internally, then the map $(h, k) \mapsto hk$ is an isomorphism $H \times K \xrightarrow{\sim} G$ (external to internal). The conditions $H, K \trianglelefteq G$ and $H \cap K = \{e\}$ ensure that elements of $H$ and $K$ commute: $hk = kh$ for all $h \in H$, $k \in K$.
+</Theorem>
+
+<Proof>
+For $h \in H$ and $k \in K$: consider $hkh^{-1}k^{-1}$. Since $K \trianglelefteq G$, $hkh^{-1} \in K$, so $hkh^{-1}k^{-1} \in K$. Since $H \trianglelefteq G$, $kh^{-1}k^{-1} \in H$, so $hkh^{-1}k^{-1} \in H$. Thus $hkh^{-1}k^{-1} \in H \cap K = \{e\}$, giving $hk = kh$.
+</Proof>
+
+<Example id="internal-v4" title="V₄ as internal direct product">
+In $V_4 = \{e, a, b, ab\}$ (Klein four-group): $H = \{e, a\} \cong \mathbb{Z}/2\mathbb{Z}$ and $K = \{e, b\} \cong \mathbb{Z}/2\mathbb{Z}$ are both normal (since $V_4$ is abelian), $H \cap K = \{e\}$, and $HK = V_4$. So $V_4 = H \times K \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="z6-internal" title="Z/6Z as internal direct product">
+In $\mathbb{Z}/6\mathbb{Z}$: $H = \{\bar{0}, \bar{3}\} \cong \mathbb{Z}/2\mathbb{Z}$ and $K = \{\bar{0}, \bar{2}, \bar{4}\} \cong \mathbb{Z}/3\mathbb{Z}$. Then $H + K = \mathbb{Z}/6\mathbb{Z}$, $H \cap K = \{\bar{0}\}$. So $\mathbb{Z}/6\mathbb{Z} \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$ internally.
+</Example>
+
+<Example id="not-direct" title="S₃ is NOT a direct product">
+$S_3$ has normal subgroup $A_3 = \{e, (123), (132)\}$ and subgroup $H = \{e, (12)\}$, with $A_3 \cap H = \{e\}$ and $A_3 H = S_3$. But $H$ is **not** normal in $S_3$! So $S_3$ is **not** an internal direct product of $A_3$ and $H$. (It is, however, a semidirect product.)
+</Example>
+
+---
+
+## Semidirect product
+
+<Definition title="Semidirect product" number="2.22">
+Let $N \trianglelefteq G$ and $H \leq G$ such that $G = NH$ and $N \cap H = \{e\}$. Then $G$ is a **(internal) semidirect product** of $N$ by $H$, written $G = N \rtimes H$.
+
+Unlike the direct product, we only require $N$ to be normal, not $H$.
+</Definition>
+
+<Remark title="The action determines the semidirect product">
+In $G = N \rtimes H$, conjugation gives an action of $H$ on $N$: $\varphi : H \to \mathrm{Aut}(N)$ defined by $\varphi(h)(n) = hnh^{-1}$. The group operation is
+
+$$(n_1 h_1)(n_2 h_2) = n_1 (h_1 n_2 h_1^{-1}) h_1 h_2 = (n_1 \cdot \varphi(h_1)(n_2)) \cdot (h_1 h_2).$$
+
+When $\varphi$ is trivial (every $h$ acts as the identity), this reduces to the direct product.
+</Remark>
+
+<Definition title="External semidirect product" number="2.23">
+Given groups $N$ and $H$ and a homomorphism $\varphi : H \to \mathrm{Aut}(N)$, the **(external) semidirect product** $N \rtimes_\varphi H$ is the set $N \times H$ with multiplication
+
+$$(n_1, h_1)(n_2, h_2) = (n_1 \cdot \varphi(h_1)(n_2),\; h_1 h_2).$$
+</Definition>
+
+<Example id="s3-semidirect" title="S₃ as a semidirect product">
+$S_3 \cong \mathbb{Z}/3\mathbb{Z} \rtimes \mathbb{Z}/2\mathbb{Z}$, where $\mathbb{Z}/2\mathbb{Z}$ acts on $\mathbb{Z}/3\mathbb{Z}$ by inversion: $\varphi(\bar{1})(\bar{k}) = -\bar{k}$. Explicitly, with $N = A_3 \cong \mathbb{Z}/3\mathbb{Z}$ and $H = \{e, (12)\} \cong \mathbb{Z}/2\mathbb{Z}$:
+
+$$(12) \cdot (123) \cdot (12)^{-1} = (132) = (123)^{-1}.$$
+
+So the transposition acts on $A_3$ by inversion, matching the semidirect product structure.
+</Example>
+
+<Example id="dn-semidirect" title="Dihedral group as semidirect product">
+$D_n \cong \mathbb{Z}/n\mathbb{Z} \rtimes \mathbb{Z}/2\mathbb{Z}$, where the generator of $\mathbb{Z}/2\mathbb{Z}$ acts on $\mathbb{Z}/n\mathbb{Z}$ by $\bar{k} \mapsto -\bar{k}$ (inversion). The rotation subgroup $\langle r \rangle \cong \mathbb{Z}/n\mathbb{Z}$ is normal, and a reflection $s$ generates a complement $\{e, s\} \cong \mathbb{Z}/2\mathbb{Z}$ with $srs^{-1} = r^{-1}$.
+</Example>
+
+<Example id="trivial-semidirect" title="Trivial action gives direct product">
+If $\varphi : H \to \mathrm{Aut}(N)$ is the trivial map ($\varphi(h) = \mathrm{id}_N$ for all $h$), then $N \rtimes_\varphi H = N \times H$. The semidirect product generalizes the direct product.
+</Example>
+
+<Example id="semidirect-z-z" title="Z/n x Z/2 vs Z/n ⋊ Z/2">
+With $N = \mathbb{Z}/5\mathbb{Z}$ and $H = \mathbb{Z}/2\mathbb{Z}$:
+
+- **Trivial action**: $\mathbb{Z}/5\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} \cong \mathbb{Z}/10\mathbb{Z}$ (cyclic, abelian).
+- **Inversion action** ($\bar{1} \mapsto (\bar{k} \mapsto -\bar{k})$): $\mathbb{Z}/5\mathbb{Z} \rtimes \mathbb{Z}/2\mathbb{Z} \cong D_5$ (non-abelian, dihedral of order 10).
+
+Different actions give genuinely different groups.
+</Example>
+
+---
+
+## Recognizing direct and semidirect products
+
+<Theorem title="Direct product recognition" number="2.18">
+$G \cong H \times K$ if and only if there exist $H', K' \trianglelefteq G$ with $G = H'K'$, $H' \cap K' = \{e\}$, $H' \cong H$, and $K' \cong K$.
+</Theorem>
+
+<Theorem title="Semidirect product recognition" number="2.19">
+$G \cong N \rtimes H$ if and only if there exist $N' \trianglelefteq G$ and $H' \leq G$ with $G = N'H'$, $N' \cap H' = \{e\}$, $N' \cong N$, and $H' \cong H$.
+
+The subgroup $H'$ is called a **complement** to $N'$.
+</Theorem>
+
+<Example id="ga-semidirect" title="Affine group as semidirect product">
+The **affine group** $\mathrm{Aff}(F) = \{x \mapsto ax + b \mid a \in F^*, b \in F\}$ is a semidirect product:
+
+$$\mathrm{Aff}(F) \cong F \rtimes F^*,$$
+
+where $F^*$ acts on the additive group $(F, +)$ by multiplication: $\varphi(a)(b) = ab$. The translations $\{x \mapsto x + b\} \cong (F, +)$ form the normal subgroup, and the scalings $\{x \mapsto ax\} \cong F^*$ form the complement.
+</Example>
+
+<Example id="classify-order6" title="Groups of order 6">
+Every group of order 6 is either $\mathbb{Z}/6\mathbb{Z}$ or $S_3$. Both can be written in terms of products:
+
+- $\mathbb{Z}/6\mathbb{Z} \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$ (direct product).
+- $S_3 \cong \mathbb{Z}/3\mathbb{Z} \rtimes \mathbb{Z}/2\mathbb{Z}$ (semidirect product with nontrivial action).
+
+The unique element of $\mathrm{Aut}(\mathbb{Z}/3\mathbb{Z}) \cong \mathbb{Z}/2\mathbb{Z}$ of order 2 is inversion, so there are exactly two semidirect products, giving exactly two groups.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. **Direct product** $G = H \times K$: both $H, K \trianglelefteq G$, $H \cap K = \{e\}$, $G = HK$, and elements of $H$ and $K$ commute.
+2. **Semidirect product** $G = N \rtimes H$: only $N$ need be normal. The group structure is determined by the action $\varphi : H \to \mathrm{Aut}(N)$.
+3. $\mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}/mn\mathbb{Z}$ iff $\gcd(m,n) = 1$.
+4. Semidirect products are the main tool for constructing and classifying non-abelian groups of small order.
+</Remark>

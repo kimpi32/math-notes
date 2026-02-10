@@ -1,0 +1,98 @@
+export const metadata = {
+  title: 'Heart of a t-structure — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Concept — Heart of a t-structure" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Heart of a t-structure
+
+The heart of a t-structure is the abelian category sitting inside a triangulated category. It consists of objects that are simultaneously "non-positive" and "non-negative" with respect to the t-structure. The heart is the place where exact sequences live, even though the ambient triangulated category only has distinguished triangles.
+
+---
+
+## Definition
+
+<Definition title="Heart" number="6.6">
+The **heart** of a t-structure $(\mathcal{T}^{\leq 0}, \mathcal{T}^{\geq 0})$ on a triangulated category $\mathcal{T}$ is the full subcategory
+
+$$\mathcal{A} = \mathcal{T}^{\leq 0} \cap \mathcal{T}^{\geq 0}$$
+
+The **cohomological functor** $H^0 : \mathcal{T} \to \mathcal{A}$ is defined by $H^0(X) = \tau_{\leq 0} \tau_{\geq 0} X$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Standard heart is A" id="standard-heart">
+For the standard t-structure on $D(\mathcal{A})$, the heart is $D^{\leq 0} \cap D^{\geq 0} = \{A^\bullet : H^n(A) = 0 \text{ for } n \neq 0\} \cong \mathcal{A}$. The identification sends a complex to its $H^0$.
+</Example>
+
+<Example title="Perverse sheaves" id="perverse-heart">
+The heart of the perverse t-structure on $D^b_c(X)$ is the abelian category $\mathrm{Perv}(X)$ of perverse sheaves. Perverse sheaves are neither sheaves nor perverse; they are complexes of sheaves satisfying support and cosupport conditions with respect to a stratification.
+</Example>
+
+<Example title="Tilted heart" id="tilted-heart">
+For a torsion pair $(\mathcal{T}, \mathcal{F})$ in $\mathcal{A}$, the tilted heart in $D^b(\mathcal{A})$ is the subcategory of complexes $A^\bullet$ with $H^0(A) \in \mathcal{F}$, $H^{-1}(A) \in \mathcal{T}$, and $H^n(A) = 0$ for $n \neq 0, -1$. This new abelian category is called the **tilt** of $\mathcal{A}$ at $(\mathcal{T}, \mathcal{F})$.
+</Example>
+
+<Example title="Heart of weight structure" id="weight-heart">
+For a weight structure on $\mathcal{T}$, the heart consists of objects that are both "non-negative" and "non-positive" in the weight sense. Unlike t-structure hearts, weight structure hearts are not necessarily abelian but are additive and have the property that every object of $\mathcal{T}$ has a "weight filtration."
+</Example>
+
+<Example title="Category O as a heart" id="category-o">
+The BGG category $\mathcal{O}$ for a semisimple Lie algebra can be realized as the heart of a certain t-structure on $D^b(\mathcal{O})$ (the standard one). Non-standard t-structures give "exotic" versions of category $\mathcal{O}$.
+</Example>
+
+<Example title="Heart of D^b(Coh(P^1))" id="p1-heart">
+On $D^b(\mathrm{Coh}(\mathbb{P}^1))$, the standard heart is $\mathrm{Coh}(\mathbb{P}^1)$. Tilting at the torsion pair (torsion sheaves, vector bundles) gives a new heart equivalent to $\mathrm{mod}\text{-}k[\bullet \rightrightarrows \bullet]$ (representations of the Kronecker quiver).
+</Example>
+
+<Example title="Short exact sequences in the heart" id="ses-heart">
+A short exact sequence $0 \to A \to B \to C \to 0$ in the heart $\mathcal{A}$ corresponds to a distinguished triangle $A \to B \to C \to A[1]$ in $\mathcal{T}$ with all three vertices in $\mathcal{A}$. The connecting map $C \to A[1]$ lies in $\mathrm{Ext}^1_{\mathcal{A}}(C, A)$.
+</Example>
+
+<Example title="Heart and cohomology" id="heart-cohomology">
+The $n$-th cohomology with respect to a t-structure is $H^n = H^0 \circ [-n] : \mathcal{T} \to \mathcal{A}$. This is a cohomological functor: it sends distinguished triangles to long exact sequences in $\mathcal{A}$.
+</Example>
+
+<Example title="Multiple hearts on the same category" id="multiple-hearts">
+$D^b(\mathrm{Coh}(\mathbb{P}^2))$ admits infinitely many t-structures with different hearts. The space of Bridgeland stability conditions parametrizes these t-structures (and their central charges).
+</Example>
+
+<Example title="Heart determines the t-structure" id="heart-determines">
+The heart $\mathcal{A}$ determines the t-structure: $\mathcal{T}^{\leq 0} = \{X : H^n(X) = 0 \text{ for } n > 0\}$ and $\mathcal{T}^{\geq 0} = \{X : H^n(X) = 0 \text{ for } n < 0\}$. This follows from the axioms.
+</Example>
+
+<Example title="Realization functor" id="realization">
+For a bounded t-structure with heart $\mathcal{A}$, the realization functor $\mathrm{real} : D^b(\mathcal{A}) \to \mathcal{T}$ extends the inclusion $\mathcal{A} \hookrightarrow \mathcal{T}$. It is always exact but not always an equivalence.
+</Example>
+
+<Example title="D-modules as a heart" id="d-modules-heart">
+On a smooth variety $X$, the category of regular holonomic D-modules is the heart of a natural t-structure on $D^b_{\mathrm{rh}}(D_X)$. The Riemann-Hilbert correspondence identifies this heart with perverse sheaves.
+</Example>
+
+---
+
+<Theorem title="Heart is abelian" number="6.4">
+The heart $\mathcal{A} = \mathcal{T}^{\leq 0} \cap \mathcal{T}^{\geq 0}$ of a t-structure on $\mathcal{T}$ is an abelian category. The kernel of $f : A \to B$ in $\mathcal{A}$ is $H^0(\mathrm{Cone}(f)[-1])$ and the cokernel is $H^0(\mathrm{Cone}(f))$.
+</Theorem>
+
+<Remark title="Significance">
+The fact that the heart is abelian is remarkable: triangulated categories are not abelian (they lack kernels/cokernels), yet they contain abelian categories as hearts. This is how abelian categories arise "in nature" from triangulated categories, and it is the mechanism behind the construction of perverse sheaves, tilted algebras, and Bridgeland stability conditions.
+</Remark>

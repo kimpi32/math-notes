@@ -1,0 +1,238 @@
+export const metadata = {
+  title: 'Proof of Cayley-Hamilton Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "5. 고유값과 고유벡터", href: "/linear-algebra/ch05-eigenvalues" },
+  { label: "Proof — Cayley-Hamilton" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Cayley-Hamilton Theorem
+
+We present multiple proofs of the Cayley--Hamilton theorem, each illuminating a different aspect of the result. The adjugate (cofactor) proof is the most elementary, while the extension-of-scalars proof is the most conceptual.
+
+---
+
+## Statement
+
+<Theorem title="Cayley-Hamilton Theorem" number="5.4">
+Let $A \in M_{n \times n}(F)$ with characteristic polynomial $p_A(\lambda) = \det(\lambda I - A)$. Then $p_A(A) = 0$.
+</Theorem>
+
+---
+
+## Proof 1: Via the adjugate matrix
+
+<Proof title="Proof using the classical adjoint (adjugate)">
+**Key idea:** The adjugate matrix $\operatorname{adj}(\lambda I - A)$ is a matrix whose entries are polynomials in $\lambda$, and the identity $(\lambda I - A) \cdot \operatorname{adj}(\lambda I - A) = \det(\lambda I - A) \cdot I$ will give us the result when we "substitute" $\lambda = A$.
+
+**Step 1: The adjugate identity.** For any matrix $M$, we have $M \cdot \operatorname{adj}(M) = \det(M) \cdot I$. Applying this to $M = \lambda I - A$:
+
+$$(\lambda I - A) \cdot \operatorname{adj}(\lambda I - A) = p_A(\lambda) \cdot I.$$
+
+**Step 2: Expand the adjugate as a polynomial in $\lambda$.** Each entry of $\operatorname{adj}(\lambda I - A)$ is an $(n-1) \times (n-1)$ minor of $\lambda I - A$, hence a polynomial in $\lambda$ of degree at most $n - 1$. So we can write:
+
+$$\operatorname{adj}(\lambda I - A) = B_{n-1}\lambda^{n-1} + B_{n-2}\lambda^{n-2} + \cdots + B_1 \lambda + B_0,$$
+
+where $B_0, B_1, \ldots, B_{n-1}$ are $n \times n$ matrices with entries in $F$ (independent of $\lambda$).
+
+**Step 3: Expand both sides.** Write $p_A(\lambda) = \lambda^n + c_{n-1}\lambda^{n-1} + \cdots + c_1\lambda + c_0$. The left side is:
+
+$$(\lambda I - A)(B_{n-1}\lambda^{n-1} + \cdots + B_0) = B_{n-1}\lambda^n + (B_{n-2} - AB_{n-1})\lambda^{n-1} + \cdots + (B_0 - AB_1)\lambda + (-AB_0).$$
+
+The right side is:
+
+$$p_A(\lambda) \cdot I = I\lambda^n + c_{n-1}I\lambda^{n-1} + \cdots + c_1 I \lambda + c_0 I.$$
+
+**Step 4: Match coefficients.** Comparing coefficients of each power of $\lambda$:
+
+$$B_{n-1} = I, \quad B_{n-2} - AB_{n-1} = c_{n-1}I, \quad \ldots, \quad B_0 - AB_1 = c_1 I, \quad -AB_0 = c_0 I.$$
+
+**Step 5: Multiply and sum.** Multiply the $k$-th equation (coefficient of $\lambda^k$) by $A^k$ on the left:
+
+- $\lambda^n$: $A^n \cdot B_{n-1} = A^n \cdot I = A^n$.
+- $\lambda^{n-1}$: $A^{n-1}(B_{n-2} - AB_{n-1}) = c_{n-1} A^{n-1}$.
+- $\vdots$
+- $\lambda^1$: $A(B_0 - AB_1) = c_1 A$.
+- $\lambda^0$: $-AB_0 = c_0 I$.
+
+Wait, we need to be more careful. Multiply the equation for $\lambda^k$ by $A^k$:
+
+- From $\lambda^n$: $B_{n-1} = I$ $\implies$ multiply by $A^n$: $A^n B_{n-1} = A^n$.
+- From $\lambda^{n-1}$: $B_{n-2} - AB_{n-1} = c_{n-1}I$ $\implies$ multiply by $A^{n-1}$: $A^{n-1}B_{n-2} - A^n B_{n-1} = c_{n-1}A^{n-1}$.
+- From $\lambda^{n-2}$: $B_{n-3} - AB_{n-2} = c_{n-2}I$ $\implies$ multiply by $A^{n-2}$: $A^{n-2}B_{n-3} - A^{n-1}B_{n-2} = c_{n-2}A^{n-2}$.
+- $\vdots$
+- From $\lambda^0$: $-AB_0 = c_0 I$ $\implies$ multiply by $I$: $-AB_0 = c_0 I$.
+
+**Step 6: Telescope.** Adding all these equations, the left side telescopes:
+
+$$A^n B_{n-1} + (A^{n-1}B_{n-2} - A^n B_{n-1}) + \cdots + (-AB_0) = -AB_0 + \text{(everything cancels)}.$$
+
+More precisely, the sum is $-AB_0$ from the last equation, but the telescoping gives:
+
+$$\text{LHS} = -AB_0 + AB_0 - A^2 B_1 + A^2 B_1 - \cdots = 0.$$
+
+Wait, let me re-sum. The total of the left sides is:
+
+$A^n - A^n + A^{n-1}B_{n-2} - A^{n-1}B_{n-2} + \cdots = 0.$
+
+Actually, the positive term $A^k B_{k-1}$ from the $\lambda^k$ equation cancels with the negative term $-A^k B_{k-1}$ from the $\lambda^{k-1}$ equation. So the total is $0$.
+
+The total of the right sides is $A^n + c_{n-1}A^{n-1} + \cdots + c_1 A + c_0 I = p_A(A)$.
+
+Therefore $p_A(A) = 0$. $\blacksquare$
+</Proof>
+
+<Example id="adjugate-2x2" title="Adjugate proof illustrated for 2x2">
+$A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$, $p(\lambda) = \lambda^2 - (a+d)\lambda + (ad - bc)$.
+
+$\lambda I - A = \begin{pmatrix} \lambda - a & -b \\ -c & \lambda - d \end{pmatrix}$, $\operatorname{adj}(\lambda I - A) = \begin{pmatrix} \lambda - d & b \\ c & \lambda - a \end{pmatrix}$.
+
+So $B_1 = I$ and $B_0 = \begin{pmatrix} -d & b \\ c & -a \end{pmatrix}$.
+
+The equations are:
+- $\lambda^2$: $B_1 = I$.
+- $\lambda^1$: $B_0 - AB_1 = -(a+d)I$, i.e., $B_0 = A - (a+d)I = \begin{pmatrix} -d & b \\ c & -a \end{pmatrix}$ ✓.
+- $\lambda^0$: $-AB_0 = (ad-bc)I$, i.e., $-A\begin{pmatrix} -d & b \\ c & -a \end{pmatrix} = (ad-bc)I$ ✓.
+
+Multiplying: $A^2 \cdot I - A \cdot (-(a+d)I) + I \cdot (ad-bc)I = A^2 - (a+d)A + (ad-bc)I$, and the telescoping gives $0$.
+</Example>
+
+---
+
+## Proof 2: Via extension of scalars (for diagonalizable case)
+
+<Proof title="Proof for diagonalizable matrices">
+**Special case:** Assume $A$ is diagonalizable, i.e., $A = PDP^{-1}$ where $D = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$.
+
+Then $p_A(\lambda) = \prod_{i=1}^n (\lambda - \lambda_i)$, and:
+
+$$p_A(A) = \prod_{i=1}^n (A - \lambda_i I) = P \prod_{i=1}^n (D - \lambda_i I) P^{-1}.$$
+
+Now $D - \lambda_i I = \operatorname{diag}(\lambda_1 - \lambda_i, \ldots, \lambda_n - \lambda_i)$, which has a zero in the $i$-th diagonal entry. The product $\prod_i (D - \lambda_i I)$ has every diagonal entry equal to zero (the $j$-th entry is $\prod_i (\lambda_j - \lambda_i)$, which contains the factor $\lambda_j - \lambda_j = 0$). So $\prod_i (D - \lambda_i I) = 0$, hence $p_A(A) = 0$.
+</Proof>
+
+<Remark title="Extending to all matrices">
+The diagonalizable case is not sufficient since not all matrices are diagonalizable over $F$. However, over $\overline{F}$ (the algebraic closure), the diagonalizable matrices are dense (in the Zariski topology). Since $p_A(A) = 0$ is a polynomial identity in the entries of $A$, and it holds on a dense set, it holds everywhere. This is the "extension of scalars" or "density" argument.
+
+More concretely: the entries of $p_A(A)$ are polynomial functions of the entries of $A$. These polynomials vanish on all diagonalizable matrices (a Zariski-dense set), hence vanish identically.
+</Remark>
+
+---
+
+## Proof 3: Via eigenvectors
+
+<Proof title="Proof by checking on each eigenvector (over algebraically closed fields)">
+Over an algebraically closed field $F$, let $\lambda$ be an eigenvalue of $A$ with eigenvector $v$. Then:
+
+$$p_A(A)v = p_A(\lambda) v = 0 \cdot v = 0,$$
+
+since $A^k v = \lambda^k v$ for all $k$, so $p(A)v = p(\lambda)v$ for any polynomial $p$.
+
+If $A$ has $n$ linearly independent eigenvectors $v_1, \ldots, v_n$ (i.e., $A$ is diagonalizable), then $p_A(A)v_i = 0$ for all $i$ implies $p_A(A) = 0$.
+
+For non-diagonalizable $A$: use generalized eigenvectors. If $v$ is a generalized eigenvector with $(A - \lambda I)^m v = 0$, and $p_A(\lambda) = (\lambda - \lambda_0)^{m_0} \cdots$, then a similar but more involved argument shows $p_A(A)v = 0$. Since the generalized eigenvectors span $F^n$ (over an algebraically closed field), $p_A(A) = 0$.
+</Proof>
+
+<Example id="gen-eigenvector-check" title="Checking on generalized eigenvectors">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$, $p(\lambda) = (\lambda - 2)^2$.
+
+Eigenvector: $v_1 = (1, 0)$, $Av_1 = 2v_1$. Check: $p(A)v_1 = (A-2I)^2 v_1 = 0$ since $(A-2I)v_1 = 0$.
+
+Generalized eigenvector: $v_2 = (0, 1)$, $(A - 2I)v_2 = (1, 0) = v_1 \neq 0$, but $(A-2I)^2 v_2 = (A-2I)v_1 = 0$.
+
+So $p(A)v_2 = 0$. Since $v_1, v_2$ span $\mathbb{R}^2$, $p(A) = 0$.
+</Example>
+
+---
+
+## Verification examples
+
+<Example id="verify-rotation" title="Verification for rotation matrix">
+$R = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$.
+
+$p(\lambda) = \lambda^2 - 2\cos\theta \cdot \lambda + 1$.
+
+$R^2 - 2\cos\theta \cdot R + I$:
+
+$R^2 = \begin{pmatrix} \cos 2\theta & -\sin 2\theta \\ \sin 2\theta & \cos 2\theta \end{pmatrix}$, so the $(1,1)$ entry of $R^2 - 2\cos\theta \cdot R + I$ is:
+
+$\cos 2\theta - 2\cos^2\theta + 1 = (2\cos^2\theta - 1) - 2\cos^2\theta + 1 = 0$ ✓.
+
+Similarly, all entries vanish.
+</Example>
+
+<Example id="verify-3x3-general" title="Verification for a general 3x3">
+$A = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}$, $p(\lambda) = (1 - \lambda)^3 = -\lambda^3 + 3\lambda^2 - 3\lambda + 1$.
+
+$(A - I)^3 = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}^3 = 0$ (a $3 \times 3$ nilpotent matrix cubed is zero).
+</Example>
+
+<Example id="verify-symmetric" title="Verification for a symmetric matrix">
+$A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, $p(\lambda) = \lambda^2 - 4\lambda + 3 = (\lambda - 3)(\lambda - 1)$.
+
+$A^2 - 4A + 3I = \begin{pmatrix} 5 & 4 \\ 4 & 5 \end{pmatrix} - \begin{pmatrix} 8 & 4 \\ 4 & 8 \end{pmatrix} + \begin{pmatrix} 3 & 0 \\ 0 & 3 \end{pmatrix} = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}$ ✓.
+</Example>
+
+<Example id="verify-complex" title="Verification over C">
+$A = \begin{pmatrix} i & 1 \\ 0 & -i \end{pmatrix}$ over $\mathbb{C}$. $p(\lambda) = \lambda^2 + 1$.
+
+$A^2 + I = \begin{pmatrix} -1 & 0 \\ 0 & -1 \end{pmatrix} + \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix} = 0$. Wait: $A^2 = \begin{pmatrix} i & 1 \\ 0 & -i \end{pmatrix}^2 = \begin{pmatrix} -1 & i \cdot 1 + 1 \cdot (-i) \\ 0 & -1 \end{pmatrix} = \begin{pmatrix} -1 & 0 \\ 0 & -1 \end{pmatrix} = -I$.
+
+So $A^2 + I = -I + I = 0$ ✓.
+</Example>
+
+<Example id="verify-4x4" title="Verification for a 4x4 permutation matrix">
+$A = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 \end{pmatrix}$ (cyclic permutation).
+
+$A^4 = I$, so $p(\lambda) = \lambda^4 - 1$ and $p(A) = A^4 - I = 0$ ✓.
+</Example>
+
+---
+
+## Consequences revisited
+
+<Example id="consequence-annihilating" title="Every matrix is annihilated by a degree-n polynomial">
+By Cayley--Hamilton, the vector space $\{p(A) : p \in F[x], \deg p \leq n - 1\}$ contains all powers $A^k$ (by repeatedly using the relation $A^n = -(c_{n-1}A^{n-1} + \cdots + c_0 I)$). This means:
+
+$$F[A] = \operatorname{span}\{I, A, A^2, \ldots, A^{n-1}\},$$
+
+a vector space of dimension at most $n$. The exact dimension is $\deg m_A$, where $m_A$ is the minimal polynomial.
+</Example>
+
+<Example id="consequence-inverse-formula" title="General inverse formula">
+For $n = 3$ with $p(\lambda) = \lambda^3 + c_2\lambda^2 + c_1\lambda + c_0$ and $c_0 = (-1)^3 \det(A) \neq 0$:
+
+$$A^3 + c_2 A^2 + c_1 A + c_0 I = 0 \implies A(A^2 + c_2 A + c_1 I) = -c_0 I,$$
+
+$$A^{-1} = -\frac{1}{c_0}(A^2 + c_2 A + c_1 I).$$
+
+For $A = \begin{pmatrix} 1 & 0 & 1 \\ 0 & 2 & 0 \\ 0 & 0 & 3 \end{pmatrix}$: $p(\lambda) = (\lambda-1)(\lambda-2)(\lambda-3) = \lambda^3 - 6\lambda^2 + 11\lambda - 6$.
+
+$A^{-1} = \frac{1}{6}(A^2 - 6A + 11I) = \frac{1}{6}\left(\begin{pmatrix} 1 & 0 & 4 \\ 0 & 4 & 0 \\ 0 & 0 & 9 \end{pmatrix} - \begin{pmatrix} 6 & 0 & 6 \\ 0 & 12 & 0 \\ 0 & 0 & 18 \end{pmatrix} + \begin{pmatrix} 11 & 0 & 0 \\ 0 & 11 & 0 \\ 0 & 0 & 11 \end{pmatrix}\right) = \frac{1}{6}\begin{pmatrix} 6 & 0 & -2 \\ 0 & 3 & 0 \\ 0 & 0 & 2 \end{pmatrix}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Three proof strategies">
+The Cayley--Hamilton theorem admits several proofs, each with distinct flavor:
+- **Adjugate proof:** Elementary, works over any commutative ring. Uses the identity $(\lambda I - A) \cdot \operatorname{adj}(\lambda I - A) = p_A(\lambda) I$ and a telescoping argument.
+- **Density argument:** Proves the result for diagonalizable matrices (where it is obvious) and extends by continuity/Zariski density to all matrices.
+- **Generalized eigenvector proof:** Checks $p_A(A)v = 0$ on each (generalized) eigenvector over the algebraic closure.
+
+All three illuminate the same truth: the characteristic polynomial is the "identity card" of the matrix, and the matrix itself is constrained to satisfy this identity.
+</Remark>

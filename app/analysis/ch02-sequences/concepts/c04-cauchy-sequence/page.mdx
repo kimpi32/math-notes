@@ -1,0 +1,166 @@
+export const metadata = {
+  title: '코시 수열 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "개념 - 코시 수열" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 코시 수열 (Cauchy Sequence)
+
+A Cauchy sequence captures the idea that the terms of a sequence get arbitrarily close to each other, without requiring advance knowledge of the limit. This is crucial: it provides an "intrinsic" criterion for convergence.
+
+---
+
+## Definition
+
+<Definition title="Cauchy sequence" number="2.10">
+A sequence $(a_n)$ is a **Cauchy sequence** if:
+
+$$\forall \varepsilon > 0, \quad \exists N \in \mathbb{N}, \quad \forall m, n \geq N : \quad |a_m - a_n| < \varepsilon.$$
+
+In words: for every tolerance $\varepsilon > 0$, there is a stage $N$ beyond which any two terms are within $\varepsilon$ of each other.
+</Definition>
+
+<Remark>
+Compare with convergence: convergence says terms get close to a **specific limit** $L$, while the Cauchy condition says terms get close to **each other**. The power of the Cauchy criterion is that you do not need to know $L$ in advance.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="1/n is Cauchy">
+1. **Claim**: $(a_n) = (\frac{1}{n})$ is Cauchy.
+
+**Proof**: Let $\varepsilon > 0$. Choose $N > \frac{2}{\varepsilon}$. For $m, n \geq N$:
+
+$$|a_m - a_n| = \left|\frac{1}{m} - \frac{1}{n}\right| \leq \frac{1}{m} + \frac{1}{n} \leq \frac{2}{N} < \varepsilon.$$
+</Example>
+
+<Example title="Partial sums of 1/k squared">
+2. $s_n = \sum_{k=1}^{n} \frac{1}{k^2}$ is Cauchy. For $m > n$:
+
+$$|s_m - s_n| = \sum_{k=n+1}^{m} \frac{1}{k^2} \leq \sum_{k=n+1}^{m} \frac{1}{k(k-1)} = \sum_{k=n+1}^{m} \left(\frac{1}{k-1} - \frac{1}{k}\right) = \frac{1}{n} - \frac{1}{m} < \frac{1}{n}.$$
+
+Given $\varepsilon > 0$, choose $N > \frac{1}{\varepsilon}$.
+</Example>
+
+<Example title="Harmonic partial sums are not Cauchy">
+3. $s_n = \sum_{k=1}^{n} \frac{1}{k}$ is **not** Cauchy. For $m = 2n$:
+
+$$|s_{2n} - s_n| = \sum_{k=n+1}^{2n} \frac{1}{k} \geq \sum_{k=n+1}^{2n} \frac{1}{2n} = \frac{n}{2n} = \frac{1}{2}.$$
+
+So taking $\varepsilon = \frac{1}{2}$, no $N$ works.
+</Example>
+
+---
+
+## Cauchy sequences are bounded
+
+<Theorem title="Cauchy sequences are bounded">
+Every Cauchy sequence is bounded.
+</Theorem>
+
+<Proof>
+Let $(a_n)$ be Cauchy. Taking $\varepsilon = 1$, there exists $N$ with $|a_m - a_n| < 1$ for all $m, n \geq N$. In particular, $|a_n - a_N| < 1$ for all $n \geq N$, so $|a_n| < |a_N| + 1$ for $n \geq N$. Set $K = \max(|a_1|, \ldots, |a_{N-1}|, |a_N| + 1)$. Then $|a_n| \leq K$ for all $n$.
+</Proof>
+
+---
+
+## Convergent implies Cauchy
+
+<Theorem title="Convergent implies Cauchy">
+Every convergent sequence is a Cauchy sequence.
+</Theorem>
+
+<Proof>
+Let $a_n \to L$ and let $\varepsilon > 0$. There exists $N$ with $|a_n - L| < \frac{\varepsilon}{2}$ for all $n \geq N$. For $m, n \geq N$:
+
+$$|a_m - a_n| \leq |a_m - L| + |L - a_n| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.$$
+</Proof>
+
+---
+
+## The converse: completeness of R
+
+<Theorem title="Cauchy completeness of R">
+In $\mathbb{R}$, every Cauchy sequence converges. That is:
+
+$$(a_n) \text{ is Cauchy} \iff (a_n) \text{ converges}.$$
+</Theorem>
+
+<Remark>
+This is a deep property of $\mathbb{R}$ that is **equivalent** to the completeness axiom (least upper bound property). The proof uses the Bolzano--Weierstrass theorem. See the [Cauchy criterion](/analysis/ch02-sequences/theorems/t03-cauchy-criterion) for the full statement and proof.
+</Remark>
+
+<Example title="Cauchy sequence not converging in Q">
+4. Define $a_1 = 1$, $a_{n+1} = \frac{1}{2}(a_n + \frac{2}{a_n})$. This Newton iteration for $\sqrt{2}$ is Cauchy in $\mathbb{Q}$, but does **not** converge in $\mathbb{Q}$ since $\sqrt{2} \notin \mathbb{Q}$. It converges in $\mathbb{R}$.
+
+This shows that $\mathbb{Q}$ is **not** complete: the Cauchy property does not guarantee convergence in $\mathbb{Q}$.
+</Example>
+
+<Example title="Decimal expansions and Cauchy sequences">
+5. The sequence $3, 3.1, 3.14, 3.141, 3.1415, 3.14159, \ldots$ (successive decimal approximations to $\pi$) is Cauchy: $|a_m - a_n| < 10^{-\min(m,n)+1}$ for $m \neq n$. By completeness, it converges to some real number, which is $\pi$.
+</Example>
+
+---
+
+## Contractive sequences
+
+<Definition title="Contractive sequence" number="2.11">
+A sequence $(a_n)$ is **contractive** if there exists $0 < c < 1$ such that
+
+$$|a_{n+2} - a_{n+1}| \leq c \cdot |a_{n+1} - a_n| \quad \text{for all } n.$$
+</Definition>
+
+<Theorem title="Contractive implies Cauchy">
+Every contractive sequence is Cauchy (and hence convergent in $\mathbb{R}$).
+</Theorem>
+
+<Example title="Contractive sequences">
+6. $a_1 = 0$, $a_{n+1} = \frac{1}{2}(a_n + 1)$. Then $|a_{n+2} - a_{n+1}| = \frac{1}{2}|a_{n+1} - a_n|$, so this is contractive with $c = \frac{1}{2}$. It converges to $1$.
+
+7. The sequence defined by $a_1 = 1$, $a_{n+1} = \frac{a_n + 3}{a_n + 1}$ is contractive and converges to $\sqrt{3}$.
+</Example>
+
+---
+
+## Cauchy sequences in other settings
+
+<Remark>
+The Cauchy property generalizes to any metric space $(X, d)$: a sequence $(x_n)$ in $X$ is Cauchy if for every $\varepsilon > 0$ there exists $N$ with $d(x_m, x_n) < \varepsilon$ for all $m, n \geq N$. A metric space is **complete** if every Cauchy sequence converges. The real numbers $\mathbb{R}$ with $d(x,y) = |x-y|$ are complete; the rationals $\mathbb{Q}$ are not.
+</Remark>
+
+<Example title="Cauchy sequences of functions">
+8. In the space $C([0,1])$ of continuous functions on $[0,1]$ with the sup norm $\|f\| = \sup_{x \in [0,1]} |f(x)|$, a sequence $(f_n)$ is Cauchy if $\|f_m - f_n\|_\infty \to 0$. This space is complete (a key fact in functional analysis).
+</Example>
+
+<Example title="Cauchy but slow convergence">
+9. $a_n = \sum_{k=1}^{n} \frac{1}{k^2}$. This converges to $\frac{\pi^2}{6}$, but the convergence rate is $O(1/n)$: after $n = 1000$ terms, we still have roughly $3$ correct decimal places.
+</Example>
+
+<Example title="Fast Cauchy convergence">
+10. $a_n = \sum_{k=0}^{n} \frac{1}{k!}$. This converges to $e$ extremely fast: $|a_n - e| < \frac{3}{(n+1)!}$. After $n = 10$ terms, we already have $7$ correct digits.
+</Example>
+
+<Example title="Nested interval Cauchy sequences">
+11. Given nested intervals $[a_n, b_n]$ with $b_n - a_n \to 0$, both $(a_n)$ and $(b_n)$ are Cauchy and converge to the same limit. This is the nested interval property of $\mathbb{R}$.
+</Example>
+
+<Example title="Cauchy criterion for series">
+12. The series $\sum a_n$ converges if and only if the partial sums form a Cauchy sequence, i.e., for every $\varepsilon > 0$ there exists $N$ with $|\sum_{k=n+1}^{m} a_k| < \varepsilon$ for all $m > n \geq N$. This is the **Cauchy criterion for series**.
+</Example>

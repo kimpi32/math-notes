@@ -1,0 +1,217 @@
+export const metadata = {
+  title: '논리와 명제 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "개념 - 논리와 명제" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 논리와 명제 (Logic and Propositions)
+
+Mathematical analysis rests on rigorous logical reasoning. Before we can state or prove any theorem about limits, continuity, or integration, we need a precise language for making and combining mathematical statements. This section develops that language.
+
+---
+
+## Propositions
+
+<Definition title="Proposition" number="0.1">
+A **proposition** (or **statement**) is a declarative sentence that is either true (T) or false (F), but not both. We typically denote propositions by letters $P$, $Q$, $R$, etc.
+</Definition>
+
+<Example title="Propositions and non-propositions">
+1. "$2 + 3 = 5$" is a proposition (true).
+2. "$7$ is even" is a proposition (false).
+3. "$\pi > 3$" is a proposition (true).
+4. "Is $5$ prime?" is **not** a proposition (it is a question).
+5. "$x^2 = 4$" is **not** a proposition as stated (its truth value depends on $x$; it becomes a proposition once $x$ is specified or quantified).
+</Example>
+
+---
+
+## Logical Connectives
+
+<Definition title="Logical connectives" number="0.2">
+Given propositions $P$ and $Q$, we form new propositions using the following **logical connectives**:
+
+- **Negation**: $\neg P$ ("not $P$") is true when $P$ is false, and false when $P$ is true.
+- **Conjunction**: $P \land Q$ ("$P$ and $Q$") is true when both $P$ and $Q$ are true.
+- **Disjunction**: $P \lor Q$ ("$P$ or $Q$") is true when at least one of $P$ or $Q$ is true (inclusive or).
+- **Implication**: $P \Rightarrow Q$ ("if $P$, then $Q$" or "$P$ implies $Q$") is false only when $P$ is true and $Q$ is false.
+- **Biconditional**: $P \Leftrightarrow Q$ ("$P$ if and only if $Q$") is true when $P$ and $Q$ have the same truth value.
+</Definition>
+
+<Example title="Conjunction and disjunction">
+6. Let $P$: "$6$ is divisible by $2$" (true) and $Q$: "$6$ is divisible by $3$" (true). Then $P \land Q$ is true: "$6$ is divisible by both $2$ and $3$."
+7. Let $P$: "$5 > 7$" (false) and $Q$: "$5$ is prime" (true). Then $P \lor Q$ is true (since $Q$ is true), but $P \land Q$ is false (since $P$ is false).
+</Example>
+
+---
+
+## Truth Tables
+
+The truth values of compound propositions are determined by truth tables:
+
+$$
+\begin{array}{cc|ccccc}
+P & Q & \neg P & P \land Q & P \lor Q & P \Rightarrow Q & P \Leftrightarrow Q \\
+\hline
+T & T & F & T & T & T & T \\
+T & F & F & F & T & F & F \\
+F & T & T & F & T & T & F \\
+F & F & T & F & F & T & T
+\end{array}
+$$
+
+<Example title="Implication with a false hypothesis">
+8. The statement "If $1 = 2$, then pigs can fly" is a **true** implication. When the hypothesis $P$ is false, $P \Rightarrow Q$ is true regardless of $Q$. This is called a **vacuously true** statement. Vacuous truth appears throughout analysis: for instance, "every element of the empty set is positive" is vacuously true.
+</Example>
+
+<Remark>
+The implication $P \Rightarrow Q$ is logically equivalent to $\neg P \lor Q$. This can be verified from the truth table. The contrapositive $\neg Q \Rightarrow \neg P$ is also logically equivalent to $P \Rightarrow Q$, and is often easier to prove.
+</Remark>
+
+---
+
+## Converse, Contrapositive, and Inverse
+
+<Definition title="Related conditionals" number="0.3">
+Given an implication $P \Rightarrow Q$:
+
+- The **converse** is $Q \Rightarrow P$.
+- The **contrapositive** is $\neg Q \Rightarrow \neg P$.
+- The **inverse** is $\neg P \Rightarrow \neg Q$.
+
+The original implication and its contrapositive are logically equivalent. The converse and inverse are logically equivalent to each other, but **not** to the original.
+</Definition>
+
+<Example title="Contrapositive in analysis">
+9. Consider: "If $(a_n)$ converges, then $(a_n)$ is bounded." The contrapositive is: "If $(a_n)$ is unbounded, then $(a_n)$ diverges." Both statements are equivalent and both are true. However, the converse "If $(a_n)$ is bounded, then $(a_n)$ converges" is **false** (consider $a_n = (-1)^n$).
+</Example>
+
+---
+
+## Quantifiers
+
+<Definition title="Quantifiers" number="0.4">
+Let $P(x)$ be a predicate (a statement depending on a variable $x$ from a domain $D$):
+
+- **Universal quantifier**: $\forall x \in D,\; P(x)$ means "$P(x)$ is true for every $x$ in $D$."
+- **Existential quantifier**: $\exists x \in D,\; P(x)$ means "there exists at least one $x$ in $D$ for which $P(x)$ is true."
+</Definition>
+
+<Example title="Quantified statements">
+10. $\forall n \in \mathbb{N},\; n + 1 > n$. This is true: every natural number is strictly less than its successor.
+11. $\exists x \in \mathbb{R},\; x^2 = 2$. This is true: $x = \sqrt{2}$ works (assuming we are in $\mathbb{R}$).
+12. $\forall x \in \mathbb{R},\; x^2 \geq 0$. This is true: the square of any real number is nonneg.
+</Example>
+
+<Remark>
+The order of quantifiers matters enormously. Consider two statements about a sequence $(a_n)$:
+
+- $\forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall n \geq N\colon |a_n - L| < \varepsilon$ (the sequence converges to $L$).
+- $\exists N \in \mathbb{N},\; \forall \varepsilon > 0,\; \forall n \geq N\colon |a_n - L| < \varepsilon$ (eventually $a_n = L$ exactly).
+
+The second statement is strictly stronger. Swapping $\forall$ and $\exists$ changes the meaning entirely.
+</Remark>
+
+---
+
+## Negation of Quantified Statements
+
+<Definition title="Negation of quantifiers" number="0.5">
+The negation rules for quantifiers are:
+
+$$\neg(\forall x \in D,\; P(x)) \;\;\Longleftrightarrow\;\; \exists x \in D,\; \neg P(x)$$
+
+$$\neg(\exists x \in D,\; P(x)) \;\;\Longleftrightarrow\;\; \forall x \in D,\; \neg P(x)$$
+
+In words: the negation of "for all" is "there exists ... not," and the negation of "there exists" is "for all ... not."
+</Definition>
+
+<Example title="Negating convergence">
+13. The statement "$(a_n)$ converges to $L$" is:
+
+$$\forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall n \geq N\colon |a_n - L| < \varepsilon.$$
+
+Its negation, "$(a_n)$ does not converge to $L$," is:
+
+$$\exists \varepsilon > 0,\; \forall N \in \mathbb{N},\; \exists n \geq N\colon |a_n - L| \geq \varepsilon.$$
+
+Each $\forall$ becomes $\exists$ and vice versa, and the final inequality is negated. This mechanical procedure is essential for constructing proofs by contradiction in analysis.
+</Example>
+
+<Example title="Negating continuity">
+14. The statement "$f$ is continuous at $c$" is:
+
+$$\forall \varepsilon > 0,\; \exists \delta > 0,\; \forall x\colon |x - c| < \delta \Rightarrow |f(x) - f(c)| < \varepsilon.$$
+
+Its negation, "$f$ is **not** continuous at $c$," is:
+
+$$\exists \varepsilon > 0,\; \forall \delta > 0,\; \exists x\colon |x - c| < \delta \;\land\; |f(x) - f(c)| \geq \varepsilon.$$
+
+Note how $\Rightarrow$ became $\land$ under negation (since $\neg(P \Rightarrow Q) \Leftrightarrow P \land \neg Q$).
+</Example>
+
+---
+
+## Logical Equivalences
+
+<Definition title="Logical equivalence" number="0.6">
+Two propositions $P$ and $Q$ are **logically equivalent**, written $P \equiv Q$, if they have the same truth value in every possible assignment of truth values to their components. Equivalently, $P \Leftrightarrow Q$ is a tautology.
+</Definition>
+
+Key logical equivalences used throughout analysis:
+
+| Name | Equivalence |
+|---|---|
+| Double negation | $\neg(\neg P) \equiv P$ |
+| De Morgan's laws | $\neg(P \land Q) \equiv \neg P \lor \neg Q$ |
+| | $\neg(P \lor Q) \equiv \neg P \land \neg Q$ |
+| Contrapositive | $(P \Rightarrow Q) \equiv (\neg Q \Rightarrow \neg P)$ |
+| Implication rewrite | $(P \Rightarrow Q) \equiv (\neg P \lor Q)$ |
+| Biconditional | $(P \Leftrightarrow Q) \equiv (P \Rightarrow Q) \land (Q \Rightarrow P)$ |
+
+<Example title="De Morgan's laws in analysis">
+15. The statement "$(a_n)$ is bounded" means $\exists M > 0,\; \forall n\colon |a_n| \leq M$. Its negation is $\forall M > 0,\; \exists n\colon |a_n| > M$, which says the sequence is unbounded. De Morgan's laws underlie this quantifier-swapping process.
+</Example>
+
+---
+
+## Unique Existence
+
+<Definition title="Unique existence" number="0.7">
+The notation $\exists! x \in D,\; P(x)$ means "there exists a **unique** $x$ in $D$ such that $P(x)$." Formally:
+
+$$\exists x \in D,\; P(x) \;\;\land\;\; \forall y, z \in D,\; (P(y) \land P(z) \Rightarrow y = z).$$
+</Definition>
+
+<Example title="Unique existence of limits">
+16. If a sequence $(a_n)$ converges, its limit is unique. That is, if $a_n \to L$ and $a_n \to L'$, then $L = L'$. This is proven by the triangle inequality: $|L - L'| \leq |L - a_n| + |a_n - L'| < 2\varepsilon$ for all $\varepsilon > 0$, forcing $L = L'$.
+</Example>
+
+---
+
+## Summary
+
+<Remark>
+The logical framework developed here is indispensable for analysis. In particular:
+
+1. **Implication and contrapositive** are the basis for direct and contrapositive proofs.
+2. **Quantifier negation** is the key to proofs by contradiction: to show a $\forall$-statement is false, exhibit a single counterexample; to disprove an $\exists$-statement, show no witness exists.
+3. **Nested quantifiers** appear in every fundamental definition of analysis ($\varepsilon$-$\delta$, $\varepsilon$-$N$, uniform continuity, uniform convergence).
+
+Mastering these logical manipulations is a prerequisite for reading and writing rigorous proofs in analysis.
+</Remark>

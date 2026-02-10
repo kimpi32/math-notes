@@ -1,0 +1,149 @@
+export const metadata = {
+  title: 'Limit and Colimit — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Concept — Limit and Colimit" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Limit and Colimit
+
+Limits and colimits unify products, equalizers, pullbacks, and all other universal constructions into a single framework. A limit is a universal cone over a diagram; a colimit is a universal cocone. Together they form the backbone of categorical constructions.
+
+---
+
+## Diagrams and Cones
+
+<Definition title="Diagram" number="2.9">
+A **diagram** of shape $\mathcal{J}$ in a category $\mathcal{C}$ is a functor $D : \mathcal{J} \to \mathcal{C}$, where $\mathcal{J}$ is a small category called the **index category** or **shape**.
+</Definition>
+
+<Definition title="Cone" number="2.10">
+A **cone** over a diagram $D : \mathcal{J} \to \mathcal{C}$ with **apex** $N$ is a natural transformation from the constant functor $c_N : \mathcal{J} \to \mathcal{C}$ (sending everything to $N$) to $D$. Explicitly, it is a family of morphisms
+
+$$\lambda_j : N \to D(j) \qquad \text{for each } j \in \mathcal{J}$$
+
+such that for every morphism $u : j \to j'$ in $\mathcal{J}$, we have $D(u) \circ \lambda_j = \lambda_{j'}$.
+</Definition>
+
+<Definition title="Limit" number="2.11">
+A **limit** of $D : \mathcal{J} \to \mathcal{C}$ is a cone $(\varprojlim D, \{\pi_j\})$ that is **universal** (terminal) among all cones: for every cone $(N, \{\lambda_j\})$, there exists a unique morphism $h : N \to \varprojlim D$ such that $\pi_j \circ h = \lambda_j$ for all $j$.
+
+We write $\varprojlim D$ or $\lim_{\leftarrow} D$ for the limit object.
+</Definition>
+
+<Definition title="Colimit" number="2.12">
+Dually, a **colimit** of $D : \mathcal{J} \to \mathcal{C}$ is a universal cocone $(\varinjlim D, \{\iota_j\})$: a cocone that is initial among all cocones. For every cocone $(N, \{\lambda_j\})$, there exists a unique morphism $h : \varinjlim D \to N$ with $h \circ \iota_j = \lambda_j$.
+</Definition>
+
+---
+
+## Special Cases
+
+<Remark title="Taxonomy of limits">
+Different shapes $\mathcal{J}$ give different constructions:
+
+| Shape $\mathcal{J}$ | Limit | Colimit |
+|---|---|---|
+| Discrete (no non-identity morphisms) | Product $\prod$ | Coproduct $\bigsqcup$ |
+| $\bullet \rightrightarrows \bullet$ | Equalizer | Coequalizer |
+| $\bullet \to \bullet \leftarrow \bullet$ | Pullback | (dual: pushout) |
+| $\bullet \leftarrow \bullet \to \bullet$ | (dual: pullback) | Pushout |
+| Empty category | Terminal object | Initial object |
+| Directed poset | Inverse limit | Direct limit (filtered colimit) |
+</Remark>
+
+<Definition title="Equalizer" number="2.13">
+The **equalizer** of two morphisms $f, g : A \rightrightarrows B$ is the limit of the diagram $A \rightrightarrows B$. It is an object $E$ with $e : E \to A$ such that $f \circ e = g \circ e$, universal with this property.
+
+In $\mathbf{Set}$: $\mathrm{eq}(f,g) = \{a \in A : f(a) = g(a)\}$.
+</Definition>
+
+<Definition title="Filtered Colimit" number="2.14">
+A **filtered colimit** is a colimit over a filtered category $\mathcal{J}$ (every finite diagram in $\mathcal{J}$ has a cocone). Filtered colimits commute with finite limits in $\mathbf{Set}$ and in module categories.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Limit over a discrete category" id="lim-discrete">
+When $\mathcal{J}$ is discrete with objects $\{1, \ldots, n\}$, a diagram is a family of objects $A_1, \ldots, A_n$, a cone is a family of maps from a single object to each $A_i$, and the limit is the product $A_1 \times \cdots \times A_n$.
+</Example>
+
+<Example title="Equalizer in Ab" id="eq-ab">
+In $\mathbf{Ab}$, the equalizer of $f, g : A \to B$ is the kernel of $f - g$: $\mathrm{eq}(f,g) = \ker(f - g) = \{a \in A : f(a) = g(a)\}$.
+</Example>
+
+<Example title="Inverse limit of Z/p^n Z" id="inv-lim">
+The inverse limit $\varprojlim \mathbb{Z}/p^n\mathbb{Z}$ (over the system $\cdots \to \mathbb{Z}/p^3\mathbb{Z} \to \mathbb{Z}/p^2\mathbb{Z} \to \mathbb{Z}/p\mathbb{Z}$) is the $p$-adic integers $\mathbb{Z}_p$. This is a filtered inverse limit in $\mathbf{Ring}$.
+</Example>
+
+<Example title="Direct limit (filtered colimit)" id="dir-lim">
+The direct limit $\varinjlim \mathbb{Z}/n!\mathbb{Z}$ over the inclusions gives the group $\mathbb{Q}/\mathbb{Z}$. More generally, every module is a filtered colimit of its finitely generated submodules.
+</Example>
+
+<Example title="Coequalizer in Set" id="coeq-set">
+The coequalizer of $f, g : A \rightrightarrows B$ in $\mathbf{Set}$ is the quotient $B / {\sim}$ where $\sim$ is the equivalence relation generated by $f(a) \sim g(a)$ for all $a \in A$.
+</Example>
+
+<Example title="Coequalizer in Grp gives quotient" id="coeq-grp">
+In $\mathbf{Grp}$, the coequalizer of $f, g : H \rightrightarrows G$ is the quotient $G / N$ where $N$ is the normal subgroup generated by $\{f(h) \cdot g(h)^{-1} : h \in H\}$.
+</Example>
+
+<Example title="Stalks as filtered colimits" id="stalk">
+For a sheaf $\mathcal{F}$ on a topological space $X$, the stalk at $x \in X$ is the filtered colimit $\mathcal{F}_x = \varinjlim_{U \ni x} \mathcal{F}(U)$ over all open neighborhoods of $x$.
+</Example>
+
+<Example title="Limit in a functor category" id="lim-functor">
+In the functor category $[\mathcal{C}, \mathcal{D}]$, limits are computed pointwise: if $\mathcal{D}$ has all limits of shape $\mathcal{J}$, then $(\varprojlim F_i)(A) = \varprojlim F_i(A)$ for each $A \in \mathcal{C}$. This is why presheaf categories $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ have all limits and colimits.
+</Example>
+
+<Example title="Limit as a section of a projection" id="lim-section">
+The limit $\varprojlim D$ can be described as the equalizer of two maps between products: $\varprojlim D = \mathrm{eq}\left(\prod_{j} D(j) \rightrightarrows \prod_{u : j \to j'} D(j')\right)$. This gives the [construction of limits via products and equalizers](/category-theory/ch02-limits-colimits/theorems/t02-limits-via-products-equalizers).
+</Example>
+
+<Example title="Profinite completion" id="profinite">
+The profinite completion $\hat{G}$ of a group $G$ is the inverse limit $\hat{G} = \varprojlim_{N \trianglelefteq G,\, [G:N] < \infty} G/N$. The profinite completion of $\mathbb{Z}$ is $\hat{\mathbb{Z}} = \prod_p \mathbb{Z}_p$.
+</Example>
+
+<Example title="Colimits and quotients" id="colim-quotient">
+Any group $G$ is a filtered colimit of its finitely generated subgroups. Any $R$-module is a filtered colimit of its finitely generated submodules. Any ring is a filtered colimit of its finitely generated subrings.
+</Example>
+
+<Example title="Limits in the category of topological spaces" id="lim-top">
+In $\mathbf{Top}$, limits are formed by taking the limit of the underlying sets (computed in $\mathbf{Set}$) and equipping it with the initial topology (coarsest making all projections continuous). Colimits use the final topology.
+</Example>
+
+---
+
+## Complete and Cocomplete Categories
+
+<Definition title="Complete and Cocomplete" number="2.15">
+A category $\mathcal{C}$ is **complete** if it has all small limits (limits over all small index categories). It is **cocomplete** if it has all small colimits.
+</Definition>
+
+<Theorem title="Completeness criterion" number="2.5">
+A category $\mathcal{C}$ is complete if and only if it has all products and all equalizers. Dually, $\mathcal{C}$ is cocomplete if and only if it has all coproducts and all coequalizers.
+</Theorem>
+
+<Example title="Complete and cocomplete categories" id="complete-examples">
+The categories $\mathbf{Set}$, $\mathbf{Grp}$, $\mathbf{Ab}$, $R\text{-}\mathbf{Mod}$, $\mathbf{Top}$, and $[\mathcal{C}, \mathcal{D}]$ (when $\mathcal{D}$ is complete/cocomplete) are all complete and cocomplete.
+</Example>
+
+<Remark title="Limits and adjunctions">
+Right [adjoint functors](/category-theory/ch02-limits-colimits/concepts/c05-adjunction) preserve all limits, and left adjoints preserve all colimits. This is the RAPL theorem (Right Adjoints Preserve Limits). Conversely, the [Freyd adjoint functor theorem](/category-theory/ch02-limits-colimits/theorems/t01-freyd-adjoint) gives conditions under which a limit-preserving functor must have a left adjoint.
+</Remark>

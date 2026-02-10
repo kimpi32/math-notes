@@ -1,0 +1,160 @@
+export const metadata = {
+  title: 'Pullback and Pushout — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Concept — Pullback and Pushout" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Pullback and Pushout
+
+Pullbacks and pushouts are limits and colimits over diagrams of shape $\bullet \to \bullet \leftarrow \bullet$ and $\bullet \leftarrow \bullet \to \bullet$, respectively. They generalize fiber products, intersections, and amalgamated sums, and play a central role in algebraic geometry (fiber products of schemes) and homological algebra (connecting exact sequences).
+
+---
+
+## Pullback (Fiber Product)
+
+<Definition title="Pullback" number="2.7">
+Given morphisms $f : A \to C$ and $g : B \to C$ in a category $\mathcal{C}$, a **pullback** (or **fiber product**) is an object $A \times_C B$ together with morphisms $p_A : A \times_C B \to A$ and $p_B : A \times_C B \to B$ such that $f \circ p_A = g \circ p_B$, and for every object $X$ with morphisms $\alpha : X \to A$, $\beta : X \to B$ satisfying $f \circ \alpha = g \circ \beta$, there exists a unique morphism $h : X \to A \times_C B$ with $p_A \circ h = \alpha$ and $p_B \circ h = \beta$.
+
+$$
+\begin{array}{ccc}
+A \times_C B & \xrightarrow{p_B} & B \\[6pt]
+\downarrow\scriptstyle{p_A} & & \downarrow\scriptstyle{g} \\[6pt]
+A & \xrightarrow{f} & C
+\end{array}
+$$
+</Definition>
+
+---
+
+## Pushout (Amalgamated Sum)
+
+<Definition title="Pushout" number="2.8">
+Given morphisms $f : C \to A$ and $g : C \to B$, a **pushout** (or **amalgamated sum**, or **fibered coproduct**) is an object $A \sqcup_C B$ with morphisms $\iota_A : A \to A \sqcup_C B$ and $\iota_B : B \to A \sqcup_C B$ such that $\iota_A \circ f = \iota_B \circ g$, and satisfying the dual universal property.
+
+$$
+\begin{array}{ccc}
+C & \xrightarrow{g} & B \\[6pt]
+\downarrow\scriptstyle{f} & & \downarrow\scriptstyle{\iota_B} \\[6pt]
+A & \xrightarrow{\iota_A} & A \sqcup_C B
+\end{array}
+$$
+</Definition>
+
+<Remark title="Duality">
+A pushout in $\mathcal{C}$ is a pullback in $\mathcal{C}^{\mathrm{op}}$. Every result about pullbacks has a dual statement about pushouts.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Pullback in Set" id="pb-set">
+In $\mathbf{Set}$, the pullback of $f : A \to C$ and $g : B \to C$ is
+
+$$A \times_C B = \{(a, b) \in A \times B : f(a) = g(b)\}$$
+
+with projections to $A$ and $B$. When $f$ and $g$ are inclusion maps of subsets $A, B \subseteq C$, the pullback is the intersection $A \cap B$.
+</Example>
+
+<Example title="Pullback as preimage" id="pb-preimage">
+In $\mathbf{Set}$, the pullback of $f : A \to B$ along the inclusion $\{b\} \hookrightarrow B$ is the fiber $f^{-1}(b)$. More generally, pulling back along any map gives the "preimage" construction.
+</Example>
+
+<Example title="Fiber product of schemes" id="pb-scheme">
+In $\mathbf{Sch}$, the pullback $X \times_S Y$ is the fiber product. For affine schemes, $\mathrm{Spec}\, A \times_{\mathrm{Spec}\, R} \mathrm{Spec}\, B = \mathrm{Spec}(A \otimes_R B)$. This is the fundamental construction in algebraic geometry: base change, fibers, intersections, and self-products are all fiber products.
+</Example>
+
+<Example title="Pullback in Grp" id="pb-grp">
+In $\mathbf{Grp}$, the pullback of $f : G \to K$ and $g : H \to K$ is $G \times_K H = \{(g,h) \in G \times H : f(g) = g(h)\}$ with the induced group structure. When $f$ and $g$ are inclusion maps of subgroups, this recovers the intersection.
+</Example>
+
+<Example title="Pullback in Top" id="pb-top">
+In $\mathbf{Top}$, the pullback of $f : X \to Z$ and $g : Y \to Z$ is the set $\{(x,y) : f(x) = g(y)\} \subseteq X \times Y$ with the subspace topology from the product topology on $X \times Y$. The fiber $f^{-1}(z)$ is the pullback along the inclusion $\{z\} \hookrightarrow Z$.
+</Example>
+
+<Example title="Pushout in Set" id="po-set">
+In $\mathbf{Set}$, the pushout of $f : C \to A$ and $g : C \to B$ is the quotient $(A \sqcup B) / {\sim}$ where $f(c) \sim g(c)$ for all $c \in C$. This "glues" $A$ and $B$ along the common part specified by $C$.
+</Example>
+
+<Example title="Pushout in Ab" id="po-ab">
+In $\mathbf{Ab}$, the pushout of $f : C \to A$ and $g : C \to B$ is $(A \oplus B) / \{(f(c), -g(c)) : c \in C\}$. This is the **amalgamated sum** or **fiber sum**.
+</Example>
+
+<Example title="Pushout in Top: CW complexes" id="po-cw">
+CW complexes are built by pushouts. Attaching an $n$-cell to a space $X$ via a map $\varphi : S^{n-1} \to X$ is the pushout of $\varphi$ and the inclusion $S^{n-1} \hookrightarrow D^n$:
+
+$$X \cup_\varphi D^n = X \sqcup_{S^{n-1}} D^n$$
+
+The entire CW structure is a sequence of pushouts.
+</Example>
+
+<Example title="Pullback and kernel" id="pb-kernel">
+In an abelian category, the kernel of $f : A \to B$ is the pullback of $f$ and the zero map $0 \to B$:
+
+$$\ker f = A \times_B 0$$
+
+Dually, the cokernel is a pushout.
+</Example>
+
+<Example title="Pullback of covering spaces" id="pb-covering">
+In $\mathbf{Top}$, if $p : \tilde{X} \to X$ is a covering space and $f : Y \to X$ is any continuous map, the pullback $f^*\tilde{X} = Y \times_X \tilde{X}$ is a covering space of $Y$. This is the "pullback" or "induced" covering space.
+</Example>
+
+<Example title="Pushout in Ring" id="po-ring">
+In $\mathbf{CRing}$, the pushout of $R \to A$ and $R \to B$ is the tensor product $A \otimes_R B$. This is because the pushout in $\mathbf{CRing}$ is the coproduct in the category of $R$-algebras.
+</Example>
+
+<Example title="Pullback preserves monomorphisms" id="pb-mono">
+If $g : B \to C$ is a monomorphism, then the pullback $p_A : A \times_C B \to A$ is also a monomorphism. This is because pullbacks "preserve" monomorphisms — a general property of limits.
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Pullback of monomorphisms" number="2.3">
+In any category, if the square
+
+$$
+\begin{array}{ccc}
+P & \to & B \\
+\downarrow & & \downarrow\scriptstyle{g} \\
+A & \xrightarrow{f} & C
+\end{array}
+$$
+
+is a pullback and $g$ is a monomorphism, then $P \to A$ is also a monomorphism.
+</Theorem>
+
+<Theorem title="Pasting law for pullbacks" number="2.4">
+Given a commutative diagram
+
+$$
+\begin{array}{ccccc}
+P & \to & Q & \to & R \\
+\downarrow & & \downarrow & & \downarrow \\
+A & \to & B & \to & C
+\end{array}
+$$
+
+if the right square is a pullback, then the outer rectangle is a pullback if and only if the left square is a pullback.
+</Theorem>
+
+<Remark title="Looking ahead">
+Pullbacks and pushouts are key to the construction of [exact sequences](/category-theory/ch03-abelian-categories/concepts/c04-exact-sequence) in abelian categories and the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma). In the theory of triangulated categories, the mapping cone triangle generalizes the pushout construction.
+</Remark>

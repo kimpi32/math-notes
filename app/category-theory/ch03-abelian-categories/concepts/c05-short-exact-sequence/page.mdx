@@ -1,0 +1,140 @@
+export const metadata = {
+  title: 'Short Exact Sequence — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Concept — Short Exact Sequence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Short Exact Sequence
+
+A short exact sequence $0 \to A \to B \to C \to 0$ is the most fundamental exact sequence. It says that $A$ embeds into $B$ and $C$ is the quotient. Short exact sequences encode extensions, splittings, and the data measured by $\mathrm{Ext}^1$.
+
+---
+
+## Definition
+
+<Definition title="Short Exact Sequence" number="3.11">
+A **short exact sequence** (SES) in an abelian category is a sequence
+
+$$0 \to A \xrightarrow{f} B \xrightarrow{g} C \to 0$$
+
+that is exact at $A$ (i.e., $f$ is monic), exact at $B$ (i.e., $\mathrm{im}\, f = \ker g$), and exact at $C$ (i.e., $g$ is epic).
+
+Equivalently: $f$ is the kernel of $g$, and $g$ is the cokernel of $f$.
+</Definition>
+
+<Definition title="Split Short Exact Sequence" number="3.12">
+A short exact sequence $0 \to A \xrightarrow{f} B \xrightarrow{g} C \to 0$ **splits** if any of the following equivalent conditions hold:
+
+1. There exists $s : C \to B$ with $g \circ s = \mathrm{id}_C$ (a **section** of $g$).
+2. There exists $r : B \to A$ with $r \circ f = \mathrm{id}_A$ (a **retraction** of $f$).
+3. $B \cong A \oplus C$ via an isomorphism compatible with $f$ and $g$.
+</Definition>
+
+<Definition title="Extension" number="3.13">
+A short exact sequence $0 \to A \to B \to C \to 0$ is called an **extension** of $C$ by $A$. Two extensions are **equivalent** if there is a commutative diagram:
+
+$$
+\begin{array}{ccccccccc}
+0 & \to & A & \to & B & \to & C & \to & 0 \\
+& & \| & & \downarrow\scriptstyle{\cong} & & \| & & \\
+0 & \to & A & \to & B' & \to & C & \to & 0
+\end{array}
+$$
+
+The set of equivalence classes of extensions is $\mathrm{Ext}^1(C, A)$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Standard SES in Z-Mod" id="ses-z">
+The sequence $0 \to \mathbb{Z} \xrightarrow{\times n} \mathbb{Z} \xrightarrow{\pi} \mathbb{Z}/n\mathbb{Z} \to 0$ is a short exact sequence. For $n \geq 2$, it does not split: $\mathbb{Z} \not\cong \mathbb{Z} \oplus \mathbb{Z}/n\mathbb{Z}$.
+</Example>
+
+<Example title="Split SES: direct sum" id="ses-split">
+The sequence $0 \to A \xrightarrow{\iota_A} A \oplus C \xrightarrow{\pi_C} C \to 0$ always splits: the inclusion $\iota_C : C \to A \oplus C$ is a section of $\pi_C$.
+</Example>
+
+<Example title="Non-split SES" id="ses-nonsplit">
+$0 \to \mathbb{Z}/2\mathbb{Z} \to \mathbb{Z}/4\mathbb{Z} \to \mathbb{Z}/2\mathbb{Z} \to 0$ does not split, since $\mathbb{Z}/4\mathbb{Z} \not\cong \mathbb{Z}/2\mathbb{Z} \oplus \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example title="Every SES of vector spaces splits" id="ses-vect">
+In $\mathbf{Vect}_k$, every short exact sequence $0 \to V \to W \to W/V \to 0$ splits. This is because every subspace has a complement. Equivalently, every module over a field is projective and injective.
+</Example>
+
+<Example title="SES of groups" id="ses-grp">
+$1 \to A_n \to S_n \to \mathbb{Z}/2\mathbb{Z} \to 1$ is a short exact sequence of groups (here $A_n$ is the alternating group). For $n \geq 3$, this does not split when viewed in $\mathbf{Grp}$ (though $S_n$ contains elements of order 2, the extension is not a direct product for $n \geq 3$). For $n = 2$, $S_2 \cong \mathbb{Z}/2\mathbb{Z}$ and the sequence is trivial.
+</Example>
+
+<Example title="Exponential sequence in complex geometry" id="exponential-ses">
+On a complex manifold $X$, the exponential sequence is:
+
+$$0 \to \underline{\mathbb{Z}} \xrightarrow{2\pi i} \mathcal{O}_X \xrightarrow{\exp} \mathcal{O}_X^* \to 0$$
+
+The long exact sequence in cohomology gives $\cdots \to H^1(X, \mathcal{O}_X) \to H^1(X, \mathcal{O}_X^*) \xrightarrow{c_1} H^2(X, \mathbb{Z}) \to \cdots$, connecting line bundles to topology via the first Chern class.
+</Example>
+
+<Example title="Euler sequence" id="euler-ses">
+On $\mathbb{P}^n$, the Euler sequence is $0 \to \Omega^1_{\mathbb{P}^n} \to \mathcal{O}(-1)^{n+1} \to \mathcal{O} \to 0$, relating the cotangent sheaf to twists of the structure sheaf. This is fundamental for computing cohomology on projective space.
+</Example>
+
+<Example title="SES of chain complexes" id="ses-chain">
+A short exact sequence of chain complexes $0 \to A_\bullet \to B_\bullet \to C_\bullet \to 0$ (exact in each degree) induces the [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence) via the Snake Lemma.
+</Example>
+
+<Example title="Extension of Z/2Z by Z/2Z" id="ext-z2">
+The extensions of $\mathbb{Z}/2\mathbb{Z}$ by $\mathbb{Z}/2\mathbb{Z}$ are classified by $\mathrm{Ext}^1_\mathbb{Z}(\mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/2\mathbb{Z}) \cong \mathbb{Z}/2\mathbb{Z}$. The two classes are the split extension $\mathbb{Z}/2\mathbb{Z} \oplus \mathbb{Z}/2\mathbb{Z}$ and the non-split extension $\mathbb{Z}/4\mathbb{Z}$.
+</Example>
+
+<Example title="Horseshoe lemma" id="horseshoe">
+Given a SES $0 \to A \to B \to C \to 0$ and projective resolutions $P_\bullet \to A$ and $Q_\bullet \to C$, the **horseshoe lemma** constructs a projective resolution $P_\bullet \oplus Q_\bullet \to B$. This is essential for computing derived functors.
+</Example>
+
+<Example title="SES and projective modules" id="ses-projective">
+A module $P$ is **projective** if and only if every SES $0 \to A \to B \to P \to 0$ splits. Equivalently, $\mathrm{Ext}^1(P, A) = 0$ for all $A$. Free modules are projective, and over a PID, projective modules are free.
+</Example>
+
+<Example title="SES and injective modules" id="ses-injective">
+A module $I$ is **injective** if and only if every SES $0 \to I \to B \to C \to 0$ splits. Equivalently, $\mathrm{Ext}^1(A, I) = 0$ for all $A$. By Baer's criterion, $I$ is injective iff every map from an ideal of $R$ to $I$ extends to $R$.
+</Example>
+
+---
+
+## The Splitting Lemma
+
+<Theorem title="Splitting Lemma" number="3.5">
+For a short exact sequence $0 \to A \xrightarrow{f} B \xrightarrow{g} C \to 0$ in an abelian category, the following are equivalent:
+
+1. $g$ has a section $s : C \to B$.
+2. $f$ has a retraction $r : B \to A$.
+3. $B \cong A \oplus C$ compatibly with the maps $f$ and $g$.
+</Theorem>
+
+<Proof>
+$(1) \Rightarrow (3)$: Given $s$ with $g \circ s = \mathrm{id}_C$, define $\varphi : A \oplus C \to B$ by $\varphi(a, c) = f(a) + s(c)$. This is an isomorphism: injectivity follows from the exactness, and surjectivity from the section.
+
+$(3) \Rightarrow (2)$: If $B \cong A \oplus C$, the projection to $A$ gives a retraction.
+
+$(2) \Rightarrow (1)$: Given $r$ with $r \circ f = \mathrm{id}_A$, define $s(c) = b - f(r(b))$ for any $b$ with $g(b) = c$. This is well-defined and gives a section.
+</Proof>
+
+<Remark title="Looking ahead">
+Short exact sequences are the input for the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma), which produces connecting homomorphisms. The [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence) is the most important consequence. Extensions classified by $\mathrm{Ext}^1$ provide the link between homological algebra and the structure theory of modules.
+</Remark>

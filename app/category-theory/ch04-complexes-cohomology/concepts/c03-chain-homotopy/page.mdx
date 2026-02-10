@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'Chain Homotopy — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Concept — Chain Homotopy" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Chain Homotopy
+
+Chain homotopy is the algebraic analogue of topological homotopy. Two chain maps are chain homotopic if they differ by a "deformation" through one degree. Chain homotopic maps induce the same map on cohomology, which is why we pass from the category of complexes to the homotopy category.
+
+---
+
+## Definition
+
+<Definition title="Chain Homotopy" number="4.6">
+Let $f, g : A^\bullet \to B^\bullet$ be chain maps. A **chain homotopy** from $f$ to $g$ is a family of morphisms $s^n : A^n \to B^{n-1}$ such that
+
+$$f^n - g^n = d_B^{n-1} \circ s^n + s^{n+1} \circ d_A^n \quad \text{for all } n$$
+
+We write $f \sim g$ and say $f$ and $g$ are **chain homotopic** (or **homotopic**).
+</Definition>
+
+<Definition title="Null-homotopic" number="4.7">
+A chain map $f : A^\bullet \to B^\bullet$ is **null-homotopic** if $f \sim 0$, i.e., $f^n = d_B^{n-1} \circ s^n + s^{n+1} \circ d_A^n$ for some family $s^n$.
+</Definition>
+
+<Definition title="Chain Homotopy Equivalence" number="4.8">
+A chain map $f : A^\bullet \to B^\bullet$ is a **chain homotopy equivalence** if there exists $g : B^\bullet \to A^\bullet$ such that $g \circ f \sim \mathrm{id}_A$ and $f \circ g \sim \mathrm{id}_B$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Chain homotopy in topology" id="homotopy-topology">
+If two continuous maps $f, g : X \to Y$ are homotopic, then the induced chain maps $f_\sharp, g_\sharp : C_\bullet(X) \to C_\bullet(Y)$ are chain homotopic. This is the fundamental connection between topological and algebraic homotopy. The chain homotopy is constructed from the prism operator.
+</Example>
+
+<Example title="Contractible complex" id="contractible">
+A complex $A^\bullet$ is **contractible** if $\mathrm{id}_{A^\bullet} \sim 0$, equivalently if $A^\bullet$ is homotopy equivalent to the zero complex. A contractible complex is acyclic ($H^n = 0$ for all $n$), but not every acyclic complex is contractible.
+</Example>
+
+<Example title="Projective resolution is unique up to homotopy" id="proj-res-unique">
+Any two projective resolutions of a module $M$ are chain homotopy equivalent. This is the **comparison theorem**: if $P_\bullet \to M$ and $Q_\bullet \to M$ are projective resolutions, there exist chain maps $f : P_\bullet \to Q_\bullet$ and $g : Q_\bullet \to P_\bullet$ (lifting $\mathrm{id}_M$) with $g \circ f \sim \mathrm{id}_P$ and $f \circ g \sim \mathrm{id}_Q$.
+</Example>
+
+<Example title="Derived functors are independent of resolution" id="derived-independent">
+Since projective resolutions are unique up to chain homotopy, and homotopic maps induce equal maps on cohomology, the derived functors $R^nF(M) = H^n(F(I^\bullet))$ (using an injective resolution $M \to I^\bullet$) are well-defined up to canonical isomorphism.
+</Example>
+
+<Example title="Contracting homotopy for the bar resolution" id="bar-contracting">
+The bar resolution $B_\bullet \to \mathbb{Z}$ for a group $G$ admits an explicit contracting homotopy $s_n : B_n \to B_{n+1}$ defined by $s_n[g_1|\cdots|g_n] = [1|g_1|\cdots|g_n]$. This shows $B_\bullet$ is a resolution (acyclic augmented complex).
+</Example>
+
+<Example title="Null-homotopic maps and Ext" id="null-homotopic-ext">
+A map $f : P_\bullet \to Q_\bullet$ between projective resolutions is null-homotopic iff it induces the zero map on $\mathrm{Ext}$. More precisely, elements of $\mathrm{Ext}^n(M, N)$ are chain homotopy classes of chain maps $P_\bullet \to I_\bullet[n]$.
+</Example>
+
+<Example title="Chain homotopy and mapping cone" id="homotopy-cone">
+$f \sim g$ if and only if $f - g$ is null-homotopic, which happens iff the mapping cone $\mathrm{Cone}(f - g)$ is contractible. This connects chain homotopy to the cone construction.
+</Example>
+
+<Example title="Homotopy of de Rham complexes" id="derham-homotopy">
+The Poincare lemma states that on a contractible open set $U \subseteq \mathbb{R}^n$, the de Rham complex is acyclic. The proof constructs an explicit chain homotopy using integration along fibers.
+</Example>
+
+<Example title="Chain homotopy as a 2-morphism" id="2-morphism">
+In the 2-category of complexes, chain homotopies are the 2-morphisms between chain maps (1-morphisms). This perspective leads to the DG category structure on complexes and ultimately to stable infinity-categories.
+</Example>
+
+<Example title="Acyclic but not contractible" id="acyclic-not-contractible">
+In $\mathbb{Z}\text{-}\mathbf{Mod}$, the complex $0 \to \mathbb{Z} \xrightarrow{2} \mathbb{Z} \to \mathbb{Z}/2\mathbb{Z} \to 0$ is acyclic (it is a short exact sequence) but not split, hence not contractible. The obstruction to contractibility lives in $\mathrm{Ext}^1$.
+</Example>
+
+<Example title="Homotopy is an equivalence relation" id="homotopy-equiv-rel">
+Chain homotopy $\sim$ is an equivalence relation on $\mathrm{Hom}_{\mathbf{Ch}}(A^\bullet, B^\bullet)$ compatible with composition: if $f \sim g$ and $f' \sim g'$, then $f' \circ f \sim g' \circ g$. The null-homotopic maps form a two-sided ideal.
+</Example>
+
+<Example title="Homotopy in DG categories" id="dg-homotopy">
+In a DG category, homotopy between morphisms is formalized by the condition $f - g = d(s)$ in the DG hom-complex. This generalizes chain homotopy and is the foundation for DG enhancements of triangulated categories.
+</Example>
+
+---
+
+## Key Theorem
+
+<Theorem title="Homotopy invariance" number="4.3">
+If $f \sim g : A^\bullet \to B^\bullet$, then $H^n(f) = H^n(g) : H^n(A^\bullet) \to H^n(B^\bullet)$ for all $n$.
+</Theorem>
+
+<Proof>
+Let $s$ be a chain homotopy: $f^n - g^n = d^{n-1} s^n + s^{n+1} d^n$. For $[a] \in H^n(A)$ (where $d^n(a) = 0$): $f^n(a) - g^n(a) = d^{n-1}(s^n(a)) + s^{n+1}(0) = d^{n-1}(s^n(a))$. So $f^n(a)$ and $g^n(a)$ differ by a coboundary, giving $[f^n(a)] = [g^n(a)]$ in $H^n(B)$.
+</Proof>
+
+<Remark title="Looking ahead">
+Modding out by chain homotopy gives the [homotopy category](/category-theory/ch04-complexes-cohomology/concepts/c05-homotopy-category) $K(\mathcal{A})$, where chain homotopic maps become equal. Further inverting [quasi-isomorphisms](/category-theory/ch04-complexes-cohomology/concepts/c04-quasi-isomorphism) gives the derived category $D(\mathcal{A})$.
+</Remark>

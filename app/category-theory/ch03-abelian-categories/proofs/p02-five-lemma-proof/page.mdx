@@ -1,0 +1,122 @@
+export const metadata = {
+  title: 'Proof of Five Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Proof — Five Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Five Lemma
+
+We give a complete proof of the [Five Lemma](/category-theory/ch03-abelian-categories/theorems/t02-five-lemma) by diagram chasing in $R\text{-}\mathbf{Mod}$.
+
+---
+
+## Setup
+
+Consider the commutative diagram with exact rows:
+
+$$
+\begin{array}{ccccccccc}
+A_1 & \xrightarrow{d_1} & A_2 & \xrightarrow{d_2} & A_3 & \xrightarrow{d_3} & A_4 & \xrightarrow{d_4} & A_5 \\[6pt]
+\downarrow\scriptstyle{\alpha_1} & & \downarrow\scriptstyle{\alpha_2} & & \downarrow\scriptstyle{\alpha_3} & & \downarrow\scriptstyle{\alpha_4} & & \downarrow\scriptstyle{\alpha_5} \\[6pt]
+B_1 & \xrightarrow{e_1} & B_2 & \xrightarrow{e_2} & B_3 & \xrightarrow{e_3} & B_4 & \xrightarrow{e_4} & B_5
+\end{array}
+$$
+
+We prove the two "Four Lemma" halves separately.
+
+---
+
+## Part 1: $\alpha_3$ is Monic
+
+<Proof title="alpha_3 is monic (assuming alpha_2, alpha_4 monic and alpha_1 epic)">
+Assume $\alpha_2$ and $\alpha_4$ are monic and $\alpha_1$ is epic. We show $\alpha_3$ is monic.
+
+Let $a_3 \in A_3$ with $\alpha_3(a_3) = 0$. We need to show $a_3 = 0$.
+
+**Step 1.** Compute $d_3(a_3) \in A_4$. We have $\alpha_4(d_3(a_3)) = e_3(\alpha_3(a_3)) = e_3(0) = 0$. Since $\alpha_4$ is monic, $d_3(a_3) = 0$.
+
+**Step 2.** By exactness of the top row at $A_3$: $\ker d_3 = \mathrm{im}\, d_2$. So $a_3 = d_2(a_2)$ for some $a_2 \in A_2$.
+
+**Step 3.** Compute $e_2(\alpha_2(a_2)) = \alpha_3(d_2(a_2)) = \alpha_3(a_3) = 0$. By exactness of the bottom row at $B_2$: $\alpha_2(a_2) \in \ker e_2 = \mathrm{im}\, e_1$. So $\alpha_2(a_2) = e_1(b_1)$ for some $b_1 \in B_1$.
+
+**Step 4.** Since $\alpha_1$ is epic, $b_1 = \alpha_1(a_1)$ for some $a_1 \in A_1$. Then $\alpha_2(a_2) = e_1(\alpha_1(a_1)) = \alpha_2(d_1(a_1))$.
+
+**Step 5.** Since $\alpha_2$ is monic, $a_2 = d_1(a_1)$. Therefore $a_3 = d_2(a_2) = d_2(d_1(a_1))$.
+
+**Step 6.** By exactness of the top row at $A_2$: $\mathrm{im}\, d_1 \subseteq \ker d_2$. So $d_2(d_1(a_1)) = 0$. Thus $a_3 = 0$.
+</Proof>
+
+---
+
+## Part 2: $\alpha_3$ is Epic
+
+<Proof title="alpha_3 is epic (assuming alpha_2, alpha_4 epic and alpha_5 monic)">
+Assume $\alpha_2$ and $\alpha_4$ are epic and $\alpha_5$ is monic. We show $\alpha_3$ is epic.
+
+Let $b_3 \in B_3$. We need to find $a_3 \in A_3$ with $\alpha_3(a_3) = b_3$.
+
+**Step 1.** Compute $e_3(b_3) \in B_4$. Since $\alpha_4$ is epic, $e_3(b_3) = \alpha_4(a_4)$ for some $a_4 \in A_4$.
+
+**Step 2.** Compute $\alpha_5(d_4(a_4)) = e_4(\alpha_4(a_4)) = e_4(e_3(b_3)) = 0$ (by exactness of the bottom row: $e_4 \circ e_3 = 0$). Since $\alpha_5$ is monic, $d_4(a_4) = 0$.
+
+**Step 3.** By exactness of the top row at $A_4$: $a_4 \in \ker d_4 = \mathrm{im}\, d_3$. So $a_4 = d_3(a_3')$ for some $a_3' \in A_3$.
+
+**Step 4.** Compute $e_3(b_3 - \alpha_3(a_3')) = e_3(b_3) - e_3(\alpha_3(a_3')) = \alpha_4(a_4) - \alpha_4(d_3(a_3')) = \alpha_4(a_4 - d_3(a_3')) = \alpha_4(0) = 0$.
+
+**Step 5.** So $b_3 - \alpha_3(a_3') \in \ker e_3 = \mathrm{im}\, e_2$. Write $b_3 - \alpha_3(a_3') = e_2(b_2)$ for some $b_2 \in B_2$.
+
+**Step 6.** Since $\alpha_2$ is epic, $b_2 = \alpha_2(a_2)$ for some $a_2 \in A_2$. Then $b_3 - \alpha_3(a_3') = e_2(\alpha_2(a_2)) = \alpha_3(d_2(a_2))$.
+
+**Step 7.** Set $a_3 = a_3' + d_2(a_2)$. Then $\alpha_3(a_3) = \alpha_3(a_3') + \alpha_3(d_2(a_2)) = \alpha_3(a_3') + (b_3 - \alpha_3(a_3')) = b_3$.
+</Proof>
+
+---
+
+## Conclusion
+
+<Proof title="Full Five Lemma">
+If $\alpha_1, \alpha_2, \alpha_4, \alpha_5$ are all isomorphisms, then:
+- $\alpha_1$ is epic, $\alpha_2$ and $\alpha_4$ are monic $\Rightarrow$ $\alpha_3$ is monic (Part 1).
+- $\alpha_5$ is monic, $\alpha_2$ and $\alpha_4$ are epic $\Rightarrow$ $\alpha_3$ is epic (Part 2).
+
+Therefore $\alpha_3$ is an isomorphism. $\square$
+</Proof>
+
+---
+
+## Remarks
+
+<Remark title="Element-free proof">
+A proof using only the universal properties of kernels and cokernels (without elements) is possible but more involved. The element-chasing proof is valid in any abelian category by the [Freyd-Mitchell Embedding Theorem](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell).
+</Remark>
+
+<Example title="Application: comparing long exact sequences" id="compare-les">
+The Five Lemma is most commonly applied when comparing two long exact sequences connected by a morphism. If the maps on four out of five terms are known to be isomorphisms (e.g., by induction or by a separate argument), the Five Lemma gives the fifth for free.
+</Example>
+
+<Example title="Application: quasi-isomorphism from mapping cone" id="qis-cone">
+A chain map $f$ is a quasi-isomorphism iff $\mathrm{Cone}(f)$ is acyclic. This follows from the long exact sequence of the mapping cone and the Five Lemma: if $H^n(\mathrm{Cone}(f)) = 0$ for all $n$, then $H^n(f)$ is an isomorphism for all $n$.
+</Example>
+
+<Example title="Short Five Lemma" id="short-five">
+The Short Five Lemma is the special case where $A_1 = B_1 = 0$ and $A_5 = B_5 = 0$. In this case, the hypotheses simplify: if $\alpha_2$ and $\alpha_4$ are isomorphisms, then $\alpha_3$ is an isomorphism. This is the most frequently used version.
+</Example>
+
+<Example title="Naturality of connecting homomorphisms" id="naturality-delta">
+The Five Lemma, combined with the Snake Lemma, shows that connecting homomorphisms in long exact sequences are natural: a morphism of short exact sequences induces a morphism of long exact sequences, and the connecting homomorphism commutes with the induced maps.
+</Example>

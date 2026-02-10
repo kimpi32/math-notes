@@ -1,0 +1,145 @@
+export const metadata = {
+  title: 'Pointwise Convergence — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "8. 함수열과 함수급수", href: "/analysis/ch08-sequences-of-functions" },
+  { label: "개념 — 점별수렴" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Pointwise Convergence
+
+When we pass from sequences of numbers to sequences of functions, the most natural notion of convergence is **pointwise**: the sequence converges at each individual point. However, pointwise convergence is too weak to preserve many important properties.
+
+---
+
+## Definition
+
+<Definition title="Pointwise convergence" number="8.1">
+A sequence of functions $(f_n)$ defined on a set $D \subseteq \mathbb{R}$ **converges pointwise** to a function $f: D \to \mathbb{R}$ if for every $x \in D$:
+
+$$\lim_{n \to \infty} f_n(x) = f(x).$$
+
+In $\varepsilon$-$N$ language: for every $x \in D$ and every $\varepsilon > 0$, there exists $N = N(x, \varepsilon) \in \mathbb{N}$ such that
+
+$$n \geq N \implies |f_n(x) - f(x)| < \varepsilon.$$
+
+The crucial point is that $N$ may depend on both $\varepsilon$ **and** $x$.
+</Definition>
+
+<Example title="Powers on [0,1]">
+Let $f_n(x) = x^n$ on $[0,1]$. For each fixed $x$:
+
+- If $0 \leq x < 1$: $x^n \to 0$.
+- If $x = 1$: $x^n = 1 \to 1$.
+
+So $f_n \to f$ pointwise, where $f(x) = 0$ for $x \in [0,1)$ and $f(1) = 1$.
+
+Each $f_n$ is continuous, but the limit $f$ is **not continuous** at $x = 1$.
+</Example>
+
+<Example title="Bump functions">
+Let $f_n(x) = n x e^{-nx^2}$ on $[0, \infty)$. For each $x > 0$: $f_n(x) = n x e^{-nx^2} \to 0$ (the exponential kills the polynomial). At $x = 0$: $f_n(0) = 0$. So $f_n \to 0$ pointwise.
+
+But $f_n$ has a maximum at $x = 1/\sqrt{2n}$ where $f_n(1/\sqrt{2n}) = \sqrt{n/(2e)} \to \infty$. The functions get taller and thinner.
+</Example>
+
+<Example title="Characteristic functions of shrinking intervals">
+$f_n = \mathbf{1}_{[0, 1/n]}$ (the indicator of $[0, 1/n]$). For $x > 0$: eventually $x > 1/n$, so $f_n(x) = 0$. At $x = 0$: $f_n(0) = 1$ for all $n$. So $f_n \to f$ pointwise where $f(x) = 0$ for $x > 0$ and $f(0) = 1$.
+
+Again, continuous functions converge pointwise to a discontinuous limit.
+</Example>
+
+---
+
+## Pointwise convergence does not preserve continuity
+
+<Example title="A classic example: staircase functions">
+Define $f_n: [0,1] \to \mathbb{R}$ by $f_n(x) = x^n$. Each $f_n$ is continuous, but $f_n \to f$ pointwise where $f$ is discontinuous at $x = 1$. Continuity is not preserved under pointwise limits.
+</Example>
+
+<Example title="Pointwise limit of differentiable functions need not be differentiable">
+$f_n(x) = \frac{\sin(nx)}{n}$ on $\mathbb{R}$. Each $f_n$ is smooth with $f_n'(x) = \cos(nx)$.
+
+$f_n \to 0$ pointwise (and uniformly). But $f_n'(x) = \cos(nx)$ does not converge pointwise for most $x$. The limit of the derivatives is not the derivative of the limit.
+</Example>
+
+---
+
+## Pointwise convergence does not preserve integrability
+
+<Example title="Integral of the limit need not equal the limit of integrals">
+Let $f_n: [0,1] \to \mathbb{R}$ with $f_n(x) = n$ for $x \in (0, 1/n)$ and $f_n(x) = 0$ otherwise.
+
+$f_n \to 0$ pointwise (for $x > 0$, eventually $x > 1/n$ so $f_n(x) = 0$; at $x = 0$, $f_n(0) = 0$).
+
+But $\int_0^1 f_n = n \cdot \frac{1}{n} = 1$ for all $n$, while $\int_0^1 0 = 0$.
+
+$$\lim_{n\to\infty} \int_0^1 f_n \neq \int_0^1 \lim_{n\to\infty} f_n.$$
+</Example>
+
+<Example title="Another integral interchange failure">
+$f_n(x) = n^2 x (1 - x^2)^n$ on $[0,1]$. One can show $f_n \to 0$ pointwise (for each $x \in (0,1)$, $(1-x^2)^n \to 0$ faster than $n^2$ grows). But
+
+$$\int_0^1 f_n(x)\,dx = \frac{n^2}{2(n+1)} \to \frac{1}{2} \neq 0.$$
+</Example>
+
+---
+
+## Pointwise convergence of series of functions
+
+<Definition title="Pointwise convergence of a series" number="8.2">
+A series of functions $\sum_{n=1}^\infty g_n$ **converges pointwise** on $D$ if for each $x \in D$, the series of numbers $\sum g_n(x)$ converges. The **sum function** is $f(x) = \sum_{n=1}^\infty g_n(x)$.
+</Definition>
+
+<Example title="Geometric series of functions">
+$\sum_{n=0}^\infty x^n$ converges pointwise on $(-1,1)$ to $f(x) = \frac{1}{1-x}$.
+</Example>
+
+<Example title="A continuous series with a discontinuous partial sum pattern">
+$\sum_{n=1}^\infty \frac{x}{(1+x^2)^n}$ for $x \neq 0$: this is a geometric series with ratio $r = \frac{1}{1+x^2} < 1$, summing to $\frac{x}{1+x^2} \cdot \frac{1}{1 - 1/(1+x^2)} = \frac{x}{x^2} \cdot (1+x^2) \cdot \frac{1}{x^2}$... more carefully: the sum is $\frac{x/(1+x^2)}{1 - 1/(1+x^2)} = \frac{x/(1+x^2)}{x^2/(1+x^2)} = \frac{1}{x}$. At $x = 0$, each term is $0$, so the sum is $0$.
+
+The sum function is $f(x) = 1/x$ for $x \neq 0$ and $f(0) = 0$, which is discontinuous at $0$.
+</Example>
+
+---
+
+## When pointwise convergence suffices
+
+<Remark>
+Despite its weaknesses, pointwise convergence is sufficient in some settings:
+
+- **Dominated convergence** (Lebesgue theory): if $|f_n| \leq g$ for an integrable $g$, then $\int f_n \to \int f$.
+- **Monotone convergence**: if $0 \leq f_1 \leq f_2 \leq \cdots$ pointwise, then $\int f_n \uparrow \int f$ (in the Lebesgue sense).
+- **Dini's theorem**: if $f_n \to f$ pointwise on a compact set, each $f_n$ is continuous, $f$ is continuous, and the convergence is monotone, then convergence is actually uniform.
+</Remark>
+
+<Example title="Dini's theorem in action">
+$f_n(x) = 1 - x^n$ on $[0,1)$: $f_n \uparrow 1$ pointwise. But on $[0,1]$, $f_n(1) = 0$ for all $n$ while $f(1) = 1$, so the limit is discontinuous and Dini's theorem does not apply on $[0,1]$.
+
+On $[0, 1-\delta]$ for any $\delta > 0$: $f_n \uparrow 1$ with continuous limit, on a compact set. By Dini's theorem, convergence is uniform on $[0, 1-\delta]$.
+</Example>
+
+<Example title="Pointwise convergence of polynomials">
+$f_n(x) = (1 + x/n)^n$ on $\mathbb{R}$. For each fixed $x$: $f_n(x) \to e^x$ (the classical limit definition of $e^x$). Each $f_n$ is a polynomial, so pointwise limits of polynomials can be transcendental functions.
+</Example>
+
+<Example title="Pointwise convergence preserving integrability">
+$f_n(x) = \frac{x}{(1+x)^n}$ on $[0, \infty)$. For $x > 0$: $f_n(x) \to 0$ since $(1+x)^n \to \infty$. At $x = 0$: $f_n(0) = 0$. The convergence is pointwise to $0$, and here $\int_0^\infty f_n(x)\,dx = \frac{1}{(n-1)(n-2)}$ for $n \geq 3$, which does converge to $0 = \int 0$. In this case, the interchange of limit and integral works, even though convergence is only pointwise.
+</Example>
+
+<Remark>
+The deficiencies of pointwise convergence motivate [uniform convergence](/analysis/ch08-sequences-of-functions/concepts/c02-uniform-convergence), a stronger notion that preserves continuity, integrability, and (with additional hypotheses) differentiability.
+</Remark>

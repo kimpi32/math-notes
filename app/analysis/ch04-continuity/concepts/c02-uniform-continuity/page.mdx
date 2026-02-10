@@ -1,0 +1,156 @@
+export const metadata = {
+  title: '균등연속 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "개념 - 균등연속" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 균등연속 (Uniform Continuity)
+
+Uniform continuity strengthens ordinary continuity by requiring that the same $\delta$ works for all points simultaneously. This seemingly small change has profound consequences for integration and approximation.
+
+---
+
+## Definition
+
+<Definition title="Uniform continuity" number="4.4">
+A function $f : A \to \mathbb{R}$ is **uniformly continuous** on $A$ if:
+
+$$\forall \varepsilon > 0, \quad \exists \delta > 0, \quad \forall x, y \in A: \quad |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.$$
+</Definition>
+
+<Remark>
+Compare the quantifier order with (pointwise) continuity:
+
+**Continuity at $c$**: $\forall \varepsilon > 0$, $\exists \delta > 0$, $\forall x$: $|x - c| < \delta \Rightarrow |f(x) - f(c)| < \varepsilon$.
+
+**Uniform continuity**: $\forall \varepsilon > 0$, $\exists \delta > 0$, $\forall x, y$: $|x - y| < \delta \Rightarrow |f(x) - f(y)| < \varepsilon$.
+
+In continuity, $\delta$ may depend on both $\varepsilon$ and $c$. In uniform continuity, $\delta$ depends only on $\varepsilon$. This is a **stronger** condition.
+</Remark>
+
+---
+
+## Examples of uniformly continuous functions
+
+<Example title="Linear functions">
+1. $f(x) = 3x + 2$ is uniformly continuous on $\mathbb{R}$.
+
+$|f(x) - f(y)| = 3|x - y|$. Choose $\delta = \varepsilon/3$, independent of the points.
+</Example>
+
+<Example title="Lipschitz implies uniform continuity">
+2. Any **Lipschitz continuous** function (where $|f(x) - f(y)| \leq L|x - y|$ for some constant $L$) is uniformly continuous: choose $\delta = \varepsilon / L$.
+
+Examples: $f(x) = \sin x$ ($L = 1$), $f(x) = |x|$ ($L = 1$), $f(x) = \sqrt{x^2 + 1}$ ($L = 1$).
+</Example>
+
+<Example title="sqrt(x) on [0, infinity)">
+3. $f(x) = \sqrt{x}$ is uniformly continuous on $[0, \infty)$.
+
+$|\sqrt{x} - \sqrt{y}| = \frac{|x - y|}{\sqrt{x} + \sqrt{y}} \leq \frac{|x - y|}{\sqrt{|x-y|}} = \sqrt{|x-y|}$,
+
+using $\sqrt{x} + \sqrt{y} \geq \sqrt{|x-y|}$ (which follows from $(\sqrt{x} + \sqrt{y})^2 \geq |x - y|$). Choose $\delta = \varepsilon^2$.
+</Example>
+
+---
+
+## Non-uniformly continuous functions
+
+<Example title="x squared on R">
+4. $f(x) = x^2$ is continuous but **not** uniformly continuous on $\mathbb{R}$.
+
+Take $x_n = n + \frac{1}{n}$ and $y_n = n$. Then $|x_n - y_n| = \frac{1}{n} \to 0$, but $|f(x_n) - f(y_n)| = |x_n^2 - n^2| = |2 + \frac{1}{n^2}| \to 2 \neq 0$.
+
+So no single $\delta$ works for $\varepsilon = 1$.
+</Example>
+
+<Example title="sin(x squared) on R">
+5. $f(x) = \sin(x^2)$ is continuous but not uniformly continuous on $\mathbb{R}$.
+
+Take $x_n = \sqrt{n\pi + \pi/2}$ and $y_n = \sqrt{n\pi}$. Then $|x_n - y_n| \to 0$ (since $x_n - y_n = \frac{\pi/2}{\sqrt{n\pi + \pi/2} + \sqrt{n\pi}} \to 0$), but $|f(x_n) - f(y_n)| = |\sin(n\pi + \pi/2) - \sin(n\pi)| = |(\pm 1) - 0| = 1$.
+</Example>
+
+<Example title="1/x on (0,1)">
+6. $f(x) = \frac{1}{x}$ is not uniformly continuous on $(0, 1)$.
+
+Take $x_n = \frac{1}{n}$ and $y_n = \frac{1}{n+1}$. Then $|x_n - y_n| = \frac{1}{n(n+1)} \to 0$, but $|f(x_n) - f(y_n)| = 1$ for all $n$.
+</Example>
+
+---
+
+## Sequential criterion for non-uniform continuity
+
+<Theorem title="Negation of uniform continuity">
+$f$ is **not** uniformly continuous on $A$ if and only if there exist $\varepsilon_0 > 0$ and sequences $(x_n), (y_n)$ in $A$ with $|x_n - y_n| \to 0$ but $|f(x_n) - f(y_n)| \geq \varepsilon_0$ for all $n$.
+</Theorem>
+
+<Example title="Applying the negation">
+7. $f(x) = x\sin(1/x)$ on $(0, 1)$: this is actually uniformly continuous (it extends continuously to $[0,1]$). The key test: does $|x_n - y_n| \to 0$ always force $|f(x_n) - f(y_n)| \to 0$?
+</Example>
+
+---
+
+## Uniform continuity on bounded intervals
+
+<Example title="x squared on [0, K]">
+8. $f(x) = x^2$ is uniformly continuous on any bounded interval $[0, K]$. Indeed, $|x^2 - y^2| = |x+y| \cdot |x-y| \leq 2K|x-y|$. Choose $\delta = \varepsilon/(2K)$.
+
+The failure of uniform continuity on $\mathbb{R}$ is due to the unbounded domain, not the function itself.
+</Example>
+
+<Remark>
+The Heine--Cantor theorem guarantees: every continuous function on a **closed bounded** interval $[a,b]$ is uniformly continuous. See [Heine--Cantor](/analysis/ch04-continuity/theorems/t03-heine-cantor).
+</Remark>
+
+---
+
+## Uniform continuity and extensions
+
+<Theorem title="Extension to the closure">
+If $f : (a, b) \to \mathbb{R}$ is uniformly continuous, then $f$ extends uniquely to a continuous function on $[a, b]$.
+</Theorem>
+
+<Example title="Extension example">
+9. $f(x) = x \sin(1/x)$ on $(0, 1]$ is uniformly continuous and extends to $f(0) = 0$.
+
+10. $f(x) = \sin(1/x)$ on $(0, 1]$ is **not** uniformly continuous and does **not** extend continuously to $[0, 1]$ (the limit at $0$ does not exist).
+</Example>
+
+---
+
+## Uniform continuity and Cauchy sequences
+
+<Theorem title="Uniform continuity preserves Cauchy sequences">
+If $f$ is uniformly continuous and $(x_n)$ is Cauchy, then $(f(x_n))$ is Cauchy.
+</Theorem>
+
+<Example title="Cauchy preservation">
+11. $f(x) = \sqrt{x}$ on $(0, \infty)$ is uniformly continuous. If $(x_n)$ is Cauchy in $(0, \infty)$, then $(\sqrt{x_n})$ is Cauchy. This is not automatic for merely continuous functions.
+
+Counterexample: $f(x) = 1/x$ on $(0, 1)$. The sequence $x_n = 1/n$ is Cauchy, but $f(x_n) = n$ is not Cauchy.
+</Example>
+
+---
+
+## Holder continuity
+
+<Example title="Holder continuous functions">
+12. A function $f$ is **Holder continuous** with exponent $\alpha \in (0, 1]$ if $|f(x) - f(y)| \leq C|x - y|^\alpha$. When $\alpha = 1$, this is Lipschitz. For $0 < \alpha < 1$, Holder continuous functions are uniformly continuous (choose $\delta = (\varepsilon/C)^{1/\alpha}$) but may not be Lipschitz.
+
+Example: $f(x) = \sqrt{x}$ on $[0,1]$ is Holder with $\alpha = 1/2$, $C = 1$: $|\sqrt{x} - \sqrt{y}| \leq |x - y|^{1/2}$.
+</Example>

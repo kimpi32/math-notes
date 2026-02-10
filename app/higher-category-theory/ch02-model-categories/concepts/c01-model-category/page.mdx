@@ -1,0 +1,177 @@
+export const metadata = {
+  title: 'Model Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Concept — Model Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Model Category
+
+A model category is Quillen's axiomatic framework for doing homotopy theory in a general categorical setting. It equips a category with three distinguished classes of morphisms -- weak equivalences, fibrations, and cofibrations -- satisfying axioms that capture the essential structure of homotopy theory. Model categories allow us to construct homotopy categories, define derived functors, and compare different models of the same homotopy theory.
+
+---
+
+## Definition
+
+<Definition title="Model category" number="2.1">
+A **model category** is a category $\mathcal{M}$ equipped with three distinguished classes of morphisms -- **weak equivalences** ($\xrightarrow{\sim}$), **fibrations** ($\twoheadrightarrow$), and **cofibrations** ($\hookrightarrow$) -- satisfying the following axioms:
+
+**MC1 (Limits and colimits).** $\mathcal{M}$ has all small limits and colimits.
+
+**MC2 (Two-out-of-three).** If $f$ and $g$ are composable morphisms and two of $f$, $g$, $g \circ f$ are weak equivalences, then so is the third.
+
+**MC3 (Retracts).** Each of the three classes is closed under retracts.
+
+**MC4 (Lifting).** Trivial cofibrations have the LLP with respect to fibrations, and cofibrations have the LLP with respect to trivial fibrations. (A trivial cofibration/fibration is one that is also a weak equivalence.)
+
+**MC5 (Factorization).** Every morphism $f$ can be factored as:
+- $f = p \circ i$ where $i$ is a cofibration and $p$ is a trivial fibration.
+- $f = q \circ j$ where $j$ is a trivial cofibration and $q$ is a fibration.
+</Definition>
+
+<Definition title="Cofibrant and fibrant objects" number="2.2">
+An object $X$ is **cofibrant** if the unique map $\emptyset \to X$ from the initial object is a cofibration. An object $X$ is **fibrant** if the unique map $X \to *$ to the terminal object is a fibration. An object that is both is called **bifibrant**.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="model-top" title="Topological spaces (Quillen model structure)">
+The category $\mathbf{Top}$ of compactly generated weak Hausdorff spaces has a model structure:
+- **Weak equivalences**: Weak homotopy equivalences ($\pi_n$-isomorphisms for all $n$ and all basepoints).
+- **Fibrations**: Serre fibrations (RLP with respect to $D^n \hookrightarrow D^n \times [0,1]$).
+- **Cofibrations**: Retracts of relative CW inclusions.
+
+Every object is fibrant. Cofibrant objects are retracts of CW complexes. The homotopy category is the classical homotopy category of CW complexes.
+</Example>
+
+<Example id="model-sset" title="Simplicial sets (Kan--Quillen)">
+The category $\mathbf{sSet}$ has the Kan--Quillen model structure:
+- **Weak equivalences**: Maps inducing isomorphisms on all homotopy groups (after geometric realization).
+- **Fibrations**: Kan fibrations (RLP with respect to horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$).
+- **Cofibrations**: Monomorphisms (levelwise injections).
+
+Every object is cofibrant. Fibrant objects are Kan complexes.
+</Example>
+
+<Example id="model-chain" title="Chain complexes">
+The category $\mathbf{Ch}_{\geq 0}(R)$ of non-negatively graded chain complexes of $R$-modules has a model structure:
+- **Weak equivalences**: Quasi-isomorphisms (maps inducing isomorphisms on homology).
+- **Fibrations**: Epimorphisms in positive degrees (surjective on $C_n$ for $n \geq 1$).
+- **Cofibrations**: Monomorphisms with projective cokernel in each degree.
+
+This is connected to $\mathbf{sSet}$ via the Dold--Kan correspondence: $\mathbf{Ch}_{\geq 0}(\mathbb{Z}) \simeq \mathbf{sAb}$ (simplicial abelian groups).
+</Example>
+
+<Example id="model-cat-small" title="Cat (Thomason model structure)">
+The category $\mathbf{Cat}$ of small categories has the Thomason model structure:
+- **Weak equivalences**: Functors $F: \mathcal{C} \to \mathcal{D}$ such that $|N(F)|: |N(\mathcal{C})| \to |N(\mathcal{D})|$ is a weak homotopy equivalence.
+- The fibrations and cofibrations are determined by the adjunction with $\mathbf{sSet}$.
+
+This model structure makes $\mathbf{Cat}$ Quillen equivalent to $\mathbf{sSet}$ and $\mathbf{Top}$. Every homotopy type is represented by a category.
+</Example>
+
+<Example id="model-trivial" title="Trivial model structure">
+Any bicomplete category has a **trivial model structure**: weak equivalences are isomorphisms, every morphism is both a fibration and a cofibration. The homotopy category is the category itself.
+
+This shows the axioms are satisfiable but the resulting homotopy theory is uninteresting. The choice of weak equivalences is what makes a model structure meaningful.
+</Example>
+
+---
+
+## Factorization
+
+<Example id="factorization-top" title="Factorization in Top">
+In $\mathbf{Top}$, the factorization axiom gives:
+- Any map $f: X \to Y$ factors as $X \hookrightarrow Z \xrightarrow{\sim} Y$ (cofibration followed by trivial fibration). This is the **mapping cylinder** construction: $Z = M_f = (X \times [0,1]) \sqcup_f Y$.
+- Any map $f: X \to Y$ factors as $X \xrightarrow{\sim} P \twoheadrightarrow Y$ (trivial cofibration followed by fibration). This is the **path space** construction: $P = X \times_Y Y^{[0,1]}$ (the homotopy fiber).
+</Example>
+
+<Example id="factorization-sset" title="Factorization in sSet">
+In $\mathbf{sSet}$, factorizations are constructed by the **small object argument**:
+- For cofibration + trivial fibration: attach cells to kill all horn-lifting obstructions.
+- For trivial cofibration + fibration: attach cells to fill all horns simultaneously.
+
+The small object argument produces functorial factorizations, which is technically important for many constructions.
+</Example>
+
+---
+
+## Fibrant and Cofibrant Replacement
+
+<Definition title="Fibrant and cofibrant replacement" number="2.3">
+Given an object $X$ in a model category:
+
+A **cofibrant replacement** of $X$ is a cofibrant object $QX$ together with a trivial fibration $QX \xrightarrow{\sim} X$. It is obtained by factoring $\emptyset \to X$ as $\emptyset \hookrightarrow QX \xrightarrow{\sim} X$.
+
+A **fibrant replacement** of $X$ is a fibrant object $RX$ together with a trivial cofibration $X \xrightarrow{\sim} RX$. It is obtained by factoring $X \to *$ as $X \xrightarrow{\sim} RX \twoheadrightarrow *$.
+
+Both are functorial when the factorization system is functorial.
+</Definition>
+
+<Example id="fibrant-replacement-sset" title="Fibrant replacement in sSet: Kan's Ex-infinity">
+In $\mathbf{sSet}$, every simplicial set $X$ needs a fibrant replacement -- a Kan complex weakly equivalent to $X$. Kan's $\operatorname{Ex}^\infty$ functor provides one: $\operatorname{Ex}^\infty(X) = \operatorname{colim}_n \operatorname{Ex}^n(X)$, where $\operatorname{Ex}$ is the right adjoint of the barycentric subdivision $\mathrm{sd}$.
+
+The map $X \to \operatorname{Ex}^\infty(X)$ is a weak equivalence, and $\operatorname{Ex}^\infty(X)$ is a Kan complex. Another approach uses the small object argument to fill all horns.
+</Example>
+
+<Example id="cofibrant-replacement-chain" title="Cofibrant replacement in chain complexes">
+In $\mathbf{Ch}_{\geq 0}(R)$, a cofibrant replacement of a chain complex $C$ is a quasi-isomorphism $P \xrightarrow{\sim} C$ where $P$ is a complex of projective modules. This is precisely a **projective resolution** of $C$.
+
+This shows that the classical notion of projective resolution is a special case of cofibrant replacement in a model category.
+</Example>
+
+<Example id="fibrant-replacement-chain" title="Fibrant replacement in chain complexes">
+In a model structure on $\mathbf{Ch}(R)$ where fibrations are epimorphisms, a fibrant replacement of $C$ is a quasi-isomorphism $C \xrightarrow{\sim} I$ where $I$ is a complex of injective modules. This is an **injective resolution**.
+
+Derived functors in homological algebra are thus derived functors in the model categorical sense.
+</Example>
+
+---
+
+## Cylinder and Path Objects
+
+<Definition title="Cylinder and path objects" number="2.4">
+A **cylinder object** for $X$ is an object $X \otimes I$ together with a factorization of the fold map: $X \sqcup X \hookrightarrow X \otimes I \xrightarrow{\sim} X$ (cofibration followed by weak equivalence).
+
+A **path object** for $X$ is an object $X^I$ together with a factorization of the diagonal map: $X \xrightarrow{\sim} X^I \twoheadrightarrow X \times X$ (weak equivalence followed by fibration).
+
+These generalize the topological cylinder $X \times [0,1]$ and path space $X^{[0,1]}$.
+</Definition>
+
+<Example id="cylinder-sset" title="Cylinder in sSet">
+In $\mathbf{sSet}$, the cylinder object for $X$ is $X \times \Delta[1]$. The two inclusions $X \hookrightarrow X \times \Delta[1]$ (at vertices $0$ and $1$) give the cofibration $X \sqcup X \hookrightarrow X \times \Delta[1]$, and the projection $X \times \Delta[1] \to X$ is a weak equivalence (in fact a simplicial homotopy equivalence).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Model categories provide the axiomatic framework for homotopy theory:
+
+1. **Three classes** (weak equivalences, fibrations, cofibrations) satisfying five axioms encode the essential structure of homotopy theory.
+
+2. **Factorization** (MC5) produces fibrant/cofibrant replacements, generalizing resolutions.
+
+3. **Lifting** (MC4) provides the technical core: the interplay between (trivial) cofibrations and (trivial) fibrations.
+
+4. The main examples are $\mathbf{Top}$, $\mathbf{sSet}$, and $\mathbf{Ch}(R)$, but the framework applies to many other settings.
+
+5. Model categories are the stepping stone to **$\infty$-categories**: the $\infty$-category underlying a model category captures its full homotopy theory, beyond what the homotopy category records.
+</Remark>

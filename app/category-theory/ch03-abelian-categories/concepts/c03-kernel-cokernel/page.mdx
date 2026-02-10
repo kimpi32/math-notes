@@ -1,0 +1,125 @@
+export const metadata = {
+  title: 'Kernel and Cokernel — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Concept — Kernel and Cokernel" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Kernel and Cokernel
+
+Kernels and cokernels are the categorical generalizations of null spaces and quotients. In a preadditive category, the kernel of $f$ is the equalizer of $f$ and $0$, and the cokernel is the coequalizer. They are the fundamental building blocks of exact sequences and homological algebra.
+
+---
+
+## Definitions
+
+<Definition title="Kernel" number="3.6">
+In a preadditive category, the **kernel** of a morphism $f : A \to B$ is a morphism $\iota : K \to A$ such that $f \circ \iota = 0$ and for every $g : X \to A$ with $f \circ g = 0$, there exists a unique $\bar{g} : X \to K$ with $\iota \circ \bar{g} = g$.
+
+$$\ker f = \mathrm{eq}(f, 0 : A \to B)$$
+</Definition>
+
+<Definition title="Cokernel" number="3.7">
+The **cokernel** of $f : A \to B$ is a morphism $\pi : B \to C$ such that $\pi \circ f = 0$ and for every $h : B \to Y$ with $h \circ f = 0$, there exists a unique $\bar{h} : C \to Y$ with $\bar{h} \circ \pi = h$.
+
+$$\mathrm{coker}\, f = \mathrm{coeq}(f, 0 : A \to B)$$
+</Definition>
+
+<Definition title="Image and Coimage" number="3.8">
+For a morphism $f : A \to B$ in an abelian category:
+
+- The **image** is $\mathrm{im}\, f = \ker(\mathrm{coker}\, f) \rightarrowtail B$.
+- The **coimage** is $\mathrm{coim}\, f = \mathrm{coker}(\ker f) : A \twoheadrightarrow \mathrm{coim}\, f$.
+
+In an abelian category, the canonical map $\mathrm{coim}\, f \to \mathrm{im}\, f$ is an isomorphism.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Kernel and cokernel in R-Mod" id="kernel-rmod">
+In $R\text{-}\mathbf{Mod}$, for $f : M \to N$:
+- $\ker f = \{m \in M : f(m) = 0\}$ with the inclusion $\ker f \hookrightarrow M$.
+- $\mathrm{coker}\, f = N / \mathrm{im}\, f$ with the projection $N \twoheadrightarrow N / \mathrm{im}\, f$.
+- $\mathrm{im}\, f = f(M) \subseteq N$.
+</Example>
+
+<Example title="Kernel in Ab" id="kernel-ab">
+In $\mathbf{Ab}$, the kernel of $f : A \to B$ is the usual kernel subgroup $\ker f = f^{-1}(0)$. The cokernel is $B / f(A)$.
+</Example>
+
+<Example title="Kernel of a matrix" id="kernel-matrix">
+In $\mathbf{Vect}_k$, the kernel of a linear map $T : V \to W$ represented by a matrix $A$ is the null space $\ker A = \{v : Av = 0\}$. The cokernel is $W / \mathrm{col}(A)$, and $\mathrm{im}\, T = \mathrm{col}(A)$.
+</Example>
+
+<Example title="Kernel of a chain map" id="kernel-chain">
+In $\mathbf{Ch}(\mathcal{A})$, the kernel of $f_\bullet : A_\bullet \to B_\bullet$ is computed degreewise: $(\ker f)^n = \ker(f^n : A^n \to B^n)$. The differentials on $\ker f$ are the restrictions of the differentials on $A_\bullet$.
+</Example>
+
+<Example title="Cokernel in the category of sheaves" id="cokernel-sheaf">
+In $\mathbf{Sh}(X)$, the cokernel of $f : \mathcal{F} \to \mathcal{G}$ is the sheafification of the presheaf $U \mapsto \mathcal{G}(U) / f(\mathcal{F}(U))$. The presheaf cokernel is not always a sheaf, so sheafification is necessary.
+</Example>
+
+<Example title="Kernel in a poset: no kernels in general" id="kernel-poset">
+Poset categories (viewed as preadditive with trivial abelian group structure) generally do not have kernels or cokernels, since the zero morphism condition has no meaning. Kernels and cokernels are meaningful only in preadditive (enriched over Ab) categories.
+</Example>
+
+<Example title="Normal monomorphisms" id="normal-mono">
+In an abelian category, every monomorphism $\iota : K \rightarrowtail A$ is a kernel of some morphism — specifically, it is the kernel of its cokernel: $\iota = \ker(\mathrm{coker}\, \iota)$. Such monomorphisms are called **normal**. In $\mathbf{Grp}$, only inclusions of normal subgroups are normal monomorphisms.
+</Example>
+
+<Example title="Rank-nullity as kernel-cokernel" id="rank-nullity">
+For a linear map $T : V \to W$ in $\mathbf{Vect}_k^{\mathrm{fd}}$, $\dim V = \dim(\ker T) + \dim(\mathrm{im}\, T)$ and $\dim W = \dim(\mathrm{im}\, T) + \dim(\mathrm{coker}\, T)$. This gives $\dim V - \dim W = \dim(\ker T) - \dim(\mathrm{coker}\, T)$.
+</Example>
+
+<Example title="Kernels and exact functors" id="exact-functors">
+A functor $F : \mathcal{A} \to \mathcal{B}$ between abelian categories is **left exact** if it preserves kernels (equivalently, preserves all finite limits). It is **right exact** if it preserves cokernels. It is **exact** if it preserves both.
+</Example>
+
+<Example title="Hom is left exact" id="hom-left-exact">
+For any object $A$ in an abelian category, the functor $\mathrm{Hom}(A, -)$ is left exact: it preserves kernels but not necessarily cokernels. The failure of right exactness leads to the [Ext functor](/category-theory/ch07-derived-functors/concepts/c03-ext) as the right derived functor.
+</Example>
+
+<Example title="Tensor is right exact" id="tensor-right-exact">
+The functor $M \otimes_R -$ is right exact: it preserves cokernels but not necessarily kernels. The failure of left exactness leads to the [Tor functor](/category-theory/ch07-derived-functors/concepts/c04-tor) as the left derived functor.
+</Example>
+
+<Example title="Canonical factorization" id="canonical-factorization">
+In an abelian category, every morphism $f : A \to B$ factors as:
+
+$$A \xrightarrow{\pi} \mathrm{coim}\, f \xrightarrow{\sim} \mathrm{im}\, f \xrightarrow{\iota} B$$
+
+where $\pi$ is an epimorphism, the middle map is an isomorphism, and $\iota$ is a monomorphism. This is the **canonical factorization** of $f$.
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Properties of kernels and cokernels" number="3.3">
+In an abelian category:
+
+1. $f$ is monic if and only if $\ker f = 0$.
+2. $f$ is epic if and only if $\mathrm{coker}\, f = 0$.
+3. $f$ is an isomorphism if and only if $\ker f = 0$ and $\mathrm{coker}\, f = 0$.
+4. $\ker(\mathrm{coker}(\ker f)) = \ker f$ and $\mathrm{coker}(\ker(\mathrm{coker}\, f)) = \mathrm{coker}\, f$.
+</Theorem>
+
+<Remark title="Looking ahead">
+Kernels and cokernels are the ingredients for defining [exact sequences](/category-theory/ch03-abelian-categories/concepts/c04-exact-sequence), which in turn are the subject matter of the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma) and [Five Lemma](/category-theory/ch03-abelian-categories/theorems/t02-five-lemma).
+</Remark>

@@ -1,0 +1,234 @@
+export const metadata = {
+  title: 'Rings and Ring Homomorphisms — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Concept — Rings and Ring Homomorphisms" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Rings and Ring Homomorphisms
+
+A ring is an algebraic structure that generalizes the integers: it has both addition and multiplication, with addition forming an abelian group, and multiplication distributing over addition. Rings are the natural setting for studying factorization, divisibility, and polynomial equations.
+
+---
+
+## Definition of a Ring
+
+<Definition title="Ring" number="4.1">
+A **ring** is a set $R$ together with two binary operations $+$ (addition) and $\cdot$ (multiplication) satisfying:
+
+1. $(R, +)$ is an **abelian group** with identity element $0$.
+2. Multiplication is **associative**: $(a \cdot b) \cdot c = a \cdot (b \cdot c)$ for all $a, b, c \in R$.
+3. There exists a **multiplicative identity** $1 \in R$ such that $1 \cdot a = a \cdot 1 = a$ for all $a \in R$.
+4. **Distributive laws**: For all $a, b, c \in R$:
+
+$$a \cdot (b + c) = a \cdot b + a \cdot c \quad \text{and} \quad (a + b) \cdot c = a \cdot c + b \cdot c$$
+</Definition>
+
+<Remark title="Convention on unity">
+Some authors do not require a multiplicative identity $1$, calling such a structure a "rng" (ring without identity). In this course, all rings are assumed to have a multiplicative identity $1$, and we require $1 \neq 0$ (so the zero ring, where $1 = 0$, is excluded by some authors but we allow it as the trivial ring).
+</Remark>
+
+<Definition title="Commutative ring" number="4.2">
+A ring $R$ is **commutative** if $a \cdot b = b \cdot a$ for all $a, b \in R$.
+</Definition>
+
+---
+
+## Basic Properties
+
+<Theorem title="Elementary properties of rings" number="4.1">
+Let $R$ be a ring. For all $a, b \in R$:
+
+1. $0 \cdot a = a \cdot 0 = 0$.
+2. $(-a) \cdot b = a \cdot (-b) = -(a \cdot b)$.
+3. $(-a)(-b) = ab$.
+4. If $R$ has unity $1$, then $(-1) \cdot a = -a$.
+</Theorem>
+
+---
+
+## Important Classes of Rings
+
+<Definition title="Units and division rings" number="4.3">
+An element $u \in R$ is a **unit** (or invertible element) if there exists $v \in R$ with $uv = vu = 1$. The set of all units of $R$ is denoted $R^\times$ and forms a group under multiplication, called the **group of units**.
+
+A ring $R$ in which every nonzero element is a unit (i.e., $R^\times = R \setminus \{0\}$) is called a **division ring** (or skew field). A commutative division ring is a **field**.
+</Definition>
+
+<Definition title="Integral domain" number="4.4">
+A commutative ring $R$ is an **integral domain** if $R \neq 0$ and whenever $ab = 0$ in $R$, either $a = 0$ or $b = 0$ (i.e., $R$ has no zero divisors).
+</Definition>
+
+<Definition title="Zero divisor" number="4.5">
+A nonzero element $a \in R$ is a **zero divisor** if there exists a nonzero $b \in R$ with $ab = 0$ or $ba = 0$.
+</Definition>
+
+---
+
+## Examples of Rings
+
+<Example id="integers" title="The integers">
+$\mathbb{Z}$ is a commutative ring, in fact an integral domain. The group of units is $\mathbb{Z}^\times = \{1, -1\}$.
+</Example>
+
+<Example id="modular" title="Modular arithmetic">
+For any $n \geq 1$, $\mathbb{Z}/n\mathbb{Z}$ is a commutative ring. It is a field if and only if $n$ is prime. For composite $n$, it has zero divisors: in $\mathbb{Z}/6\mathbb{Z}$, we have $\bar{2} \cdot \bar{3} = \bar{0}$.
+</Example>
+
+<Example id="polynomial" title="Polynomial ring">
+For any commutative ring $R$, the polynomial ring $R[x]$ consists of formal polynomials $\sum_{i=0}^n a_i x^i$ with $a_i \in R$. It is commutative if $R$ is commutative. If $R$ is an integral domain, so is $R[x]$.
+</Example>
+
+<Example id="matrix" title="Matrix rings">
+For any ring $R$ and $n \geq 1$, the set $M_n(R)$ of $n \times n$ matrices with entries in $R$ forms a ring under matrix addition and multiplication. For $n \geq 2$, $M_n(R)$ is **not commutative** even when $R$ is commutative. For example, in $M_2(\mathbb{R})$, if $A$ has entries $a_{11} = a_{12} = 1$, $a_{21} = a_{22} = 0$ and $B$ has entries $b_{11} = b_{22} = 0$, $b_{21} = 1$, $b_{12} = 0$, then $AB$ has $(1,1)$-entry $1$ and all other entries $0$, while $BA$ has $(2,1)$-entry $1$, $(2,2)$-entry $1$, and first row all zeros. In particular $AB \neq BA$.
+</Example>
+
+<Example id="quaternions" title="The quaternions">
+The **Hamilton quaternions** $\mathbb{H}$ consist of elements $a + bi + cj + dk$ with $a, b, c, d \in \mathbb{R}$, where $i^2 = j^2 = k^2 = ijk = -1$. This implies $ij = k, jk = i, ki = j$ and $ji = -k, kj = -i, ik = -j$. The quaternions form a noncommutative division ring.
+</Example>
+
+<Example id="endomorphism" title="Endomorphism ring">
+For any abelian group $(A, +)$, the set $\mathrm{End}(A)$ of group homomorphisms $A \to A$ forms a ring under pointwise addition $(f+g)(a) = f(a) + g(a)$ and composition $(f \cdot g)(a) = f(g(a))$. This ring is generally noncommutative.
+</Example>
+
+<Example id="gaussian" title="Gaussian integers">
+The **Gaussian integers** $\mathbb{Z}[i] = \{a + bi : a, b \in \mathbb{Z}\}$ form a subring of $\mathbb{C}$. It is an integral domain (as a subring of a field). The units are $\mathbb{Z}[i]^\times = \{1, -1, i, -i\}$.
+</Example>
+
+<Example id="function-ring" title="Ring of continuous functions">
+For a topological space $X$, the set $C(X, \mathbb{R})$ of continuous functions $X \to \mathbb{R}$ forms a commutative ring under pointwise addition and multiplication. If $X$ has more than one point, this ring has zero divisors: take functions supported on disjoint open sets.
+</Example>
+
+<Example id="trivial-ring" title="The zero ring">
+The zero ring $\{0\}$ with $0 = 1$ is a ring. It is the terminal object in the category of rings. Note: it is NOT an integral domain (by convention, integral domains must satisfy $1 \neq 0$).
+</Example>
+
+<Example id="direct-product" title="Direct product of rings">
+If $R$ and $S$ are rings, then $R \times S$ is a ring with componentwise operations: $(r_1, s_1) + (r_2, s_2) = (r_1 + r_2, s_1 + s_2)$ and $(r_1, s_1)(r_2, s_2) = (r_1 r_2, s_1 s_2)$. The identity is $(1_R, 1_S)$. Note that $R \times S$ always has zero divisors when both $R$ and $S$ are nonzero: $(1, 0) \cdot (0, 1) = (0, 0)$.
+</Example>
+
+---
+
+## Subrings
+
+<Definition title="Subring" number="4.6">
+A subset $S \subseteq R$ is a **subring** if:
+
+1. $S$ is closed under addition and multiplication.
+2. $0 \in S$ and $1 \in S$.
+3. For every $a \in S$, $-a \in S$.
+
+Equivalently, $S$ is a subring if $S$ is a ring under the operations inherited from $R$ and $1_S = 1_R$.
+</Definition>
+
+<Example id="subring-examples" title="Subrings of familiar rings">
+- $\mathbb{Z} \subseteq \mathbb{Q} \subseteq \mathbb{R} \subseteq \mathbb{C}$ is a chain of subrings.
+- $\mathbb{Z}[i] \subseteq \mathbb{C}$ is a subring.
+- $\mathbb{Z}[\sqrt{2}] = \{a + b\sqrt{2} : a, b \in \mathbb{Z}\} \subseteq \mathbb{R}$ is a subring.
+- The upper triangular matrices form a subring of $M_n(R)$.
+</Example>
+
+---
+
+## Ring Homomorphisms
+
+<Definition title="Ring homomorphism" number="4.7">
+Let $R$ and $S$ be rings. A **ring homomorphism** is a function $\varphi: R \to S$ satisfying:
+
+1. $\varphi(a + b) = \varphi(a) + \varphi(b)$ for all $a, b \in R$.
+2. $\varphi(ab) = \varphi(a)\varphi(b)$ for all $a, b \in R$.
+3. $\varphi(1_R) = 1_S$.
+</Definition>
+
+<Remark title="Preserving unity">
+Condition (3) is essential: the map $\varphi: \mathbb{Z} \to M_2(\mathbb{Z})$ sending $n$ to the matrix with $n$ in the $(1,1)$-entry and $0$ elsewhere satisfies (1) and (2) but not (3), and is not considered a ring homomorphism.
+</Remark>
+
+<Definition title="Ring isomorphism" number="4.8">
+A ring homomorphism $\varphi: R \to S$ is a **ring isomorphism** if it is bijective. We write $R \cong S$ and say $R$ and $S$ are **isomorphic**. An isomorphism from $R$ to itself is an **automorphism**.
+</Definition>
+
+<Definition title="Kernel of a ring homomorphism" number="4.9">
+The **kernel** of a ring homomorphism $\varphi: R \to S$ is
+
+$$\ker(\varphi) = \{r \in R : \varphi(r) = 0_S\}$$
+
+The **image** of $\varphi$ is $\mathrm{im}(\varphi) = \varphi(R) = \{\varphi(r) : r \in R\}$.
+</Definition>
+
+<Theorem title="Properties of ring homomorphisms" number="4.2">
+Let $\varphi: R \to S$ be a ring homomorphism. Then:
+
+1. $\varphi(0_R) = 0_S$ and $\varphi(-a) = -\varphi(a)$ for all $a \in R$.
+2. $\ker(\varphi)$ is an ideal of $R$ (not just a subgroup).
+3. $\mathrm{im}(\varphi)$ is a subring of $S$.
+4. $\varphi$ is injective if and only if $\ker(\varphi) = \{0\}$.
+5. If $u \in R^\times$, then $\varphi(u) \in S^\times$ and $\varphi(u^{-1}) = \varphi(u)^{-1}$.
+</Theorem>
+
+---
+
+## Examples of Ring Homomorphisms
+
+<Example id="evaluation" title="Evaluation homomorphism">
+For a commutative ring $R$ and $a \in R$, the **evaluation map** $\mathrm{ev}_a: R[x] \to R$ defined by $f(x) \mapsto f(a)$ is a ring homomorphism. Its kernel is the set of polynomials vanishing at $a$.
+</Example>
+
+<Example id="reduction" title="Reduction modulo n">
+The natural map $\pi: \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ sending $a \mapsto \bar{a}$ is a surjective ring homomorphism with $\ker(\pi) = n\mathbb{Z}$.
+</Example>
+
+<Example id="complex-conjugation" title="Complex conjugation">
+The map $\mathbb{C} \to \mathbb{C}$ sending $z \mapsto \bar{z}$ is a ring automorphism (in fact, a field automorphism). It has order $2$ and $\ker = \{0\}$.
+</Example>
+
+<Example id="characteristic" title="Characteristic of a ring">
+For any ring $R$, there is a unique ring homomorphism $\chi: \mathbb{Z} \to R$ defined by $\chi(n) = n \cdot 1_R$. The kernel of $\chi$ is of the form $m\mathbb{Z}$ for a unique $m \geq 0$. This $m$ is the **characteristic** of $R$, denoted $\mathrm{char}(R)$.
+
+If $R$ is an integral domain, then $\mathrm{char}(R)$ is either $0$ or a prime number $p$.
+</Example>
+
+---
+
+## The Characteristic of a Ring
+
+<Example id="char-examples" title="Characteristics of familiar rings">
+- $\mathrm{char}(\mathbb{Z}) = 0$, $\mathrm{char}(\mathbb{Q}) = 0$, $\mathrm{char}(\mathbb{R}) = 0$, $\mathrm{char}(\mathbb{C}) = 0$.
+- $\mathrm{char}(\mathbb{Z}/n\mathbb{Z}) = n$.
+- $\mathrm{char}(\mathbb{F}_p) = p$ for a prime $p$.
+- $\mathrm{char}(\mathbb{Z}/6\mathbb{Z}) = 6$ (not prime, so $\mathbb{Z}/6\mathbb{Z}$ is not an integral domain).
+</Example>
+
+<Theorem title="Freshman's dream" number="4.3">
+Let $R$ be a commutative ring of characteristic $p$ (a prime). Then for all $a, b \in R$:
+
+$$(a + b)^p = a^p + b^p$$
+
+More generally, $(a + b)^{p^n} = a^{p^n} + b^{p^n}$ for all $n \geq 1$. The map $\varphi: R \to R$ defined by $\varphi(a) = a^p$ is a ring homomorphism, called the **Frobenius endomorphism**.
+</Theorem>
+
+---
+
+## Summary
+
+<Remark title="Hierarchy of ring structures">
+The key hierarchy of algebraic structures studied in ring theory is:
+
+$$\text{Ring} \supset \text{Commutative Ring} \supset \text{Integral Domain} \supset \text{UFD} \supset \text{PID} \supset \text{Euclidean Domain} \supset \text{Field}$$
+
+Each inclusion is strict, as we will see in subsequent sections. Rings serve as the foundation for studying ideals, quotient constructions, polynomial rings, and ultimately field theory and Galois theory.
+</Remark>

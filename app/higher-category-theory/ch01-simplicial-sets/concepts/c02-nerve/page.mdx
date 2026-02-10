@@ -1,0 +1,190 @@
+export const metadata = {
+  title: 'Nerve of a Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "1. 단체집합", href: "/higher-category-theory/ch01-simplicial-sets" },
+  { label: "Concept — Nerve of a Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Nerve of a Category
+
+The nerve construction embeds the theory of ordinary categories into the world of simplicial sets. Given a category $\mathcal{C}$, its nerve $N(\mathcal{C})$ is a simplicial set whose $n$-simplices are composable chains of $n$ morphisms. This construction is fully faithful: the nerve completely determines the category up to isomorphism. The nerve is the gateway through which classical category theory enters higher category theory.
+
+---
+
+## Definition
+
+<Definition title="Nerve of a category" number="1.1">
+Let $\mathcal{C}$ be a (small) category. The **nerve** of $\mathcal{C}$ is the simplicial set $N(\mathcal{C})$ defined by
+
+$$N(\mathcal{C})_n = \operatorname{Fun}([n], \mathcal{C})$$
+
+where $[n]$ is viewed as the category $0 \to 1 \to \cdots \to n$ (with a unique morphism from $i$ to $j$ when $i \leq j$). An $n$-simplex of $N(\mathcal{C})$ is therefore a diagram
+
+$$c_0 \xrightarrow{f_1} c_1 \xrightarrow{f_2} c_2 \to \cdots \xrightarrow{f_n} c_n$$
+
+in $\mathcal{C}$, i.e., a composable chain of $n$ morphisms.
+</Definition>
+
+<Definition title="Face and degeneracy maps of the nerve" number="1.2">
+For an $n$-simplex $(c_0 \xrightarrow{f_1} c_1 \xrightarrow{f_2} \cdots \xrightarrow{f_n} c_n)$:
+
+**Face maps** $d_i$ for $0 \leq i \leq n$:
+- $d_0$ deletes $c_0$ and $f_1$ (keeping $c_1 \xrightarrow{f_2} \cdots \xrightarrow{f_n} c_n$)
+- $d_i$ for $0 < i < n$ composes $f_i$ and $f_{i+1}$ (replacing $c_{i-1} \xrightarrow{f_i} c_i \xrightarrow{f_{i+1}} c_{i+1}$ by $c_{i-1} \xrightarrow{f_{i+1} \circ f_i} c_{i+1}$)
+- $d_n$ deletes $c_n$ and $f_n$ (keeping $c_0 \xrightarrow{f_1} \cdots \xrightarrow{f_{n-1}} c_{n-1}$)
+
+**Degeneracy maps** $s_j$ for $0 \leq j \leq n$: insert the identity morphism $\mathrm{id}_{c_j}$ at position $j$.
+</Definition>
+
+---
+
+## Low-Dimensional Simplices
+
+<Example id="nerve-0-simplices" title="0-simplices: objects">
+The $0$-simplices of $N(\mathcal{C})$ are the objects of $\mathcal{C}$:
+
+$$N(\mathcal{C})_0 = \operatorname{Ob}(\mathcal{C}).$$
+
+A functor $[0] \to \mathcal{C}$ simply picks out a single object.
+</Example>
+
+<Example id="nerve-1-simplices" title="1-simplices: morphisms">
+The $1$-simplices of $N(\mathcal{C})$ are the morphisms of $\mathcal{C}$:
+
+$$N(\mathcal{C})_1 = \operatorname{Mor}(\mathcal{C}).$$
+
+A functor $[1] \to \mathcal{C}$ picks out a morphism $c_0 \xrightarrow{f} c_1$.
+
+The face maps are $d_0(f) = c_1$ (target) and $d_1(f) = c_0$ (source). The degeneracy $s_0(c) = \mathrm{id}_c$.
+</Example>
+
+<Example id="nerve-2-simplices" title="2-simplices: composable pairs with composite">
+A $2$-simplex of $N(\mathcal{C})$ is a composable pair with its composite:
+
+$$c_0 \xrightarrow{f} c_1 \xrightarrow{g} c_2$$
+
+together with the implicit composite $g \circ f: c_0 \to c_2$. The faces are $d_0 = g$, $d_1 = g \circ f$, $d_2 = f$.
+
+Crucially, a $2$-simplex witnesses that $d_1 = d_0 \circ d_2$, i.e., it encodes the composition law.
+</Example>
+
+<Example id="nerve-3-simplices" title="3-simplices: associativity">
+A $3$-simplex of $N(\mathcal{C})$ is a composable triple $c_0 \xrightarrow{f} c_1 \xrightarrow{g} c_2 \xrightarrow{h} c_3$. Its four faces are:
+
+- $d_0$: the chain $c_1 \xrightarrow{g} c_2 \xrightarrow{h} c_3$
+- $d_1$: the chain $c_0 \xrightarrow{g \circ f} c_2 \xrightarrow{h} c_3$
+- $d_2$: the chain $c_0 \xrightarrow{f} c_1 \xrightarrow{h \circ g} c_3$
+- $d_3$: the chain $c_0 \xrightarrow{f} c_1 \xrightarrow{g} c_2$
+
+The fact that such a $3$-simplex exists and is unique (given the composable triple) encodes **associativity**: $h \circ (g \circ f) = (h \circ g) \circ f$.
+</Example>
+
+---
+
+## Examples of Nerves
+
+<Example id="nerve-discrete" title="Nerve of a discrete category">
+A **discrete category** $\mathcal{C}$ has only identity morphisms. Its nerve $N(\mathcal{C})$ is the constant simplicial set on $\operatorname{Ob}(\mathcal{C})$: all face and degeneracy maps are identities. The geometric realization is a discrete set of points.
+</Example>
+
+<Example id="nerve-group" title="Nerve of a group">
+A group $G$ can be viewed as a category $BG$ with one object $*$ and $\operatorname{Hom}(*, *) = G$. The nerve $N(BG)$ has:
+- One $0$-simplex ($*$)
+- $G$ many $1$-simplices (one for each group element)
+- $G \times G$ many $2$-simplices (composable pairs $(g_1, g_2)$)
+- $G^n$ many $n$-simplices (ordered $n$-tuples)
+
+The geometric realization $|N(BG)|$ is the classifying space $BG$. For $G = \mathbb{Z}/2\mathbb{Z}$, we get $\mathbb{R}P^\infty$. For $G = \mathbb{Z}$, we get $S^1$.
+</Example>
+
+<Example id="nerve-poset" title="Nerve of a poset">
+A partially ordered set $(P, \leq)$ is a category where $\operatorname{Hom}(x, y)$ has one element if $x \leq y$ and is empty otherwise. The $n$-simplices of $N(P)$ are chains $x_0 \leq x_1 \leq \cdots \leq x_n$.
+
+For the poset $\{0 < 1 < 2\}$, the nerve has three $0$-simplices, three non-degenerate $1$-simplices, and one non-degenerate $2$-simplex. Its geometric realization is a filled triangle $\Delta^2$.
+
+Non-degenerate $n$-simplices correspond to **strict** chains $x_0 < x_1 < \cdots < x_n$. So the nerve of a poset is the **order complex** from combinatorial topology.
+</Example>
+
+<Example id="nerve-groupoid" title="Nerve of a groupoid">
+Let $\mathcal{G}$ be a groupoid (a category in which every morphism is invertible). The nerve $N(\mathcal{G})$ is a Kan complex (every horn has a filler), because invertibility of morphisms provides the necessary compositions and inverses.
+
+For the groupoid with two objects and a single isomorphism between them (the "walking isomorphism"), the nerve has a geometric realization homeomorphic to $[0,1]$, which is contractible.
+</Example>
+
+<Example id="nerve-arrow-cat" title="Nerve of the arrow category">
+The arrow category $[1] = (0 \to 1)$ has nerve $N([1]) = \Delta[1]$: it is precisely the standard $1$-simplex. More generally, $N([n]) = \Delta[n]$ for all $n$, by definition.
+
+This shows that the simplex category $\Delta$ is the "category of finite nonempty linear orders," and the standard simplices are nerves of these linear orders.
+</Example>
+
+<Example id="nerve-pullback" title="Nerve of the free-standing pullback">
+Consider the category $\Lambda = \{a \to c \leftarrow b\}$ (three objects, two non-identity morphisms). Its nerve $N(\Lambda)$ is the simplicial set $\Lambda^2_2$ (the inner horn), with three vertices and two edges but no $2$-simplex.
+
+The geometric realization is a "V" shape, not a filled triangle. A functor from $\Lambda$ to $\mathcal{C}$ is precisely a diagram for computing a pullback (or fiber product).
+</Example>
+
+---
+
+## Functoriality
+
+<Definition title="Nerve as a functor" number="1.3">
+The nerve defines a functor $N: \mathbf{Cat} \to \mathbf{sSet}$ from the category of small categories to simplicial sets. A functor $F: \mathcal{C} \to \mathcal{D}$ induces a map $N(F): N(\mathcal{C}) \to N(\mathcal{D})$ by postcomposition:
+
+$$N(F)_n(c_0 \to \cdots \to c_n) = (F(c_0) \to \cdots \to F(c_n)).$$
+
+Natural transformations between functors correspond to simplicial homotopies between the induced maps on nerves: a natural transformation $\alpha: F \Rightarrow G$ gives a map $N(\mathcal{C}) \times \Delta[1] \to N(\mathcal{D})$.
+</Definition>
+
+<Example id="nerve-natural-transformation" title="Natural transformations as homotopies">
+If $F, G: \mathcal{C} \to \mathcal{D}$ are functors and $\alpha: F \Rightarrow G$ is a natural transformation, then $N(F)$ and $N(G)$ are simplicially homotopic. The homotopy $H: N(\mathcal{C}) \times \Delta[1] \to N(\mathcal{D})$ is defined on $(c_0 \to \cdots \to c_n, 0 \leq i_0 \leq \cdots \leq i_m \leq 1)$ by the appropriate composable chain involving $F(f_j)$, $G(f_k)$, and $\alpha_{c_l}$.
+
+In particular, if $F$ and $G$ are naturally isomorphic, then $|N(F)|$ and $|N(G)|$ are homotopic maps. If $\mathcal{C}$ and $\mathcal{D}$ are equivalent categories, their nerves have homotopy equivalent geometric realizations.
+</Example>
+
+---
+
+## The Nerve is Fully Faithful
+
+<Theorem title="Nerve is fully faithful" number="1.4">
+The nerve functor $N: \mathbf{Cat} \to \mathbf{sSet}$ is **fully faithful**. That is, for any two small categories $\mathcal{C}$ and $\mathcal{D}$:
+
+$$\operatorname{Fun}(\mathcal{C}, \mathcal{D}) \cong \operatorname{Hom}_{\mathbf{sSet}}(N(\mathcal{C}), N(\mathcal{D})).$$
+
+In particular, a simplicial set $X$ is isomorphic to the nerve of a category if and only if it satisfies certain unique lifting properties (the Segal conditions).
+</Theorem>
+
+<Proof>
+A map $f: N(\mathcal{C}) \to N(\mathcal{D})$ determines a functor $F: \mathcal{C} \to \mathcal{D}$ as follows. On objects: $F(c) = f_0(c) \in N(\mathcal{D})_0 = \operatorname{Ob}(\mathcal{D})$. On morphisms: $F(\varphi) = f_1(\varphi) \in N(\mathcal{D})_1 = \operatorname{Mor}(\mathcal{D})$. The simplicial identities ensure that $f_1$ respects sources and targets ($d_0$ and $d_1$) and that $f_1$ preserves composition (from the $2$-simplex level) and identities (from the degeneracy $s_0$). The higher simplices are then uniquely determined because $N(\mathcal{D})$ is $2$-coskeletal.
+</Proof>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The nerve construction has these essential properties:
+
+1. The nerve $N(\mathcal{C})$ is a simplicial set whose $n$-simplices are composable chains of $n$ morphisms.
+
+2. The nerve functor $N: \mathbf{Cat} \to \mathbf{sSet}$ is **fully faithful**, so categories embed completely into simplicial sets.
+
+3. $2$-simplices encode **composition**; $3$-simplices encode **associativity**. Higher simplices add no new information (the nerve is $2$-coskeletal).
+
+4. Natural transformations correspond to simplicial homotopies; equivalences of categories give homotopy equivalences of nerves.
+
+5. The nerve has a left adjoint, the **fundamental category** functor $\tau_1: \mathbf{sSet} \to \mathbf{Cat}$.
+</Remark>

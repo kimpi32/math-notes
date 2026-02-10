@@ -1,0 +1,182 @@
+export const metadata = {
+  title: 'Proof of Rank-Nullity Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "2. 선형변환", href: "/linear-algebra/ch02-linear-transformations" },
+  { label: "Proof — Rank-Nullity Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Rank-Nullity Theorem
+
+We prove: if $T : V \to W$ is linear and $V$ is finite-dimensional, then $\dim V = \text{rank}(T) + \text{nullity}(T)$.
+
+---
+
+## Main proof
+
+<Proof>
+Let $\dim V = n$, $\text{nullity}(T) = k$, and let $\{u_1, \ldots, u_k\}$ be a basis for $\ker(T)$.
+
+By the basis extension theorem, extend to a basis for $V$:
+
+$$\{u_1, \ldots, u_k, w_1, \ldots, w_{n-k}\}$$
+
+is a basis for $V$, where $n - k = \dim V - \text{nullity}(T)$.
+
+**Claim**: $\{T(w_1), \ldots, T(w_{n-k})\}$ is a basis for $\text{im}(T)$.
+
+*Spanning*: Let $y \in \text{im}(T)$. Then $y = T(v)$ for some $v \in V$. Write $v = a_1 u_1 + \cdots + a_k u_k + b_1 w_1 + \cdots + b_{n-k} w_{n-k}$. Then
+
+$$y = T(v) = a_1 T(u_1) + \cdots + a_k T(u_k) + b_1 T(w_1) + \cdots + b_{n-k} T(w_{n-k}).$$
+
+Since $u_i \in \ker(T)$, $T(u_i) = 0$. So $y = b_1 T(w_1) + \cdots + b_{n-k} T(w_{n-k})$.
+
+*Independence*: Suppose $c_1 T(w_1) + \cdots + c_{n-k} T(w_{n-k}) = 0$. Then
+
+$$T(c_1 w_1 + \cdots + c_{n-k} w_{n-k}) = 0,$$
+
+so $c_1 w_1 + \cdots + c_{n-k} w_{n-k} \in \ker(T)$. Write this as a linear combination of the kernel basis:
+
+$$c_1 w_1 + \cdots + c_{n-k} w_{n-k} = d_1 u_1 + \cdots + d_k u_k.$$
+
+Rearranging: $d_1 u_1 + \cdots + d_k u_k - c_1 w_1 - \cdots - c_{n-k} w_{n-k} = 0$. Since $\{u_1, \ldots, u_k, w_1, \ldots, w_{n-k}\}$ is a basis for $V$ (hence linearly independent), all coefficients are zero. In particular, $c_1 = \cdots = c_{n-k} = 0$.
+
+Therefore $\{T(w_1), \ldots, T(w_{n-k})\}$ is a basis for $\text{im}(T)$, so
+
+$$\text{rank}(T) = n - k = \dim V - \text{nullity}(T).$$
+
+Rearranging: $\dim V = \text{rank}(T) + \text{nullity}(T)$.
+</Proof>
+
+---
+
+## Worked examples illustrating the proof
+
+<Example id="trace-concrete" title="Trace: concrete illustration">
+$T = \text{tr} : M_{2 \times 2}(\mathbb{R}) \to \mathbb{R}$, $\dim V = 4$.
+
+**Step 1**: $\ker(T) = \{A \mid a_{11} + a_{22} = 0\}$. Basis for kernel:
+
+$$u_1 = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix},\; u_2 = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix},\; u_3 = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}.$$
+
+So $k = 3$.
+
+**Step 2**: Extend to a basis of $M_{2 \times 2}(\mathbb{R})$ by adding $w_1 = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$.
+
+**Step 3**: $\{T(w_1)\} = \{1\}$ is a basis for $\text{im}(T) = \mathbb{R}$.
+
+So rank $= 1 = 4 - 3$. Check: $4 = 1 + 3$.
+</Example>
+
+<Example id="derivative-concrete" title="Derivative: concrete illustration">
+$D : P_2(\mathbb{R}) \to P_1(\mathbb{R})$, $\dim V = 3$.
+
+$\ker(D) = \text{span}\{1\}$, $k = 1$.
+
+Extend: $\{1, x, x^2\}$ is a basis for $P_2(\mathbb{R})$, with $u_1 = 1$, $w_1 = x$, $w_2 = x^2$.
+
+$\{D(x), D(x^2)\} = \{1, 2x\}$ is a basis for $P_1(\mathbb{R}) = \text{im}(D)$.
+
+rank $= 2 = 3 - 1$. Check: $3 = 2 + 1$.
+</Example>
+
+<Example id="projection-concrete" title="Projection: concrete illustration">
+$T : \mathbb{R}^3 \to \mathbb{R}^2$, $T(x, y, z) = (x, y)$, $\dim V = 3$.
+
+$\ker(T) = \text{span}\{e_3\}$, $k = 1$.
+
+Extend: $\{e_3, e_1, e_2\}$ is a basis for $\mathbb{R}^3$.
+
+$\{T(e_1), T(e_2)\} = \{(1,0), (0,1)\}$ is a basis for $\mathbb{R}^2 = \text{im}(T)$.
+
+rank $= 2 = 3 - 1$. Check: $3 = 2 + 1$.
+</Example>
+
+<Example id="injection-concrete" title="Injection: trivial kernel">
+$T : \mathbb{R}^2 \to \mathbb{R}^3$, $T(x, y) = (x, y, 0)$, $\dim V = 2$.
+
+$\ker(T) = \{0\}$, $k = 0$. No kernel basis to extend.
+
+$\{T(e_1), T(e_2)\} = \{(1,0,0), (0,1,0)\}$ is a basis for $\text{im}(T)$.
+
+rank $= 2 = 2 - 0$. Check: $2 = 2 + 0$.
+</Example>
+
+<Example id="singular-matrix" title="Matrix with nontrivial kernel">
+$A = \begin{pmatrix} 1 & 2 \\ 2 & 4 \end{pmatrix}$, $T_A : \mathbb{R}^2 \to \mathbb{R}^2$, $\dim V = 2$.
+
+$\ker(T_A) = \text{span}\{(-2, 1)\}$, $k = 1$.
+
+Extend: $\{(-2, 1), (1, 0)\}$ is a basis for $\mathbb{R}^2$.
+
+$\{T_A(1, 0)\} = \{(1, 2)\}$ is a basis for $\text{im}(T_A) = \text{span}\{(1, 2)\}$ (the column space).
+
+rank $= 1 = 2 - 1$. Check: $2 = 1 + 1$.
+</Example>
+
+<Example id="proof-structure" title="Structure of the proof">
+The proof strategy is beautifully simple:
+
+1. Find a basis for $\ker(T)$ (size $k$).
+2. Extend to a basis for all of $V$ (total size $n$, added $n - k$ vectors).
+3. Show the images of the added vectors form a basis for $\text{im}(T)$.
+
+The kernel vectors contribute nothing to the image (they map to $0$), while the remaining vectors map to an independent spanning set.
+</Example>
+
+<Example id="short-exact" title="Short exact sequence viewpoint">
+The Rank-Nullity Theorem says the sequence
+
+$$0 \to \ker(T) \xrightarrow{\iota} V \xrightarrow{T} \text{im}(T) \to 0$$
+
+is a **short exact sequence** of vector spaces. The dimension formula $\dim V = \dim \ker(T) + \dim \text{im}(T)$ is the statement that dimensions are additive across short exact sequences. This generalizes to the theory of [exact sequences in abelian categories](/category-theory/ch03-abelian-categories/concepts/c04-exact-sequence).
+</Example>
+
+<Example id="quotient-viewpoint" title="Quotient space viewpoint">
+The first isomorphism theorem gives $V/\ker(T) \cong \text{im}(T)$. Therefore:
+
+$$\dim V = \dim \ker(T) + \dim(V/\ker(T)) = \dim \ker(T) + \dim \text{im}(T).$$
+
+This is perhaps the most conceptual proof of the Rank-Nullity Theorem.
+</Example>
+
+<Example id="application-existence" title="Application: existence of solutions">
+Does $T(x, y, z) = (x + y, y + z, x + z)$ satisfy $T(v) = (1, 2, 3)$ for some $v$?
+
+$\text{rank}(T)$: the matrix is $\begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 1 & 0 & 1 \end{pmatrix}$ with $\det = 2 \neq 0$. So rank $= 3 = \dim \mathbb{R}^3$, meaning $T$ is surjective. Yes, a solution exists (and it is unique since nullity $= 0$).
+</Example>
+
+<Example id="matrix-rank" title="Row rank equals column rank">
+For a matrix $A \in M_{m \times n}(F)$, the Rank-Nullity Theorem applied to $T_A$ gives rank$(A) = n - $ nullity$(A)$. Here rank$(A)$ is the column rank. A separate argument shows **row rank = column rank**, giving a single notion of "rank."
+</Example>
+
+<Example id="pigeonhole" title="Linear algebra pigeonhole">
+If $T : F^5 \to F^3$ is linear, then nullity$(T) \geq 5 - 3 = 2$. So $\ker(T)$ is at least 2-dimensional. This "pigeonhole principle for linear maps" is a consequence of Rank-Nullity.
+</Example>
+
+<Example id="systems-summary" title="Summary for linear systems">
+For $Ax = b$ with $A \in M_{m \times n}(F)$:
+
+- **Existence**: $b \in C(A)$ iff rank$(A) = $ rank$(A | b)$.
+- **Uniqueness**: the solution is unique iff nullity$(A) = 0$, i.e., rank$(A) = n$.
+- **Number of free variables**: $n - $ rank$(A)$.
+</Example>
+
+---
+
+<Remark title="Summary">
+The Rank-Nullity Theorem is the fundamental balance equation of linear algebra: the "input dimension" splits into "information preserved" (rank) plus "information lost" (nullity). This principle permeates all of linear algebra and extends to exact sequences in homological algebra.
+</Remark>

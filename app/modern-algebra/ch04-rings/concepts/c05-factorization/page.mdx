@@ -1,0 +1,253 @@
+export const metadata = {
+  title: 'Factorization in Integral Domains — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Concept — Factorization in Integral Domains" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Factorization in Integral Domains
+
+The study of factorization generalizes the Fundamental Theorem of Arithmetic to arbitrary integral domains. Not every integral domain admits unique factorization, and understanding when and how factorization fails is a central theme in algebra and number theory.
+
+---
+
+## Divisibility
+
+<Definition title="Divisibility" number="4.27">
+Let $R$ be an integral domain. For $a, b \in R$, we say $a$ **divides** $b$ (written $a \mid b$) if there exists $c \in R$ such that $b = ac$. We say $a$ and $b$ are **associates** (written $a \sim b$) if $a = ub$ for some unit $u \in R^\times$.
+</Definition>
+
+<Theorem title="Divisibility properties" number="4.21">
+In an integral domain $R$:
+
+1. $a \mid b$ and $b \mid a$ if and only if $a \sim b$ (equivalently $(a) = (b)$).
+2. $a$ is a unit if and only if $a \mid 1$.
+3. $a \mid b$ if and only if $(b) \subseteq (a)$.
+4. $a \sim b$ if and only if $(a) = (b)$.
+</Theorem>
+
+<Example id="associates-Z" title="Associates in various rings">
+- In $\mathbb{Z}$: $a \sim b$ iff $b = \pm a$. So $3$ and $-3$ are associates.
+- In $\mathbb{Z}[i]$: $a \sim b$ iff $b = ua$ with $u \in \{1, -1, i, -i\}$. So $1 + i, -1 - i, -1 + i, 1 - i$ are all associates.
+- In $k[x]$ for a field $k$: $f \sim g$ iff $g = cf$ for some $c \in k^\times$. So $2x + 2$ and $x + 1$ are associates in $\mathbb{Q}[x]$.
+</Example>
+
+---
+
+## Irreducible and Prime Elements
+
+<Definition title="Irreducible element" number="4.28">
+A nonzero non-unit element $a$ in an integral domain $R$ is **irreducible** (or an **atom**) if whenever $a = bc$, either $b$ or $c$ is a unit.
+</Definition>
+
+<Definition title="Prime element" number="4.29">
+A nonzero non-unit element $p$ in an integral domain $R$ is **prime** if whenever $p \mid bc$, either $p \mid b$ or $p \mid c$.
+
+Equivalently, $p$ is prime iff the ideal $(p)$ is a prime ideal.
+</Definition>
+
+<Theorem title="Prime implies irreducible" number="4.22">
+In an integral domain, every prime element is irreducible.
+</Theorem>
+
+<Proof>
+Suppose $p$ is prime and $p = ab$. Then $p \mid ab$, so $p \mid a$ or $p \mid b$. Say $p \mid a$, so $a = pc$. Then $p = ab = pcb$, giving $1 = cb$ (by cancellation in an integral domain). So $b$ is a unit.
+</Proof>
+
+<Remark title="Converse fails in general">
+The converse "irreducible implies prime" does NOT hold in every integral domain. It holds in UFDs (by definition, essentially), and in particular in PIDs and Euclidean domains. The failure of this converse is precisely what causes unique factorization to fail.
+</Remark>
+
+---
+
+## Examples of Factorization
+
+<Example id="factor-Z-sqrt-5" title="Non-unique factorization in integers with sqrt of -5">
+In $R = \mathbb{Z}[\sqrt{-5}]$, consider $6$:
+
+$$6 = 2 \cdot 3 = (1 + \sqrt{-5})(1 - \sqrt{-5})$$
+
+Use the norm $N(a + b\sqrt{-5}) = a^2 + 5b^2$ to show all four factors are irreducible:
+- $N(2) = 4$. If $2 = \alpha\beta$, then $N(\alpha)N(\beta) = 4$. Need $N(\alpha) = 2$, but $a^2 + 5b^2 = 2$ has no integer solutions. So $2$ is irreducible.
+- $N(3) = 9$. If $3 = \alpha\beta$, then $N(\alpha) = 3$, but $a^2 + 5b^2 = 3$ has no integer solutions. So $3$ is irreducible.
+- $N(1 \pm \sqrt{-5}) = 6$. If $1 + \sqrt{-5} = \alpha\beta$, then $N(\alpha)N(\beta) = 6$, needing $N(\alpha) \in \{2, 3\}$, both impossible. So $1 + \sqrt{-5}$ is irreducible.
+
+No two of $2, 3, 1 + \sqrt{-5}, 1 - \sqrt{-5}$ are associates (they have different norms or are visibly distinct). So $6$ has two genuinely different factorizations.
+</Example>
+
+<Example id="factor-gaussian" title="Factorization in Gaussian integers">
+$\mathbb{Z}[i]$ is a UFD (it is a Euclidean domain). Factoring $5$:
+
+$$5 = (2 + i)(2 - i)$$
+
+Both $2 + i$ and $2 - i$ are irreducible (norm $5$ is prime). This is the unique factorization of $5$ (up to order and units).
+
+Factoring $13$:
+
+$$13 = (3 + 2i)(3 - 2i)$$
+
+Not all primes split: $3$ remains irreducible in $\mathbb{Z}[i]$ since $N(3) = 9$ and $a^2 + b^2 = 3$ has no integer solutions.
+
+A prime $p \in \mathbb{Z}$ factors in $\mathbb{Z}[i]$ as follows:
+- $p = 2$: $2 = -i(1+i)^2$ (ramified).
+- $p \equiv 1 \pmod{4}$: $p = \pi\bar{\pi}$ with $\pi$ irreducible (split).
+- $p \equiv 3 \pmod{4}$: $p$ remains irreducible in $\mathbb{Z}[i]$ (inert).
+</Example>
+
+<Example id="factor-polynomial" title="Factorization in polynomial rings">
+In $\mathbb{Q}[x]$:
+
+$$x^4 - 1 = (x^2 + 1)(x^2 - 1) = (x^2 + 1)(x + 1)(x - 1)$$
+
+This is the unique factorization since $x^2 + 1$ is irreducible over $\mathbb{Q}$.
+
+In $\mathbb{R}[x]$: same factorization since $x^2 + 1$ is still irreducible.
+
+In $\mathbb{C}[x]$: $x^4 - 1 = (x - 1)(x + 1)(x - i)(x + i)$.
+</Example>
+
+---
+
+## Existence and Uniqueness of Factorization
+
+<Theorem title="Existence of factorization in Noetherian domains" number="4.23">
+In a Noetherian integral domain (an integral domain satisfying the ascending chain condition on ideals), every nonzero non-unit element can be written as a finite product of irreducible elements.
+</Theorem>
+
+<Remark title="ACC and factorization">
+The ascending chain condition (ACC) on principal ideals suffices for existence of factorization. If $a$ is not irreducible, write $a = a_1 b_1$ with neither factor a unit. Then $(a) \subsetneq (a_1)$. If $a_1$ is not irreducible, continue. The ACC ensures this process terminates, yielding a factorization into irreducibles.
+
+Without ACC, factorization may not exist: in the ring $\mathbb{Z}[x^{1/2}, x^{1/4}, x^{1/8}, \ldots]$, the element $x$ has no irreducible factorization since $x = x^{1/2} \cdot x^{1/2} = x^{1/4} \cdot x^{1/4} \cdot x^{1/4} \cdot x^{1/4} = \cdots$ and this process never terminates.
+</Remark>
+
+<Theorem title="Characterization of UFDs" number="4.24">
+An integral domain $R$ is a UFD if and only if:
+
+1. $R$ satisfies the ACC on principal ideals, and
+2. Every irreducible element of $R$ is prime.
+</Theorem>
+
+---
+
+## Factorization in Specific Rings
+
+<Example id="Z-x-factorization" title="Factorization in integers adjoin x">
+In $\mathbb{Z}[x]$ (a UFD by Gauss's lemma):
+
+$$2x^2 + 2 = 2(x^2 + 1)$$
+
+Here $2$ is irreducible (prime) in $\mathbb{Z}[x]$, and $x^2 + 1$ is irreducible over $\mathbb{Z}$ (irreducible over $\mathbb{Q}$ by having no rational roots, and primitive, so irreducible over $\mathbb{Z}$ by Gauss's lemma). This is the unique factorization.
+</Example>
+
+<Example id="Z-sqrt-10" title="Non-unique factorization in integers with sqrt of 10">
+In $\mathbb{Z}[\sqrt{10}]$:
+
+$$10 = 2 \cdot 5 = \sqrt{10} \cdot \sqrt{10}$$
+
+Using $N(a + b\sqrt{10}) = |a^2 - 10b^2|$: $N(2) = 4, N(5) = 25, N(\sqrt{10}) = 10$. One checks that $2$ is irreducible: if $2 = \alpha\beta$, need $N(\alpha) = 2$, but $|a^2 - 10b^2| = 2$ has no solutions (check mod $5$: $a^2 \equiv \pm 2 \pmod{5}$ has no solution). Similarly $5$ and $\sqrt{10}$ are irreducible. So $\mathbb{Z}[\sqrt{10}]$ is not a UFD.
+</Example>
+
+<Example id="half-factorial" title="Half-factorial domains">
+A ring where factorization exists and the number of irreducible factors is always the same (but the factors themselves may differ) is called a **half-factorial domain**. For example, $\mathbb{Z}[\sqrt{-3}]$ is half-factorial: $4 = 2 \cdot 2 = (1 + \sqrt{-3})(1 - \sqrt{-3})$ are distinct factorizations, but both have two factors.
+</Example>
+
+---
+
+## Content and Primitivity
+
+<Definition title="Content of a polynomial" number="4.30">
+Let $R$ be a UFD and $f = a_n x^n + \cdots + a_1 x + a_0 \in R[x]$. The **content** of $f$ is
+
+$$c(f) = \gcd(a_0, a_1, \ldots, a_n)$$
+
+A polynomial is **primitive** if $c(f) \sim 1$ (the coefficients have no common non-unit factor).
+</Definition>
+
+<Example id="content-examples" title="Content of polynomials">
+- $c(6x^2 + 4x + 2) = 2$ in $\mathbb{Z}[x]$. Writing $6x^2 + 4x + 2 = 2(3x^2 + 2x + 1)$, the polynomial $3x^2 + 2x + 1$ is primitive.
+- $c(x^3 + x) = 1$ in $\mathbb{Z}[x]$, so $x^3 + x$ is primitive.
+- Every monic polynomial is primitive.
+</Example>
+
+<Theorem title="Content is multiplicative" number="4.25">
+Let $R$ be a UFD and $f, g \in R[x]$. Then $c(fg) \sim c(f)c(g)$. In particular, the product of two primitive polynomials is primitive.
+</Theorem>
+
+<Example id="content-product" title="Content of products">
+In $\mathbb{Z}[x]$: $(2x + 2)(3x + 3) = 6x^2 + 12x + 6$. We have $c(2x+2) = 2$, $c(3x+3) = 3$, and $c(6x^2 + 12x + 6) = 6 = 2 \cdot 3$.
+</Example>
+
+---
+
+## Irreducibility Tests
+
+<Theorem title="Reduction modulo p" number="4.26">
+Let $f \in \mathbb{Z}[x]$ be primitive with $\deg(f) \geq 1$. If there exists a prime $p$ such that:
+1. $p$ does not divide the leading coefficient of $f$, and
+2. the reduction $\bar{f} \in \mathbb{F}_p[x]$ is irreducible,
+
+then $f$ is irreducible over $\mathbb{Z}$ (equivalently, over $\mathbb{Q}$).
+</Theorem>
+
+<Example id="reduction-test" title="Irreducibility by reduction">
+Is $f(x) = x^4 + x + 1$ irreducible over $\mathbb{Q}$?
+
+Reduce mod $2$: $\bar{f} = x^4 + x + 1 \in \mathbb{F}_2[x]$. Check: $\bar{f}(0) = 1$, $\bar{f}(1) = 1$, so no linear factors. Check for quadratic factors: the only irreducible quadratic over $\mathbb{F}_2$ is $x^2 + x + 1$. We compute $(x^2 + x + 1)^2 = x^4 + x^2 + 1 \neq x^4 + x + 1$. So $\bar{f}$ has no quadratic factors and is therefore irreducible over $\mathbb{F}_2$. By the reduction criterion, $f$ is irreducible over $\mathbb{Q}$.
+</Example>
+
+<Example id="reduction-fails" title="When reduction does not help">
+$f(x) = x^4 + 1$ is irreducible over $\mathbb{Q}$, but $\bar{f}$ is reducible mod every prime $p$:
+- Mod $2$: $x^4 + 1 = (x+1)^4$.
+- Mod odd $p$: $x^4 + 1$ always factors (it splits in $\mathbb{F}_{p^2}$ and its splitting behavior is controlled by $p \bmod 8$).
+
+So the reduction test alone cannot prove $x^4 + 1$ is irreducible. One needs other methods (e.g., substitution $x \mapsto x + 1$ followed by Eisenstein).
+</Example>
+
+---
+
+## Noetherian Rings and Factorization
+
+<Theorem title="Noetherian condition" number="4.27">
+An integral domain $R$ is Noetherian (every ideal is finitely generated) if and only if every ascending chain of ideals $I_1 \subseteq I_2 \subseteq \cdots$ stabilizes (i.e., $I_n = I_{n+1}$ for large $n$).
+</Theorem>
+
+<Remark title="Connection to factorization">
+The Noetherian condition guarantees that every nonzero non-unit element has a factorization into irreducibles (existence). For uniqueness, one additionally needs that irreducibles are prime. This is why:
+- **Noetherian + irreducibles are prime = UFD**.
+- **Noetherian alone** gives existence but not uniqueness of factorization.
+</Remark>
+
+<Example id="noetherian-non-ufd" title="Noetherian but not UFD">
+$\mathbb{Z}[\sqrt{-5}]$ is Noetherian (it is a finitely generated $\mathbb{Z}$-algebra, hence Noetherian by the Hilbert Basis Theorem) but not a UFD. Every element has a factorization into irreducibles, but the factorizations are not unique.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The factorization landscape">
+The study of factorization in integral domains reveals a rich hierarchy:
+
+1. **Fields**: Every nonzero element is a unit; factorization is trivial.
+2. **Euclidean domains**: Division algorithm enables the Euclidean algorithm for GCDs.
+3. **PIDs**: Every ideal is principal; irreducibles are prime; unique factorization holds.
+4. **UFDs**: Unique factorization holds; ideals may need multiple generators.
+5. **Noetherian domains**: Factorization into irreducibles exists but may not be unique.
+6. **General integral domains**: Even existence of factorization may fail.
+
+The key insight: unique factorization of **elements** fails in many natural rings, but unique factorization of **ideals** (into prime ideals) holds in the much broader class of Dedekind domains.
+</Remark>

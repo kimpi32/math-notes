@@ -1,0 +1,144 @@
+export const metadata = {
+  title: 'Compactness — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "개념 — 컴팩트성" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Compactness
+
+Compactness is perhaps the most important topological property in analysis. It is the correct generalization of "closed and bounded" from $\mathbb{R}^n$ to arbitrary metric spaces, and it guarantees that continuous functions attain their extrema.
+
+---
+
+## Open cover definition
+
+<Definition title="Open cover and compactness" number="9.10">
+An **open cover** of a set $K \subseteq X$ is a collection of open sets $\{U_\alpha\}_{\alpha \in A}$ whose union contains $K$: $K \subseteq \bigcup_{\alpha \in A} U_\alpha$.
+
+A **subcover** is a subcollection that still covers $K$. A **finite subcover** is a subcover with finitely many sets.
+
+$K$ is **compact** if every open cover of $K$ has a finite subcover.
+</Definition>
+
+<Example title="[0,1] is compact">
+Let $\{U_\alpha\}$ be any open cover of $[0,1]$. We prove it has a finite subcover by contradiction (or by the Heine-Borel theorem). The key is that $[0,1]$ is closed and bounded in $\mathbb{R}$.
+</Example>
+
+<Example title="(0,1) is not compact">
+The open cover $\{(1/n, 1) : n = 2, 3, 4, \ldots\}$ covers $(0,1)$ (for any $x \in (0,1)$, choose $n > 1/x$). But no finite subcollection covers $(0,1)$: if we take $\{(1/n_1, 1), \ldots, (1/n_k, 1)\}$ with $N = \max(n_1, \ldots, n_k)$, then points in $(0, 1/N)$ are not covered.
+</Example>
+
+<Example title="R is not compact">
+$\{(-n, n) : n \in \mathbb{N}\}$ covers $\mathbb{R}$ but has no finite subcover.
+</Example>
+
+<Example title="Finite sets are compact">
+Any finite set $K = \{x_1, \ldots, x_m\}$ is compact: given any open cover $\{U_\alpha\}$, for each $x_i$ choose $U_{\alpha_i}$ containing $x_i$. Then $\{U_{\alpha_1}, \ldots, U_{\alpha_m}\}$ is a finite subcover.
+</Example>
+
+---
+
+## Sequential compactness
+
+<Definition title="Sequential compactness" number="9.11">
+A set $K$ is **sequentially compact** if every sequence in $K$ has a subsequence that converges to a point in $K$.
+</Definition>
+
+<Theorem title="Equivalence in metric spaces" number="9.4">
+In a metric space, a set is compact if and only if it is sequentially compact.
+</Theorem>
+
+<Example title="Sequential compactness of [0,1]">
+Any sequence $(x_n) \subseteq [0,1]$ is bounded, so by Bolzano-Weierstrass it has a convergent subsequence. The limit is in $[0,1]$ since $[0,1]$ is closed. So $[0,1]$ is sequentially compact, hence compact.
+</Example>
+
+<Example title="(0,1) is not sequentially compact">
+$x_n = 1/n \in (0,1)$. Every subsequence converges to $0 \notin (0,1)$. So $(0,1)$ is not sequentially compact.
+</Example>
+
+---
+
+## Properties of compact sets
+
+<Theorem title="Compact subsets are closed and bounded" number="9.5">
+If $K$ is a compact subset of a metric space $(X, d)$, then $K$ is closed and bounded.
+</Theorem>
+
+<Example title="Closed and bounded but not compact (in general)">
+In $\ell^2$, let $K = \{e_n : n \in \mathbb{N}\}$ where $e_n$ is the $n$th standard basis vector. Then $K$ is closed (no limit points) and bounded ($\|e_n\| = 1$), but not compact: $d(e_m, e_n) = \sqrt{2}$ for $m \neq n$, so no subsequence is Cauchy, hence no subsequence converges.
+
+In $\mathbb{R}^n$, the Heine-Borel theorem says closed and bounded implies compact. This fails in infinite-dimensional spaces.
+</Example>
+
+<Theorem title="Compact sets and continuous functions" number="9.6">
+Let $f: X \to Y$ be continuous and $K \subseteq X$ compact. Then:
+
+1. $f(K)$ is compact (continuous image of compact is compact).
+2. If $Y = \mathbb{R}$, then $f$ attains its maximum and minimum on $K$ (extreme value theorem).
+3. $f$ is uniformly continuous on $K$.
+</Theorem>
+
+<Example title="Extreme value theorem in metric spaces">
+$f: [0,1] \to \mathbb{R}$ continuous. Since $[0,1]$ is compact, $f$ attains its max and min. This generalizes the extreme value theorem from $\mathbb{R}$.
+
+$f: (0,1) \to \mathbb{R}$, $f(x) = 1/x$. The domain is not compact, and $f$ does not attain a maximum.
+</Example>
+
+<Example title="Uniform continuity on compact sets">
+$f(x) = x^2$ on $\mathbb{R}$ is continuous but not uniformly continuous. However, on any compact set $[a,b]$, it is uniformly continuous.
+
+$f(x) = \sin(1/x)$ on $(0,1]$ is continuous but not uniformly continuous. Adding the point $0$ to the domain (defining $f(0) = 0$) makes $f$ discontinuous, so $[0,1]$ does not help.
+</Example>
+
+---
+
+## Total boundedness
+
+<Definition title="Totally bounded" number="9.12">
+A set $A \subseteq X$ is **totally bounded** if for every $\varepsilon > 0$, $A$ can be covered by finitely many open balls of radius $\varepsilon$: there exist $x_1, \ldots, x_N \in A$ with $A \subseteq \bigcup_{i=1}^N B(x_i, \varepsilon)$.
+</Definition>
+
+<Theorem title="Compactness = completeness + total boundedness" number="9.7">
+A metric space is compact if and only if it is complete and totally bounded.
+</Theorem>
+
+<Example title="Totally bounded sets">
+- $[0,1]$ in $\mathbb{R}$: for any $\varepsilon$, cover with $\lceil 1/\varepsilon \rceil$ balls. Complete (closed subset of $\mathbb{R}$) and totally bounded, hence compact.
+
+- $(0,1)$: totally bounded (same argument) but not complete ($1/n$ has no limit in $(0,1)$). Hence not compact.
+
+- The unit ball in $\ell^2$: not totally bounded (the $e_n$ are distance $\sqrt{2}$ apart, so they cannot be covered by finitely many balls of radius $1$).
+</Example>
+
+---
+
+## Compact metric spaces
+
+<Example title="The Cantor set is compact">
+The Cantor set $C \subseteq [0,1]$ is closed (intersection of closed sets) and bounded. By Heine-Borel, $C$ is compact. It is also uncountable, totally disconnected, and has measure zero.
+</Example>
+
+<Example title="Compactness in function spaces">
+In $C[0,1]$ with the sup metric, the closed unit ball $\{f : \|f\|_\infty \leq 1\}$ is closed and bounded but **not** compact (by the same argument as $\ell^2$: take $f_n(x) = x^n$, no uniformly convergent subsequence).
+
+The **Arzela-Ascoli theorem** characterizes compact subsets of $C[0,1]$: $K \subseteq C[0,1]$ is compact iff $K$ is closed, uniformly bounded, and equicontinuous.
+</Example>
+
+<Remark>
+Compactness is the analytical substitute for finiteness. Many arguments that work for finite sets ("choose the maximum," "extract a convergent subsequence," "reduce to finitely many cases") generalize to compact sets. The [Heine-Borel theorem](/analysis/ch09-metric-spaces/theorems/t01-heine-borel) makes compactness concrete in $\mathbb{R}^n$.
+</Remark>

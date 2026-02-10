@@ -1,0 +1,274 @@
+export const metadata = {
+  title: 'Conjugacy Classes and Class Equation — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Concept — Conjugacy Classes and Class Equation" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Conjugacy Classes and Class Equation
+
+Conjugacy is the natural equivalence relation on a group arising from the conjugation action. Two elements $a$ and $b$ in a group $G$ are conjugate if $b = gag^{-1}$ for some $g \in G$. The resulting equivalence classes -- conjugacy classes -- encode deep structural information about the group. The **class equation**, which decomposes the order of the group according to conjugacy class sizes, is a fundamental tool leading directly to theorems about $p$-groups and the Sylow theorems.
+
+---
+
+## Conjugacy Classes
+
+<Definition title="Conjugacy relation" number="3.14">
+Let $G$ be a group. Two elements $a, b \in G$ are **conjugate** (written $a \sim b$) if there exists $g \in G$ such that $b = gag^{-1}$.
+
+This is an equivalence relation on $G$:
+- **Reflexive**: $a = eae^{-1}$.
+- **Symmetric**: If $b = gag^{-1}$, then $a = g^{-1}bg$.
+- **Transitive**: If $b = gag^{-1}$ and $c = hbh^{-1}$, then $c = (hg)a(hg)^{-1}$.
+</Definition>
+
+<Definition title="Conjugacy class" number="3.15">
+The **conjugacy class** of $a \in G$ is the equivalence class
+
+$$\operatorname{cl}(a) = \{gag^{-1} : g \in G\}.$$
+
+This is precisely the orbit of $a$ under the conjugation action of $G$ on itself.
+</Definition>
+
+<Example id="conjugacy-s3" title="Conjugacy classes of S_3">
+$S_3 = \{e, (1\;2), (1\;3), (2\;3), (1\;2\;3), (1\;3\;2)\}$.
+
+- $\operatorname{cl}(e) = \{e\}$ (the identity is always alone).
+- $\operatorname{cl}((1\;2)) = \{(1\;2), (1\;3), (2\;3)\}$ (all transpositions are conjugate).
+- $\operatorname{cl}((1\;2\;3)) = \{(1\;2\;3), (1\;3\;2)\}$ (both 3-cycles are conjugate).
+
+Check: $1 + 3 + 2 = 6 = |S_3|$. The conjugacy classes partition $S_3$ into three classes.
+</Example>
+
+<Example id="conjugacy-s4" title="Conjugacy classes of S_4">
+In $S_n$, two permutations are conjugate if and only if they have the same cycle type. For $S_4$:
+
+- Identity: $\{e\}$, size 1.
+- Transpositions (cycle type $(2)$): $\{(1\;2), (1\;3), (1\;4), (2\;3), (2\;4), (3\;4)\}$, size 6.
+- 3-cycles (cycle type $(3)$): $\{(1\;2\;3), (1\;3\;2), (1\;2\;4), \ldots\}$, size 8.
+- 4-cycles (cycle type $(4)$): $\{(1\;2\;3\;4), (1\;2\;4\;3), \ldots\}$, size 6.
+- Products of two disjoint transpositions (cycle type $(2,2)$): $\{(1\;2)(3\;4), (1\;3)(2\;4), (1\;4)(2\;3)\}$, size 3.
+
+Check: $1 + 6 + 8 + 6 + 3 = 24 = |S_4|$.
+</Example>
+
+<Example id="conjugacy-abelian" title="Conjugacy classes in abelian groups">
+If $G$ is abelian, then $gag^{-1} = a$ for all $g$, so every conjugacy class is a singleton: $\operatorname{cl}(a) = \{a\}$ for all $a \in G$.
+
+For $G = \mathbb{Z}/6\mathbb{Z}$, there are 6 conjugacy classes, each of size 1. This is equivalent to saying $Z(G) = G$.
+</Example>
+
+<Example id="conjugacy-d4" title="Conjugacy classes of D_4">
+$D_4 = \langle r, s \mid r^4 = s^2 = e, srs = r^{-1} \rangle$ of order 8.
+
+- $\{e\}$: size 1.
+- $\{r^2\}$: size 1 (since $r^2$ commutes with all elements).
+- $\{r, r^3\}$: size 2 (since $srs^{-1} = r^{-1} = r^3$).
+- $\{s, sr^2\}$: size 2.
+- $\{sr, sr^3\}$: size 2.
+
+Check: $1 + 1 + 2 + 2 + 2 = 8 = |D_4|$. There are 5 conjugacy classes.
+
+Note that $Z(D_4) = \{e, r^2\}$, consisting of exactly the elements whose conjugacy classes are singletons.
+</Example>
+
+---
+
+## The Centralizer
+
+<Definition title="Centralizer" number="3.16">
+The **centralizer** of an element $a \in G$ is
+
+$$C_G(a) = \{g \in G : ga = ag\} = \{g \in G : gag^{-1} = a\}.$$
+
+This is the stabilizer of $a$ under the conjugation action, so it is always a subgroup of $G$.
+</Definition>
+
+<Remark title="Size of conjugacy class via centralizer">
+By the Orbit-Stabilizer Theorem applied to the conjugation action:
+
+$$|\operatorname{cl}(a)| = [G : C_G(a)] = \frac{|G|}{|C_G(a)|}.$$
+
+In particular, $|\operatorname{cl}(a)|$ always divides $|G|$.
+</Remark>
+
+<Example id="centralizer-s3" title="Centralizers in S_3">
+For $S_3$:
+
+- $C_{S_3}(e) = S_3$, so $|\operatorname{cl}(e)| = 6/6 = 1$.
+- $C_{S_3}((1\;2)) = \{e, (1\;2)\}$, so $|\operatorname{cl}((1\;2))| = 6/2 = 3$.
+- $C_{S_3}((1\;2\;3)) = \{e, (1\;2\;3), (1\;3\;2)\} = \langle (1\;2\;3) \rangle$, so $|\operatorname{cl}((1\;2\;3))| = 6/3 = 2$.
+
+This confirms the conjugacy class sizes computed earlier.
+</Example>
+
+<Example id="centralizer-gl2" title="Centralizer in GL_2">
+In $G = GL_2(\mathbb{R})$, the centralizer of the identity matrix $I$ is all of $G$. The centralizer of a scalar matrix $\lambda I$ is also all of $G$ (scalar matrices commute with everything).
+
+For a non-scalar diagonal matrix $D = \operatorname{diag}(\lambda_1, \lambda_2)$ with $\lambda_1 \neq \lambda_2$, the centralizer consists of all diagonal matrices: $C_G(D) = \{A \in GL_2(\mathbb{R}) : A \text{ is diagonal}\}$.
+
+This shows that elements with "more symmetry" (like scalar matrices) have larger centralizers, and correspondingly smaller conjugacy classes.
+</Example>
+
+---
+
+## The Center
+
+<Definition title="Center of a group" number="3.17">
+The **center** of $G$ is
+
+$$Z(G) = \{a \in G : ga = ag \text{ for all } g \in G\} = \{a \in G : C_G(a) = G\}.$$
+
+Equivalently, $Z(G)$ is the set of elements whose conjugacy class is a singleton: $a \in Z(G)$ if and only if $\operatorname{cl}(a) = \{a\}$.
+
+$Z(G)$ is always a normal subgroup of $G$. It is abelian by definition.
+</Definition>
+
+<Example id="center-examples" title="Centers of familiar groups">
+- $Z(S_n) = \{e\}$ for $n \geq 3$ (no non-identity permutation commutes with all others).
+- $Z(D_n) = \{e, r^{n/2}\}$ if $n$ is even; $Z(D_n) = \{e\}$ if $n$ is odd.
+- $Z(GL_n(F)) = \{\lambda I : \lambda \in F^*\}$ (scalar matrices).
+- $Z(Q_8) = \{1, -1\}$ where $Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$ is the quaternion group.
+- $Z(A_n) = \{e\}$ for $n \geq 4$.
+</Example>
+
+---
+
+## The Class Equation
+
+<Theorem title="Class Equation" number="3.3">
+Let $G$ be a finite group. Then
+
+$$|G| = |Z(G)| + \sum_{i=1}^{r} [G : C_G(a_i)]$$
+
+where $a_1, \ldots, a_r$ are representatives of the conjugacy classes of size greater than 1 (i.e., one representative from each non-central conjugacy class). Each term $[G : C_G(a_i)]$ is strictly greater than 1 and divides $|G|$.
+</Theorem>
+
+<Proof>
+$G$ is the disjoint union of its conjugacy classes. The conjugacy classes of size 1 are exactly the elements of $Z(G)$. Every other conjugacy class has size $[G : C_G(a)] > 1$. Summing the sizes of all conjugacy classes gives $|G|$.
+</Proof>
+
+<Example id="class-equation-s3" title="Class equation of S_3">
+$|S_3| = 6$. The center is $Z(S_3) = \{e\}$, so $|Z(S_3)| = 1$. The non-central conjugacy classes have sizes 3 and 2.
+
+Class equation: $6 = 1 + 3 + 2$.
+
+Since $|Z(S_3)| = 1$, the group $S_3$ has trivial center. Note that each summand on the right divides 6.
+</Example>
+
+<Example id="class-equation-d4" title="Class equation of D_4">
+$|D_4| = 8$. The center is $Z(D_4) = \{e, r^2\}$, so $|Z(D_4)| = 2$. The non-central conjugacy classes have sizes 2, 2, and 2.
+
+Class equation: $8 = 2 + 2 + 2 + 2$.
+
+All non-central class sizes equal 2, which divides 8.
+</Example>
+
+<Example id="class-equation-a4" title="Class equation of A_4">
+$A_4$ has order 12. The conjugacy classes are:
+- $\{e\}$: size 1.
+- $\{(1\;2)(3\;4), (1\;3)(2\;4), (1\;4)(2\;3)\}$: size 3.
+- $\{(1\;2\;3), (1\;3\;4), (2\;4\;3), (1\;4\;2)\}$: size 4.
+- $\{(1\;3\;2), (1\;4\;3), (2\;3\;4), (1\;2\;4)\}$: size 4.
+
+Center: $Z(A_4) = \{e\}$, so $|Z(A_4)| = 1$.
+
+Class equation: $12 = 1 + 3 + 4 + 4$.
+</Example>
+
+<Example id="class-equation-q8" title="Class equation of Q_8">
+The quaternion group $Q_8 = \{1, -1, i, -i, j, -j, k, -k\}$ has order 8.
+
+Conjugacy classes:
+- $\{1\}$: size 1.
+- $\{-1\}$: size 1.
+- $\{i, -i\}$: size 2.
+- $\{j, -j\}$: size 2.
+- $\{k, -k\}$: size 2.
+
+Center: $Z(Q_8) = \{1, -1\}$, so $|Z(Q_8)| = 2$.
+
+Class equation: $8 = 2 + 2 + 2 + 2$.
+
+Note that $Q_8$ and $D_4$ have the same class equation, but they are not isomorphic (every subgroup of $Q_8$ is normal, but $D_4$ has non-normal subgroups).
+</Example>
+
+---
+
+## Applications of the Class Equation
+
+<Example id="p-group-center" title="Center of a p-group is nontrivial">
+Let $G$ be a $p$-group (a finite group of order $p^n$ for some prime $p$ and $n \geq 1$). By the class equation:
+
+$$p^n = |Z(G)| + \sum [G : C_G(a_i)].$$
+
+Each summand $[G : C_G(a_i)]$ divides $|G| = p^n$ and is greater than 1, so each is divisible by $p$. Hence $p$ divides $|Z(G)|$.
+
+Since $|Z(G)| \geq 1$, this gives $|Z(G)| \geq p > 1$. Therefore every $p$-group has a nontrivial center. This is one of the most important consequences of the class equation.
+</Example>
+
+<Example id="p2-abelian" title="Groups of order p^2 are abelian">
+Let $|G| = p^2$. By the previous example, $|Z(G)| \geq p$, so $|Z(G)| \in \{p, p^2\}$.
+
+If $|Z(G)| = p^2$, then $G = Z(G)$ is abelian.
+
+If $|Z(G)| = p$, then $|G/Z(G)| = p$, so $G/Z(G)$ is cyclic. But a group whose quotient by its center is cyclic must be abelian (if $G/Z(G) = \langle gZ(G) \rangle$, then every element is $g^k z$ for some $k$ and $z \in Z(G)$, and these all commute). Contradiction with $|Z(G)| = p < p^2$.
+
+Therefore $|Z(G)| = p^2$ and $G$ is abelian. The groups of order $p^2$ are $\mathbb{Z}/p^2\mathbb{Z}$ and $\mathbb{Z}/p\mathbb{Z} \times \mathbb{Z}/p\mathbb{Z}$.
+</Example>
+
+---
+
+## Conjugacy in $S_n$
+
+<Theorem title="Conjugacy in symmetric groups" number="3.4">
+Two permutations in $S_n$ are conjugate if and only if they have the same cycle type. The number of conjugacy classes in $S_n$ equals the number of partitions of $n$.
+</Theorem>
+
+<Example id="cycle-type-s5" title="Conjugacy classes of S_5">
+$S_5$ has 7 conjugacy classes, corresponding to the 7 partitions of 5:
+
+| Cycle type | Partition | Class size | Example |
+|-----------|----------|------------|---------|
+| $(1,1,1,1,1)$ | $5 = 1+1+1+1+1$ | 1 | $e$ |
+| $(2,1,1,1)$ | $5 = 2+1+1+1$ | 10 | $(1\;2)$ |
+| $(2,2,1)$ | $5 = 2+2+1$ | 15 | $(1\;2)(3\;4)$ |
+| $(3,1,1)$ | $5 = 3+1+1$ | 20 | $(1\;2\;3)$ |
+| $(3,2)$ | $5 = 3+2$ | 20 | $(1\;2\;3)(4\;5)$ |
+| $(4,1)$ | $5 = 4+1$ | 30 | $(1\;2\;3\;4)$ |
+| $(5)$ | $5 = 5$ | 24 | $(1\;2\;3\;4\;5)$ |
+
+Check: $1 + 10 + 15 + 20 + 20 + 30 + 24 = 120 = |S_5|$.
+
+The size of the class with cycle type $1^{a_1} 2^{a_2} \cdots k^{a_k}$ is $n! / (1^{a_1} a_1! \cdot 2^{a_2} a_2! \cdots k^{a_k} a_k!)$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+1. **Conjugacy classes** are the orbits of the conjugation action; they partition the group.
+
+2. $|\operatorname{cl}(a)| = [G : C_G(a)]$, so conjugacy class sizes always divide $|G|$.
+
+3. The **class equation** $|G| = |Z(G)| + \sum [G : C_G(a_i)]$ is a powerful tool for structural results.
+
+4. The class equation proves that **$p$-groups have nontrivial center** and that **groups of order $p^2$ are abelian**.
+
+5. In $S_n$, conjugacy classes correspond to **cycle types**, equivalently to **partitions of $n$**.
+</Remark>

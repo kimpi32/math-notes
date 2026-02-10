@@ -1,0 +1,179 @@
+export const metadata = {
+  title: 'Proof of Heine-Borel — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "증명 — 하이네-보렐 정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Heine-Borel
+
+We prove that a subset of $\mathbb{R}^n$ is compact if and only if it is closed and bounded. The interesting direction is showing that closed and bounded implies compact.
+
+---
+
+## Statement
+
+<Theorem title="Heine-Borel theorem">
+$K \subseteq \mathbb{R}^n$ is compact if and only if $K$ is closed and bounded.
+</Theorem>
+
+---
+
+## Direction 1: Compact implies closed and bounded
+
+<Proof title="Compact implies closed">
+Let $K$ be compact and let $p \notin K$. For each $y \in K$, let $r_y = d(p,y)/2 > 0$. The open balls $B(y, r_y)$ cover $K$. By compactness, there exist $y_1, \ldots, y_m$ with $K \subseteq \bigcup_{i=1}^m B(y_i, r_{y_i})$.
+
+Let $r = \min(r_{y_1}, \ldots, r_{y_m}) > 0$. For any $z \in B(p, r)$ and any $i$:
+
+$$d(z, y_i) \geq d(p, y_i) - d(p, z) > 2r_{y_i} - r \geq 2r_{y_i} - r_{y_i} = r_{y_i}.$$
+
+So $z \notin B(y_i, r_{y_i})$ for any $i$, hence $z \notin K$. Thus $B(p, r) \cap K = \emptyset$, showing $K^c$ is open, so $K$ is closed.
+</Proof>
+
+<Proof title="Compact implies bounded">
+Fix any point $x_0 \in \mathbb{R}^n$. The collection $\{B(x_0, k) : k = 1, 2, 3, \ldots\}$ is an open cover of $K$ (since $\mathbb{R}^n = \bigcup_k B(x_0, k)$). By compactness, a finite subcover exists: $K \subseteq B(x_0, k_1) \cup \cdots \cup B(x_0, k_m) = B(x_0, N)$ where $N = \max(k_1, \ldots, k_m)$. So $K$ is bounded.
+</Proof>
+
+---
+
+## Direction 2: Closed and bounded implies compact
+
+We give two proofs: one using the Bolzano-Weierstrass theorem (via sequential compactness) and one direct proof using bisection.
+
+### Proof via Bolzano-Weierstrass
+
+<Proof title="Closed and bounded implies sequentially compact">
+Let $K \subseteq \mathbb{R}^n$ be closed and bounded, and let $(x_k)$ be any sequence in $K$.
+
+Since $K$ is bounded, $(x_k)$ is a bounded sequence in $\mathbb{R}^n$. By the **Bolzano-Weierstrass theorem** (every bounded sequence in $\mathbb{R}^n$ has a convergent subsequence), there exists a subsequence $x_{k_j} \to x^*$ for some $x^* \in \mathbb{R}^n$.
+
+Since $K$ is closed and all $x_{k_j} \in K$, we have $x^* \in K$.
+
+So every sequence in $K$ has a subsequence converging to a point in $K$. This means $K$ is sequentially compact, which (in metric spaces) is equivalent to compactness.
+</Proof>
+
+<Example title="The proof in action: a sequence in [0,1]">
+Take any sequence $(x_n) \subseteq [0,1]$. Since $[0,1]$ is bounded, Bolzano-Weierstrass gives a convergent subsequence $x_{n_k} \to L$. Since $0 \leq x_{n_k} \leq 1$ for all $k$, we have $0 \leq L \leq 1$. So $L \in [0,1]$. This confirms $[0,1]$ is sequentially compact.
+</Example>
+
+### Direct proof via bisection (for $\mathbb{R}$)
+
+<Proof title="[a,b] is compact — bisection argument">
+Suppose $\{U_\alpha\}$ is an open cover of $[a,b]$ with no finite subcover. We derive a contradiction.
+
+**Step 1 (Bisection)**: Divide $[a,b]$ into two halves: $[a, (a+b)/2]$ and $[(a+b)/2, b]$. At least one half cannot be covered by finitely many $U_\alpha$ (otherwise both could, and their union would be a finite subcover of $[a,b]$). Call this half $[a_1, b_1]$ with $b_1 - a_1 = (b-a)/2$.
+
+**Step 2 (Iterate)**: Repeat, obtaining nested intervals $[a_n, b_n]$ with $b_n - a_n = (b-a)/2^n$, each of which has no finite subcover from $\{U_\alpha\}$.
+
+**Step 3 (Convergence)**: By the Nested Interval Theorem, $\bigcap_{n=1}^\infty [a_n, b_n] = \{c\}$ for some $c \in [a,b]$.
+
+**Step 4 (Contradiction)**: Since $c \in [a,b]$, there exists $U_{\alpha_0}$ with $c \in U_{\alpha_0}$. Since $U_{\alpha_0}$ is open, there exists $\delta > 0$ with $(c - \delta, c + \delta) \subseteq U_{\alpha_0}$.
+
+For $n$ large enough, $b_n - a_n < \delta$ and $c \in [a_n, b_n]$, so $[a_n, b_n] \subseteq (c - \delta, c + \delta) \subseteq U_{\alpha_0}$.
+
+But then the single set $\{U_{\alpha_0}\}$ covers $[a_n, b_n]$, contradicting the choice that $[a_n, b_n]$ has no finite subcover.
+</Proof>
+
+<Example title="Why the bisection proof works">
+The key ingredients are:
+1. **Nested Interval Theorem** (which uses completeness of $\mathbb{R}$): nested closed intervals with lengths tending to $0$ have a unique common point.
+2. **Open cover**: the covering set $U_{\alpha_0}$ contains an interval around $c$.
+3. **Bisection**: ensures we always select a "problematic" half.
+
+This is essentially a proof by infinite descent: if a finite subcover does not exist, we find smaller and smaller intervals that still resist finite covering, until we reach a contradiction.
+</Example>
+
+---
+
+## Extension to $\mathbb{R}^n$
+
+<Proof title="Heine-Borel for R^n">
+A closed and bounded $K \subseteq \mathbb{R}^n$ is contained in a box $[a_1, b_1] \times \cdots \times [a_n, b_n]$. The proof proceeds by showing:
+
+1. Each interval $[a_i, b_i]$ is compact (proved above).
+2. The product of finitely many compact spaces is compact (**Tychonoff's theorem** for finite products, which has a direct proof).
+3. A closed subset of a compact space is compact.
+
+Applying (1), (2), (3): $K$ is a closed subset of the compact box, hence compact.
+</Proof>
+
+<Example title="Verifying for the closed unit disk">
+$\overline{B}(0,1) = \{(x,y) : x^2 + y^2 \leq 1\} \subseteq [-1,1] \times [-1,1]$. Since $[-1,1]^2$ is compact (product of compact intervals), and $\overline{B}(0,1)$ is closed in $[-1,1]^2$, $\overline{B}(0,1)$ is compact.
+</Example>
+
+---
+
+## Why Heine-Borel fails in infinite dimensions
+
+<Example title="Failure in l²">
+$B = \{x \in \ell^2 : \|x\| \leq 1\}$ is closed and bounded, but not compact. The sequence of standard basis vectors $e_1, e_2, \ldots$ lies in $B$ with $\|e_m - e_n\| = \sqrt{2}$ for $m \neq n$, so no subsequence is Cauchy, hence no subsequence converges.
+
+The bisection argument fails because we cannot reduce to a finite product of intervals. The Bolzano-Weierstrass argument fails because bounded sequences in infinite-dimensional spaces need not have convergent subsequences.
+</Example>
+
+<Example title="Failure in C[0,1]">
+The sequence $f_n(x) = x^n$ in $C[0,1]$ has $\|f_n\|_\infty = 1$ for all $n$, but $\|f_m - f_n\|_\infty$ does not go to $0$ (no uniformly convergent subsequence). The closed unit ball in $C[0,1]$ is not compact.
+
+The **Arzela-Ascoli theorem** gives the correct compactness criterion: $K \subseteq C[0,1]$ is compact iff $K$ is closed, uniformly bounded, and equicontinuous.
+</Example>
+
+---
+
+## Summary of the proof structure
+
+<Remark>
+The proof of Heine-Borel uses three fundamental properties of $\mathbb{R}$:
+
+1. **Completeness** (for the nested interval theorem and Bolzano-Weierstrass).
+2. **Archimedean property** (to make intervals shrink to a point).
+3. **Finite dimensionality** (to reduce to a product of intervals).
+
+Any of these can fail in other metric spaces, which is why Heine-Borel is specific to $\mathbb{R}^n$. The general characterization of compactness in metric spaces is: complete and totally bounded.
+</Remark>
+
+---
+
+## Additional examples
+
+<Example title="Applying Heine-Borel to a concrete cover">
+Cover $[0,1]$ with $\{(-0.1, 0.6), (0.4, 0.8), (0.7, 1.1)\}$. This is a finite open cover, so it trivially has a finite subcover (itself). Heine-Borel guarantees that even if we start with uncountably many open sets covering $[0,1]$, finitely many suffice.
+</Example>
+
+<Example title="Compact sets in R²: a triangle">
+The closed triangle $T = \{(x,y) : x \geq 0, y \geq 0, x + y \leq 1\}$ is closed (intersection of three closed half-planes) and bounded ($T \subseteq [0,1]^2$). By Heine-Borel, $T$ is compact.
+</Example>
+
+<Example title="Compact sets in R²: a closed annulus">
+$A = \{(x,y) : 1 \leq x^2 + y^2 \leq 4\}$ is closed and bounded, hence compact by Heine-Borel. Any continuous function $f: A \to \mathbb{R}$ attains its maximum and minimum on $A$.
+</Example>
+
+<Example title="Non-compact: the open square">
+$(0,1) \times (0,1)$ is bounded but not closed (boundary points like $(0, 1/2)$ are missing). Not compact. The cover $\{(1/n, 1) \times (1/n, 1) : n \geq 2\}$ has no finite subcover.
+</Example>
+
+<Example title="Non-compact: the graph of 1/x">
+$G = \{(x, 1/x) : x > 0\} \subseteq \mathbb{R}^2$ is closed in $\mathbb{R}^2$ (it is the preimage of $\{1\}$ under $(x,y) \mapsto xy$ restricted to $\{x > 0\}$... actually more carefully, it is a closed subset). But it is unbounded ($1/x \to \infty$ as $x \to 0^+$ and $x \to \infty$ as $x \to \infty$). So $G$ is not compact.
+</Example>
+
+<Example title="Sequences in compact sets: the Bolzano-Weierstrass approach">
+Any sequence in the closed unit ball $\overline{B}(0,1) \subseteq \mathbb{R}^3$ has a convergent subsequence with limit in $\overline{B}(0,1)$. For instance, $((\sin n)/n, (\cos n)/n, 1/n) \to (0, 0, 0) \in \overline{B}(0,1)$.
+</Example>
+
+<Example title="Compactness and the extreme value theorem">
+$f(x,y) = x^2 + y^2 - 2x$ on the compact set $K = \{(x,y) : x^2 + y^2 \leq 4\}$. By the EVT, $f$ attains a minimum and maximum on $K$. The minimum is at $(1, 0)$ with $f = -1$; the maximum is on the boundary circle at $(-2, 0)$ with $f = 8$.
+</Example>

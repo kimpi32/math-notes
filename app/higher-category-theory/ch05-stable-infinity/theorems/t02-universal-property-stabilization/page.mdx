@@ -1,0 +1,208 @@
+export const metadata = {
+  title: 'Universal Property of Stabilization — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Theorem — Universal Property of Stabilization" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Universal Property of Stabilization
+
+The stabilization of a pointed $\infty$-category $\mathcal{C}$ is the universal stable $\infty$-category receiving a "reduced" functor from $\mathcal{C}$. The $\infty$-category of spectra $\operatorname{Sp}$ is the stabilization of pointed spaces $\mathcal{S}_*$, and this universal property explains why spectra are the natural coefficients for stable phenomena. Stabilization provides the canonical passage from unstable to stable homotopy theory.
+
+---
+
+## Statement
+
+<Theorem title="Universal property of stabilization" number="5.1">
+Let $\mathcal{C}$ be a pointed $\infty$-category with finite limits. The **stabilization** $\operatorname{Sp}(\mathcal{C})$ is the stable $\infty$-category defined by
+
+$$\operatorname{Sp}(\mathcal{C}) = \lim\left(\cdots \xrightarrow{\Omega} \mathcal{C} \xrightarrow{\Omega} \mathcal{C} \xrightarrow{\Omega} \mathcal{C}\right)$$
+
+together with the functor $\Omega^\infty: \operatorname{Sp}(\mathcal{C}) \to \mathcal{C}$ (projection to the zeroth component). This satisfies the following **universal property**:
+
+For any stable $\infty$-category $\mathcal{D}$, the functor
+
+$$\operatorname{Fun}^{\mathrm{ex}}(\mathcal{D}, \operatorname{Sp}(\mathcal{C})) \xrightarrow{\Omega^\infty \circ -} \operatorname{Fun}^{\mathrm{lex}}(\mathcal{D}, \mathcal{C})$$
+
+is an equivalence. That is, $\operatorname{Sp}(\mathcal{C})$ is the universal stable $\infty$-category equipped with a finite-limit-preserving functor to $\mathcal{C}$.
+</Theorem>
+
+<Theorem title="Presentable stabilization" number="5.2">
+If $\mathcal{C}$ is a presentable pointed $\infty$-category, then $\operatorname{Sp}(\mathcal{C})$ is a presentable stable $\infty$-category and the stabilization adjunction takes the form:
+
+$$\Sigma^\infty: \mathcal{C} \rightleftarrows \operatorname{Sp}(\mathcal{C}) : \Omega^\infty$$
+
+where $\Sigma^\infty$ is a left adjoint preserving colimits and $\Omega^\infty$ preserves limits. The universal property becomes: for any presentable stable $\infty$-category $\mathcal{D}$,
+
+$$\operatorname{Fun}^L(\operatorname{Sp}(\mathcal{C}), \mathcal{D}) \simeq \operatorname{Fun}^L(\mathcal{C}, \mathcal{D})$$
+
+where $\operatorname{Fun}^L$ denotes colimit-preserving functors.
+</Theorem>
+
+<Theorem title="Spectra as stabilization of spaces" number="5.3">
+The $\infty$-category of spectra is the stabilization of pointed spaces:
+
+$$\operatorname{Sp} = \operatorname{Sp}(\mathcal{S}_*)$$
+
+with the adjunction $\Sigma^\infty: \mathcal{S}_* \rightleftarrows \operatorname{Sp} : \Omega^\infty$. Moreover, $\operatorname{Sp}$ is the **initial** presentable stable $\infty$-category: for any presentable stable $\infty$-category $\mathcal{D}$,
+
+$$\operatorname{Fun}^L(\operatorname{Sp}, \mathcal{D}) \simeq \mathcal{D}$$
+
+via evaluation at $\mathbb{S}$ (the sphere spectrum, the image of $S^0$ under $\Sigma^\infty$).
+</Theorem>
+
+---
+
+## Proof Outline
+
+<Proof title="Proof of the universal property">
+**Step 1 (Construction of stabilization).** Define $\operatorname{Sp}(\mathcal{C})$ as the limit of the tower
+
+$$\cdots \xrightarrow{\Omega} \mathcal{C} \xrightarrow{\Omega} \mathcal{C} \xrightarrow{\Omega} \mathcal{C}$$
+
+in the $\infty$-category $\widehat{\operatorname{Cat}}_\infty$ of $\infty$-categories. An object of $\operatorname{Sp}(\mathcal{C})$ is a sequence $(X_0, X_1, X_2, \ldots)$ with equivalences $X_n \simeq \Omega X_{n+1}$.
+
+**Step 2 (Stability of $\operatorname{Sp}(\mathcal{C})$).** The suspension functor on $\operatorname{Sp}(\mathcal{C})$ is given by shifting: $\Sigma(X_0, X_1, \ldots) = (X_1, X_2, \ldots)$. This is an equivalence with inverse $\Omega(X_0, X_1, \ldots) = (\Omega X_0, X_0, X_1, \ldots)$. Since $\Sigma$ is an equivalence and $\operatorname{Sp}(\mathcal{C})$ is pointed with finite limits and colimits, it is stable.
+
+**Step 3 (Universal property).** Let $\mathcal{D}$ be stable and $F: \mathcal{D} \to \mathcal{C}$ a finite-limit-preserving functor. We construct a lift $\tilde{F}: \mathcal{D} \to \operatorname{Sp}(\mathcal{C})$ by setting $\tilde{F}(X)_n = F(\Omega^{-n} X) = F(\Sigma^n X)$ (using that $\Sigma$ is an equivalence on $\mathcal{D}$). The equivalences $\tilde{F}(X)_n \simeq \Omega \tilde{F}(X)_{n+1}$ follow because $F$ preserves limits (hence preserves $\Omega$). One verifies that $\tilde{F}$ is exact, $\Omega^\infty \circ \tilde{F} = F$, and that this construction is an equivalence on functor categories.
+
+**Step 4 (Presentable case).** When $\mathcal{C}$ is presentable, the adjoint functor theorem gives the left adjoint $\Sigma^\infty$. The colimit-preserving universal property follows by adjunction from the limit-preserving one.
+
+**Step 5 (Spectra are initial).** $\operatorname{Sp} = \operatorname{Sp}(\mathcal{S}_*)$ is initial because $\mathcal{S}_*$ is the free presentable pointed $\infty$-category on one generator ($S^0$). For any $\mathcal{D}$, $\operatorname{Fun}^L(\operatorname{Sp}, \mathcal{D}) \simeq \operatorname{Fun}^L(\mathcal{S}_*, \mathcal{D}) \simeq \mathcal{D}$ (evaluation at $S^0$, then at $\mathbb{S} = \Sigma^\infty S^0$).
+</Proof>
+
+---
+
+## Key Examples
+
+<Example id="stabilization-spaces" title="Stabilization of pointed spaces">
+$\operatorname{Sp}(\mathcal{S}_*) = \operatorname{Sp}$, the $\infty$-category of spectra. The adjunction $\Sigma^\infty \dashv \Omega^\infty$ sends a pointed space $X$ to its suspension spectrum $\Sigma^\infty X$ and a spectrum $E$ to its infinite loop space $\Omega^\infty E = E_0$.
+
+The counit $\Sigma^\infty \Omega^\infty E \to E$ is an equivalence when $E$ is a suspension spectrum. The unit $X \to \Omega^\infty \Sigma^\infty X$ corresponds to the stable Hurewicz map.
+</Example>
+
+<Example id="stabilization-modules" title="Stabilization of pointed R-modules">
+For a commutative ring $R$, consider the $\infty$-category $\operatorname{Mod}_R^{\geq 0}$ of connective $R$-module spectra (or equivalently, simplicial $R$-modules). Its stabilization is:
+
+$$\operatorname{Sp}(\operatorname{Mod}_R^{\geq 0}) \simeq D(R)$$
+
+the derived $\infty$-category of $R$. The adjunction sends a connective module to its inclusion in $D(R)$, and the right adjoint is the connective cover $\tau_{\geq 0}$.
+</Example>
+
+<Example id="stabilization-abelian-group" title="Stabilization of abelian group objects">
+For an $\infty$-topos $\mathcal{X}$, the $\infty$-category of abelian group objects $\operatorname{Ab}(\mathcal{X})$ (equivalently, grouplike $E_\infty$-monoids) has stabilization:
+
+$$\operatorname{Sp}(\operatorname{Ab}(\mathcal{X})) \simeq \operatorname{Sp}(\mathcal{X})$$
+
+the $\infty$-category of spectrum objects in $\mathcal{X}$. When $\mathcal{X} = \mathcal{S}$, this gives $\operatorname{Sp}(\operatorname{Ab}(\mathcal{S})) \simeq \operatorname{Sp}$.
+</Example>
+
+<Example id="stabilization-connective-spectra" title="Connective spectra and grouplike E-infinity spaces">
+The $\infty$-category of connective spectra $\operatorname{Sp}_{\geq 0}$ is equivalent to the $\infty$-category of grouplike $E_\infty$-spaces (infinite loop spaces). The equivalence is given by:
+
+$$\Omega^\infty: \operatorname{Sp}_{\geq 0} \xrightarrow{\simeq} \operatorname{Mon}_{E_\infty}^{\mathrm{gp}}(\mathcal{S})$$
+
+This is not a stabilization statement per se, but it shows that the connective part of $\operatorname{Sp}$ has a purely space-level description. The full $\operatorname{Sp}$ is obtained by inverting the suspension.
+</Example>
+
+<Example id="stabilization-motivic" title="Motivic stabilization">
+In motivic homotopy theory, the motivic stable $\infty$-category $\operatorname{SH}(S)$ over a scheme $S$ is the stabilization of the pointed motivic $\infty$-category $\mathcal{H}_\bullet(S)$ with respect to the $\mathbb{P}^1$-suspension:
+
+$$\operatorname{SH}(S) = \operatorname{Sp}^{\mathbb{P}^1}(\mathcal{H}_\bullet(S)) = \operatorname{colim}\left(\mathcal{H}_\bullet(S) \xrightarrow{\Sigma^{\mathbb{P}^1}} \mathcal{H}_\bullet(S) \xrightarrow{\Sigma^{\mathbb{P}^1}} \cdots\right)$$
+
+The universal property says: for any presentable stable $\infty$-category $\mathcal{D}$, colimit-preserving functors $\operatorname{SH}(S) \to \mathcal{D}$ correspond to $\mathbb{P}^1$-stable functors $\mathcal{H}_\bullet(S) \to \mathcal{D}$.
+</Example>
+
+<Example id="stabilization-sheaves" title="Stabilization of sheaves of spaces">
+For a site $(\mathcal{C}, \tau)$, the $\infty$-topos $\operatorname{Shv}(\mathcal{C})$ of sheaves of spaces can be stabilized:
+
+$$\operatorname{Sp}(\operatorname{Shv}(\mathcal{C})_*) \simeq \operatorname{Shv}(\mathcal{C}; \operatorname{Sp})$$
+
+the $\infty$-category of sheaves of spectra on $\mathcal{C}$. This is a stable presentable $\infty$-category that serves as the natural home for sheaf cohomology.
+
+For the etale site of a scheme $X$: $\operatorname{Sp}(\operatorname{Shv}_{\mathrm{et}}(X)_*) \simeq \operatorname{Shv}_{\mathrm{et}}(X; \operatorname{Sp})$, the $\infty$-category of etale sheaves of spectra.
+</Example>
+
+<Example id="stabilization-iterate" title="Stabilization is idempotent">
+If $\mathcal{C}$ is already a stable $\infty$-category, then $\operatorname{Sp}(\mathcal{C}) \simeq \mathcal{C}$. The stabilization functor is idempotent:
+
+$$\operatorname{Sp}(\operatorname{Sp}(\mathcal{C})) \simeq \operatorname{Sp}(\mathcal{C})$$
+
+This is because $\Omega$ is already an equivalence on $\operatorname{Sp}(\mathcal{C})$, so the sequential limit $\lim(\cdots \xrightarrow{\Omega} \operatorname{Sp}(\mathcal{C}) \xrightarrow{\Omega} \operatorname{Sp}(\mathcal{C}))$ stabilizes immediately.
+</Example>
+
+<Example id="stabilization-tangent" title="Tangent categories via stabilization">
+The tangent $\infty$-category $T_X \mathcal{C}$ at an object $X$ of a presentable $\infty$-category $\mathcal{C}$ is defined as:
+
+$$T_X \mathcal{C} = \operatorname{Sp}(\mathcal{C}_{/X})$$
+
+the stabilization of the slice category. When $\mathcal{C} = \operatorname{CAlg}_k$ (commutative $k$-algebras) and $X = A$:
+
+$$T_A \operatorname{CAlg}_k \simeq \operatorname{Mod}_A$$
+
+the $\infty$-category of $A$-modules. The cotangent complex $L_{A/k}$ is the image of $A \to A$ under $\Sigma^\infty: (\operatorname{CAlg}_k)_{/A} \to \operatorname{Mod}_A$. This is the foundation of derived deformation theory.
+</Example>
+
+<Example id="stabilization-goodwillie" title="Goodwillie calculus and stabilization">
+In Goodwillie calculus, the first derivative of a homotopy functor $F: \mathcal{S}_* \to \mathcal{S}_*$ is a functor $D_1 F: \mathcal{S}_* \to \operatorname{Sp}$, obtained by stabilizing $F$. The stabilization of the identity functor gives:
+
+$$D_1(\operatorname{id}_{\mathcal{S}_*}) \simeq \Sigma^\infty: \mathcal{S}_* \to \operatorname{Sp}$$
+
+More generally, for a functor $F: \mathcal{C} \to \mathcal{D}$ between presentable $\infty$-categories, the derivative at $X \in \mathcal{C}$ is a functor $D_X F: T_X \mathcal{C} \to T_{F(X)} \mathcal{D}$ between tangent (stable) categories. This is the $\infty$-categorical analogue of the differential of a smooth map.
+</Example>
+
+<Example id="stabilization-excision" title="Excisive functors and the universal property">
+A functor $F: \mathcal{S}_* \to \operatorname{Sp}$ is **excisive** (or $1$-excisive) if it sends pushout squares to pullback squares. The $\infty$-category of excisive functors $\operatorname{Exc}(\mathcal{S}_*, \operatorname{Sp})$ is equivalent to $\operatorname{Sp}$:
+
+$$\operatorname{Exc}(\mathcal{S}_*, \operatorname{Sp}) \simeq \operatorname{Sp}$$
+
+This is another manifestation of the universal property: $\operatorname{Sp}$ is the universal target for "linear" (excisive) functors from pointed spaces.
+</Example>
+
+<Example id="stabilization-ring-spectra" title="Module categories over ring spectra">
+For a ring spectrum $R$ (an $E_1$-ring), the $\infty$-category $\operatorname{Mod}_R$ is a presentable stable $\infty$-category. By the universal property of $\operatorname{Sp}$, giving a colimit-preserving functor $\operatorname{Sp} \to \operatorname{Mod}_R$ is the same as giving an object of $\operatorname{Mod}_R$. The functor corresponding to $R \in \operatorname{Mod}_R$ is $E \mapsto R \wedge E$ (the smash product with $R$), which is the "free $R$-module" functor:
+
+$$\operatorname{Free}_R = R \wedge (-): \operatorname{Sp} \to \operatorname{Mod}_R$$
+
+This left adjoint corresponds to the forgetful functor $\operatorname{Mod}_R \to \operatorname{Sp}$ (which preserves limits).
+</Example>
+
+<Example id="stabilization-two-variable" title="Bilinear stabilization">
+For a bifunctor $\otimes: \mathcal{C} \times \mathcal{D} \to \mathcal{E}$ between pointed $\infty$-categories, the bilinear stabilization produces a bifunctor $\operatorname{Sp}(\mathcal{C}) \times \operatorname{Sp}(\mathcal{D}) \to \operatorname{Sp}(\mathcal{E})$. Applied to the smash product of pointed spaces:
+
+$$\wedge: \mathcal{S}_* \times \mathcal{S}_* \to \mathcal{S}_*$$
+
+stabilization in both variables gives the smash product of spectra $\wedge: \operatorname{Sp} \times \operatorname{Sp} \to \operatorname{Sp}$, recovering the symmetric monoidal structure on $\operatorname{Sp}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The universal property of stabilization characterizes stable $\infty$-categories as universal targets:
+
+1. $\operatorname{Sp}(\mathcal{C}) = \lim(\cdots \xrightarrow{\Omega} \mathcal{C} \xrightarrow{\Omega} \mathcal{C})$ is the **universal stable $\infty$-category** mapping to $\mathcal{C}$.
+
+2. $\operatorname{Sp} = \operatorname{Sp}(\mathcal{S}_*)$ is the **initial presentable stable $\infty$-category**: $\operatorname{Fun}^L(\operatorname{Sp}, \mathcal{D}) \simeq \mathcal{D}$.
+
+3. The **adjunction** $\Sigma^\infty \dashv \Omega^\infty$ mediates between unstable and stable phenomena.
+
+4. Key applications: tangent categories and the **cotangent complex**, Goodwillie calculus, motivic stabilization.
+
+5. Stabilization is **idempotent**: applying it to a stable $\infty$-category returns the same category.
+</Remark>

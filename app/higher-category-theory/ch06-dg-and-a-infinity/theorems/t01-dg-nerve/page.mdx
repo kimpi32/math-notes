@@ -1,0 +1,216 @@
+export const metadata = {
+  title: 'DG Nerve Theorem — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "6. DG 범주와 A∞ 범주", href: "/higher-category-theory/ch06-dg-and-a-infinity" },
+  { label: "Theorem — DG Nerve Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# DG Nerve Theorem
+
+The DG nerve theorem establishes an equivalence between DG categories and a class of $\infty$-categories, providing the precise bridge between the algebraic world of differential graded categories and the homotopy-theoretic world of $\infty$-categories. Via this construction, the rich theory of DG categories (Keller, Drinfeld, Toen) and the $\infty$-categorical framework (Lurie) become interchangeable for many purposes.
+
+---
+
+## Statement
+
+<Theorem title="DG nerve equivalence" number="6.1">
+Let $k$ be a commutative ring. The **DG nerve** functor
+
+$$N_{\mathrm{dg}}: \mathbf{dgCat}_k \to \operatorname{Cat}_\infty$$
+
+from the category of small DG categories over $k$ to $\infty$-categories, defined by Lurie, has the following properties:
+
+1. $N_{\mathrm{dg}}$ sends quasi-equivalences to categorical equivalences.
+2. The induced functor on $\infty$-categories of DG categories (localized at quasi-equivalences) is fully faithful.
+3. The essential image consists of $k$-linear $\infty$-categories (those enriched in $D(k)$-modules).
+
+When $k$ is a field of characteristic $0$, this induces an equivalence of $\infty$-categories:
+
+$$\mathbf{dgCat}_k[W_{\mathrm{qe}}^{-1}] \simeq \operatorname{Cat}_\infty^{k\text{-lin}}$$
+
+between DG categories up to quasi-equivalence and $k$-linear $\infty$-categories.
+</Theorem>
+
+<Theorem title="Stable DG nerve" number="6.2">
+If $\mathcal{A}$ is a pretriangulated DG category, then $N_{\mathrm{dg}}(\mathcal{A})$ is a stable $\infty$-category, and
+
+$$\operatorname{h}(N_{\mathrm{dg}}(\mathcal{A})) \simeq H^0(\mathcal{A})$$
+
+as triangulated categories. The triangulated structure on $H^0(\mathcal{A})$ (shift = DG shift, exact triangles = cone sequences) matches the triangulated structure on the homotopy category of the stable $\infty$-category $N_{\mathrm{dg}}(\mathcal{A})$ (shift = suspension, exact triangles = cofiber sequences).
+</Theorem>
+
+<Theorem title="Morita equivalence" number="6.3">
+The DG nerve preserves Morita equivalences: two DG categories $\mathcal{A}$ and $\mathcal{B}$ are Morita equivalent (i.e., $D(\mathcal{A}) \simeq D(\mathcal{B})$ as triangulated categories) if and only if $\operatorname{Ind}(N_{\mathrm{dg}}(\mathcal{A})) \simeq \operatorname{Ind}(N_{\mathrm{dg}}(\mathcal{B}))$ as presentable stable $\infty$-categories.
+
+This gives an equivalence between Morita theory of DG categories and Morita theory of stable $\infty$-categories (in the $k$-linear setting).
+</Theorem>
+
+---
+
+## Construction
+
+<Proof title="Construction of the DG nerve">
+The DG nerve $N_{\mathrm{dg}}(\mathcal{A})$ of a DG category $\mathcal{A}$ is a simplicial set whose $n$-simplices encode chains of morphisms with higher homotopies.
+
+**Step 1 (Dold--Kan correspondence).** For each pair $X, Y \in \mathcal{A}$, apply the Dold--Kan functor $\Gamma: \mathbf{Ch}_{\leq 0}(k) \to s\mathbf{Mod}_k$ to the truncation $\tau_{\leq 0}\operatorname{Hom}_{\mathcal{A}}(X, Y)$ to obtain a simplicial $k$-module, hence a simplicial set $\operatorname{Map}(X, Y)$.
+
+**Step 2 (Simplicial enrichment).** The DG category $\mathcal{A}$ gives rise to a simplicial category $\mathcal{A}^{\Delta}$ with the same objects and mapping spaces $\operatorname{Map}_{\mathcal{A}^{\Delta}}(X, Y) = \Gamma(\tau_{\leq 0}\operatorname{Hom}_{\mathcal{A}}(X, Y))$.
+
+**Step 3 (Simplicial nerve).** Apply the simplicial nerve (homotopy coherent nerve) $N^{\mathrm{hc}}$ to obtain a quasi-category:
+
+$$N_{\mathrm{dg}}(\mathcal{A}) = N^{\mathrm{hc}}(\mathcal{A}^{\Delta})$$
+
+This is the DG nerve. Its $n$-simplices consist of objects $X_0, \ldots, X_n$ together with compatible chains of morphisms and homotopies.
+
+**Step 4 (Independence of truncation).** The truncation $\tau_{\leq 0}$ is necessary for the Dold--Kan correspondence. For DG categories concentrated in non-positive degrees (as is common in algebraic geometry), no truncation is needed. The full information of positive-degree Hom groups is recovered from the stable structure via $\pi_n(\operatorname{map}(X, Y)) \cong H^{-n}(\operatorname{Hom}(X, Y))$.
+</Proof>
+
+---
+
+## Key Examples
+
+<Example id="dgnerve-chain-complexes" title="DG nerve of chain complexes">
+For the DG category $\mathbf{C}_{\mathrm{dg}}(R)$ of chain complexes of $R$-modules:
+
+$$N_{\mathrm{dg}}(\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(R)) \simeq D(R)$$
+
+where $\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(R)$ is the full DG subcategory of h-injective complexes, and $D(R)$ is the derived $\infty$-category. The mapping spaces satisfy:
+
+$$\pi_n(\operatorname{Map}_{D(R)}(C, D)) \cong H^{-n}(\operatorname{Hom}_{\mathrm{dg}}(C, D)) \cong \operatorname{Ext}^{-n}_R(C, D)$$
+</Example>
+
+<Example id="dgnerve-dg-algebra" title="DG nerve of a DG algebra">
+For a DG algebra $A$ (viewed as a one-object DG category), the DG nerve $N_{\mathrm{dg}}(A)$ is a pointed $\infty$-category with one object $*$ and endomorphism spectrum:
+
+$$\operatorname{map}(*, *) \simeq |A|$$
+
+where $|A|$ denotes the spectrum associated to the chain complex underlying $A$. The DG nerve of the category of DG modules gives:
+
+$$N_{\mathrm{dg}}(\operatorname{Mod}_A^{\mathrm{dg, h-proj}}) \simeq \operatorname{Mod}_A^{\infty}$$
+
+the $\infty$-category of $A$-modules (in the derived sense).
+</Example>
+
+<Example id="dgnerve-coh-scheme" title="DG nerve for coherent sheaves">
+For a smooth projective variety $X$ over a field $k$, the DG category of coherent sheaves $\operatorname{Coh}_{\mathrm{dg}}(X)$ maps under the DG nerve to:
+
+$$N_{\mathrm{dg}}(\operatorname{Coh}_{\mathrm{dg}}(X)) \simeq D^b(\operatorname{Coh}(X))^{\infty}$$
+
+the stable $\infty$-category enhancing $D^b(\operatorname{Coh}(X))$. This allows translation between DG-level results (Keller, Orlov) and $\infty$-categorical results (Lurie, Gaitsgory).
+</Example>
+
+<Example id="dgnerve-endomorphism" title="Recovering the DG category from the nerve">
+Given a small stable $\infty$-category $\mathcal{C}$ (linear over $k$), one can extract a DG category $\mathcal{C}^{\mathrm{dg}}$ by taking the mapping spectra and using the inverse Dold--Kan correspondence to produce chain complexes. This gives an inverse to $N_{\mathrm{dg}}$:
+
+$$\mathcal{C}^{\mathrm{dg}} \text{ with } \operatorname{Hom}_{\mathcal{C}^{\mathrm{dg}}}(X, Y) = \operatorname{DK}^{-1}(\operatorname{map}_{\mathcal{C}}(X, Y))$$
+
+The roundtrip $\mathcal{A} \mapsto N_{\mathrm{dg}}(\mathcal{A}) \mapsto N_{\mathrm{dg}}(\mathcal{A})^{\mathrm{dg}}$ recovers $\mathcal{A}$ up to quasi-equivalence.
+</Example>
+
+<Example id="dgnerve-mapping-spaces" title="Mapping spaces via the DG nerve">
+For objects $X, Y$ in a DG category $\mathcal{A}$, the mapping space in $N_{\mathrm{dg}}(\mathcal{A})$ is:
+
+$$\operatorname{Map}_{N_{\mathrm{dg}}(\mathcal{A})}(X, Y) \simeq \Gamma(\tau_{\leq 0}\operatorname{Hom}_{\mathcal{A}}(X, Y))$$
+
+In particular:
+- $\pi_0(\operatorname{Map}(X, Y)) = H^0(\operatorname{Hom}(X, Y))$ (morphisms in the homotopy category).
+- $\pi_n(\operatorname{Map}(X, Y)) = H^{-n}(\operatorname{Hom}(X, Y))$ for $n > 0$ (higher homotopies).
+
+The non-positive cohomology groups of the Hom complex become the homotopy groups of the mapping space.
+</Example>
+
+<Example id="dgnerve-functors" title="DG functors become infinity-functors">
+A DG functor $F: \mathcal{A} \to \mathcal{B}$ induces an $\infty$-functor $N_{\mathrm{dg}}(F): N_{\mathrm{dg}}(\mathcal{A}) \to N_{\mathrm{dg}}(\mathcal{B})$. Key properties:
+
+- If $F$ is a quasi-equivalence, then $N_{\mathrm{dg}}(F)$ is a categorical equivalence.
+- If $F$ preserves cones (exact DG functor between pretriangulated categories), then $N_{\mathrm{dg}}(F)$ is an exact functor of stable $\infty$-categories.
+- DG natural transformations map to $\infty$-natural transformations.
+</Example>
+
+<Example id="dgnerve-hochschild" title="Hochschild cohomology via the DG nerve">
+For a DG category $\mathcal{A}$, the Hochschild cohomology can be computed either at the DG level or the $\infty$-categorical level:
+
+$$HH^*(\mathcal{A}) = H^*(\operatorname{RHom}_{\mathcal{A}^{\mathrm{op}} \otimes \mathcal{A}}(\mathcal{A}, \mathcal{A})) \cong \pi_{-*}(\operatorname{map}_{\operatorname{Fun}(N_{\mathrm{dg}}(\mathcal{A}), N_{\mathrm{dg}}(\mathcal{A}))}(\operatorname{id}, \operatorname{id}))$$
+
+The DG nerve preserves the Hochschild complex, so computations can be performed in whichever framework is more convenient.
+</Example>
+
+---
+
+## Comparison Results
+
+<Example id="dgnerve-vs-simplicial" title="DG categories vs. simplicial categories">
+Over $\mathbb{Q}$ (or any field of characteristic $0$), the Dold--Kan correspondence gives an equivalence:
+
+$$\mathbf{Ch}_{\leq 0}(\mathbb{Q}) \simeq s\mathbf{Mod}_{\mathbb{Q}}$$
+
+between non-positively graded chain complexes and simplicial $\mathbb{Q}$-modules. This extends to an equivalence between DG categories and simplicial categories (over $\mathbb{Q}$), which then maps to $\infty$-categories via the homotopy coherent nerve.
+
+In positive characteristic, the Dold--Kan correspondence still exists but the resulting simplicial objects carry less information, and the equivalence between DG categories and $\infty$-categories is more subtle.
+</Example>
+
+<Example id="dgnerve-model-structures" title="Model structures on DG categories">
+Tabuada and Toen endowed $\mathbf{dgCat}_k$ with model structures:
+
+1. **Dwyer--Kan model structure**: weak equivalences are quasi-equivalences. Fibrant objects are DG categories with "path objects" for Hom complexes.
+2. **Morita model structure**: weak equivalences are Morita equivalences. Fibrant objects are idempotent-complete pretriangulated DG categories.
+
+The DG nerve sends the Dwyer--Kan model structure to the Joyal model structure on simplicial sets. The Morita model structure corresponds to the $\infty$-category of idempotent-complete stable $\infty$-categories.
+</Example>
+
+<Example id="dgnerve-infinity-functors" title="Functor categories">
+For DG categories $\mathcal{A}$ and $\mathcal{B}$, the DG category of DG functors $\operatorname{Fun}_{\mathrm{dg}}(\mathcal{A}, \mathcal{B})$ maps under the nerve to:
+
+$$N_{\mathrm{dg}}(\operatorname{Fun}_{\mathrm{dg}}(\mathcal{A}, \mathcal{B})) \simeq \operatorname{Fun}(N_{\mathrm{dg}}(\mathcal{A}), N_{\mathrm{dg}}(\mathcal{B}))$$
+
+the $\infty$-category of functors. This compatibility with internal Hom is essential for translating categorical constructions between the two frameworks.
+</Example>
+
+<Example id="dgnerve-toen-derived" title="Toen's derived category of DG categories">
+Toen constructed the "derived category" (actually $\infty$-category) of DG categories:
+
+$$\operatorname{Hqe} = \mathbf{dgCat}_k[W_{\mathrm{qe}}^{-1}]$$
+
+This $\infty$-category has a symmetric monoidal structure (derived tensor product) and an internal Hom (given by DG bimodules). The DG nerve identifies $\operatorname{Hqe}$ with the $\infty$-category of $k$-linear $\infty$-categories.
+</Example>
+
+<Example id="dgnerve-six-operations" title="Six operations via DG nerve">
+For a morphism $f: X \to Y$ of schemes, the six-functor formalism $(f^*, f_*, f^!, f_!, \otimes, \underline{\operatorname{Hom}})$ can be constructed either:
+
+1. At the DG level: using DG enhancements of derived categories and DG bimodules.
+2. At the $\infty$-categorical level: using stable $\infty$-categories and $\infty$-functors.
+
+The DG nerve theorem ensures these two approaches give equivalent results. In practice, DG methods are often more explicit (using resolutions), while $\infty$-categorical methods are more conceptual (using universal properties).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The DG nerve theorem bridges differential graded and $\infty$-categorical worlds:
+
+1. The DG nerve $N_{\mathrm{dg}}$ sends DG categories to $\infty$-categories, preserving quasi-equivalences.
+
+2. Over characteristic $0$ fields, it gives an **equivalence** between DG categories (up to quasi-equivalence) and $k$-linear $\infty$-categories.
+
+3. Pretriangulated DG categories map to **stable $\infty$-categories**, with matching triangulated homotopy categories.
+
+4. **Mapping spaces** in the nerve encode the cohomology of Hom complexes: $\pi_n(\operatorname{Map}(X, Y)) \cong H^{-n}(\operatorname{Hom}(X, Y))$.
+
+5. The DG nerve is compatible with **functors**, **Hochschild cohomology**, **Morita equivalence**, and the **six-functor formalism**.
+</Remark>

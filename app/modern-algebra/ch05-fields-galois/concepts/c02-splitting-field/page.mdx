@@ -1,0 +1,218 @@
+export const metadata = {
+  title: 'Splitting Fields and Algebraic Closures — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "5. 체와 갈루아 이론", href: "/modern-algebra/ch05-fields-galois" },
+  { label: "Concept — Splitting Fields and Algebraic Closures" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Splitting Fields and Algebraic Closures
+
+A polynomial may be irreducible over a given field, but after extending the field sufficiently, every polynomial splits into linear factors. The **splitting field** is the smallest such extension, and the **algebraic closure** is the universal extension where every polynomial splits.
+
+---
+
+## Splitting fields
+
+<Definition title="Splits completely" number="5.8">
+Let $f(x) \in F[x]$ be a polynomial of degree $n$. We say $f$ **splits completely** (or **splits**) over a field extension $E/F$ if
+
+$$f(x) = c(x - \alpha_1)(x - \alpha_2) \cdots (x - \alpha_n)$$
+
+for some $\alpha_1, \ldots, \alpha_n \in E$ and $c \in F$.
+</Definition>
+
+<Definition title="Splitting field" number="5.9">
+A **splitting field** of $f(x) \in F[x]$ over $F$ is an extension $E/F$ such that:
+1. $f$ splits completely over $E$, and
+2. $E = F(\alpha_1, \ldots, \alpha_n)$ where $\alpha_1, \ldots, \alpha_n$ are the roots of $f$ in $E$.
+
+Condition (2) says that $E$ is the *smallest* extension over which $f$ splits.
+</Definition>
+
+<Example id="split-x2+1" title="Splitting field of x^2 + 1 over Q">
+The polynomial $x^2 + 1 \in \mathbb{Q}[x]$ does not split over $\mathbb{Q}$. Its splitting field is $\mathbb{Q}(i)$ where $i^2 = -1$:
+
+$$x^2 + 1 = (x - i)(x + i) \quad \text{in } \mathbb{Q}(i)[x].$$
+
+We have $[\mathbb{Q}(i) : \mathbb{Q}] = 2$.
+</Example>
+
+<Example id="split-x2-2" title="Splitting field of x^2 - 2 over Q">
+$x^2 - 2 = (x - \sqrt{2})(x + \sqrt{2})$, so the splitting field is $\mathbb{Q}(\sqrt{2})$ with $[\mathbb{Q}(\sqrt{2}) : \mathbb{Q}] = 2$.
+</Example>
+
+<Example id="split-x3-2" title="Splitting field of x^3 - 2 over Q">
+The roots of $x^3 - 2$ are $\sqrt[3]{2}$, $\omega\sqrt[3]{2}$, $\omega^2\sqrt[3]{2}$ where $\omega = e^{2\pi i/3}$. The splitting field is
+
+$$E = \mathbb{Q}(\sqrt[3]{2}, \omega).$$
+
+We have $[\mathbb{Q}(\sqrt[3]{2}) : \mathbb{Q}] = 3$ and $[\mathbb{Q}(\omega) : \mathbb{Q}] = 2$. Since $\gcd(3,2) = 1$, the tower law gives $[E : \mathbb{Q}] = 6$.
+
+Note: $\mathbb{Q}(\sqrt[3]{2})$ alone is **not** a splitting field of $x^3 - 2$ because $\omega \notin \mathbb{R} \supseteq \mathbb{Q}(\sqrt[3]{2})$.
+</Example>
+
+<Example id="split-x4-2" title="Splitting field of x^4 - 2 over Q">
+The roots of $x^4 - 2$ are $\sqrt[4]{2}, i\sqrt[4]{2}, -\sqrt[4]{2}, -i\sqrt[4]{2}$. The splitting field is $\mathbb{Q}(\sqrt[4]{2}, i)$. By the tower law:
+- $[\mathbb{Q}(\sqrt[4]{2}) : \mathbb{Q}] = 4$
+- $[\mathbb{Q}(\sqrt[4]{2}, i) : \mathbb{Q}(\sqrt[4]{2})] = 2$ (since $i \notin \mathbb{R}$)
+- $[\mathbb{Q}(\sqrt[4]{2}, i) : \mathbb{Q}] = 8$
+</Example>
+
+<Example id="split-over-fp" title="Splitting field over a finite field">
+Consider $f(x) = x^2 + x + 1 \in \mathbb{F}_2[x]$. This is irreducible over $\mathbb{F}_2$ (check: $f(0) = 1$, $f(1) = 1$). Its splitting field is $\mathbb{F}_4 = \mathbb{F}_2[x]/(x^2+x+1)$, a field with $4$ elements.
+</Example>
+
+---
+
+## Existence and uniqueness
+
+<Theorem title="Existence of splitting fields" number="5.6">
+For every nonconstant $f(x) \in F[x]$, a splitting field of $f$ over $F$ exists.
+</Theorem>
+
+<Proof>
+By induction on $\deg f$. If $\deg f = 1$, then $F$ itself is the splitting field. If $\deg f > 1$, pick an irreducible factor $p(x)$ of $f$. Then $K = F[x]/(p(x))$ is a field extension of $F$ in which $p$ has a root $\alpha$ (the image of $x$). In $K[x]$, write $f(x) = (x - \alpha) g(x)$. By induction, $g(x)$ has a splitting field $E$ over $K$. Then $E$ is a splitting field of $f$ over $F$.
+</Proof>
+
+<Theorem title="Uniqueness of splitting fields (up to isomorphism)" number="5.7">
+If $E_1$ and $E_2$ are both splitting fields of $f(x) \in F[x]$ over $F$, then there exists an isomorphism $\sigma: E_1 \to E_2$ that fixes $F$ pointwise.
+</Theorem>
+
+<Remark title="Isomorphism, not equality">
+The uniqueness is up to isomorphism, not canonical equality. In general, the isomorphism $\sigma$ is **not** unique --- the number of such isomorphisms equals $|\operatorname{Aut}(E/F)|$, which is related to the Galois group.
+</Remark>
+
+<Example id="two-embeddings" title="Two splitting fields of x^2 - 2">
+We can construct the splitting field of $x^2 - 2$ as either $\mathbb{Q}[x]/(x^2-2)$ or as the subfield $\mathbb{Q}(\sqrt{2}) \subset \mathbb{R}$. These are isomorphic via the map sending $x \bmod (x^2-2)$ to $\sqrt{2}$.
+
+There are two isomorphisms: one sends $\sqrt{2} \mapsto \sqrt{2}$ (identity) and the other sends $\sqrt{2} \mapsto -\sqrt{2}$.
+</Example>
+
+---
+
+## Algebraic closures
+
+<Definition title="Algebraically closed field" number="5.10">
+A field $F$ is **algebraically closed** if every nonconstant polynomial in $F[x]$ has a root in $F$. Equivalently, every nonconstant polynomial in $F[x]$ splits completely over $F$. Equivalently, the only irreducible polynomials in $F[x]$ are the linear ones.
+</Definition>
+
+<Definition title="Algebraic closure" number="5.11">
+An **algebraic closure** of a field $F$ is a field $\overline{F}$ such that:
+1. $\overline{F}$ is algebraically closed, and
+2. $\overline{F}/F$ is algebraic.
+</Definition>
+
+<Theorem title="Existence of algebraic closures" number="5.8">
+Every field $F$ has an algebraic closure $\overline{F}$. Moreover, the algebraic closure is unique up to (non-canonical) isomorphism fixing $F$.
+</Theorem>
+
+<Remark title="Zorn's lemma">
+The existence proof uses Zorn's lemma (or equivalently, the axiom of choice). Steinitz (1910) first proved this fundamental result. The proof constructs a maximal algebraic extension using a transfinite process.
+</Remark>
+
+<Example id="c-is-closure-r" title="C is the algebraic closure of R">
+$\mathbb{C}$ is the algebraic closure of $\mathbb{R}$. This is the content of the Fundamental Theorem of Algebra: every nonconstant polynomial in $\mathbb{R}[x]$ (or $\mathbb{C}[x]$) has a root in $\mathbb{C}$. Moreover, $\mathbb{C}/\mathbb{R}$ is algebraic with $[\mathbb{C}:\mathbb{R}] = 2$.
+
+This is remarkable: the algebraic closure of $\mathbb{R}$ is a *finite* extension! This is very unusual.
+</Example>
+
+<Example id="qbar" title="Algebraic closure of Q">
+$\overline{\mathbb{Q}} = \{\alpha \in \mathbb{C} \mid \alpha \text{ is algebraic over } \mathbb{Q}\}$. This is a countable, algebraically closed field. It is a proper subfield of $\mathbb{C}$: the transcendental numbers $\pi, e, \ldots$ are missing.
+</Example>
+
+<Example id="closure-fp" title="Algebraic closure of F_p">
+The algebraic closure of $\mathbb{F}_p$ is
+
+$$\overline{\mathbb{F}_p} = \bigcup_{n=1}^{\infty} \mathbb{F}_{p^n}.$$
+
+It is countably infinite. Each $\mathbb{F}_{p^n}$ embeds into $\mathbb{F}_{p^m}$ whenever $n \mid m$, and the union (direct limit) over all $n$ is algebraically closed.
+</Example>
+
+<Example id="closure-not-complete" title="Algebraic closure vs. completion">
+$\overline{\mathbb{Q}}$ is algebraically closed but not complete (as a metric space with the absolute value from $\mathbb{C}$). Conversely, $\mathbb{R}$ is complete but not algebraically closed. The field $\mathbb{C}$ is both.
+
+For $p$-adic fields: $\overline{\mathbb{Q}_p}$ is algebraically closed but not complete. Its completion $\mathbb{C}_p$ is both algebraically closed and complete.
+</Example>
+
+---
+
+## Separability
+
+<Definition title="Separable polynomial" number="5.12">
+A polynomial $f(x) \in F[x]$ is **separable** if it has no repeated roots in $\overline{F}$. Equivalently, $\gcd(f, f') = 1$ where $f'$ is the formal derivative.
+</Definition>
+
+<Definition title="Separable extension" number="5.13">
+An algebraic extension $E/F$ is **separable** if every $\alpha \in E$ has a separable minimal polynomial over $F$.
+</Definition>
+
+<Example id="separable-char0" title="Characteristic zero is always separable">
+If $\operatorname{char}(F) = 0$, then every irreducible polynomial $p(x) \in F[x]$ is separable. Indeed, if $p$ has a repeated root, then $\gcd(p, p') \neq 1$, but $\deg p' = \deg p - 1 \ge 0$ and $p$ is irreducible, so $\gcd(p, p') = 1$, a contradiction.
+
+Thus every algebraic extension of a field of characteristic $0$ is separable.
+</Example>
+
+<Example id="inseparable" title="An inseparable polynomial">
+Let $F = \mathbb{F}_p(t)$ (rational functions in $t$ over $\mathbb{F}_p$). Consider $f(x) = x^p - t \in F[x]$. In $\overline{F}$, if $\alpha^p = t$, then $x^p - t = (x - \alpha)^p$ (using the Frobenius in characteristic $p$). So $f$ has a repeated root.
+
+The polynomial $x^p - t$ is in fact irreducible over $\mathbb{F}_p(t)$ (by Eisenstein's criterion applied in $\mathbb{F}_p[t][x]$), so it is an irreducible inseparable polynomial.
+</Example>
+
+<Example id="perfect-field" title="Perfect fields">
+A field $F$ is **perfect** if every irreducible polynomial over $F$ is separable. All fields of characteristic $0$ are perfect. A field $F$ of characteristic $p > 0$ is perfect if and only if the Frobenius map $x \mapsto x^p$ is surjective (i.e., every element has a $p$-th root).
+
+All finite fields are perfect: $\mathbb{F}_{p^n}^* = \mathbb{F}_{p^n} \setminus \{0\}$ is a cyclic group of order $p^n - 1$, and the map $x \mapsto x^p$ is an automorphism.
+</Example>
+
+---
+
+## Normal extensions
+
+<Definition title="Normal extension" number="5.14">
+An algebraic extension $E/F$ is **normal** if for every irreducible $p(x) \in F[x]$, if $p$ has at least one root in $E$, then $p$ splits completely over $E$.
+
+Equivalently, $E$ is a splitting field of a (possibly infinite) family of polynomials in $F[x]$.
+</Definition>
+
+<Example id="normal-splitting" title="Splitting fields are normal">
+The splitting field of any polynomial $f(x) \in F[x]$ is a normal extension of $F$. For instance, $\mathbb{Q}(\sqrt[3]{2}, \omega)/\mathbb{Q}$ is normal because it is the splitting field of $x^3 - 2$.
+</Example>
+
+<Example id="not-normal" title="A non-normal extension">
+$\mathbb{Q}(\sqrt[3]{2})/\mathbb{Q}$ is **not** normal: the polynomial $x^3 - 2$ has one root in $\mathbb{Q}(\sqrt[3]{2})$ but does not split there (the other roots are complex, but $\mathbb{Q}(\sqrt[3]{2}) \subset \mathbb{R}$).
+</Example>
+
+<Example id="all-degree2-normal" title="All degree 2 extensions are normal">
+If $[E:F] = 2$ and $\operatorname{char}(F) \neq 2$, then $E = F(\alpha)$ where $\alpha^2 \in F$. The minimal polynomial $x^2 - a$ of $\alpha$ splits in $E$ as $(x-\alpha)(x+\alpha)$. So $E/F$ is normal.
+</Example>
+
+---
+
+## Summary table
+
+| Polynomial | Splitting field over $\mathbb{Q}$ | Degree |
+|---|---|---|
+| $x^2 + 1$ | $\mathbb{Q}(i)$ | $2$ |
+| $x^2 - 2$ | $\mathbb{Q}(\sqrt{2})$ | $2$ |
+| $x^3 - 2$ | $\mathbb{Q}(\sqrt[3]{2}, \omega)$ | $6$ |
+| $x^4 - 2$ | $\mathbb{Q}(\sqrt[4]{2}, i)$ | $8$ |
+| $x^4 - 1$ | $\mathbb{Q}(i)$ | $2$ |
+| $x^p - 1$ ($p$ prime) | $\mathbb{Q}(\zeta_p)$ | $p-1$ |
+
+<Remark title="Looking ahead">
+An extension that is both normal and separable is called a **Galois extension**. This is precisely the setting where the [Galois group](/modern-algebra/ch05-fields-galois/concepts/c03-galois-group) acts most powerfully, leading to the [Fundamental Theorem of Galois Theory](/modern-algebra/ch05-fields-galois/theorems/t01-fundamental-galois).
+</Remark>

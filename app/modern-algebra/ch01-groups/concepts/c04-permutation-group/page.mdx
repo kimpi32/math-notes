@@ -1,0 +1,234 @@
+export const metadata = {
+  title: 'Symmetric and Alternating Groups — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Concept — Symmetric and Alternating Groups" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Symmetric and Alternating Groups
+
+The **symmetric group** $S_n$ is the group of all permutations of $n$ elements. It is one of the most important groups in algebra: by Cayley's theorem, every group embeds into some symmetric group. The **alternating group** $A_n$, consisting of even permutations, is equally fundamental — for $n \geq 5$, it is a simple group, which has profound consequences for the unsolvability of polynomial equations by radicals.
+
+---
+
+## The Symmetric Group
+
+<Definition title="Symmetric group" number="1.9">
+The **symmetric group** $S_n$ is the group of all bijections $\sigma : \{1, 2, \ldots, n\} \to \{1, 2, \ldots, n\}$, with composition as the group operation.
+
+The order of $S_n$ is $|S_n| = n!$.
+</Definition>
+
+<Example id="s3-elements" title="The symmetric group S_3">
+$S_3$ has $3! = 6$ elements. In cycle notation:
+
+$$S_3 = \{e, (1\;2), (1\;3), (2\;3), (1\;2\;3), (1\;3\;2)\}$$
+
+The multiplication table (composition, read right to left):
+
+| $\circ$ | $e$ | $(1\;2)$ | $(1\;3)$ | $(2\;3)$ | $(1\;2\;3)$ | $(1\;3\;2)$ |
+|---|---|---|---|---|---|---|
+| $e$ | $e$ | $(1\;2)$ | $(1\;3)$ | $(2\;3)$ | $(1\;2\;3)$ | $(1\;3\;2)$ |
+| $(1\;2)$ | $(1\;2)$ | $e$ | $(1\;2\;3)$ | $(1\;3\;2)$ | $(1\;3)$ | $(2\;3)$ |
+| $(1\;3)$ | $(1\;3)$ | $(1\;3\;2)$ | $e$ | $(1\;2\;3)$ | $(2\;3)$ | $(1\;2)$ |
+| $(2\;3)$ | $(2\;3)$ | $(1\;2\;3)$ | $(1\;3\;2)$ | $e$ | $(1\;2)$ | $(1\;3)$ |
+
+$S_3$ is the smallest non-abelian group: $(1\;2)(1\;3) = (1\;2\;3)$ but $(1\;3)(1\;2) = (1\;3\;2)$.
+</Example>
+
+---
+
+## Cycle Notation
+
+<Definition title="Cycle" number="1.10">
+A **$k$-cycle** (or cycle of length $k$) is a permutation $\sigma \in S_n$ that cyclically permutes $k$ elements and fixes the rest. We write:
+
+$$(a_1 \; a_2 \; \cdots \; a_k)$$
+
+meaning $\sigma(a_1) = a_2$, $\sigma(a_2) = a_3$, $\ldots$, $\sigma(a_k) = a_1$.
+
+A 2-cycle $(a\;b)$ is called a **transposition**.
+</Definition>
+
+<Example id="cycle-notation" title="Reading cycle notation">
+In $S_5$, the permutation $(1\;3\;5)(2\;4)$ acts as:
+
+$$1 \mapsto 3 \mapsto 5 \mapsto 1, \quad 2 \mapsto 4 \mapsto 2$$
+
+In two-line notation: the top row is $1, 2, 3, 4, 5$ and the bottom row (images) is $3, 4, 5, 2, 1$.
+
+The order of this permutation is $\mathrm{lcm}(3, 2) = 6$.
+</Example>
+
+<Theorem title="Disjoint cycle decomposition" number="1.16">
+Every permutation $\sigma \in S_n$ can be written as a product of **disjoint cycles**, and this decomposition is unique up to the order of the cycles and cyclic rotation within each cycle.
+</Theorem>
+
+<Example id="cycle-decomposition" title="Finding the cycle decomposition">
+Consider $\sigma \in S_7$ defined by $\sigma(1) = 3$, $\sigma(2) = 5$, $\sigma(3) = 1$, $\sigma(4) = 7$, $\sigma(5) = 2$, $\sigma(6) = 6$, $\sigma(7) = 4$.
+
+Trace the orbits: $1 \to 3 \to 1$ (cycle $(1\;3)$), $2 \to 5 \to 2$ (cycle $(2\;5)$), $4 \to 7 \to 4$ (cycle $(4\;7)$), $6 \to 6$ (fixed).
+
+So $\sigma = (1\;3)(2\;5)(4\;7)$.
+</Example>
+
+<Theorem title="Order of a permutation" number="1.17">
+The order of a permutation is the **least common multiple** of the lengths of its disjoint cycles.
+</Theorem>
+
+<Example id="order-permutation" title="Computing orders of permutations">
+In $S_8$:
+
+- $(1\;2\;3)(4\;5)$: order $= \mathrm{lcm}(3, 2) = 6$
+- $(1\;2\;3\;4\;5\;6)$: order $= 6$
+- $(1\;2)(3\;4)(5\;6\;7)$: order $= \mathrm{lcm}(2, 2, 3) = 6$
+- $(1\;2\;3\;4)(5\;6\;7)$: order $= \mathrm{lcm}(4, 3) = 12$
+</Example>
+
+---
+
+## Transpositions and Generation
+
+<Theorem title="Generation by transpositions" number="1.18">
+Every permutation in $S_n$ can be written as a product of transpositions.
+</Theorem>
+
+<Proof>
+It suffices to show that every $k$-cycle is a product of transpositions:
+
+$$(a_1 \; a_2 \; \cdots \; a_k) = (a_1 \; a_k)(a_1 \; a_{k-1}) \cdots (a_1 \; a_2)$$
+
+Since every permutation is a product of disjoint cycles, the result follows.
+</Proof>
+
+<Example id="cycle-as-transpositions" title="Decomposing cycles into transpositions">
+$(1\;2\;3\;4) = (1\;4)(1\;3)(1\;2)$
+
+Verify: $(1\;2)$ sends $1 \to 2$. Then $(1\;3)$ fixes 2. Then $(1\;4)$ fixes 2. So $1 \mapsto 2$. Check: $(1\;4)(1\;3)(1\;2)$ sends $2 \to 1 \to 3 \to 3$, i.e., $2 \mapsto 3$. Sends $3 \to 3 \to 1 \to 4$, i.e., $3 \mapsto 4$. Sends $4 \to 4 \to 4 \to 1$, i.e., $4 \mapsto 1$. This is indeed $(1\;2\;3\;4)$.
+</Example>
+
+---
+
+## The Sign of a Permutation
+
+<Definition title="Even and odd permutations" number="1.11">
+A permutation $\sigma \in S_n$ is called **even** if it can be written as a product of an even number of transpositions, and **odd** if it requires an odd number.
+
+The **sign** (or **signature**) of $\sigma$ is:
+
+$$\mathrm{sgn}(\sigma) = (-1)^k$$
+
+where $k$ is the number of transpositions in any decomposition of $\sigma$.
+</Definition>
+
+<Theorem title="Well-definedness of sign" number="1.19">
+The sign of a permutation is well-defined: if $\sigma = \tau_1 \cdots \tau_k = \tau'_1 \cdots \tau'_m$ (both products of transpositions), then $k$ and $m$ have the same parity.
+</Theorem>
+
+<Proof>
+Consider the polynomial $\Delta = \prod_{1 \leq i < j \leq n} (x_i - x_j)$. A permutation $\sigma$ acts on $\Delta$ by permuting variables. One verifies that each transposition changes the sign of $\Delta$, so $\sigma(\Delta) = (-1)^k \Delta$. Since $\sigma(\Delta)$ is uniquely determined, $(-1)^k$ is independent of the decomposition.
+</Proof>
+
+<Example id="sign-examples" title="Computing signs">
+- $(1\;2)$: one transposition, so $\mathrm{sgn} = -1$ (odd).
+- $(1\;2\;3) = (1\;3)(1\;2)$: two transpositions, so $\mathrm{sgn} = +1$ (even).
+- $(1\;2\;3\;4) = (1\;4)(1\;3)(1\;2)$: three transpositions, so $\mathrm{sgn} = -1$ (odd).
+
+**General rule:** A $k$-cycle has sign $(-1)^{k-1}$. So odd-length cycles are even permutations and even-length cycles are odd permutations.
+</Example>
+
+<Theorem title="Sign is a homomorphism" number="1.20">
+The map $\mathrm{sgn} : S_n \to \{+1, -1\}$ is a group homomorphism:
+
+$$\mathrm{sgn}(\sigma\tau) = \mathrm{sgn}(\sigma) \cdot \mathrm{sgn}(\tau)$$
+</Theorem>
+
+<Example id="sign-product" title="Sign of a product of disjoint cycles">
+For $\sigma = (1\;2\;3)(4\;5)(6\;7\;8\;9) \in S_9$:
+
+$$\mathrm{sgn}(\sigma) = (-1)^{3-1} \cdot (-1)^{2-1} \cdot (-1)^{4-1} = (+1)(-1)(-1) = +1$$
+
+So $\sigma$ is an even permutation.
+</Example>
+
+---
+
+## The Alternating Group
+
+<Definition title="Alternating group" number="1.12">
+The **alternating group** $A_n$ is the kernel of the sign homomorphism:
+
+$$A_n = \ker(\mathrm{sgn}) = \{\sigma \in S_n : \mathrm{sgn}(\sigma) = +1\}$$
+
+It consists of all **even permutations** in $S_n$. Since $\mathrm{sgn}$ maps onto $\{+1, -1\}$:
+
+$$|A_n| = \frac{n!}{2}$$
+</Definition>
+
+<Example id="a3" title="The alternating group A_3">
+$A_3 = \{e, (1\;2\;3), (1\;3\;2)\}$, a group of order 3. This is cyclic: $A_3 \cong \mathbb{Z}/3\mathbb{Z}$.
+</Example>
+
+<Example id="a4" title="The alternating group A_4">
+$A_4$ has $4!/2 = 12$ elements:
+
+- The identity $e$
+- Eight 3-cycles: $(1\;2\;3)$, $(1\;3\;2)$, $(1\;2\;4)$, $(1\;4\;2)$, $(1\;3\;4)$, $(1\;4\;3)$, $(2\;3\;4)$, $(2\;4\;3)$
+- Three products of disjoint transpositions: $(1\;2)(3\;4)$, $(1\;3)(2\;4)$, $(1\;4)(2\;3)$
+
+$A_4$ is notable for being the smallest group whose order is divisible by a prime $p$ (here $p = 2$ with $4 \mid 12$, or $p = 3$ with $3 \mid 12$) but which does not have a subgroup of order $p^2 = 4$... wait, it does have the Klein four-group $V_4 = \{e, (1\;2)(3\;4), (1\;3)(2\;4), (1\;4)(2\;3)\}$ as a subgroup. However, $A_4$ has **no subgroup of order 6**, showing that the converse of Lagrange's theorem is false.
+</Example>
+
+<Example id="a5-simple" title="A_5 is simple">
+$A_5$ has order $60$. It is the smallest **non-abelian simple group** — it has no normal subgroups except $\{e\}$ and $A_5$ itself.
+
+The simplicity of $A_5$ is the algebraic reason why there is **no formula** (using radicals) for the roots of a general polynomial of degree $\geq 5$ (the Abel-Ruffini theorem / Galois theory).
+</Example>
+
+---
+
+## Conjugacy in $S_n$
+
+<Theorem title="Conjugacy classes in S_n" number="1.21">
+Two permutations in $S_n$ are conjugate if and only if they have the **same cycle type** (the same multiset of cycle lengths).
+</Theorem>
+
+<Example id="conjugacy-s4" title="Conjugacy classes of S_4">
+The cycle types for $S_4$ are the partitions of 4:
+
+| Cycle type | Example | Number of elements | Even/Odd |
+|---|---|---|---|
+| $(1, 1, 1, 1)$ | $e$ | 1 | Even |
+| $(2, 1, 1)$ | $(1\;2)$ | 6 | Odd |
+| $(2, 2)$ | $(1\;2)(3\;4)$ | 3 | Even |
+| $(3, 1)$ | $(1\;2\;3)$ | 8 | Even |
+| $(4)$ | $(1\;2\;3\;4)$ | 6 | Odd |
+
+Total: $1 + 6 + 3 + 8 + 6 = 24 = 4!$. The number of elements with cycle type $(2, 1, 1)$ is $\binom{4}{2} = 6$ (choosing which 2 elements to swap).
+</Example>
+
+<Example id="count-cycles" title="Counting permutations by cycle type">
+How many 3-cycles are in $S_5$? Choose 3 elements from 5: $\binom{5}{3} = 10$. Each set of 3 elements gives $(3-1)! = 2$ distinct 3-cycles. Total: $10 \cdot 2 = 20$.
+
+How many permutations of cycle type $(3, 2)$ in $S_5$? Choose 3 for the 3-cycle: $\binom{5}{3} = 10$. Arrange as a 3-cycle: $2! = 2$ ways. The remaining 2 form a transposition: $1$ way. Total: $10 \cdot 2 \cdot 1 = 20$.
+</Example>
+
+---
+
+## Summary
+
+The symmetric group $S_n$ and its subgroup $A_n$ are cornerstones of algebra. Every permutation decomposes uniquely into disjoint cycles, and the sign homomorphism $\mathrm{sgn} : S_n \to \{\pm 1\}$ distinguishes even from odd permutations. The alternating group $A_n$ is simple for $n \geq 5$, a fact that lies at the heart of Galois theory and the insolvability of the quintic.

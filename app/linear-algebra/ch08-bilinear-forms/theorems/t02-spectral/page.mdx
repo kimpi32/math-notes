@@ -1,0 +1,222 @@
+export const metadata = {
+  title: 'Spectral Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "8. 쌍선형형식", href: "/linear-algebra/ch08-bilinear-forms" },
+  { label: "Theorem — Spectral Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Spectral Theorem
+
+The Spectral Theorem states that every real symmetric (or complex Hermitian) matrix is orthogonally (unitarily) diagonalizable. The eigenvectors form an orthonormal basis, and the eigenvalues are all real. This is one of the most important theorems in linear algebra, with applications ranging from quantum mechanics to principal component analysis.
+
+---
+
+## Statement
+
+<Theorem title="Spectral Theorem (real case)" number="8.5">
+Let $A \in M_{n \times n}(\mathbb{R})$ be a symmetric matrix ($A^T = A$). Then:
+
+1. All eigenvalues of $A$ are real.
+2. Eigenvectors corresponding to distinct eigenvalues are orthogonal.
+3. $A$ is **orthogonally diagonalizable**: there exists an orthogonal matrix $Q$ ($Q^TQ = I$) such that $Q^TAQ = \Lambda = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$.
+
+Equivalently, $A = Q\Lambda Q^T = \sum_{i=1}^n \lambda_i q_i q_i^T$, where $q_i$ are the orthonormal eigenvectors.
+</Theorem>
+
+<Theorem title="Spectral Theorem (complex case)" number="8.6">
+Let $A \in M_{n \times n}(\mathbb{C})$ be Hermitian ($A^* = A$). Then all eigenvalues are real, and there exists a unitary matrix $U$ ($U^*U = I$) such that $U^*AU = \Lambda = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$.
+
+More generally, for **normal** matrices ($A^*A = AA^*$), unitarily diagonalizable with possibly complex eigenvalues.
+</Theorem>
+
+---
+
+## Examples
+
+<Example id="spectral-2x2" title="Spectral theorem for a 2x2 symmetric matrix">
+$A = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$.
+
+Eigenvalues: $\lambda_1 = 4$, $\lambda_2 = 2$.
+
+Eigenvectors: $v_1 = \frac{1}{\sqrt{2}}(1, 1)$, $v_2 = \frac{1}{\sqrt{2}}(1, -1)$.
+
+$Q = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$, $Q^TAQ = \begin{pmatrix} 4 & 0 \\ 0 & 2 \end{pmatrix}$.
+
+Spectral decomposition: $A = 4 \cdot \frac{1}{2}\begin{pmatrix} 1 \\ 1 \end{pmatrix}(1, 1) + 2 \cdot \frac{1}{2}\begin{pmatrix} 1 \\ -1 \end{pmatrix}(1, -1) = 2\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix} + \begin{pmatrix} 1 & -1 \\ -1 & 1 \end{pmatrix} = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$ ✓.
+</Example>
+
+<Example id="spectral-3x3" title="Spectral theorem for a 3x3 symmetric matrix">
+$A = \begin{pmatrix} 2 & -1 & 0 \\ -1 & 2 & -1 \\ 0 & -1 & 2 \end{pmatrix}$ (the tridiagonal matrix from the discrete Laplacian).
+
+Eigenvalues: $\lambda_k = 2 - 2\cos\frac{k\pi}{4}$ for $k = 1, 2, 3$: $\lambda_1 = 2 - \sqrt{2}$, $\lambda_2 = 2$, $\lambda_3 = 2 + \sqrt{2}$.
+
+All eigenvalues are real and positive (so $A$ is positive definite). The eigenvectors are orthogonal and can be normalized to form an orthonormal basis.
+</Example>
+
+<Example id="spectral-diagonal" title="Diagonal matrices are trivially spectral">
+$A = \operatorname{diag}(\lambda_1, \ldots, \lambda_n)$ is already in spectral form with $Q = I$.
+
+The spectral decomposition $A = \sum \lambda_i e_i e_i^T$ is just writing the diagonal matrix as a sum of rank-$1$ projections.
+</Example>
+
+---
+
+## The spectral decomposition
+
+<Definition title="Spectral decomposition" number="8.12">
+The **spectral decomposition** of a symmetric matrix $A$ is:
+
+$$A = \lambda_1 P_1 + \lambda_2 P_2 + \cdots + \lambda_k P_k,$$
+
+where $\lambda_1 < \lambda_2 < \cdots < \lambda_k$ are the distinct eigenvalues and $P_i$ is the orthogonal projection onto the eigenspace $E_{\lambda_i}$. The projections satisfy $P_i P_j = 0$ for $i \neq j$ and $P_1 + \cdots + P_k = I$.
+</Definition>
+
+<Example id="spectral-decomp-detail" title="Spectral decomposition in detail">
+$A = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}$. Eigenvalues: $\lambda_1 = 1$, $\lambda_2 = 6$.
+
+Eigenvectors: $v_1 = \frac{1}{\sqrt{5}}(-1, 2)$, $v_2 = \frac{1}{\sqrt{5}}(2, 1)$.
+
+$P_1 = v_1 v_1^T = \frac{1}{5}\begin{pmatrix} 1 & -2 \\ -2 & 4 \end{pmatrix}$, $P_2 = v_2 v_2^T = \frac{1}{5}\begin{pmatrix} 4 & 2 \\ 2 & 1 \end{pmatrix}$.
+
+$A = 1 \cdot P_1 + 6 \cdot P_2 = \frac{1}{5}\begin{pmatrix} 1 & -2 \\ -2 & 4 \end{pmatrix} + \frac{6}{5}\begin{pmatrix} 4 & 2 \\ 2 & 1 \end{pmatrix} = \frac{1}{5}\begin{pmatrix} 25 & 10 \\ 10 & 10 \end{pmatrix} = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}$ ✓.
+</Example>
+
+---
+
+## Why eigenvalues are real
+
+<Proof title="Eigenvalues of symmetric matrices are real">
+Let $Av = \lambda v$ with $v \neq 0$, $A = A^T$. Consider $\bar{v}^T Av$:
+
+$\bar{v}^T Av = \lambda \bar{v}^T v = \lambda \|v\|^2$.
+
+Also, $\bar{v}^T Av = \bar{v}^T A^T v = (Av)^T \bar{v}$... wait. More carefully (working over $\mathbb{C}$):
+
+$\overline{\lambda} \|v\|^2 = \overline{\lambda \|v\|^2} = \overline{v^* Av} = (Av)^* v = (A^*v)^*... $
+
+Cleanly: $v^* Av = v^* \lambda v = \lambda \|v\|^2$. Also $v^* Av = v^* A^* v = (Av)^* v = \overline{\lambda} v^* v = \overline{\lambda}\|v\|^2$.
+
+So $\lambda \|v\|^2 = \overline{\lambda}\|v\|^2$. Since $\|v\|^2 > 0$, $\lambda = \overline{\lambda}$, meaning $\lambda \in \mathbb{R}$. $\blacksquare$
+</Proof>
+
+---
+
+## Why eigenvectors for distinct eigenvalues are orthogonal
+
+<Proof title="Orthogonality of eigenvectors">
+Let $Av_1 = \lambda_1 v_1$ and $Av_2 = \lambda_2 v_2$ with $\lambda_1 \neq \lambda_2$ and $A = A^T$.
+
+$\lambda_1 \langle v_1, v_2 \rangle = \langle Av_1, v_2 \rangle = \langle v_1, A^Tv_2 \rangle = \langle v_1, Av_2 \rangle = \lambda_2 \langle v_1, v_2 \rangle$.
+
+So $(\lambda_1 - \lambda_2)\langle v_1, v_2 \rangle = 0$. Since $\lambda_1 \neq \lambda_2$: $\langle v_1, v_2 \rangle = 0$. $\blacksquare$
+</Proof>
+
+<Example id="orthogonal-eigenvectors" title="Orthogonality verified">
+$A = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$, eigenvalues $3, 1$, eigenvectors $(1, 1)$ and $(1, -1)$.
+
+$(1, 1) \cdot (1, -1) = 1 - 1 = 0$ ✓ (orthogonal as guaranteed by the theorem).
+</Example>
+
+---
+
+## Applications
+
+<Example id="pca" title="Principal Component Analysis (PCA)">
+Given data points in $\mathbb{R}^n$, the covariance matrix $\Sigma = \frac{1}{m}X^TX$ is symmetric positive semi-definite. The spectral theorem gives $\Sigma = Q\Lambda Q^T$.
+
+The eigenvectors (columns of $Q$) are the **principal components** -- the directions of maximum variance. The eigenvalues measure the variance along each direction.
+
+For data in $\mathbb{R}^2$ with $\Sigma = \begin{pmatrix} 4 & 2 \\ 2 & 3 \end{pmatrix}$: eigenvalues $5, 2$, eigenvectors $(2, 1)/\sqrt{5}$ and $(-1, 2)/\sqrt{5}$. The first principal component captures $5/(5+2) \approx 71\%$ of the variance.
+</Example>
+
+<Example id="quadratic-form-spectral" title="Diagonalizing a quadratic form">
+$Q(x, y) = 5x^2 + 4xy + 2y^2$. Matrix: $M = \begin{pmatrix} 5 & 2 \\ 2 & 2 \end{pmatrix}$.
+
+By the spectral theorem: eigenvalues $6, 1$, so in the eigenbasis $Q = 6u^2 + v^2$.
+
+The level set $Q = 1$ is an ellipse with semi-axes $1/\sqrt{6}$ and $1$, rotated to align with the eigenvectors.
+</Example>
+
+<Example id="matrix-functions" title="Matrix functions via spectral theorem">
+For symmetric $A = Q\Lambda Q^T$, any function $f$ can be applied:
+
+$$f(A) = Q f(\Lambda) Q^T = Q \operatorname{diag}(f(\lambda_1), \ldots, f(\lambda_n)) Q^T.$$
+
+- **Square root:** $\sqrt{A} = Q\sqrt{\Lambda}Q^T$ (requires $A$ positive semi-definite).
+- **Inverse:** $A^{-1} = Q\Lambda^{-1}Q^T$ (requires $A$ invertible).
+- **Exponential:** $e^A = Qe^{\Lambda}Q^T$.
+- **Logarithm:** $\log A = Q\log\Lambda Q^T$ (requires $A$ positive definite).
+
+For $A = \begin{pmatrix} 3 & 1 \\ 1 & 3 \end{pmatrix}$, eigenvalues $4, 2$: $\sqrt{A} = Q\operatorname{diag}(2, \sqrt{2})Q^T$.
+</Example>
+
+<Example id="svd-connection" title="Connection to Singular Value Decomposition">
+For any $m \times n$ matrix $A$, the matrices $A^TA$ and $AA^T$ are symmetric positive semi-definite. By the spectral theorem:
+
+$A^TA = V\Sigma^2 V^T$, $AA^T = U\Sigma^2 U^T$.
+
+This leads to the SVD: $A = U\Sigma V^T$, where $\sigma_i = \sqrt{\lambda_i}$ are the singular values.
+</Example>
+
+<Example id="quantum-mechanics" title="Observables in quantum mechanics">
+In quantum mechanics, observables are represented by Hermitian operators on a Hilbert space. The spectral theorem guarantees:
+
+- Measurement outcomes (eigenvalues) are **real numbers**.
+- Eigenstates for different outcomes are **orthogonal**.
+- Any state can be expanded in the eigenbasis: $|\psi\rangle = \sum c_i |i\rangle$.
+
+The probability of measuring eigenvalue $\lambda_i$ is $|c_i|^2 = |\langle i | \psi \rangle|^2$.
+</Example>
+
+<Example id="positive-definite-test" title="Testing positive definiteness via eigenvalues">
+A symmetric matrix is positive definite iff all eigenvalues are positive (by the spectral theorem, $Q(v) = v^T A v = \sum \lambda_i (q_i^T v)^2$, which is positive for all $v \neq 0$ iff all $\lambda_i > 0$).
+
+$A = \begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix}$: eigenvalues $3, 1$. Both positive, so $A$ is positive definite.
+
+$A = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$: eigenvalues $3, -1$. One negative, so $A$ is indefinite.
+</Example>
+
+---
+
+## Spectral theorem for normal matrices
+
+<Theorem title="Spectral theorem for normal matrices" number="8.7">
+A complex matrix $A$ is unitarily diagonalizable ($A = U\Lambda U^*$) if and only if $A$ is **normal** ($A^*A = AA^*$).
+
+Normal matrices include: Hermitian ($A^* = A$), skew-Hermitian ($A^* = -A$), unitary ($A^*A = I$), and their real analogues.
+</Theorem>
+
+<Example id="normal-examples" title="Examples of normal matrices">
+- Symmetric: $A = A^T$. Real eigenvalues.
+- Skew-symmetric: $A = -A^T$. Purely imaginary eigenvalues.
+- Orthogonal: $A^TA = I$. Eigenvalues on the unit circle ($|\lambda| = 1$).
+- Rotation: $R_\theta = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$. Normal (it is orthogonal). Over $\mathbb{C}$, unitarily diagonalizable with eigenvalues $e^{\pm i\theta}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The spectral theorem as the central theorem">
+The Spectral Theorem is one of the most powerful results in linear algebra:
+- **Symmetric matrices have real eigenvalues** and orthogonal eigenvectors.
+- Every symmetric matrix has an **orthonormal basis of eigenvectors** -- orthogonal diagonalization always works.
+- The spectral decomposition $A = \sum \lambda_i P_i$ represents $A$ as a linear combination of orthogonal projections.
+- It enables **matrix functions** ($\sqrt{A}$, $e^A$, $\log A$) via the functional calculus.
+- It underlies **PCA**, **SVD**, **quantum mechanics**, and the **classification of quadratic forms**.
+- The generalization to normal operators on Hilbert spaces is the foundation of functional analysis and quantum theory.
+</Remark>

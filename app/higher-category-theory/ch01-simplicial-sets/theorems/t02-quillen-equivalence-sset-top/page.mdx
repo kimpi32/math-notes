@@ -1,0 +1,186 @@
+export const metadata = {
+  title: 'Quillen Equivalence sSet and Top — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "1. 단체집합", href: "/higher-category-theory/ch01-simplicial-sets" },
+  { label: "Theorem — Quillen Equivalence sSet and Top" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quillen Equivalence between sSet and Top
+
+The Quillen equivalence between simplicial sets and topological spaces is one of the foundational results of modern homotopy theory. It states that the geometric realization and singular simplicial set functors induce an equivalence of homotopy theories: the homotopy category of simplicial sets (with the Kan--Quillen model structure) is equivalent to the homotopy category of topological spaces. This justifies the use of simplicial sets as a fully adequate combinatorial substitute for topological spaces.
+
+---
+
+## Statement
+
+<Theorem title="Quillen Equivalence sSet and Top" number="1.1">
+The adjunction
+
+$$|\cdot|: \mathbf{sSet} \rightleftarrows \mathbf{Top} : \operatorname{Sing}$$
+
+is a **Quillen equivalence** between the Kan--Quillen model structure on $\mathbf{sSet}$ and the standard (Quillen) model structure on $\mathbf{Top}$. That is:
+
+1. $|\cdot|$ preserves cofibrations and trivial cofibrations (so the adjunction is a Quillen pair).
+
+2. For every cofibrant simplicial set $X$ (which is every simplicial set, since all objects are cofibrant) and every fibrant space $Y$ (which is every space), a map $f: |X| \to Y$ is a weak homotopy equivalence if and only if the adjunct $\tilde{f}: X \to \operatorname{Sing}(Y)$ is a weak equivalence of simplicial sets.
+
+In particular, the derived adjunction induces an equivalence of homotopy categories:
+
+$$\operatorname{Ho}(\mathbf{sSet}) \simeq \operatorname{Ho}(\mathbf{Top}).$$
+</Theorem>
+
+---
+
+## The Model Structures
+
+<Definition title="Kan--Quillen model structure on sSet" number="1.2">
+The **Kan--Quillen model structure** on $\mathbf{sSet}$ has:
+
+- **Weak equivalences**: maps $f: X \to Y$ such that $|f|: |X| \to |Y|$ is a weak homotopy equivalence (equivalently, $f$ induces isomorphisms on all homotopy groups for all basepoints).
+- **Cofibrations**: monomorphisms (levelwise injections).
+- **Fibrations**: Kan fibrations (maps with the RLP against all horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$).
+
+Every object is cofibrant. The fibrant objects are the Kan complexes.
+</Definition>
+
+<Example id="model-structure-top" title="Quillen model structure on Top">
+The **standard model structure** on $\mathbf{Top}$ (for compactly generated weak Hausdorff spaces) has:
+
+- **Weak equivalences**: weak homotopy equivalences (maps inducing isomorphisms on all homotopy groups).
+- **Cofibrations**: retracts of relative CW inclusions.
+- **Fibrations**: Serre fibrations (maps with the RLP against $D^n \times \{0\} \hookrightarrow D^n \times [0,1]$).
+
+Every object is fibrant. The cofibrant objects are retracts of CW complexes.
+</Example>
+
+---
+
+## Why It Is a Quillen Pair
+
+<Example id="realization-preserves-cofib" title="Geometric realization preserves cofibrations">
+A cofibration in $\mathbf{sSet}$ is a monomorphism $A \hookrightarrow B$. Since geometric realization sends $\partial\Delta[n] \hookrightarrow \Delta[n]$ to $S^{n-1} \hookrightarrow D^n$ (the inclusion of the sphere into the disk), and every monomorphism is built from these generators by pushout and transfinite composition, $|A| \hookrightarrow |B|$ is a relative CW inclusion, hence a cofibration in $\mathbf{Top}$.
+</Example>
+
+<Example id="realization-preserves-triv-cofib" title="Geometric realization preserves trivial cofibrations">
+A trivial cofibration in $\mathbf{sSet}$ is an anodyne extension (a monomorphism that is also a weak equivalence). Since $|\cdot|$ sends horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ to the topological horn inclusion $|\Lambda^n_k| \hookrightarrow |\Delta^n|$, which is a homotopy equivalence (the topological horn deformation-retracts onto the full simplex), the result follows by closure properties.
+</Example>
+
+<Example id="sing-preserves-fibrations" title="Sing preserves fibrations">
+If $p: Y \to Z$ is a Serre fibration in $\mathbf{Top}$, then $\operatorname{Sing}(p): \operatorname{Sing}(Y) \to \operatorname{Sing}(Z)$ is a Kan fibration. This is because lifting a horn $\Lambda^n_k \to \operatorname{Sing}(Y)$ over $\operatorname{Sing}(Z)$ corresponds to extending a map $|\Lambda^n_k| \to Y$ to $|\Delta^n| \to Y$ over $Z$, which is possible since $|\Lambda^n_k| \hookrightarrow |\Delta^n|$ is an NDR pair and $p$ is a Serre fibration.
+</Example>
+
+---
+
+## Why It Is a Quillen Equivalence
+
+<Example id="counit-weak-equiv" title="The counit is a weak equivalence">
+For any space $Y$, the counit $\varepsilon_Y: |\operatorname{Sing}(Y)| \to Y$ is a weak homotopy equivalence. This is a classical theorem: $|\operatorname{Sing}(Y)|$ is a CW approximation of $Y$.
+
+The proof uses the fact that $\pi_n(|\operatorname{Sing}(Y)|) \cong \pi_n(\operatorname{Sing}(Y)) \cong \pi_n(Y)$, where the first isomorphism comes from the compatibility of simplicial homotopy groups with geometric realization, and the second is essentially the definition of simplicial homotopy groups for $\operatorname{Sing}(Y)$.
+</Example>
+
+<Example id="unit-weak-equiv-kan" title="The unit on Kan complexes">
+For a Kan complex $X$, the unit $\eta_X: X \to \operatorname{Sing}(|X|)$ is a weak equivalence of simplicial sets. This follows from the fact that for Kan complexes, the simplicial homotopy groups of $X$ agree with the topological homotopy groups of $|X|$, and $\operatorname{Sing}(|X|)$ has the same homotopy groups as $|X|$.
+
+Combined with the counit being a weak equivalence, this shows the adjunction is a Quillen equivalence.
+</Example>
+
+---
+
+## Consequences
+
+<Example id="homotopy-category-equiv" title="Equivalence of homotopy categories">
+The Quillen equivalence gives:
+
+$$\operatorname{Ho}(\mathbf{sSet}) \simeq \operatorname{Ho}(\mathbf{Top})$$
+
+Objects of $\operatorname{Ho}(\mathbf{sSet})$ are simplicial sets (localized at weak equivalences), and objects of $\operatorname{Ho}(\mathbf{Top})$ are topological spaces (localized at weak homotopy equivalences).
+
+In $\operatorname{Ho}(\mathbf{sSet})$, every object is isomorphic to a Kan complex (its fibrant replacement). In $\operatorname{Ho}(\mathbf{Top})$, every object is isomorphic to a CW complex (its cofibrant replacement).
+
+Morphisms in the homotopy category are homotopy classes of maps: $[X, Y]$ for Kan complexes $X, Y$ in $\mathbf{sSet}$ corresponds to $[|X|, |Y|]$ for topological spaces.
+</Example>
+
+<Example id="compute-homotopy-groups" title="Computing homotopy groups simplicially">
+The Quillen equivalence justifies computing homotopy invariants of spaces using simplicial sets. For instance:
+
+- $\pi_n(S^m)$ can be computed using simplicial models of spheres.
+- Eilenberg--MacLane spaces $K(G, n)$ have natural simplicial models (the Dold--Kan correspondence gives chain complexes, which give simplicial abelian groups).
+- Postnikov towers, fibration sequences, and spectral sequences all have simplicial analogues.
+
+The combinatorial nature of simplicial sets makes them amenable to computation in ways that point-set topology is not.
+</Example>
+
+<Example id="milnor-theorem" title="Milnor's theorem on geometric realization">
+Milnor's theorem states that the geometric realization of a simplicial set is a CW complex, and the geometric realization of a Kan fibration $p: X \to Y$ (where $Y$ has countably many non-degenerate simplices) is a Serre fibration $|p|: |X| \to |Y|$.
+
+This is a crucial technical result: it ensures that the homotopy-theoretic properties visible in $\mathbf{sSet}$ (Kan fibrations, weak equivalences) translate faithfully to topological properties.
+</Example>
+
+<Example id="simplicial-approximation" title="Simplicial approximation theorem">
+Given a continuous map $f: |X| \to |Y|$ between geometric realizations of finite simplicial sets, there exists a subdivision $\mathrm{sd}^N(X)$ and a simplicial map $g: \mathrm{sd}^N(X) \to Y$ such that $|g|$ is homotopic to $f \circ |\mathrm{sd}^N(X) \to X|$.
+
+This "simplicial approximation" ensures that every topological map can be approximated by a combinatorial one after sufficient subdivision, another manifestation of the Quillen equivalence at the level of individual maps.
+</Example>
+
+<Example id="function-complexes" title="Mapping spaces">
+The internal hom in $\mathbf{sSet}$ gives the **function complex** (or **mapping space**):
+
+$$\operatorname{Map}(X, Y)_n = \operatorname{Hom}_{\mathbf{sSet}}(X \times \Delta[n], Y).$$
+
+When $Y$ is a Kan complex, $\operatorname{Map}(X, Y)$ is also a Kan complex, and its geometric realization is weakly equivalent to the topological mapping space $\operatorname{Map}(|X|, |Y|)$ with the compact-open topology (when $X$ is finite).
+
+This shows that the simplicial enrichment of $\mathbf{sSet}$ is compatible with the topological enrichment of $\mathbf{Top}$ via the Quillen equivalence.
+</Example>
+
+<Example id="dwyer-kan-equivalence" title="Dwyer--Kan equivalence">
+The Quillen equivalence can be upgraded to a **Dwyer--Kan equivalence** (equivalence of simplicial categories): the simplicial localizations $L^H(\mathbf{sSet})$ and $L^H(\mathbf{Top})$ are equivalent as simplicially enriched categories. This is a stronger statement than the equivalence of homotopy categories, capturing the full "higher homotopy" information of the mapping spaces.
+
+In modern language, this says the $\infty$-categories $\mathbf{sSet}[W^{-1}]$ and $\mathbf{Top}[W^{-1}]$ are equivalent, where $W$ denotes weak equivalences.
+</Example>
+
+---
+
+## Historical Context
+
+<Remark title="History and significance">
+The Quillen equivalence between $\mathbf{sSet}$ and $\mathbf{Top}$ was established by Daniel Quillen in his foundational 1967 book "Homotopical Algebra," where model categories were first introduced. Key prior results include:
+
+- **Kan (1950s)**: Introduced Kan complexes and the Kan extension condition; showed that $\operatorname{Sing}(Y)$ is always a Kan complex.
+- **Milnor (1957)**: Proved that geometric realization preserves products (for compactly generated spaces) and that $|\operatorname{Sing}(Y)| \to Y$ is a weak equivalence.
+- **Quillen (1967)**: Put all these results into the framework of model categories, establishing the full Quillen equivalence.
+
+This result justifies the modern practice of doing homotopy theory entirely within simplicial sets, which is the foundation for Joyal and Lurie's theory of quasi-categories.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The Quillen equivalence $|\cdot| \dashv \operatorname{Sing}$ between $\mathbf{sSet}$ and $\mathbf{Top}$:
+
+1. The geometric realization--singular set adjunction is a **Quillen equivalence**: it induces an equivalence of homotopy categories.
+
+2. In the Kan--Quillen model structure, all simplicial sets are cofibrant; the fibrant objects are **Kan complexes**.
+
+3. The counit $|\operatorname{Sing}(Y)| \to Y$ is always a **weak homotopy equivalence**, providing CW approximations.
+
+4. This equivalence justifies using simplicial sets as a **complete substitute** for topological spaces in homotopy theory.
+
+5. The simplicial enrichment (mapping spaces) is compatible with the topological enrichment, upgrading to a **Dwyer--Kan equivalence**.
+</Remark>

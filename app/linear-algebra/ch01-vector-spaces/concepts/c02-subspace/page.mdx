@@ -1,0 +1,143 @@
+export const metadata = {
+  title: 'Subspace — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Concept — Subspace" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Subspaces
+
+A **subspace** is a subset of a vector space that is itself a vector space under the inherited operations. Subspaces are the natural "sub-objects" in linear algebra.
+
+---
+
+## Definition and criterion
+
+<Definition title="Subspace" number="1.2">
+Let $V$ be a vector space over a field $F$. A subset $W \subseteq V$ is a **subspace** of $V$ if $W$ is itself a vector space over $F$ with the same operations of addition and scalar multiplication.
+</Definition>
+
+<Theorem title="Subspace test" number="1.2">
+A subset $W \subseteq V$ is a subspace if and only if:
+
+1. $0 \in W$ (nonempty, contains zero)
+2. $u + v \in W$ for all $u, v \in W$ (closed under addition)
+3. $cv \in W$ for all $c \in F$, $v \in W$ (closed under scalar multiplication)
+
+Equivalently, conditions (2) and (3) can be combined: $W \neq \varnothing$ and $au + bv \in W$ for all $a, b \in F$ and $u, v \in W$.
+</Theorem>
+
+<Proof>
+If $W$ is a subspace, then (1)-(3) hold by the vector space axioms. Conversely, if (1)-(3) hold, then the axioms of commutativity, associativity, distributivity, etc., are inherited from $V$ since $W \subseteq V$. Closure under scalar multiplication with $c = -1$ gives existence of additive inverses.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="trivial" title="Trivial subspaces">
+For any vector space $V$:
+- $\{0\}$ is a subspace (the **zero subspace** or **trivial subspace**).
+- $V$ itself is a subspace.
+
+These are called the **improper subspaces**. All other subspaces are **proper**.
+</Example>
+
+<Example id="lines-planes" title="Lines and planes through the origin">
+In $\mathbb{R}^3$:
+- Any line through the origin is a subspace: $W = \{t(a, b, c) \mid t \in \mathbb{R}\}$ for a fixed nonzero vector $(a, b, c)$.
+- Any plane through the origin is a subspace: $W = \{(x, y, z) \mid ax + by + cz = 0\}$ for constants $a, b, c$ (not all zero).
+- A line or plane not through the origin is **not** a subspace (it does not contain $0$).
+</Example>
+
+<Example id="symmetric" title="Symmetric and skew-symmetric matrices">
+Let $V = M_{n \times n}(F)$. Then:
+- $\text{Sym}_n(F) = \{A \in V \mid A^T = A\}$ is a subspace (symmetric matrices).
+- $\text{Skew}_n(F) = \{A \in V \mid A^T = -A\}$ is a subspace (skew-symmetric matrices).
+
+When $\text{char}(F) \neq 2$, we have $V = \text{Sym}_n(F) \oplus \text{Skew}_n(F)$ via $A = \tfrac{1}{2}(A + A^T) + \tfrac{1}{2}(A - A^T)$.
+</Example>
+
+<Example id="diagonal" title="Diagonal matrices">
+The set of $n \times n$ diagonal matrices $D_n(F) = \{A \in M_{n \times n}(F) \mid a_{ij} = 0 \text{ for } i \neq j\}$ is a subspace of $M_{n \times n}(F)$ of dimension $n$.
+</Example>
+
+<Example id="upper-triangular" title="Upper triangular matrices">
+The set $U_n(F) = \{A \in M_{n \times n}(F) \mid a_{ij} = 0 \text{ for } i > j\}$ of upper triangular matrices is a subspace of $M_{n \times n}(F)$ of dimension $n(n+1)/2$.
+</Example>
+
+<Example id="polynomials-degree" title="Polynomials of bounded degree">
+$P_n(F) \subseteq P(F)$ is a subspace for each $n \geq 0$. Note that the set of polynomials of degree **exactly** $n$ is **not** a subspace (it does not contain $0$, and it is not closed under addition: $(x^2 + x) + (-x^2) = x \notin$ degree-2 polynomials).
+</Example>
+
+<Example id="even-odd" title="Even and odd functions">
+In $F(\mathbb{R}, \mathbb{R})$:
+- $W_{\text{even}} = \{f \mid f(-x) = f(x) \text{ for all } x\}$ is a subspace.
+- $W_{\text{odd}} = \{f \mid f(-x) = -f(x) \text{ for all } x\}$ is a subspace.
+
+Every function decomposes as $f(x) = \tfrac{f(x)+f(-x)}{2} + \tfrac{f(x)-f(-x)}{2}$ (even + odd).
+</Example>
+
+<Example id="null-space" title="Null space of a matrix">
+For $A \in M_{m \times n}(F)$, the **null space** $N(A) = \{x \in F^n \mid Ax = 0\}$ is a subspace of $F^n$. If $Au = 0$ and $Av = 0$, then $A(au + bv) = aAu + bAv = 0$.
+</Example>
+
+<Example id="not-subspace-1" title="Non-example: first quadrant">
+$W = \{(x, y) \in \mathbb{R}^2 \mid x \geq 0, y \geq 0\}$ is **not** a subspace. It contains $(1, 1)$ but not $(-1)(1, 1) = (-1, -1)$, so it fails closure under scalar multiplication.
+</Example>
+
+<Example id="not-subspace-2" title="Non-example: unit circle">
+$W = \{(x, y) \in \mathbb{R}^2 \mid x^2 + y^2 = 1\}$ is **not** a subspace: $0 \notin W$, and $(1, 0) + (0, 1) = (1, 1) \notin W$.
+</Example>
+
+<Example id="not-subspace-3" title="Non-example: affine subspace">
+$W = \{(x, y) \in \mathbb{R}^2 \mid x + y = 1\}$ is **not** a subspace because $(0, 0) \notin W$. However, $W$ is an **affine subspace** (a translate of the subspace $\{(x, y) \mid x + y = 0\}$).
+</Example>
+
+<Example id="continuous-diff" title="Differentiable functions as a subspace">
+$C^1(\mathbb{R}) \subseteq C(\mathbb{R}) \subseteq F(\mathbb{R}, \mathbb{R})$ are nested subspaces. The differentiable functions form a subspace of the continuous functions, which form a subspace of all functions.
+</Example>
+
+---
+
+## Operations on subspaces
+
+<Definition title="Sum of subspaces" number="1.3">
+If $W_1, W_2$ are subspaces of $V$, their **sum** is
+
+$$W_1 + W_2 = \{w_1 + w_2 \mid w_1 \in W_1,\; w_2 \in W_2\}.$$
+
+This is the smallest subspace of $V$ containing both $W_1$ and $W_2$.
+</Definition>
+
+<Definition title="Direct sum" number="1.4">
+$V$ is the **direct sum** of subspaces $W_1$ and $W_2$, written $V = W_1 \oplus W_2$, if $V = W_1 + W_2$ and $W_1 \cap W_2 = \{0\}$. Equivalently, every $v \in V$ can be written **uniquely** as $v = w_1 + w_2$ with $w_i \in W_i$.
+</Definition>
+
+<Example id="direct-sum-rn" title="Direct sum decomposition of R^3">
+In $\mathbb{R}^3$, let $W_1 = \{(a, 0, 0) \mid a \in \mathbb{R}\}$ (the $x$-axis) and $W_2 = \{(0, b, c) \mid b, c \in \mathbb{R}\}$ (the $yz$-plane). Then $\mathbb{R}^3 = W_1 \oplus W_2$: every $(a, b, c) = (a, 0, 0) + (0, b, c)$ uniquely.
+</Example>
+
+<Theorem title="Dimension formula for subspaces" number="1.3">
+If $W_1$ and $W_2$ are finite-dimensional subspaces of $V$, then
+
+$$\dim(W_1 + W_2) = \dim W_1 + \dim W_2 - \dim(W_1 \cap W_2).$$
+</Theorem>
+
+<Remark title="Looking ahead">
+Subspaces correspond to certain linear maps: every subspace $W \subseteq V$ is the kernel of some linear map (namely, the projection $V \to V/W$). The interplay between subspaces and linear maps is explored in [Chapter 2](/linear-algebra/ch02-linear-transformations/concepts/c01-linear-map).
+</Remark>

@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'Ext Functor — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Concept — Ext Functor" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ext Functor
+
+The Ext functor is the derived functor of Hom. It classifies extensions of modules, measures the failure of Hom to be exact, and provides the fundamental link between homological algebra and deformation theory. Ext groups are the cohomology of the Hom complex in the derived category.
+
+---
+
+## Definitions
+
+<Definition title="Ext via Derived Functors" number="7.8">
+For objects $A, B$ in an abelian category $\mathcal{A}$ with enough injectives (or enough projectives), the **Ext groups** are:
+
+$$\mathrm{Ext}^n_{\mathcal{A}}(A, B) = R^n\mathrm{Hom}_{\mathcal{A}}(A, -)(B) = H^n(\mathrm{Hom}(A, I^\bullet))$$
+
+where $B \to I^\bullet$ is an injective resolution. Equivalently, using a projective resolution $P_\bullet \to A$:
+
+$$\mathrm{Ext}^n_{\mathcal{A}}(A, B) = H^n(\mathrm{Hom}(P_\bullet, B))$$
+</Definition>
+
+<Definition title="Ext via Extensions (Yoneda)" number="7.9">
+$\mathrm{Ext}^n_{\mathcal{A}}(A, B)$ classifies equivalence classes of **$n$-fold extensions**: exact sequences $0 \to B \to E_n \to \cdots \to E_1 \to A \to 0$. Two extensions are equivalent if they are connected by a chain of morphisms of exact sequences that are the identity on $A$ and $B$. The Baer sum gives the group structure.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Ext^0 is Hom" id="ext0">
+$\mathrm{Ext}^0(A, B) = \mathrm{Hom}(A, B)$. This follows from $R^0\mathrm{Hom}(A, -) = \mathrm{Hom}(A, -)$ since $\mathrm{Hom}(A, -)$ is left exact.
+</Example>
+
+<Example title="Ext^1 classifies extensions" id="ext1-extensions">
+$\mathrm{Ext}^1_R(A, B)$ classifies short exact sequences $0 \to B \to E \to A \to 0$ up to equivalence. The zero element corresponds to the split extension $E = A \oplus B$. For abelian groups: $\mathrm{Ext}^1_{\mathbb{Z}}(\mathbb{Z}/n, \mathbb{Z}/m) \cong \mathbb{Z}/\gcd(n, m)$.
+</Example>
+
+<Example title="Ext over Z" id="ext-z">
+Over $\mathbb{Z}$: $\mathrm{Ext}^n_{\mathbb{Z}}(A, B) = 0$ for all $n \geq 2$ (since $\mathbb{Z}$ has global dimension 1). $\mathrm{Ext}^1_{\mathbb{Z}}(\mathbb{Z}/n, B) \cong B/nB$. In particular, $\mathrm{Ext}^1_{\mathbb{Z}}(\mathbb{Z}/2, \mathbb{Z}) \cong \mathbb{Z}/2$, reflecting the non-split extension $0 \to \mathbb{Z} \xrightarrow{2} \mathbb{Z} \to \mathbb{Z}/2 \to 0$.
+</Example>
+
+<Example title="Ext for vector spaces" id="ext-vect">
+Over a field $k$: $\mathrm{Ext}^n_k(V, W) = 0$ for all $n \geq 1$ and all vector spaces $V, W$. Every short exact sequence of vector spaces splits, so there are no non-trivial extensions. This reflects $\mathrm{gl.dim}(k) = 0$.
+</Example>
+
+<Example title="Ext over k[x]/(x^2)" id="ext-dual-numbers">
+Over $R = k[x]/(x^2)$ (dual numbers), $\mathrm{Ext}^n_R(k, k) \cong k$ for all $n \geq 0$. The periodic projective resolution $\cdots \xrightarrow{x} R \xrightarrow{x} R \to k \to 0$ gives $\mathrm{Hom}_R(R, k) \cong k$ in each degree. This ring has infinite global dimension.
+</Example>
+
+<Example title="Ext and group cohomology" id="ext-group">
+$H^n(G, M) = \mathrm{Ext}^n_{\mathbb{Z}[G]}(\mathbb{Z}, M)$. The bar resolution of $\mathbb{Z}$ as a $\mathbb{Z}[G]$-module provides the standard complex computing group cohomology. For $G = \mathbb{Z}/n$, $H^{2k}(G, \mathbb{Z}) = \mathbb{Z}/n$ and $H^{2k+1}(G, \mathbb{Z}) = 0$ for $k \geq 1$.
+</Example>
+
+<Example title="Ext and sheaf cohomology" id="ext-sheaf">
+For sheaves on $X$: $\mathrm{Ext}^n_{\mathbf{Sh}(X)}(\mathbb{Z}_X, \mathcal{F}) \cong H^n(X, \mathcal{F})$. Sheaf cohomology is Ext from the constant sheaf. More generally, $\mathrm{Ext}^n(\mathcal{E}, \mathcal{F})$ for coherent sheaves on a scheme governs deformations of morphisms $\mathcal{E} \to \mathcal{F}$.
+</Example>
+
+<Example title="Serre duality and Ext" id="serre-ext">
+On a smooth projective variety $X$ of dimension $n$, Serre duality gives $\mathrm{Ext}^i(\mathcal{E}, \mathcal{F}) \cong \mathrm{Ext}^{n-i}(\mathcal{F}, \mathcal{E} \otimes \omega_X)^*$. For a curve ($n = 1$): $\mathrm{Ext}^1(\mathcal{O}_X, \mathcal{L}) \cong H^0(X, \mathcal{L}^{-1} \otimes \omega_X)^*$ by Serre duality.
+</Example>
+
+<Example title="Ext and deformation theory" id="ext-deformation">
+$\mathrm{Ext}^1(\mathcal{E}, \mathcal{E})$ is the tangent space to the moduli of deformations of a coherent sheaf $\mathcal{E}$. $\mathrm{Ext}^2(\mathcal{E}, \mathcal{E})$ contains the obstructions to deformation. If $\mathrm{Ext}^2 = 0$, the moduli space is smooth at $\mathcal{E}$.
+</Example>
+
+<Example title="Ext in the derived category" id="ext-derived">
+In the derived category, $\mathrm{Ext}^n(A, B) = \mathrm{Hom}_{D(\mathcal{A})}(A, B[n])$. This gives a single formula unifying all Ext groups. The composition $\mathrm{Ext}^m(B, C) \otimes \mathrm{Ext}^n(A, B) \to \mathrm{Ext}^{m+n}(A, C)$ is the Yoneda product, corresponding to composition of morphisms in the derived category.
+</Example>
+
+<Example title="Yoneda product" id="yoneda-product">
+The **Yoneda product** $\mathrm{Ext}^m(B, C) \times \mathrm{Ext}^n(A, B) \to \mathrm{Ext}^{m+n}(A, C)$ is defined by splicing extensions. For $m = n = 1$: splice $0 \to C \to E' \to B \to 0$ with $0 \to B \to E \to A \to 0$ to get $0 \to C \to E' \to E \to A \to 0 \in \mathrm{Ext}^2(A, C)$. The Ext algebra $\mathrm{Ext}^\bullet(A, A) = \bigoplus_n \mathrm{Ext}^n(A, A)$ is a graded ring.
+</Example>
+
+<Example title="Ext and projective dimension" id="ext-proj-dim">
+The **projective dimension** of $A$ is $\mathrm{pd}(A) = \sup\{n : \mathrm{Ext}^n(A, -) \neq 0\}$. For $R$-modules, $\mathrm{pd}(A) \leq d$ iff $A$ has a projective resolution of length $\leq d$. The global dimension $\mathrm{gl.dim}(R) = \sup_A \mathrm{pd}(A)$.
+</Example>
+
+<Example title="Change of rings for Ext" id="change-rings">
+For a ring homomorphism $\phi : R \to S$ and $S$-modules $A, B$, there is a change-of-rings spectral sequence $\mathrm{Ext}^p_S(A, \mathrm{Ext}^q_R(S, B)) \Rightarrow \mathrm{Ext}^{p+q}_R(A, B)$. When $S = R/I$ for a regular sequence, this collapses and gives explicit formulas.
+</Example>
+
+---
+
+<Theorem title="Balance of Ext" number="7.3">
+The two definitions of Ext agree:
+
+$$R^n\mathrm{Hom}(A, -)(B) \cong R^n\mathrm{Hom}(-, B)(A)$$
+
+That is, Ext can be computed using either an injective resolution of $B$ or a projective resolution of $A$. Both give the same result.
+</Theorem>
+
+<Remark title="Ext as a bifunctor">
+$\mathrm{Ext}^n(-, -)$ is contravariant in the first argument and covariant in the second. It forms a cohomological delta-functor in each variable separately. The long exact sequences in both variables, together with the Yoneda product, encode rich algebraic structure.
+</Remark>

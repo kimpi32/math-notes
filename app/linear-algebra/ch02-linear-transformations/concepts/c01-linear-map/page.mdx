@@ -1,0 +1,143 @@
+export const metadata = {
+  title: 'Linear Transformation — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "2. 선형변환", href: "/linear-algebra/ch02-linear-transformations" },
+  { label: "Concept — Linear Transformation" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Linear Transformations
+
+A **linear transformation** (or **linear map**) is a function between vector spaces that preserves the linear structure. These are the natural "morphisms" in the category of vector spaces.
+
+---
+
+## Definition
+
+<Definition title="Linear transformation" number="2.1">
+Let $V$ and $W$ be vector spaces over the same field $F$. A function $T : V \to W$ is a **linear transformation** (or **linear map**) if for all $u, v \in V$ and $c \in F$:
+
+1. $T(u + v) = T(u) + T(v)$ (preserves addition)
+2. $T(cv) = cT(v)$ (preserves scalar multiplication)
+
+Equivalently, $T(au + bv) = aT(u) + bT(v)$ for all $a, b \in F$ and $u, v \in V$.
+</Definition>
+
+<Remark title="Notation">
+We write $T : V \to W$ or $V \xrightarrow{T} W$. The set of all linear transformations from $V$ to $W$ is denoted $\mathcal{L}(V, W)$ or $\text{Hom}_F(V, W)$. When $V = W$, we write $\mathcal{L}(V)$ and call $T$ a **linear operator** (or **endomorphism**).
+</Remark>
+
+<Remark title="T(0) = 0">
+Every linear map sends $0$ to $0$: $T(0) = T(0 \cdot v) = 0 \cdot T(v) = 0$. If a function fails this, it is not linear.
+</Remark>
+
+---
+
+## Examples
+
+<Example id="identity" title="Identity and zero maps">
+For any vector space $V$:
+- The **identity map** $\text{id}_V : V \to V$, $\text{id}_V(v) = v$, is linear.
+- The **zero map** $T_0 : V \to W$, $T_0(v) = 0$, is linear.
+</Example>
+
+<Example id="matrix-map" title="Matrix multiplication">
+For $A \in M_{m \times n}(F)$, the map $T_A : F^n \to F^m$ defined by $T_A(x) = Ax$ is linear. This is the most important example: every linear map between finite-dimensional spaces can be represented this way.
+</Example>
+
+<Example id="derivative" title="Differentiation">
+$D : P_n(\mathbb{R}) \to P_{n-1}(\mathbb{R})$ defined by $D(p) = p'$ (the derivative) is linear:
+
+$$D(af + bg) = (af + bg)' = af' + bg' = aD(f) + bD(g).$$
+
+More generally, $D : C^\infty(\mathbb{R}) \to C^\infty(\mathbb{R})$ is a linear operator.
+</Example>
+
+<Example id="integration" title="Integration">
+$T : C[0,1] \to \mathbb{R}$ defined by $T(f) = \int_0^1 f(x)\,dx$ is linear:
+
+$$T(af + bg) = \int_0^1 (af + bg)\,dx = a\int_0^1 f\,dx + b\int_0^1 g\,dx = aT(f) + bT(g).$$
+</Example>
+
+<Example id="projection" title="Projection">
+$\pi : \mathbb{R}^3 \to \mathbb{R}^2$ defined by $\pi(x, y, z) = (x, y)$ (projection onto the $xy$-plane) is linear. More generally, the projection onto any subspace along a complement is linear.
+</Example>
+
+<Example id="rotation" title="Rotation in R^2">
+Rotation by angle $\theta$ about the origin is a linear map $R_\theta : \mathbb{R}^2 \to \mathbb{R}^2$:
+
+$$R_\theta(x, y) = (x\cos\theta - y\sin\theta,\; x\sin\theta + y\cos\theta).$$
+
+This corresponds to multiplication by the rotation matrix $\begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$.
+</Example>
+
+<Example id="reflection" title="Reflection">
+Reflection across the $x$-axis in $\mathbb{R}^2$: $T(x, y) = (x, -y)$ is linear. Reflection across any line through the origin is linear.
+</Example>
+
+<Example id="transpose" title="Transpose map">
+$T : M_{n \times n}(F) \to M_{n \times n}(F)$ defined by $T(A) = A^T$ is linear:
+
+$$(aA + bB)^T = aA^T + bB^T.$$
+</Example>
+
+<Example id="trace" title="Trace">
+$\text{tr} : M_{n \times n}(F) \to F$ defined by $\text{tr}(A) = \sum_{i=1}^n a_{ii}$ is linear. This is a linear **functional** (a linear map to the base field).
+</Example>
+
+<Example id="evaluation" title="Evaluation map">
+For $c \in F$, the map $\text{ev}_c : P(F) \to F$ defined by $\text{ev}_c(p) = p(c)$ is linear. This is another linear functional.
+</Example>
+
+<Example id="shift" title="Left shift">
+The left shift $L : F^\infty \to F^\infty$ defined by $L(a_1, a_2, a_3, \ldots) = (a_2, a_3, a_4, \ldots)$ is linear. It "deletes" the first entry. Similarly, the right shift $R(a_1, a_2, \ldots) = (0, a_1, a_2, \ldots)$ is linear.
+</Example>
+
+<Example id="not-linear-1" title="Non-example: translation">
+$T : \mathbb{R}^2 \to \mathbb{R}^2$ defined by $T(x, y) = (x + 1, y)$ is **not** linear because $T(0, 0) = (1, 0) \neq (0, 0)$.
+</Example>
+
+<Example id="not-linear-2" title="Non-example: squaring">
+$T : \mathbb{R} \to \mathbb{R}$ defined by $T(x) = x^2$ is **not** linear: $T(2 + 3) = 25 \neq 4 + 9 = T(2) + T(3)$.
+</Example>
+
+---
+
+## Basic properties
+
+<Theorem title="Determined by values on a basis" number="2.1">
+Let $\beta = \{v_1, \ldots, v_n\}$ be a basis for $V$, and let $w_1, \ldots, w_n$ be any vectors in $W$ (not necessarily distinct or independent). Then there exists a **unique** linear transformation $T : V \to W$ with $T(v_i) = w_i$ for all $i$.
+</Theorem>
+
+<Proof>
+Define $T(a_1 v_1 + \cdots + a_n v_n) = a_1 w_1 + \cdots + a_n w_n$. This is well-defined (since the $a_i$ are unique by linear independence) and linear (by construction). Uniqueness follows because any linear $S$ with $S(v_i) = w_i$ satisfies $S(a_1 v_1 + \cdots + a_n v_n) = a_1 w_1 + \cdots + a_n w_n = T(\cdot)$.
+</Proof>
+
+<Remark title="Linear maps form a vector space">
+$\mathcal{L}(V, W)$ is itself a vector space over $F$ under pointwise operations:
+
+$$(T + S)(v) = T(v) + S(v), \quad (cT)(v) = cT(v).$$
+
+If $\dim V = n$ and $\dim W = m$, then $\dim \mathcal{L}(V, W) = mn$.
+</Remark>
+
+<Remark title="Composition is linear">
+If $T : V \to W$ and $S : W \to U$ are linear, then $S \circ T : V \to U$ is linear. Composition is associative: $(R \circ S) \circ T = R \circ (S \circ T)$.
+</Remark>
+
+<Remark title="Looking ahead">
+The key invariants of a linear map are its [kernel and image](/linear-algebra/ch02-linear-transformations/concepts/c02-kernel-image). Their relationship is captured by the [Rank-Nullity Theorem](/linear-algebra/ch02-linear-transformations/theorems/t01-rank-nullity). In finite dimensions, every linear map can be encoded as a [matrix](/linear-algebra/ch03-matrices/concepts/c01-matrix-operations).
+</Remark>

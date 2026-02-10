@@ -1,0 +1,150 @@
+export const metadata = {
+  title: '칸토어 대각선 논법 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "정리 - 칸토어 대각선 논법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 칸토어 대각선 논법 (Cantor's Diagonal Argument)
+
+Georg Cantor's diagonal argument (1891) is one of the most celebrated proofs in all of mathematics. It demonstrates that not all infinite sets are the same size, thereby founding the theory of transfinite cardinals. For analysis, it establishes the uncountability of $\mathbb{R}$, which is the reason that the real line has a fundamentally richer structure than $\mathbb{Q}$.
+
+---
+
+## Background: Countability
+
+<Definition title="Countable and Uncountable Sets" number="0.2">
+A set $S$ is **countable** if there exists an injection $f: S \to \mathbb{N}$ (equivalently, $S$ is finite or there exists a bijection $f: S \to \mathbb{N}$). A set is **uncountable** if it is not countable.
+
+We write $|S| = |\mathbb{N}| = \aleph_0$ for a countably infinite set, and $|S| \leq |\mathbb{N}|$ for any countable set.
+</Definition>
+
+<Remark>
+Examples of countable sets include $\mathbb{Z}$, $\mathbb{Q}$, and $\mathbb{N} \times \mathbb{N}$. Cantor's diagonal argument shows that $\mathbb{R}$ and $\mathcal{P}(\mathbb{N})$ are uncountable, belonging to a strictly larger cardinality.
+</Remark>
+
+---
+
+## Main Theorems
+
+<Theorem title="Uncountability of the Reals" number="0.3">
+The set $\mathbb{R}$ of real numbers is uncountable. In particular, the interval $(0, 1)$ is uncountable.
+
+Equivalently, there is no surjection $f: \mathbb{N} \to (0, 1)$.
+</Theorem>
+
+<Theorem title="Cantor's Theorem (Power Set)" number="0.4">
+For any set $S$, the power set $\mathcal{P}(S)$ has strictly greater cardinality than $S$:
+
+$$|S| < |\mathcal{P}(S)|$$
+
+In particular, $|\mathbb{N}| < |\mathcal{P}(\mathbb{N})|$. There is no surjection from $S$ onto $\mathcal{P}(S)$.
+</Theorem>
+
+<Remark>
+Cantor's theorem applies to **every** set, including uncountable ones. This means there is no "largest" infinite cardinal: given any set $S$, we can always form $\mathcal{P}(S)$, $\mathcal{P}(\mathcal{P}(S))$, and so on, obtaining an unending hierarchy of ever-larger infinities.
+</Remark>
+
+---
+
+## The Diagonal Argument (Idea)
+
+The core idea behind Cantor's diagonal argument is beautifully simple:
+
+1. **Assume** a complete list of objects exists (e.g., all real numbers in $(0, 1)$, or all subsets of $\mathbb{N}$).
+
+2. **Construct** a new object by systematically differing from every item in the list: make the new object disagree with the $n$-th listed object in the $n$-th "coordinate."
+
+3. **Conclude** that the new object cannot appear anywhere in the list, contradicting the assumption of completeness.
+
+For the real number case: suppose we have listed every real in $(0,1)$ as $r_1, r_2, r_3, \ldots$ with decimal expansions. We build a new number $d$ whose $n$-th digit differs from the $n$-th digit of $r_n$. Then $d \neq r_n$ for every $n$, contradicting the assumption that all reals were listed.
+
+For the full proof, see the [detailed proof page](/analysis/ch00-foundations/proofs/p02-cantor-diagonal-proof).
+
+---
+
+## Consequences
+
+The diagonal argument has profound consequences:
+
+- **Different sizes of infinity**: $|\mathbb{N}| < |\mathbb{R}|$. The "infinity" of the natural numbers is strictly smaller than the "infinity" of the real numbers. This was revolutionary in the 19th century.
+
+- **The power set is always strictly larger**: Applying Cantor's theorem iteratively gives an infinite tower of infinities: $|\mathbb{N}| < |\mathcal{P}(\mathbb{N})| < |\mathcal{P}(\mathcal{P}(\mathbb{N}))| < \cdots$
+
+- **The Continuum Hypothesis**: Cantor conjectured that there is no cardinal strictly between $|\mathbb{N}|$ and $|\mathbb{R}|$. This was shown to be independent of ZFC by Godel (1940) and Cohen (1963).
+
+- **Uncountability of the irrationals**: Since $\mathbb{Q}$ is countable and $\mathbb{R} = \mathbb{Q} \cup (\mathbb{R} \setminus \mathbb{Q})$ is uncountable, the set of irrational numbers must be uncountable (and in fact has the same cardinality as $\mathbb{R}$).
+
+- **Existence of transcendental numbers**: The algebraic numbers are countable (as a countable union of finite sets). Since $\mathbb{R}$ is uncountable, "most" real numbers are transcendental. This gives a non-constructive existence proof of transcendental numbers, which Cantor published before Lindemann's explicit proof that $\pi$ is transcendental.
+
+---
+
+## Examples
+
+<Example title="Attempting to list all reals in (0,1)">
+1. Suppose someone claims the following is a complete list of all reals in $(0,1)$:
+
+$$r_1 = 0.5000\ldots$$
+$$r_2 = 0.3333\ldots$$
+$$r_3 = 0.7182\ldots$$
+$$r_4 = 0.1415\ldots$$
+$$r_5 = 0.6931\ldots$$
+
+The diagonal digits are $5, 3, 8, 5, 1, \ldots$ Take a different digit for each (e.g., add $1$ mod $10$, avoiding $0$ and $9$): $d = 0.64162\ldots$ This number $d$ differs from $r_n$ in the $n$-th decimal place, so $d \neq r_n$ for all $n$. The list is incomplete.
+</Example>
+
+<Example title="Cantor's theorem for a finite set">
+2. Let $S = \lbrace a, b \rbrace$. Then $\mathcal{P}(S) = \lbrace \varnothing, \lbrace a \rbrace, \lbrace b \rbrace, \lbrace a, b \rbrace \rbrace$. We have $|S| = 2 < 4 = |\mathcal{P}(S)|$, confirming $|S| < |\mathcal{P}(S)|$.
+
+For any function $f: S \to \mathcal{P}(S)$, e.g., $f(a) = \lbrace a \rbrace$, $f(b) = \lbrace a, b \rbrace$, the "diagonal" set $D = \lbrace x \in S : x \notin f(x) \rbrace = \lbrace b \rbrace$ (since $a \in f(a)$ but $b \notin f(b)$). We see $D \neq f(a)$ and $D \neq f(b)$, so $f$ is not surjective.
+</Example>
+
+<Example title="The set of all infinite binary sequences is uncountable">
+3. Let $\lbrace 0, 1 \rbrace^{\mathbb{N}}$ denote the set of all infinite sequences of $0$s and $1$s. There is a natural bijection between $\lbrace 0, 1 \rbrace^{\mathbb{N}}$ and $\mathcal{P}(\mathbb{N})$: each sequence $(a_1, a_2, a_3, \ldots)$ corresponds to the set $\lbrace n \in \mathbb{N} : a_n = 1 \rbrace$.
+
+Since $|\mathcal{P}(\mathbb{N})| > |\mathbb{N}|$ by Cantor's theorem, $\lbrace 0, 1 \rbrace^{\mathbb{N}}$ is uncountable. The diagonal argument applies directly: given any list of binary sequences, flip the $n$-th bit of the $n$-th sequence to produce a sequence not on the list.
+</Example>
+
+<Example title="Countability of the rationals (contrast)">
+4. In contrast, $\mathbb{Q}$ is countable. The standard proof uses a "zig-zag" enumeration of the grid $\mathbb{Z} \times \mathbb{N}$, listing all fractions $p/q$ and removing duplicates. This shows that the diagonal argument cannot work for $\mathbb{Q}$: any "diagonal" construction on the rationals will produce an irrational number, escaping the set under consideration.
+</Example>
+
+<Example title="The set of all functions from N to N is uncountable">
+5. The set $\mathbb{N}^{\mathbb{N}}$ of all functions $f: \mathbb{N} \to \mathbb{N}$ is uncountable. Given any purported list $f_1, f_2, f_3, \ldots$ of all such functions, define $g: \mathbb{N} \to \mathbb{N}$ by $g(n) = f_n(n) + 1$. Then $g(n) \neq f_n(n)$ for all $n$, so $g$ is not on the list.
+
+This is the diagonal argument in its purest form: the "diagonal" of the infinite matrix $(f_i(j))$ is modified to produce a function not in any row.
+</Example>
+
+<Example title="Application to computability: the halting problem">
+6. Cantor's diagonal method underlies Turing's proof (1936) that the halting problem is undecidable. The set of all Turing machines is countable (each is described by a finite string). If a "halting oracle" $H$ existed, we could diagonalize: build a machine $D$ that on input $n$ does the opposite of what machine $n$ does on input $n$. Then $D$ cannot be any machine $n$, a contradiction.
+
+This deep connection shows that Cantor's idea has implications far beyond set theory, reaching into the foundations of computer science.
+</Example>
+
+<Example title="Cardinality of the real line equals that of the power set of N">
+7. One can show $|\mathbb{R}| = |\mathcal{P}(\mathbb{N})| = 2^{\aleph_0}$, called the cardinality of the continuum and denoted $\mathfrak{c}$. The proof uses the bijection between $(0,1)$ and infinite binary sequences (via binary expansions, with care about dyadic rationals).
+
+By Cantor's theorem, $\mathfrak{c} = 2^{\aleph_0} > \aleph_0$. Whether $\mathfrak{c} = \aleph_1$ (the Continuum Hypothesis) is independent of ZFC.
+</Example>
+
+---
+
+## Historical Note
+
+<Remark>
+Cantor first proved the uncountability of $\mathbb{R}$ in 1874 using a different method (nested intervals). The diagonal argument appeared in 1891 and is more elegant and more general. Cantor's work on infinite sets was initially met with fierce opposition from some contemporaries, notably Kronecker. Today, Cantor's theory is regarded as one of the greatest achievements of 19th-century mathematics, and Hilbert famously declared: "No one shall expel us from the paradise that Cantor has created."
+</Remark>

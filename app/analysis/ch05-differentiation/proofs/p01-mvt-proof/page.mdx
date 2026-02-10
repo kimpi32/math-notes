@@ -1,0 +1,168 @@
+export const metadata = {
+  title: '평균값 정리의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "5. 미분", href: "/analysis/ch05-differentiation" },
+  { label: "증명 - 평균값 정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 평균값 정리의 증명 (Proof of the Mean Value Theorem)
+
+The proof reduces the MVT to Rolle's theorem via an auxiliary function that "tilts" the graph to make the endpoints equal.
+
+---
+
+## Theorem restated
+
+<Theorem title="Mean Value Theorem">
+If $f$ is continuous on $[a, b]$ and differentiable on $(a, b)$, then there exists $c \in (a, b)$ with
+
+$$f'(c) = \frac{f(b) - f(a)}{b - a}.$$
+</Theorem>
+
+---
+
+## Full proof
+
+<Proof>
+**Define the auxiliary function.** Let $L(x)$ be the linear function (secant line) connecting $(a, f(a))$ to $(b, f(b))$:
+
+$$L(x) = f(a) + \frac{f(b) - f(a)}{b - a}(x - a).$$
+
+Define $g(x) = f(x) - L(x)$.
+
+**Verify Rolle's hypotheses.**
+
+1. *Continuity*: $g$ is continuous on $[a, b]$ (difference of continuous functions).
+
+2. *Differentiability*: $g$ is differentiable on $(a, b)$ with
+
+$$g'(x) = f'(x) - \frac{f(b) - f(a)}{b - a}.$$
+
+3. *Equal endpoints*:
+
+$$g(a) = f(a) - L(a) = f(a) - f(a) = 0,$$
+
+$$g(b) = f(b) - L(b) = f(b) - \left[f(a) + \frac{f(b) - f(a)}{b - a}(b - a)\right] = f(b) - f(b) = 0.$$
+
+**Apply Rolle's theorem.** By Rolle's theorem, there exists $c \in (a, b)$ with $g'(c) = 0$:
+
+$$0 = f'(c) - \frac{f(b) - f(a)}{b - a}.$$
+
+Therefore $f'(c) = \frac{f(b) - f(a)}{b - a}$.
+</Proof>
+
+---
+
+## Geometric intuition
+
+<Remark>
+The function $g(x) = f(x) - L(x)$ measures the **vertical distance** from the graph of $f$ to the secant line. Since $g(a) = g(b) = 0$, Rolle's theorem guarantees that $g$ has a horizontal tangent at some interior point $c$. A horizontal tangent of $g$ means $f'(c) = L'(c) = $ slope of secant, which is exactly the MVT conclusion.
+</Remark>
+
+---
+
+## Why this auxiliary function?
+
+<Remark>
+The key idea is: subtracting the secant line "straightens" the problem. After subtracting, the endpoints are equal, and Rolle's theorem applies directly. This technique of reducing a general problem to a special case (here, MVT to Rolle's) is ubiquitous in analysis.
+</Remark>
+
+---
+
+## Verifying the proof with examples
+
+<Example title="f(x) = x^2 on [1, 3]">
+1. $L(x) = 1 + \frac{9 - 1}{2}(x - 1) = 4x - 3$. $g(x) = x^2 - 4x + 3 = (x-1)(x-3)$. $g'(x) = 2x - 4 = 0$ at $c = 2$. Check: $f'(2) = 4 = \frac{9-1}{2}$.
+</Example>
+
+<Example title="f(x) = sin(x) on [0, pi]">
+2. $L(x) = 0 + \frac{0 - 0}{\pi}(x - 0) = 0$. $g(x) = \sin x$. $g'(x) = \cos x = 0$ at $c = \pi/2$. Check: $f'(\pi/2) = 0 = \frac{0-0}{\pi}$.
+
+Here the MVT reduces to Rolle's theorem since $f(0) = f(\pi) = 0$.
+</Example>
+
+<Example title="f(x) = e^x on [0, 1]">
+3. $L(x) = 1 + (e - 1)x$. $g(x) = e^x - 1 - (e-1)x$. $g'(x) = e^x - (e-1) = 0$ at $x = \ln(e - 1) \approx 0.541$.
+
+Check: $f'(c) = e^c = e - 1 \approx 1.718 = \frac{e - 1}{1}$.
+</Example>
+
+---
+
+## Proof of consequences
+
+<Example title="Proving f' = 0 implies f constant">
+4. Let $f'(x) = 0$ for all $x \in (a, b)$. Take any $x_1 < x_2$ in $(a, b)$. By MVT:
+
+$$f(x_2) - f(x_1) = f'(c)(x_2 - x_1) = 0.$$
+
+So $f(x_1) = f(x_2)$.
+</Example>
+
+<Example title="Proving Lipschitz bound">
+5. If $|f'(x)| \leq M$ for all $x \in (a, b)$, then for $x_1, x_2 \in (a, b)$:
+
+$$|f(x_2) - f(x_1)| = |f'(c)| \cdot |x_2 - x_1| \leq M|x_2 - x_1|.$$
+
+So $f$ is Lipschitz with constant $M$.
+</Example>
+
+<Example title="Proving monotonicity">
+6. If $f'(x) > 0$ on $(a, b)$: for $x_1 < x_2$, $f(x_2) - f(x_1) = f'(c)(x_2 - x_1) > 0$. So $f$ is strictly increasing.
+</Example>
+
+---
+
+## Proof of Cauchy's MVT
+
+<Example title="Cauchy MVT proof">
+7. To prove Cauchy's MVT ($\frac{f'(c)}{g'(c)} = \frac{f(b)-f(a)}{g(b)-g(a)}$), define:
+
+$$h(x) = f(x)[g(b) - g(a)] - g(x)[f(b) - f(a)].$$
+
+Then $h(a) = f(a)g(b) - g(a)f(b) = h(b)$, so Rolle's theorem gives $h'(c) = 0$:
+
+$$f'(c)[g(b) - g(a)] = g'(c)[f(b) - f(a)].$$
+</Example>
+
+---
+
+## Applications of the proof technique
+
+<Example title="Generalized MVT for integrals">
+8. The Mean Value Theorem for integrals states: if $f$ is continuous on $[a,b]$, there exists $c \in (a,b)$ with $\int_a^b f = f(c)(b-a)$. This follows from the MVT applied to the antiderivative $F(x) = \int_a^x f(t)\,dt$: $F(b) - F(a) = F'(c)(b - a) = f(c)(b - a)$.
+</Example>
+
+<Example title="Newton's method convergence">
+9. The MVT is used to prove quadratic convergence of Newton's method. If $f(r) = 0$ and $x_n$ is near $r$:
+
+$$x_{n+1} - r = x_n - \frac{f(x_n)}{f'(x_n)} - r = \frac{f'(x_n)(x_n - r) - f(x_n)}{f'(x_n)}.$$
+
+Using Taylor: $f(x_n) = f'(c)(x_n - r)$, so the error involves $|f'(x_n) - f'(c)|$, which by MVT on $f'$ is $\leq |f''(\xi)||x_n - r|$.
+</Example>
+
+<Example title="Convexity">
+10. If $f''(x) > 0$ on $(a,b)$, then $f$ is convex. Proof: by MVT, $\frac{f(x) - f(a)}{x - a} = f'(c_1)$ and $\frac{f(b) - f(x)}{b - x} = f'(c_2)$ with $c_1 < x < c_2$. Since $f'' > 0$ implies $f'$ is increasing: $f'(c_1) < f'(c_2)$, which gives the convexity inequality.
+</Example>
+
+<Example title="Comparing functions via derivatives">
+11. To prove $e^x > 1 + x + x^2/2$ for $x > 0$: let $g(x) = e^x - 1 - x - x^2/2$. Then $g(0) = 0$ and $g'(x) = e^x - 1 - x$. Now $g'(0) = 0$ and $g''(x) = e^x - 1 > 0$ for $x > 0$. By MVT, $g'(x) > 0$ for $x > 0$, then $g(x) > 0$ for $x > 0$.
+</Example>
+
+<Example title="Bernoulli inequality">
+12. For $x > -1$ and $n \geq 1$: $(1 + x)^n \geq 1 + nx$. Let $f(x) = (1+x)^n - 1 - nx$. Then $f(0) = 0$ and $f'(x) = n(1+x)^{n-1} - n = n((1+x)^{n-1} - 1)$. For $x > 0$: $(1+x)^{n-1} > 1$, so $f' > 0$ and $f(x) > f(0) = 0$.
+</Example>

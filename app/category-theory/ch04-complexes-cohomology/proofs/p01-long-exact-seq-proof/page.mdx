@@ -1,0 +1,120 @@
+export const metadata = {
+  title: 'Proof of Long Exact Sequence via Snake Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Proof — Long Exact Sequence via Snake Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Long Exact Sequence via the Snake Lemma
+
+We prove the [Long Exact Sequence in Cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence) by reducing it to the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma).
+
+---
+
+## Setup
+
+Let $0 \to A^\bullet \xrightarrow{f} B^\bullet \xrightarrow{g} C^\bullet \to 0$ be a short exact sequence of complexes. This means $0 \to A^n \xrightarrow{f^n} B^n \xrightarrow{g^n} C^n \to 0$ is exact for each $n$.
+
+---
+
+## Step 1: Identify Cocycles and Coboundaries
+
+<Proof title="Step 1">
+For each $n$, define $Z^n(A) = \ker(d_A^n : A^n \to A^{n+1})$ (cocycles) and $B^n(A) = \mathrm{im}(d_A^{n-1} : A^{n-1} \to A^n)$ (coboundaries). We have $B^n \subseteq Z^n$ since $d^n \circ d^{n-1} = 0$, and $H^n(A) = Z^n(A) / B^n(A)$.
+</Proof>
+
+---
+
+## Step 2: The Key Diagram
+
+<Proof title="Step 2">
+Consider the commutative diagram for each $n$:
+
+$$
+\begin{array}{ccccccccc}
+& & A^n / B^n(A) & \xrightarrow{\bar{f}^n} & B^n / B^n(B) & \xrightarrow{\bar{g}^n} & C^n / B^n(C) & \to & 0 \\[6pt]
+& & \downarrow\scriptstyle{\bar{d}_A^n} & & \downarrow\scriptstyle{\bar{d}_B^n} & & \downarrow\scriptstyle{\bar{d}_C^n} & & \\[6pt]
+0 & \to & Z^{n+1}(A) & \xrightarrow{f^{n+1}} & Z^{n+1}(B) & \xrightarrow{g^{n+1}} & Z^{n+1}(C) & &
+\end{array}
+$$
+
+where $\bar{d}^n$ denotes the map induced by $d^n$ on the quotient $A^n / B^n \to A^{n+1}$, landing in $Z^{n+1}$ since $d^{n+1} \circ d^n = 0$.
+
+**Top row is exact on the right:** Since $g^n$ is surjective, $\bar{g}^n$ is surjective.
+
+**Bottom row is exact on the left:** Since $f^{n+1}$ is injective, its restriction to $Z^{n+1}(A) \to Z^{n+1}(B)$ is injective.
+
+**Kernels:** $\ker(\bar{d}_A^n) = Z^n(A) / B^n(A) = H^n(A)$ (since $\bar{d}^n[a] = 0 \iff d^n(a) = 0 \iff a \in Z^n$). Similarly for $B$ and $C$.
+
+**Cokernels:** $\mathrm{coker}(\bar{d}_A^n) = Z^{n+1}(A) / \mathrm{im}(\bar{d}_A^n) = Z^{n+1}(A) / B^{n+1}(A) = H^{n+1}(A)$. Similarly for $B$ and $C$.
+</Proof>
+
+---
+
+## Step 3: Apply the Snake Lemma
+
+<Proof title="Step 3">
+Applying the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma) to the diagram in Step 2, we obtain the exact sequence:
+
+$$H^n(A) \to H^n(B) \to H^n(C) \xrightarrow{\delta^n} H^{n+1}(A) \to H^{n+1}(B) \to H^{n+1}(C)$$
+
+Since this holds for every $n$, splicing these sequences together gives the long exact sequence:
+
+$$\cdots \to H^n(A) \xrightarrow{H^n(f)} H^n(B) \xrightarrow{H^n(g)} H^n(C) \xrightarrow{\delta^n} H^{n+1}(A) \to \cdots$$
+</Proof>
+
+---
+
+## Step 4: The Connecting Homomorphism Explicitly
+
+<Proof title="Step 4">
+In $R\text{-}\mathbf{Mod}$, $\delta^n$ acts as follows. Given $[c] \in H^n(C)$ (so $c \in C^n$ with $d_C^n(c) = 0$):
+
+1. **Lift:** Choose $b \in B^n$ with $g^n(b) = c$.
+2. **Differentiate:** Compute $d_B^n(b) \in B^{n+1}$. We have $g^{n+1}(d_B^n(b)) = d_C^n(g^n(b)) = d_C^n(c) = 0$.
+3. **Lift to $A$:** By exactness, $d_B^n(b) = f^{n+1}(a)$ for a unique $a \in A^{n+1}$.
+4. **Verify cocycle:** $f^{n+2}(d_A^{n+1}(a)) = d_B^{n+1}(f^{n+1}(a)) = d_B^{n+1}(d_B^n(b)) = 0$. Since $f$ is injective, $d_A^{n+1}(a) = 0$, so $a \in Z^{n+1}(A)$.
+5. **Define:** $\delta^n([c]) = [a] \in H^{n+1}(A)$.
+
+Independence of the lift $b$ follows from the Snake Lemma proof. $\square$
+</Proof>
+
+---
+
+## Naturality
+
+<Theorem title="Naturality of the connecting homomorphism" number="4.8">
+Given a morphism of short exact sequences of complexes:
+
+$$
+\begin{array}{ccccccccc}
+0 & \to & A^\bullet & \to & B^\bullet & \to & C^\bullet & \to & 0 \\
+& & \downarrow\scriptstyle{\alpha} & & \downarrow\scriptstyle{\beta} & & \downarrow\scriptstyle{\gamma} & & \\
+0 & \to & A'^\bullet & \to & B'^\bullet & \to & C'^\bullet & \to & 0
+\end{array}
+$$
+
+the connecting homomorphisms satisfy $\delta' \circ H^n(\gamma) = H^{n+1}(\alpha) \circ \delta$. This gives a morphism of long exact sequences.
+</Theorem>
+
+<Example title="Application to Ext" id="ext-naturality">
+For a SES $0 \to M' \to M \to M'' \to 0$ and any module $N$, the connecting homomorphism $\delta : \mathrm{Hom}(M', N) \to \mathrm{Ext}^1(M'', N)$ sends a map $\varphi : M' \to N$ to the extension class obtained by pushing out the original SES along $\varphi$.
+</Example>
+
+<Example title="Application to sheaf cohomology" id="sheaf-naturality">
+For $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ on $X$, the connecting homomorphism $\delta : H^0(X, \mathcal{F}'') \to H^1(X, \mathcal{F}')$ sends a global section $s \in \Gamma(\mathcal{F}'')$ to the obstruction class for lifting $s$ to $\Gamma(\mathcal{F})$.
+</Example>

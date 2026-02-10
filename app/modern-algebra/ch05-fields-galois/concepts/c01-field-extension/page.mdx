@@ -1,0 +1,230 @@
+export const metadata = {
+  title: 'Field Extensions — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "5. 체와 갈루아 이론", href: "/modern-algebra/ch05-fields-galois" },
+  { label: "Concept — Field Extensions" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Field Extensions
+
+A **field extension** is the fundamental object of study in Galois theory. Just as group theory studies symmetry through subgroups and quotients, field theory studies algebraic equations by embedding a base field into larger fields where those equations have solutions.
+
+---
+
+## Basic definitions
+
+<Definition title="Field extension" number="5.1">
+A **field extension** is an inclusion of fields $F \subseteq E$ (equivalently, a ring homomorphism $F \hookrightarrow E$ of fields, which is always injective). We write $E/F$ and call $F$ the **base field** and $E$ the **extension field**.
+</Definition>
+
+<Definition title="Degree of an extension" number="5.2">
+The **degree** of $E/F$, denoted $[E : F]$, is the dimension of $E$ as a vector space over $F$:
+
+$$[E : F] = \dim_F E.$$
+
+If $[E : F] < \infty$, we say $E/F$ is a **finite extension**. Otherwise, it is an **infinite extension**.
+</Definition>
+
+<Example id="q-sqrt2" title="Q(sqrt(2)) over Q">
+Let $E = \mathbb{Q}(\sqrt{2}) = \{a + b\sqrt{2} \mid a, b \in \mathbb{Q}\}$. Then $E/\mathbb{Q}$ is a field extension of degree $2$: a basis for $E$ over $\mathbb{Q}$ is $\{1, \sqrt{2}\}$.
+</Example>
+
+<Example id="c-over-r" title="C over R">
+$\mathbb{C}/\mathbb{R}$ is a field extension with $[\mathbb{C} : \mathbb{R}] = 2$. A basis is $\{1, i\}$, and every element is $a + bi$ with $a, b \in \mathbb{R}$.
+</Example>
+
+<Example id="r-over-q" title="R over Q">
+$\mathbb{R}/\mathbb{Q}$ is an infinite extension: $[\mathbb{R} : \mathbb{Q}] = \infty$. In fact, by cardinality, $\mathbb{R}$ has uncountable dimension over $\mathbb{Q}$ (a Hamel basis requires the axiom of choice).
+</Example>
+
+---
+
+## The tower law
+
+<Theorem title="Tower Law (Multiplicativity of degrees)" number="5.1">
+If $F \subseteq K \subseteq E$ are fields, then
+
+$$[E : F] = [E : K] \cdot [K : F].$$
+
+In particular, $[E : F]$ is finite if and only if both $[E : K]$ and $[K : F]$ are finite.
+</Theorem>
+
+<Proof>
+Let $\{e_1, \ldots, e_m\}$ be a basis for $E$ over $K$ and $\{f_1, \ldots, f_n\}$ a basis for $K$ over $F$. We claim $\{e_i f_j\}_{1 \le i \le m, 1 \le j \le n}$ is a basis for $E$ over $F$.
+
+**Spanning**: Any $x \in E$ can be written $x = \sum_i a_i e_i$ with $a_i \in K$, and each $a_i = \sum_j b_{ij} f_j$ with $b_{ij} \in F$. So $x = \sum_{i,j} b_{ij} e_i f_j$.
+
+**Linear independence**: If $\sum_{i,j} b_{ij} e_i f_j = 0$ with $b_{ij} \in F$, then $\sum_i (\sum_j b_{ij} f_j) e_i = 0$. Since the $e_i$ are linearly independent over $K$, we get $\sum_j b_{ij} f_j = 0$ for each $i$. Since the $f_j$ are linearly independent over $F$, we get $b_{ij} = 0$ for all $i, j$.
+</Proof>
+
+<Example id="tower-example" title="A tower of extensions">
+Consider $\mathbb{Q} \subseteq \mathbb{Q}(\sqrt{2}) \subseteq \mathbb{Q}(\sqrt{2}, \sqrt{3})$. We have:
+- $[\mathbb{Q}(\sqrt{2}) : \mathbb{Q}] = 2$
+- $[\mathbb{Q}(\sqrt{2}, \sqrt{3}) : \mathbb{Q}(\sqrt{2})] = 2$ (since $\sqrt{3} \notin \mathbb{Q}(\sqrt{2})$)
+- $[\mathbb{Q}(\sqrt{2}, \sqrt{3}) : \mathbb{Q}] = 4$
+
+A basis for $\mathbb{Q}(\sqrt{2}, \sqrt{3})$ over $\mathbb{Q}$ is $\{1, \sqrt{2}, \sqrt{3}, \sqrt{6}\}$.
+</Example>
+
+<Example id="degree-divides" title="Degree divisibility">
+If $[E : F] = p$ is prime, then there are no intermediate fields between $F$ and $E$: any intermediate $K$ satisfies $[E:F] = [E:K][K:F]$, so $[K:F]$ divides $p$, forcing $K = F$ or $K = E$.
+</Example>
+
+---
+
+## Algebraic and transcendental elements
+
+<Definition title="Algebraic and transcendental elements" number="5.3">
+Let $E/F$ be a field extension and $\alpha \in E$.
+
+- $\alpha$ is **algebraic** over $F$ if there exists a nonzero polynomial $f(x) \in F[x]$ with $f(\alpha) = 0$.
+- $\alpha$ is **transcendental** over $F$ if no such polynomial exists.
+</Definition>
+
+<Definition title="Minimal polynomial" number="5.4">
+If $\alpha$ is algebraic over $F$, the **minimal polynomial** of $\alpha$ over $F$, denoted $\min_F(\alpha)$ or $\operatorname{irr}(\alpha, F)$, is the unique monic polynomial of least degree in $F[x]$ having $\alpha$ as a root. It is irreducible over $F$.
+</Definition>
+
+<Example id="sqrt2-minimal" title="Minimal polynomial of sqrt(2)">
+$\sqrt{2}$ is algebraic over $\mathbb{Q}$ with minimal polynomial $x^2 - 2$. This polynomial is irreducible over $\mathbb{Q}$ by Eisenstein with $p = 2$ (or by the rational root theorem).
+</Example>
+
+<Example id="cube-root-unity" title="Primitive cube root of unity">
+Let $\omega = e^{2\pi i/3} = (-1 + \sqrt{-3})/2$. Then $\omega$ is a root of $x^3 - 1 = (x-1)(x^2+x+1)$, but the minimal polynomial of $\omega$ over $\mathbb{Q}$ is $x^2 + x + 1$ (irreducible over $\mathbb{Q}$, since its roots are not real). So $[\mathbb{Q}(\omega) : \mathbb{Q}] = 2$.
+</Example>
+
+<Example id="pi-transcendental" title="Transcendental numbers">
+The numbers $\pi$ and $e$ are transcendental over $\mathbb{Q}$ (Lindemann 1882, Hermite 1873). This means $[\mathbb{Q}(\pi) : \mathbb{Q}] = \infty$, and $\mathbb{Q}(\pi) \cong \mathbb{Q}(x)$, the field of rational functions.
+</Example>
+
+<Example id="x-transcendental" title="Indeterminate is transcendental">
+In the rational function field $F(x)/F$, the element $x$ is transcendental over $F$ by definition. So $F(x)/F$ is an infinite extension with $[F(x) : F] = \infty$.
+</Example>
+
+---
+
+## Simple extensions
+
+<Definition title="Simple extension" number="5.5">
+A field extension $E/F$ is **simple** if $E = F(\alpha)$ for some single element $\alpha \in E$. The element $\alpha$ is called a **primitive element** of the extension.
+</Definition>
+
+<Theorem title="Structure of simple extensions" number="5.2">
+Let $E = F(\alpha)$.
+
+- If $\alpha$ is algebraic over $F$ with minimal polynomial $p(x)$ of degree $n$, then $F(\alpha) \cong F[x]/(p(x))$ and $[F(\alpha) : F] = n$. A basis for $F(\alpha)$ over $F$ is $\{1, \alpha, \alpha^2, \ldots, \alpha^{n-1}\}$.
+
+- If $\alpha$ is transcendental over $F$, then $F(\alpha) \cong F(x)$, the field of rational functions, and $[F(\alpha) : F] = \infty$.
+</Theorem>
+
+<Example id="adjoin-sqrt" title="Adjoining a square root">
+$\mathbb{Q}(\sqrt{5}) \cong \mathbb{Q}[x]/(x^2 - 5)$. Every element can be written uniquely as $a + b\sqrt{5}$ with $a, b \in \mathbb{Q}$. The multiplication rule follows from $(\sqrt{5})^2 = 5$: for instance,
+
+$$(2 + 3\sqrt{5})(1 - \sqrt{5}) = 2 - 2\sqrt{5} + 3\sqrt{5} - 15 = -13 + \sqrt{5}.$$
+</Example>
+
+<Example id="adjoin-cuberoot" title="Adjoining a cube root">
+Let $\alpha = \sqrt[3]{2}$. Then $\min_{\mathbb{Q}}(\alpha) = x^3 - 2$ (irreducible by Eisenstein). So $[\mathbb{Q}(\sqrt[3]{2}) : \mathbb{Q}] = 3$ and a basis is $\{1, \sqrt[3]{2}, \sqrt[3]{4}\}$.
+
+Note: $\mathbb{Q}(\sqrt[3]{2}) \subset \mathbb{R}$, so it does not contain the other cube roots of $2$, which are $\omega\sqrt[3]{2}$ and $\omega^2\sqrt[3]{2}$ where $\omega = e^{2\pi i/3}$.
+</Example>
+
+---
+
+## Algebraic and transcendental extensions
+
+<Definition title="Algebraic extension" number="5.6">
+A field extension $E/F$ is **algebraic** if every element of $E$ is algebraic over $F$. Otherwise, it is **transcendental**.
+</Definition>
+
+<Theorem title="Finite implies algebraic" number="5.3">
+Every finite extension is algebraic.
+</Theorem>
+
+<Proof>
+If $[E:F] = n$ and $\alpha \in E$, then the $n+1$ elements $1, \alpha, \alpha^2, \ldots, \alpha^n$ are linearly dependent over $F$. A nontrivial linear relation $\sum_{i=0}^{n} c_i \alpha^i = 0$ with $c_i \in F$ gives a nonzero polynomial vanishing at $\alpha$.
+</Proof>
+
+<Remark title="Converse is false">
+The converse fails: the algebraic closure $\overline{\mathbb{Q}}/\mathbb{Q}$ is algebraic but not finite (it has infinite degree). The algebraic numbers form a countably infinite field extension of $\mathbb{Q}$.
+</Remark>
+
+<Example id="algebraic-closure-q" title="Algebraic closure of Q">
+$\overline{\mathbb{Q}}$ consists of all complex numbers that are roots of polynomials in $\mathbb{Q}[x]$. It includes $\sqrt{2}, i, \sqrt[5]{3}, e^{2\pi i/n}$ for all $n$, etc. The extension $\overline{\mathbb{Q}}/\mathbb{Q}$ is algebraic but $[\overline{\mathbb{Q}} : \mathbb{Q}] = \infty$.
+</Example>
+
+---
+
+## Compositum and intersections
+
+<Definition title="Compositum" number="5.7">
+If $K_1$ and $K_2$ are subfields of a field $E$ both containing a field $F$, their **compositum** $K_1 K_2$ is the smallest subfield of $E$ containing both $K_1$ and $K_2$.
+</Definition>
+
+<Example id="compositum-example" title="Compositum of quadratic extensions">
+In $\mathbb{C}$, let $K_1 = \mathbb{Q}(\sqrt{2})$ and $K_2 = \mathbb{Q}(\sqrt{3})$. Then $K_1 K_2 = \mathbb{Q}(\sqrt{2}, \sqrt{3})$, which has degree $4$ over $\mathbb{Q}$.
+
+Note that $\sqrt{6} = \sqrt{2}\sqrt{3} \in K_1 K_2$, so $\mathbb{Q}(\sqrt{6}) \subset K_1 K_2$. But $[\mathbb{Q}(\sqrt{6}) : \mathbb{Q}] = 2 \neq 4$, so $\mathbb{Q}(\sqrt{6})$ is a proper subfield.
+</Example>
+
+<Theorem title="Degree of compositum" number="5.4">
+If $K_1/F$ and $K_2/F$ are finite extensions inside a common field $E$, then
+
+$$[K_1 K_2 : F] \le [K_1 : F] \cdot [K_2 : F],$$
+
+with equality if and only if a basis for $K_1/F$ remains linearly independent over $K_2$.
+</Theorem>
+
+<Example id="coprime-degrees" title="Coprime degrees force equality">
+If $[K_1 : F]$ and $[K_2 : F]$ are coprime, then $[K_1 K_2 : F] = [K_1:F] \cdot [K_2:F]$. For instance, if $[K_1:F] = 2$ and $[K_2:F] = 3$, then $[K_1 K_2 : F] = 6$.
+
+Proof sketch: $[K_1 : F]$ divides $[K_1 K_2 : F]$ and $[K_2 : F]$ divides $[K_1 K_2 : F]$. Since $\gcd([K_1:F],[K_2:F]) = 1$, the product divides $[K_1 K_2 : F]$, and the reverse inequality always holds.
+</Example>
+
+---
+
+## Algebraic elements over intermediate fields
+
+<Theorem title="Transitivity of algebraicity" number="5.5">
+If $E/K$ and $K/F$ are both algebraic extensions, then $E/F$ is algebraic.
+</Theorem>
+
+<Proof>
+Let $\alpha \in E$. Since $E/K$ is algebraic, $\alpha$ satisfies a polynomial $a_n \alpha^n + \cdots + a_0 = 0$ with $a_i \in K$. Let $L = F(a_0, \ldots, a_n)$. Since $K/F$ is algebraic, each $a_i$ is algebraic over $F$, so $[L : F] < \infty$. Now $\alpha$ is algebraic over $L$, so $[L(\alpha) : L] < \infty$. By the tower law, $[L(\alpha) : F] = [L(\alpha) : L] \cdot [L : F] < \infty$. Since $F \subseteq L(\alpha)$ is finite, $\alpha$ is algebraic over $F$.
+</Proof>
+
+<Example id="sqrt-sqrt2" title="Nested radicals are algebraic">
+$\alpha = \sqrt{1 + \sqrt{2}}$ is algebraic over $\mathbb{Q}$. Indeed, $\alpha^2 = 1 + \sqrt{2}$, so $(\alpha^2 - 1)^2 = 2$, giving $\alpha^4 - 2\alpha^2 - 1 = 0$. The minimal polynomial is $x^4 - 2x^2 - 1$, and $[\mathbb{Q}(\alpha) : \mathbb{Q}] = 4$.
+</Example>
+
+---
+
+## Summary
+
+| Extension | Type | Degree |
+|---|---|---|
+| $\mathbb{Q}(\sqrt{2})/\mathbb{Q}$ | Algebraic, simple, finite | $2$ |
+| $\mathbb{Q}(\sqrt[3]{2})/\mathbb{Q}$ | Algebraic, simple, finite | $3$ |
+| $\mathbb{Q}(\sqrt{2},\sqrt{3})/\mathbb{Q}$ | Algebraic, finite | $4$ |
+| $\mathbb{C}/\mathbb{R}$ | Algebraic, simple, finite | $2$ |
+| $\overline{\mathbb{Q}}/\mathbb{Q}$ | Algebraic, infinite | $\infty$ |
+| $\mathbb{R}/\mathbb{Q}$ | Transcendental, infinite | $\infty$ |
+| $F(x)/F$ | Transcendental, simple, infinite | $\infty$ |
+
+<Remark title="Looking ahead">
+With the notion of field extension in place, the next step is to study [splitting fields](/modern-algebra/ch05-fields-galois/concepts/c02-splitting-field) --- the minimal extensions where a polynomial factors completely --- and then the [Galois group](/modern-algebra/ch05-fields-galois/concepts/c03-galois-group), which captures the symmetry of roots.
+</Remark>

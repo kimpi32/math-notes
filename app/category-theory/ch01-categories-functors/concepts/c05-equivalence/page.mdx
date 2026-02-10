@@ -1,0 +1,142 @@
+export const metadata = {
+  title: 'Equivalence of Categories — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Concept — Equivalence of Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Equivalence of Categories
+
+An equivalence of categories is the correct notion of "sameness" for categories. Unlike isomorphism (which is too strict), equivalence allows for the identification of isomorphic objects and captures the principle that categories sharing the same structural properties should be considered "the same."
+
+---
+
+## Definition
+
+<Definition title="Equivalence of Categories" number="1.15">
+An **equivalence of categories** consists of functors $F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to \mathcal{C}$ together with natural isomorphisms
+
+$$\eta : \mathrm{Id}_{\mathcal{C}} \xrightarrow{\;\sim\;} G \circ F \qquad \text{and} \qquad \varepsilon : F \circ G \xrightarrow{\;\sim\;} \mathrm{Id}_{\mathcal{D}}$$
+
+We write $\mathcal{C} \simeq \mathcal{D}$ and say $\mathcal{C}$ and $\mathcal{D}$ are **equivalent categories**. The functor $F$ is called an **equivalence**, and $G$ is called a **quasi-inverse** of $F$.
+</Definition>
+
+<Definition title="Isomorphism of Categories" number="1.16">
+An **isomorphism of categories** is a functor $F : \mathcal{C} \to \mathcal{D}$ with an inverse $G : \mathcal{D} \to \mathcal{C}$ such that $G \circ F = \mathrm{Id}_{\mathcal{C}}$ and $F \circ G = \mathrm{Id}_{\mathcal{D}}$ (strict equality, not just natural isomorphism).
+</Definition>
+
+<Remark title="Equivalence vs Isomorphism">
+Isomorphism of categories is almost always too strong. For instance, $\mathbf{Vect}_k^{\mathrm{fd}}$ (finite-dimensional vector spaces) is equivalent but not isomorphic to $\mathbf{Mat}_k$ (natural numbers with matrices as morphisms). The right notion is equivalence: it preserves all categorical properties (limits, colimits, exactness, etc.) while allowing flexibility in the choice of representatives.
+</Remark>
+
+---
+
+## The Characterization Theorem
+
+<Theorem title="Characterization of Equivalences" number="1.7">
+A functor $F : \mathcal{C} \to \mathcal{D}$ is an equivalence of categories if and only if it is:
+
+1. **Fully faithful:** For all $A, B \in \mathcal{C}$, the map $F : \mathrm{Hom}(A, B) \to \mathrm{Hom}(F(A), F(B))$ is a bijection.
+2. **Essentially surjective:** For every $D \in \mathcal{D}$, there exists $C \in \mathcal{C}$ with $F(C) \cong D$.
+</Theorem>
+
+<Proof>
+**($\Rightarrow$)** Suppose $F$ is an equivalence with quasi-inverse $G$ and natural isomorphisms $\eta, \varepsilon$.
+
+*Fully faithful:* Given $f, g : A \to B$ with $F(f) = F(g)$, apply $G$ to get $GF(f) = GF(g)$. Since $\eta$ is a natural isomorphism, $\eta_B \circ f = GF(f) \circ \eta_A = GF(g) \circ \eta_A = \eta_B \circ g$, so $f = g$ (faithful). For fullness, given $h : F(A) \to F(B)$, set $f = \eta_B^{-1} \circ G(h) \circ \eta_A$. Then $F(f) = h$ by a similar naturality argument.
+
+*Essentially surjective:* For any $D \in \mathcal{D}$, we have $F(G(D)) \cong D$ via $\varepsilon_D$.
+
+**($\Leftarrow$)** Suppose $F$ is fully faithful and essentially surjective. For each $D \in \mathcal{D}$, choose $G(D) \in \mathcal{C}$ and an isomorphism $\varepsilon_D : F(G(D)) \xrightarrow{\sim} D$. For a morphism $h : D \to D'$ in $\mathcal{D}$, define $G(h)$ to be the unique morphism making the square commute (using full faithfulness). Then $G$ is a functor, and $\varepsilon$ and the induced $\eta$ are natural isomorphisms.
+</Proof>
+
+---
+
+## Skeleton
+
+<Definition title="Skeleton" number="1.17">
+A **skeleton** of a category $\mathcal{C}$ is a full subcategory $\mathcal{C}_0 \subseteq \mathcal{C}$ containing exactly one object from each isomorphism class. Every category is equivalent to any of its skeletons.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Finite-dimensional vector spaces and matrices" id="vect-mat">
+The category $\mathbf{Vect}_k^{\mathrm{fd}}$ of finite-dimensional vector spaces over $k$ is equivalent to $\mathbf{Mat}_k$ (objects: natural numbers, morphisms: matrices). The equivalence sends $V$ to $\dim V$ and a linear map to its matrix with respect to chosen bases. The skeleton of $\mathbf{Vect}_k^{\mathrm{fd}}$ is $\mathbf{Mat}_k$: each $n$-dimensional space is isomorphic to $k^n$.
+</Example>
+
+<Example title="Compact Hausdorff spaces and commutative C*-algebras" id="gelfand">
+Gelfand duality: the category of compact Hausdorff spaces is equivalent to the opposite of the category of commutative unital C*-algebras. The functors are $X \mapsto C(X)$ (continuous functions) and $A \mapsto \mathrm{Max}(A)$ (maximal ideal space).
+</Example>
+
+<Example title="Affine schemes and commutative rings" id="affine-scheme">
+The category of affine schemes is equivalent to $\mathbf{CRing}^{\mathrm{op}}$. The equivalence sends $\mathrm{Spec}\, A \mapsto A$ and $A \mapsto \mathrm{Spec}\, A$. This is the starting point of algebraic geometry: geometric objects (affine schemes) correspond to algebraic objects (commutative rings) contravariantly.
+</Example>
+
+<Example title="Covering spaces and group actions" id="covering-spaces">
+For a connected, locally simply connected space $X$ with fundamental group $\pi_1(X, x_0) = G$, the category of covering spaces of $X$ is equivalent to the category of $G$-sets: $\mathbf{Cov}(X) \simeq G\text{-}\mathbf{Set}$. The equivalence sends a covering $p : \tilde{X} \to X$ to the fiber $p^{-1}(x_0)$ with the monodromy action.
+</Example>
+
+<Example title="Presheaves on a discrete category" id="presheaf-discrete">
+For a discrete category with objects $\{1, 2, \ldots, n\}$, the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is equivalent to $\mathbf{Set}^n$ (the category of $n$-tuples of sets). A presheaf on a discrete category is simply a choice of one set for each object.
+</Example>
+
+<Example title="Modules over Morita equivalent rings" id="morita">
+Two rings $R$ and $S$ are **Morita equivalent** if their module categories are equivalent: $R\text{-}\mathbf{Mod} \simeq S\text{-}\mathbf{Mod}$. For example, $R$ and $M_n(R)$ are always Morita equivalent. Morita equivalence preserves all categorical properties of module categories (projectivity, injectivity, exactness) but not ring-theoretic properties (commutativity, being a field).
+</Example>
+
+<Example title="G-sets and functors from BG" id="g-sets-bg">
+For a group $G$, the category of $G$-sets is equivalent to the functor category $[\mathbf{B}G, \mathbf{Set}]$, where $\mathbf{B}G$ is the one-object category with morphisms $G$. A functor $\mathbf{B}G \to \mathbf{Set}$ picks a set $S$ and gives an action $G \times S \to S$; natural transformations correspond to equivariant maps.
+</Example>
+
+<Example title="Category of finite sets" id="fin-set">
+Let $\mathbf{FinSet}$ be the category of finite sets and let $\mathbf{F}$ be the category whose objects are $\{[n] = \{1, \ldots, n\} : n \geq 0\}$ (with $[0] = \varnothing$) and whose morphisms are all functions. Then $\mathbf{F}$ is a skeleton of $\mathbf{FinSet}$: every finite set is isomorphic to exactly one $[n]$.
+</Example>
+
+<Example title="Connected groupoids and groups" id="groupoid-group">
+A connected groupoid (a groupoid with a single isomorphism class) is equivalent to $\mathbf{B}G$ for some group $G$: pick any object $x$, set $G = \mathrm{Aut}(x)$, and the equivalence $\mathbf{B}G \to \mathcal{G}$ sends $*$ to $x$. In particular, the fundamental groupoid $\Pi_1(X)$ of a path-connected space $X$ is equivalent to $\mathbf{B}\pi_1(X, x_0)$.
+</Example>
+
+<Example title="Non-equivalent categories" id="non-equivalent">
+$\mathbf{Set}$ and $\mathbf{Set}^{\mathrm{op}}$ are **not** equivalent. One way to see this: $\mathbf{Set}$ has a zero object candidate (the empty set is initial but not terminal), while in $\mathbf{Set}^{\mathrm{op}}$ the empty set is terminal but not initial. More precisely, $\mathbf{Set}$ has a strict initial object (no morphisms into $\varnothing$ from nonempty sets), but $\mathbf{Set}^{\mathrm{op}}$ does not have this property for its initial object.
+</Example>
+
+<Example title="Equivalence preserves limits and colimits" id="preserves-limits">
+If $\mathcal{C} \simeq \mathcal{D}$, then $\mathcal{C}$ has all (co)limits of a given type if and only if $\mathcal{D}$ does. For example, $\mathbf{Ab}$ is an abelian category, so any category equivalent to $\mathbf{Ab}$ is also abelian. Equivalence also preserves: having enough injectives/projectives, being locally small, having a generator, etc.
+</Example>
+
+<Example title="Derived categories and equivalences" id="derived-equiv">
+In the Gelfand-Manin framework, a key question is when two abelian categories $\mathcal{A}$ and $\mathcal{B}$ have equivalent derived categories $D^b(\mathcal{A}) \simeq D^b(\mathcal{B})$. This is a weaker condition than $\mathcal{A} \simeq \mathcal{B}$ and is the subject of Fourier-Mukai theory and tilting theory. For instance, $D^b(\mathrm{Coh}(X)) \simeq D^b(\mathrm{Coh}(Y))$ for certain non-isomorphic varieties $X$ and $Y$.
+</Example>
+
+---
+
+## Properties Preserved by Equivalence
+
+<Theorem title="Invariance under equivalence" number="1.8">
+If $F : \mathcal{C} \to \mathcal{D}$ is an equivalence, then:
+
+1. $F$ preserves and reflects limits and colimits.
+2. $F$ preserves and reflects monomorphisms, epimorphisms, and isomorphisms.
+3. $\mathcal{C}$ is abelian if and only if $\mathcal{D}$ is abelian.
+4. $\mathcal{C}$ has enough injectives if and only if $\mathcal{D}$ does.
+</Theorem>
+
+<Remark title="The principle of equivalence">
+In category theory, one should never distinguish between equivalent categories. Any property or construction that is not invariant under equivalence is considered "evil" (a technical term in the categorical literature). This principle extends to higher category theory: in an $n$-category, the correct notion of sameness at level $k$ should use equivalences, not strict equalities.
+</Remark>

@@ -1,0 +1,210 @@
+export const metadata = {
+  title: 'Partition and Upper/Lower Sums — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "6. 리만 적분", href: "/analysis/ch06-integration" },
+  { label: "개념 — 분할과 상합/하합" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Partition and Upper/Lower Sums
+
+The Riemann integral begins by approximating the area under a curve using rectangles. The key objects are **partitions** of an interval and the **upper** and **lower sums** they induce.
+
+---
+
+## Partitions
+
+<Definition title="Partition" number="6.1">
+A **partition** of a closed interval $[a, b]$ is a finite set of points
+
+$$P = \{x_0, x_1, \ldots, x_n\}$$
+
+such that $a = x_0 < x_1 < x_2 < \cdots < x_n = b$. The **subintervals** of $P$ are $[x_{i-1}, x_i]$ for $i = 1, \ldots, n$, and the **mesh** (or norm) of $P$ is
+
+$$\|P\| = \max_{1 \leq i \leq n} (x_i - x_{i-1}).$$
+</Definition>
+
+<Example title="Simple partitions of [0,1]">
+- **Uniform partition into $n$ parts**: $P_n = \{0, \tfrac{1}{n}, \tfrac{2}{n}, \ldots, 1\}$. The mesh is $\|P_n\| = \frac{1}{n}$.
+
+- $P = \{0, \frac{1}{4}, \frac{1}{2}, 1\}$ has subintervals $[0, \frac{1}{4}]$, $[\frac{1}{4}, \frac{1}{2}]$, $[\frac{1}{2}, 1]$ and mesh $\|P\| = \frac{1}{2}$.
+
+- $P = \{0, 0.1, 0.5, 0.9, 1\}$ has mesh $\|P\| = 0.4$.
+</Example>
+
+<Definition title="Refinement" number="6.2">
+A partition $Q$ is a **refinement** of a partition $P$ if $P \subseteq Q$ (every point of $P$ is also a point of $Q$). The **common refinement** of partitions $P$ and $Q$ is $P \cup Q$.
+</Definition>
+
+<Example title="Refinement example">
+Let $P = \{0, \frac{1}{2}, 1\}$ and $Q = \{0, \frac{1}{4}, \frac{1}{2}, \frac{3}{4}, 1\}$. Then $Q$ is a refinement of $P$ since $P \subseteq Q$. The common refinement of $P$ and $\{0, \frac{1}{3}, \frac{2}{3}, 1\}$ is $\{0, \frac{1}{3}, \frac{1}{2}, \frac{2}{3}, 1\}$.
+</Example>
+
+---
+
+## Upper and lower sums
+
+<Definition title="Upper and lower sums" number="6.3">
+Let $f: [a,b] \to \mathbb{R}$ be a bounded function and $P = \{x_0, \ldots, x_n\}$ a partition of $[a,b]$. Define
+
+$$M_i = \sup_{x \in [x_{i-1}, x_i]} f(x), \qquad m_i = \inf_{x \in [x_{i-1}, x_i]} f(x).$$
+
+The **upper sum** and **lower sum** of $f$ with respect to $P$ are
+
+$$U(f, P) = \sum_{i=1}^{n} M_i (x_i - x_{i-1}), \qquad L(f, P) = \sum_{i=1}^{n} m_i (x_i - x_{i-1}).$$
+</Definition>
+
+<Example title="Upper and lower sums for f(x) = x on [0,1]">
+Take $f(x) = x$ on $[0,1]$ with the uniform partition $P_n = \{0, \frac{1}{n}, \frac{2}{n}, \ldots, 1\}$.
+
+On $[\frac{i-1}{n}, \frac{i}{n}]$: $M_i = \frac{i}{n}$ and $m_i = \frac{i-1}{n}$, each subinterval has length $\frac{1}{n}$.
+
+$$U(f, P_n) = \sum_{i=1}^{n} \frac{i}{n} \cdot \frac{1}{n} = \frac{1}{n^2} \cdot \frac{n(n+1)}{2} = \frac{n+1}{2n}$$
+
+$$L(f, P_n) = \sum_{i=1}^{n} \frac{i-1}{n} \cdot \frac{1}{n} = \frac{1}{n^2} \cdot \frac{(n-1)n}{2} = \frac{n-1}{2n}$$
+
+As $n \to \infty$, both converge to $\frac{1}{2}$.
+</Example>
+
+<Example title="Upper and lower sums for f(x) = x² on [0,1]">
+With the same uniform partition $P_n$ and $f(x) = x^2$:
+
+$$U(f, P_n) = \sum_{i=1}^{n} \frac{i^2}{n^2} \cdot \frac{1}{n} = \frac{1}{n^3} \cdot \frac{n(n+1)(2n+1)}{6} = \frac{(n+1)(2n+1)}{6n^2}$$
+
+$$L(f, P_n) = \frac{(n-1)(2n-1)}{6n^2}$$
+
+Both converge to $\frac{1}{3}$ as $n \to \infty$.
+</Example>
+
+<Example title="Dirichlet function">
+Let $f: [0,1] \to \mathbb{R}$ be the Dirichlet function: $f(x) = 1$ if $x \in \mathbb{Q}$, $f(x) = 0$ if $x \notin \mathbb{Q}$.
+
+For any partition $P$, every subinterval contains both rationals and irrationals, so $M_i = 1$ and $m_i = 0$ for all $i$. Thus
+
+$$U(f, P) = \sum_{i=1}^n 1 \cdot (x_i - x_{i-1}) = 1, \qquad L(f, P) = 0.$$
+
+The upper and lower sums never approach each other, so $f$ is not Riemann integrable.
+</Example>
+
+---
+
+## Key inequalities
+
+<Theorem title="Refinement lemma" number="6.1">
+If $Q$ is a refinement of $P$, then
+
+$$L(f, P) \leq L(f, Q) \leq U(f, Q) \leq U(f, P).$$
+
+In words: refining a partition increases lower sums and decreases upper sums.
+</Theorem>
+
+<Example title="Refinement increases precision">
+For $f(x) = x$ on $[0,1]$, compare $P = \{0, 1\}$ and $Q = \{0, \frac{1}{2}, 1\}$:
+
+$L(f, P) = 0 \cdot 1 = 0$, $U(f, P) = 1 \cdot 1 = 1$. Gap: $1$.
+
+$L(f, Q) = 0 \cdot \frac{1}{2} + \frac{1}{2} \cdot \frac{1}{2} = \frac{1}{4}$, $U(f, Q) = \frac{1}{2} \cdot \frac{1}{2} + 1 \cdot \frac{1}{2} = \frac{3}{4}$. Gap: $\frac{1}{2}$.
+
+Indeed $0 \leq \frac{1}{4} \leq \frac{3}{4} \leq 1$, confirming the refinement lemma.
+</Example>
+
+<Theorem title="Any lower sum is at most any upper sum" number="6.2">
+For any two partitions $P_1$ and $P_2$ of $[a,b]$:
+
+$$L(f, P_1) \leq U(f, P_2).$$
+</Theorem>
+
+<Example title="Cross-comparison of sums">
+For $f(x) = x$ on $[0,1]$, $P_1 = \{0, \frac{1}{3}, 1\}$ gives $L(f, P_1) = 0 \cdot \frac{1}{3} + \frac{1}{3} \cdot \frac{2}{3} = \frac{2}{9}$. The partition $P_2 = \{0, \frac{1}{2}, 1\}$ gives $U(f, P_2) = \frac{3}{4}$. Indeed $\frac{2}{9} < \frac{3}{4}$.
+</Example>
+
+---
+
+## Upper and lower integrals
+
+<Definition title="Upper and lower integrals" number="6.4">
+The **upper integral** and **lower integral** of a bounded function $f: [a,b] \to \mathbb{R}$ are
+
+$$\overline{\int_a^b} f = \inf_P U(f, P), \qquad \underline{\int_a^b} f = \sup_P L(f, P),$$
+
+where the infimum and supremum are taken over all partitions $P$ of $[a,b]$.
+
+By the previous theorem, $\underline{\int_a^b} f \leq \overline{\int_a^b} f$ always holds.
+</Definition>
+
+<Example title="Upper and lower integrals for f(x) = x">
+From the computations above, $L(f, P_n) = \frac{n-1}{2n} \to \frac{1}{2}$ and $U(f, P_n) = \frac{n+1}{2n} \to \frac{1}{2}$.
+
+Since lower sums approach $\frac{1}{2}$ from below and upper sums from above:
+
+$$\underline{\int_0^1} x \, dx = \overline{\int_0^1} x \, dx = \frac{1}{2}.$$
+</Example>
+
+<Example title="Upper and lower integrals for the Dirichlet function">
+For the Dirichlet function on $[0,1]$:
+
+$$\underline{\int_0^1} f = \sup_P L(f,P) = \sup_P 0 = 0, \qquad \overline{\int_0^1} f = \inf_P U(f,P) = \inf_P 1 = 1.$$
+
+Since $0 \neq 1$, the function is not Riemann integrable.
+</Example>
+
+<Example title="A step function">
+Let $f: [0,2] \to \mathbb{R}$ with $f(x) = 1$ for $x \in [0,1)$ and $f(x) = 3$ for $x \in [1,2]$.
+
+Take $P_\varepsilon = \{0, 1-\varepsilon, 1+\varepsilon, 2\}$. Then
+
+$$L(f, P_\varepsilon) = 1(1-\varepsilon) + 1(2\varepsilon) + 3(1-\varepsilon) = 4 - 2\varepsilon$$
+
+$$U(f, P_\varepsilon) = 1(1-\varepsilon) + 3(2\varepsilon) + 3(1-\varepsilon) = 4 + 2\varepsilon$$
+
+As $\varepsilon \to 0$, both approach $4$. So $\underline{\int_0^2} f = \overline{\int_0^2} f = 4$ and $f$ is integrable.
+</Example>
+
+---
+
+## Riemann sums
+
+<Definition title="Riemann sum" number="6.5">
+Given a partition $P = \{x_0, \ldots, x_n\}$ and **tags** $t_i \in [x_{i-1}, x_i]$, the **Riemann sum** is
+
+$$S(f, P, t) = \sum_{i=1}^{n} f(t_i)(x_i - x_{i-1}).$$
+
+For any choice of tags: $L(f, P) \leq S(f, P, t) \leq U(f, P)$.
+</Definition>
+
+<Example title="Left, right, and midpoint Riemann sums">
+For $f(x) = x^2$ on $[0,1]$ with $P_4 = \{0, \frac{1}{4}, \frac{1}{2}, \frac{3}{4}, 1\}$:
+
+**Left endpoints** ($t_i = x_{i-1}$): $S = \frac{1}{4}(0 + \frac{1}{16} + \frac{1}{4} + \frac{9}{16}) = \frac{1}{4} \cdot \frac{14}{16} = \frac{7}{32} \approx 0.219$
+
+**Right endpoints** ($t_i = x_i$): $S = \frac{1}{4}(\frac{1}{16} + \frac{1}{4} + \frac{9}{16} + 1) = \frac{1}{4} \cdot \frac{30}{16} = \frac{15}{32} \approx 0.469$
+
+**Midpoints** ($t_i = \frac{x_{i-1}+x_i}{2}$): $S = \frac{1}{4}(\frac{1}{64} + \frac{9}{64} + \frac{25}{64} + \frac{49}{64}) = \frac{1}{4} \cdot \frac{84}{64} = \frac{21}{64} \approx 0.328$
+
+The exact value is $\frac{1}{3} \approx 0.333$. The midpoint sum is closest.
+</Example>
+
+<Example title="Riemann sums for sin x on [0, pi]">
+With $P_4 = \{0, \frac{\pi}{4}, \frac{\pi}{2}, \frac{3\pi}{4}, \pi\}$ and right endpoints:
+
+$$S = \frac{\pi}{4}\left(\sin\frac{\pi}{4} + \sin\frac{\pi}{2} + \sin\frac{3\pi}{4} + \sin\pi\right) = \frac{\pi}{4}\left(\frac{\sqrt{2}}{2} + 1 + \frac{\sqrt{2}}{2} + 0\right) = \frac{\pi(1 + \sqrt{2})}{4} \approx 1.896.$$
+
+The exact value is $\int_0^\pi \sin x \, dx = 2$.
+</Example>
+
+<Remark>
+The Darboux approach (upper and lower sums) and the Riemann approach (Riemann sums with mesh tending to 0) give the same class of integrable functions. We primarily use the Darboux approach, as it avoids the need to quantify over all possible tag choices.
+</Remark>

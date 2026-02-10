@@ -1,0 +1,108 @@
+export const metadata = {
+  title: 'Distinguished Triangle — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Concept — Distinguished Triangle" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Distinguished Triangle
+
+Distinguished triangles are the replacement for short exact sequences in triangulated categories. While a short exact sequence $0 \to A \to B \to C \to 0$ lives in an abelian category, a distinguished triangle $A \to B \to C \to A[1]$ lives in a triangulated category. The key difference is the third morphism $C \to A[1]$, which encodes the connecting homomorphism.
+
+---
+
+## Definition
+
+<Definition title="Triangle" number="5.3">
+A **triangle** in a triangulated category $\mathcal{T}$ is a sequence of morphisms
+
+$$X \xrightarrow{u} Y \xrightarrow{v} Z \xrightarrow{w} X[1]$$
+
+A **morphism of triangles** from $(X, Y, Z, u, v, w)$ to $(X', Y', Z', u', v', w')$ is a triple $(\alpha, \beta, \gamma)$ making the obvious diagram commute.
+</Definition>
+
+<Definition title="Distinguished Triangle" number="5.4">
+A triangle is **distinguished** (or **exact**) if it belongs to the specified class of distinguished triangles in the triangulated structure. In $K(\mathcal{A})$ and $D(\mathcal{A})$, the distinguished triangles are those isomorphic to mapping cone triangles $A \xrightarrow{f} B \to \mathrm{Cone}(f) \to A[1]$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Mapping cone triangle" id="cone-triangle">
+For any chain map $f : A^\bullet \to B^\bullet$, the triangle $A \xrightarrow{f} B \xrightarrow{\iota} \mathrm{Cone}(f) \xrightarrow{p} A[1]$ is distinguished in $K(\mathcal{A})$. Here $\mathrm{Cone}(f)^n = A^{n+1} \oplus B^n$ with differential $d(a, b) = (-da, f(a) + db)$.
+</Example>
+
+<Example title="Short exact sequence gives a triangle" id="ses-triangle">
+In $D(\mathcal{A})$, a short exact sequence $0 \to A \to B \to C \to 0$ in $\mathcal{A}$ gives a distinguished triangle $A \to B \to C \xrightarrow{\delta} A[1]$. The morphism $\delta$ corresponds to the extension class in $\mathrm{Ext}^1(C, A)$.
+</Example>
+
+<Example title="Split triangle" id="split-triangle">
+The triangle $A \to A \oplus B \to B \to A[1]$ with the obvious maps and $w = 0$ is distinguished. This corresponds to the split short exact sequence. The zero connecting homomorphism means the extension is trivial.
+</Example>
+
+<Example title="Cofiber sequence in topology" id="cofiber">
+In the stable homotopy category, for $f : X \to Y$, the cofiber sequence $X \xrightarrow{f} Y \to Y/X \to \Sigma X$ is a distinguished triangle. The shift $[1]$ is the suspension $\Sigma$.
+</Example>
+
+<Example title="Rotation" id="rotation">
+If $X \xrightarrow{u} Y \xrightarrow{v} Z \xrightarrow{w} X[1]$ is distinguished, then $Y \xrightarrow{v} Z \xrightarrow{w} X[1] \xrightarrow{-u[1]} Y[1]$ is also distinguished. The sign $-u[1]$ is essential.
+</Example>
+
+<Example title="Long exact sequence from a triangle" id="les-triangle">
+Applying $\mathrm{Hom}(W, -)$ to a distinguished triangle $X \to Y \to Z \to X[1]$ gives the long exact sequence:
+
+$$\cdots \to \mathrm{Hom}(W, X[n]) \to \mathrm{Hom}(W, Y[n]) \to \mathrm{Hom}(W, Z[n]) \to \mathrm{Hom}(W, X[n+1]) \to \cdots$$
+</Example>
+
+<Example title="Acyclicity from a triangle" id="acyclic-triangle">
+In $D(\mathcal{A})$, a complex $C^\bullet$ is acyclic iff $C^\bullet \cong 0$ iff $0 \to C^\bullet \to 0 \to 0[1]$ is a distinguished triangle iff $C^\bullet$ sits in a distinguished triangle $C \to 0 \to ? \to C[1]$.
+</Example>
+
+<Example title="Ext and triangles" id="ext-triangle">
+$\mathrm{Ext}^n(X, Y) = \mathrm{Hom}_{D(\mathcal{A})}(X, Y[n])$. A class $\xi \in \mathrm{Ext}^1(C, A)$ corresponds to a distinguished triangle $A \to B \to C \xrightarrow{\xi} A[1]$ where $B$ is the extension.
+</Example>
+
+<Example title="Koszul triangle" id="koszul-triangle">
+For an element $x \in R$ and an $R$-module $M$, the Koszul triangle is $M \xrightarrow{x} M \to M/xM \to M[1]$ in $D(R)$. This is the triangle associated to the short exact sequence $0 \to M \xrightarrow{x} M \to M/xM \to 0$ (when $x$ is a non-zero-divisor on $M$).
+</Example>
+
+<Example title="Direct sum of triangles" id="sum-triangles">
+If $X_i \to Y_i \to Z_i \to X_i[1]$ are distinguished for $i = 1, 2$, then $X_1 \oplus X_2 \to Y_1 \oplus Y_2 \to Z_1 \oplus Z_2 \to (X_1 \oplus X_2)[1]$ is distinguished. Distinguished triangles are preserved by direct sums.
+</Example>
+
+<Example title="Verdier quotient triangles" id="verdier-triangle">
+In the Verdier quotient $\mathcal{T}/\mathcal{S}$, a triangle is distinguished iff it is isomorphic to the image of a distinguished triangle in $\mathcal{T}$. The localization functor $\mathcal{T} \to \mathcal{T}/\mathcal{S}$ is exact (preserves distinguished triangles).
+</Example>
+
+<Example title="Distinguished triangle and Euler characteristic" id="euler-triangle">
+For a distinguished triangle $X \to Y \to Z \to X[1]$ in $D^b(\mathcal{A})$, $\chi(Y) = \chi(X) + \chi(Z)$, where $\chi = \sum (-1)^n [H^n]$ in the Grothendieck group.
+</Example>
+
+---
+
+## Key Properties
+
+<Theorem title="Properties of distinguished triangles" number="5.1">
+1. The composition $v \circ u = 0$ for any distinguished triangle $X \xrightarrow{u} Y \xrightarrow{v} Z \to X[1]$.
+2. If two of three vertices of a morphism of distinguished triangles are isomorphisms, so is the third.
+3. The cone $Z$ is determined by $u$ up to (non-unique) isomorphism.
+</Theorem>
+
+<Remark title="Non-functoriality">
+Unlike kernels in abelian categories, the cone $Z$ in a distinguished triangle $X \xrightarrow{u} Y \to Z \to X[1]$ depends on $u$ but is not functorial in $u$. This is a fundamental deficiency: given a commutative square, the induced map on cones exists but is not unique. This motivates DG and $\infty$-categorical enhancements.
+</Remark>

@@ -1,0 +1,162 @@
+export const metadata = {
+  title: 'Infinity-Groupoid (Kan complex) — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Concept — Infinity-Groupoid" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# $\infty$-Groupoid (Kan complex)
+
+An $\infty$-groupoid is an $\infty$-category in which every morphism is an equivalence. In the quasi-categorical framework, $\infty$-groupoids are precisely Kan complexes. The homotopy hypothesis, attributed to Grothendieck, asserts that $\infty$-groupoids model homotopy types of topological spaces. This identification is one of the central pillars of higher category theory.
+
+---
+
+## Definition and Characterization
+
+<Definition title="Infinity-groupoid" number="3.1">
+An **$\infty$-groupoid** is a quasi-category $\mathcal{C}$ in which every morphism is an equivalence. Equivalently, it is a simplicial set satisfying the Kan condition: every horn $\Lambda^n_k \to \mathcal{C}$ (for all $n \geq 1$, $0 \leq k \leq n$) has a filler.
+
+An $\infty$-groupoid is the same thing as a Kan complex. The $\infty$-category of all (small) $\infty$-groupoids is denoted $\mathcal{S}$ and is called the **$\infty$-category of spaces**.
+</Definition>
+
+<Example id="groupoid-ordinary" title="Ordinary groupoids as infinity-groupoids">
+An ordinary groupoid $\mathcal{G}$ gives an $\infty$-groupoid $N(\mathcal{G})$ via the nerve. This is a Kan complex with unique horn fillers (it is $1$-truncated: $\pi_n = 0$ for $n \geq 2$).
+
+The fundamental groupoid $\Pi_1(X)$ of a topological space $X$ is an ordinary groupoid whose nerve is the $1$-truncation of $\operatorname{Sing}(X)$.
+</Example>
+
+<Example id="groupoid-bg" title="Classifying spaces as infinity-groupoids">
+For a group $G$, the nerve $N(BG)$ is a Kan complex with $\pi_0 = *$, $\pi_1 = G$, and $\pi_n = 0$ for $n \geq 2$. This is the Eilenberg--MacLane space $K(G, 1)$.
+
+More generally, for a topological group $G$, the classifying space $BG$ is an $\infty$-groupoid with $\pi_1 = \pi_0(G)$, $\pi_2 = \pi_1(G)$, etc.
+</Example>
+
+<Example id="groupoid-em" title="Eilenberg--MacLane spaces">
+For an abelian group $A$ and $n \geq 1$, the Eilenberg--MacLane space $K(A, n)$ is an $\infty$-groupoid with $\pi_k = 0$ for $k \neq n$ and $\pi_n = A$. It represents cohomology:
+
+$$[X, K(A, n)] = H^n(X; A)$$
+
+These can be constructed as simplicial abelian groups via the Dold--Kan correspondence applied to the chain complex $A[-n]$ concentrated in degree $n$.
+</Example>
+
+---
+
+## The Homotopy Hypothesis
+
+<Theorem title="Homotopy hypothesis" number="3.2">
+The $\infty$-category of $\infty$-groupoids is equivalent to the $\infty$-category of homotopy types (spaces). More precisely, the Quillen equivalence $|\cdot| \dashv \operatorname{Sing}$ between $\mathbf{sSet}_{\mathrm{KQ}}$ and $\mathbf{Top}$ identifies Kan complexes with spaces up to weak homotopy equivalence.
+
+At the level of homotopy categories: $\operatorname{Ho}(\operatorname{Kan}) \simeq \operatorname{Ho}(\mathbf{Top})$.
+</Theorem>
+
+<Example id="homotopy-hypothesis-evidence" title="Evidence for the homotopy hypothesis">
+The homotopy hypothesis holds in the following precise senses:
+
+1. **Quillen equivalence**: $\mathbf{sSet}_{\mathrm{KQ}} \simeq_Q \mathbf{Top}$ via $|\cdot| \dashv \operatorname{Sing}$.
+
+2. **Homotopy groups agree**: $\pi_n(X) \cong \pi_n(|X|)$ for Kan complexes $X$.
+
+3. **Mapping spaces agree**: $\operatorname{Map}_{\mathrm{Kan}}(X, Y) \simeq \operatorname{Map}_{\mathrm{Top}}(|X|, |Y|)$.
+
+4. **Classification**: Homotopy types are classified by homotopy groups and Postnikov invariants, which are the same data as $\infty$-groupoids with their higher structure.
+</Example>
+
+---
+
+## The Infinity-category of Spaces
+
+<Example id="spaces-infty-cat" title="The infinity-category S">
+The $\infty$-category $\mathcal{S}$ of spaces is the central object of higher category theory. It can be constructed as:
+
+1. The coherent nerve $N_\Delta(\operatorname{Kan})$ of the simplicial category of Kan complexes.
+2. The $\infty$-categorical localization $N(\mathbf{sSet})[W^{-1}]$.
+3. The quasi-category of objects in the Kan--Quillen model structure.
+
+$\mathcal{S}$ plays the role in $\infty$-category theory that $\mathbf{Set}$ plays in ordinary category theory. It is the "base" for enrichment, and functors $\mathcal{C} \to \mathcal{S}$ are the $\infty$-categorical analogues of presheaves.
+</Example>
+
+<Example id="spaces-presentable" title="S is the free presentable infinity-category">
+The $\infty$-category $\mathcal{S}$ is the **free colimit-completion** of the terminal $\infty$-category $\{*\}$:
+
+$$\mathcal{S} \simeq \operatorname{Ind}(\{*\}) \simeq \operatorname{Fun}(\{*\}^{\mathrm{op}}, \mathcal{S})$$
+
+This says that $\mathcal{S}$ is the "free presentable $\infty$-category on one generator." The generator is the point $* \in \mathcal{S}$, and every space is a colimit of copies of $*$.
+</Example>
+
+<Example id="presheaves" title="Presheaves valued in spaces">
+A **presheaf** on a quasi-category $\mathcal{C}$ valued in $\mathcal{S}$ is a functor $F: \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$. The $\infty$-category of presheaves is $\operatorname{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$, which is always a presentable $\infty$-category.
+
+For $\mathcal{C} = N(\mathcal{C}_0)$ an ordinary category, presheaves valued in $\mathcal{S}$ generalize classical presheaves (valued in $\mathbf{Set}$): instead of sets of sections, we have spaces of sections.
+</Example>
+
+---
+
+## Truncation and Connectivity
+
+<Definition title="n-truncated and n-connected" number="3.3">
+A space (Kan complex) $X$ is **$n$-truncated** if $\pi_k(X, x) = 0$ for all $k > n$ and all basepoints $x$. It is **$n$-connected** if $\pi_k(X, x) = 0$ for all $k \leq n$.
+
+- $(-1)$-truncated spaces are either empty or contractible ($\pi_0 \leq 1$, all higher trivial).
+- $0$-truncated spaces are homotopy equivalent to discrete sets.
+- $1$-truncated spaces are $K(\pi_1, 1)$'s (plus $\pi_0$ components).
+- $0$-connected spaces are simply connected ($\pi_0 = *$).
+</Definition>
+
+<Example id="truncation-examples" title="Examples of truncation levels">
+- $S^0 = \{0, 1\}$ is $0$-truncated (discrete, $\pi_k = 0$ for $k \geq 1$).
+- $K(\mathbb{Z}, 1) = S^1$ is $1$-truncated ($\pi_1 = \mathbb{Z}$, $\pi_k = 0$ for $k \geq 2$).
+- $S^2$ is NOT finitely truncated: $\pi_3(S^2) = \mathbb{Z}$ (Hopf), etc.
+- $K(\mathbb{Z}, 2) = \mathbb{C}P^\infty$ is $2$-truncated.
+
+The $n$-truncation functor $\tau_{\leq n}: \mathcal{S} \to \mathcal{S}_{\leq n}$ is left adjoint to the inclusion $\mathcal{S}_{\leq n} \hookrightarrow \mathcal{S}$.
+</Example>
+
+<Example id="postnikov-tower" title="Postnikov towers">
+Every space $X$ has a **Postnikov tower**:
+
+$$\cdots \to \tau_{\leq 2} X \to \tau_{\leq 1} X \to \tau_{\leq 0} X$$
+
+with $X \simeq \lim_n \tau_{\leq n} X$. Each stage $\tau_{\leq n} X \to \tau_{\leq n-1} X$ is a principal $K(\pi_n(X), n)$-fibration, classified by the **$k$-invariant** $k_n \in H^{n+1}(\tau_{\leq n-1} X; \pi_n(X))$.
+
+The Postnikov tower completely determines the homotopy type of $X$ (given the $k$-invariants). This is the $\infty$-groupoid analogue of describing a group by generators and relations.
+</Example>
+
+<Example id="looping-delooping" title="Looping and delooping">
+For a pointed $\infty$-groupoid $(X, x)$, the loop space $\Omega_x X = \operatorname{Map}_X(x, x)$ is an $\infty$-groupoid with $\pi_n(\Omega X) = \pi_{n+1}(X)$.
+
+Conversely, for an $\infty$-group (a group object in $\mathcal{S}$, i.e., a connected Kan complex $G$ with group-like structure), the **delooping** $BG$ satisfies $\Omega BG \simeq G$. This gives a bijection between $\infty$-groups and pointed connected spaces.
+
+For $n$-fold loop spaces: $\Omega^n(K(A, n)) \simeq A$ (discrete), reflecting the identification $K(A, n) = B^n A$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+$\infty$-groupoids are the foundation of homotopy theory:
+
+1. **$\infty$-groupoids = Kan complexes = spaces** (the homotopy hypothesis).
+
+2. The $\infty$-category $\mathcal{S}$ of spaces is the $\infty$-categorical analogue of $\mathbf{Set}$.
+
+3. **Presheaves** valued in $\mathcal{S}$ generalize classical presheaves, replacing sets with spaces.
+
+4. Spaces are classified by **homotopy groups** and **Postnikov invariants** ($k$-invariants).
+
+5. **Truncation** relates $\infty$-groupoids to ordinary groupoids ($1$-truncated) and sets ($0$-truncated).
+</Remark>

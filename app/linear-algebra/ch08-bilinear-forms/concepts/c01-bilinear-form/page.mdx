@@ -1,0 +1,199 @@
+export const metadata = {
+  title: 'Bilinear Form — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "8. 쌍선형형식", href: "/linear-algebra/ch08-bilinear-forms" },
+  { label: "Concept — Bilinear Form" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Bilinear Form
+
+A bilinear form is a function of two vector variables that is linear in each variable separately. Bilinear forms generalize the dot product and provide the algebraic framework for studying quadratic forms, orthogonality in non-standard metrics, and the duality between a vector space and its dual.
+
+---
+
+## Definition
+
+<Definition title="Bilinear form" number="8.1">
+Let $V$ be a vector space over a field $F$. A **bilinear form** on $V$ is a function $B: V \times V \to F$ satisfying:
+
+1. $B(\alpha u + \beta v, w) = \alpha B(u, w) + \beta B(v, w)$ (linear in the first argument),
+2. $B(u, \alpha v + \beta w) = \alpha B(u, v) + \beta B(u, w)$ (linear in the second argument).
+</Definition>
+
+<Definition title="Symmetric and skew-symmetric" number="8.2">
+A bilinear form $B$ is:
+- **Symmetric** if $B(u, v) = B(v, u)$ for all $u, v$.
+- **Skew-symmetric** (or **alternating**) if $B(u, v) = -B(v, u)$ for all $u, v$.
+
+In characteristic $\neq 2$, every bilinear form decomposes uniquely as $B = B_{\text{sym}} + B_{\text{skew}}$ where $B_{\text{sym}}(u,v) = \frac{1}{2}(B(u,v) + B(v,u))$ and $B_{\text{skew}}(u,v) = \frac{1}{2}(B(u,v) - B(v,u))$.
+</Definition>
+
+---
+
+## Matrix representation
+
+<Definition title="Matrix of a bilinear form" number="8.3">
+Given a basis $\{e_1, \ldots, e_n\}$ of $V$, the bilinear form $B$ is represented by the **Gram matrix** $M = (m_{ij})$ where $m_{ij} = B(e_i, e_j)$. Then:
+
+$$B(u, v) = [u]^T M [v],$$
+
+where $[u], [v]$ are the coordinate vectors. $B$ is symmetric iff $M = M^T$, and skew-symmetric iff $M = -M^T$.
+</Definition>
+
+<Example id="dot-product-bilinear" title="The dot product as a bilinear form">
+$B(x, y) = x^T y = \sum x_i y_i$ on $\mathbb{R}^n$. The Gram matrix (in the standard basis) is $M = I_n$.
+
+$B$ is symmetric, and it is the standard inner product.
+</Example>
+
+<Example id="non-standard-bilinear" title="A non-standard symmetric bilinear form">
+$B(x, y) = x^T \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix} y$ on $\mathbb{R}^2$.
+
+$B(e_1, e_1) = 2$, $B(e_1, e_2) = 1$, $B(e_2, e_2) = 3$.
+
+$B((1,1), (1,-1)) = (1,1)\begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}\begin{pmatrix} 1 \\ -1 \end{pmatrix} = (1,1)\begin{pmatrix} 1 \\ -2 \end{pmatrix} = -1$.
+</Example>
+
+<Example id="skew-symmetric" title="A skew-symmetric bilinear form">
+$B(x, y) = x_1 y_2 - x_2 y_1$ on $\mathbb{R}^2$. Gram matrix: $M = \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}$.
+
+$B(u, v) = -B(v, u)$ ✓. $B(u, u) = 0$ for all $u$ (skew-symmetric forms always satisfy this in characteristic $\neq 2$).
+
+Geometrically, $B(u, v) = \det(u, v)$ is the signed area of the parallelogram spanned by $u$ and $v$.
+</Example>
+
+<Example id="lorentz" title="The Lorentz bilinear form">
+On $\mathbb{R}^4$: $B(x, y) = -x_0 y_0 + x_1 y_1 + x_2 y_2 + x_3 y_3$.
+
+Gram matrix: $M = \operatorname{diag}(-1, 1, 1, 1)$ (the Minkowski metric).
+
+This is symmetric but **not** positive definite -- it has signature $(3, 1)$. It defines the geometry of special relativity.
+</Example>
+
+---
+
+## Change of basis
+
+<Theorem title="Change of basis for bilinear forms" number="8.1">
+If $P$ is the change-of-basis matrix from basis $\mathcal{B}$ to $\mathcal{B}'$, then the Gram matrix transforms as:
+
+$$M' = P^T M P.$$
+
+Two matrices $M, M'$ related by $M' = P^T M P$ for some invertible $P$ are called **congruent**.
+</Theorem>
+
+<Example id="change-basis-bilinear" title="Diagonalizing a bilinear form">
+$M = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$ (symmetric, singular).
+
+Complete the square: $B(x, y) = (x_1 + x_2)(y_1 + y_2)$. Set $u_1 = x_1 + x_2$, $u_2 = x_2$, so $P = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}$.
+
+$P^T M P = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 2 \\ 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 4 & 2 \\ 2 & 1 \end{pmatrix}$...
+
+Let me redo. Actually, a cleaner approach: eigenvalues of $M$ are $2$ and $0$. Eigenvectors: $(1,1)$ for $\lambda = 2$ and $(1,-1)$ for $\lambda = 0$. With $P = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$: $P^TMP = \begin{pmatrix} 4 & 0 \\ 0 & 0 \end{pmatrix}$.
+
+In the new basis, $B = 4u_1^2$ (a "degenerate" form with rank $1$).
+</Example>
+
+---
+
+## Rank, kernel, and non-degeneracy
+
+<Definition title="Rank and radical" number="8.4">
+The **rank** of a bilinear form $B$ is the rank of its Gram matrix $M$ (this is basis-independent since $\operatorname{rank}(P^TMP) = \operatorname{rank}(M)$ for invertible $P$).
+
+The **radical** (or **kernel**) of $B$ is:
+
+$$\operatorname{rad}(B) = \{v \in V : B(v, w) = 0 \text{ for all } w \in V\}.$$
+
+$B$ is **non-degenerate** if $\operatorname{rad}(B) = \{0\}$, equivalently $\det M \neq 0$.
+</Definition>
+
+<Example id="degenerate-form" title="A degenerate bilinear form">
+$B(x, y) = x_1 y_1$ on $\mathbb{R}^2$. Gram matrix: $M = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$, rank $1$.
+
+$\operatorname{rad}(B) = \{(0, t) : t \in \mathbb{R}\}$ (the $y$-axis). $B$ is degenerate.
+</Example>
+
+<Example id="nondegenerate-form" title="Non-degenerate forms">
+$B(x, y) = x_1 y_1 - x_2 y_2$ on $\mathbb{R}^2$. $M = \operatorname{diag}(1, -1)$, $\det M = -1 \neq 0$. Non-degenerate.
+
+$B(x, y) = x^T y$ (standard dot product): $M = I$, $\det = 1$. Non-degenerate.
+
+The Lorentz form: $\det M = -1 \neq 0$. Non-degenerate.
+</Example>
+
+---
+
+## Orthogonality with respect to a bilinear form
+
+<Definition title="B-orthogonality" number="8.5">
+Vectors $u, v$ are **$B$-orthogonal** if $B(u, v) = 0$. For a subspace $W$:
+
+$$W^{\perp_B} = \{v \in V : B(v, w) = 0 \text{ for all } w \in W\}.$$
+
+If $B$ is non-degenerate, then $\dim W + \dim W^{\perp_B} = \dim V$.
+</Definition>
+
+<Example id="lorentz-orthogonal" title="Orthogonality in the Lorentz metric">
+$B(x, y) = -x_0 y_0 + x_1 y_1$ on $\mathbb{R}^2$.
+
+$u = (1, 1)$: $B(u, u) = -1 + 1 = 0$. This vector is **isotropic** (self-orthogonal with respect to $B$, also called a null vector).
+
+$u = (1, 1)$ and $v = (1, -1)$: $B(u, v) = -1 - 1 = -2 \neq 0$. Not $B$-orthogonal.
+
+$u = (1, 0)$ and $v = (0, 1)$: $B(u, v) = 0$. These are $B$-orthogonal, but $B(u, u) = -1 < 0$ (timelike) and $B(v, v) = 1 > 0$ (spacelike).
+</Example>
+
+<Example id="isotropic-vectors" title="Isotropic vectors">
+A vector $v$ with $B(v, v) = 0$ and $v \neq 0$ is called **isotropic** (or null). Isotropic vectors exist iff $B$ is indefinite (has both positive and negative eigenvalues, or is degenerate).
+
+For $B(x, y) = x_1 y_2 + x_2 y_1$: $B(e_1, e_1) = 0$, $B(e_2, e_2) = 0$. Both basis vectors are isotropic.
+
+For the standard inner product ($M = I$): there are no nonzero isotropic vectors (positive definiteness).
+</Example>
+
+---
+
+## Sesquilinear forms
+
+<Definition title="Sesquilinear form" number="8.6">
+On a complex vector space $V$, a **sesquilinear form** is a function $H: V \times V \to \mathbb{C}$ that is linear in the first argument and conjugate-linear in the second:
+
+$$H(\alpha u, v) = \alpha H(u, v), \quad H(u, \beta v) = \bar{\beta} H(u, v).$$
+
+A **Hermitian form** satisfies additionally $H(u, v) = \overline{H(v, u)}$. In a basis, $H(u, v) = [u]^* M [v]$ where $M$ is Hermitian ($M = M^*$).
+</Definition>
+
+<Example id="hermitian-form" title="Standard Hermitian form on C^n">
+$H(x, y) = x^* y = \sum_i x_i \bar{y}_i$. Gram matrix: $M = I_n$.
+
+$H((1, i), (1, -i)) = 1 \cdot 1 + i \cdot i = 1 - 1 = 0$. These vectors are orthogonal with respect to $H$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Bilinear forms as generalized inner products">
+Bilinear forms extend the inner product framework:
+- **Positive definite** symmetric bilinear forms are inner products.
+- **Indefinite** symmetric forms (like the Lorentz metric) arise in physics and geometry.
+- **Skew-symmetric** forms (symplectic forms) are fundamental in Hamiltonian mechanics.
+- The **Gram matrix** $M$ represents $B$ in a basis, and congruence $P^TMP$ is the equivalence relation.
+- **Non-degeneracy** ($\det M \neq 0$) ensures the form induces an isomorphism $V \to V^*$.
+- The classification of symmetric bilinear forms (Sylvester's law of inertia) is a central result of this chapter.
+</Remark>

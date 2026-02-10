@@ -1,0 +1,230 @@
+export const metadata = {
+  title: 'Eigenvalue and Eigenvector — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "5. 고유값과 고유벡터", href: "/linear-algebra/ch05-eigenvalues" },
+  { label: "Concept — Eigenvalue and Eigenvector" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Eigenvalue and Eigenvector
+
+An eigenvector of a linear transformation $T$ is a nonzero vector $v$ whose direction is preserved by $T$: the output $Tv$ is a scalar multiple of $v$. The corresponding scalar $\lambda$ is the eigenvalue. Eigenvalues reveal the intrinsic scaling behavior of a linear map, independent of any choice of basis.
+
+---
+
+## Definition
+
+<Definition title="Eigenvalue and eigenvector" number="5.1">
+Let $V$ be a vector space over a field $F$, and let $T: V \to V$ be a linear transformation. A scalar $\lambda \in F$ is an **eigenvalue** of $T$ if there exists a nonzero vector $v \in V$ such that:
+
+$$T(v) = \lambda v.$$
+
+Such a vector $v \neq 0$ is called an **eigenvector** of $T$ corresponding to the eigenvalue $\lambda$.
+
+For a matrix $A \in M_{n \times n}(F)$, this becomes $Av = \lambda v$, or equivalently $(A - \lambda I)v = 0$ with $v \neq 0$.
+</Definition>
+
+<Definition title="Eigenspace" number="5.2">
+The **eigenspace** of $T$ corresponding to an eigenvalue $\lambda$ is:
+
+$$E_\lambda = \ker(T - \lambda I) = \{ v \in V : T(v) = \lambda v \}.$$
+
+This is a subspace of $V$ (it always contains the zero vector). The dimension $\dim E_\lambda$ is the **geometric multiplicity** of $\lambda$.
+</Definition>
+
+<Example id="2x2-basic" title="Eigenvalues of a 2x2 matrix">
+Let $A = \begin{pmatrix} 3 & 1 \\ 0 & 2 \end{pmatrix}$. To find eigenvalues, solve $\det(A - \lambda I) = 0$:
+
+$$\det \begin{pmatrix} 3 - \lambda & 1 \\ 0 & 2 - \lambda \end{pmatrix} = (3 - \lambda)(2 - \lambda) = 0.$$
+
+So $\lambda_1 = 3$ and $\lambda_2 = 2$.
+
+For $\lambda_1 = 3$: $(A - 3I)v = 0$ gives $\begin{pmatrix} 0 & 1 \\ 0 & -1 \end{pmatrix} v = 0$, so $E_3 = \operatorname{span}\{(1, 0)\}$.
+
+For $\lambda_2 = 2$: $(A - 2I)v = 0$ gives $\begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix} v = 0$, so $E_2 = \operatorname{span}\{(-1, 1)\}$.
+</Example>
+
+<Example id="rotation" title="Rotation matrix (no real eigenvalues)">
+The rotation by $\theta$ in $\mathbb{R}^2$: $R_\theta = \begin{pmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{pmatrix}$.
+
+The characteristic polynomial is $\lambda^2 - 2\cos\theta \cdot \lambda + 1 = 0$, with discriminant $4\cos^2\theta - 4 = -4\sin^2\theta$.
+
+- For $\theta \neq 0, \pi$: the discriminant is negative, so there are no real eigenvalues. Over $\mathbb{C}$, the eigenvalues are $\lambda = e^{\pm i\theta}$.
+- For $\theta = 0$: $\lambda = 1$ (double), every nonzero vector is an eigenvector.
+- For $\theta = \pi$: $\lambda = -1$ (double), $R_\pi = -I$.
+</Example>
+
+---
+
+## Eigenvalues of specific transformations
+
+<Example id="diagonal" title="Diagonal matrices">
+If $A = \operatorname{diag}(d_1, d_2, \ldots, d_n)$, then the eigenvalues are exactly $d_1, d_2, \ldots, d_n$, with eigenvectors $e_1, e_2, \ldots, e_n$ (the standard basis vectors).
+
+For $A = \operatorname{diag}(2, -1, 5)$: eigenvalues $2, -1, 5$ with eigenvectors $(1,0,0)$, $(0,1,0)$, $(0,0,1)$.
+</Example>
+
+<Example id="triangular" title="Triangular matrices">
+If $A$ is upper (or lower) triangular, the eigenvalues are the diagonal entries. This follows from $\det(A - \lambda I)$ being the product of the diagonal entries of $A - \lambda I$.
+
+For $A = \begin{pmatrix} 1 & 4 & 7 \\ 0 & 2 & 8 \\ 0 & 0 & 3 \end{pmatrix}$: eigenvalues are $1, 2, 3$.
+</Example>
+
+<Example id="projection" title="Projection operators">
+Let $P: V \to V$ be a projection onto a subspace $W$ along a complement $U$ (so $V = W \oplus U$ and $P|_W = \operatorname{id}$, $P|_U = 0$). Then:
+
+- $\lambda = 1$: eigenspace is $W$ (everything in $W$ is fixed by $P$).
+- $\lambda = 0$: eigenspace is $U$ (everything in $U$ is killed by $P$).
+- These are the only eigenvalues, since $P^2 = P$ implies $\lambda^2 = \lambda$, so $\lambda \in \{0, 1\}$.
+</Example>
+
+<Example id="nilpotent" title="Nilpotent operators">
+A linear map $N: V \to V$ is **nilpotent** if $N^k = 0$ for some $k \geq 1$. If $Nv = \lambda v$ with $v \neq 0$, then $N^k v = \lambda^k v = 0$, so $\lambda^k = 0$, hence $\lambda = 0$.
+
+The only eigenvalue of a nilpotent operator is $0$. For example, $N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$ has $N^2 = 0$, eigenvalue $\lambda = 0$ with eigenspace $\operatorname{span}\{(1, 0)\}$ (geometric multiplicity $1$, algebraic multiplicity $2$).
+</Example>
+
+---
+
+## Key properties
+
+<Theorem title="Linear independence of eigenvectors">
+Eigenvectors corresponding to distinct eigenvalues are linearly independent. That is, if $\lambda_1, \ldots, \lambda_k$ are distinct eigenvalues of $T$ with eigenvectors $v_1, \ldots, v_k$, then $v_1, \ldots, v_k$ are linearly independent.
+</Theorem>
+
+<Proof title="Proof by induction">
+Base case $k = 1$: a single eigenvector is nonzero, hence linearly independent.
+
+Inductive step: suppose $c_1 v_1 + \cdots + c_k v_k = 0$. Apply $T$: $c_1 \lambda_1 v_1 + \cdots + c_k \lambda_k v_k = 0$. Subtract $\lambda_k$ times the original: $c_1(\lambda_1 - \lambda_k)v_1 + \cdots + c_{k-1}(\lambda_{k-1} - \lambda_k)v_{k-1} = 0$. By the inductive hypothesis, $c_i(\lambda_i - \lambda_k) = 0$ for $i = 1, \ldots, k-1$. Since $\lambda_i \neq \lambda_k$, we get $c_i = 0$. Then $c_k v_k = 0$ gives $c_k = 0$.
+</Proof>
+
+<Example id="independence-3x3" title="Three distinct eigenvalues in R^3">
+Let $A = \begin{pmatrix} 2 & 0 & 0 \\ 1 & 3 & 0 \\ 0 & 0 & -1 \end{pmatrix}$. The eigenvalues (diagonal of a triangular matrix) are $2, 3, -1$.
+
+Computing eigenvectors: $v_1 = (-1, 1, 0)$ for $\lambda = 2$; $v_2 = (0, 1, 0)$ for $\lambda = 3$; $v_3 = (0, 0, 1)$ for $\lambda = -1$.
+
+These three eigenvectors are linearly independent (they form a basis of $\mathbb{R}^3$), confirming the theorem.
+</Example>
+
+---
+
+## Spectrum and trace/determinant relations
+
+<Definition title="Spectrum" number="5.3">
+The **spectrum** of $T$ (or of the matrix $A$) is the set of all eigenvalues:
+
+$$\sigma(T) = \{ \lambda \in F : T - \lambda I \text{ is not invertible} \}.$$
+</Definition>
+
+<Theorem title="Trace and determinant from eigenvalues">
+If $A \in M_{n \times n}(F)$ has eigenvalues $\lambda_1, \ldots, \lambda_n$ (counted with algebraic multiplicity, over the algebraic closure of $F$), then:
+
+$$\operatorname{tr}(A) = \lambda_1 + \lambda_2 + \cdots + \lambda_n, \quad \det(A) = \lambda_1 \lambda_2 \cdots \lambda_n.$$
+</Theorem>
+
+<Example id="trace-det" title="Trace and determinant verification">
+For $A = \begin{pmatrix} 4 & 2 \\ 1 & 3 \end{pmatrix}$: $\operatorname{tr}(A) = 7$, $\det(A) = 10$.
+
+Characteristic polynomial: $\lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$, so $\lambda_1 = 5, \lambda_2 = 2$.
+
+Check: $5 + 2 = 7 = \operatorname{tr}(A)$ and $5 \cdot 2 = 10 = \det(A)$.
+</Example>
+
+<Example id="3x3-trace-det" title="3x3 verification">
+For $A = \begin{pmatrix} 1 & 0 & 0 \\ 0 & 2 & 0 \\ 0 & 0 & 3 \end{pmatrix}$: eigenvalues $1, 2, 3$.
+
+$\operatorname{tr}(A) = 1 + 2 + 3 = 6$, $\det(A) = 1 \cdot 2 \cdot 3 = 6$.
+</Example>
+
+---
+
+## Eigenvalues of special matrices
+
+<Example id="idempotent" title="Idempotent matrices">
+$A^2 = A$ implies $\lambda^2 = \lambda$, so $\lambda \in \{0, 1\}$.
+
+For $A = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$: eigenvalues $1, 0$. For $A = \frac{1}{2}\begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$: eigenvalues $1, 0$ (check: $\operatorname{tr} = 1$, $\det = 0$).
+</Example>
+
+<Example id="involution" title="Involutions">
+$A^2 = I$ implies $\lambda^2 = 1$, so $\lambda \in \{1, -1\}$.
+
+For $A = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}$ (permutation matrix): $\det(A - \lambda I) = \lambda^2 - 1$, eigenvalues $1, -1$, eigenvectors $(1,1)$ and $(1,-1)$.
+</Example>
+
+<Example id="stochastic" title="Stochastic matrices">
+A (right) stochastic matrix has nonnegative entries with each row summing to $1$. Then $A \mathbf{1} = \mathbf{1}$ where $\mathbf{1} = (1, 1, \ldots, 1)^T$... actually, for a right stochastic matrix, columns sum to $1$, so $\mathbf{1}^T A = \mathbf{1}^T$. For a left stochastic matrix (rows sum to $1$): $A \mathbf{1} = \mathbf{1}$, so $\lambda = 1$ is always an eigenvalue with eigenvector $\mathbf{1}$.
+
+For $A = \begin{pmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{pmatrix}$: eigenvalues $\lambda_1 = 1$ (with eigenvector $(3, 4)^T$ after scaling) and $\lambda_2 = 0.3$.
+</Example>
+
+---
+
+## Eigenvalues under matrix operations
+
+<Theorem title="Eigenvalue relationships">
+Let $A$ have eigenvalue $\lambda$ with eigenvector $v$. Then:
+
+- $A^k$ has eigenvalue $\lambda^k$ with eigenvector $v$ (for any $k \geq 1$).
+- $A + cI$ has eigenvalue $\lambda + c$ with eigenvector $v$.
+- If $A$ is invertible, $A^{-1}$ has eigenvalue $\lambda^{-1}$ with eigenvector $v$.
+- $p(A)$ has eigenvalue $p(\lambda)$ for any polynomial $p$.
+</Theorem>
+
+<Example id="polynomial-eigenvalue" title="Eigenvalue of a matrix polynomial">
+Let $A = \begin{pmatrix} 2 & 1 \\ 0 & 3 \end{pmatrix}$ with eigenvalues $2, 3$.
+
+For $p(x) = x^2 - 5x + 6 = (x-2)(x-3)$: $p(A)$ has eigenvalues $p(2) = 0$ and $p(3) = 0$. Indeed, $p(A) = A^2 - 5A + 6I = 0$ (this is the Cayley--Hamilton theorem in action).
+
+For $q(x) = x^2 + 1$: $q(A)$ has eigenvalues $q(2) = 5$ and $q(3) = 10$.
+</Example>
+
+---
+
+## Geometric and algebraic multiplicity
+
+<Definition title="Algebraic and geometric multiplicity" number="5.4">
+For an eigenvalue $\lambda$ of $T$:
+- The **algebraic multiplicity** $m_a(\lambda)$ is the multiplicity of $\lambda$ as a root of the characteristic polynomial.
+- The **geometric multiplicity** $m_g(\lambda) = \dim E_\lambda = \dim \ker(T - \lambda I)$.
+
+Always: $1 \leq m_g(\lambda) \leq m_a(\lambda)$.
+</Definition>
+
+<Example id="defective" title="A defective matrix (m_g less than m_a)">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$ has characteristic polynomial $(\lambda - 2)^2$, so $\lambda = 2$ with $m_a = 2$.
+
+But $A - 2I = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$, so $\ker(A - 2I) = \operatorname{span}\{(1, 0)\}$, giving $m_g = 1 < 2 = m_a$.
+
+This matrix is called **defective**: it cannot be diagonalized because there are not enough linearly independent eigenvectors.
+</Example>
+
+<Example id="equal-multiplicities" title="Equal multiplicities">
+$A = \begin{pmatrix} 3 & 0 \\ 0 & 3 \end{pmatrix} = 3I$ has $\lambda = 3$ with $m_a = 2$ and $m_g = 2$ (every nonzero vector is an eigenvector). This matrix is diagonalizable (it is already diagonal).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Eigenvalues as fundamental invariants">
+Eigenvalues encode essential information about a linear transformation:
+- The **trace** is the sum of eigenvalues, the **determinant** is the product.
+- **Invertibility**: $A$ is invertible iff $0 \notin \sigma(A)$.
+- **Nilpotence**: $A$ is nilpotent iff $\sigma(A) = \{0\}$.
+- The gap between geometric and algebraic multiplicity measures the "defect" of the transformation -- the failure to be diagonalizable.
+- Eigenvectors for distinct eigenvalues are always linearly independent, which is the foundation for diagonalization.
+</Remark>

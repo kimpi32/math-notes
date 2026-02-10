@@ -1,0 +1,161 @@
+export const metadata = {
+  title: '수열 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "개념 - 수열" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 수열 (Sequence)
+
+A sequence is the most fundamental object in analysis. Before we can discuss limits, continuity, or differentiation, we must understand what sequences are, how they behave, and what operations preserve their structure.
+
+---
+
+## Definition
+
+<Definition title="Sequence" number="2.1">
+A **sequence** of real numbers is a function $a : \mathbb{N} \to \mathbb{R}$. We write $a_n$ for $a(n)$ and denote the sequence by $(a_n)_{n=1}^{\infty}$ or simply $(a_n)$.
+
+The value $a_n$ is called the **$n$-th term** of the sequence.
+</Definition>
+
+<Example title="Explicit formula sequences">
+1. $a_n = \frac{1}{n}$: the sequence $(1, \frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \ldots)$.
+2. $a_n = (-1)^n$: the sequence $(-1, 1, -1, 1, \ldots)$.
+3. $a_n = \frac{n}{n+1}$: the sequence $(\frac{1}{2}, \frac{2}{3}, \frac{3}{4}, \frac{4}{5}, \ldots)$.
+4. $a_n = n^2$: the sequence $(1, 4, 9, 16, \ldots)$.
+</Example>
+
+<Example title="Recursively defined sequences">
+5. **Fibonacci sequence**: $a_1 = 1$, $a_2 = 1$, $a_{n+2} = a_{n+1} + a_n$ for $n \geq 1$. This gives $(1, 1, 2, 3, 5, 8, 13, \ldots)$.
+6. $a_1 = 2$, $a_{n+1} = \frac{1}{2}(a_n + \frac{2}{a_n})$. This is Newton's method for $\sqrt{2}$.
+</Example>
+
+---
+
+## Bounded sequences
+
+<Definition title="Bounded sequence" number="2.2">
+A sequence $(a_n)$ is:
+- **bounded above** if there exists $M \in \mathbb{R}$ such that $a_n \leq M$ for all $n \in \mathbb{N}$,
+- **bounded below** if there exists $m \in \mathbb{R}$ such that $a_n \geq m$ for all $n \in \mathbb{N}$,
+- **bounded** if it is both bounded above and bounded below, equivalently, if there exists $K > 0$ such that $|a_n| \leq K$ for all $n \in \mathbb{N}$.
+</Definition>
+
+<Example title="Bounded sequences">
+7. $a_n = \frac{1}{n}$ is bounded: $0 < a_n \leq 1$ for all $n$, so $|a_n| \leq 1$.
+8. $a_n = (-1)^n$ is bounded: $|a_n| = 1$ for all $n$.
+9. $a_n = \frac{n}{n+1}$ is bounded: $0 < a_n < 1$ for all $n$.
+</Example>
+
+<Example title="Unbounded sequences">
+10. $a_n = n$ is bounded below but not above. For any $M > 0$, choose $n > M$ (Archimedean property).
+11. $a_n = (-1)^n \cdot n$ is neither bounded above nor bounded below.
+</Example>
+
+---
+
+## Monotone sequences
+
+<Definition title="Monotone sequence" number="2.3">
+A sequence $(a_n)$ is:
+- **monotonically increasing** (or **nondecreasing**) if $a_n \leq a_{n+1}$ for all $n$,
+- **strictly increasing** if $a_n < a_{n+1}$ for all $n$,
+- **monotonically decreasing** (or **nonincreasing**) if $a_n \geq a_{n+1}$ for all $n$,
+- **strictly decreasing** if $a_n > a_{n+1}$ for all $n$,
+- **monotone** if it is either monotonically increasing or monotonically decreasing.
+</Definition>
+
+<Example title="Monotone sequences">
+12. $a_n = \frac{1}{n}$ is strictly decreasing: $\frac{1}{n} > \frac{1}{n+1}$ for all $n$.
+13. $a_n = \frac{n}{n+1} = 1 - \frac{1}{n+1}$ is strictly increasing.
+14. $a_n = 1 + \frac{(-1)^n}{n}$ is **not** monotone, though it converges to $1$.
+</Example>
+
+---
+
+## Arithmetic of sequences
+
+<Definition title="Algebraic operations on sequences" number="2.4">
+Given sequences $(a_n)$ and $(b_n)$ and a scalar $c \in \mathbb{R}$, define:
+- $(a_n + b_n)$: the sequence whose $n$-th term is $a_n + b_n$,
+- $(c \cdot a_n)$: the sequence whose $n$-th term is $c \cdot a_n$,
+- $(a_n \cdot b_n)$: the sequence whose $n$-th term is $a_n \cdot b_n$,
+- $(a_n / b_n)$: the sequence whose $n$-th term is $a_n / b_n$, provided $b_n \neq 0$ for all $n$.
+</Definition>
+
+---
+
+## Tail of a sequence
+
+<Remark>
+For convergence, the first finitely many terms of a sequence are irrelevant. What matters is the **tail**: for any $N \in \mathbb{N}$, the tail $(a_n)_{n \geq N}$ is the subsequence starting from the $N$-th term.
+
+Formally, $(a_n)$ converges if and only if $(a_n)_{n \geq N}$ converges, for any fixed $N$. This observation is used constantly in $\varepsilon$-$N$ proofs.
+</Remark>
+
+<Example title="Tail equivalence">
+15. The sequences $(100, 200, 300, \frac{1}{4}, \frac{1}{5}, \frac{1}{6}, \ldots)$ and $(\frac{1}{1}, \frac{1}{2}, \frac{1}{3}, \frac{1}{4}, \frac{1}{5}, \frac{1}{6}, \ldots)$ have the same convergence behavior: both converge to $0$.
+</Example>
+
+---
+
+## Special sequences
+
+<Example title="Geometric sequence">
+16. $a_n = r^n$ for $r \in \mathbb{R}$. The behavior depends on $r$:
+- $|r| < 1$: $a_n \to 0$ (converges).
+- $r = 1$: $a_n = 1$ (constant).
+- $r = -1$: $a_n = (-1)^n$ (oscillates, diverges).
+- $|r| > 1$: $|a_n| \to \infty$ (diverges).
+</Example>
+
+<Example title="Arithmetic-geometric sequences">
+17. $a_n = n \cdot r^n$ for $|r| < 1$: converges to $0$. The exponential decay $r^n$ dominates the linear growth $n$.
+</Example>
+
+<Example title="Sequences defined by integrals">
+18. $a_n = \int_0^1 x^n \, dx = \frac{1}{n+1}$. This defines a sequence via integration, and $a_n \to 0$.
+</Example>
+
+---
+
+## Sequences as building blocks
+
+<Remark>
+Sequences appear throughout all of analysis:
+- **Convergence** of sequences is the foundation for limits of functions, continuity, and differentiability.
+- **Series** $\sum a_n$ are defined via the sequence of partial sums $s_N = \sum_{n=1}^N a_n$.
+- **Function sequences** $(f_n)$ lead to pointwise and uniform convergence.
+- The **completeness** of $\mathbb{R}$ is often stated in terms of Cauchy sequences.
+
+Understanding the behavior of real sequences is thus essential before proceeding to any deeper topic.
+</Remark>
+
+---
+
+## Looking ahead
+
+<Remark>
+The four key results about sequences in this chapter are:
+1. **Monotone Convergence Theorem**: monotone + bounded implies convergent. See [MCT](/analysis/ch02-sequences/theorems/t01-monotone-convergence).
+2. **Bolzano--Weierstrass**: bounded implies convergent subsequence. See [BW](/analysis/ch02-sequences/theorems/t02-bolzano-weierstrass).
+3. **Cauchy Criterion**: Cauchy if and only if convergent. See [Cauchy](/analysis/ch02-sequences/theorems/t03-cauchy-criterion).
+4. **Algebraic limit theorem**: arithmetic operations preserve convergence. See [Convergence](/analysis/ch02-sequences/concepts/c02-convergence).
+
+These form the foundation for everything that follows in analysis.
+</Remark>

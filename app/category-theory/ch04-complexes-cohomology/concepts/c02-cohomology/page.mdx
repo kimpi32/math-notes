@@ -1,0 +1,106 @@
+export const metadata = {
+  title: 'Cohomology — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Concept — Cohomology" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Cohomology
+
+Cohomology measures the failure of exactness in a complex. The $n$-th cohomology $H^n(A^\bullet)$ is the quotient of cocycles (elements in the kernel of $d^n$) by coboundaries (elements in the image of $d^{n-1}$). It is a functor from complexes to the underlying abelian category, and its behavior under short exact sequences gives rise to long exact sequences.
+
+---
+
+## Definition
+
+<Definition title="Cohomology" number="4.4">
+For a complex $A^\bullet$ in an abelian category $\mathcal{A}$, the **$n$-th cohomology** is
+
+$$H^n(A^\bullet) = \ker d^n / \mathrm{im}\, d^{n-1} = \ker(A^n \to A^{n+1}) / \mathrm{im}(A^{n-1} \to A^n)$$
+
+Elements of $\ker d^n$ are called **$n$-cocycles** ($Z^n$), and elements of $\mathrm{im}\, d^{n-1}$ are called **$n$-coboundaries** ($B^n$).
+</Definition>
+
+<Definition title="Acyclic complex" number="4.5">
+A complex $A^\bullet$ is **acyclic** (or **exact**) if $H^n(A^\bullet) = 0$ for all $n$, i.e., the complex is an exact sequence.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Cohomology of a short complex" id="short-cohomology">
+For $0 \to A \xrightarrow{f} B \to 0$ (concentrated in degrees 0 and 1): $H^0 = \ker f$ and $H^1 = \mathrm{coker}\, f = B / \mathrm{im}\, f$.
+</Example>
+
+<Example title="De Rham cohomology" id="derham-coh">
+$H^n_{\mathrm{dR}}(M) = \ker(d : \Omega^n \to \Omega^{n+1}) / \mathrm{im}(d : \Omega^{n-1} \to \Omega^n)$ is the $n$-th de Rham cohomology. For $M = \mathbb{R}^n$, all cohomology vanishes except $H^0 \cong \mathbb{R}$ (Poincare lemma).
+</Example>
+
+<Example title="Singular cohomology" id="singular-coh">
+Applying $\mathrm{Hom}(-, G)$ to the singular chain complex gives the singular cochain complex. Its cohomology is the singular cohomology $H^n(X; G)$.
+</Example>
+
+<Example title="Group cohomology" id="group-coh">
+For a group $G$ and $G$-module $M$, $H^n(G, M)$ is the cohomology of the complex $\mathrm{Hom}_G(P_\bullet, M)$ where $P_\bullet \to \mathbb{Z}$ is a projective resolution. $H^0(G, M) = M^G$ (fixed points), $H^1(G, M)$ classifies extensions, $H^2(G, M)$ classifies central extensions.
+</Example>
+
+<Example title="Sheaf cohomology" id="sheaf-coh">
+$H^n(X, \mathcal{F}) = R^n\Gamma(X, \mathcal{F})$ is the $n$-th right derived functor of global sections. It can be computed via injective resolutions or Cech cohomology.
+</Example>
+
+<Example title="Cohomology of the Koszul complex" id="koszul-coh">
+For a regular sequence $x_1, \ldots, x_n$ in a Noetherian ring $R$, the Koszul complex $K(x_1, \ldots, x_n)$ is acyclic except in degree $0$, where $H^0 = R/(x_1, \ldots, x_n)$.
+</Example>
+
+<Example title="Ext as cohomology" id="ext-coh">
+$\mathrm{Ext}^n_R(M, N) = H^n(\mathrm{Hom}_R(P_\bullet, N))$ where $P_\bullet \to M$ is a projective resolution. This is the cohomology of the Hom complex.
+</Example>
+
+<Example title="Tor as homology" id="tor-homology">
+$\mathrm{Tor}_n^R(M, N) = H_n(P_\bullet \otimes_R N)$ where $P_\bullet \to M$ is a projective resolution. This is the homology of the tensor complex.
+</Example>
+
+<Example title="Cohomology as a functor" id="coh-functor">
+$H^n : \mathbf{Ch}(\mathcal{A}) \to \mathcal{A}$ is an additive functor. A chain map $f : A^\bullet \to B^\bullet$ induces $H^n(f) : H^n(A^\bullet) \to H^n(B^\bullet)$. Chain homotopic maps induce the same map on cohomology.
+</Example>
+
+<Example title="Euler characteristic" id="euler-char">
+For a bounded complex with finite-length cohomology, the **Euler characteristic** is $\chi(A^\bullet) = \sum_n (-1)^n \ell(H^n(A^\bullet))$. It is additive on short exact sequences of complexes.
+</Example>
+
+<Example title="Cohomology of the mapping cone" id="cone-coh">
+For $f : A^\bullet \to B^\bullet$, the long exact sequence of the mapping cone gives $\cdots \to H^n(A) \xrightarrow{H^n(f)} H^n(B) \to H^n(\mathrm{Cone}(f)) \to H^{n+1}(A) \to \cdots$. Thus $f$ is a quasi-isomorphism iff $\mathrm{Cone}(f)$ is acyclic.
+</Example>
+
+<Example title="Hypercohomology" id="hypercoh">
+For a complex of sheaves $\mathcal{F}^\bullet$ on $X$, the hypercohomology $\mathbb{H}^n(X, \mathcal{F}^\bullet)$ is computed by taking an injective resolution of each sheaf and forming the total complex. It generalizes both sheaf cohomology and de Rham cohomology.
+</Example>
+
+---
+
+<Theorem title="Long exact sequence in cohomology" number="4.2">
+A short exact sequence of complexes $0 \to A^\bullet \to B^\bullet \to C^\bullet \to 0$ induces a long exact sequence:
+
+$$\cdots \to H^n(A) \to H^n(B) \to H^n(C) \xrightarrow{\delta^n} H^{n+1}(A) \to H^{n+1}(B) \to \cdots$$
+
+The connecting homomorphism $\delta^n$ is constructed via the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma). See the [detailed proof](/category-theory/ch04-complexes-cohomology/proofs/p01-long-exact-seq-proof).
+</Theorem>
+
+<Remark title="Cohomology and derived categories">
+In the [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category) $D(\mathcal{A})$, two complexes are isomorphic if and only if they have the same cohomology in a strong sense (they are connected by a zigzag of quasi-isomorphisms). The cohomology functor $H^n$ factors through $D(\mathcal{A})$.
+</Remark>

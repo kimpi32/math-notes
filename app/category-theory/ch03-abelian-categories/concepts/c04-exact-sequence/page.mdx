@@ -1,0 +1,124 @@
+export const metadata = {
+  title: 'Exact Sequence — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Concept — Exact Sequence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Exact Sequence
+
+Exact sequences are the central objects of study in homological algebra. A sequence is exact when the image of each morphism equals the kernel of the next. This condition encodes precise information about the relationship between objects and the failure of functors to preserve structural properties.
+
+---
+
+## Definition
+
+<Definition title="Exact at a point" number="3.9">
+A sequence of morphisms $A \xrightarrow{f} B \xrightarrow{g} C$ in an abelian category is **exact at $B$** if $\mathrm{im}\, f = \ker g$. Equivalently:
+
+1. $g \circ f = 0$ (i.e., $\mathrm{im}\, f \subseteq \ker g$), and
+2. The inclusion $\mathrm{im}\, f \hookrightarrow \ker g$ is an isomorphism.
+</Definition>
+
+<Definition title="Exact sequence" number="3.10">
+A (possibly infinite) sequence $\cdots \to A_{n-1} \xrightarrow{f_{n-1}} A_n \xrightarrow{f_n} A_{n+1} \to \cdots$ is **exact** if it is exact at every $A_n$ (except possibly at the endpoints).
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Exactness at the left end" id="exact-left">
+The sequence $0 \to A \xrightarrow{f} B$ is exact at $A$ if and only if $f$ is a monomorphism ($\ker f = 0$). Saying "the kernel is zero" means $f$ is injective in $R\text{-}\mathbf{Mod}$.
+</Example>
+
+<Example title="Exactness at the right end" id="exact-right">
+The sequence $A \xrightarrow{f} B \to 0$ is exact at $B$ if and only if $f$ is an epimorphism ($\mathrm{im}\, f = B$). In $R\text{-}\mathbf{Mod}$, this means $f$ is surjective.
+</Example>
+
+<Example title="Exact sequence and the first isomorphism theorem" id="first-iso">
+For any morphism $f : A \to B$ in $R\text{-}\mathbf{Mod}$, the sequence
+
+$$0 \to \ker f \xrightarrow{\iota} A \xrightarrow{f} B \xrightarrow{\pi} \mathrm{coker}\, f \to 0$$
+
+is exact. The first isomorphism theorem states $A / \ker f \cong \mathrm{im}\, f$.
+</Example>
+
+<Example title="Exact sequence from a normal subgroup" id="normal-subgroup">
+For $N \trianglelefteq G$ in $\mathbf{Grp}$, the sequence $1 \to N \xrightarrow{\iota} G \xrightarrow{\pi} G/N \to 1$ is exact (where $1$ denotes the trivial group). In $\mathbf{Ab}$, this becomes $0 \to N \to G \to G/N \to 0$.
+</Example>
+
+<Example title="Localization exact sequence" id="localization-exact">
+For a Noetherian ring $R$ and a multiplicative set $S$, the functor $S^{-1}(-)$ is exact: it preserves exact sequences. In particular, $0 \to S^{-1}M' \to S^{-1}M \to S^{-1}M'' \to 0$ is exact whenever $0 \to M' \to M \to M'' \to 0$ is.
+</Example>
+
+<Example title="Long exact sequence of homology" id="les-homology">
+A short exact sequence of chain complexes $0 \to A_\bullet \to B_\bullet \to C_\bullet \to 0$ induces a long exact sequence in homology:
+
+$$\cdots \to H_n(A) \to H_n(B) \to H_n(C) \xrightarrow{\delta} H_{n-1}(A) \to H_{n-1}(B) \to \cdots$$
+
+The connecting homomorphism $\delta$ is constructed via the [Snake Lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma).
+</Example>
+
+<Example title="Mayer-Vietoris sequence" id="mayer-vietoris">
+For an open cover $X = U \cup V$, there is a long exact sequence
+
+$$\cdots \to H_n(U \cap V) \to H_n(U) \oplus H_n(V) \to H_n(X) \xrightarrow{\delta} H_{n-1}(U \cap V) \to \cdots$$
+
+This is the Mayer-Vietoris sequence, a fundamental computational tool in algebraic topology.
+</Example>
+
+<Example title="Exact sequence of Ext" id="ext-exact">
+For $R$-modules, a short exact sequence $0 \to A \to B \to C \to 0$ induces a long exact sequence
+
+$$0 \to \mathrm{Hom}(C, M) \to \mathrm{Hom}(B, M) \to \mathrm{Hom}(A, M) \to \mathrm{Ext}^1(C, M) \to \mathrm{Ext}^1(B, M) \to \cdots$$
+
+This is the [long exact sequence for Ext](/category-theory/ch07-derived-functors/theorems/t03-ext-ses).
+</Example>
+
+<Example title="Exact functor" id="exact-functor">
+A functor $F : \mathcal{A} \to \mathcal{B}$ between abelian categories is **exact** if it sends every short exact sequence $0 \to A \to B \to C \to 0$ to a short exact sequence $0 \to FA \to FB \to FC \to 0$. Localization, direct limit, and base change (for flat modules) are exact functors.
+</Example>
+
+<Example title="Left exact functor" id="left-exact">
+$F$ is **left exact** if it sends $0 \to A \to B \to C \to 0$ to the exact sequence $0 \to FA \to FB \to FC$. The functor $\mathrm{Hom}(M, -)$ is left exact; its right derived functors are $\mathrm{Ext}^n(M, -)$.
+</Example>
+
+<Example title="Right exact functor" id="right-exact">
+$F$ is **right exact** if it sends $0 \to A \to B \to C \to 0$ to $FA \to FB \to FC \to 0$. The functor $M \otimes_R -$ is right exact; its left derived functors are $\mathrm{Tor}_n(M, -)$.
+</Example>
+
+<Example title="Non-exact functor: global sections" id="global-sections">
+The global sections functor $\Gamma(X, -) : \mathbf{Sh}(X) \to \mathbf{Ab}$ is left exact but not exact in general. Its right derived functors are the sheaf cohomology groups $H^n(X, -)$.
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Exactness and functors" number="3.4">
+In an abelian category:
+
+1. $0 \to A \xrightarrow{f} B \xrightarrow{g} C \to 0$ is exact if and only if $f$ is monic, $g$ is epic, and $\mathrm{im}\, f = \ker g$.
+2. A left exact functor $F$ preserves the exactness of $0 \to A \to B \to C$ but may fail on the right.
+3. A right exact functor preserves $A \to B \to C \to 0$ but may fail on the left.
+4. An exact functor preserves all exact sequences.
+</Theorem>
+
+<Remark title="Looking ahead">
+The failure of exactness for left/right exact functors is precisely what [derived functors](/category-theory/ch07-derived-functors/concepts/c02-classical-derived) measure. The [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence) converts a short exact sequence into a long exact sequence, making the failure of exactness visible and computable.
+</Remark>

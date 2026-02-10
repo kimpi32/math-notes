@@ -1,0 +1,163 @@
+export const metadata = {
+  title: '아르키메데스 성질의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "1. 실수의 체계", href: "/analysis/ch01-real-numbers" },
+  { label: "증명 - 아르키메데스 성질의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 아르키메데스 성질의 증명 (Proof of the Archimedean Property)
+
+The Archimedean property is one of the first important consequences of the completeness axiom. It ensures that the natural numbers are unbounded and, equivalently, that for any positive real number $\varepsilon$, the sequence $1/n$ eventually becomes smaller than $\varepsilon$. The proof uses the completeness axiom (existence of supremum) via a proof by contradiction.
+
+---
+
+## Statement
+
+<Theorem title="Archimedean Property" number="1.5">
+**Version 1.** For every $x \in \mathbb{R}$, there exists $n \in \mathbb{N}$ such that $n > x$.
+
+Equivalently, $\mathbb{N}$ is not bounded above in $\mathbb{R}$.
+
+**Version 2.** For any $x, y \in \mathbb{R}$ with $x > 0$, there exists $n \in \mathbb{N}$ such that $nx > y$.
+</Theorem>
+
+<Remark>
+Version 1 and Version 2 are equivalent. Version 2 follows from Version 1 by applying it to $y/x$ (which exists since $x > 0$). Version 1 follows from Version 2 by taking $x = 1$ and $y = x$.
+</Remark>
+
+---
+
+## Proof of Version 1 (by Contradiction)
+
+<Proof>
+We prove that $\mathbb{N}$ is not bounded above in $\mathbb{R}$.
+
+**Step 1: Assume for contradiction that $\mathbb{N}$ is bounded above.**
+
+Suppose there exists $M \in \mathbb{R}$ such that $n \leq M$ for all $n \in \mathbb{N}$. In other words, $M$ is an upper bound of $\mathbb{N}$.
+
+**Step 2: Apply the completeness axiom.**
+
+The set $\mathbb{N}$ is nonempty (since $1 \in \mathbb{N}$) and bounded above (by assumption). By the completeness axiom of $\mathbb{R}$, the supremum $\alpha = \sup \mathbb{N}$ exists.
+
+**Step 3: Show that $\alpha - 1$ is not an upper bound.**
+
+Since $\alpha = \sup \mathbb{N}$, the number $\alpha - 1$ is strictly less than $\alpha$ and therefore is **not** an upper bound of $\mathbb{N}$. (The supremum is the **least** upper bound, so anything smaller fails to be an upper bound.)
+
+Hence there exists $n_0 \in \mathbb{N}$ such that
+
+$$n_0 > \alpha - 1.$$
+
+**Step 4: Derive a contradiction.**
+
+Since $n_0 \in \mathbb{N}$, we also have $n_0 + 1 \in \mathbb{N}$. From $n_0 > \alpha - 1$, we get
+
+$$n_0 + 1 > \alpha.$$
+
+But $n_0 + 1 \in \mathbb{N}$ and $\alpha$ is an upper bound of $\mathbb{N}$, so $n_0 + 1 \leq \alpha$. This is a contradiction.
+
+**Step 5: Conclusion.**
+
+The assumption that $\mathbb{N}$ is bounded above leads to a contradiction. Therefore $\mathbb{N}$ is not bounded above: for every $x \in \mathbb{R}$, there exists $n \in \mathbb{N}$ with $n > x$.
+</Proof>
+
+---
+
+## Key Observations
+
+<Remark>
+The proof critically uses the **completeness axiom** -- specifically, the existence of $\sup \mathbb{N}$ under the assumption that $\mathbb{N}$ is bounded. Without completeness, the Archimedean property can fail. In fact, there exist non-Archimedean ordered fields (see Example 4 below).
+
+The logical structure is: completeness $\Rightarrow$ Archimedean property. The converse is false: $\mathbb{Q}$ is Archimedean but not complete.
+</Remark>
+
+---
+
+## Proof of Version 2
+
+<Proof>
+Let $x > 0$ and $y \in \mathbb{R}$. We must find $n \in \mathbb{N}$ with $nx > y$.
+
+If $y \leq 0$, then $n = 1$ works since $1 \cdot x = x > 0 \geq y$.
+
+If $y > 0$, consider the real number $y/x > 0$. By Version 1, there exists $n \in \mathbb{N}$ with $n > y/x$. Multiplying both sides by $x > 0$ gives $nx > y$.
+</Proof>
+
+---
+
+## Important Corollaries
+
+<Theorem title="Corollary: Infimum of 1/n" number="1.6">
+$\inf\{1/n : n \in \mathbb{N}\} = 0$.
+
+Equivalently, for every $\varepsilon > 0$, there exists $n \in \mathbb{N}$ such that $1/n < \varepsilon$.
+</Theorem>
+
+<Proof>
+Let $S = \{1/n : n \in \mathbb{N}\}$.
+
+**$0$ is a lower bound**: For all $n \in \mathbb{N}$, $1/n > 0$, so $0$ is a lower bound of $S$.
+
+**$0$ is the greatest lower bound**: Let $\varepsilon > 0$. By the Archimedean property (Version 2 with $x = \varepsilon$ and $y = 1$), there exists $n \in \mathbb{N}$ with $n\varepsilon > 1$, i.e., $1/n < \varepsilon$. Hence $1/n \in S$ and $1/n < 0 + \varepsilon$. By the epsilon characterization of infimum, $\inf S = 0$.
+</Proof>
+
+<Remark>
+This corollary is used throughout analysis. Every time we write "choose $n$ large enough that $1/n < \varepsilon$," we are invoking the Archimedean property.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Archimedean property for large numbers">
+1. Let $x = 10^{100}$ (a googol). The Archimedean property guarantees there exists $n \in \mathbb{N}$ with $n > 10^{100}$. Of course, $n = 10^{100} + 1$ works. The point is not that this is surprising for specific numbers, but that the property holds for **every** real number, including those we cannot write down explicitly.
+</Example>
+
+<Example title="Making nx exceed y">
+2. Let $x = 0.001$ and $y = 1000$. We need $n$ with $0.001 \cdot n > 1000$, i.e., $n > 1{,}000{,}000$. So $n = 1{,}000{,}001$ works. In general, $n = \lfloor y/x \rfloor + 1$ always works.
+</Example>
+
+<Example title="Convergence of 1/n to zero">
+3. The sequence $a_n = 1/n$ converges to $0$. To prove this formally: for any $\varepsilon > 0$, the Archimedean property gives $N \in \mathbb{N}$ with $1/N < \varepsilon$. Then for all $n \geq N$, $|a_n - 0| = 1/n \leq 1/N < \varepsilon$.
+</Example>
+
+<Example title="Non-Archimedean ordered fields">
+4. Consider the ordered field $\mathbb{Q}(\varepsilon)$ of rational functions in an indeterminate $\varepsilon$, ordered so that $\varepsilon$ is "infinitely small" (positive but less than every positive rational). Then $1/\varepsilon$ is "infinitely large" -- there is no $n \in \mathbb{N}$ with $n > 1/\varepsilon$. This is a non-Archimedean ordered field, showing that the Archimedean property does not follow from the ordered field axioms alone.
+</Example>
+
+<Example title="Application to floor function">
+5. The **floor function** $\lfloor x \rfloor = \max\{n \in \mathbb{Z} : n \leq x\}$ is well-defined for all $x \in \mathbb{R}$. This relies on the Archimedean property: since $\mathbb{N}$ is unbounded, there exists $n \in \mathbb{N}$ with $n > |x|$, so the set $\{k \in \mathbb{Z} : k \leq x\}$ is bounded above and nonempty (it contains $-n$). The well-ordering of $\mathbb{Z}$ from above (or completeness) then gives the maximum.
+</Example>
+
+<Example title="Density and the Archimedean property">
+6. The Archimedean property is the essential ingredient in proving the [유리수의 조밀성](/analysis/ch01-real-numbers/theorems/t02-density-of-rationals). Given $a < b$, the Archimedean property provides $n$ with $1/n < b - a$, which is the crucial first step. See the [유리수 조밀성의 증명](/analysis/ch01-real-numbers/proofs/p02-density-proof) for the complete argument.
+</Example>
+
+---
+
+## Summary of the Proof Structure
+
+<Remark>
+The proof of the Archimedean property follows a pattern that recurs throughout real analysis:
+
+1. **Assume the negation**: suppose the desired conclusion fails.
+2. **Apply completeness**: the negation gives a bounded set, so the supremum exists.
+3. **Use the supremum characterization**: find an element close to the supremum.
+4. **Derive a contradiction**: produce an element that exceeds the supremum.
+
+This "completeness + contradiction" pattern appears in the proofs of the Monotone Convergence Theorem, the Bolzano--Weierstrass Theorem, the Extreme Value Theorem, and many others.
+</Remark>

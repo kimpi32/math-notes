@@ -1,0 +1,136 @@
+export const metadata = {
+  title: 'Standard t-structure — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Theorem — Standard t-structure" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Standard t-structure
+
+The standard t-structure on the derived category $D(\mathcal{A})$ is the canonical way to recover the abelian category $\mathcal{A}$ from its derived category. It provides the truncation functors that are ubiquitous in homological algebra.
+
+---
+
+## Statement
+
+<Theorem title="Standard t-structure" number="6.5">
+Let $\mathcal{A}$ be an abelian category. The **standard t-structure** on $D(\mathcal{A})$ is defined by:
+
+$$D^{\leq 0} = \{A^\bullet \in D(\mathcal{A}) : H^n(A) = 0 \text{ for all } n > 0\}$$
+
+$$D^{\geq 0} = \{A^\bullet \in D(\mathcal{A}) : H^n(A) = 0 \text{ for all } n < 0\}$$
+
+This pair $(D^{\leq 0}, D^{\geq 0})$ satisfies the axioms of a t-structure, and its heart $D^{\leq 0} \cap D^{\geq 0}$ is canonically equivalent to $\mathcal{A}$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+We verify the three axioms of a t-structure.
+
+**Axiom 1: Closure under shifts.**
+
+If $A^\bullet \in D^{\leq 0}$, then $H^n(A) = 0$ for $n > 0$. For the shift $A[1]$, we have $H^n(A[1]) = H^{n+1}(A)$. If $n > 0$, then $n + 1 > 1 > 0$, so $H^{n+1}(A) = 0$. Thus $A[1] \in D^{\leq 0}$, proving $D^{\leq 0}[1] \subseteq D^{\leq 0}$.
+
+Similarly, if $B^\bullet \in D^{\geq 0}$, then $H^n(B) = 0$ for $n < 0$. For $B[-1]$, $H^n(B[-1]) = H^{n-1}(B)$. If $n < 0$, then $n - 1 < -1 < 0$, so $H^{n-1}(B) = 0$. Thus $D^{\geq 0}[-1] \subseteq D^{\geq 0}$.
+
+**Axiom 2: Orthogonality.**
+
+We must show $\mathrm{Hom}_{D(\mathcal{A})}(X, Y) = 0$ for $X \in D^{\leq 0}$ and $Y \in D^{\geq 1}$ (i.e., $H^n(Y) = 0$ for $n \leq 0$).
+
+When $\mathcal{A}$ has enough injectives, represent $Y$ by a complex of injectives $I^\bullet$ with $I^n = 0$ for $n \leq 0$. Any chain map $f : X \to I^\bullet$ must have $f^n = 0$ for $n > 0$ (since $X$ has zero cohomology there) and the components into $I^n$ for $n \leq 0$ vanish since $I^n = 0$. A careful analysis using the injective model shows that such maps are null-homotopic.
+
+**Axiom 3: Truncation triangle.**
+
+For $X \in D(\mathcal{A})$, define the **canonical truncation**:
+
+$$(\tau_{\leq 0} X)^n = X^n \text{ for } n < 0, \quad (\tau_{\leq 0} X)^0 = \ker(d^0 : X^0 \to X^1), \quad (\tau_{\leq 0} X)^n = 0 \text{ for } n > 0$$
+
+and define $\tau_{\geq 1} X$ by the short exact sequence of complexes $0 \to \tau_{\leq 0} X \to X \to \tau_{\geq 1} X \to 0$. This gives a distinguished triangle $\tau_{\leq 0} X \to X \to \tau_{\geq 1} X \to (\tau_{\leq 0} X)[1]$, with $\tau_{\leq 0} X \in D^{\leq 0}$ and $\tau_{\geq 1} X \in D^{\geq 1}$.
+
+**Heart is $\mathcal{A}$.**
+
+An object in $D^{\leq 0} \cap D^{\geq 0}$ has $H^n = 0$ for $n \neq 0$. Such a complex is quasi-isomorphic to $H^0[0]$, which is a single object of $\mathcal{A}$ in degree zero. The functor $A \mapsto A[0]$ gives the equivalence $\mathcal{A} \xrightarrow{\sim} D^{\leq 0} \cap D^{\geq 0}$.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Truncation of a two-term complex" id="two-term">
+Let $A^\bullet = [A^0 \xrightarrow{d} A^1]$ (in degrees 0 and 1). Then $\tau_{\leq 0} A^\bullet = [\ker d]$ (concentrated in degree 0) and $\tau_{\geq 1} A^\bullet = [\mathrm{coker}\, d']$ where $d' : A^0/\ker d \to A^1$ is the induced map. The cohomology is $H^0 = \ker d$ and $H^1 = \mathrm{coker}\, d$.
+</Example>
+
+<Example title="Truncation of a resolution" id="truncation-resolution">
+Let $0 \to P_2 \to P_1 \to P_0 \to M \to 0$ be a projective resolution viewed as a complex $P^\bullet$ in degrees $-2, -1, 0$ with a quasi-isomorphism $P^\bullet \to M[0]$. Then $\tau_{\leq -1} P^\bullet = [P_2 \to \ker(P_1 \to P_0)]$ and $\tau_{\geq 0} P^\bullet \simeq M[0]$.
+</Example>
+
+<Example title="Cohomological functor from t-structure" id="cohomological">
+The standard t-structure gives $H^n = H^0 \circ [-n]$ where $H^0(X) = \tau_{\leq 0}\tau_{\geq 0} X$. This recovers the usual cohomology of complexes. For a distinguished triangle $X \to Y \to Z \to X[1]$, the long exact sequence $\cdots \to H^n(X) \to H^n(Y) \to H^n(Z) \to H^{n+1}(X) \to \cdots$ follows formally.
+</Example>
+
+<Example title="Standard t-structure on D(Vect)" id="d-vect">
+On $D(\mathbf{Vect}_k)$, every complex is formal: $A^\bullet \cong \bigoplus_n H^n(A)[-n]$. The truncation $\tau_{\leq 0}$ simply keeps the summands $H^n[-n]$ for $n \leq 0$. The t-structure is completely determined by the grading.
+</Example>
+
+<Example title="Standard t-structure on D(Ab)" id="d-ab">
+On $D(\mathbf{Ab})$, formality also holds (since $\mathbb{Z}$ is hereditary). The standard t-structure has heart $\mathbf{Ab}$. The truncation functors agree with the naive truncation on the level of cohomology groups.
+</Example>
+
+<Example title="Non-standard t-structure by shifting" id="shifted">
+For any integer $n$, the shifted t-structure $(D^{\leq n}, D^{\geq n})$ is also a valid t-structure on $D(\mathcal{A})$. Its heart consists of complexes with cohomology concentrated in degree $n$, which is again equivalent to $\mathcal{A}$ via $A \mapsto A[-n]$.
+</Example>
+
+<Example title="Truncation and exact triangles" id="truncation-triangle">
+For a short exact sequence $0 \to A \to B \to C \to 0$ in $\mathcal{A}$, viewed as a distinguished triangle $A[0] \to B[0] \to C[0] \to A[1]$ in $D(\mathcal{A})$, all three terms lie in $D^{\leq 0} \cap D^{\geq 0}$. The truncation functors act as the identity on objects in the heart.
+</Example>
+
+<Example title="Truncation of sheaf complexes" id="sheaf-truncation">
+For $\mathcal{F}^\bullet \in D^b(\mathbf{Sh}(X))$, the truncation $\tau_{\leq n} \mathcal{F}^\bullet$ is a complex whose cohomology sheaves $\mathcal{H}^k$ vanish for $k > n$ and agree with those of $\mathcal{F}^\bullet$ for $k \leq n$. This is used extensively in the theory of perverse sheaves and intersection cohomology.
+</Example>
+
+<Example title="Standard vs perverse" id="standard-vs-perverse">
+On $D^b_c(X)$ for a stratified space $X$, the standard t-structure has heart $\mathbf{Sh}_c(X)$ (constructible sheaves), while the perverse t-structure has heart $\mathrm{Perv}(X)$ (perverse sheaves). The perverse t-structure is a non-trivial deformation of the standard one, shifted differently on each stratum.
+</Example>
+
+<Example title="Adjunction of truncation functors" id="truncation-adjunction">
+The inclusion $i : D^{\leq 0} \hookrightarrow D(\mathcal{A})$ has a right adjoint $\tau_{\leq 0}$, and $j : D^{\geq 0} \hookrightarrow D(\mathcal{A})$ has a left adjoint $\tau_{\geq 0}$. These adjunctions encode the universal property of truncation: $\mathrm{Hom}(X, \tau_{\leq 0} Y) \cong \mathrm{Hom}(X, Y)$ for $X \in D^{\leq 0}$.
+</Example>
+
+<Example title="Truncation and derived functors" id="truncation-derived">
+For a left exact functor $F : \mathcal{A} \to \mathcal{B}$, the derived functor $RF$ maps $D^+(\mathcal{A}) \to D^+(\mathcal{B})$. The relationship $H^n(RF(X)) = R^nF(H^0(X))$ holds when $X \in D^{\geq 0} \cap D^{\leq 0}$. For general $X$, a spectral sequence $R^pF(H^q(X)) \Rightarrow H^{p+q}(RF(X))$ mediates.
+</Example>
+
+<Example title="Stupid truncation vs canonical truncation" id="stupid-vs-canonical">
+The **stupid (or brutal) truncation** $\sigma_{\leq n}$ simply sets $X^k = 0$ for $k > n$ and keeps $X^k$ for $k \leq n$. Unlike the canonical truncation $\tau_{\leq n}$, the stupid truncation does not preserve quasi-isomorphism classes and does not define a functor on $D(\mathcal{A})$. However, $\sigma_{\leq n}$ is useful at the chain level.
+</Example>
+
+<Example title="Non-degenerate t-structure" id="non-degenerate">
+The standard t-structure on $D^b(\mathcal{A})$ is **non-degenerate**: $\bigcap_n D^{\leq n} = 0$ and $\bigcap_n D^{\geq n} = 0$. This means every nonzero object has some nonzero cohomology, which is automatic for bounded complexes. For unbounded $D(\mathcal{A})$, non-degeneracy requires that no nonzero object has all cohomology groups zero (which holds by definition of the derived category).
+</Example>
+
+---
+
+<Remark title="Universality of the standard t-structure">
+The standard t-structure is the unique t-structure on $D(\mathcal{A})$ whose heart recovers $\mathcal{A}$ via the canonical embedding $\mathcal{A} \hookrightarrow D(\mathcal{A})$. Any other t-structure with heart equivalent to $\mathcal{A}$ (via this embedding) must coincide with the standard one.
+</Remark>
+
+<Remark title="Truncation as a filtered structure">
+The sequence of subcategories $\cdots \subseteq D^{\leq -1} \subseteq D^{\leq 0} \subseteq D^{\leq 1} \subseteq \cdots$ defines a filtration on $D(\mathcal{A})$. This filtration is the categorical analogue of a filtration on a vector space, and the associated graded pieces are copies of the heart $\mathcal{A}$. This perspective connects t-structures to filtered derived categories and mixed Hodge theory.
+</Remark>

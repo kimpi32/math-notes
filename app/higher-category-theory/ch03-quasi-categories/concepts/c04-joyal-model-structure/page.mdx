@@ -1,0 +1,150 @@
+export const metadata = {
+  title: 'Joyal Model Structure — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Concept — Joyal Model Structure" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Joyal Model Structure
+
+The Joyal model structure on $\mathbf{sSet}$ is the model structure whose fibrant objects are quasi-categories and whose weak equivalences are categorical equivalences. While the Kan--Quillen model structure models homotopy types (spaces/$\infty$-groupoids), the Joyal model structure models $(\infty,1)$-categories. This model structure, introduced by Andre Joyal, provides the foundational framework for Lurie's theory of $\infty$-categories.
+
+---
+
+## Definition
+
+<Theorem title="Joyal model structure" number="3.1">
+The category $\mathbf{sSet}$ admits a model structure, called the **Joyal model structure**, with:
+
+- **Weak equivalences**: Categorical equivalences (maps inducing equivalences of $\infty$-categories).
+- **Cofibrations**: Monomorphisms (same as Kan--Quillen).
+- **Fibrations**: Maps with the RLP against all maps that are both monomorphisms and categorical equivalences.
+
+The fibrant objects are precisely the **quasi-categories**.
+</Theorem>
+
+<Example id="joyal-generating" title="Generating trivial cofibrations">
+The Joyal model structure is cofibrantly generated. The generating cofibrations are the same as Kan--Quillen: $I = \{\partial\Delta[n] \hookrightarrow \Delta[n]\}$. The generating trivial cofibrations include the inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 < k < n$, together with additional maps encoding the contractibility of the space of composites.
+
+Fibrations between quasi-categories are the **isofibrations**: inner fibrations $p: \mathcal{C} \to \mathcal{D}$ such that for every equivalence $e: p(x) \xrightarrow{\sim} d$ in $\mathcal{D}$, there exists an equivalence $\bar{e}: x \xrightarrow{\sim} \bar{d}$ in $\mathcal{C}$ with $p(\bar{e}) = e$.
+</Example>
+
+---
+
+## Comparison with Kan--Quillen
+
+<Example id="compare-we" title="Weak equivalences differ">
+The Joyal weak equivalences (categorical equivalences) contain the Kan--Quillen weak equivalences but are strictly larger. The identity functor $\mathrm{id}: \mathbf{sSet}_{\mathrm{KQ}} \to \mathbf{sSet}_{\mathrm{Joyal}}$ is a left Quillen functor but NOT a Quillen equivalence.
+
+Key difference: the nerve of the category $[1] = (0 \to 1)$, i.e., $\Delta[1]$, is categorically equivalent to $\Delta[0]$ (since $[1]$ has a terminal object, it is equivalent to the terminal category). But $|\Delta[1]| = [0,1] \not\simeq \{*\}$ as spaces. Wait -- actually $[0,1] \simeq \{*\}$ topologically. So let us use $N(B\mathbb{Z}) \to *$: this is NOT a Joyal weak equivalence (since $B\mathbb{Z}$ is not equivalent to the terminal category) but it IS a Kan--Quillen weak equivalence... no, $|N(B\mathbb{Z})| = S^1$, which is not contractible. Better example: the map $\Delta[0] \sqcup \Delta[0] \to J$ (two points mapping to the two objects of the walking isomorphism) is a Kan--Quillen weak equivalence (since $|J| \simeq *$ is contractible) but NOT a categorical equivalence ($J$ has one connected component while $\Delta[0] \sqcup \Delta[0]$ has two). Actually $J$ is connected with $|J| \simeq [0,1] \simeq *$. A proper example: consider $\Delta[0] \to J$. This IS both a categorical equivalence and a KQ equivalence. The distinction is more subtle.
+
+In fact, the Joyal weak equivalences are detected by the homotopy category: $f: X \to Y$ is a Joyal equivalence iff $\operatorname{h}(f): \operatorname{h}X \to \operatorname{h}Y$ is an equivalence of categories and $f$ is a weak equivalence on mapping spaces.
+</Example>
+
+<Example id="compare-fibrant" title="Fibrant objects differ">
+Kan--Quillen fibrant = Kan complexes (all horns fill). Joyal fibrant = quasi-categories (inner horns fill).
+
+Every Kan complex is a quasi-category, but not conversely. The nerve $N(\mathcal{C})$ of a non-groupoid category is a quasi-category but NOT a Kan complex.
+
+The Joyal fibrant replacement of a simplicial set $X$ produces a quasi-category; the Kan--Quillen fibrant replacement produces a Kan complex (which "forgets" the direction of morphisms by making them all invertible).
+</Example>
+
+---
+
+## Inner Fibrations
+
+<Definition title="Inner fibration" number="3.2">
+A map $p: X \to S$ of simplicial sets is an **inner fibration** if it has the RLP with respect to all inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 < k < n$.
+
+When $S = \Delta[0]$, an inner fibration $X \to \Delta[0]$ is exactly a quasi-category. In general, an inner fibration $p: X \to S$ models a "family of $\infty$-categories parametrized by $S$."
+</Definition>
+
+<Example id="inner-fibration-nerve" title="Inner fibrations and Grothendieck fibrations">
+For ordinary categories, a functor $p: \mathcal{E} \to \mathcal{B}$ is a Grothendieck fibration if and only if $N(p): N(\mathcal{E}) \to N(\mathcal{B})$ is an inner fibration satisfying an additional lifting condition for outer horns. The $\infty$-categorical analogue of Grothendieck fibrations are **Cartesian fibrations** (inner fibrations with a Cartesian lifting property).
+</Example>
+
+<Example id="left-right-fibration" title="Left and right fibrations">
+A **left fibration** $p: X \to S$ has the RLP against $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 \leq k < n$ (all horns except the last). A **right fibration** uses $0 < k \leq n$ (all except the first).
+
+Left fibrations over $S$ model covariant functors $S \to \mathcal{S}$ (from $S$ to the $\infty$-category of spaces). Right fibrations model contravariant functors. This is the $\infty$-categorical Grothendieck construction, formalized by Lurie's straightening/unstraightening equivalence.
+</Example>
+
+---
+
+## Key Properties
+
+<Example id="joyal-proper" title="Left properness">
+The Joyal model structure is **left proper** (pushouts along cofibrations preserve weak equivalences) but NOT right proper. This is a technical difference from the Kan--Quillen model structure (which is both left and right proper).
+
+The failure of right properness means one must be careful with pullbacks in the Joyal model structure. Lurie addresses this using **categorical fibrations** (isofibrations) instead of general fibrations.
+</Example>
+
+<Example id="joyal-monoidal" title="Monoidal structure">
+The Joyal model structure is a **monoidal model category** with respect to the **join** operation $X \star Y$, not the Cartesian product. The Cartesian product does not satisfy the pushout-product axiom for the Joyal model structure.
+
+However, the Cartesian product preserves categorical equivalences between cofibrant objects (which is all objects, since cofibrations are monomorphisms), so the product is well-behaved on the homotopy category.
+</Example>
+
+<Example id="joyal-enrichment" title="Self-enrichment">
+The Joyal model structure is enriched over itself in the following sense: for quasi-categories $\mathcal{C}$ and $\mathcal{D}$, the functor category $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$ is a quasi-category, and this construction is homotopy invariant.
+
+The "mapping space" in the Joyal sense is $\operatorname{Map}^J(X, Y) = \operatorname{Fun}(X, Y)^\simeq$ (the core of the functor category), which is a Kan complex.
+</Example>
+
+---
+
+## Fibrant Replacement
+
+<Example id="joyal-fibrant-replacement" title="Joyal fibrant replacement">
+Given a simplicial set $X$, its Joyal fibrant replacement is a quasi-category $\mathcal{C}$ with a categorical equivalence $X \xrightarrow{\sim} \mathcal{C}$. This can be constructed via:
+
+1. **Small object argument**: Iteratively fill all inner horns.
+2. **Coherent nerve**: If $X$ comes from a simplicial category, use the coherent nerve $N_\Delta$.
+3. **Localization**: If $X = N(\mathcal{M})$ for a model category, the Dwyer--Kan localization $N(\mathcal{M})[W^{-1}]$ is a quasi-category.
+
+The Joyal fibrant replacement of a Kan complex $K$ is $K$ itself (Kan complexes are quasi-categories).
+</Example>
+
+<Example id="joyal-vs-kan-replacement" title="Joyal vs. Kan fibrant replacement">
+For a quasi-category $\mathcal{C}$:
+- **Joyal fibrant replacement**: $\mathcal{C}$ itself (already fibrant).
+- **Kan fibrant replacement**: The underlying $\infty$-groupoid $\mathcal{C}^\simeq$ (the core) -- but this loses the non-invertible morphisms.
+
+For the nerve $N([1]) = \Delta[1]$:
+- Joyal fibrant: $\Delta[1]$ (already a quasi-category).
+- Kan fibrant: $\operatorname{Ex}^\infty(\Delta[1])$, which is a contractible Kan complex (since $[0,1]$ is contractible).
+
+The Kan fibrant replacement "groupoid-ifies" by making all morphisms invertible.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The Joyal model structure provides the foundation for $\infty$-category theory:
+
+1. **Fibrant objects** are quasi-categories; **weak equivalences** are categorical equivalences.
+
+2. **Cofibrations** are monomorphisms (same as Kan--Quillen), so all objects are cofibrant.
+
+3. **Inner fibrations** model families of $\infty$-categories; **left/right fibrations** model functors to spaces.
+
+4. The Joyal model structure is **different** from Kan--Quillen: it has more weak equivalences and fewer fibrant objects.
+
+5. It is **left proper** and **cofibrantly generated**, providing the technical foundation for Lurie's work in HTT and HA.
+</Remark>

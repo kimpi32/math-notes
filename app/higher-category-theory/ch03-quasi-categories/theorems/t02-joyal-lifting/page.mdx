@@ -1,0 +1,142 @@
+export const metadata = {
+  title: 'Joyal Lifting Theorem — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Theorem — Joyal Lifting Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Joyal Lifting Theorem
+
+The Joyal lifting theorem establishes the existence of the Joyal model structure on $\mathbf{sSet}$ by characterizing its fibrations, trivial fibrations, and weak equivalences. It provides the key technical results needed to develop the theory of quasi-categories, including the characterization of categorical equivalences, the behavior of inner fibrations, and the lifting properties that make the theory work.
+
+---
+
+## Main Results
+
+<Theorem title="Joyal's existence theorem" number="3.1">
+The category $\mathbf{sSet}$ admits a left proper, cofibrantly generated model structure (the **Joyal model structure**) in which:
+
+1. The cofibrations are the monomorphisms.
+2. The fibrant objects are the quasi-categories.
+3. A map $f: X \to Y$ between quasi-categories is a fibration if and only if it is an **isofibration**: an inner fibration such that every equivalence in $Y$ lying over an object of $X$ lifts to an equivalence in $X$.
+4. The weak equivalences between quasi-categories are the **categorical equivalences**: fully faithful and essentially surjective functors.
+</Theorem>
+
+<Theorem title="Joyal lifting theorem for inner fibrations" number="3.2">
+Let $p: X \to S$ be an inner fibration and let $e: s \to s'$ be an equivalence in $S$ (i.e., an isomorphism in the homotopy category $\operatorname{h}S$). Then for any lift $\bar{s}$ of $s$ (i.e., $p(\bar{s}) = s$), the equivalence $e$ lifts to an equivalence $\bar{e}: \bar{s} \to \bar{s}'$ in $X$ with $p(\bar{e}) = e$.
+
+In other words, inner fibrations have the lifting property for equivalences, not just for inner horns.
+</Theorem>
+
+---
+
+## Key Lemmas
+
+<Example id="inner-fib-fiber" title="Fibers of inner fibrations">
+If $p: X \to S$ is an inner fibration and $s \in S_0$ is a vertex, the fiber $X_s = p^{-1}(s)$ is a quasi-category. This follows because inner horn fillers in $X$ lying over degenerate simplices in $S$ (at the vertex $s$) provide inner horn fillers in $X_s$.
+
+This shows that inner fibrations are indeed "families of quasi-categories."
+</Example>
+
+<Example id="equivalence-lifting" title="Equivalence lifting property">
+The lifting theorem for equivalences is stronger than just lifting inner horns. It states that in an inner fibration $p: \mathcal{C} \to \mathcal{D}$, equivalences in $\mathcal{D}$ can always be lifted to equivalences in $\mathcal{C}$ (given a lift of the source).
+
+This is the $\infty$-categorical analogue of the path-lifting property for covering spaces and fibrations. In an isofibration (Joyal fibration), the lift can be chosen to start at any specified point.
+</Example>
+
+<Example id="joyal-characterization-we" title="Characterization of Joyal weak equivalences">
+A map $f: \mathcal{C} \to \mathcal{D}$ between quasi-categories is a Joyal weak equivalence (categorical equivalence) if and only if:
+
+1. The induced functor $\operatorname{h}f: \operatorname{h}\mathcal{C} \to \operatorname{h}\mathcal{D}$ on homotopy categories is an equivalence of ordinary categories.
+2. For all objects $x, y \in \mathcal{C}$, the induced map $\operatorname{Map}_{\mathcal{C}}(x, y) \to \operatorname{Map}_{\mathcal{D}}(f(x), f(y))$ is a weak homotopy equivalence.
+
+Equivalently, $f$ is a categorical equivalence if it is **essentially surjective** (every object of $\mathcal{D}$ is equivalent to one in the image of $f$) and **fully faithful** (the mapping space comparison is a weak equivalence).
+</Example>
+
+---
+
+## Applications
+
+<Example id="app-functor-categories" title="Functor categories are quasi-categories">
+A crucial consequence: if $\mathcal{D}$ is a quasi-category and $K$ is any simplicial set, then $\operatorname{Fun}(K, \mathcal{D}) = \mathcal{D}^K$ is a quasi-category. The proof uses the Joyal model structure: the exponential $\mathcal{D}^K$ is fibrant (a quasi-category) whenever $\mathcal{D}$ is fibrant.
+
+This justifies the use of functor categories throughout $\infty$-category theory without needing to verify the quasi-category axiom each time.
+</Example>
+
+<Example id="app-overcategory" title="Over and under categories">
+For a quasi-category $\mathcal{C}$ and an object $c \in \mathcal{C}$, the **overcategory** (or **slice**) $\mathcal{C}_{/c}$ and **undercategory** $\mathcal{C}_{c/}$ are quasi-categories. These are defined as simplicial sets with:
+
+$$(\mathcal{C}_{/c})_n = \operatorname{Hom}_c(\Delta[n] \star \Delta[0], \mathcal{C})$$
+
+The Joyal lifting theorem ensures that the forgetful functor $\mathcal{C}_{/c} \to \mathcal{C}$ is a right fibration, and the forgetful functor $\mathcal{C}_{c/} \to \mathcal{C}$ is a left fibration.
+</Example>
+
+<Example id="app-straightening" title="Foundation for straightening/unstraightening">
+The Joyal model structure and lifting theorem provide the foundation for Lurie's **straightening/unstraightening equivalence**:
+
+$$\operatorname{St}: \mathbf{sSet}_{/S}^{\text{left fib}} \xrightarrow{\;\simeq\;} \operatorname{Fun}(S, \mathcal{S}): \operatorname{Un}$$
+
+This equivalence identifies left fibrations $X \to S$ with functors $S \to \mathcal{S}$ (from $S$ to the $\infty$-category of spaces). It is the $\infty$-categorical Grothendieck construction and is fundamental to the entire theory.
+
+The Joyal lifting theorem ensures that the fibers of a left fibration are Kan complexes (spaces), making this identification possible.
+</Example>
+
+<Example id="app-joyal-vs-bergner" title="Comparison with other models">
+The Joyal model structure on $\mathbf{sSet}$ is Quillen equivalent to:
+- The **Bergner model structure** on simplicial categories (via the coherent nerve $N_\Delta \dashv \mathfrak{C}$).
+- The **Rezk model structure** on bisimplicial sets (complete Segal spaces).
+- The **Segal category model structure**.
+
+These Quillen equivalences show that quasi-categories, simplicial categories, complete Segal spaces, and Segal categories all provide equivalent models for $(\infty, 1)$-categories.
+</Example>
+
+<Example id="app-limits-colimits" title="Existence of limits and colimits">
+The Joyal model structure provides the technical foundation for proving that quasi-categories have limits and colimits. Specifically:
+
+- **Representability**: A functor $F: K \to \mathcal{C}$ has a limit if and only if the canonical map $\mathcal{C} \to \operatorname{Fun}(K, \mathcal{C})$ has a right adjoint.
+- **Construction**: Limits in $\mathcal{C}$ are computed as terminal objects of the appropriate slice category $\mathcal{C}_{/F}$.
+
+The lifting properties of isofibrations are essential for establishing the universal properties of these constructions.
+</Example>
+
+---
+
+## Historical Notes
+
+<Remark title="History">
+The Joyal model structure was introduced by Andre Joyal in his unpublished manuscript "Quasi-categories and Kan complexes" (circa 2002) and his notes on "The Theory of Quasi-categories" (2008). The existence proof is technically demanding, requiring careful analysis of the combinatorics of inner horn fillers and the behavior of categorical equivalences.
+
+Joyal's work built on the earlier observation by Boardman--Vogt (1973) that weak Kan complexes (quasi-categories) provide a model for homotopy-coherent categories. Lurie's "Higher Topos Theory" (2009) developed the full theory of $\infty$-categories using the Joyal model structure as its foundation.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The Joyal lifting theorem and model structure provide the technical foundation for $\infty$-category theory:
+
+1. The **Joyal model structure** has quasi-categories as fibrant objects and categorical equivalences as weak equivalences.
+
+2. **Inner fibrations** have the lifting property for equivalences, making fibers into quasi-categories.
+
+3. **Isofibrations** (Joyal fibrations) additionally lift equivalences starting at specified points.
+
+4. The model structure is **Quillen equivalent** to simplicial categories, complete Segal spaces, and Segal categories.
+
+5. It provides the foundation for **functor categories**, **slice categories**, **limits/colimits**, and the **straightening/unstraightening** equivalence.
+</Remark>

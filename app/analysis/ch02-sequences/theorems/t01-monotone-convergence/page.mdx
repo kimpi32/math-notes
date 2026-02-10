@@ -1,0 +1,153 @@
+export const metadata = {
+  title: '단조수렴정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "정리 - 단조수렴정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 단조수렴정리 (Monotone Convergence Theorem)
+
+The Monotone Convergence Theorem is one of the most important consequences of the completeness of $\mathbb{R}$. It guarantees convergence from just two checkable conditions: monotonicity and boundedness.
+
+---
+
+## Statement
+
+<Theorem title="Monotone Convergence Theorem" number="2.1">
+Let $(a_n)$ be a monotone sequence of real numbers.
+
+1. If $(a_n)$ is **increasing** and **bounded above**, then $(a_n)$ converges and $\lim_{n \to \infty} a_n = \sup \{a_n : n \in \mathbb{N}\}$.
+
+2. If $(a_n)$ is **decreasing** and **bounded below**, then $(a_n)$ converges and $\lim_{n \to \infty} a_n = \inf \{a_n : n \in \mathbb{N}\}$.
+
+Equivalently: a monotone sequence converges if and only if it is bounded.
+</Theorem>
+
+<Remark>
+The proof is a direct application of the **completeness axiom** (least upper bound property). This theorem is in fact equivalent to the completeness of $\mathbb{R}$: one can show that the Monotone Convergence Theorem implies the least upper bound property. See the [proof](/analysis/ch02-sequences/proofs/p01-monotone-convergence-proof).
+</Remark>
+
+---
+
+## Applications
+
+<Example title="The number e">
+1. Define $a_n = \left(1 + \frac{1}{n}\right)^n$. This sequence is increasing and bounded above by $3$. By the Monotone Convergence Theorem, $\lim_{n \to \infty} a_n$ exists. We call this limit $e \approx 2.71828\ldots$
+
+The monotonicity follows from the AM-GM inequality applied to the $n+1$ factors.
+</Example>
+
+<Example title="Recursively defined sequence converging to sqrt(2)">
+2. Define $a_1 = 1$, $a_{n+1} = \frac{1}{2}\left(a_n + \frac{2}{a_n}\right)$.
+
+**Bounded below**: By AM-GM, $a_{n+1} = \frac{1}{2}(a_n + \frac{2}{a_n}) \geq \sqrt{a_n \cdot \frac{2}{a_n}} = \sqrt{2}$ for $n \geq 1$ (once $a_n > 0$).
+
+**Decreasing** (for $n \geq 2$): $a_{n+1} - a_n = \frac{1}{2}(\frac{2}{a_n} - a_n) = \frac{2 - a_n^2}{2a_n} \leq 0$ since $a_n \geq \sqrt{2}$.
+
+By MCT, $(a_n)$ converges to some $L \geq \sqrt{2}$. Taking limits: $L = \frac{1}{2}(L + \frac{2}{L})$, giving $L^2 = 2$, so $L = \sqrt{2}$.
+</Example>
+
+<Example title="Nested radicals">
+3. Define $a_1 = \sqrt{2}$, $a_{n+1} = \sqrt{2 + a_n}$.
+
+**Bounded above by $2$**: By induction, if $a_n < 2$ then $a_{n+1} = \sqrt{2 + a_n} < \sqrt{4} = 2$.
+
+**Increasing**: $a_{n+1}^2 - a_n^2 = (2 + a_n) - a_n^2 = (2 - a_n)(1 + a_n) > 0$ since $a_n < 2$.
+
+By MCT, $a_n \to L$ with $L = \sqrt{2 + L}$, so $L^2 - L - 2 = 0$, giving $L = 2$.
+</Example>
+
+<Example title="Partial sums of convergent series">
+4. The sequence $s_n = \sum_{k=1}^{n} \frac{1}{k^2}$ is increasing (each term added is positive) and bounded above (by $1 + \sum_{k=2}^{n} \frac{1}{k(k-1)} < 2$). By MCT, $\lim s_n$ exists. Euler showed this limit equals $\frac{\pi^2}{6}$.
+</Example>
+
+<Example title="Sequence defined by a_n = sup of tail">
+5. For any bounded sequence $(b_n)$, define $s_N = \sup_{n \geq N} b_n$. Then $(s_N)$ is decreasing (the supremum over a smaller set is smaller) and bounded below (by $\inf b_n$). By MCT, $\lim_{N \to \infty} s_N$ exists. This is exactly $\limsup_{n \to \infty} b_n$.
+</Example>
+
+---
+
+## The converse direction
+
+<Example title="Bounded but not monotone need not converge">
+6. $a_n = (-1)^n$ is bounded but not monotone, and does not converge. So both conditions (monotone + bounded) are needed.
+</Example>
+
+<Example title="Monotone but not bounded diverges">
+7. $a_n = \ln n$ is increasing but not bounded above: $\ln n \to +\infty$. The Monotone Convergence Theorem does not apply, and indeed the sequence diverges.
+</Example>
+
+---
+
+## Recursive sequences
+
+<Example title="General recursive convergence pattern">
+8. Consider $a_1 > 0$, $a_{n+1} = \frac{1}{2}(a_n + \frac{c}{a_n})$ for $c > 0$. The MCT approach:
+- Show $a_n \geq \sqrt{c}$ for $n \geq 2$ (AM-GM).
+- Show $(a_n)_{n \geq 2}$ is decreasing.
+- Conclude $a_n \to \sqrt{c}$.
+
+This Newton's method for $\sqrt{c}$ converges quadratically.
+</Example>
+
+<Example title="Logistic-type recursion">
+9. $a_1 = \frac{1}{2}$, $a_{n+1} = a_n(1 - a_n)$. Since $0 < a_n < 1$ implies $0 < a_{n+1} < \frac{1}{4}$, and for $a_n \in (0, \frac{1}{4})$ we get $a_{n+1} < a_n$. So $(a_n)_{n \geq 2}$ is decreasing and bounded below by $0$. By MCT, $a_n \to L$ with $L = L(1-L)$, giving $L = 0$.
+</Example>
+
+<Example title="Continued fraction sequence">
+10. Define $a_1 = 1$, $a_{n+1} = 1 + \frac{1}{a_n}$. The odd-indexed subsequence is increasing, the even-indexed is decreasing, and both are bounded. By MCT applied to each, both converge to $L$ with $L = 1 + \frac{1}{L}$, so $L^2 - L - 1 = 0$, giving $L = \frac{1+\sqrt{5}}{2}$ (the golden ratio).
+</Example>
+
+<Example title="Iterated cosine">
+11. Define $a_0 = 0$, $a_{n+1} = \cos(a_n)$. The subsequences $(a_{2k})$ and $(a_{2k+1})$ are monotone and bounded, so both converge. They converge to the unique fixed point of $\cos$, the **Dottie number** $\approx 0.7391$.
+</Example>
+
+<Example title="Geometric decay">
+12. $a_n = r^n$ for $|r| < 1$ is eventually decreasing in absolute value (for $r > 0$: decreasing; for $r < 0$: alternating). By MCT (applied to $|a_n| = |r|^n$ which is decreasing and bounded below by $0$): $|a_n| \to 0$, hence $a_n \to 0$.
+</Example>
+
+---
+
+## Speed of convergence
+
+<Remark>
+The Monotone Convergence Theorem guarantees convergence but says nothing about the **rate**. The sequence $(1 - \frac{1}{n})$ converges to $1$ at rate $O(1/n)$, while $1 - 2^{-n}$ converges to $1$ at exponential rate. For recursive sequences like Newton's method, the convergence is often quadratic: $|a_n - L| \leq C|a_{n-1} - L|^2$.
+</Remark>
+
+<Example title="Slow monotone convergence">
+13. $a_n = 1 - \frac{1}{\ln(n+1)}$: monotonically increasing, bounded above by $1$, but converges extremely slowly: $|a_n - 1| = \frac{1}{\ln(n+1)}$. After $n = 10^6$ terms, the error is still about $0.072$.
+</Example>
+
+<Example title="Fast monotone convergence">
+14. $a_1 = 3$, $a_{n+1} = \frac{1}{2}(a_n + \frac{2}{a_n})$: converges to $\sqrt{2}$. The error satisfies $|a_{n+1} - \sqrt{2}| \leq \frac{|a_n - \sqrt{2}|^2}{2\sqrt{2}}$, giving quadratic convergence. After $5$ iterations starting from $a_1 = 3$, we have about $30$ correct digits.
+</Example>
+
+---
+
+## MCT in probability and statistics
+
+<Example title="Monotone convergence in probability">
+15. If $A_1 \subseteq A_2 \subseteq \cdots$ are events, then $P(A_n)$ is increasing and bounded by $1$. By MCT, $P(A_n) \to P(\bigcup A_n)$. This "continuity from below" of probability measures follows directly from the MCT for sequences.
+</Example>
+
+---
+
+## Historical note
+
+<Remark>
+The Monotone Convergence Theorem was recognized in the 19th century as a fundamental consequence of the completeness of $\mathbb{R}$. Weierstrass and his school used it extensively. The Lebesgue Monotone Convergence Theorem (for integrals) is an important generalization: if $0 \leq f_1 \leq f_2 \leq \cdots$ are measurable with $f_n \to f$ pointwise, then $\int f_n \to \int f$.
+</Remark>

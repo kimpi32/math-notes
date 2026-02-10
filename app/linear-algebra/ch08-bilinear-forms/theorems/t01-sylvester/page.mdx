@@ -1,0 +1,194 @@
+export const metadata = {
+  title: "Sylvester's Law of Inertia — Linear Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "8. 쌍선형형식", href: "/linear-algebra/ch08-bilinear-forms" },
+  { label: "Theorem — Sylvester's Law of Inertia" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sylvester's Law of Inertia
+
+Sylvester's Law of Inertia states that the signature of a real quadratic form is invariant under change of basis. This means that while the specific diagonal entries may change when we diagonalize a quadratic form, the number of positive, negative, and zero entries remains the same. This gives a complete classification of real quadratic forms up to congruence.
+
+---
+
+## Statement
+
+<Theorem title="Sylvester's Law of Inertia" number="8.2">
+Let $Q$ be a real quadratic form on $\mathbb{R}^n$ with symmetric matrix $M$. If $Q$ can be reduced to diagonal form in two different ways:
+
+$$Q = a_1 y_1^2 + \cdots + a_n y_n^2 = b_1 z_1^2 + \cdots + b_n z_n^2,$$
+
+then the number of positive $a_i$, the number of negative $a_i$, and the number of zero $a_i$ are the same as for the $b_j$.
+
+Equivalently: if $P^T M P = D$ and $Q^T M Q = D'$ are two diagonalizations (where $D, D'$ are diagonal), then $D$ and $D'$ have the same numbers of positive, negative, and zero diagonal entries.
+</Theorem>
+
+<Definition title="Signature" number="8.11">
+The **signature** of $Q$ is the triple $(p, q, z)$ where $p$ is the number of positive diagonal entries, $q$ the number of negative entries, and $z$ the number of zero entries after diagonalization. Since $p + q + z = n$ and $r = p + q$ is the rank, we often write just $(p, q)$.
+
+Two real quadratic forms are **congruent** (equivalent) if and only if they have the same signature.
+</Definition>
+
+---
+
+## Proof sketch
+
+<Proof title="Proof of Sylvester's Law of Inertia">
+Suppose $Q = x_1^2 + \cdots + x_p^2 - x_{p+1}^2 - \cdots - x_{p+q}^2$ in one basis and $Q = y_1^2 + \cdots + y_{p'}^2 - y_{p'+1}^2 - \cdots - y_{p'+q'}^2$ in another. We prove $p = p'$.
+
+Assume for contradiction $p' > p$. Let $V^+ = \operatorname{span}\{e_1, \ldots, e_{p'}\}$ (the "$y$" coordinates where $Q$ is positive) and $V^- = \operatorname{span}\{f_{p+1}, \ldots, f_n\}$ (the "$x$" coordinates where $Q$ is $\leq 0$).
+
+$\dim V^+ = p'$ and $\dim V^- = n - p$. Since $p' > p$, we have $\dim V^+ + \dim V^- = p' + n - p > n$, so $V^+ \cap V^- \neq \{0\}$.
+
+Pick $v \in V^+ \cap V^-$, $v \neq 0$. Since $v \in V^+$: $Q(v) > 0$ (the form is a sum of positive squares on $V^+$). Since $v \in V^-$: $Q(v) \leq 0$ (the form is non-positive on $V^-$). Contradiction.
+
+Therefore $p' \leq p$. By symmetry, $p \leq p'$, so $p = p'$. Similarly $q = q'$. $\blacksquare$
+</Proof>
+
+---
+
+## Examples
+
+<Example id="sylvester-2x2" title="Signature of 2x2 forms">
+$M = \begin{pmatrix} 1 & 2 \\ 2 & 3 \end{pmatrix}$: eigenvalues $2 \pm \sqrt{5}$, one positive and one negative. Signature $(1, 1)$.
+
+$M = \begin{pmatrix} 1 & 1 \\ 1 & 1 \end{pmatrix}$: eigenvalues $2, 0$. Signature $(1, 0)$, rank $1$.
+
+$M = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$: eigenvalues $3, 1$. Signature $(2, 0)$ (positive definite).
+
+$M = \begin{pmatrix} -1 & 0 \\ 0 & -3 \end{pmatrix}$: eigenvalues $-1, -3$. Signature $(0, 2)$ (negative definite).
+</Example>
+
+<Example id="sylvester-3x3" title="Signature of 3x3 forms">
+$M = \operatorname{diag}(1, -1, 0)$: signature $(1, 1)$, rank $2$. The form is $Q = x^2 - y^2$.
+
+$M = \operatorname{diag}(2, 3, -5)$: signature $(2, 1)$, rank $3$. Equivalent to $\operatorname{diag}(1, 1, -1)$.
+
+$M = \operatorname{diag}(1, 1, 1)$: signature $(3, 0)$, positive definite. The form $Q = x^2 + y^2 + z^2$.
+</Example>
+
+<Example id="sylvester-invariance" title="Two diagonalizations, same signature">
+$Q(x, y) = 2x^2 + 4xy + 3y^2$.
+
+**Diagonalization 1** (completing the square): $Q = 2(x + y)^2 + y^2$. Diagonal form: $2u^2 + v^2$. Positive coefficients: $2$.
+
+**Diagonalization 2** (eigenvalues of $M = \begin{pmatrix} 2 & 2 \\ 2 & 3 \end{pmatrix}$): eigenvalues $\frac{5 \pm \sqrt{5}}{2} \approx 3.62, 1.38$. Both positive.
+
+Signature $(2, 0)$ in both cases ✓. Sylvester's Law guarantees this consistency.
+</Example>
+
+---
+
+## Complete classification
+
+<Theorem title="Classification of real quadratic forms" number="8.3">
+Two real quadratic forms on $\mathbb{R}^n$ are congruent if and only if they have the same signature $(p, q)$ (equivalently, the same rank $r = p + q$ and the same index of positivity $p$).
+
+There are exactly $\frac{(n+1)(n+2)}{2}$ equivalence classes of quadratic forms on $\mathbb{R}^n$: one for each pair $(p, q)$ with $p + q \leq n$.
+</Theorem>
+
+<Example id="classification-R2" title="All quadratic forms on R^2">
+The possible signatures on $\mathbb{R}^2$ are:
+- $(2, 0)$: $x^2 + y^2$ (positive definite), represented by $I_2$.
+- $(1, 1)$: $x^2 - y^2$ (indefinite), represented by $\operatorname{diag}(1, -1)$.
+- $(0, 2)$: $-x^2 - y^2$ (negative definite), represented by $-I_2$.
+- $(1, 0)$: $x^2$ (degenerate, rank $1$, positive).
+- $(0, 1)$: $-x^2$ (degenerate, rank $1$, negative).
+- $(0, 0)$: $Q = 0$ (the zero form).
+
+Total: $6 = \frac{3 \cdot 4}{2}$ equivalence classes.
+</Example>
+
+<Example id="classification-R3" title="Counting forms on R^3">
+On $\mathbb{R}^3$: pairs $(p, q)$ with $p + q \leq 3$:
+
+$(3,0), (2,1), (1,2), (0,3), (2,0), (1,1), (0,2), (1,0), (0,1), (0,0)$.
+
+Total: $10 = \frac{4 \cdot 5}{2}$. For example, the Lorentz form $-t^2 + x^2 + y^2$ has signature $(2, 1)$, the same class as $x^2 + y^2 - z^2$.
+</Example>
+
+---
+
+## Sylvester's criterion for definiteness
+
+<Theorem title="Sylvester's criterion" number="8.4">
+A symmetric matrix $M$ is **positive definite** if and only if all leading principal minors are positive:
+
+$$\Delta_1 = m_{11} > 0, \quad \Delta_2 = \det\begin{pmatrix} m_{11} & m_{12} \\ m_{21} & m_{22} \end{pmatrix} > 0, \quad \ldots, \quad \Delta_n = \det M > 0.$$
+
+$M$ is **negative definite** iff $(-1)^k \Delta_k > 0$ for all $k$ (the minors alternate in sign: $\Delta_1 < 0, \Delta_2 > 0, \Delta_3 < 0, \ldots$).
+</Theorem>
+
+<Example id="sylvester-criterion-3x3" title="Applying Sylvester's criterion">
+$M = \begin{pmatrix} 4 & 2 & 0 \\ 2 & 5 & 3 \\ 0 & 3 & 6 \end{pmatrix}$.
+
+$\Delta_1 = 4 > 0$ ✓, $\Delta_2 = 20 - 4 = 16 > 0$ ✓, $\Delta_3 = 4(30 - 9) - 2(12) = 84 - 24 = 60 > 0$ ✓.
+
+All positive, so $M$ is positive definite.
+</Example>
+
+<Example id="sylvester-criterion-negative" title="Testing negative definiteness">
+$M = \begin{pmatrix} -2 & 1 \\ 1 & -3 \end{pmatrix}$.
+
+$\Delta_1 = -2 < 0$ ✓ (should be $< 0$ for negative definite).
+$\Delta_2 = 6 - 1 = 5 > 0$ ✓ (should be $> 0$).
+
+$(-1)^1 \Delta_1 = 2 > 0$ and $(-1)^2 \Delta_2 = 5 > 0$. Negative definite ✓.
+</Example>
+
+<Example id="sylvester-fails" title="When Sylvester's criterion detects indefiniteness">
+$M = \begin{pmatrix} 1 & 3 \\ 3 & 1 \end{pmatrix}$.
+
+$\Delta_1 = 1 > 0$, $\Delta_2 = 1 - 9 = -8 < 0$.
+
+$\Delta_2 < 0$ means $M$ is not positive definite. Since $\Delta_1 > 0$ (so it is not negative definite either), $M$ is indefinite. Eigenvalues: $4, -2$, confirming signature $(1, 1)$.
+</Example>
+
+---
+
+## Congruence vs. similarity
+
+<Example id="congruence-vs-similarity" title="Congruence is not similarity">
+$A = \begin{pmatrix} 1 & 0 \\ 0 & 4 \end{pmatrix}$ and $B = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$.
+
+$A$ and $B$ are **congruent** (both positive definite with signature $(2, 0)$, so $B = P^TAP$ for some $P$). Indeed, $P = \operatorname{diag}(\sqrt{2}, 1/\sqrt{2})$ gives $P^TAP = \operatorname{diag}(2, 2) = B$ ✓.
+
+But $A$ and $B$ are **not similar** (eigenvalues $\{1, 4\}$ vs $\{2, 2\}$).
+
+Congruence preserves the signature; similarity preserves the characteristic polynomial. These are different equivalence relations.
+</Example>
+
+<Example id="over-Q-vs-R" title="Congruence over Q vs over R">
+Over $\mathbb{R}$: $Q_1 = x^2 + y^2$ and $Q_2 = x^2 + 2y^2$ are congruent (both signature $(2, 0)$).
+
+Over $\mathbb{Q}$: they are **not** congruent. To see this, $Q_1 = 1$ has the rational solution $(1, 0)$, and $Q_1 = 3$ has no rational solutions (since $x^2 + y^2 = 3$ has no solutions in $\mathbb{Q}$), but $Q_2 = 3$ has the solution $(1, 1)$. The forms represent different sets of rationals.
+
+Over $\mathbb{R}$, Sylvester's Law classifies forms by signature alone. Over $\mathbb{Q}$ (and other fields), the classification is much richer.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Sylvester's Law as complete invariant">
+Sylvester's Law of Inertia provides a complete classification of real symmetric bilinear forms:
+- The **signature** $(p, q)$ is the unique congruence invariant.
+- Every real quadratic form is congruent to $x_1^2 + \cdots + x_p^2 - x_{p+1}^2 - \cdots - x_{p+q}^2$.
+- **Sylvester's criterion** provides a practical test for definiteness via leading principal minors.
+- Over other fields (e.g., $\mathbb{Q}$, $\mathbb{F}_p$), the classification is more complex (Hasse--Minkowski theorem, Witt cancellation).
+- The law connects to the Hodge Index Theorem in algebraic geometry, where the intersection form on a surface has signature $(1, \rho - 1)$.
+</Remark>

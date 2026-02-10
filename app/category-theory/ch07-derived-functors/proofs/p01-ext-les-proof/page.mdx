@@ -1,0 +1,158 @@
+export const metadata = {
+  title: 'Proof: Ext Long Exact Sequence — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Proof — Ext Long Exact Sequence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof: Ext Long Exact Sequence
+
+We give a detailed proof of the long exact sequence for Ext in the covariant variable, starting from a short exact sequence $0 \to B' \to B \to B'' \to 0$. The proof uses the horseshoe lemma, the exactness of Hom out of a fixed object into injectives, and the snake lemma connecting homomorphism.
+
+---
+
+## Setup
+
+<Remark title="Theorem reference">
+We prove the covariant long exact sequence from [Theorem 7.9](/category-theory/ch07-derived-functors/theorems/t03-ext-ses): for any $A$ and short exact sequence $0 \to B' \to B \to B'' \to 0$:
+
+$$\cdots \to \mathrm{Ext}^n(A, B') \to \mathrm{Ext}^n(A, B) \to \mathrm{Ext}^n(A, B'') \xrightarrow{\delta^n} \mathrm{Ext}^{n+1}(A, B') \to \cdots$$
+</Remark>
+
+---
+
+## Proof
+
+<Proof title="Step 1: Horseshoe lemma for injective resolutions">
+Start with injective resolutions $B' \to I'^\bullet$ and $B'' \to I''^\bullet$. The **horseshoe lemma** constructs an injective resolution $B \to I^\bullet$ with $I^n = I'^n \oplus I''^n$ fitting into a short exact sequence of complexes:
+
+$$0 \to I'^\bullet \to I^\bullet \to I''^\bullet \to 0$$
+
+The construction proceeds inductively. At degree 0: given $B' \hookrightarrow I'^0$ and $B'' \hookrightarrow I''^0$, the composite $B \twoheadrightarrow B'' \hookrightarrow I''^0$ lifts (since $I''^0$ is injective and we can extend maps) to give a map $B \to I'^0 \oplus I''^0$. This map is a monomorphism and $I'^0 \oplus I''^0$ is injective. The differentials are constructed to make the diagram commute.
+</Proof>
+
+<Proof title="Step 2: Applying Hom(A, -)">
+Apply $\mathrm{Hom}(A, -)$ to the short exact sequence of injective complexes:
+
+$$0 \to \mathrm{Hom}(A, I'^\bullet) \to \mathrm{Hom}(A, I^\bullet) \to \mathrm{Hom}(A, I''^\bullet) \to 0$$
+
+**Claim:** This is a short exact sequence of cochain complexes.
+
+Each $I'^n$ is injective, so $\mathrm{Hom}(A, -)$ applied to $0 \to I'^n \to I^n \to I''^n \to 0$ gives a short exact sequence $0 \to \mathrm{Hom}(A, I'^n) \to \mathrm{Hom}(A, I^n) \to \mathrm{Hom}(A, I''^n) \to 0$ in each degree. (The surjectivity on the right uses the fact that $I'^n$ is injective: any map $A \to I''^n$ can be lifted, but more precisely, the sequence $0 \to I'^n \to I^n \to I''^n \to 0$ splits as a sequence of objects since $I'^n$ is injective, so the Hom sequence is termwise split exact.)
+
+The differentials in each complex are induced by those in $I'^\bullet, I^\bullet, I''^\bullet$, and naturality of Hom ensures commutativity.
+</Proof>
+
+<Proof title="Step 3: Long exact sequence in cohomology">
+The short exact sequence of cochain complexes from Step 2 gives, by the standard long exact sequence in cohomology (proved via the [snake lemma](/category-theory/ch03-abelian-categories/theorems/t01-snake-lemma)):
+
+$$\cdots \to H^n(\mathrm{Hom}(A, I'^\bullet)) \to H^n(\mathrm{Hom}(A, I^\bullet)) \to H^n(\mathrm{Hom}(A, I''^\bullet)) \xrightarrow{\delta^n} H^{n+1}(\mathrm{Hom}(A, I'^\bullet)) \to \cdots$$
+
+By definition of Ext via injective resolutions, $H^n(\mathrm{Hom}(A, I'^\bullet)) = \mathrm{Ext}^n(A, B')$, etc. This gives the desired long exact sequence.
+</Proof>
+
+<Proof title="Step 4: The connecting homomorphism">
+The connecting map $\delta^n : \mathrm{Ext}^n(A, B'') \to \mathrm{Ext}^{n+1}(A, B')$ is constructed as follows:
+
+Given a cocycle $\alpha \in \mathrm{Hom}(A, I''^n)$ representing an element of $\mathrm{Ext}^n(A, B'')$ (meaning $d'' \circ \alpha = 0$ where $d''$ is the differential in $I''^\bullet$):
+
+1. **Lift:** Since $\mathrm{Hom}(A, I^n) \twoheadrightarrow \mathrm{Hom}(A, I''^n)$, choose a lift $\tilde{\alpha} \in \mathrm{Hom}(A, I^n)$.
+
+2. **Differentiate:** Compute $d \circ \tilde{\alpha} \in \mathrm{Hom}(A, I^{n+1})$. Its image in $\mathrm{Hom}(A, I''^{n+1})$ is $d'' \circ \alpha = 0$, so $d \circ \tilde{\alpha}$ lies in $\mathrm{Hom}(A, I'^{n+1})$.
+
+3. **Check cocycle:** $d' \circ (d \circ \tilde{\alpha}) = d \circ d \circ \tilde{\alpha} = 0$, so $d \circ \tilde{\alpha}$ is a cocycle in $\mathrm{Hom}(A, I'^\bullet)$.
+
+4. **Define:** $\delta^n([\alpha]) = [d \circ \tilde{\alpha}] \in \mathrm{Ext}^{n+1}(A, B')$.
+
+This is well-defined: a different choice of lift $\tilde{\alpha}' = \tilde{\alpha} + \beta$ (where $\beta \in \mathrm{Hom}(A, I'^n)$) gives $d \circ \tilde{\alpha}' = d \circ \tilde{\alpha} + d' \circ \beta$, which differs by a coboundary.
+</Proof>
+
+<Proof title="Step 5: Independence of resolution">
+The long exact sequence is independent of the choice of injective resolutions. Given two injective resolutions $B' \to I'^\bullet$ and $B' \to J'^\bullet$, the comparison theorem provides chain homotopy equivalences $I'^\bullet \simeq J'^\bullet$ over $B'$. These induce isomorphisms on cohomology, and a naturality argument shows the resulting long exact sequences are canonically isomorphic.
+
+More precisely, the comparison maps lift the identity on $B'$ to a chain map $I'^\bullet \to J'^\bullet$, unique up to homotopy. Applying $\mathrm{Hom}(A, -)$ preserves chain homotopies, so the induced maps on $\mathrm{Ext}^n(A, B')$ are independent of the choice of comparison map.
+</Proof>
+
+<Proof title="Step 6: Naturality">
+The long exact sequence is natural in $A$, $B'$, $B$, and $B''$. A morphism of short exact sequences (a commutative diagram with three vertical maps between two short exact sequences) induces a commutative ladder between the two long exact sequences. This follows from the functoriality of Hom and the naturality of the snake lemma connecting morphism.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Degree 0: recovering left exactness" id="degree-0">
+At degree 0, the long exact sequence begins $0 \to \mathrm{Hom}(A, B') \to \mathrm{Hom}(A, B) \to \mathrm{Hom}(A, B'')$. This is just the left exactness of $\mathrm{Hom}(A, -)$: a map $A \to B'$ determines a map $A \to B$ (by composing with $i$), and a map $A \to B$ that lands in $B''$ as zero must factor through $B'$.
+</Example>
+
+<Example title="Connecting map for Z/n" id="connecting-zn">
+From $0 \to \mathbb{Z} \xrightarrow{n} \mathbb{Z} \to \mathbb{Z}/n \to 0$, the connecting map $\delta^0 : \mathrm{Hom}(A, \mathbb{Z}/n) \to \mathrm{Ext}^1(A, \mathbb{Z})$ sends $f : A \to \mathbb{Z}/n$ to the pullback extension. For $A = \mathbb{Z}/m$: $\delta^0$ maps the generator of $\mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}/n) \cong \mathbb{Z}/\gcd(m,n)$ to the extension $0 \to \mathbb{Z} \to E \to \mathbb{Z}/m \to 0$ classified by $\gcd(m,n)$ in $\mathrm{Ext}^1(\mathbb{Z}/m, \mathbb{Z}) \cong \mathbb{Z}/m$.
+</Example>
+
+<Example title="Splitting criterion" id="splitting">
+The connecting map $\delta^0 : \mathrm{Hom}(A, B'') \to \mathrm{Ext}^1(A, B')$ vanishes iff every map $A \to B''$ lifts to $A \to B$. The sequence $0 \to B' \to B \to B'' \to 0$ splits iff the identity $\mathrm{id}_{B''} \in \mathrm{Hom}(B'', B'')$ maps to zero under $\delta^0$, i.e., iff the extension class in $\mathrm{Ext}^1(B'', B')$ is zero.
+</Example>
+
+<Example title="Contravariant version via projective resolutions" id="contravariant">
+The contravariant long exact sequence (from $0 \to A' \to A \to A'' \to 0$) is proved analogously using projective resolutions and the horseshoe lemma for projectives. The connecting map $\delta^n : \mathrm{Ext}^n(A', B) \to \mathrm{Ext}^{n+1}(A'', B)$ is constructed by the same lift-differentiate-project recipe.
+</Example>
+
+<Example title="Application: computing Ext^1(Z/m, Z/n)" id="compute-ext1">
+From $0 \to \mathbb{Z} \xrightarrow{m} \mathbb{Z} \to \mathbb{Z}/m \to 0$, apply $\mathrm{Hom}(-, \mathbb{Z}/n)$:
+
+$$0 \to \mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}/n) \to \mathrm{Hom}(\mathbb{Z}, \mathbb{Z}/n) \xrightarrow{m \cdot} \mathrm{Hom}(\mathbb{Z}, \mathbb{Z}/n) \to \mathrm{Ext}^1(\mathbb{Z}/m, \mathbb{Z}/n) \to 0$$
+
+This gives $\mathrm{Ext}^1(\mathbb{Z}/m, \mathbb{Z}/n) = \mathrm{coker}(\mathbb{Z}/n \xrightarrow{m} \mathbb{Z}/n) = \mathbb{Z}/\gcd(m,n)$.
+</Example>
+
+<Example title="Application: Ext for coherent sheaves on P^1" id="ext-p1">
+On $\mathbb{P}^1$, from the Euler sequence $0 \to \mathcal{O}(-2) \to \mathcal{O}(-1)^2 \to \mathcal{O} \to 0$, apply $\mathrm{Hom}(\mathcal{O}(d), -)$:
+
+$$\cdots \to H^0(\mathcal{O}(d)) \to \mathrm{Ext}^1(\mathcal{O}(d), \mathcal{O}(-2)) \to \mathrm{Ext}^1(\mathcal{O}(d), \mathcal{O}(-1))^2 \to \cdots$$
+
+Combined with Serre duality $\mathrm{Ext}^1(\mathcal{O}(d), \mathcal{O}(e)) \cong H^0(\mathcal{O}(d - e - 2))^*$, this computes all Ext groups between line bundles.
+</Example>
+
+<Example title="Dimension shifting via the long exact sequence" id="dim-shift">
+From $0 \to B \to I \to I/B \to 0$ with $I$ injective, the long exact sequence gives $\mathrm{Ext}^n(A, I) = 0$ for $n \geq 1$, hence $\mathrm{Ext}^{n+1}(A, B) \cong \mathrm{Ext}^n(A, I/B)$ for $n \geq 1$. This reduces computation of higher Ext to lower Ext at the cost of changing the module.
+</Example>
+
+<Example title="Ext^2 and obstructions" id="ext2-obstruction">
+The map $\delta^1 : \mathrm{Ext}^1(A, B'') \to \mathrm{Ext}^2(A, B')$ sends an extension $0 \to B'' \to E \to A \to 0$ to the obstruction to lifting it to an extension involving $B$. Specifically, $\delta^1(\xi)$ vanishes iff the extension $\xi$ can be "extended" to a two-step filtration $B' \subseteq B \subseteq E' \twoheadrightarrow A$.
+</Example>
+
+<Example title="Exactness at Ext^1(A, B)" id="exactness-middle">
+Exactness at $\mathrm{Ext}^1(A, B)$ means: an extension $0 \to B \to E \to A \to 0$ maps to zero in $\mathrm{Ext}^1(A, B'')$ iff it comes from an extension $0 \to B' \to E' \to A \to 0$ (via pushout along $B' \to B$). Geometrically: an extension with middle term $B$ factors through $B'$ iff its pushout to $B''$ splits.
+</Example>
+
+<Example title="Derived category perspective" id="derived-perspective">
+In $D(\mathcal{A})$, the short exact sequence $0 \to B' \to B \to B'' \to 0$ is a distinguished triangle $B' \to B \to B'' \to B'[1]$. The long exact sequence is obtained by applying the cohomological functor $\mathrm{Hom}_{D(\mathcal{A})}(A, -)$ to this triangle, using $\mathrm{Hom}_{D}(A, B''[n]) = \mathrm{Ext}^n(A, B'')$.
+</Example>
+
+<Example title="Both variables simultaneously" id="both-variables">
+Given a morphism $f : A \to B$ in $\mathcal{A}$ and short exact sequences for both the kernel/cokernel of $f$, one can combine both long exact sequences. The composition $\mathrm{Hom}(A, A) \xrightarrow{f_*} \mathrm{Hom}(A, B)$ sends $\mathrm{id}_A$ to $f$, and the failure of $f$ to lift through extensions is detected by the connecting maps in both sequences.
+</Example>
+
+<Example title="Comparison with Tor long exact sequence" id="comparison-tor">
+The Tor long exact sequence $\cdots \to \mathrm{Tor}_1(M, A'') \to M \otimes A' \to M \otimes A \to M \otimes A'' \to 0$ is the analogue for the tensor product. Both sequences arise from the same principle: a short exact sequence of inputs produces a long exact sequence of derived functors, via the connecting homomorphism of a short exact sequence of complexes.
+</Example>
+
+---
+
+<Remark title="The proof strategy">
+The proof has three essential ingredients: (1) the horseshoe lemma, which assembles injective resolutions compatibly with short exact sequences; (2) the exactness of Hom into injectives, which converts the short exact sequence of resolutions into a short exact sequence of Hom complexes; and (3) the snake lemma / long exact sequence in cohomology, which produces the long exact sequence with connecting maps. Each step is canonical and natural, ensuring the final result is functorial.
+</Remark>

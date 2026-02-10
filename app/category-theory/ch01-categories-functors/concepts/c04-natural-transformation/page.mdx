@@ -1,0 +1,160 @@
+export const metadata = {
+  title: 'Natural Transformation — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Concept — Natural Transformation" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Natural Transformation
+
+A natural transformation is a "morphism between functors." If functors are the morphisms of categories, then natural transformations are the 2-morphisms. This third layer of structure — objects, functors, natural transformations — gives category theory its full power.
+
+---
+
+## Definition
+
+<Definition title="Natural Transformation" number="1.10">
+Let $F, G : \mathcal{C} \to \mathcal{D}$ be two functors. A **natural transformation** $\alpha : F \Rightarrow G$ consists of a family of morphisms in $\mathcal{D}$:
+
+$$\alpha_A : F(A) \to G(A) \qquad \text{for each } A \in \mathrm{Ob}(\mathcal{C})$$
+
+called the **components** of $\alpha$, such that for every morphism $f : A \to B$ in $\mathcal{C}$, the following diagram commutes:
+
+$$
+\begin{array}{ccc}
+F(A) & \xrightarrow{\alpha_A} & G(A) \\[6pt]
+\downarrow\scriptstyle{F(f)} & & \downarrow\scriptstyle{G(f)} \\[6pt]
+F(B) & \xrightarrow{\alpha_B} & G(B)
+\end{array}
+$$
+
+That is, $G(f) \circ \alpha_A = \alpha_B \circ F(f)$ for all $f : A \to B$.
+</Definition>
+
+<Definition title="Natural Isomorphism" number="1.11">
+A natural transformation $\alpha : F \Rightarrow G$ is a **natural isomorphism** if each component $\alpha_A$ is an isomorphism in $\mathcal{D}$. In this case we write $F \cong G$ and say $F$ and $G$ are **naturally isomorphic**.
+</Definition>
+
+<Remark title="Why naturality matters">
+The concept of naturality formalizes the idea that a construction is "canonical" or "independent of choices." When Eilenberg and Mac Lane introduced category theory in the 1940s, their original motivation was precisely to give a rigorous meaning to the phrase "natural isomorphism." For instance, the isomorphism $V \cong V^{**}$ for finite-dimensional vector spaces is natural; the isomorphism $V \cong V^*$ is not.
+</Remark>
+
+---
+
+## Composition of Natural Transformations
+
+<Definition title="Vertical Composition" number="1.12">
+Given natural transformations $\alpha : F \Rightarrow G$ and $\beta : G \Rightarrow H$ (where $F, G, H : \mathcal{C} \to \mathcal{D}$), the **vertical composition** $\beta \circ \alpha : F \Rightarrow H$ has components:
+
+$$(\beta \circ \alpha)_A = \beta_A \circ \alpha_A$$
+</Definition>
+
+<Definition title="Horizontal Composition (Whiskering)" number="1.13">
+Given functors $F, G : \mathcal{C} \to \mathcal{D}$ and $H, K : \mathcal{D} \to \mathcal{E}$ with natural transformations $\alpha : F \Rightarrow G$ and $\beta : H \Rightarrow K$, the **horizontal composition** $\beta * \alpha : H \circ F \Rightarrow K \circ G$ has components:
+
+$$(\beta * \alpha)_A = \beta_{G(A)} \circ H(\alpha_A) = K(\alpha_A) \circ \beta_{F(A)}$$
+
+The equality of these two expressions follows from the naturality of $\beta$.
+</Definition>
+
+---
+
+## The Functor Category
+
+<Definition title="Functor Category" number="1.14">
+For categories $\mathcal{C}$ and $\mathcal{D}$, the **functor category** $[\mathcal{C}, \mathcal{D}]$ (also denoted $\mathcal{D}^{\mathcal{C}}$ or $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$) has:
+
+- **Objects:** Functors $F : \mathcal{C} \to \mathcal{D}$.
+- **Morphisms:** Natural transformations $\alpha : F \Rightarrow G$.
+- **Composition:** Vertical composition.
+- **Identity:** The identity natural transformation $\mathrm{id}_F : F \Rightarrow F$ with $(\mathrm{id}_F)_A = \mathrm{id}_{F(A)}$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Double dual is natural" id="double-dual">
+For finite-dimensional vector spaces over a field $k$, define $\alpha_V : V \to V^{**}$ by $\alpha_V(v)(\varphi) = \varphi(v)$ for $v \in V$, $\varphi \in V^*$. This defines a natural transformation $\alpha : \mathrm{Id} \Rightarrow (-)^{**}$. Naturality means: for any linear map $T : V \to W$, $T^{**} \circ \alpha_V = \alpha_W \circ T$. Moreover, each $\alpha_V$ is an isomorphism (for finite-dimensional $V$), so $\alpha$ is a natural isomorphism.
+</Example>
+
+<Example title="Single dual is NOT natural" id="single-dual">
+For a finite-dimensional vector space $V$, we can choose a basis and construct an isomorphism $V \cong V^*$. However, this isomorphism depends on the choice of basis — there is no way to define $\beta_V : V \to V^*$ naturally (i.e., commuting with all linear maps). This is the prototypical example of a non-natural construction.
+</Example>
+
+<Example title="Determinant as a natural transformation" id="determinant">
+Consider the functors $\mathrm{GL}_n, (-)^{\times} : \mathbf{CRing} \to \mathbf{Grp}$, where $\mathrm{GL}_n(R)$ is the group of invertible $n \times n$ matrices over $R$ and $R^{\times}$ is the group of units. The determinant $\det : \mathrm{GL}_n(R) \to R^{\times}$ is a natural transformation: for any ring homomorphism $\varphi : R \to S$, $\det(\varphi_*(M)) = \varphi(\det M)$.
+</Example>
+
+<Example title="Hurewicz map" id="hurewicz">
+For pointed topological spaces, the Hurewicz homomorphism $h : \pi_n(X, x_0) \to H_n(X; \mathbb{Z})$ defines a natural transformation from the homotopy group functor $\pi_n$ to the homology functor $H_n$. Naturality means that for any basepoint-preserving map $f : X \to Y$, the Hurewicz map commutes with $f_*$.
+</Example>
+
+<Example title="Unit and counit of an adjunction" id="adjunction-unit">
+If $F \dashv G$ is an adjunction ($F : \mathcal{C} \to \mathcal{D}$, $G : \mathcal{D} \to \mathcal{C}$), the **unit** $\eta : \mathrm{Id}_{\mathcal{C}} \Rightarrow G \circ F$ and **counit** $\varepsilon : F \circ G \Rightarrow \mathrm{Id}_{\mathcal{D}}$ are natural transformations. For example, the unit of the free-forgetful adjunction $F \dashv U : \mathbf{Grp} \to \mathbf{Set}$ sends a set $S$ to the inclusion $S \hookrightarrow U(F(S))$ of generators into the free group.
+</Example>
+
+<Example title="Abelianization as a natural transformation" id="abelianization-nat">
+The quotient map $q_G : G \to G^{\mathrm{ab}} = G/[G,G]$ defines a natural transformation $q : \mathrm{Id}_{\mathbf{Grp}} \Rightarrow \iota \circ \mathrm{ab}$, where $\iota : \mathbf{Ab} \hookrightarrow \mathbf{Grp}$ is the inclusion and $\mathrm{ab}$ is the abelianization functor. For any group homomorphism $\varphi : G \to H$, we have $\varphi^{\mathrm{ab}} \circ q_G = q_H \circ \varphi$.
+</Example>
+
+<Example title="Natural transformations between Hom functors" id="hom-nat">
+A morphism $f : A \to B$ in $\mathcal{C}$ induces a natural transformation $f_* : \mathrm{Hom}(-, A) \Rightarrow \mathrm{Hom}(-, B)$ with components $(f_*)_X : g \mapsto f \circ g$. By the [Yoneda Lemma](/category-theory/ch01-categories-functors/theorems/t01-yoneda), every natural transformation $\mathrm{Hom}(-, A) \Rightarrow \mathrm{Hom}(-, B)$ arises this way. This is the content of the Yoneda embedding being fully faithful.
+</Example>
+
+<Example title="Constant natural transformation" id="constant">
+Let $c_D : \mathcal{C} \to \mathcal{D}$ be the constant functor at $D$ (sending everything to $D$ and $\mathrm{id}_D$). A natural transformation $\alpha : c_D \Rightarrow F$ is a **cone** over $F$ with apex $D$: a compatible family of morphisms $\alpha_A : D \to F(A)$ for each $A$. This is exactly the data used to define [limits](/category-theory/ch02-limits-colimits/concepts/c04-limit-colimit).
+</Example>
+
+<Example title="Connecting homomorphism" id="connecting">
+In homological algebra, given a short exact sequence $0 \to A \to B \to C \to 0$ in an abelian category, the connecting homomorphism $\delta^n : H^n(C) \to H^{n+1}(A)$ is natural in the short exact sequence. This naturality is essential for the [long exact sequence in cohomology](/category-theory/ch04-complexes-cohomology/theorems/t01-long-exact-sequence).
+</Example>
+
+<Example title="Natural transformations in a poset" id="poset-nat">
+For posets $P, Q$ viewed as categories, functors $F, G : P \to Q$ are order-preserving maps, and a natural transformation $F \Rightarrow G$ exists if and only if $F(x) \leq G(x)$ for all $x \in P$. There is at most one natural transformation between any two functors (since each hom-set has at most one element).
+</Example>
+
+<Example title="Identity natural transformation and the 2-category Cat" id="2-cat">
+The identity natural transformation $\mathrm{id}_F : F \Rightarrow F$ has components $(\mathrm{id}_F)_A = \mathrm{id}_{F(A)}$. Together with vertical and horizontal composition, small categories, functors, and natural transformations form a **2-category** $\mathbf{Cat}$. The interchange law $(\beta' \circ \alpha') * (\beta \circ \alpha) = (\beta' * \beta) \circ (\alpha' * \alpha)$ holds, which is verified by naturality.
+</Example>
+
+<Example title="Sheafification as a natural transformation" id="sheafification">
+For a topological space $X$, the sheafification functor $a : \mathbf{PSh}(X) \to \mathbf{Sh}(X)$ is left adjoint to the inclusion $\iota : \mathbf{Sh}(X) \hookrightarrow \mathbf{PSh}(X)$. The unit $\eta : \mathrm{Id} \Rightarrow \iota \circ a$ is a natural transformation from each presheaf $\mathcal{F}$ to its sheafification $\mathcal{F}^+$, given by the universal map.
+</Example>
+
+---
+
+## The Interchange Law
+
+<Theorem title="Interchange Law" number="1.6">
+Given the diagram of functors and natural transformations:
+
+$$\mathcal{C} \underset{G}{\overset{F}{\rightrightarrows}} \mathcal{D} \underset{K}{\overset{H}{\rightrightarrows}} \mathcal{E}$$
+
+with $\alpha : F \Rightarrow G$ and $\beta : H \Rightarrow K$, the horizontal composition satisfies:
+
+$$(\beta * \alpha) = (K \circ \alpha) \circ (\beta \circ F) = (\beta \circ G) \circ (H \circ \alpha)$$
+
+where $K \circ \alpha$ denotes whiskering (precomposing $\alpha$ with $K$).
+</Theorem>
+
+<Remark title="Looking ahead">
+Natural transformations are the key ingredient in defining:
+- [Equivalence of categories](/category-theory/ch01-categories-functors/concepts/c05-equivalence) (natural isomorphisms between compositions of functors and identity functors)
+- [Adjoint functors](/category-theory/ch02-limits-colimits/concepts/c05-adjunction) (natural bijections on Hom sets)
+- [Representable functors](/category-theory/ch01-categories-functors/concepts/c06-representable) and the Yoneda Lemma (natural transformations out of Hom functors)
+</Remark>

@@ -1,0 +1,140 @@
+export const metadata = {
+  title: 'Spectral Sequence — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Concept — Spectral Sequence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Spectral Sequence
+
+A spectral sequence is an algebraic device for computing cohomology by successive approximations. Starting from an initial page $E_2^{p,q}$ (or sometimes $E_1^{p,q}$), each page is the cohomology of the previous one, and the sequence converges to the desired cohomology. Spectral sequences arise naturally from filtered complexes, double complexes, and compositions of derived functors.
+
+---
+
+## Definitions
+
+<Definition title="Spectral Sequence" number="7.15">
+A **(cohomological) spectral sequence** in an abelian category $\mathcal{A}$ consists of:
+
+1. For each $r \geq r_0$, a bigraded object $E_r^{p,q}$ (the **$r$-th page**).
+2. Differentials $d_r^{p,q} : E_r^{p,q} \to E_r^{p+r, q-r+1}$ with $d_r \circ d_r = 0$.
+3. Isomorphisms $E_{r+1}^{p,q} \cong \ker d_r^{p,q} / \mathrm{im}\, d_r^{p-r, q+r-1}$ (each page is the cohomology of the previous one).
+
+The spectral sequence **converges** to a graded object $H^n$ if there is a filtration $F^pH^n$ with $E_\infty^{p,q} \cong F^pH^{p+q}/F^{p+1}H^{p+q}$.
+</Definition>
+
+<Definition title="Spectral Sequence of a Filtered Complex" number="7.16">
+A filtered complex $(K^\bullet, F^\bullet)$ with decreasing filtration $\cdots \supseteq F^pK^n \supseteq F^{p+1}K^n \supseteq \cdots$ gives rise to a spectral sequence with $E_0^{p,q} = F^pK^{p+q}/F^{p+1}K^{p+q}$, $E_1^{p,q} = H^{p+q}(\mathrm{gr}^p K)$, converging to $H^{p+q}(K^\bullet)$ under suitable boundedness conditions.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Leray spectral sequence" id="leray">
+For a continuous map $f : X \to Y$ and a sheaf $\mathcal{F}$ on $X$:
+
+$$E_2^{p,q} = H^p(Y, R^qf_*\mathcal{F}) \Rightarrow H^{p+q}(X, \mathcal{F})$$
+
+This computes sheaf cohomology on $X$ from the cohomology of $Y$ with coefficients in the higher direct images. It arises from the composition $R\Gamma_Y \circ Rf_* = R\Gamma_X$.
+</Example>
+
+<Example title="Grothendieck spectral sequence" id="grothendieck-ss">
+For composable left exact functors $G \circ F$ where $F$ sends injectives to $G$-acyclic objects:
+
+$$E_2^{p,q} = R^pG(R^qF(A)) \Rightarrow R^{p+q}(G \circ F)(A)$$
+
+The Leray spectral sequence is the special case $F = f_*$, $G = \Gamma_Y$.
+</Example>
+
+<Example title="Hochschild-Serre spectral sequence" id="hochschild-serre">
+For a normal subgroup $N \trianglelefteq G$ and a $G$-module $M$:
+
+$$E_2^{p,q} = H^p(G/N, H^q(N, M)) \Rightarrow H^{p+q}(G, M)$$
+
+This computes group cohomology of $G$ from the cohomology of $N$ and $G/N$. It arises from the composition of invariant functors $(-)^G = ((-)^N)^{G/N}$.
+</Example>
+
+<Example title="Kunneth spectral sequence" id="kunneth">
+For spaces $X, Y$ and a sheaf (or coefficient ring $R$):
+
+$$E_2^{p,q} = \bigoplus_{i+j=q} \mathrm{Tor}_p^R(H^i(X, R), H^j(Y, R)) \Rightarrow H^{p+q}(X \times Y, R)$$
+
+When $R$ is a field, $\mathrm{Tor} = 0$ for $p \geq 1$ and this collapses to the Kunneth formula $H^n(X \times Y) \cong \bigoplus_{i+j=n} H^i(X) \otimes H^j(Y)$.
+</Example>
+
+<Example title="Universal coefficient spectral sequence" id="universal-coeff">
+For a chain complex $C_\bullet$ of free abelian groups and an abelian group $G$:
+
+$$E_2^{p,q} = \mathrm{Ext}^p_{\mathbb{Z}}(H_q(C), G) \Rightarrow H^{p+q}(C; G)$$
+
+For $\mathbb{Z}$-coefficients this degenerates to the universal coefficient short exact sequence since $\mathrm{Ext}^p = 0$ for $p \geq 2$.
+</Example>
+
+<Example title="Spectral sequence of a double complex" id="double-complex">
+A double complex $K^{p,q}$ with two commuting differentials $d_h$ and $d_v$ has two spectral sequences converging to $H^n(\mathrm{Tot}(K))$. The first has $E_1^{p,q} = H^q_v(K^{p,\bullet})$ and the second has $E_1^{p,q} = H^p_h(K^{\bullet, q})$. Comparing them is a powerful technique.
+</Example>
+
+<Example title="Hodge-to-de Rham spectral sequence" id="hodge-de-rham">
+For a smooth projective variety $X$ over a field:
+
+$$E_1^{p,q} = H^q(X, \Omega^p_X) \Rightarrow H^{p+q}_{\mathrm{dR}}(X)$$
+
+In characteristic 0, this degenerates at $E_1$ (by Hodge theory), giving the Hodge decomposition $H^n_{\mathrm{dR}}(X) \cong \bigoplus_{p+q=n} H^q(X, \Omega^p)$. In positive characteristic, it can fail to degenerate.
+</Example>
+
+<Example title="Atiyah-Hirzebruch spectral sequence" id="atiyah-hirzebruch">
+For a generalized cohomology theory $h^\bullet$ and a CW complex $X$:
+
+$$E_2^{p,q} = H^p(X; h^q(\mathrm{pt})) \Rightarrow h^{p+q}(X)$$
+
+This computes generalized cohomology from ordinary cohomology. For $K$-theory, $h^q(\mathrm{pt}) = \mathbb{Z}$ for $q$ even and $0$ for $q$ odd.
+</Example>
+
+<Example title="Collapsing spectral sequences" id="collapsing">
+A spectral sequence **collapses at $E_2$** if $d_r = 0$ for all $r \geq 2$, so $E_\infty = E_2$. This gives $H^n \cong \bigoplus_{p+q=n} E_2^{p,q}$ (the filtration splits). Collapsing often follows from vanishing of certain groups or from weight/purity arguments.
+</Example>
+
+<Example title="Edge maps" id="edge-maps">
+A spectral sequence $E_2^{p,q} \Rightarrow H^{p+q}$ has **edge maps**: $H^n \twoheadrightarrow E_\infty^{n,0} \hookrightarrow E_2^{n,0}$ and $E_2^{0,n} \twoheadrightarrow E_\infty^{0,n} \hookrightarrow H^n$. For the Leray spectral sequence, the edge map $H^n(X) \to E_2^{0,n} = H^0(Y, R^nf_*\mathcal{F})$ is the restriction to fibers, and $E_2^{n,0} = H^n(Y, f_*\mathcal{F}) \to H^n(X)$ is the pullback.
+</Example>
+
+<Example title="Five-term exact sequence" id="five-term">
+Any spectral sequence $E_2^{p,q} \Rightarrow H^{p+q}$ gives a **five-term exact sequence**:
+
+$$0 \to E_2^{1,0} \to H^1 \to E_2^{0,1} \xrightarrow{d_2} E_2^{2,0} \to H^2$$
+
+For the Hochschild-Serre sequence: $0 \to H^1(G/N, M^N) \to H^1(G, M) \to H^1(N, M)^{G/N} \to H^2(G/N, M^N) \to H^2(G, M)$, which is the inflation-restriction exact sequence.
+</Example>
+
+<Example title="Spectral sequences and derived categories" id="ss-derived">
+In the derived category, a spectral sequence arises whenever one computes the composition $RG \circ RF$ versus $R(G \circ F)$. The spectral sequence is a way of extracting cohomological information from the total derived functor. In principle, the total derived functor $R(G \circ F)$ contains all the information, and the spectral sequence is a computational tool for extracting it.
+</Example>
+
+---
+
+<Theorem title="Convergence of spectral sequences" number="7.6">
+For a bounded below filtered complex $(K^\bullet, F^\bullet)$ with exhaustive and Hausdorff filtration, the associated spectral sequence converges:
+
+$$E_1^{p,q} = H^{p+q}(\mathrm{gr}^p K^\bullet) \Rightarrow H^{p+q}(K^\bullet)$$
+
+If the filtration is bounded (only finitely many non-zero graded pieces in each total degree), the spectral sequence degenerates after finitely many pages.
+</Theorem>
+
+<Remark title="Philosophy of spectral sequences">
+Spectral sequences are "iterated long exact sequences." A long exact sequence computes cohomology from a two-step filtration; a spectral sequence handles multi-step filtrations by taking cohomology repeatedly. Each page $E_r$ is a better approximation to the final answer. In practice, most spectral sequences degenerate at $E_2$ or $E_3$, making them computationally tractable.
+</Remark>

@@ -1,0 +1,100 @@
+export const metadata = {
+  title: 'Octahedral Axiom — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Theorem — Octahedral Axiom" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Octahedral Axiom
+
+The octahedral axiom (TR4) is the most subtle axiom of triangulated categories. It relates the cones of a composition $g \circ f$ to the cones of $f$ and $g$ individually. The name comes from the octahedral diagram that appears when all the relevant distinguished triangles are drawn.
+
+---
+
+## Statement
+
+<Theorem title="Octahedral Axiom (TR4)" number="5.4">
+Let $\mathcal{T}$ be a triangulated category. Given morphisms $f : X \to Y$ and $g : Y \to Z$, suppose we have distinguished triangles:
+
+$$X \xrightarrow{f} Y \to Q \to X[1]$$
+$$Y \xrightarrow{g} Z \to R \to Y[1]$$
+$$X \xrightarrow{g \circ f} Z \to S \to X[1]$$
+
+Then there exists a distinguished triangle $Q \to S \to R \to Q[1]$ making all the relevant diagrams commute. Geometrically, the four triangles form the faces of an octahedron.
+</Theorem>
+
+<Remark title="Intuition">
+The octahedral axiom says: if $X \xrightarrow{f} Y \xrightarrow{g} Z$, then the "quotient" $Z/X$ (i.e., the cone of $g \circ f$) fits into a triangle with $Y/X$ (cone of $f$) and $Z/Y$ (cone of $g$). This is analogous to the third isomorphism theorem in abelian categories: $(Z/X) / (Y/X) \cong Z/Y$.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Third isomorphism theorem" id="third-iso">
+In $D(\mathcal{A})$, for submodules $X \subseteq Y \subseteq Z$, the octahedral axiom applied to $X \hookrightarrow Y \hookrightarrow Z$ gives the triangle $Y/X \to Z/X \to Z/Y \to (Y/X)[1]$, which is the derived version of $0 \to Y/X \to Z/X \to Z/Y \to 0$.
+</Example>
+
+<Example title="Octahedral for mapping cones" id="cone-octahedral">
+In $K(\mathcal{A})$, for chain maps $f : A \to B$ and $g : B \to C$, the octahedral axiom gives a distinguished triangle $\mathrm{Cone}(f) \to \mathrm{Cone}(g \circ f) \to \mathrm{Cone}(g) \to \mathrm{Cone}(f)[1]$. This can be verified directly using the explicit cone construction.
+</Example>
+
+<Example title="Filtrations and the octahedral axiom" id="filtrations">
+The octahedral axiom ensures that filtered objects have consistent associated graded pieces. If $X$ has a filtration $0 = F_0 \to F_1 \to F_2 \to F_3 = X$, the octahedral axiom relates the cones $F_1/F_0$, $F_2/F_1$, $F_3/F_2$ to $F_2/F_0$ and $F_3/F_1$.
+</Example>
+
+<Example title="Composition of exact functors" id="exact-composition">
+The octahedral axiom ensures that the composition of two exact functors behaves correctly with respect to cones: the cone of a composition is related to the cones of the factors by a distinguished triangle.
+</Example>
+
+<Example title="Stable homotopy theory" id="stable-homotopy">
+In the stable homotopy category, the octahedral axiom follows from the fact that cofiber sequences satisfy a "puppe sequence" property. For spaces $X \to Y \to Z$, the cofibers are related by a cofiber sequence.
+</Example>
+
+<Example title="Verification in K(A)" id="verify-k">
+The octahedral axiom can be verified explicitly in $K(\mathcal{A})$ by constructing the required triangle using mapping cones. The four distinguished triangles form an "octahedron" where opposite faces commute.
+</Example>
+
+<Example title="DG enhancement makes TR4 automatic" id="dg-enhancement">
+In a pretriangulated DG category, the octahedral axiom is a theorem, not an axiom: it follows from the functoriality of the cone construction at the DG level. This is one advantage of DG enhancements over the bare triangulated structure.
+</Example>
+
+<Example title="Semi-orthogonal decompositions" id="sod-octahedral">
+The octahedral axiom is used to prove that semi-orthogonal decompositions are well-behaved under refinement: if $\mathcal{T} = \langle \mathcal{A}, \mathcal{B} \rangle$ and $\mathcal{B} = \langle \mathcal{C}, \mathcal{D} \rangle$, then $\mathcal{T} = \langle \mathcal{A}, \mathcal{C}, \mathcal{D} \rangle$.
+</Example>
+
+<Example title="Weight structures" id="weight">
+The octahedral axiom plays a role in the theory of weight structures (the "dual" of t-structures), ensuring that weight filtrations are compatible with composition.
+</Example>
+
+<Example title="Localization sequences" id="localization-seq">
+The octahedral axiom is needed to show that localization sequences $\mathcal{S} \to \mathcal{T} \to \mathcal{T}/\mathcal{S}$ behave well: the localization of a composition of localizations is the expected localization.
+</Example>
+
+<Example title="K-theory of triangulated categories" id="k-theory-octahedral">
+The octahedral axiom ensures that the Grothendieck group $K_0(\mathcal{T})$ is well-defined: the relation $[Y] = [X] + [Z]$ from a triangle $X \to Y \to Z \to X[1]$ is consistent with composition.
+</Example>
+
+<Example title="Verdier duality" id="verdier-duality">
+The octahedral axiom is used in proving properties of Verdier duality on $D^b_c(X)$: the duality functor $\mathbb{D} = R\mathcal{H}om(-, \omega_X)$ preserves the octahedral relations.
+</Example>
+
+---
+
+<Remark title="Is TR4 redundant?">
+It is an open question (related to a conjecture of Amnon Neeman) whether the octahedral axiom follows from the other axioms in certain settings. In practice, every known triangulated category satisfies TR4, and it is automatically satisfied by categories arising from DG or stable $\infty$-categorical enhancements.
+</Remark>

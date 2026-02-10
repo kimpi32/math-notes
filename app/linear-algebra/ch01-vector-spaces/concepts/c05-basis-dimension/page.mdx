@@ -1,0 +1,166 @@
+export const metadata = {
+  title: 'Basis and Dimension — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Concept — Basis and Dimension" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Basis and Dimension
+
+A **basis** is a linearly independent spanning set -- the most efficient way to describe a vector space. The **dimension** counts the number of vectors in any basis.
+
+---
+
+## Definition
+
+<Definition title="Basis" number="1.8">
+A subset $\beta = \{v_1, v_2, \ldots, v_n\}$ of a vector space $V$ is a **basis** for $V$ if:
+
+1. $\beta$ is linearly independent, and
+2. $\text{span}(\beta) = V$.
+
+Equivalently, $\beta$ is a basis if and only if every vector $v \in V$ can be written **uniquely** as
+
+$$v = a_1 v_1 + a_2 v_2 + \cdots + a_n v_n$$
+
+for some scalars $a_1, \ldots, a_n \in F$. The scalars $a_i$ are called the **coordinates** of $v$ with respect to $\beta$.
+</Definition>
+
+<Remark title="Uniqueness of coordinates">
+The uniqueness of the representation $v = \sum a_i v_i$ is equivalent to linear independence. If there were two representations $v = \sum a_i v_i = \sum b_i v_i$, then $\sum (a_i - b_i) v_i = 0$, and independence forces $a_i = b_i$ for all $i$.
+</Remark>
+
+---
+
+## Examples of bases
+
+<Example id="standard-basis" title="Standard basis for F^n">
+The **standard basis** for $F^n$ is $\{e_1, e_2, \ldots, e_n\}$ where $e_i$ has $1$ in position $i$ and $0$ elsewhere. Every $(a_1, \ldots, a_n) = a_1 e_1 + \cdots + a_n e_n$ uniquely.
+</Example>
+
+<Example id="nonstandard-r2" title="Non-standard basis for R^2">
+$\{(1, 1), (1, -1)\}$ is a basis for $\mathbb{R}^2$. To express $(a, b)$:
+
+$$(a, b) = \frac{a+b}{2}(1, 1) + \frac{a-b}{2}(1, -1).$$
+
+The change-of-coordinates formula gives unique coefficients.
+</Example>
+
+<Example id="polynomial-basis" title="Standard basis for P_n(F)">
+$\{1, x, x^2, \ldots, x^n\}$ is the standard basis for $P_n(F)$. Every polynomial of degree at most $n$ is $a_0 + a_1 x + \cdots + a_n x^n$ uniquely. So $\dim P_n(F) = n + 1$.
+</Example>
+
+<Example id="matrix-basis" title="Standard basis for M_{m x n}(F)">
+The matrices $E_{ij}$ (with $1$ in position $(i,j)$ and $0$ elsewhere) form the standard basis for $M_{m \times n}(F)$. There are $mn$ such matrices, so $\dim M_{m \times n}(F) = mn$.
+</Example>
+
+<Example id="symmetric-basis" title="Basis for symmetric 2 x 2 matrices">
+$\text{Sym}_2(\mathbb{R})$ has basis
+
+$$\left\{\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix},\; \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix},\; \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}\right\},$$
+
+so $\dim \text{Sym}_2(\mathbb{R}) = 3$. In general, $\dim \text{Sym}_n(F) = n(n+1)/2$.
+</Example>
+
+<Example id="trace-zero" title="Basis for trace-zero matrices">
+The subspace $W = \{A \in M_{2 \times 2}(F) \mid \text{tr}(A) = 0\}$ has basis
+
+$$\left\{\begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix},\; \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix},\; \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}\right\},$$
+
+so $\dim W = 3 = 4 - 1 = \dim M_{2 \times 2}(F) - 1$.
+</Example>
+
+<Example id="solution-basis" title="Basis for a solution space">
+The solution space of $x + 2y - z = 0$ in $\mathbb{R}^3$ has parametrization $(x, y, z) = s(-2, 1, 0) + t(1, 0, 1)$ and thus basis $\{(-2, 1, 0), (1, 0, 1)\}$ with dimension 2.
+</Example>
+
+<Example id="complex-basis" title="Basis for C over R">
+$\{1, i\}$ is a basis for $\mathbb{C}$ as a vector space over $\mathbb{R}$, so $\dim_{\mathbb{R}} \mathbb{C} = 2$. But $\{1\}$ is a basis for $\mathbb{C}$ over $\mathbb{C}$, so $\dim_{\mathbb{C}} \mathbb{C} = 1$.
+</Example>
+
+<Example id="lagrange-basis" title="Lagrange interpolation basis">
+For distinct points $c_0, c_1, \ldots, c_n \in F$ (with $|F| > n$), the **Lagrange polynomials**
+
+$$L_i(x) = \prod_{j \neq i} \frac{x - c_j}{c_i - c_j}$$
+
+form a basis for $P_n(F)$. They satisfy $L_i(c_j) = \delta_{ij}$, so the coordinates of $p(x)$ with respect to this basis are simply $p(c_0), p(c_1), \ldots, p(c_n)$.
+</Example>
+
+<Example id="bernstein-basis" title="Bernstein basis">
+The **Bernstein polynomials** $B_{i,n}(x) = \binom{n}{i} x^i (1-x)^{n-i}$ for $i = 0, 1, \ldots, n$ form another basis for $P_n(\mathbb{R})$. They are used extensively in computer-aided geometric design (Bezier curves).
+</Example>
+
+<Example id="infinite-dim" title="Infinite-dimensional spaces">
+$P(F)$ has basis $\{1, x, x^2, x^3, \ldots\}$ (infinite but countable). $C[0,1]$ is infinite-dimensional: for any $n$, the functions $1, x, x^2, \ldots, x^n$ are linearly independent, so $\dim C[0,1] \geq n$ for all $n$.
+</Example>
+
+<Example id="coordinates" title="Coordinate vectors">
+With respect to the basis $\beta = \{(1, 1), (1, -1)\}$ of $\mathbb{R}^2$, the vector $v = (5, 3)$ has coordinate vector $[v]_\beta = (4, 1)$ because $v = 4(1, 1) + 1(1, -1)$.
+</Example>
+
+---
+
+## Dimension
+
+<Definition title="Dimension" number="1.9">
+A vector space $V$ is **finite-dimensional** if it has a finite spanning set. The **dimension** of a finite-dimensional vector space $V$, denoted $\dim V$ (or $\dim_F V$), is the number of vectors in any basis for $V$.
+
+A vector space that is not finite-dimensional is **infinite-dimensional**.
+</Definition>
+
+<Theorem title="Every basis has the same size" number="1.6">
+If $V$ is a finite-dimensional vector space, then any two bases for $V$ have the same number of elements. Thus the dimension is well-defined.
+</Theorem>
+
+This theorem is a consequence of the [Replacement Theorem](/linear-algebra/ch01-vector-spaces/theorems/t01-replacement).
+
+<Theorem title="Basis existence and extension" number="1.7">
+Let $V$ be a finite-dimensional vector space.
+
+1. Every spanning set contains a basis (by removing redundant vectors).
+2. Every linearly independent set can be extended to a basis (by adding vectors).
+3. If $W \subseteq V$ is a subspace, then $\dim W \leq \dim V$, with equality iff $W = V$.
+</Theorem>
+
+---
+
+## Dimension tables
+
+<div className="overflow-x-auto mb-6">
+<table className="min-w-full text-sm border border-gray-200 rounded-lg overflow-hidden">
+<thead className="bg-gray-50 text-gray-600 text-left">
+<tr>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Vector space</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Standard basis</th>
+<th className="px-4 py-2.5 font-medium border-b border-gray-200">Dimension</th>
+</tr>
+</thead>
+<tbody>
+<tr><td className="px-4 py-2 border-b border-gray-100">$F^n$</td><td className="px-4 py-2 border-b border-gray-100">$e_1, \ldots, e_n$</td><td className="px-4 py-2 border-b border-gray-100">$n$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$P_n(F)$</td><td className="px-4 py-2 border-b border-gray-100">$1, x, \ldots, x^n$</td><td className="px-4 py-2 border-b border-gray-100">$n + 1$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$M_{m \times n}(F)$</td><td className="px-4 py-2 border-b border-gray-100">$E_{ij}$</td><td className="px-4 py-2 border-b border-gray-100">$mn$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\text{Sym}_n(F)$</td><td className="px-4 py-2 border-b border-gray-100">$E_{ii},\; E_{ij}+E_{ji}$</td><td className="px-4 py-2 border-b border-gray-100">$n(n+1)/2$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$\text{Skew}_n(F)$</td><td className="px-4 py-2 border-b border-gray-100">$E_{ij}-E_{ji}$ ($i &lt; j$)</td><td className="px-4 py-2 border-b border-gray-100">$n(n-1)/2$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$U_n(F)$ (upper triangular)</td><td className="px-4 py-2 border-b border-gray-100">$E_{ij}$ ($i \leq j$)</td><td className="px-4 py-2 border-b border-gray-100">$n(n+1)/2$</td></tr>
+<tr><td className="px-4 py-2 border-b border-gray-100">$D_n(F)$ (diagonal)</td><td className="px-4 py-2 border-b border-gray-100">$E_{ii}$</td><td className="px-4 py-2 border-b border-gray-100">$n$</td></tr>
+</tbody>
+</table>
+</div>
+
+<Remark title="Looking ahead">
+The concept of basis gives rise to **coordinate systems**, which connect abstract vector spaces to the concrete space $F^n$. This connection is formalized through the notion of [isomorphism](/linear-algebra/ch02-linear-transformations/concepts/c03-isomorphism): every $n$-dimensional vector space over $F$ is isomorphic to $F^n$.
+</Remark>

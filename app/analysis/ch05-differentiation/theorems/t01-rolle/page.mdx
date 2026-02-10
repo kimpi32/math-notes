@@ -1,0 +1,162 @@
+export const metadata = {
+  title: '롤의 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "5. 미분", href: "/analysis/ch05-differentiation" },
+  { label: "정리 - 롤의 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 롤의 정리 (Rolle's Theorem)
+
+Rolle's theorem is the bridge between the Extreme Value Theorem and the Mean Value Theorem. It states that between any two zeros of a differentiable function, the derivative must vanish somewhere.
+
+---
+
+## Statement
+
+<Theorem title="Rolle's Theorem" number="5.2">
+Let $f : [a, b] \to \mathbb{R}$ satisfy:
+1. $f$ is continuous on $[a, b]$,
+2. $f$ is differentiable on $(a, b)$,
+3. $f(a) = f(b)$.
+
+Then there exists $c \in (a, b)$ with $f'(c) = 0$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+By the Extreme Value Theorem, $f$ attains its maximum $M$ and minimum $m$ on $[a, b]$.
+
+**Case 1**: $M = m$. Then $f$ is constant on $[a, b]$, so $f'(c) = 0$ for every $c \in (a, b)$.
+
+**Case 2**: $M > m$. Since $f(a) = f(b)$, at least one of $M$ and $m$ is attained at an interior point $c \in (a, b)$ (they cannot both be attained only at the endpoints, since $f(a) = f(b)$ would force $M = m$).
+
+At this interior extremum $c$, the interior extremum theorem gives $f'(c) = 0$.
+</Proof>
+
+<Remark>
+The proof uses:
+1. **EVT**: to find where the extrema are attained.
+2. **Interior extremum theorem**: if $f$ has a local extremum at an interior point and $f'(c)$ exists, then $f'(c) = 0$.
+3. **Completeness of** $\mathbb{R}$: indirectly through the EVT.
+</Remark>
+
+---
+
+## Geometric interpretation
+
+<Remark>
+Rolle's theorem says: if a differentiable curve starts and ends at the same height, it must have a horizontal tangent somewhere in between. Geometrically, the curve must "turn around" at least once, and at the turning point the tangent is horizontal.
+</Remark>
+
+---
+
+## Basic applications
+
+<Example title="Polynomial with equal endpoints">
+1. $f(x) = x^2 - 4x + 3$ on $[1, 3]$: $f(1) = 0$, $f(3) = 0$. By Rolle's theorem, there exists $c \in (1, 3)$ with $f'(c) = 2c - 4 = 0$, giving $c = 2$.
+</Example>
+
+<Example title="Sine function">
+2. $f(x) = \sin x$ on $[0, \pi]$: $f(0) = 0 = f(\pi)$. By Rolle's theorem, $f'(c) = \cos c = 0$ for some $c \in (0, \pi)$, namely $c = \pi/2$.
+</Example>
+
+<Example title="Exponential times polynomial">
+3. $f(x) = e^x(x^2 - 1)$ on $[-1, 1]$: $f(-1) = 0$, $f(1) = 0$. Rolle's theorem gives $c$ with $f'(c) = e^c(x^2 + 2x - 1)|_{x=c} = 0$, so $c^2 + 2c - 1 = 0$, giving $c = -1 + \sqrt{2} \approx 0.414$.
+</Example>
+
+---
+
+## Counting roots
+
+<Example title="Between consecutive roots">
+4. If $f$ has roots at $x_1 < x_2 < \cdots < x_n$, then $f'$ has at least $n - 1$ roots (one in each interval $(x_i, x_{i+1})$). By induction, $f^{(k)}$ has at least $n - k$ roots.
+
+For example, $f(x) = (x-1)(x-2)(x-3)$: roots at $1, 2, 3$. $f'$ has roots in $(1, 2)$ and $(2, 3)$.
+</Example>
+
+<Example title="Uniqueness of roots">
+5. If $f$ is differentiable and $f'(x) > 0$ for all $x$ (strictly increasing), then $f$ has at most one root. Proof: if $f(a) = f(b) = 0$ with $a < b$, Rolle's theorem gives $f'(c) = 0$ for some $c$, contradicting $f' > 0$.
+</Example>
+
+<Example title="At most n roots for degree-n polynomial">
+6. A polynomial of degree $n$ has at most $n$ real roots. Proof by induction using Rolle's theorem: if $p$ has $n + 1$ roots, then $p'$ (degree $n - 1$) has at least $n$ roots. Continuing, $p^{(n)}$ (degree $0$, a constant) has at least $1$ root. But a nonzero constant has no roots. Contradiction.
+</Example>
+
+---
+
+## Why each hypothesis is necessary
+
+<Example title="Fails without continuity on [a,b]">
+7. $f(x) = x$ for $x \in [0, 1)$, $f(1) = 0$. Then $f(0) = 0 = f(1)$ and $f$ is differentiable on $(0, 1)$ with $f'(x) = 1 \neq 0$. But $f$ is not continuous at $x = 1$.
+</Example>
+
+<Example title="Fails without differentiability on (a,b)">
+8. $f(x) = |x|$ on $[-1, 1]$: $f(-1) = 1 = f(1)$, continuous, but not differentiable at $x = 0$. And $f'(x) = \pm 1 \neq 0$ for $x \neq 0$. No $c$ with $f'(c) = 0$ (the conclusion fails).
+</Example>
+
+<Example title="Fails without f(a) = f(b)">
+9. $f(x) = x$ on $[0, 1]$: $f(0) = 0 \neq 1 = f(1)$, continuous and differentiable, but $f'(x) = 1 \neq 0$ everywhere. No horizontal tangent.
+</Example>
+
+---
+
+## Generalizations
+
+<Example title="Rolle's for higher derivatives">
+10. **Generalized Rolle**: If $f$ vanishes at $n + 1$ distinct points, then $f^{(n)}$ vanishes at some interior point. This follows by applying Rolle's theorem $n$ times.
+</Example>
+
+<Example title="Rolle's theorem in the complex plane">
+11. Rolle's theorem **fails** in $\mathbb{C}$: $f(z) = e^{2\pi i z}$ satisfies $f(0) = f(1) = 1$, but $f'(z) = 2\pi i \cdot e^{2\pi i z} \neq 0$ for all $z$. The theorem is fundamentally real.
+</Example>
+
+<Example title="Rolle's for vector-valued functions">
+12. Rolle's theorem fails for $\mathbf{f} : [0, 2\pi] \to \mathbb{R}^2$, $\mathbf{f}(t) = (\cos t, \sin t)$: $\mathbf{f}(0) = \mathbf{f}(2\pi) = (1, 0)$, but $\mathbf{f}'(t) = (-\sin t, \cos t) \neq (0, 0)$ for all $t$. The Mean Value Theorem (and hence Rolle's) does not generalize directly to vector-valued functions.
+</Example>
+
+---
+
+## Rolle's theorem and the Mean Value Theorem
+
+<Remark>
+Rolle's theorem is the special case of the Mean Value Theorem where $f(a) = f(b)$. Conversely, the MVT is proved by reducing to Rolle's theorem via the auxiliary function $g(x) = f(x) - \frac{f(b) - f(a)}{b - a}(x - a)$. See [MVT](/analysis/ch05-differentiation/theorems/t02-mvt) and [its proof](/analysis/ch05-differentiation/proofs/p01-mvt-proof).
+
+The logical chain is: **Completeness** $\Rightarrow$ **EVT** $\Rightarrow$ **Rolle** $\Rightarrow$ **MVT** $\Rightarrow$ applications (monotonicity, L'Hopital, Taylor, etc.). Rolle's theorem is the crucial link in this chain.
+</Remark>
+
+---
+
+## Applications to differential equations
+
+<Example title="Uniqueness of ODE solutions">
+13. Consider $y' = f(x, y)$ with $f$ Lipschitz in $y$. If $y_1(x)$ and $y_2(x)$ are two solutions with $y_1(a) = y_2(a)$, define $g(x) = y_1(x) - y_2(x)$. Then $g(a) = 0$. If $g(b) = 0$ as well, Rolle's theorem gives an intermediate point where $g' = 0$, which combined with the ODE structure leads to a Gronwall-type argument for uniqueness.
+</Example>
+
+<Example title="Zeros of solutions of y'' + p(x)y = 0">
+14. **Sturm separation theorem**: If $y_1, y_2$ are linearly independent solutions of $y'' + p(x)y = 0$, then between any two consecutive zeros of $y_1$, there is exactly one zero of $y_2$. This is proved using Rolle's theorem applied to $y_2/y_1$.
+</Example>
+
+---
+
+## Historical note
+
+<Remark>
+Michel Rolle stated this theorem in 1691, but only for polynomials and without rigorous proof. The modern epsilon-delta proof came in the 19th century with Weierstrass. Ironically, Rolle was a critic of calculus, yet his theorem became one of its cornerstones.
+</Remark>

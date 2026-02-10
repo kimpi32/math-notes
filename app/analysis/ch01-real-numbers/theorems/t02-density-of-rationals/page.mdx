@@ -1,0 +1,110 @@
+export const metadata = {
+  title: '유리수의 조밀성 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "1. 실수의 체계", href: "/analysis/ch01-real-numbers" },
+  { label: "정리 - 유리수의 조밀성" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 유리수의 조밀성 (Density of Rationals)
+
+The density of the rationals is one of the most fundamental structural properties of the real line. Despite $\mathbb{Q}$ being "small" in many senses (countable, measure zero), it is **dense** in $\mathbb{R}$: between any two distinct real numbers, no matter how close, there is always a rational number. The same holds for the irrationals.
+
+---
+
+## Statement
+
+<Theorem title="Density of Rationals in R" number="1.3">
+If $a, b \in \mathbb{R}$ with $a < b$, then there exists $q \in \mathbb{Q}$ such that $a < q < b$.
+
+In other words, $\mathbb{Q}$ is **dense** in $\mathbb{R}$: every nonempty open interval $(a, b)$ contains a rational number.
+</Theorem>
+
+<Remark>
+This theorem is a consequence of the [아르키메데스 성질](/analysis/ch01-real-numbers/theorems/t01-archimedean). The proof is given in [유리수 조밀성의 증명](/analysis/ch01-real-numbers/proofs/p02-density-proof).
+</Remark>
+
+<Theorem title="Density of Irrationals in R" number="1.4">
+If $a, b \in \mathbb{R}$ with $a < b$, then there exists an irrational number $\xi$ such that $a < \xi < b$.
+
+In other words, $\mathbb{R} \setminus \mathbb{Q}$ is also dense in $\mathbb{R}$.
+</Theorem>
+
+<Remark>
+Once we have density of rationals, density of irrationals follows quickly. If $a < b$, then $a - \sqrt{2} < b - \sqrt{2}$, so by density of rationals there exists $q \in \mathbb{Q}$ with $a - \sqrt{2} < q < b - \sqrt{2}$, hence $a < q + \sqrt{2} < b$. Since $q + \sqrt{2}$ is irrational (as the sum of a rational and an irrational is irrational), we are done.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Finding rationals between close real numbers">
+1. Between $\sqrt{2} \approx 1.41421\ldots$ and $\sqrt{2} + 0.001$, there is a rational number. For instance, $q = 1.4143 = \frac{14143}{10000}$ satisfies $\sqrt{2} < 1.4143 < \sqrt{2} + 0.001$.
+</Example>
+
+<Example title="Finding rationals between irrational endpoints">
+2. Between $\pi \approx 3.14159\ldots$ and $e + 0.5 \approx 3.21828\ldots$, we can take $q = 3.15 = 63/20$ or $q = 3.2 = 16/5$.
+</Example>
+
+<Example title="Infinitely many rationals in any interval">
+3. By applying the density theorem repeatedly, between any $a < b$ there are **infinitely many** rationals. If $q_1 \in (a, b)$ is rational, then the intervals $(a, q_1)$ and $(q_1, b)$ are nonempty, and each contains another rational, and so on. In fact, every open interval contains countably infinitely many rationals.
+</Example>
+
+<Example title="Approximating irrationals by rationals">
+4. For any irrational $\alpha$ and any $\varepsilon > 0$, there exists $q \in \mathbb{Q}$ with $|q - \alpha| < \varepsilon$. This follows from density: apply the theorem to the interval $(\alpha - \varepsilon, \alpha + \varepsilon)$.
+
+For example, $\pi$ can be approximated by $3$, $22/7$, $333/106$, $355/113$, etc., to increasing accuracy.
+</Example>
+
+<Example title="Density does not imply continuity of indicator">
+5. Define $f : \mathbb{R} \to \mathbb{R}$ by $f(x) = 1$ if $x \in \mathbb{Q}$ and $f(x) = 0$ if $x \notin \mathbb{Q}$ (the Dirichlet function). Because both $\mathbb{Q}$ and $\mathbb{R} \setminus \mathbb{Q}$ are dense, $f$ is discontinuous at every point: in any neighborhood of any $x$, $f$ takes both values $0$ and $1$.
+</Example>
+
+<Example title="Finding irrationals between rationals">
+6. Between the rationals $1$ and $2$, there exist irrationals such as $\sqrt{2} \approx 1.414$, $\sqrt{3} \approx 1.732$, and $(1 + \sqrt{5})/2 \approx 1.618$ (the golden ratio). More generally, $1 + (\sqrt{2}/2) \approx 1.707$ lies in $(1, 2)$.
+</Example>
+
+---
+
+## Consequences of Density
+
+<Example title="Rational and irrational are interleaved">
+7. Between any two rationals, there is an irrational (density of irrationals). Between any two irrationals, there is a rational (density of rationals). Thus the rationals and irrationals are completely interleaved on the real line.
+
+For instance, between $1/3$ and $1/2$: the irrational $\sqrt{2}/3 \approx 0.4714$ lies in $(1/3, 1/2)$.
+</Example>
+
+<Example title="Characterizing closure of Q">
+8. The density of $\mathbb{Q}$ can be restated topologically: the **closure** of $\mathbb{Q}$ in $\mathbb{R}$ (with the standard topology) is all of $\mathbb{R}$. That is, $\overline{\mathbb{Q}} = \mathbb{R}$.
+
+Equivalently, every real number is the limit of a sequence of rationals: for any $x \in \mathbb{R}$, the sequence of decimal truncations $q_n = \lfloor 10^n x \rfloor / 10^n$ is a sequence of rationals converging to $x$.
+</Example>
+
+---
+
+## The Bigger Picture
+
+<Remark>
+Density of $\mathbb{Q}$ tells us that the rationals are "everywhere" on the real line. Yet $\mathbb{Q}$ is countable and has Lebesgue measure zero, while $\mathbb{R}$ is uncountable. These seemingly contradictory facts highlight the subtle relationship between density (a topological notion) and size (a measure-theoretic or cardinality notion).
+</Remark>
+
+<Example title="Density vs. measure">
+9. The set $\mathbb{Q} \cap [0,1]$ is dense in $[0,1]$ but has Lebesgue measure zero. The set $[0,1] \setminus \mathbb{Q}$ (irrationals in $[0,1]$) is also dense in $[0,1]$ and has Lebesgue measure $1$. Both are dense, yet one is "negligible" and the other has "full measure."
+</Example>
+
+<Example title="Constructing dense subsets">
+10. The set $\{m/2^n : m \in \mathbb{Z}, n \in \mathbb{N}_0\}$ of dyadic rationals is a subset of $\mathbb{Q}$ that is also dense in $\mathbb{R}$. This follows from the fact that for any interval $(a, b)$ with $b - a > 0$, we can choose $n$ large enough that $1/2^n < b - a$ (Archimedean property), and then find an integer $m$ with $a < m/2^n < b$.
+</Example>

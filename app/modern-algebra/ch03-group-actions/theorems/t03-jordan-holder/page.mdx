@@ -1,0 +1,280 @@
+export const metadata = {
+  title: 'Jordan-Hölder Theorem — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Theorem — Jordan–Hölder Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Jordan--Holder Theorem
+
+The Jordan--Holder theorem states that any two composition series of a finite group have the same length and the same composition factors (up to permutation and isomorphism). This is the group-theoretic analogue of the fundamental theorem of arithmetic: just as every integer factors uniquely into primes, every finite group "factors" uniquely into simple groups. The theorem justifies viewing simple groups as the building blocks of all finite groups and motivates the classification of finite simple groups.
+
+---
+
+## Composition Series
+
+<Definition title="Subnormal series" number="3.23">
+A **subnormal series** (or **normal series**) of a group $G$ is a chain of subgroups
+
+$$\{e\} = G_0 \trianglelefteq G_1 \trianglelefteq \cdots \trianglelefteq G_n = G$$
+
+where each $G_i$ is normal in $G_{i+1}$ (but not necessarily normal in $G$). The **factors** are the quotients $G_{i+1}/G_i$, and the **length** is $n$.
+</Definition>
+
+<Definition title="Composition series" number="3.24">
+A **composition series** of a group $G$ is a subnormal series
+
+$$\{e\} = G_0 \trianglelefteq G_1 \trianglelefteq \cdots \trianglelefteq G_n = G$$
+
+where each factor $G_{i+1}/G_i$ is **simple** (and nontrivial). Equivalently, each $G_i$ is a maximal normal subgroup of $G_{i+1}$.
+
+The quotients $G_{i+1}/G_i$ are called the **composition factors**.
+</Definition>
+
+<Example id="composition-z6" title="Composition series of Z/6Z">
+$\mathbb{Z}/6\mathbb{Z}$ has two composition series:
+
+$$\{0\} \trianglelefteq \langle 3 \rangle \trianglelefteq \mathbb{Z}/6\mathbb{Z}, \quad \text{factors: } \mathbb{Z}/2\mathbb{Z},\; \mathbb{Z}/3\mathbb{Z}.$$
+
+$$\{0\} \trianglelefteq \langle 2 \rangle \trianglelefteq \mathbb{Z}/6\mathbb{Z}, \quad \text{factors: } \mathbb{Z}/3\mathbb{Z},\; \mathbb{Z}/2\mathbb{Z}.$$
+
+Both have the same composition factors $\{\mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/3\mathbb{Z}\}$, just in different order.
+</Example>
+
+<Example id="composition-z12-detail" title="Composition series of Z/12Z">
+$\mathbb{Z}/12\mathbb{Z}$ has order 12 = $2^2 \cdot 3$. One composition series:
+
+$$\{0\} \trianglelefteq \langle 6 \rangle \trianglelefteq \langle 2 \rangle \trianglelefteq \mathbb{Z}/12\mathbb{Z}$$
+
+with factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/3\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+Another composition series:
+
+$$\{0\} \trianglelefteq \langle 6 \rangle \trianglelefteq \langle 3 \rangle \trianglelefteq \mathbb{Z}/12\mathbb{Z}$$
+
+with factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/3\mathbb{Z}$.
+
+Yet another:
+
+$$\{0\} \trianglelefteq \langle 4 \rangle \trianglelefteq \langle 2 \rangle \trianglelefteq \mathbb{Z}/12\mathbb{Z}$$
+
+with factors $\mathbb{Z}/3\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+All three have the same multiset of composition factors: $\{\mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/3\mathbb{Z}\}$.
+</Example>
+
+---
+
+## Statement
+
+<Theorem title="Jordan--Hölder Theorem" number="3.14">
+Let $G$ be a nontrivial finite group. Then:
+
+1. **(Existence)** $G$ has at least one composition series.
+
+2. **(Uniqueness of composition factors)** If
+
+$$\{e\} = G_0 \trianglelefteq G_1 \trianglelefteq \cdots \trianglelefteq G_n = G$$
+
+and
+
+$$\{e\} = H_0 \trianglelefteq H_1 \trianglelefteq \cdots \trianglelefteq H_m = G$$
+
+are two composition series of $G$, then $n = m$ and there exists a permutation $\sigma$ of $\{1, \ldots, n\}$ such that $G_i/G_{i-1} \cong H_{\sigma(i)}/H_{\sigma(i)-1}$ for each $i$.
+
+In other words, the composition factors (with multiplicities) are unique up to isomorphism and reordering.
+</Theorem>
+
+<Proof>
+**(Existence)**: We proceed by induction on $|G|$. If $G$ is simple, then $\{e\} \trianglelefteq G$ is a composition series. Otherwise, $G$ has a proper nontrivial normal subgroup $N$. Choose $N$ to be a maximal proper normal subgroup. By induction, $N$ has a composition series, and appending $G$ to it gives a composition series of $G$.
+
+**(Uniqueness)**: We use strong induction on $|G|$.
+
+**Base case**: If $G$ is simple, the only composition series is $\{e\} \trianglelefteq G$, so uniqueness is trivial.
+
+**Inductive step**: Suppose $G$ has two composition series with $G_{n-1}$ and $H_{m-1}$ as the penultimate terms. If $G_{n-1} = H_{m-1}$, then by induction on $|G_{n-1}|$, the two restricted series have the same factors, and since $G/G_{n-1} \cong G/H_{m-1}$, the full series have the same factors.
+
+If $G_{n-1} \neq H_{m-1}$: let $K = G_{n-1} \cap H_{m-1}$. Since both $G_{n-1}$ and $H_{m-1}$ are maximal normal in $G$, we have $G_{n-1} H_{m-1} = G$. By the second isomorphism theorem:
+
+$$G/G_{n-1} = G_{n-1} H_{m-1} / G_{n-1} \cong H_{m-1} / (G_{n-1} \cap H_{m-1}) = H_{m-1}/K$$
+
+$$G/H_{m-1} = G_{n-1} H_{m-1} / H_{m-1} \cong G_{n-1} / (G_{n-1} \cap H_{m-1}) = G_{n-1}/K$$
+
+Take a composition series of $K$ and extend it to composition series of $G_{n-1}$ and $H_{m-1}$, then to $G$. Comparing via the induction hypothesis on $G_{n-1}$ and $H_{m-1}$ gives the result.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="jh-s3" title="Jordan--Holder for S_3">
+$S_3$ has a unique composition series:
+
+$$\{e\} \trianglelefteq A_3 \trianglelefteq S_3.$$
+
+Composition factors: $A_3 \cong \mathbb{Z}/3\mathbb{Z}$ and $S_3/A_3 \cong \mathbb{Z}/2\mathbb{Z}$.
+
+There is no other composition series because the only normal subgroups of $S_3$ are $\{e\}$, $A_3$, and $S_3$, and the only maximal one is $A_3$.
+</Example>
+
+<Example id="jh-s4" title="Jordan--Holder for S_4">
+$S_4$ has composition series:
+
+$$\{e\} \trianglelefteq \langle (1\;2)(3\;4) \rangle \trianglelefteq V_4 \trianglelefteq A_4 \trianglelefteq S_4.$$
+
+Factors: $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/3\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+All composition factors are cyclic of prime order. Since $S_4$ is solvable (all composition factors are abelian), this is a solvable series.
+</Example>
+
+<Example id="jh-a5" title="Jordan--Holder for A_5">
+Since $A_5$ is simple, its only composition series is:
+
+$$\{e\} \trianglelefteq A_5.$$
+
+The single composition factor is $A_5$ itself. This reflects the fact that $A_5$ cannot be "decomposed" further.
+</Example>
+
+<Example id="jh-s5" title="Jordan--Holder for S_5">
+$$\{e\} \trianglelefteq A_5 \trianglelefteq S_5.$$
+
+Factors: $A_5$ (simple, non-abelian, order 60) and $\mathbb{Z}/2\mathbb{Z}$.
+
+Since one composition factor ($A_5$) is non-abelian, $S_5$ is **not solvable**. This is closely related to the Abel--Ruffini theorem: the general polynomial of degree 5 is not solvable by radicals.
+</Example>
+
+<Example id="jh-abelian" title="Jordan--Holder for finite abelian groups">
+For a finite abelian group $G \cong \mathbb{Z}/p_1^{a_1}\mathbb{Z} \times \cdots \times \mathbb{Z}/p_k^{a_k}\mathbb{Z}$, the composition factors are:
+
+$$\underbrace{\mathbb{Z}/p_1\mathbb{Z}, \ldots, \mathbb{Z}/p_1\mathbb{Z}}_{a_1 \text{ times}}, \; \ldots, \; \underbrace{\mathbb{Z}/p_k\mathbb{Z}, \ldots, \mathbb{Z}/p_k\mathbb{Z}}_{a_k \text{ times}}.$$
+
+This is just the prime factorization of $|G|$ read off as cyclic groups. The Jordan--Holder theorem for abelian groups is essentially the fundamental theorem of arithmetic.
+</Example>
+
+<Example id="jh-q8" title="Jordan--Holder for Q_8">
+The quaternion group $Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$ has several composition series:
+
+$$\{1\} \trianglelefteq \{1,-1\} \trianglelefteq \langle i \rangle \trianglelefteq Q_8$$
+
+with factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+Or: $\{1\} \trianglelefteq \{1,-1\} \trianglelefteq \langle j \rangle \trianglelefteq Q_8$, same factors.
+
+Or: $\{1\} \trianglelefteq \{1,-1\} \trianglelefteq \langle k \rangle \trianglelefteq Q_8$, same factors.
+
+All composition series give factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+Note: $Q_8$ and $D_4$ have the same composition factors (three copies of $\mathbb{Z}/2\mathbb{Z}$) but are not isomorphic. The composition factors do not uniquely determine the group.
+</Example>
+
+---
+
+## Non-Uniqueness of the Group
+
+<Remark title="Extension problem">
+The Jordan--Holder theorem shows that the **composition factors** of a group are uniquely determined, but the group is NOT uniquely determined by its composition factors. Given a list of simple groups $S_1, \ldots, S_n$, there can be many non-isomorphic groups with those composition factors.
+
+The problem of classifying all groups with given composition factors is the **extension problem**. It asks: given groups $N$ and $Q$, classify all groups $G$ with $N \trianglelefteq G$ and $G/N \cong Q$ (up to isomorphism).
+
+The extension problem is generally very difficult. Even for the simplest case of $N = \mathbb{Z}/p\mathbb{Z}$ and $Q = \mathbb{Z}/p\mathbb{Z}$, there are two extensions: $\mathbb{Z}/p^2\mathbb{Z}$ and $\mathbb{Z}/p\mathbb{Z} \times \mathbb{Z}/p\mathbb{Z}$.
+</Remark>
+
+<Example id="same-factors-different-groups" title="Groups with the same composition factors">
+The following groups all have composition factors $\mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/2\mathbb{Z}, \mathbb{Z}/2\mathbb{Z}$:
+
+1. $\mathbb{Z}/8\mathbb{Z}$ (cyclic).
+2. $\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+3. $(\mathbb{Z}/2\mathbb{Z})^3$.
+4. $D_4$ (dihedral group of order 8).
+5. $Q_8$ (quaternion group).
+
+These are all five groups of order 8. They share the same composition factors but have very different structures (some abelian, some not; different numbers of elements of each order).
+</Example>
+
+---
+
+## Solvable Groups
+
+<Definition title="Solvable group" number="3.25">
+A group $G$ is **solvable** if it has a composition series whose factors are all abelian (equivalently, all cyclic of prime order). Equivalently, $G$ has a subnormal series with abelian factors:
+
+$$\{e\} = G_0 \trianglelefteq G_1 \trianglelefteq \cdots \trianglelefteq G_n = G, \quad G_{i+1}/G_i \text{ abelian}.$$
+
+By the Jordan--Holder theorem, if one composition series has abelian factors, then all do.
+</Definition>
+
+<Example id="solvable-examples" title="Examples of solvable and non-solvable groups">
+**Solvable**: All abelian groups, $S_3$, $S_4$, $D_n$, all $p$-groups, all groups of order $p^a q^b$.
+
+**Not solvable**: $S_n$ for $n \geq 5$, $A_n$ for $n \geq 5$, any group containing $A_5$ as a composition factor.
+
+The group $S_4$ is solvable (composition factors: $\mathbb{Z}/2, \mathbb{Z}/2, \mathbb{Z}/3, \mathbb{Z}/2$), but $S_5$ is not (composition factor $A_5$ is non-abelian simple).
+
+The solvability of $S_n$ for $n \leq 4$ is precisely why polynomial equations of degree $\leq 4$ are solvable by radicals.
+</Example>
+
+<Example id="derived-series" title="Derived series and solvability">
+The **derived series** of $G$ is $G^{(0)} = G$, $G^{(1)} = [G, G]$, $G^{(2)} = [G^{(1)}, G^{(1)}]$, and so on. A group is solvable if and only if its derived series reaches $\{e\}$ in finitely many steps.
+
+For $S_3$: $S_3' = [S_3, S_3] = A_3 \cong \mathbb{Z}/3\mathbb{Z}$, and $A_3' = \{e\}$. So $S_3$ is solvable with derived length 2.
+
+For $S_5$: $S_5' = A_5$, and $A_5' = A_5$ (since $A_5$ is perfect: it equals its own commutator subgroup). The derived series never reaches $\{e\}$, confirming non-solvability.
+</Example>
+
+---
+
+## Additional Examples
+
+<Example id="jh-d4" title="Jordan--Holder for D_4">
+$D_4$ (order 8) has several composition series:
+
+$$\{e\} \trianglelefteq \langle r^2 \rangle \trianglelefteq \langle r \rangle \trianglelefteq D_4$$
+
+with factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$.
+
+Another: $\{e\} \trianglelefteq \langle r^2 \rangle \trianglelefteq \{e, r^2, s, sr^2\} \trianglelefteq D_4$
+
+with the same factors. The Jordan--Holder theorem guarantees these always yield $\mathbb{Z}/2\mathbb{Z}$ three times.
+</Example>
+
+<Example id="jh-a4-detail" title="Jordan--Holder for A_4">
+$A_4$ has order 12. Its composition series is:
+
+$$\{e\} \trianglelefteq \langle(1\;2)(3\;4)\rangle \trianglelefteq V_4 \trianglelefteq A_4$$
+
+with factors $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/3\mathbb{Z}$.
+
+This is essentially the unique composition series of $A_4$ (up to the choice of order-2 subgroup of $V_4$ in the first step).
+
+Since all factors are abelian, $A_4$ is solvable.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+1. Every finite group has a **composition series**: a subnormal series with simple factors.
+
+2. The **Jordan--Holder theorem** guarantees that composition factors are unique up to permutation and isomorphism.
+
+3. The composition factors do **not** uniquely determine the group (the extension problem).
+
+4. A group is **solvable** if all its composition factors are cyclic of prime order.
+
+5. The theorem motivates the **classification of finite simple groups**: knowing the simple groups is the first step toward understanding all finite groups.
+</Remark>

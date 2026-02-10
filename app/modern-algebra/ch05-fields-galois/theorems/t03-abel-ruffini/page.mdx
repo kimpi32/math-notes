@@ -1,0 +1,184 @@
+export const metadata = {
+  title: 'Abel-Ruffini Theorem — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "5. 체와 갈루아 이론", href: "/modern-algebra/ch05-fields-galois" },
+  { label: "Theorem — Abel-Ruffini Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Abel-Ruffini Theorem
+
+The Abel-Ruffini theorem is one of the landmark results in the history of mathematics. It settles a centuries-old question: there is no general algebraic formula for the roots of polynomial equations of degree five or higher.
+
+---
+
+## Historical context
+
+For millennia, mathematicians sought formulas for roots of polynomials:
+
+- **Degree 2**: Known to Babylonians ($\sim$1800 BCE). The quadratic formula involves one square root.
+- **Degree 3**: Cardano (1545), using work of del Ferro and Tartaglia. Involves square roots and cube roots.
+- **Degree 4**: Ferrari (1540). Reduces to a cubic via a resolvent.
+- **Degree 5**: No general formula exists. Ruffini (1799) gave an incomplete proof; Abel (1824) gave the first rigorous proof. Galois (1831) gave the definitive framework.
+
+---
+
+## Statement
+
+<Theorem title="Abel-Ruffini Theorem" number="5.24">
+The general polynomial equation of degree $n \ge 5$ is **not solvable by radicals**. That is, there is no formula expressing the roots of a general degree-$n$ polynomial in terms of its coefficients using only the operations of addition, subtraction, multiplication, division, and extraction of $k$-th roots.
+</Theorem>
+
+<Remark title="Precise formulation">
+More precisely: let $F = \mathbb{Q}(s_1, \ldots, s_n)$ where $s_1, \ldots, s_n$ are independent transcendentals (the "generic coefficients"), and consider the **generic polynomial**
+
+$$f(x) = x^n - s_1 x^{n-1} + s_2 x^{n-2} - \cdots + (-1)^n s_n.$$
+
+For $n \ge 5$, the splitting field of $f$ over $F$ is not contained in any radical extension of $F$.
+</Remark>
+
+---
+
+## The key group-theoretic fact
+
+<Theorem title="S_n is not solvable for n >= 5" number="5.25">
+The symmetric group $S_n$ is not solvable for $n \ge 5$.
+</Theorem>
+
+<Proof>
+It suffices to show $A_n$ is **simple** (has no nontrivial normal subgroups) for $n \ge 5$, since any solvable series for $S_n$ would need to pass through $A_n$ (the unique normal subgroup of index $2$), and $A_n$ being simple and nonabelian blocks further refinement.
+
+**$A_5$ is simple**: Let $N \trianglelefteq A_5$, $N \neq \{e\}$. The conjugacy classes in $A_5$ have sizes $1, 12, 12, 15, 20$. Since $|N|$ divides $|A_5| = 60$ and $N$ is a union of conjugacy classes (always including $\{e\}$), we need $|N| = 1 + (\text{sum of some subset of } \{12, 12, 15, 20\})$ to divide $60$. Checking all subsets: no nontrivial proper divisor of $60$ can be written as $1 + (\text{sum of a subset})$. So $N = A_5$.
+
+For $n > 5$: $A_n$ contains $A_5$ (acting on $5$ elements), and one can show simplicity by induction using $3$-cycles.
+</Proof>
+
+---
+
+## The Galois group of the generic polynomial
+
+<Theorem title="Galois group of the generic polynomial is S_n" number="5.26">
+Let $F = \mathbb{Q}(s_1, \ldots, s_n)$ with $s_i$ the elementary symmetric polynomials in $x_1, \ldots, x_n$, and let $E = \mathbb{Q}(x_1, \ldots, x_n)$. Then $\operatorname{Gal}(E/F) \cong S_n$, acting by permuting $x_1, \ldots, x_n$.
+</Theorem>
+
+<Example id="generic-quadratic" title="Generic quadratic">
+The generic quadratic is $x^2 - s_1 x + s_2$ where $s_1 = x_1 + x_2$, $s_2 = x_1 x_2$. The Galois group is $S_2 \cong \mathbb{Z}/2\mathbb{Z}$, swapping $x_1 \leftrightarrow x_2$. This is solvable, consistent with the quadratic formula.
+</Example>
+
+<Example id="generic-cubic" title="Generic cubic">
+The generic cubic $x^3 - s_1 x^2 + s_2 x - s_3$ has Galois group $S_3$, which is solvable (series $\{e\} \trianglelefteq A_3 \trianglelefteq S_3$). This is consistent with Cardano's formula.
+</Example>
+
+<Example id="generic-quartic" title="Generic quartic">
+The generic quartic has Galois group $S_4$, which is solvable (series $\{e\} \trianglelefteq V_4 \trianglelefteq A_4 \trianglelefteq S_4$). This is consistent with Ferrari's method.
+</Example>
+
+<Example id="generic-quintic" title="Generic quintic">
+The generic quintic $x^5 - s_1 x^4 + \cdots - s_5$ has Galois group $S_5$, which is **not** solvable. By Galois's criterion, the generic quintic is not solvable by radicals. **This is the Abel-Ruffini theorem.**
+</Example>
+
+---
+
+## Specific unsolvable polynomials
+
+<Example id="x5-4x+2" title="x^5 - 4x + 2">
+$f(x) = x^5 - 4x + 2 \in \mathbb{Q}[x]$. This polynomial is:
+- **Irreducible** over $\mathbb{Q}$ (Eisenstein with $p = 2$).
+- Has exactly **three real roots** and **two complex conjugate roots** (by analysis of $f'(x) = 5x^4 - 4$).
+
+Since $\operatorname{Gal}(E/\mathbb{Q})$ is a transitive subgroup of $S_5$ (irreducibility), contains a transposition (from complex conjugation), and has order divisible by $5$ (since $[E:\mathbb{Q}]$ is divisible by $5$, so $G$ contains a $5$-cycle), the group must be $S_5$.
+
+Therefore $f$ is **not solvable by radicals**: its roots cannot be expressed using $+, -, \times, \div$ and $n$-th roots starting from rational numbers.
+</Example>
+
+<Example id="x5-6x+3" title="x^5 - 6x + 3">
+$f(x) = x^5 - 6x + 3$ is irreducible (Eisenstein with $p = 3$). Numerical analysis shows it has three real roots and two complex roots. By the same argument as above, $\operatorname{Gal}(E/\mathbb{Q}) \cong S_5$, and $f$ is not solvable by radicals.
+</Example>
+
+<Example id="x5+20x+16" title="x^5 + 20x + 16">
+$f(x) = x^5 + 20x + 16$ is irreducible over $\mathbb{Q}$ (by the rational root theorem) and has Galois group $S_5$, making it unsolvable by radicals.
+</Example>
+
+---
+
+## Some quintics ARE solvable
+
+<Example id="x5-1-solvable" title="x^5 - 1 is solvable">
+$x^5 - 1 = (x-1)(x^4+x^3+x^2+x+1)$. The splitting field of $\Phi_5(x) = x^4+x^3+x^2+x+1$ is $\mathbb{Q}(\zeta_5)$ with $\operatorname{Gal}(\mathbb{Q}(\zeta_5)/\mathbb{Q}) \cong (\mathbb{Z}/5\mathbb{Z})^\times \cong \mathbb{Z}/4\mathbb{Z}$, which is cyclic and hence solvable.
+
+The roots are $\zeta_5^k = e^{2\pi ik/5}$, which can be expressed using radicals (this is related to the constructibility of the regular pentagon).
+</Example>
+
+<Example id="x5-2-solvable" title="x^5 - 2 is solvable">
+The splitting field of $x^5 - 2$ is $\mathbb{Q}(\sqrt[5]{2}, \zeta_5)$. The Galois group is the **Frobenius group** $F_{20}$ of order $20$ (a semidirect product $\mathbb{Z}/5\mathbb{Z} \rtimes \mathbb{Z}/4\mathbb{Z}$), which is solvable.
+
+The roots are simply $\zeta_5^k \sqrt[5]{2}$ for $k = 0, 1, 2, 3, 4$ --- manifestly expressed in radicals.
+</Example>
+
+<Example id="solvable-quintic-criterion" title="Solvable quintic criterion">
+An irreducible quintic $f(x) \in \mathbb{Q}[x]$ is solvable by radicals if and only if its Galois group is contained in the Frobenius group $F_{20}$, which happens if and only if the resolvent sextic of $f$ has a rational root. The possible solvable Galois groups for irreducible quintics are:
+- $\mathbb{Z}/5\mathbb{Z}$ (order $5$)
+- $D_5$ (order $10$, the dihedral group)
+- $F_{20}$ (order $20$, the Frobenius group)
+</Example>
+
+---
+
+## Why degree 4 works but degree 5 does not
+
+<Example id="degree-comparison" title="The key difference">
+| $n$ | $S_n$ | Simple? | Solvable? |
+|---|---|---|---|
+| $2$ | $S_2 \cong \mathbb{Z}/2\mathbb{Z}$ | Yes (trivially) | Yes |
+| $3$ | $S_3$ ($A_3 \cong \mathbb{Z}/3\mathbb{Z}$) | $A_3$ is simple | Yes |
+| $4$ | $S_4$ ($A_4$ contains $V_4$) | $A_4$ not simple | Yes |
+| $5$ | $S_5$ ($A_5$ is simple, $\|A_5\| = 60$) | $A_5$ is simple | **No** |
+| $\ge 6$ | $S_n$ ($A_n$ is simple) | $A_n$ is simple | **No** |
+
+The jump at $n = 5$ is because $A_5$ is the smallest nonabelian simple group ($|A_5| = 60$). For $n \le 4$, $A_n$ has nontrivial normal subgroups (e.g., $V_4 \trianglelefteq A_4$), allowing a solvable series.
+</Example>
+
+---
+
+## Beyond the Abel-Ruffini theorem
+
+<Example id="bring-radical" title="Bring radicals">
+While no formula in the classical radicals works for the general quintic, one can introduce the **Bring radical** $\operatorname{BR}(a)$, defined as the real root of $x^5 + x + a$. Every quintic can be reduced to Bring-Jerrard form $x^5 + x + a$ by Tschirnhaus transformations, and then solved using $\operatorname{BR}$. But $\operatorname{BR}$ is not expressible in ordinary radicals.
+</Example>
+
+<Example id="modular-functions" title="Solution by modular functions">
+Hermite (1858) showed that the general quintic can be solved using **elliptic modular functions** (specifically, Jacobi theta functions). This goes beyond radicals but provides an explicit analytic solution. The connection is through the icosahedral group $A_5$ and the theory of modular equations.
+</Example>
+
+<Example id="galois-theory-specific" title="Testing a specific polynomial">
+For a specific polynomial, the Galois group may be smaller than $S_n$, making it solvable. For example, $x^5 - 5x^4 + 10x^3 - 10x^2 + 5x - 1 = (x-1)^5$ is trivially solvable. Computing the Galois group of a specific polynomial is an algorithmic problem, solvable in principle (e.g., using factoring algorithms and resolvent methods).
+</Example>
+
+---
+
+## Summary
+
+| Statement | Result |
+|---|---|
+| Degree $\le 4$ polynomials | Always solvable by radicals |
+| Degree $\ge 5$ generic polynomial | Not solvable by radicals |
+| Specific degree $\ge 5$ polynomial | Depends on its Galois group |
+| $\operatorname{Gal}(E/F)$ solvable $\Leftrightarrow$ | $f$ solvable by radicals |
+| $S_n$ not solvable for $n \ge 5$ | Because $A_n$ is simple and nonabelian |
+
+<Remark title="Galois's legacy">
+Galois was killed in a duel at age 20 (1832), having developed his theory in letters written the night before. His work, eventually published by Liouville in 1846, not only answered the question of polynomial solvability but launched the entire subject of abstract algebra and group theory.
+</Remark>

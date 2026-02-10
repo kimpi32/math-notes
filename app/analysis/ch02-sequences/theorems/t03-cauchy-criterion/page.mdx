@@ -1,0 +1,128 @@
+export const metadata = {
+  title: '코시 수렴판정법 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "정리 - 코시 수렴판정법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 코시 수렴판정법 (Cauchy Convergence Criterion)
+
+The Cauchy criterion provides a necessary and sufficient condition for convergence that does not require knowledge of the limit. This is especially powerful for series, where the limit is typically unknown.
+
+---
+
+## Statement
+
+<Theorem title="Cauchy Convergence Criterion" number="2.3">
+A sequence $(a_n)$ of real numbers converges if and only if it is a Cauchy sequence. That is:
+
+$$\lim_{n \to \infty} a_n \text{ exists in } \mathbb{R} \quad \Longleftrightarrow \quad \forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall m, n \geq N: |a_m - a_n| < \varepsilon.$$
+</Theorem>
+
+<Remark>
+The forward direction ($\Rightarrow$) holds in any metric space. The reverse direction ($\Leftarrow$) is the content of **completeness** and is specific to $\mathbb{R}$ (and other complete spaces). The proof of the reverse direction uses the Bolzano--Weierstrass theorem.
+</Remark>
+
+---
+
+## Proof outline
+
+<Proof>
+**($\Rightarrow$)** If $a_n \to L$, then for $\varepsilon > 0$ there exists $N$ with $|a_n - L| < \varepsilon/2$ for $n \geq N$. For $m, n \geq N$: $|a_m - a_n| \leq |a_m - L| + |L - a_n| < \varepsilon$.
+
+**($\Leftarrow$)** Suppose $(a_n)$ is Cauchy.
+
+*Step 1*: $(a_n)$ is bounded (Cauchy implies bounded).
+
+*Step 2*: By Bolzano--Weierstrass, there exists a convergent subsequence $a_{n_k} \to L$.
+
+*Step 3*: We show $a_n \to L$. Given $\varepsilon > 0$, choose $N_1$ with $|a_m - a_n| < \varepsilon/2$ for $m, n \geq N_1$, and $N_2$ with $|a_{n_k} - L| < \varepsilon/2$ for $k \geq N_2$. Choose $k \geq N_2$ with $n_k \geq N_1$. For $n \geq N_1$:
+
+$$|a_n - L| \leq |a_n - a_{n_k}| + |a_{n_k} - L| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.$$
+</Proof>
+
+---
+
+## Applications to sequences
+
+<Example title="Verifying convergence without knowing the limit">
+1. $a_n = \sum_{k=1}^{n} \frac{(-1)^{k+1}}{k} = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots$
+
+For $m > n$: $|a_m - a_n| = \left|\sum_{k=n+1}^{m} \frac{(-1)^{k+1}}{k}\right| \leq \frac{1}{n+1}$ (by the alternating series estimation). Given $\varepsilon > 0$, choose $N > 1/\varepsilon$. So the sequence converges. (The limit turns out to be $\ln 2$.)
+</Example>
+
+<Example title="Convergence of e approximation">
+2. $a_n = \sum_{k=0}^{n} \frac{1}{k!}$. For $m > n$:
+
+$$|a_m - a_n| = \sum_{k=n+1}^{m} \frac{1}{k!} \leq \frac{1}{(n+1)!} \sum_{j=0}^{m-n-1} \frac{1}{(n+2)^j} < \frac{2}{(n+1)!}.$$
+
+This goes to $0$ as $n \to \infty$, so $(a_n)$ is Cauchy and converges (to $e$).
+</Example>
+
+---
+
+## Cauchy criterion for series
+
+<Theorem title="Cauchy criterion for series">
+The series $\sum_{n=1}^{\infty} a_n$ converges if and only if for every $\varepsilon > 0$ there exists $N$ such that for all $m > n \geq N$:
+
+$$\left|\sum_{k=n+1}^{m} a_k\right| < \varepsilon.$$
+</Theorem>
+
+<Example title="Necessary condition: terms go to zero">
+3. Taking $m = n + 1$: if $\sum a_n$ converges, then $|a_{n+1}| < \varepsilon$ for $n \geq N$, i.e., $a_n \to 0$. This is the **divergence test**: if $a_n \not\to 0$, the series diverges.
+</Example>
+
+<Example title="Harmonic series diverges">
+4. $\sum \frac{1}{n}$ diverges: for $m = 2n$, $\sum_{k=n+1}^{2n} \frac{1}{k} \geq \frac{n}{2n} = \frac{1}{2}$, so the Cauchy criterion fails with $\varepsilon = \frac{1}{2}$.
+</Example>
+
+<Example title="p-series convergence">
+5. $\sum \frac{1}{n^p}$ converges for $p > 1$: for $m > n$, $\sum_{k=n+1}^{m} \frac{1}{k^p} \leq \int_n^{\infty} \frac{dx}{x^p} = \frac{n^{1-p}}{p-1} \to 0$.
+</Example>
+
+---
+
+## Further applications
+
+<Example title="Products and Cauchy">
+6. If $a_n \to A$ and $b_n \to B$, one can verify $a_n b_n$ is Cauchy directly: $|a_m b_m - a_n b_n| \leq |a_m||b_m - b_n| + |b_n||a_m - a_n|$, and both terms can be made small since convergent sequences are bounded.
+</Example>
+
+<Example title="Completeness of C([a,b])">
+7. The space $C([a,b])$ of continuous functions with the sup norm is complete. If $(f_n)$ is Cauchy in the sup norm, one shows the pointwise limit $f(x) = \lim f_n(x)$ exists (by completeness of $\mathbb{R}$), the convergence is uniform (by the Cauchy condition), and $f$ is continuous (uniform limit of continuous functions).
+</Example>
+
+<Example title="Cauchy condensation connection">
+8. For a decreasing sequence $a_n \geq 0$: $\sum a_n$ converges iff $\sum 2^n a_{2^n}$ converges (Cauchy condensation test). This is proved by bounding the Cauchy sums: $\sum_{k=2^n+1}^{2^{n+1}} a_k$ is between $2^n a_{2^{n+1}}$ and $2^n a_{2^n}$.
+</Example>
+
+<Example title="Absolute convergence implies convergence">
+9. If $\sum |a_n|$ converges, then $\sum a_n$ converges: $\left|\sum_{k=n+1}^{m} a_k\right| \leq \sum_{k=n+1}^{m} |a_k|$, so the Cauchy condition for $\sum a_n$ follows from that for $\sum |a_n|$.
+</Example>
+
+<Example title="Rearrangement and conditional convergence">
+10. $\sum \frac{(-1)^{n+1}}{n}$ converges (Cauchy criterion, as shown above) but $\sum \frac{1}{n}$ diverges. So this series is **conditionally convergent**. Riemann's rearrangement theorem says we can rearrange it to converge to any real number.
+</Example>
+
+<Example title="Geometric series Cauchy verification">
+11. For $|r| < 1$: $|\sum_{k=n+1}^{m} r^k| = |r|^{n+1} \frac{1 - |r|^{m-n}}{1 - |r|} \leq \frac{|r|^{n+1}}{1 - |r|} \to 0$, confirming the geometric series is Cauchy.
+</Example>
+
+<Example title="Non-Cauchy via subsequence">
+12. To show a sequence is **not** Cauchy, it suffices to find $\varepsilon_0 > 0$ and pairs $(m_k, n_k)$ with $m_k, n_k \to \infty$ but $|a_{m_k} - a_{n_k}| \geq \varepsilon_0$. For example, $a_n = \sin(\ln n)$ is not Cauchy: choosing $m_k = \lceil e^{2\pi k + \pi/2} \rceil$ and $n_k = \lceil e^{2\pi k} \rceil$ gives $|a_{m_k} - a_{n_k}| \approx 1$.
+</Example>

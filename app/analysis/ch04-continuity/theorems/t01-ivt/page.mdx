@@ -1,0 +1,149 @@
+export const metadata = {
+  title: '중간값 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "정리 - 중간값 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 중간값 정리 (Intermediate Value Theorem)
+
+The Intermediate Value Theorem (IVT) captures the fundamental geometric property of continuous functions: they cannot "jump" over values. If a continuous function takes two values, it must take every value in between.
+
+---
+
+## Statement
+
+<Theorem title="Intermediate Value Theorem" number="4.1">
+Let $f : [a, b] \to \mathbb{R}$ be continuous. If $v$ is any value between $f(a)$ and $f(b)$ (i.e., $\min(f(a), f(b)) \leq v \leq \max(f(a), f(b))$), then there exists $c \in [a, b]$ with $f(c) = v$.
+</Theorem>
+
+<Remark>
+A common special case: if $f(a) < 0 < f(b)$ (or $f(a) > 0 > f(b)$), then there exists $c \in (a, b)$ with $f(c) = 0$. This is the **zero-finding version** of the IVT, used in root-finding algorithms. See the [proof](/analysis/ch04-continuity/proofs/p01-ivt-proof).
+</Remark>
+
+---
+
+## Applications to root finding
+
+<Example title="x^2 = 2 has a solution in (1,2)">
+1. Let $f(x) = x^2 - 2$. Then $f(1) = -1 < 0$ and $f(2) = 2 > 0$. Since $f$ is continuous, the IVT guarantees there exists $c \in (1, 2)$ with $f(c) = 0$, i.e., $c^2 = 2$. This proves $\sqrt{2}$ exists (without the completeness axiom directly, but the IVT proof uses completeness).
+</Example>
+
+<Example title="Odd-degree polynomials have a real root">
+2. Let $p(x) = x^{2k+1} + a_{2k}x^{2k} + \cdots + a_0$ be a polynomial of odd degree. Then $p(x) \to +\infty$ as $x \to +\infty$ and $p(x) \to -\infty$ as $x \to -\infty$. By the IVT, $p$ has at least one real root.
+</Example>
+
+<Example title="cos(x) = x has a solution">
+3. Let $f(x) = \cos x - x$. Then $f(0) = 1 > 0$ and $f(\pi/2) = -\pi/2 < 0$. By IVT, there exists $c \in (0, \pi/2)$ with $\cos c = c$. This is the **Dottie number** $c \approx 0.7391$.
+</Example>
+
+<Example title="e^x = 3 - x">
+4. Let $f(x) = e^x - 3 + x$. Then $f(0) = -2 < 0$ and $f(2) = e^2 - 1 > 0$. By IVT, a solution exists in $(0, 2)$.
+</Example>
+
+---
+
+## Fixed point theorems
+
+<Example title="Fixed point on [0,1]">
+5. Let $f : [0, 1] \to [0, 1]$ be continuous. Define $g(x) = f(x) - x$. Then $g(0) = f(0) \geq 0$ and $g(1) = f(1) - 1 \leq 0$. By IVT, there exists $c$ with $g(c) = 0$, i.e., $f(c) = c$. Every continuous map from $[0,1]$ to itself has a **fixed point**.
+</Example>
+
+<Example title="Fixed point on [a,b]">
+6. More generally, if $f : [a, b] \to [a, b]$ is continuous, then $f$ has a fixed point. Same argument with $g(x) = f(x) - x$: $g(a) \geq 0$ and $g(b) \leq 0$.
+</Example>
+
+---
+
+## Topological consequences
+
+<Example title="Image of an interval is an interval">
+7. If $f : [a, b] \to \mathbb{R}$ is continuous, then $f([a, b])$ is a closed bounded interval (by IVT + EVT). More generally, the continuous image of a connected set is connected.
+</Example>
+
+<Example title="No continuous bijection from [0,1] to (0,1)">
+8. Suppose $f : [0,1] \to (0,1)$ is a continuous bijection. By the Extreme Value Theorem, $f$ attains its maximum $M$ and minimum $m$ on $[0,1]$. By IVT, $f([0,1]) = [m, M]$. But $(0,1)$ is not a closed interval. Contradiction.
+</Example>
+
+---
+
+## Bisection method
+
+<Example title="Bisection algorithm">
+9. The IVT proof (by bisection) gives an algorithm: to solve $f(x) = 0$ on $[a, b]$ where $f(a) < 0 < f(b)$:
+- Compute $m = (a+b)/2$.
+- If $f(m) = 0$, done. If $f(m) > 0$, replace $b$ by $m$. If $f(m) < 0$, replace $a$ by $m$.
+- Repeat. After $n$ steps, the root is located within an interval of length $(b-a)/2^n$.
+
+This is guaranteed to converge by the IVT (via nested intervals).
+</Example>
+
+---
+
+## Counterexamples without continuity
+
+<Example title="IVT fails for discontinuous functions">
+10. $f(x) = \lfloor x \rfloor$ on $[0, 2]$: $f(0) = 0$, $f(2) = 2$, but $f(x) \neq 0.5$ for any $x$. The IVT fails because $f$ is not continuous.
+</Example>
+
+<Example title="IVT fails for functions on disconnected domains">
+11. $f(x) = 0$ on $[0, 1]$ and $f(x) = 2$ on $[2, 3]$. This is continuous on the disconnected domain $[0,1] \cup [2,3]$, but the value $1$ is never attained. The IVT requires the domain to be an interval (connected).
+</Example>
+
+---
+
+## More applications
+
+<Example title="Existence of n-th roots">
+12. For $a > 0$ and $n \in \mathbb{N}$, define $f(x) = x^n$ on $[0, \max(a, 1)]$. Then $f(0) = 0 \leq a$ and $f(\max(a,1)) \geq a$ (check both cases). By IVT, there exists $c$ with $c^n = a$. This is $a^{1/n}$.
+</Example>
+
+<Example title="Temperature on a circular path">
+13. Consider two antipodal points on a circular path, with temperatures $T(\theta)$ and $T(\theta + \pi)$. Define $g(\theta) = T(\theta) - T(\theta + \pi)$. Then $g(0) = T(0) - T(\pi)$ and $g(\pi) = T(\pi) - T(2\pi) = T(\pi) - T(0) = -g(0)$. By IVT, there exists $\theta_0$ with $g(\theta_0) = 0$, meaning $T(\theta_0) = T(\theta_0 + \pi)$. Two antipodal points always have the same temperature.
+</Example>
+
+<Example title="Surjectivity of continuous functions on R">
+14. If $f : \mathbb{R} \to \mathbb{R}$ is continuous with $\lim_{x \to +\infty} f(x) = +\infty$ and $\lim_{x \to -\infty} f(x) = -\infty$, then $f$ is surjective: for any $y \in \mathbb{R}$, choose $a, b$ with $f(a) < y < f(b)$ and apply IVT.
+</Example>
+
+---
+
+## Generalizations
+
+<Example title="IVT in higher dimensions">
+15. In $\mathbb{R}^n$, the IVT generalizes to: the continuous image of a connected set is connected. This implies, for instance, that a continuous path from $A$ to $B$ in $\mathbb{R}^n$ passes through every "intermediate" connected set separating $A$ and $B$. The Borsuk--Ulam theorem ($f : S^n \to \mathbb{R}^n$ continuous implies $f(x) = f(-x)$ for some $x$) is a deep generalization.
+</Example>
+
+---
+
+## Darboux's theorem: IVT for derivatives
+
+<Remark>
+Derivatives always satisfy the IVP (intermediate value property), even when they are not continuous. This is **Darboux's theorem**: if $f$ is differentiable on $[a, b]$ and $v$ lies between $f'(a)$ and $f'(b)$, then there exists $c \in (a, b)$ with $f'(c) = v$.
+
+Importantly, Darboux's theorem is proved using the Extreme Value Theorem (not the IVT), since $f'$ may be discontinuous and the IVT does not apply directly.
+</Remark>
+
+---
+
+## Historical note
+
+<Remark>
+The IVT was first stated by Bolzano in 1817 and later proved rigorously by Weierstrass. Before the construction of the real numbers, the theorem was considered "obvious" from the geometric picture of continuous curves. The need for a rigorous proof was one of the driving forces behind the development of the epsilon-delta framework and the completeness axiom.
+
+The IVT is equivalent to the **connectedness** of $\mathbb{R}$: an ordered field is connected (in the order topology) if and only if it satisfies the IVP for continuous functions.
+</Remark>

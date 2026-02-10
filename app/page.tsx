@@ -38,6 +38,12 @@ const colorStyles: Record<string, { border: string; bg: string; hover: string; a
     hover: "hover:border-teal-400 hover:shadow-teal-100",
     accent: "text-teal-600",
   },
+  indigo: {
+    border: "border-indigo-200",
+    bg: "bg-indigo-50/50",
+    hover: "hover:border-indigo-400 hover:shadow-indigo-100",
+    accent: "text-indigo-600",
+  },
 };
 
 export default function Home() {

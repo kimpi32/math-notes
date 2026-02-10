@@ -1,0 +1,151 @@
+export const metadata = {
+  title: '볼차노-바이어슈트라스 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "2. 수열과 극한", href: "/analysis/ch02-sequences" },
+  { label: "정리 - 볼차노-바이어슈트라스 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 볼차노-바이어슈트라스 정리 (Bolzano--Weierstrass Theorem)
+
+The Bolzano--Weierstrass theorem is one of the central results of real analysis. It asserts that boundedness alone is enough to guarantee the existence of a convergent subsequence. This theorem is equivalent to the completeness of $\mathbb{R}$.
+
+---
+
+## Statement
+
+<Theorem title="Bolzano--Weierstrass Theorem" number="2.2">
+Every bounded sequence of real numbers has a convergent subsequence.
+
+Equivalently: if $(a_n)$ is a sequence with $|a_n| \leq M$ for all $n$, then there exists a subsequence $(a_{n_k})$ and a real number $L$ with $a_{n_k} \to L$.
+</Theorem>
+
+<Remark>
+The proof uses the Monotone Convergence Theorem (and hence the completeness of $\mathbb{R}$). Two standard proof strategies exist: the **bisection method** (nested intervals) and the **peak point method** (monotone subsequence). See the [proof](/analysis/ch02-sequences/proofs/p02-bolzano-weierstrass-proof).
+</Remark>
+
+---
+
+## Applications
+
+<Example title="Accumulation points of bounded sequences">
+1. $a_n = \sin(n)$. This is bounded ($|a_n| \leq 1$), so by Bolzano--Weierstrass it has a convergent subsequence. In fact, the set of subsequential limits is the entire interval $[-1, 1]$.
+</Example>
+
+<Example title="Convergent subsequence of (-1)^n">
+2. $a_n = (-1)^n$ is bounded. The subsequences $a_{2k} = 1$ and $a_{2k-1} = -1$ are both convergent.
+</Example>
+
+<Example title="Bounded rational enumeration">
+3. Let $(r_n)$ be an enumeration of the rationals in $[0,1]$. This is bounded, so by Bolzano--Weierstrass it has convergent subsequences. In fact, every point in $[0,1]$ is a subsequential limit (by density of rationals).
+</Example>
+
+---
+
+## The theorem fails without boundedness
+
+<Example title="Unbounded sequences can lack convergent subsequences">
+4. $a_n = n$ has no convergent subsequence. Any subsequence $a_{n_k}$ satisfies $a_{n_k} \geq n_k \geq k \to \infty$.
+
+5. $a_n = (-1)^n \cdot n$ also has no convergent subsequence, despite oscillating, because $|a_n| = n \to \infty$.
+</Example>
+
+---
+
+## Equivalent formulations
+
+<Theorem title="Equivalences of completeness">
+The following are equivalent for an ordered field $F$:
+1. Every nonempty subset of $F$ bounded above has a least upper bound (completeness axiom).
+2. Every bounded monotone sequence converges (Monotone Convergence Theorem).
+3. Every bounded sequence has a convergent subsequence (Bolzano--Weierstrass).
+4. Every Cauchy sequence converges (Cauchy completeness).
+5. Every nested sequence of closed bounded intervals has nonempty intersection (Nested Interval Property).
+</Theorem>
+
+<Remark>
+These equivalences show that Bolzano--Weierstrass is not just a consequence of completeness but an equivalent characterization. The proofs of these equivalences form a "circle of ideas" at the foundation of real analysis.
+</Remark>
+
+---
+
+## Applications to existence proofs
+
+<Example title="Extreme Value Theorem setup">
+6. Let $f : [a,b] \to \mathbb{R}$ be continuous. To show $f$ attains its maximum, take a sequence $(x_n)$ with $f(x_n) \to \sup f$. Since $(x_n) \subseteq [a,b]$ is bounded, Bolzano--Weierstrass gives a convergent subsequence $x_{n_k} \to x^*$. Continuity then yields $f(x^*) = \sup f$.
+</Example>
+
+<Example title="Fixed point existence">
+7. Let $f : [0,1] \to [0,1]$ be any function, and define $a_{n+1} = f(a_n)$. The sequence $(a_n) \subseteq [0,1]$ is bounded, so Bolzano--Weierstrass gives a convergent subsequence $a_{n_k} \to L$. If $f$ is continuous, then $f(L) = \lim f(a_{n_k}) = \lim a_{n_k + 1}$. If the full sequence converges, $L$ is a fixed point.
+</Example>
+
+<Example title="Limit point compactness">
+8. In a metric space, a set $K$ is **sequentially compact** if every sequence in $K$ has a convergent subsequence with limit in $K$. The Bolzano--Weierstrass theorem says that every closed bounded subset of $\mathbb{R}$ is sequentially compact.
+</Example>
+
+---
+
+## Higher dimensions
+
+<Example title="Bolzano--Weierstrass in R^n">
+9. The Bolzano--Weierstrass theorem extends to $\mathbb{R}^n$: every bounded sequence in $\mathbb{R}^n$ has a convergent subsequence. The proof uses the one-dimensional version iteratively, extracting convergence in each coordinate.
+
+For example, if $(x_n, y_n) \in [0,1]^2$ is bounded, first extract a subsequence with $x_{n_k}$ converging, then from that extract a further subsequence with $y_{n_{k_j}}$ converging.
+</Example>
+
+<Example title="Application to compact sets">
+10. A subset $K \subseteq \mathbb{R}^n$ is compact if and only if it is closed and bounded (Heine--Borel theorem). The Bolzano--Weierstrass theorem is the key ingredient: bounded gives a convergent subsequence, and closed ensures the limit stays in $K$.
+</Example>
+
+<Example title="Constructing limits of bounded averages">
+11. If $(a_n)$ is bounded, the Cesaro means $\sigma_n = \frac{1}{n}\sum_{k=1}^n a_k$ are also bounded. By Bolzano--Weierstrass, $(\sigma_n)$ has a convergent subsequence. For specific sequences, all subsequences may converge to the same limit, giving Cesaro convergence.
+</Example>
+
+<Example title="Diagonal extraction">
+12. Given a countable family of bounded sequences $(a_n^{(1)}), (a_n^{(2)}), \ldots$, we can use Bolzano--Weierstrass and a **diagonal argument** to extract a single subsequence along which all sequences converge simultaneously. This technique is fundamental in functional analysis (e.g., Arzela--Ascoli theorem).
+</Example>
+
+---
+
+## Why Bolzano--Weierstrass fails in infinite dimensions
+
+<Example title="No convergent subsequence in infinite dimensions">
+13. In $\ell^2$ (sequences $(x_1, x_2, \ldots)$ with $\sum x_n^2 < \infty$), the sequence $e_n = (0, \ldots, 0, 1, 0, \ldots)$ (the standard basis) is bounded ($\|e_n\| = 1$) but has no convergent subsequence: $\|e_m - e_n\| = \sqrt{2}$ for $m \neq n$.
+
+This shows that the Bolzano--Weierstrass theorem fails in infinite-dimensional spaces. The closed unit ball is not compact.
+</Example>
+
+<Example title="Compact operators and BW">
+14. The appropriate infinite-dimensional generalization is: a **compact operator** $T : X \to Y$ maps bounded sequences to sequences with convergent subsequences (i.e., $T$ maps bounded sets to precompact sets). Compact operators are the "finite-dimensional-like" operators.
+</Example>
+
+---
+
+## Bolzano--Weierstrass and measure theory
+
+<Remark>
+The Bolzano--Weierstrass theorem has analogues in measure theory. The **Helly selection theorem** states that every uniformly bounded sequence of monotone functions on $[a, b]$ has a pointwise convergent subsequence. The **Prokhorov theorem** states that every tight sequence of probability measures has a weakly convergent subsequence.
+
+These are all manifestations of the same principle: boundedness plus structure implies the existence of convergent subsequences.
+</Remark>
+
+---
+
+## Historical note
+
+<Remark>
+The theorem is named after Bernard Bolzano (1817) and Karl Weierstrass (1860s). Bolzano gave an early (incomplete) proof in the context of proving the Intermediate Value Theorem. Weierstrass provided the rigorous proof as part of his foundational program for analysis. The theorem exemplifies the power of completeness and is one of the key results distinguishing $\mathbb{R}$ from $\mathbb{Q}$.
+</Remark>

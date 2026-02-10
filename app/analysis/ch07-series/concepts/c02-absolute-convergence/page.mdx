@@ -1,0 +1,161 @@
+export const metadata = {
+  title: 'Absolute vs Conditional Convergence — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "7. 급수", href: "/analysis/ch07-series" },
+  { label: "개념 — 절대수렴과 조건부수렴" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Absolute vs Conditional Convergence
+
+Not all convergent series behave equally. The distinction between absolute and conditional convergence is fundamental: absolutely convergent series are robust under rearrangement, while conditionally convergent series are surprisingly fragile.
+
+---
+
+## Definitions
+
+<Definition title="Absolute and conditional convergence" number="7.6">
+A series $\sum_{n=1}^\infty a_n$ is:
+
+- **Absolutely convergent** if $\sum_{n=1}^\infty |a_n|$ converges.
+- **Conditionally convergent** if $\sum a_n$ converges but $\sum |a_n|$ diverges.
+</Definition>
+
+<Theorem title="Absolute convergence implies convergence" number="7.6">
+If $\sum |a_n|$ converges, then $\sum a_n$ converges.
+</Theorem>
+
+<Example title="Absolutely convergent series">
+- $\sum \frac{(-1)^n}{n^2}$: since $\sum \frac{1}{n^2} = \frac{\pi^2}{6} < \infty$, the series converges absolutely.
+
+- $\sum \frac{\sin n}{n^2}$: since $|\sin n| \leq 1$, we have $\left|\frac{\sin n}{n^2}\right| \leq \frac{1}{n^2}$. By comparison, the series converges absolutely.
+
+- $\sum \frac{(-1)^n}{2^n}$: since $\sum \frac{1}{2^n} = 1 < \infty$, absolutely convergent.
+</Example>
+
+<Example title="Conditionally convergent series">
+- $\sum \frac{(-1)^{n+1}}{n} = \ln 2$: converges (alternating series test), but $\sum \frac{1}{n}$ diverges. So it is conditionally convergent.
+
+- $\sum \frac{(-1)^{n+1}}{\sqrt{n}}$: converges by the alternating series test, but $\sum \frac{1}{\sqrt{n}}$ diverges ($p = 1/2 < 1$). Conditionally convergent.
+
+- $\sum \frac{(-1)^{n+1}}{n^{1/3}}$: same reasoning. Conditionally convergent.
+</Example>
+
+---
+
+## Why absolute convergence matters
+
+<Theorem title="Rearrangement theorem for absolutely convergent series" number="7.7">
+If $\sum_{n=1}^\infty a_n$ converges absolutely to $S$, then every rearrangement of the series also converges to $S$.
+
+Formally: if $\sigma: \mathbb{N} \to \mathbb{N}$ is any bijection, then $\sum_{n=1}^\infty a_{\sigma(n)} = S$.
+</Theorem>
+
+<Example title="Rearranging an absolutely convergent series">
+$\sum_{n=0}^\infty \frac{1}{2^n} = 2$. Any rearrangement, such as
+
+$$1 + \frac{1}{4} + \frac{1}{2} + \frac{1}{16} + \frac{1}{8} + \cdots$$
+
+still sums to $2$.
+</Example>
+
+---
+
+## Riemann rearrangement theorem
+
+<Theorem title="Riemann rearrangement theorem" number="7.8">
+If $\sum a_n$ is conditionally convergent, then for any $L \in \mathbb{R} \cup \{+\infty, -\infty\}$, there exists a rearrangement of the series that converges to $L$ (or diverges to $\pm\infty$).
+</Theorem>
+
+<Example title="Rearranging the alternating harmonic series to sum to 3/2 ln 2">
+Start with $\sum \frac{(-1)^{n+1}}{n} = \ln 2$. Consider the rearrangement: take two positive terms, then one negative term, repeating:
+
+$$1 + \frac{1}{3} - \frac{1}{2} + \frac{1}{5} + \frac{1}{7} - \frac{1}{4} + \frac{1}{9} + \frac{1}{11} - \frac{1}{6} + \cdots$$
+
+This rearrangement converges to $\frac{3}{2} \ln 2 \neq \ln 2$. The sum has changed merely by reordering the terms.
+</Example>
+
+<Example title="Rearranging to diverge">
+From the same alternating harmonic series, take positive terms until the partial sum exceeds $10$, then subtract $\frac{1}{2}$, then add positive terms until the sum exceeds $20$, then subtract $\frac{1}{4}$, and so on. This rearrangement diverges to $+\infty$.
+</Example>
+
+<Remark>
+The Riemann rearrangement theorem is one of the most striking results in analysis. It shows that the sum of a conditionally convergent series depends on the order of summation. This is why absolute convergence is the "correct" notion for unconditional convergence.
+</Remark>
+
+---
+
+## Multiplication of series
+
+<Definition title="Cauchy product" number="7.7">
+The **Cauchy product** of $\sum a_n$ and $\sum b_n$ is the series $\sum c_n$ where
+
+$$c_n = \sum_{k=0}^{n} a_k b_{n-k}.$$
+
+This is the natural product motivated by multiplying power series.
+</Definition>
+
+<Theorem title="Mertens' theorem" number="7.9">
+If $\sum a_n = A$ converges absolutely and $\sum b_n = B$ converges, then their Cauchy product converges to $AB$.
+</Theorem>
+
+<Example title="Squaring the geometric series">
+Let $a_n = b_n = r^n$ with $|r| < 1$. Then $c_n = \sum_{k=0}^n r^k \cdot r^{n-k} = (n+1)r^n$.
+
+So $\sum_{n=0}^\infty (n+1)r^n = \left(\frac{1}{1-r}\right)^2$. For $r = 1/2$: $\sum (n+1)/2^n = 4$.
+</Example>
+
+<Example title="Cauchy product of alternating series">
+Consider $\sum_{n=0}^\infty \frac{(-1)^n}{\sqrt{n+1}}$ with itself. Each series converges conditionally. The Cauchy product has terms
+
+$$c_n = \sum_{k=0}^n \frac{(-1)^k}{\sqrt{k+1}} \cdot \frac{(-1)^{n-k}}{\sqrt{n-k+1}} = (-1)^n \sum_{k=0}^n \frac{1}{\sqrt{(k+1)(n-k+1)}}.$$
+
+One can show $|c_n| \not\to 0$, so the Cauchy product diverges. Mertens' theorem does not apply because neither series is absolutely convergent.
+</Example>
+
+---
+
+## Tests for absolute convergence
+
+<Remark>
+The [comparison test](/analysis/ch07-series/theorems/t01-comparison-test), [ratio test](/analysis/ch07-series/theorems/t02-ratio-test), and [root test](/analysis/ch07-series/theorems/t03-root-test) are the primary tools for testing absolute convergence. They test convergence of $\sum |a_n|$.
+</Remark>
+
+<Example title="Summary of convergence behavior">
+Consider the family $\sum \frac{(-1)^n}{n^p}$ for various $p$:
+
+- $p > 1$: absolutely convergent (since $\sum 1/n^p < \infty$).
+- $p = 1$: conditionally convergent ($\sum (-1)^n/n = -\ln 2$ converges, but $\sum 1/n = \infty$).
+- $0 < p \leq 1$: conditionally convergent (alternating test applies, but $\sum 1/n^p = \infty$).
+- $p = 0$: divergent ($a_n = (-1)^n \not\to 0$).
+- $p < 0$: divergent ($|a_n| = n^{|p|} \to \infty$).
+</Example>
+
+<Example title="A subtler example">
+$\sum_{n=2}^\infty \frac{(-1)^n}{n \ln n}$: the alternating series test applies since $\frac{1}{n \ln n}$ is decreasing and tends to $0$. But $\sum \frac{1}{n \ln n}$ diverges (by the integral test: $\int_2^\infty \frac{1}{x \ln x}\,dx = \ln(\ln x)\big|_2^\infty = \infty$). So this series is conditionally convergent.
+</Example>
+
+<Example title="Absolute convergence of a product series">
+$\sum_{n=1}^\infty \frac{\cos(n) \sin(n)}{n^2}$: since $|\cos(n)\sin(n)| \leq 1$, we have $\left|\frac{\cos(n)\sin(n)}{n^2}\right| \leq \frac{1}{n^2}$. By comparison with $\sum 1/n^2$, the series converges absolutely.
+</Example>
+
+<Example title="Rearrangement to any target">
+The alternating harmonic series $\sum (-1)^{n+1}/n$ can be rearranged to converge to any real number $L$. To get $L = 0$: add positive terms until the sum first exceeds $0$, then subtract negative terms until it drops below $0$, and repeat. The partial sums oscillate around $0$ with decreasing amplitude, converging to $0$.
+</Example>
+
+<Example title="Absolute convergence is preserved under rearrangement">
+If $\sum a_n$ converges absolutely to $S$, and $\sigma$ is any permutation of $\mathbb{N}$, then $\sum a_{\sigma(n)} = S$. This follows because for any $\varepsilon > 0$, we can find $N$ such that $\sum_{n > N} |a_n| < \varepsilon$. Any rearrangement eventually includes all terms $a_1, \ldots, a_N$, so the tail of the rearranged series is also small.
+</Example>

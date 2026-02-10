@@ -1,0 +1,126 @@
+export const metadata = {
+  title: 'Additive Category — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Concept — Additive Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Additive Category
+
+An additive category is a category enriched over abelian groups: each hom-set carries an abelian group structure compatible with composition. This is the first step toward the axiomatics of homological algebra, sitting between general categories and abelian categories.
+
+---
+
+## Definition
+
+<Definition title="Preadditive Category" number="3.1">
+A category $\mathcal{C}$ is **preadditive** (or **Ab-enriched**) if:
+
+1. For every pair of objects $A, B$, the set $\mathrm{Hom}(A, B)$ is an abelian group.
+2. Composition is **bilinear**: for $f, f' : A \to B$ and $g, g' : B \to C$,
+
+$$g \circ (f + f') = g \circ f + g \circ f', \qquad (g + g') \circ f = g \circ f + g' \circ f$$
+</Definition>
+
+<Definition title="Additive Category" number="3.2">
+A preadditive category $\mathcal{C}$ is **additive** if:
+
+1. It has a **zero object** $0$ (both initial and terminal).
+2. It has all **finite biproducts**: for any $A, B \in \mathcal{C}$, the biproduct $A \oplus B$ exists.
+</Definition>
+
+<Definition title="Biproduct" number="3.3">
+A **biproduct** of $A$ and $B$ in a preadditive category is an object $A \oplus B$ equipped with morphisms
+
+$$\iota_A : A \to A \oplus B, \quad \iota_B : B \to A \oplus B, \quad \pi_A : A \oplus B \to A, \quad \pi_B : A \oplus B \to B$$
+
+satisfying:
+
+$$\pi_A \circ \iota_A = \mathrm{id}_A, \quad \pi_B \circ \iota_B = \mathrm{id}_B, \quad \pi_A \circ \iota_B = 0, \quad \pi_B \circ \iota_A = 0$$
+
+$$\iota_A \circ \pi_A + \iota_B \circ \pi_B = \mathrm{id}_{A \oplus B}$$
+
+The biproduct is simultaneously a product (via $\pi_A, \pi_B$) and a coproduct (via $\iota_A, \iota_B$).
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Ab is additive" id="ab-additive">
+$\mathbf{Ab}$ is additive: $\mathrm{Hom}(A, B)$ is an abelian group under pointwise addition $(f + g)(a) = f(a) + g(a)$. The zero object is $\{0\}$, and the biproduct is the direct sum $A \oplus B$.
+</Example>
+
+<Example title="R-Mod is additive" id="rmod-additive">
+$R\text{-}\mathbf{Mod}$ is additive with the same structure: pointwise addition of homomorphisms, zero module as zero object, and direct sum as biproduct.
+</Example>
+
+<Example title="Vect_k is additive" id="vect-additive">
+$\mathbf{Vect}_k$ is additive. The direct sum $V \oplus W$ is the biproduct. In matrix terms, a morphism $V \oplus W \to V' \oplus W'$ corresponds to a $2 \times 2$ block matrix.
+</Example>
+
+<Example title="Ch(A) is additive" id="ch-additive">
+If $\mathcal{A}$ is additive, then the category of chain complexes $\mathbf{Ch}(\mathcal{A})$ is additive. Addition of chain maps is defined degreewise, the zero complex is the zero object, and the biproduct is the direct sum of complexes.
+</Example>
+
+<Example title="Mat_k is additive" id="mat-additive">
+The matrix category $\mathbf{Mat}_k$ (objects: natural numbers, morphisms: matrices) is additive: matrix addition gives the abelian group structure on $\mathrm{Hom}(m, n) = M_{n \times m}(k)$, the zero object is $0$, and the biproduct is $m \oplus n = m + n$.
+</Example>
+
+<Example title="Set is not additive" id="set-not-additive">
+$\mathbf{Set}$ is not additive: there is no natural abelian group structure on $\mathrm{Hom}(A, B)$ compatible with composition. The product and coproduct of two nonempty sets differ ($|A \times B| \neq |A \sqcup B|$ in general), so there is no biproduct.
+</Example>
+
+<Example title="Grp is not additive" id="grp-not-additive">
+$\mathbf{Grp}$ has a zero object (the trivial group), but finite products and coproducts differ: $G \times H \neq G * H$ in general. There is no biproduct structure, so $\mathbf{Grp}$ is not additive.
+</Example>
+
+<Example title="Top is not preadditive" id="top-not-preadditive">
+$\mathbf{Top}$ is not preadditive: there is no natural way to add two continuous maps $f, g : X \to Y$ to get another continuous map. Without a group structure on $Y$, pointwise addition is not defined.
+</Example>
+
+<Example title="Category of finite abelian groups" id="fin-ab">
+The category $\mathbf{FinAb}$ of finite abelian groups is additive. The biproduct is $A \oplus B$, the zero object is $\{0\}$, and all hom-sets are finite abelian groups.
+</Example>
+
+<Example title="Additive functors" id="additive-functor">
+A functor $F : \mathcal{A} \to \mathcal{B}$ between additive categories is **additive** if $F(f + g) = F(f) + F(g)$ for all $f, g$. Equivalently, $F$ preserves finite biproducts. The forgetful functor $R\text{-}\mathbf{Mod} \to \mathbf{Ab}$ is additive.
+</Example>
+
+<Example title="Preadditive category from a ring" id="ring-preadditive">
+A ring $R$ defines a preadditive category with one object: $\mathrm{Hom}(*,*) = R$ with addition from the ring structure and composition from multiplication. This is additive iff $R$ has the zero element (which it always does as a ring).
+</Example>
+
+<Example title="Endomorphism ring" id="endo-ring">
+In an additive category, $\mathrm{End}(A) = \mathrm{Hom}(A, A)$ is a ring: addition comes from the abelian group structure, and multiplication is composition. For $V \in \mathbf{Vect}_k$, $\mathrm{End}(V) = M_n(k)$.
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Biproduct = product = coproduct" number="3.1">
+In a preadditive category, the following are equivalent for an object $P$ with maps to/from $A$ and $B$:
+
+1. $P$ is a biproduct of $A$ and $B$.
+2. $P$ is a product of $A$ and $B$ (and the canonical map $A \sqcup B \to A \times B$ is an isomorphism).
+3. $P$ is a coproduct of $A$ and $B$ (and the canonical map $A \sqcup B \to A \times B$ is an isomorphism).
+</Theorem>
+
+<Remark title="Looking ahead">
+An additive category becomes [abelian](/category-theory/ch03-abelian-categories/concepts/c02-abelian-category) when every morphism has a kernel and cokernel, and every monomorphism is a kernel and every epimorphism is a cokernel. The additive structure ensures that [exact sequences](/category-theory/ch03-abelian-categories/concepts/c04-exact-sequence) can be defined and manipulated, laying the groundwork for homological algebra.
+</Remark>

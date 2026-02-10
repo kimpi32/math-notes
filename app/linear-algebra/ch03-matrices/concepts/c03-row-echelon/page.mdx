@@ -1,0 +1,155 @@
+export const metadata = {
+  title: 'Row Echelon Form — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "3. 행렬", href: "/linear-algebra/ch03-matrices" },
+  { label: "Concept — Row Echelon Form" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Row Echelon Form and Gaussian Elimination
+
+**Gaussian elimination** is the fundamental algorithm of computational linear algebra. It reduces any matrix to **row echelon form**, from which rank, null space, and solutions to linear systems can be read off directly.
+
+---
+
+## Definitions
+
+<Definition title="Elementary row operations" number="3.7">
+The three **elementary row operations** on a matrix are:
+
+1. **Row swap**: Interchange two rows ($R_i \leftrightarrow R_j$).
+2. **Row scaling**: Multiply a row by a nonzero scalar ($R_i \to cR_i$, $c \neq 0$).
+3. **Row addition**: Add a scalar multiple of one row to another ($R_i \to R_i + cR_j$).
+
+Each operation is invertible and corresponds to left-multiplication by an **elementary matrix**.
+</Definition>
+
+<Definition title="Row echelon form (REF)" number="3.8">
+A matrix is in **row echelon form** if:
+
+1. All zero rows are at the bottom.
+2. The leading (leftmost nonzero) entry of each nonzero row is strictly to the right of the leading entry of the row above.
+
+The leading entries are called **pivots**.
+</Definition>
+
+<Definition title="Reduced row echelon form (RREF)" number="3.9">
+A matrix is in **reduced row echelon form** if it is in REF and additionally:
+
+3. Each pivot is $1$.
+4. Each pivot is the only nonzero entry in its column.
+
+The RREF of a matrix is **unique** (though the sequence of row operations to reach it is not).
+</Definition>
+
+---
+
+## Examples
+
+<Example id="ref-example" title="Row echelon form">
+$$\begin{pmatrix} 2 & 3 & 1 \\ 0 & -1 & 4 \\ 0 & 0 & 5 \end{pmatrix}$$
+
+is in REF with pivots at positions $(1,1)$, $(2,2)$, $(3,3)$. Rank $= 3$.
+</Example>
+
+<Example id="rref-example" title="Reduced row echelon form">
+$$\begin{pmatrix} 1 & 0 & 0 & 2 \\ 0 & 1 & 0 & -1 \\ 0 & 0 & 1 & 3 \end{pmatrix}$$
+
+is in RREF. Pivot columns: 1, 2, 3. Free column: 4.
+</Example>
+
+<Example id="gaussian-elim" title="Gaussian elimination step by step">
+Reduce $A = \begin{pmatrix} 1 & 3 & 1 \\ 2 & 6 & 4 \\ 3 & 9 & 3 \end{pmatrix}$:
+
+$R_2 \to R_2 - 2R_1$: $\begin{pmatrix} 1 & 3 & 1 \\ 0 & 0 & 2 \\ 3 & 9 & 3 \end{pmatrix}$.
+
+$R_3 \to R_3 - 3R_1$: $\begin{pmatrix} 1 & 3 & 1 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+REF reached. Rank $= 2$, one free variable ($x_2$).
+
+Continue to RREF: $R_2 \to \frac{1}{2}R_2$, then $R_1 \to R_1 - R_2$: $\begin{pmatrix} 1 & 3 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}$.
+</Example>
+
+<Example id="solving-system" title="Solving a system via RREF">
+Solve: $x + 2y + z = 4$, $2x + 4y + 3z = 9$, $x + 2y + 2z = 6$.
+
+Augmented matrix: $\begin{pmatrix} 1 & 2 & 1 & 4 \\ 2 & 4 & 3 & 9 \\ 1 & 2 & 2 & 6 \end{pmatrix} \to \begin{pmatrix} 1 & 2 & 0 & 2 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 0 & 0 \end{pmatrix}$.
+
+$x_1 = 2 - 2t$, $x_2 = t$ (free), $x_3 = 2$. Solution: $(2, 0, 2) + t(-2, 1, 0)$.
+</Example>
+
+<Example id="inconsistent" title="Inconsistent system">
+$\begin{pmatrix} 1 & 1 & 1 \\ 1 & 1 & 2 \end{pmatrix} \to \begin{pmatrix} 1 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}$.
+
+The second row says $0 = 1$, which is impossible. The system has **no solution**. A row of the form $(0\ 0\ \cdots\ 0 \mid c)$ with $c \neq 0$ signals inconsistency.
+</Example>
+
+<Example id="unique-solution" title="Unique solution (full rank)">
+$\begin{pmatrix} 1 & 1 & 3 \\ 1 & -1 & 1 \end{pmatrix} \to \begin{pmatrix} 1 & 0 & 2 \\ 0 & 1 & 1 \end{pmatrix}$.
+
+$x = 2$, $y = 1$. Unique solution because rank $= 2 = $ number of variables.
+</Example>
+
+<Example id="rank-from-rref" title="Reading rank from RREF">
+The **rank** of a matrix equals the number of pivots in any REF. The **nullity** equals the number of non-pivot (free) columns.
+
+For $\begin{pmatrix} 1 & 0 & 3 & 0 \\ 0 & 1 & -1 & 0 \\ 0 & 0 & 0 & 1 \end{pmatrix}$: rank $= 3$, nullity $= 4 - 3 = 1$ (column 3 is free).
+</Example>
+
+<Example id="null-space-from-rref" title="Null space from RREF">
+For the RREF $\begin{pmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 3 \\ 0 & 0 & 0 & 0 \end{pmatrix}$:
+
+Free variables: $x_2 = s$, $x_4 = t$. Pivot variables: $x_1 = -2s - t$, $x_3 = -3t$.
+
+Null space $= \text{span}\{(-2, 1, 0, 0), (-1, 0, -3, 1)\}$, dimension $= 2$.
+</Example>
+
+<Example id="row-space" title="Row space">
+The **row space** of $A$ equals the row space of any REF of $A$ (elementary row operations preserve the row space). The nonzero rows of the REF form a basis for the row space.
+
+Row rank $=$ column rank $=$ rank of the matrix.
+</Example>
+
+<Example id="four-subspaces" title="The four fundamental subspaces">
+For $A \in M_{m \times n}(F)$:
+
+1. **Column space** $C(A) \subseteq F^m$: $\dim = r$ (rank)
+2. **Null space** $N(A) \subseteq F^n$: $\dim = n - r$
+3. **Row space** $C(A^T) \subseteq F^n$: $\dim = r$
+4. **Left null space** $N(A^T) \subseteq F^m$: $\dim = m - r$
+
+These satisfy: $C(A) \oplus N(A^T) = F^m$ and $C(A^T) \oplus N(A) = F^n$.
+</Example>
+
+<Example id="rref-uniqueness" title="RREF is unique">
+Different sequences of row operations on the same matrix always produce the same RREF. This means the RREF is a canonical form for the equivalence relation "same row space." The pivot positions (and hence the rank) are invariants of the matrix.
+</Example>
+
+<Example id="elementary-matrices" title="LU factorization preview">
+If Gaussian elimination uses no row swaps, $A = LU$ where $L$ is lower triangular (recording the multipliers) and $U$ is upper triangular (the REF). This **LU factorization** is the basis of efficient numerical linear algebra.
+</Example>
+
+---
+
+## Computational complexity
+
+<Remark title="Complexity">
+Gaussian elimination on an $n \times n$ matrix requires $\sim \frac{2}{3}n^3$ arithmetic operations. This is polynomial in $n$ and much faster than naive approaches (e.g., computing the determinant by cofactor expansion takes $\sim n!$ operations).
+</Remark>
+
+<Remark title="Looking ahead">
+Row reduction is the universal tool for: computing rank, finding null spaces, solving $Ax = b$, computing inverses, and checking invertibility. The conditions for invertibility are systematized in the [Invertible Matrix Theorem](/linear-algebra/ch03-matrices/theorems/t01-invertible-matrix).
+</Remark>

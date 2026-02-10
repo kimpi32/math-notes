@@ -1,0 +1,187 @@
+export const metadata = {
+  title: 'Correspondence Theorem — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "2. 부분군과 준동형", href: "/modern-algebra/ch02-subgroups-homomorphisms" },
+  { label: "Theorem — Correspondence Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Correspondence Theorem
+
+The correspondence theorem (also called the **lattice isomorphism theorem** or **fourth isomorphism theorem**) gives a complete description of the subgroup structure of a quotient group $G/N$ in terms of the subgroups of $G$ that contain $N$.
+
+---
+
+## Statement
+
+<Theorem title="Correspondence Theorem (Lattice Isomorphism Theorem)" number="2.23">
+Let $N \trianglelefteq G$ and $\pi : G \to G/N$ be the canonical projection. There is an inclusion-preserving bijection
+
+$$\Phi : \{H \leq G \mid N \leq H\} \xrightarrow{\;1:1\;} \{K \leq G/N\}$$
+
+given by $\Phi(H) = H/N = \pi(H)$, with inverse $\Psi(K) = \pi^{-1}(K)$.
+
+Moreover, this bijection preserves:
+1. **Inclusion**: $H_1 \leq H_2$ iff $H_1/N \leq H_2/N$.
+2. **Normality**: $H \trianglelefteq G$ iff $H/N \trianglelefteq G/N$ (for $N \leq H$).
+3. **Index**: $[G : H] = [G/N : H/N]$.
+4. **Intersections and joins**: $\Phi(H_1 \cap H_2) = \Phi(H_1) \cap \Phi(H_2)$ and $\Phi(\langle H_1, H_2 \rangle) = \langle \Phi(H_1), \Phi(H_2) \rangle$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+**Well-defined**: If $N \leq H \leq G$, then $N \trianglelefteq H$ (since $N \trianglelefteq G$ and $H \leq G$), so $H/N$ is a subgroup of $G/N$.
+
+**Inverse map**: For $K \leq G/N$, define $\Psi(K) = \pi^{-1}(K) = \{g \in G \mid gN \in K\}$. Since $\pi$ is a homomorphism, $\Psi(K) \leq G$. Also $N = \pi^{-1}(\{eN\}) \leq \pi^{-1}(K) = \Psi(K)$.
+
+**$\Phi$ and $\Psi$ are mutually inverse**: For $H$ with $N \leq H$: $\Psi(\Phi(H)) = \pi^{-1}(H/N) = H$ (since $g \in \pi^{-1}(H/N)$ iff $gN \in H/N$ iff $g \in H$). For $K \leq G/N$: $\Phi(\Psi(K)) = \pi(\pi^{-1}(K)) = K$ (since $\pi$ is surjective).
+
+**Preserves normality**: $H \trianglelefteq G$ iff $gHg^{-1} = H$ for all $g \in G$ iff $(gN)(H/N)(gN)^{-1} = H/N$ for all $gN \in G/N$ iff $H/N \trianglelefteq G/N$.
+
+**Preserves index**: $[G : H] = |G|/|H| = (|G|/|N|)/(|H|/|N|) = |G/N|/|H/N| = [G/N : H/N]$ (for finite groups; the general case uses the bijection between coset spaces).
+</Proof>
+
+---
+
+## Examples
+
+<Example id="z12-correspondence" title="Subgroups of Z/12Z via Z">
+Take $G = \mathbb{Z}$, $N = 12\mathbb{Z}$. The subgroups of $G$ containing $N$ are $d\mathbb{Z}$ where $d \mid 12$: namely $\mathbb{Z}, 2\mathbb{Z}, 3\mathbb{Z}, 4\mathbb{Z}, 6\mathbb{Z}, 12\mathbb{Z}$.
+
+By correspondence, the subgroups of $\mathbb{Z}/12\mathbb{Z}$ are:
+
+| Subgroup of $\mathbb{Z}$ containing $12\mathbb{Z}$ | Corresponding subgroup of $\mathbb{Z}/12\mathbb{Z}$ | Order |
+|---|---|---|
+| $\mathbb{Z}$ | $\mathbb{Z}/12\mathbb{Z}$ | 12 |
+| $2\mathbb{Z}$ | $2\mathbb{Z}/12\mathbb{Z} = \langle \bar{2} \rangle$ | 6 |
+| $3\mathbb{Z}$ | $3\mathbb{Z}/12\mathbb{Z} = \langle \bar{3} \rangle$ | 4 |
+| $4\mathbb{Z}$ | $4\mathbb{Z}/12\mathbb{Z} = \langle \bar{4} \rangle$ | 3 |
+| $6\mathbb{Z}$ | $6\mathbb{Z}/12\mathbb{Z} = \langle \bar{6} \rangle$ | 2 |
+| $12\mathbb{Z}$ | $\{\bar{0}\}$ | 1 |
+
+This recovers the well-known fact: subgroups of $\mathbb{Z}/n\mathbb{Z}$ biject with divisors of $n$.
+</Example>
+
+<Example id="z36-mod6" title="Subgroups of Z/36Z containing 6Z/36Z">
+The subgroups of $\mathbb{Z}/36\mathbb{Z}$ that contain $\langle \bar{6} \rangle = 6\mathbb{Z}/36\mathbb{Z}$ correspond to subgroups $d\mathbb{Z}$ of $\mathbb{Z}$ with $6\mathbb{Z} \leq d\mathbb{Z} \leq \mathbb{Z}$, i.e., $d \mid 6$. So $d \in \{1, 2, 3, 6\}$, giving four subgroups:
+
+$$\mathbb{Z}/36\mathbb{Z}, \quad \langle \bar{2} \rangle, \quad \langle \bar{3} \rangle, \quad \langle \bar{6} \rangle.$$
+
+The quotient $(\mathbb{Z}/36\mathbb{Z})/\langle \bar{6} \rangle \cong \mathbb{Z}/6\mathbb{Z}$, and the subgroups of $\mathbb{Z}/6\mathbb{Z}$ are $\langle \bar{1} \rangle, \langle \bar{2} \rangle, \langle \bar{3} \rangle, \langle \bar{0} \rangle$ — exactly four, matching.
+</Example>
+
+<Example id="s3-a3-correspondence" title="Correspondence for S₃/A₃">
+$A_3 \trianglelefteq S_3$. The subgroups of $S_3$ containing $A_3$ are: $A_3$ and $S_3$ (since $A_3$ has index 2, there is no subgroup strictly between them).
+
+The quotient $S_3/A_3 \cong \mathbb{Z}/2\mathbb{Z}$ has subgroups $\{\bar{0}\}$ and $\mathbb{Z}/2\mathbb{Z}$ — exactly two, matching the correspondence.
+</Example>
+
+<Example id="s4-v4-correspondence" title="Correspondence for S₄/V₄">
+$V_4 \trianglelefteq S_4$, $S_4/V_4 \cong S_3$. The subgroups of $S_3$ are $\{e\}$, three copies of $\mathbb{Z}/2\mathbb{Z}$, one $A_3 \cong \mathbb{Z}/3\mathbb{Z}$, and $S_3$ — six in total.
+
+By correspondence, there are exactly six subgroups of $S_4$ containing $V_4$. These are:
+- $V_4$ (corresponding to $\{e\}$ in $S_3$)
+- $D_4^{(1)}, D_4^{(2)}, D_4^{(3)}$ — three copies of $D_4$ of order 8 (corresponding to the three $\mathbb{Z}/2\mathbb{Z}$'s)
+- $A_4$ of order 12 (corresponding to $A_3$)
+- $S_4$ (corresponding to $S_3$)
+</Example>
+
+<Example id="normal-correspondence" title="Normal subgroups correspond">
+The normal subgroups of $G/N$ are exactly $M/N$ where $M \trianglelefteq G$ and $N \leq M$. For example:
+
+In $S_4$, the normal subgroups are $\{e\}, V_4, A_4, S_4$. The normal subgroups of $S_4$ containing $V_4$ are $V_4, A_4, S_4$. So the normal subgroups of $S_4/V_4 \cong S_3$ are $\{e\}, A_3, S_3$ — which is correct.
+</Example>
+
+---
+
+## Application: counting subgroups
+
+<Example id="counting-z-pq" title="Subgroups of Z/pqZ">
+For distinct primes $p, q$: the subgroups of $\mathbb{Z}/pq\mathbb{Z}$ are $\langle \bar{d} \rangle$ for $d \mid pq$, i.e., $d \in \{1, p, q, pq\}$. There are exactly 4 subgroups, forming the lattice:
+
+$$\mathbb{Z}/pq\mathbb{Z}$$
+$$\;/\;\qquad\;\backslash$$
+$$\langle \bar{p} \rangle \qquad\quad \langle \bar{q} \rangle$$
+$$\;\backslash\;\qquad\;/$$
+$$\{\bar{0}\}$$
+</Example>
+
+<Example id="index-preserving" title="Index is preserved">
+If $N \leq H \leq G$ with $N \trianglelefteq G$, then $[G : H] = [G/N : H/N]$.
+
+For $G = \mathbb{Z}$, $N = 12\mathbb{Z}$, $H = 4\mathbb{Z}$: $[\mathbb{Z} : 4\mathbb{Z}] = 4$ and $[\mathbb{Z}/12\mathbb{Z} : 4\mathbb{Z}/12\mathbb{Z}] = 12/3 = 4$. Check.
+</Example>
+
+---
+
+## Connection to the third isomorphism theorem
+
+<Remark title="Third isomorphism theorem as consequence">
+The correspondence theorem implies the third isomorphism theorem. If $N \leq M$ with both normal in $G$, then $M/N \trianglelefteq G/N$ by the correspondence, and the quotient $(G/N)/(M/N)$ has order $[G/N : M/N] = [G : M] = |G/M|$. The natural map $(G/N)/(M/N) \to G/M$ given by $(gN)(M/N) \mapsto gM$ is the desired isomorphism.
+</Remark>
+
+<Example id="chain-quotients" title="A chain of quotients">
+Consider $\mathbb{Z} \supset 2\mathbb{Z} \supset 6\mathbb{Z} \supset 12\mathbb{Z}$. Quotienting by $12\mathbb{Z}$:
+
+$$\mathbb{Z}/12\mathbb{Z} \supset 2\mathbb{Z}/12\mathbb{Z} \supset 6\mathbb{Z}/12\mathbb{Z} \supset \{\bar{0}\}.$$
+
+By the third isomorphism theorem:
+- $(\mathbb{Z}/12\mathbb{Z})/(2\mathbb{Z}/12\mathbb{Z}) \cong \mathbb{Z}/2\mathbb{Z}$
+- $(2\mathbb{Z}/12\mathbb{Z})/(6\mathbb{Z}/12\mathbb{Z}) \cong 2\mathbb{Z}/6\mathbb{Z} \cong \mathbb{Z}/3\mathbb{Z}$
+- $6\mathbb{Z}/12\mathbb{Z} \cong \mathbb{Z}/2\mathbb{Z}$
+
+So $|\mathbb{Z}/12\mathbb{Z}| = 2 \cdot 3 \cdot 2 = 12$. The quotient "factors" through the chain of normal subgroups.
+</Example>
+
+<Example id="q8-correspondence" title="Correspondence for Q₈/Z(Q₈)">
+$Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$, $Z(Q_8) = \{1, -1\}$, $Q_8/Z(Q_8) \cong V_4$ (Klein four-group). The subgroups of $V_4$ are $\{e\}$, three copies of $\mathbb{Z}/2\mathbb{Z}$, and $V_4$ itself — five total.
+
+By correspondence, the subgroups of $Q_8$ containing $Z(Q_8)$ are: $Z(Q_8)$, $\langle i \rangle = \{1, -1, i, -i\}$, $\langle j \rangle = \{1, -1, j, -j\}$, $\langle k \rangle = \{1, -1, k, -k\}$, and $Q_8$ — exactly five.
+</Example>
+
+<Example id="dn-correspondence" title="Correspondence for D_n/⟨r⟩ when n is odd">
+For odd $n$, the rotation subgroup $\langle r \rangle \cong \mathbb{Z}/n\mathbb{Z}$ is the unique subgroup of index 2, hence normal. The quotient $D_n/\langle r \rangle \cong \mathbb{Z}/2\mathbb{Z}$ has only two subgroups: $\{e\}$ and $\mathbb{Z}/2\mathbb{Z}$.
+
+By correspondence, the subgroups of $D_n$ containing $\langle r \rangle$ are: $\langle r \rangle$ and $D_n$ — exactly two. This confirms that there is no subgroup strictly between $\langle r \rangle$ and $D_n$ (which is clear since the index is prime).
+</Example>
+
+<Example id="maximal-correspondence" title="Maximal subgroups via correspondence">
+A subgroup $M$ is **maximal** in $G$ if $M < G$ and there is no subgroup strictly between $M$ and $G$. By the correspondence theorem: maximal subgroups of $G$ containing $N$ correspond bijectively to maximal subgroups of $G/N$.
+
+For $G = \mathbb{Z}$ and $N = 30\mathbb{Z}$: the maximal subgroups of $\mathbb{Z}/30\mathbb{Z}$ are $\langle \bar{2} \rangle, \langle \bar{3} \rangle, \langle \bar{5} \rangle$ (of index 2, 3, 5 respectively). These correspond to $2\mathbb{Z}, 3\mathbb{Z}, 5\mathbb{Z}$ in $\mathbb{Z}$ — the maximal subgroups containing $30\mathbb{Z}$.
+</Example>
+
+<Example id="simple-correspondence" title="Simple quotients">
+$G/N$ is **simple** (has no nontrivial proper normal subgroups) if and only if there is no normal subgroup $M$ of $G$ with $N \subsetneq M \subsetneq G$. By the correspondence theorem, this means $N$ is a **maximal normal subgroup** of $G$.
+
+For $G = S_4$, $N = V_4$: $S_4/V_4 \cong S_3$, which is not simple ($A_3 \trianglelefteq S_3$). Indeed, $A_4$ is a normal subgroup of $S_4$ with $V_4 \subsetneq A_4 \subsetneq S_4$.
+
+For $G = S_4$, $N = A_4$: $S_4/A_4 \cong \mathbb{Z}/2\mathbb{Z}$, which is simple. Indeed, $A_4$ is a maximal normal subgroup of $S_4$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. The correspondence theorem gives a **bijection** between subgroups of $G/N$ and subgroups of $G$ containing $N$.
+2. The bijection preserves inclusion, normality, index, meets, and joins — it is a **lattice isomorphism**.
+3. This is the essential tool for understanding the structure of quotient groups in terms of the original group.
+4. Combined with the isomorphism theorems, it provides a complete picture of how subgroups, normal subgroups, and quotients interact.
+</Remark>

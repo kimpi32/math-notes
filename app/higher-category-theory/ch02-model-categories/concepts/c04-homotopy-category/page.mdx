@@ -1,0 +1,178 @@
+export const metadata = {
+  title: 'Homotopy Category Ho(M) — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Concept — Homotopy Category Ho(M)" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Homotopy Category Ho(M)
+
+The homotopy category $\operatorname{Ho}(\mathcal{M})$ of a model category $\mathcal{M}$ is obtained by formally inverting all weak equivalences. It is the "shadow" of the full homotopy theory that can be captured by an ordinary category. While $\operatorname{Ho}(\mathcal{M})$ loses higher homotopical information (composition of homotopy classes, mapping spaces), it is computable and captures essential invariants like homotopy groups and homology.
+
+---
+
+## Construction
+
+<Definition title="Homotopy category" number="2.1">
+The **homotopy category** $\operatorname{Ho}(\mathcal{M})$ of a model category $\mathcal{M}$ is the localization $\mathcal{M}[\mathcal{W}^{-1}]$: the category obtained by formally inverting all weak equivalences.
+
+Concretely, $\operatorname{Ho}(\mathcal{M})$ has the same objects as $\mathcal{M}$, and morphisms from $X$ to $Y$ are equivalence classes of zigzags $X \xleftarrow{\sim} \cdot \to \cdot \xleftarrow{\sim} \cdots \to Y$ where backward arrows are weak equivalences.
+
+The model structure provides a much more tractable description: for **bifibrant** objects $X$ and $Y$,
+
+$$\operatorname{Hom}_{\operatorname{Ho}(\mathcal{M})}(X, Y) = [X, Y] = \operatorname{Hom}_{\mathcal{M}}(X, Y) / \text{homotopy}$$
+
+where the homotopy relation uses cylinder or path objects.
+</Definition>
+
+<Definition title="Left and right homotopy" number="2.2">
+Let $f, g: X \to Y$ be two morphisms in $\mathcal{M}$.
+
+A **left homotopy** from $f$ to $g$ is a map $H: X \otimes I \to Y$ (where $X \otimes I$ is a cylinder object for $X$) such that $H \circ i_0 = f$ and $H \circ i_1 = g$.
+
+A **right homotopy** from $f$ to $g$ is a map $H: X \to Y^I$ (where $Y^I$ is a path object for $Y$) such that $p_0 \circ H = f$ and $p_1 \circ H = g$.
+
+When $X$ is cofibrant and $Y$ is fibrant, left and right homotopy coincide and define an equivalence relation. The set of equivalence classes is denoted $[X, Y]$.
+</Definition>
+
+---
+
+## Examples
+
+<Example id="ho-top" title="Ho(Top): the classical homotopy category">
+$\operatorname{Ho}(\mathbf{Top})$ has objects all topological spaces and morphisms are homotopy classes of maps between CW replacements:
+
+$$\operatorname{Hom}_{\operatorname{Ho}(\mathbf{Top})}(X, Y) = [QX, Y]$$
+
+where $QX$ is a CW approximation of $X$. For CW complexes $X$ and $Y$, this is simply $[X, Y]$, the set of homotopy classes of continuous maps.
+
+Since all spaces are fibrant in $\mathbf{Top}$, we only need cofibrant replacement.
+</Example>
+
+<Example id="ho-sset" title="Ho(sSet): the simplicial homotopy category">
+$\operatorname{Ho}(\mathbf{sSet})$ has morphisms computed as $[X, RY]$ where $RY$ is a fibrant replacement (Kan complex approximation) of $Y$. Since all simplicial sets are cofibrant, we only need fibrant replacement.
+
+For Kan complexes $X$ and $Y$: $\operatorname{Hom}_{\operatorname{Ho}(\mathbf{sSet})}(X, Y) = \pi_0(\operatorname{Map}(X, Y))$, the connected components of the mapping space (simplicial function complex).
+</Example>
+
+<Example id="ho-chain" title="Ho(Ch(R)): the derived category">
+$\operatorname{Ho}(\mathbf{Ch}(R))$ is the **derived category** $D(R)$. Morphisms are computed via projective or injective resolutions:
+
+$$\operatorname{Hom}_{D(R)}(C, D) = [PC, D] = [C, ID]$$
+
+where $PC$ is a projective resolution and $ID$ is an injective resolution.
+
+This recovers the classical derived category construction via chain homotopy classes of maps between resolutions.
+</Example>
+
+<Example id="ho-pointed" title="Pointed homotopy category">
+For a pointed model category $\mathcal{M}_*$ (with a zero object), $\operatorname{Ho}(\mathcal{M}_*)$ is a pointed category with suspension and loop functors:
+
+$$\Sigma X = X \otimes S^1 = \operatorname{cofib}(X \to *), \quad \Omega Y = Y^{S^1} = \operatorname{fib}(* \to Y)$$
+
+These satisfy $[\Sigma X, Y] \cong [X, \Omega Y]$ (the loop-suspension adjunction in the homotopy category).
+</Example>
+
+---
+
+## Total Derived Functors
+
+<Definition title="Total derived functors" number="2.3">
+Let $F: \mathcal{M} \to \mathcal{N}$ be a functor between model categories. The **total left derived functor** $\mathbf{L}F: \operatorname{Ho}(\mathcal{M}) \to \operatorname{Ho}(\mathcal{N})$ is defined by
+
+$$\mathbf{L}F(X) = F(QX)$$
+
+where $QX$ is a cofibrant replacement of $X$. The **total right derived functor** is $\mathbf{R}F(X) = F(RX)$ where $RX$ is a fibrant replacement.
+
+These are well-defined when $F$ preserves weak equivalences between cofibrant (resp. fibrant) objects.
+</Definition>
+
+<Example id="derived-tensor" title="Derived tensor product">
+For a ring $R$, the tensor product $- \otimes_R M: \mathbf{Ch}(R) \to \mathbf{Ch}(R)$ does not preserve quasi-isomorphisms in general. Its left derived functor is:
+
+$$\mathbf{L}(- \otimes_R M)(C) = PC \otimes_R M$$
+
+where $PC$ is a projective resolution. The homology $H_n(PC \otimes_R M) = \operatorname{Tor}_n^R(C, M)$ recovers the classical Tor functors.
+</Example>
+
+<Example id="derived-hom" title="Derived Hom">
+The internal Hom $\operatorname{Hom}_R(-, M)$ has right derived functor:
+
+$$\mathbf{R}\operatorname{Hom}_R(C, M) = \operatorname{Hom}_R(C, IM)$$
+
+where $IM$ is an injective resolution. Its cohomology $H^n(\operatorname{Hom}_R(C, IM)) = \operatorname{Ext}^n_R(C, M)$ recovers the classical Ext functors.
+</Example>
+
+<Example id="derived-global-sections" title="Derived global sections">
+For a scheme $X$ and a sheaf $\mathcal{F}$, the global sections functor $\Gamma(X, -)$ has right derived functor $\mathbf{R}\Gamma(X, \mathcal{F})$, computed via injective resolution. The cohomology $H^n(X, \mathcal{F}) = R^n\Gamma(X, \mathcal{F})$ is sheaf cohomology.
+</Example>
+
+---
+
+## Limitations of the Homotopy Category
+
+<Example id="ho-loses-info" title="Information lost by Ho(M)">
+The homotopy category $\operatorname{Ho}(\mathcal{M})$ loses crucial higher homotopical information:
+
+1. **Mapping spaces**: $\operatorname{Ho}(\mathcal{M})$ only records $\pi_0$ of the mapping spaces, not the full mapping space. The composition $[X, Y] \times [Y, Z] \to [X, Z]$ forgets the homotopy-coherent composition.
+
+2. **Homotopy limits/colimits**: The homotopy category does not have good limits and colimits. Homotopy pullbacks in $\operatorname{Ho}(\mathcal{M})$ do not satisfy the universal property of pullbacks.
+
+3. **Obstruction theory**: Higher obstructions to lifting/extending maps require mapping space data, not just homotopy classes.
+
+This is the fundamental motivation for $\infty$-categories: they capture the full mapping spaces, not just $\pi_0$.
+</Example>
+
+<Example id="ho-non-additive" title="Ho(Top) is not abelian">
+The homotopy category $\operatorname{Ho}(\mathbf{Top}_*)$ of pointed spaces is not abelian and not even additive in general. However, for stable homotopy theory ($\operatorname{Ho}(\mathbf{Sp})$ for spectra), the homotopy category is triangulated. This triangulated structure is a remnant of the richer stable $\infty$-categorical structure.
+</Example>
+
+<Example id="mapping-space-vs-ho" title="Mapping space vs. Hom in Ho">
+Consider $X = S^2$ and $Y = S^2$ in $\mathbf{Top}$. The set $[S^2, S^2] = \mathbb{Z}$ (classified by degree). But the full mapping space $\operatorname{Map}(S^2, S^2)$ has infinitely many connected components (one for each degree), and the component of degree-$n$ maps has nontrivial homotopy groups related to the homotopy groups of $S^2$.
+
+The homotopy category sees only $\pi_0 = \mathbb{Z}$, losing all this higher information. An $\infty$-category retains the full mapping space.
+</Example>
+
+---
+
+## The Localization Functor
+
+<Example id="localization-functor" title="The localization functor gamma">
+The localization functor $\gamma: \mathcal{M} \to \operatorname{Ho}(\mathcal{M})$ is the identity on objects and sends each morphism to its homotopy class (after fibrant-cofibrant replacement). It is universal among functors inverting weak equivalences:
+
+For any functor $F: \mathcal{M} \to \mathcal{D}$ sending weak equivalences to isomorphisms, there exists a unique functor $\overline{F}: \operatorname{Ho}(\mathcal{M}) \to \mathcal{D}$ with $F = \overline{F} \circ \gamma$.
+
+This universal property justifies the homotopy category as the "best ordinary category approximation" to the homotopy theory of $\mathcal{M}$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The homotopy category captures the essence of homotopy theory at the cost of higher information:
+
+1. $\operatorname{Ho}(\mathcal{M}) = \mathcal{M}[\mathcal{W}^{-1}]$ is obtained by **inverting weak equivalences**.
+
+2. Between bifibrant objects, morphisms in $\operatorname{Ho}(\mathcal{M})$ are **homotopy classes** $[X, Y]$.
+
+3. **Derived functors** live on the homotopy category, computed via cofibrant/fibrant replacement.
+
+4. The homotopy category **loses** mapping space information, homotopy limits/colimits, and higher coherences.
+
+5. This limitation motivates **$\infty$-categories**, which capture the full homotopy-coherent structure that $\operatorname{Ho}(\mathcal{M})$ can only partially represent.
+</Remark>

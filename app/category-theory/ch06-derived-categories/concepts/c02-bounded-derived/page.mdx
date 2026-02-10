@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'Bounded Derived Categories — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Concept — Bounded Derived Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Bounded Derived Categories
+
+The bounded derived categories $D^b$, $D^+$, $D^-$ restrict attention to complexes with bounded cohomology. The bounded derived category $D^b(\mathcal{A})$ is the most commonly used variant, especially in algebraic geometry where one works with $D^b(\mathrm{Coh}(X))$.
+
+---
+
+## Definitions
+
+<Definition title="Bounded Derived Categories" number="6.3">
+For an abelian category $\mathcal{A}$:
+
+- $D^+(\mathcal{A})$: full subcategory of complexes $A^\bullet$ with $H^n(A) = 0$ for $n \ll 0$ (**bounded below** cohomology).
+- $D^-(\mathcal{A})$: complexes with $H^n(A) = 0$ for $n \gg 0$ (**bounded above** cohomology).
+- $D^b(\mathcal{A})$: complexes with $H^n(A) = 0$ for $|n| \gg 0$ (**bounded** cohomology).
+
+Each is a full triangulated subcategory of $D(\mathcal{A})$.
+</Definition>
+
+<Remark title="Bounded complexes vs bounded cohomology">
+$D^b(\mathcal{A})$ consists of complexes with bounded cohomology, not necessarily bounded complexes. However, if $\mathcal{A}$ has enough injectives/projectives, every object of $D^b(\mathcal{A})$ is isomorphic to a bounded complex (of injectives/projectives).
+</Remark>
+
+---
+
+## Examples
+
+<Example title="D^b(Vect_k)" id="db-vect">
+In $D^b(\mathbf{Vect}_k)$, every complex is isomorphic to $\bigoplus_n H^n[-n]$ (the direct sum of its cohomology, placed in the correct degrees). This is because every short exact sequence of vector spaces splits.
+</Example>
+
+<Example title="D^b(Coh(X)) for a smooth variety" id="db-coh">
+$D^b(\mathrm{Coh}(X))$ for a smooth projective variety is the primary object of study in derived algebraic geometry. It has Serre duality, and its autoequivalence group is an important invariant.
+</Example>
+
+<Example title="D^+(Sh(X)) and sheaf cohomology" id="dplus-sh">
+$D^+(\mathbf{Sh}(X))$ is the natural home for sheaf cohomology. The derived global sections $R\Gamma : D^+(\mathbf{Sh}(X)) \to D^+(\mathbf{Ab})$ is the total derived functor of $\Gamma$.
+</Example>
+
+<Example title="D^b(R-mod) for hereditary R" id="db-hereditary">
+If $R$ is a hereditary ring (global dimension $\leq 1$), every complex in $D^b(R\text{-}\mathrm{mod})$ is isomorphic to a direct sum of shifted modules. The derived category decomposes as a direct sum of copies of module categories.
+</Example>
+
+<Example title="D^b(Ab)" id="db-ab">
+Since $\mathbb{Z}$ is a PID (hereditary), every complex in $D^b(\mathbf{Ab})$ is formal: $A^\bullet \cong \bigoplus_n H^n(A)[-n]$. This fails for more general rings.
+</Example>
+
+<Example title="D^b with non-formal complexes" id="non-formal">
+Over $R = k[x]/(x^2)$, the complex $\cdots \to R \xrightarrow{x} R \xrightarrow{x} R \to \cdots$ has cohomology $k$ in every degree but is not formal (not isomorphic in $D^b$ to $\bigoplus k[-n]$). The $A_\infty$-structure on cohomology detects this non-formality.
+</Example>
+
+<Example title="Compact objects in D(R)" id="compact">
+The compact objects of $D(R)$ are precisely the perfect complexes: bounded complexes of finitely generated projective modules. These form $D^b(\mathrm{proj}\text{-}R) = \mathrm{Perf}(R) \subseteq D^b(R)$.
+</Example>
+
+<Example title="D^b and K-theory" id="k-theory">
+$K_0(D^b(\mathcal{A})) \cong K_0(\mathcal{A})$ for an abelian category $\mathcal{A}$: the Grothendieck group of the bounded derived category equals that of the abelian category. The relation $[Y] = [X] + [Z]$ from triangles corresponds to additivity of Euler characteristic.
+</Example>
+
+<Example title="D^b of an abelian category with enough injectives" id="enough-inj">
+If $\mathcal{A}$ has enough injectives, $D^+(\mathcal{A}) \simeq K^+(\mathrm{Inj}\, \mathcal{A})$: bounded below derived category is equivalent to the homotopy category of bounded below injective complexes. Similarly, $D^-(\mathcal{A}) \simeq K^-(\mathrm{Proj}\, \mathcal{A})$ when enough projectives exist.
+</Example>
+
+<Example title="Truncation functors" id="truncation">
+The canonical truncation functors $\tau_{\leq n}, \tau_{\geq n}$ on $D(\mathcal{A})$ restrict to endofunctors of $D^b(\mathcal{A})$. They satisfy $\tau_{\leq n} \circ \tau_{\geq m} = 0$ for $m > n$ and form part of the [t-structure](/category-theory/ch06-derived-categories/concepts/c03-t-structure) data.
+</Example>
+
+<Example title="Derived equivalences preserve D^b" id="derived-equiv">
+An exact equivalence $F : D^b(\mathcal{A}) \to D^b(\mathcal{B})$ sends bounded complexes to bounded complexes. Fourier-Mukai equivalences and tilting equivalences preserve boundedness.
+</Example>
+
+<Example title="Embedding of D^b into D" id="embedding-db">
+$D^b(\mathcal{A}) \hookrightarrow D(\mathcal{A})$ is a full triangulated subcategory. For well-behaved categories (Grothendieck abelian categories), $D^b$ contains all the "finitary" information.
+</Example>
+
+---
+
+<Theorem title="Resolution model for bounded categories" number="6.2">
+If $\mathcal{A}$ has enough injectives:
+
+$$D^+(\mathcal{A}) \simeq K^+(\mathrm{Inj}\, \mathcal{A})$$
+
+If $\mathcal{A}$ has enough projectives:
+
+$$D^-(\mathcal{A}) \simeq K^-(\mathrm{Proj}\, \mathcal{A})$$
+
+These equivalences allow computation: to compute $\mathrm{Hom}_{D^+}(A, B)$, replace $B$ by an injective resolution $I_B$ and compute $\mathrm{Hom}_{K^+}(A, I_B)$.
+</Theorem>
+
+<Remark title="Looking ahead">
+The bounded derived category $D^b(\mathcal{A})$ carries a natural [t-structure](/category-theory/ch06-derived-categories/concepts/c03-t-structure) whose [heart](/category-theory/ch06-derived-categories/concepts/c04-heart) recovers $\mathcal{A}$. Different t-structures on $D^b(\mathcal{A})$ give different abelian categories (e.g., perverse sheaves), providing a powerful tool for constructing new abelian categories from old ones.
+</Remark>

@@ -1,0 +1,152 @@
+export const metadata = {
+  title: '중간값 정리의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "증명 - 중간값 정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 중간값 정리의 증명 (Proof of the Intermediate Value Theorem)
+
+We present the standard proof using the completeness of $\mathbb{R}$ (via the least upper bound property). A bisection-based proof is also discussed.
+
+---
+
+## Theorem restated
+
+<Theorem title="Intermediate Value Theorem">
+Let $f : [a, b] \to \mathbb{R}$ be continuous with $f(a) < 0 < f(b)$. Then there exists $c \in (a, b)$ with $f(c) = 0$.
+</Theorem>
+
+<Remark>
+The general case ($f(a) < v < f(b)$) reduces to this by considering $g(x) = f(x) - v$. The case $f(a) > 0 > f(b)$ reduces to applying the theorem to $-f$.
+</Remark>
+
+---
+
+## Proof via the least upper bound
+
+<Proof>
+**Define the set.** Let
+
+$$S = \{x \in [a, b] : f(x) < 0\}.$$
+
+$S$ is nonempty since $a \in S$ (as $f(a) < 0$), and $S$ is bounded above by $b$.
+
+**Apply completeness.** By the least upper bound property, $c = \sup S$ exists and $a \leq c \leq b$.
+
+**Show $f(c) = 0$.** We prove this by ruling out $f(c) > 0$ and $f(c) < 0$.
+
+*Case 1: $f(c) > 0$.* By continuity, there exists $\delta > 0$ such that $f(x) > 0$ for all $x \in (c - \delta, c + \delta) \cap [a, b]$. In particular, $f(x) > 0$ for all $x \in (c - \delta, c]$, which means no point of $(c - \delta, c]$ belongs to $S$. So $c - \delta$ is an upper bound for $S$, contradicting $c = \sup S$.
+
+*Case 2: $f(c) < 0$.* By continuity, there exists $\delta > 0$ such that $f(x) < 0$ for all $x \in (c - \delta, c + \delta) \cap [a, b]$. In particular, $c + \delta/2 \in S$ (assuming $c + \delta/2 \leq b$; if $c = b$ then $f(b) < 0$, contradicting $f(b) > 0$). But $c + \delta/2 > c = \sup S$, a contradiction.
+
+Since neither $f(c) > 0$ nor $f(c) < 0$ is possible, we conclude $f(c) = 0$.
+</Proof>
+
+---
+
+## Alternative proof: Bisection method
+
+<Proof>
+**Bisection construction.** Set $a_0 = a$, $b_0 = b$. At each step:
+- Compute $m_n = \frac{a_n + b_n}{2}$.
+- If $f(m_n) = 0$, we are done.
+- If $f(m_n) < 0$, set $a_{n+1} = m_n$, $b_{n+1} = b_n$.
+- If $f(m_n) > 0$, set $a_{n+1} = a_n$, $b_{n+1} = m_n$.
+
+At each step, $f(a_n) \leq 0$ and $f(b_n) \geq 0$, and $b_n - a_n = (b - a)/2^n$.
+
+**Convergence.** $(a_n)$ is increasing and bounded above by $b$. $(b_n)$ is decreasing and bounded below by $a$. By the Monotone Convergence Theorem, both converge. Since $b_n - a_n \to 0$, they converge to the same limit $c$.
+
+**$f(c) = 0$.** By continuity, $f(c) = \lim f(a_n) \leq 0$ and $f(c) = \lim f(b_n) \geq 0$. So $f(c) = 0$.
+</Proof>
+
+---
+
+## Analysis of the proofs
+
+<Remark>
+Both proofs use the completeness of $\mathbb{R}$:
+- **Supremum proof**: uses the least upper bound property directly.
+- **Bisection proof**: uses the Monotone Convergence Theorem (equivalent to completeness).
+
+The bisection proof is more constructive and gives an **algorithm** for finding $c$.
+</Remark>
+
+---
+
+## Verifying the proof with examples
+
+<Example title="Finding sqrt(2)">
+1. $f(x) = x^2 - 2$ on $[1, 2]$. $S = \{x \in [1,2] : x^2 < 2\}$. We have $\sup S = \sqrt{2}$, and $f(\sqrt{2}) = 0$.
+
+Bisection: $m_0 = 1.5$, $f(1.5) = 0.25 > 0$, so $[1, 1.5]$. $m_1 = 1.25$, $f(1.25) = -0.4375 < 0$, so $[1.25, 1.5]$. Continuing: $1.375, 1.4375, \ldots \to \sqrt{2}$.
+</Example>
+
+<Example title="Finding the Dottie number">
+2. $f(x) = \cos x - x$ on $[0, 1]$. $f(0) = 1 > 0$, $f(1) = \cos 1 - 1 < 0$. Consider $g = -f$, so $g(0) < 0 < g(1)$. Bisection gives $c \approx 0.7391$.
+</Example>
+
+<Example title="Polynomial root">
+3. $f(x) = x^3 - x - 1$ on $[1, 2]$. $f(1) = -1 < 0$, $f(2) = 5 > 0$. $S = \{x \in [1,2] : x^3 - x - 1 < 0\}$, $\sup S \approx 1.3247$ is the unique real root.
+</Example>
+
+---
+
+## Why the IVT fails in Q
+
+<Example title="Failure in Q">
+4. Define $f : \mathbb{Q} \cap [0, 2] \to \mathbb{Q}$ by $f(x) = x^2 - 2$. Then $f(1) = -1 < 0$ and $f(2) = 2 > 0$. But there is no $c \in \mathbb{Q}$ with $f(c) = 0$, since $\sqrt{2} \notin \mathbb{Q}$.
+
+The proof fails because $\sup S$ may not be rational. Completeness of $\mathbb{R}$ is essential.
+</Example>
+
+---
+
+## Refinements and consequences
+
+<Example title="IVT for derivatives (Darboux's theorem)">
+5. Derivatives need not be continuous, but they always satisfy the intermediate value property! If $f$ is differentiable on $[a,b]$ and $f'(a) < v < f'(b)$, there exists $c$ with $f'(c) = v$. This is **Darboux's theorem**, which is **not** a consequence of the IVT (since $f'$ may be discontinuous).
+</Example>
+
+<Example title="Connected sets">
+6. The IVT is equivalent to: the continuous image of an interval is an interval. More abstractly, continuous functions preserve **connectedness**. The IVT is the one-dimensional manifestation of this topological fact.
+</Example>
+
+<Example title="No continuous injection from [0,1] to R with disconnected image">
+7. If $f : [0,1] \to \mathbb{R}$ is continuous, the image $f([0,1])$ is an interval (connected). So a continuous function on an interval cannot "skip" values.
+</Example>
+
+<Example title="Surjectivity of continuous functions on R">
+8. If $f : \mathbb{R} \to \mathbb{R}$ is continuous with $\lim_{x \to \infty} f(x) = +\infty$ and $\lim_{x \to -\infty} f(x) = -\infty$, then $f$ is surjective (by IVT on intervals $[-N, N]$ for large $N$).
+</Example>
+
+<Example title="Existence of n-th roots">
+9. For $a > 0$ and $n \in \mathbb{N}$, the function $f(x) = x^n$ is continuous on $[0, a+1]$ with $f(0) = 0$ and $f(a+1) > a$. By IVT, there exists $c$ with $c^n = a$. This proves the existence of $a^{1/n}$.
+</Example>
+
+<Example title="Intermediate value for integrals">
+10. If $f : [a,b] \to \mathbb{R}$ is continuous, then $\frac{1}{b-a}\int_a^b f(x)\,dx$ lies between $\min f$ and $\max f$. By IVT, there exists $c \in [a,b]$ with $f(c) = \frac{1}{b-a}\int_a^b f(x)\,dx$ (the Mean Value Theorem for integrals).
+</Example>
+
+<Example title="Brouwer fixed point in 1D">
+11. The 1D Brouwer fixed point theorem ($f : [0,1] \to [0,1]$ continuous implies $f$ has a fixed point) is a direct consequence of the IVT, as shown in the [IVT theorem page](/analysis/ch04-continuity/theorems/t01-ivt).
+</Example>
+
+<Example title="Rate of convergence of bisection">
+12. After $n$ bisection steps, the root is localized to an interval of length $\frac{b-a}{2^n}$. For $\varepsilon$-accuracy, we need $n \geq \log_2\frac{b-a}{\varepsilon}$ steps. This is linear convergence. Newton's method converges quadratically but requires differentiability.
+</Example>

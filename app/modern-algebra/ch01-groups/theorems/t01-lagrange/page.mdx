@@ -1,0 +1,222 @@
+export const metadata = {
+  title: "Lagrange's Theorem — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Theorem — Lagrange's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Lagrange's Theorem
+
+Lagrange's theorem is the most fundamental counting result in finite group theory. It relates the size of a subgroup to the size of the whole group through the concept of cosets.
+
+---
+
+## Cosets
+
+<Definition title="Left and right cosets" number="1.15">
+Let $H \leq G$ and $g \in G$. The **left coset** of $H$ containing $g$ is:
+
+$$gH = \{gh : h \in H\}$$
+
+The **right coset** of $H$ containing $g$ is:
+
+$$Hg = \{hg : h \in H\}$$
+</Definition>
+
+<Example id="cosets-z6" title="Cosets in Z/6Z">
+In $G = \mathbb{Z}/6\mathbb{Z}$ with $H = \{0, 3\} = \langle 3 \rangle$:
+
+- $0 + H = \{0, 3\}$
+- $1 + H = \{1, 4\}$
+- $2 + H = \{2, 5\}$
+- $3 + H = \{3, 0\} = 0 + H$
+
+There are 3 distinct cosets, and $[G : H] = 6/2 = 3$.
+</Example>
+
+<Example id="cosets-s3" title="Cosets in S_3">
+In $G = S_3$ with $H = \{e, (1\;2)\}$:
+
+**Left cosets:**
+
+- $eH = \{e, (1\;2)\}$
+- $(1\;3)H = \{(1\;3), (1\;3)(1\;2)\} = \{(1\;3), (1\;2\;3)\}$
+- $(2\;3)H = \{(2\;3), (2\;3)(1\;2)\} = \{(2\;3), (1\;3\;2)\}$
+
+**Right cosets:**
+
+- $He = \{e, (1\;2)\}$
+- $H(1\;3) = \{(1\;3), (1\;2)(1\;3)\} = \{(1\;3), (1\;3\;2)\}$
+- $H(2\;3) = \{(2\;3), (1\;2)(2\;3)\} = \{(2\;3), (1\;2\;3)\}$
+
+Notice that the left and right cosets are **different** (e.g., $(1\;3)H \neq H(1\;3)$). This happens because $H$ is not a normal subgroup of $S_3$.
+</Example>
+
+<Theorem title="Properties of cosets" number="1.25">
+Let $H \leq G$.
+
+1. Every element of $G$ belongs to exactly one left coset of $H$.
+2. Two left cosets are either **identical** or **disjoint**: $aH = bH$ iff $b^{-1}a \in H$.
+3. Every left coset has the same cardinality as $H$: $|aH| = |H|$.
+4. The left cosets of $H$ **partition** $G$.
+</Theorem>
+
+<Proof>
+(3) The map $h \mapsto ah$ is a bijection from $H$ to $aH$ (with inverse $x \mapsto a^{-1}x$), so $|aH| = |H|$.
+
+(2) If $aH \cap bH \neq \varnothing$, then $ah_1 = bh_2$ for some $h_1, h_2 \in H$, so $b^{-1}a = h_2h_1^{-1} \in H$. Then for any $h \in H$: $ah = b(b^{-1}a)h \in bH$, giving $aH \subseteq bH$. By symmetry, $bH \subseteq aH$.
+</Proof>
+
+<Definition title="Index of a subgroup" number="1.16">
+The **index** of $H$ in $G$, denoted $[G : H]$, is the number of distinct left cosets of $H$ in $G$.
+</Definition>
+
+---
+
+## Statement
+
+<Theorem title="Lagrange's Theorem" number="1.26">
+If $G$ is a finite group and $H \leq G$, then:
+
+$$|G| = [G : H] \cdot |H|$$
+
+In particular, $|H|$ **divides** $|G|$.
+</Theorem>
+
+The proof can be found in the dedicated [proof page](/modern-algebra/ch01-groups/proofs/p01-lagrange-proof).
+
+---
+
+## Consequences
+
+<Theorem title="Order of an element divides group order" number="1.27">
+If $G$ is a finite group and $g \in G$, then $\mathrm{ord}(g)$ divides $|G|$.
+</Theorem>
+
+<Proof>
+The cyclic subgroup $\langle g \rangle$ has order $\mathrm{ord}(g)$. By Lagrange's theorem, $\mathrm{ord}(g) = |\langle g \rangle|$ divides $|G|$.
+</Proof>
+
+<Theorem title="Groups of prime order are cyclic" number="1.28">
+If $|G| = p$ for a prime $p$, then $G$ is cyclic: $G \cong \mathbb{Z}/p\mathbb{Z}$.
+</Theorem>
+
+<Proof>
+Take any $g \in G$ with $g \neq e$. Then $\mathrm{ord}(g)$ divides $p$ and $\mathrm{ord}(g) > 1$, so $\mathrm{ord}(g) = p$. Thus $\langle g \rangle = G$.
+</Proof>
+
+<Theorem title="Fermat's Little Theorem" number="1.29">
+For a prime $p$ and integer $a$ with $\gcd(a, p) = 1$:
+
+$$a^{p-1} \equiv 1 \pmod{p}$$
+</Theorem>
+
+<Proof>
+In the group $G = (\mathbb{Z}/p\mathbb{Z})^\times$, we have $|G| = p - 1$. By the consequence of Lagrange's theorem, $a^{|G|} = a^{p-1} = 1$ in $G$.
+</Proof>
+
+<Theorem title="Euler's Theorem (generalization)" number="1.30">
+For any $n \geq 1$ and $a$ with $\gcd(a, n) = 1$:
+
+$$a^{\varphi(n)} \equiv 1 \pmod{n}$$
+</Theorem>
+
+<Proof>
+Apply Lagrange's theorem to $a \in (\mathbb{Z}/n\mathbb{Z})^\times$, which has order $\varphi(n)$.
+</Proof>
+
+---
+
+## Applications and Examples
+
+<Example id="possible-orders" title="Possible subgroup orders">
+Let $|G| = 12$. By Lagrange's theorem, any subgroup has order dividing 12: $1, 2, 3, 4, 6, 12$.
+
+However, Lagrange's theorem does **not** guarantee a subgroup exists for each divisor. For instance, $A_4$ (order 12) has no subgroup of order 6.
+</Example>
+
+<Example id="element-orders-12" title="Element orders in a group of order 12">
+If $|G| = 12$, every element has order dividing 12: $1, 2, 3, 4, 6, 12$. An element of order 12 would generate all of $G$ (making $G$ cyclic).
+</Example>
+
+<Example id="fermat-computation" title="Computation using Fermat's Little Theorem">
+Compute $2^{100} \bmod 13$.
+
+Since 13 is prime: $2^{12} \equiv 1 \pmod{13}$.
+
+$100 = 12 \cdot 8 + 4$, so $2^{100} = (2^{12})^8 \cdot 2^4 \equiv 1^8 \cdot 16 \equiv 3 \pmod{13}$.
+</Example>
+
+<Example id="euler-computation" title="Computation using Euler's theorem">
+Compute $7^{222} \bmod 10$.
+
+$\varphi(10) = \varphi(2)\varphi(5) = 1 \cdot 4 = 4$. Since $\gcd(7, 10) = 1$: $7^4 \equiv 1 \pmod{10}$.
+
+$222 = 4 \cdot 55 + 2$, so $7^{222} \equiv 7^2 = 49 \equiv 9 \pmod{10}$.
+
+The last digit of $7^{222}$ is $9$.
+</Example>
+
+<Example id="no-subgroup-6" title="The converse of Lagrange is false: A_4">
+$A_4$ has order 12 and $6 \mid 12$, but $A_4$ has **no subgroup of order 6**.
+
+Proof sketch: If $H \leq A_4$ with $|H| = 6$, then $[A_4 : H] = 2$, so $H$ is normal. Then $A_4/H \cong \mathbb{Z}/2\mathbb{Z}$, so every element of $A_4$ satisfies $g^2 \in H$. But the 8 elements of order 3 in $A_4$ satisfy $g^2 = g^{-1}$, which also has order 3 and must be in $H$. This would require $H$ to contain at least 9 elements (the 8 elements $g^2$ for the 3-cycles, plus $e$), contradicting $|H| = 6$.
+</Example>
+
+<Example id="index-two" title="Subgroups of index 2 are normal">
+If $[G : H] = 2$, then $H$ is normal in $G$.
+
+The two left cosets are $H$ and $G \setminus H$. The two right cosets are also $H$ and $G \setminus H$. So $gH = Hg$ for all $g$.
+
+This is why $A_n$ is always normal in $S_n$ (it has index 2).
+</Example>
+
+<Example id="counting-cosets" title="Counting cosets in S_4">
+In $S_4$ with $H = \langle (1\;2\;3\;4) \rangle = \{e, (1\;2\;3\;4), (1\;3)(2\;4), (1\;4\;3\;2)\}$:
+
+$|H| = 4$ and $|S_4| = 24$, so $[S_4 : H] = 6$. There are 6 left cosets of $H$ in $S_4$, each containing 4 elements.
+</Example>
+
+<Example id="product-formula" title="Product formula for subgroups">
+If $H, K \leq G$ are finite subgroups, then:
+
+$$|HK| = \frac{|H| \cdot |K|}{|H \cap K|}$$
+
+where $HK = \{hk : h \in H, k \in K\}$ (which is not necessarily a subgroup).
+
+For example, in $S_3$: $H = \{e, (1\;2)\}$, $K = \{e, (1\;3)\}$. Then $|H \cap K| = 1$, so $|HK| = 2 \cdot 2 / 1 = 4$. Indeed $HK = \{e, (1\;2), (1\;3), (1\;2)(1\;3)\} = \{e, (1\;2), (1\;3), (1\;2\;3)\}$, which has 4 elements.
+</Example>
+
+<Example id="rsa-application" title="RSA cryptography uses Euler's theorem">
+In RSA, we pick primes $p, q$ and set $n = pq$. For a message $m$ with $\gcd(m, n) = 1$:
+
+$$m^{\varphi(n)} \equiv 1 \pmod{n}$$
+
+where $\varphi(n) = (p-1)(q-1)$. If $ed \equiv 1 \pmod{\varphi(n)}$, then $(m^e)^d = m^{ed} = m^{1 + k\varphi(n)} = m \cdot (m^{\varphi(n)})^k = m$.
+
+This is Lagrange's theorem applied to $(\mathbb{Z}/n\mathbb{Z})^\times$.
+</Example>
+
+<Example id="coset-counting" title="How many left cosets of A_4 in S_4?">
+$|S_4| = 24$ and $|A_4| = 12$, so $[S_4 : A_4] = 2$. The two cosets are $A_4$ (even permutations) and $S_4 \setminus A_4$ (odd permutations). Any transposition, such as $(1\;2)$, is a coset representative for the odd coset.
+</Example>
+
+---
+
+## Summary
+
+Lagrange's theorem is elegantly simple — the order of a subgroup divides the order of the group — yet its consequences are far-reaching. It immediately gives Fermat's Little Theorem, Euler's theorem, the classification of groups of prime order, and constraints on element orders. The key idea is the partitioning of a group into cosets of equal size. The converse, however, is false: not every divisor of $|G|$ corresponds to a subgroup, as demonstrated by $A_4$.

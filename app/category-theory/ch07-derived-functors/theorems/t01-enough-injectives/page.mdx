@@ -1,0 +1,128 @@
+export const metadata = {
+  title: 'Enough Injectives — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Theorem — Enough Injectives" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Enough Injectives
+
+The existence of enough injectives in an abelian category is the fundamental prerequisite for constructing right derived functors. Grothendieck showed that all Grothendieck abelian categories have enough injectives, providing the foundation for sheaf cohomology and derived functor theory.
+
+---
+
+## Statement
+
+<Theorem title="Grothendieck's Theorem: Enough Injectives" number="7.7">
+Every **Grothendieck abelian category** (an abelian category with a generator, exact filtered colimits, and all colimits) has enough injectives. That is, every object $A$ admits a monomorphism $A \hookrightarrow I$ with $I$ injective.
+
+In particular, the following categories have enough injectives:
+- $R\text{-}\mathbf{Mod}$ for any ring $R$
+- $\mathbf{Sh}(X)$ (sheaves of abelian groups on a topological space)
+- $\mathbf{Sh}(X, \mathcal{O}_X)$ (sheaves of modules on a ringed space)
+- $\mathrm{QCoh}(X)$ (quasi-coherent sheaves on a scheme)
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+We prove the result for $R\text{-}\mathbf{Mod}$ using Baer's criterion, then sketch the general case.
+
+**Step 1: Baer's Criterion.**
+
+An $R$-module $I$ is injective iff for every ideal $J \subseteq R$ and every $R$-module map $f : J \to I$, $f$ extends to $R \to I$. (This reduces the lifting condition from arbitrary monomorphisms to inclusions of ideals.)
+
+**Step 2: Divisible abelian groups are injective.**
+
+An abelian group $D$ is **divisible** if $nD = D$ for all $n \neq 0$. Using Baer's criterion: for an ideal $(n) \subseteq \mathbb{Z}$ and $f : (n) \to D$ sending $n \mapsto d$, divisibility gives $d = ne$ for some $e \in D$, and $1 \mapsto e$ extends $f$. Hence $\mathbb{Q}$ and $\mathbb{Q}/\mathbb{Z}$ are injective as $\mathbb{Z}$-modules.
+
+**Step 3: Every abelian group embeds in a divisible group.**
+
+For an abelian group $A$, write $A = F/K$ with $F$ free. Then $F \hookrightarrow F \otimes \mathbb{Q}$ (tensoring the inclusion $\mathbb{Z} \hookrightarrow \mathbb{Q}$) gives $A = F/K \hookrightarrow (F \otimes \mathbb{Q})/K$, which is divisible.
+
+**Step 4: Enough injectives for $R$-Mod.**
+
+For an $R$-module $M$, the underlying abelian group $M_{\mathbb{Z}}$ embeds into a divisible (hence injective) abelian group $D$. The co-induced module $\mathrm{Hom}_{\mathbb{Z}}(R, D)$ is injective as an $R$-module (by the adjunction $\mathrm{Hom}_R(-, \mathrm{Hom}_{\mathbb{Z}}(R, D)) \cong \mathrm{Hom}_{\mathbb{Z}}(-, D)$). The composition $M \to \mathrm{Hom}_{\mathbb{Z}}(R, D)$ (via $m \mapsto (r \mapsto rm \in D)$) is a monomorphism into an injective.
+
+**Step 5: General Grothendieck categories (sketch).**
+
+For a Grothendieck category $\mathcal{A}$ with generator $U$, one uses a transfinite induction argument. Embed $A \hookrightarrow E(A)$ where $E(A)$ is constructed as a colimit of a well-ordered chain of extensions, each killing one non-extendable morphism from a subobject. The key inputs are: the generator provides enough test morphisms, filtered colimits are exact (so colimits of monomorphisms are monomorphisms), and cardinality bounds ensure the process terminates.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Injective Z-modules" id="injective-z">
+The injective $\mathbb{Z}$-modules are exactly the divisible abelian groups: $\mathbb{Q}$, $\mathbb{Q}/\mathbb{Z}$, $\mathbb{Z}[p^{-1}]/\mathbb{Z}$ (Prufer groups), and their direct sums and products. Every abelian group $A$ embeds in a divisible group $D$. The minimal such $D$ is the injective hull $E(A)$.
+</Example>
+
+<Example title="Injective hull of Z/p" id="hull-zp">
+The injective hull $E(\mathbb{Z}/p) = \mathbb{Z}[p^{-1}]/\mathbb{Z}$, the Prufer $p$-group. It is the union $\mathbb{Z}/p \subset \mathbb{Z}/p^2 \subset \mathbb{Z}/p^3 \subset \cdots$. This is the smallest injective abelian group containing $\mathbb{Z}/p$.
+</Example>
+
+<Example title="Injective modules over a PID" id="injective-pid">
+Over a PID $R$, an $R$-module is injective iff it is divisible (i.e., $rM = M$ for every nonzero $r \in R$). For $R = k[x]$, the injective hull of $k = k[x]/(x)$ is the fraction field $k(x)$ modulo $k[x]$-torsion.
+</Example>
+
+<Example title="No enough injectives in finite abelian groups" id="no-enough-finite">
+The category $\mathbf{Ab}^{\mathrm{fin}}$ of finite abelian groups does NOT have enough injectives. The only injective object is $0$ (since a nonzero finite group cannot be divisible). This category is abelian but not Grothendieck (it lacks infinite coproducts).
+</Example>
+
+<Example title="Enough projectives for R-Mod" id="enough-proj">
+$R\text{-}\mathbf{Mod}$ has enough projectives: every module $M$ is a quotient of a free module $R^{(S)} \twoheadrightarrow M$ (choose generators $S$ for $M$). Free modules are projective since $\mathrm{Hom}(R^{(S)}, -) \cong \prod_S \mathrm{Hom}(R, -) \cong (-)^S$.
+</Example>
+
+<Example title="Sheaves have enough injectives but not enough projectives" id="sheaves-no-proj">
+$\mathbf{Sh}(X)$ has enough injectives (Grothendieck's theorem) but typically NOT enough projectives. On $X = [0, 1]$, the constant sheaf $\mathbb{Z}_X$ cannot be surjected onto by a projective sheaf. This is why sheaf cohomology uses injective resolutions (right derived functors), not projective resolutions.
+</Example>
+
+<Example title="Injective sheaves on a point" id="sheaves-point">
+On the one-point space, $\mathbf{Sh}(\mathrm{pt}) \cong \mathbf{Ab}$, so injective sheaves on a point are divisible abelian groups. This trivial case illustrates that injective sheaves are "locally divisible" in an appropriate sense.
+</Example>
+
+<Example title="Injective quasi-coherent sheaves" id="injective-qcoh">
+On a Noetherian scheme $X$, every quasi-coherent sheaf embeds into an injective quasi-coherent sheaf. The injective objects of $\mathrm{QCoh}(X)$ are classified locally: on $\mathrm{Spec}(R)$, they correspond to injective $R$-modules. The structure sheaf $\mathcal{O}_X$ is rarely injective.
+</Example>
+
+<Example title="Grothendieck categories in nature" id="grothendieck-cats">
+Key examples of Grothendieck categories (all having enough injectives): module categories $R\text{-}\mathbf{Mod}$, sheaves of abelian groups $\mathbf{Sh}(X)$, quasi-coherent sheaves $\mathrm{QCoh}(X)$, sheaves of $\mathcal{O}_X$-modules, presheaves $\mathbf{PSh}(C)$ on a small category, and functor categories $[\mathcal{C}^{\mathrm{op}}, \mathbf{Ab}]$.
+</Example>
+
+<Example title="Enough injectives and derived categories" id="enough-inj-derived">
+When $\mathcal{A}$ has enough injectives: $D^+(\mathcal{A}) \simeq K^+(\mathrm{Inj}\,\mathcal{A})$, so every object of $D^+(\mathcal{A})$ can be represented by a complex of injectives. This is essential for defining $RF(X) = F(I^\bullet)$: without enough injectives, the total derived functor cannot be defined directly.
+</Example>
+
+<Example title="When enough injectives fail" id="fail-enough">
+The category of finitely generated $R$-modules (for a non-semisimple ring) typically does not have enough injectives. For $R = \mathbb{Z}$, the only injective finitely generated abelian group is $0$. To do homological algebra in such categories, one passes to the larger category $R\text{-}\mathbf{Mod}$ or uses other techniques (Koszul duality, DG methods).
+</Example>
+
+<Example title="Injective dimension" id="injective-dim">
+The **injective dimension** $\mathrm{id}(A)$ is the minimal length of an injective resolution of $A$. The **global dimension** $\mathrm{gl.dim}(\mathcal{A}) = \sup_A \mathrm{id}(A)$. For $R$ Noetherian, $\mathrm{gl.dim}(R) = \sup_{\mathfrak{m}} \mathrm{dim}(R_{\mathfrak{m}})$ (global dimension equals Krull dimension for regular local rings).
+</Example>
+
+---
+
+<Remark title="Historical significance">
+Grothendieck's proof (in "Tohoku," 1957) that Grothendieck abelian categories have enough injectives was a breakthrough. It showed that sheaf cohomology can be defined for any ringed space, not just those admitting special resolutions. This unified sheaf cohomology across algebraic geometry, complex geometry, and topology.
+</Remark>
+
+<Remark title="Constructive aspects">
+The proof of enough injectives uses Zorn's lemma (or transfinite induction), making injective resolutions inherently non-constructive. In practice, one often uses acyclic resolutions (flasque, soft, fine, flat) that are more explicit. The existence theorem guarantees that derived functors are well-defined, while acyclic resolutions provide computational access.
+</Remark>

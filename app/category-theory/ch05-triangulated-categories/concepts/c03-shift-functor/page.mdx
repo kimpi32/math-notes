@@ -1,0 +1,102 @@
+export const metadata = {
+  title: 'Shift Functor [1] — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Concept — Shift Functor [1]" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Shift Functor [1]
+
+The shift functor $[1]$ (also called translation or suspension) is an autoequivalence of a triangulated category that shifts degrees. It is one of the two essential ingredients (along with distinguished triangles) in the axiomatics of triangulated categories.
+
+---
+
+## Definition
+
+<Definition title="Shift Functor" number="5.5">
+The **shift functor** $[1] : \mathcal{T} \to \mathcal{T}$ on a triangulated category is an additive autoequivalence. For complexes in $K(\mathcal{A})$ or $D(\mathcal{A})$:
+
+$$A[1]^n = A^{n+1}, \qquad d_{A[1]}^n = -d_A^{n+1}$$
+
+More generally, $A[k]^n = A^{n+k}$ with $d_{A[k]} = (-1)^k d_A$. On morphisms, $f[1]^n = f^{n+1}$.
+</Definition>
+
+<Remark title="Sign convention">
+The sign $(-1)^k$ in the differential of $A[k]$ is essential for maintaining the correct triangulated structure. Different references may use different sign conventions; Gelfand-Manin uses the convention above.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Shift of a module" id="shift-module">
+For a module $M$ viewed as a complex $M[0]$ concentrated in degree 0, the shift $M[k]$ is the complex with $M$ in degree $-k$ and zeros elsewhere. In particular, $M[1]$ has $M$ in degree $-1$.
+</Example>
+
+<Example title="Shift and cohomology" id="shift-cohomology">
+$H^n(A[k]) = H^{n+k}(A)$. Shifting a complex by $k$ shifts all cohomology by $k$. This is immediate from the definition.
+</Example>
+
+<Example title="Shift and Ext" id="shift-ext">
+$\mathrm{Hom}_{D(\mathcal{A})}(X, Y[n]) = \mathrm{Ext}^n(X, Y)$. The shift functor converts the grading on Ext into the morphism spaces of the derived category.
+</Example>
+
+<Example title="Suspension in topology" id="suspension">
+In the stable homotopy category, the shift $[1]$ is the suspension functor $\Sigma$. For a spectrum $E$, $(\Sigma E)_n = E_{n-1}$. The cofiber sequence $X \to Y \to Y/X \to \Sigma X$ is a distinguished triangle.
+</Example>
+
+<Example title="Serre functor and shift" id="serre-shift">
+On $D^b(\mathrm{Coh}(X))$ for a smooth projective variety $X$ of dimension $n$, the Serre functor is $S = (-) \otimes \omega_X[n]$. It combines the canonical bundle twist with a shift by dimension.
+</Example>
+
+<Example title="Shift and mapping cone" id="shift-cone">
+$\mathrm{Cone}(\mathrm{id}_A) \cong A[1] \oplus A$ (as graded objects, but with a twisted differential). The shift appears naturally in the cone construction.
+</Example>
+
+<Example title="Periodicity" id="periodicity">
+The Bott periodicity theorem states that in the stable homotopy category, $K(\mathbb{Z}, n) \simeq \Omega^2 K(\mathbb{Z}, n+2)$, reflecting a 2-periodicity in the shift for complex K-theory.
+</Example>
+
+<Example title="Shift in the stable module category" id="stable-shift">
+For a self-injective algebra $A$, the shift in $\underline{\mathrm{mod}}\text{-}A$ is the cosyzygy functor $\Omega^{-1}$: it takes a module $M$ to the cokernel of an injective hull.
+</Example>
+
+<Example title="Inverse shift" id="inverse-shift">
+Since $[1]$ is an autoequivalence, it has an inverse $[-1]$: $A[-1]^n = A^{n-1}$ with $d_{A[-1]}^n = -d_A^{n-1}$. We have $A[k][-k] = A$ (up to canonical isomorphism).
+</Example>
+
+<Example title="Shift and tensor product" id="shift-tensor">
+$(A \otimes B)[k] \cong A[k] \otimes B \cong A \otimes B[k]$. The shift distributes over the tensor product.
+</Example>
+
+<Example title="Shift and RHom" id="shift-rhom">
+$\mathrm{RHom}(A, B[k]) \cong \mathrm{RHom}(A, B)[k]$ and $\mathrm{RHom}(A[k], B) \cong \mathrm{RHom}(A, B)[-k]$. These are the fundamental shift rules for RHom.
+</Example>
+
+<Example title="Graded categories and shifts" id="graded">
+A triangulated category $\mathcal{T}$ with the shift functor is an example of a $\mathbb{Z}$-graded category: the "degree $n$ morphisms" from $X$ to $Y$ are $\mathrm{Hom}(X, Y[n])$. The grading encodes the Ext groups.
+</Example>
+
+---
+
+<Theorem title="Shift is exact" number="5.2">
+The shift functor $[1] : \mathcal{T} \to \mathcal{T}$ is an exact functor: it sends distinguished triangles to distinguished triangles.
+</Theorem>
+
+<Remark title="Shift and t-structures">
+The shift functor interacts with [t-structures](/category-theory/ch06-derived-categories/concepts/c03-t-structure) in a fundamental way: the standard t-structure on $D(\mathcal{A})$ has $D^{\leq n} = D^{\leq 0}[-n]$ and $D^{\geq n} = D^{\geq 0}[-n]$. The shift moves objects between the truncation levels.
+</Remark>

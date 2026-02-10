@@ -1,0 +1,138 @@
+export const metadata = {
+  title: 'Five Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Theorem — Five Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Five Lemma
+
+The Five Lemma is a powerful diagram-chasing result that allows us to deduce that a morphism is an isomorphism from information about the surrounding morphisms. It is used throughout homological algebra to prove that maps between long exact sequences are isomorphisms.
+
+---
+
+## Statement
+
+<Theorem title="Five Lemma" number="3.7">
+In an abelian category, given a commutative diagram with exact rows:
+
+$$
+\begin{array}{ccccccccc}
+A_1 & \to & A_2 & \to & A_3 & \to & A_4 & \to & A_5 \\
+\downarrow\scriptstyle{\alpha_1} & & \downarrow\scriptstyle{\alpha_2} & & \downarrow\scriptstyle{\alpha_3} & & \downarrow\scriptstyle{\alpha_4} & & \downarrow\scriptstyle{\alpha_5} \\
+B_1 & \to & B_2 & \to & B_3 & \to & B_4 & \to & B_5
+\end{array}
+$$
+
+- If $\alpha_1$ is epic and $\alpha_2, \alpha_4$ are monic, then $\alpha_3$ is monic (**Four Lemma**, left half).
+- If $\alpha_5$ is monic and $\alpha_2, \alpha_4$ are epic, then $\alpha_3$ is epic (**Four Lemma**, right half).
+- If $\alpha_1, \alpha_2, \alpha_4, \alpha_5$ are isomorphisms, then $\alpha_3$ is an isomorphism.
+</Theorem>
+
+---
+
+## Special Cases
+
+<Theorem title="Short Five Lemma" number="3.8">
+Given a commutative diagram with exact rows:
+
+$$
+\begin{array}{ccccccccc}
+0 & \to & A & \to & B & \to & C & \to & 0 \\
+& & \downarrow\scriptstyle{\alpha} & & \downarrow\scriptstyle{\beta} & & \downarrow\scriptstyle{\gamma} & & \\
+0 & \to & A' & \to & B' & \to & C' & \to & 0
+\end{array}
+$$
+
+- If $\alpha$ and $\gamma$ are monic, then $\beta$ is monic.
+- If $\alpha$ and $\gamma$ are epic, then $\beta$ is epic.
+- If $\alpha$ and $\gamma$ are isomorphisms, then $\beta$ is an isomorphism.
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="Five Lemma in R-Mod" id="five-rmod">
+In $R\text{-}\mathbf{Mod}$, the Five Lemma is proved by element chasing. To show $\alpha_3$ is monic: take $x \in \ker \alpha_3$, chase it left to show it is in the image of $A_2 \to A_3$, then use $\alpha_2$ being monic to show $x = 0$.
+</Example>
+
+<Example title="Comparison of long exact sequences" id="compare-les">
+If two long exact sequences arise from a morphism of short exact sequences of complexes, the Five Lemma applied to the long exact sequences in cohomology shows that if the maps on most cohomology groups are isomorphisms, the remaining map is also an isomorphism.
+</Example>
+
+<Example title="Quasi-isomorphism detection" id="qis-detect">
+A chain map $f : A_\bullet \to B_\bullet$ is a quasi-isomorphism iff $H^n(f)$ is an isomorphism for all $n$. The Five Lemma applied to the long exact sequence of the mapping cone shows this is equivalent to $H^n(\mathrm{Cone}(f)) = 0$ for all $n$.
+</Example>
+
+<Example title="Excision in homology" id="excision">
+The excision theorem in algebraic topology states that $H_n(X, A) \cong H_n(X \setminus U, A \setminus U)$ under certain conditions. The proof uses the Five Lemma applied to the long exact sequences of the pairs $(X, A)$ and $(X \setminus U, A \setminus U)$.
+</Example>
+
+<Example title="Kunneth theorem" id="kunneth">
+The Kunneth theorem relates $H_n(X \times Y)$ to $H_i(X) \otimes H_j(Y)$. The Five Lemma is used to show that the Kunneth map is an isomorphism when one of the homology groups is free.
+</Example>
+
+<Example title="Comparison of resolutions" id="compare-resolutions">
+The comparison theorem states that any two projective resolutions of a module are chain homotopy equivalent. The Five Lemma (or induction using the lifting property) establishes the isomorphism on homology.
+</Example>
+
+<Example title="Five Lemma for sheaf cohomology" id="five-sheaf">
+Given a morphism $f : X \to Y$ of spaces and compatible short exact sequences of sheaves, the Five Lemma applied to the resulting long exact sequences in sheaf cohomology relates the higher direct images $R^n f_*$.
+</Example>
+
+<Example title="Short Five Lemma for group extensions" id="five-grp">
+For a commutative diagram of group extensions where the outer maps are isomorphisms, the Short Five Lemma (which holds in $\mathbf{Grp}$ as well) gives that the middle map is an isomorphism. This is used in the classification of group extensions.
+</Example>
+
+<Example title="Five Lemma and universal coefficients" id="universal-coeff">
+The universal coefficient theorem for cohomology involves a short exact sequence $0 \to \mathrm{Ext}^1(H_{n-1}(X), G) \to H^n(X; G) \to \mathrm{Hom}(H_n(X), G) \to 0$. The Five Lemma applied to morphisms between these sequences shows that maps inducing isomorphisms on homology also induce isomorphisms on cohomology.
+</Example>
+
+<Example title="Five Lemma in derived categories" id="five-derived">
+In the context of distinguished triangles in a triangulated category, the analogue of the Five Lemma states: if $f : X \to Y$ induces isomorphisms on all but one vertex of a morphism of distinguished triangles, it induces an isomorphism on the remaining vertex.
+</Example>
+
+<Example title="Five Lemma and spectral sequence comparison" id="five-spectral">
+Given a morphism of spectral sequences $E_r^{p,q} \to {E'}_r^{p,q}$, if the map is an isomorphism on the $E_2$ page, then by iterated application of the Five Lemma, it is an isomorphism on all subsequent pages and on the abutment.
+</Example>
+
+<Example title="Whitehead theorem via Five Lemma" id="whitehead">
+The Whitehead theorem states that a weak homotopy equivalence between CW-complexes is a homotopy equivalence. The proof uses the Five Lemma on the long exact sequence of homotopy groups of mapping cylinder and mapping cone.
+</Example>
+
+---
+
+## Proof of the Five Lemma
+
+<Proof title="Proof (element chase in R-Mod)">
+We prove $\alpha_3$ is monic assuming $\alpha_1$ epic and $\alpha_2, \alpha_4$ monic.
+
+Let $x_3 \in A_3$ with $\alpha_3(x_3) = 0$. We need to show $x_3 = 0$.
+
+Map $x_3$ to $A_4$: let $x_4 = d(x_3)$ where $d : A_3 \to A_4$. Then $\alpha_4(x_4) = \alpha_4(d(x_3)) = d'(\alpha_3(x_3)) = d'(0) = 0$. Since $\alpha_4$ is monic, $x_4 = 0$.
+
+By exactness of the top row at $A_3$, $x_3 = d(x_2)$ for some $x_2 \in A_2$. Then $d'(\alpha_2(x_2)) = \alpha_3(d(x_2)) = \alpha_3(x_3) = 0$. By exactness of the bottom row at $B_2$, $\alpha_2(x_2) = d'(b_1)$ for some $b_1 \in B_1$.
+
+Since $\alpha_1$ is epic, $b_1 = \alpha_1(x_1)$ for some $x_1 \in A_1$. Then $\alpha_2(x_2) = d'(\alpha_1(x_1)) = \alpha_2(d(x_1))$. Since $\alpha_2$ is monic, $x_2 = d(x_1)$. Thus $x_3 = d(x_2) = d(d(x_1)) = 0$ by $d^2 = 0$ (i.e., by exactness at $A_2$: $x_3 = d(d(x_1)) = 0$).
+
+The proof that $\alpha_3$ is epic under the dual hypotheses is the dual argument.
+</Proof>
+
+<Remark title="Validity in general abelian categories">
+The element-chasing proof works in $R\text{-}\mathbf{Mod}$. For a general abelian category, we invoke the [Freyd-Mitchell embedding theorem](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell) to reduce to a module category. Alternatively, one can give a purely categorical proof using the universal properties of kernels and cokernels.
+</Remark>

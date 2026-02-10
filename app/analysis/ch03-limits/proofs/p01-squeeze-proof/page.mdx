@@ -1,0 +1,144 @@
+export const metadata = {
+  title: '조임 정리의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "3. 함수의 극한", href: "/analysis/ch03-limits" },
+  { label: "증명 - 조임 정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 조임 정리의 증명 (Proof of the Squeeze Theorem)
+
+The proof is a clean application of the epsilon-delta definition. The key idea is to combine the delta-neighborhoods from the two bounding limits.
+
+---
+
+## Theorem restated
+
+<Theorem title="Squeeze Theorem">
+Let $g(x) \leq f(x) \leq h(x)$ for all $x$ in a punctured neighborhood of $c$. If $\lim_{x \to c} g(x) = \lim_{x \to c} h(x) = L$, then $\lim_{x \to c} f(x) = L$.
+</Theorem>
+
+---
+
+## Full proof
+
+<Proof>
+Let $\varepsilon > 0$.
+
+**Step 1.** Since $\lim_{x \to c} g(x) = L$, there exists $\delta_1 > 0$ such that
+
+$$0 < |x - c| < \delta_1 \implies |g(x) - L| < \varepsilon \implies L - \varepsilon < g(x).$$
+
+**Step 2.** Since $\lim_{x \to c} h(x) = L$, there exists $\delta_2 > 0$ such that
+
+$$0 < |x - c| < \delta_2 \implies |h(x) - L| < \varepsilon \implies h(x) < L + \varepsilon.$$
+
+**Step 3.** Since $g(x) \leq f(x) \leq h(x)$ holds in some punctured neighborhood $(c - \delta_0, c + \delta_0) \setminus \{c\}$, we have a $\delta_0 > 0$.
+
+**Step 4.** Let $\delta = \min(\delta_0, \delta_1, \delta_2) > 0$. For $0 < |x - c| < \delta$:
+
+$$L - \varepsilon < g(x) \leq f(x) \leq h(x) < L + \varepsilon.$$
+
+Therefore $|f(x) - L| < \varepsilon$.
+
+Since $\varepsilon > 0$ was arbitrary, $\lim_{x \to c} f(x) = L$.
+</Proof>
+
+---
+
+## Key observations
+
+<Remark>
+**Why three deltas?** Each condition gives its own $\delta$: the lower bound $g \to L$ gives $\delta_1$, the upper bound $h \to L$ gives $\delta_2$, and the inequality $g \leq f \leq h$ might only hold near $c$ (giving $\delta_0$). Taking the minimum ensures all three hold simultaneously.
+
+**Direction of inequalities matters.** From $|g(x) - L| < \varepsilon$ we only use the lower bound $g(x) > L - \varepsilon$. From $|h(x) - L| < \varepsilon$ we only use the upper bound $h(x) < L + \varepsilon$. The opposite bounds ($g(x) < L + \varepsilon$ and $h(x) > L - \varepsilon$) are not needed.
+</Remark>
+
+---
+
+## Variant: sequential version
+
+<Theorem title="Squeeze Theorem for Sequences">
+If $g_n \leq a_n \leq h_n$ for all $n \geq N_0$ and $g_n \to L$, $h_n \to L$, then $a_n \to L$.
+</Theorem>
+
+<Proof>
+Let $\varepsilon > 0$. Choose $N_1$ with $g_n > L - \varepsilon$ for $n \geq N_1$, and $N_2$ with $h_n < L + \varepsilon$ for $n \geq N_2$. For $n \geq \max(N_0, N_1, N_2)$:
+
+$$L - \varepsilon < g_n \leq a_n \leq h_n < L + \varepsilon,$$
+
+so $|a_n - L| < \varepsilon$.
+</Proof>
+
+---
+
+## Applications of the proof technique
+
+<Example title="sin(x)/x via geometric squeeze">
+1. The classic proof that $\lim_{x \to 0} \frac{\sin x}{x} = 1$ uses the geometric inequality $\cos x \leq \frac{\sin x}{x} \leq 1$ for $0 < |x| < \pi/2$, then applies the Squeeze Theorem with $L = 1$.
+</Example>
+
+<Example title="Squeeze with matching asymptotic bounds">
+2. To find $\lim_{x \to \infty} \frac{x + \sin x}{x}$: we have $\frac{x - 1}{x} \leq \frac{x + \sin x}{x} \leq \frac{x + 1}{x}$. Both bounds $\to 1$, so the limit is $1$.
+</Example>
+
+<Example title="Squeeze for factorial ratios">
+3. For sequences: $\frac{n!}{n^n}$. Since $n! = 1 \cdot 2 \cdots n \leq n^n$ and $n! \geq 1$, we need tighter bounds. Using $\frac{k}{n} \leq 1$ for $k \leq n$: $\frac{n!}{n^n} = \prod_{k=1}^{n} \frac{k}{n} \leq \frac{1}{n} \cdot 1^{n-1} = \frac{1}{n}$. So $0 \leq \frac{n!}{n^n} \leq \frac{1}{n} \to 0$.
+</Example>
+
+<Example title="Squeeze for n-th root of n!">
+4. $(n!)^{1/n} / n \to 1/e$ (Stirling). As a simpler result: $\lim (n!)^{1/n} = \infty$. We have $(n!)^{1/n} \geq (n/2)^{n/2 \cdot 1/n} = (n/2)^{1/2} \to \infty$.
+</Example>
+
+---
+
+## The proof in other contexts
+
+<Example title="Squeeze for limits at infinity">
+5. The proof adapts: replace "$0 < |x - c| < \delta$" with "$x > M$". Everything else is identical. For $\lim_{x \to \infty} \frac{\cos(x^2)}{x} = 0$: squeeze by $\frac{-1}{x} \leq \frac{\cos(x^2)}{x} \leq \frac{1}{x}$.
+</Example>
+
+<Example title="Squeeze for one-sided limits">
+6. For $\lim_{x \to 0^+} x^x = 1$: write $x^x = e^{x \ln x}$ and show $x \ln x \to 0$. For $0 < x < 1$: $|x \ln x| = -x \ln x$. Set $x = 1/t$ ($t \to \infty$): $\frac{\ln t}{t} \to 0$, so $x \ln x \to 0$, thus $x^x \to e^0 = 1$.
+</Example>
+
+---
+
+## Generalizations
+
+<Example title="Squeeze in metric spaces">
+7. In a metric space $(X, d)$: if $d(f(x), L) \leq h(x)$ for $x$ near $c$ and $h(x) \to 0$, then $f(x) \to L$. This is the metric space version of the squeeze (with $g$ being the zero function).
+</Example>
+
+<Example title="Squeeze in R^n">
+8. In $\mathbb{R}^n$: if $\|f(x) - L\| \leq h(x)$ where $h : \mathbb{R}^n \to \mathbb{R}$ with $h(x) \to 0$ as $x \to c$, then $f(x) \to L$. This is used extensively in multivariable calculus.
+</Example>
+
+<Example title="Integral squeeze">
+9. If $g(x) \leq f(x) \leq h(x)$ on $[a,b]$ and all three are integrable, then $\int_a^b g \leq \int_a^b f \leq \int_a^b h$. This is the integral version of the squeeze, and leads to the comparison principle for integrals.
+</Example>
+
+<Example title="Monotone squeeze">
+10. A monotone function $f : (a,b) \to \mathbb{R}$ has one-sided limits at every point. If $g \leq f \leq h$ with $g$ and $h$ having the same limit, the squeeze pins down $f$'s limit too. This is used in proving that monotone functions have only jump discontinuities.
+</Example>
+
+<Example title="Asymptotic squeeze">
+11. In asymptotic analysis: if $f(x) = O(g(x))$ and $g(x) \to 0$, then $f(x) \to 0$. This is a squeeze: $-C|g(x)| \leq f(x) \leq C|g(x)|$.
+</Example>
+
+<Example title="Probabilistic squeeze">
+12. In probability, if $X_n \leq Y_n \leq Z_n$ almost surely and $X_n \to L$, $Z_n \to L$ in probability, then $Y_n \to L$ in probability. This is the probabilistic squeeze theorem.
+</Example>

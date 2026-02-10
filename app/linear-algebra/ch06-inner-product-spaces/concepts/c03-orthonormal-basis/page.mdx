@@ -1,0 +1,208 @@
+export const metadata = {
+  title: 'Orthonormal Basis — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "6. 내적공간", href: "/linear-algebra/ch06-inner-product-spaces" },
+  { label: "Concept — Orthonormal Basis" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Orthonormal Basis
+
+An orthonormal basis is a basis whose vectors are pairwise orthogonal and each has unit length. It is the most computationally convenient type of basis: coordinates are computed by inner products, projections are trivial, and the matrix of any linear transformation has special structure.
+
+---
+
+## Definition
+
+<Definition title="Orthonormal set and orthonormal basis" number="6.8">
+A set of vectors $\{e_1, \ldots, e_k\}$ in an inner product space $V$ is **orthonormal** if:
+
+$$\langle e_i, e_j \rangle = \delta_{ij} = \begin{cases} 1 & \text{if } i = j, \\ 0 & \text{if } i \neq j. \end{cases}$$
+
+An orthonormal set that is also a basis for $V$ is called an **orthonormal basis** (ONB).
+</Definition>
+
+<Example id="standard-onb" title="Standard orthonormal basis">
+The standard basis $\{e_1, \ldots, e_n\}$ of $\mathbb{R}^n$ (or $\mathbb{C}^n$) with the standard inner product is the prototypical orthonormal basis.
+
+In $\mathbb{R}^3$: $e_1 = (1,0,0)$, $e_2 = (0,1,0)$, $e_3 = (0,0,1)$, with $e_i \cdot e_j = \delta_{ij}$.
+</Example>
+
+<Example id="rotated-onb" title="A rotated orthonormal basis in R^2">
+$e_1' = \left(\frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}\right)$, $e_2' = \left(\frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}\right)$.
+
+$\langle e_1', e_1' \rangle = \frac{1}{2} + \frac{1}{2} = 1$ ✓, $\langle e_2', e_2' \rangle = 1$ ✓, $\langle e_1', e_2' \rangle = \frac{1}{2} - \frac{1}{2} = 0$ ✓.
+
+This is an orthonormal basis obtained by rotating the standard basis by $45°$.
+</Example>
+
+<Example id="legendre-onb" title="Orthonormal polynomials (Legendre)">
+On $\mathcal{P}_2$ with $\langle f, g \rangle = \int_{-1}^{1} f(x)g(x)\,dx$, the normalized Legendre polynomials form an ONB:
+
+$P_0(x) = \frac{1}{\sqrt{2}}$, $P_1(x) = \sqrt{\frac{3}{2}} \cdot x$, $P_2(x) = \sqrt{\frac{5}{2}} \cdot \frac{3x^2 - 1}{2}$.
+
+These satisfy $\langle P_i, P_j \rangle = \delta_{ij}$.
+</Example>
+
+---
+
+## Coordinate representation
+
+<Theorem title="Fourier coefficients" number="6.1">
+If $\{e_1, \ldots, e_n\}$ is an orthonormal basis for $V$, then every $v \in V$ can be written as:
+
+$$v = \sum_{i=1}^n \langle v, e_i \rangle \, e_i.$$
+
+The scalars $c_i = \langle v, e_i \rangle$ are the **Fourier coefficients** (or coordinates) of $v$ with respect to the ONB. No matrix inversion is needed -- just compute inner products.
+</Theorem>
+
+<Example id="fourier-coords-R3" title="Coordinates in a non-standard ONB">
+ONB for $\mathbb{R}^3$: $e_1 = \frac{1}{\sqrt{2}}(1, 1, 0)$, $e_2 = \frac{1}{\sqrt{2}}(1, -1, 0)$, $e_3 = (0, 0, 1)$.
+
+For $v = (3, 1, 5)$:
+- $c_1 = \langle v, e_1 \rangle = \frac{1}{\sqrt{2}}(3 + 1) = \frac{4}{\sqrt{2}} = 2\sqrt{2}$.
+- $c_2 = \langle v, e_2 \rangle = \frac{1}{\sqrt{2}}(3 - 1) = \sqrt{2}$.
+- $c_3 = \langle v, e_3 \rangle = 5$.
+
+Check: $2\sqrt{2} \cdot \frac{1}{\sqrt{2}}(1,1,0) + \sqrt{2} \cdot \frac{1}{\sqrt{2}}(1,-1,0) + 5(0,0,1) = (2,2,0) + (1,-1,0) + (0,0,5) = (3,1,5)$ ✓.
+</Example>
+
+<Example id="fourier-function" title="Fourier coefficients for functions">
+In $L^2[-\pi, \pi]$ with ONB $\{\frac{1}{\sqrt{2\pi}}, \frac{\cos(nx)}{\sqrt{\pi}}, \frac{\sin(nx)}{\sqrt{\pi}}\}_{n \geq 1}$:
+
+The Fourier coefficients of $f$ are $a_0 = \frac{1}{\sqrt{2\pi}}\int_{-\pi}^{\pi} f(x)\,dx$, $a_n = \frac{1}{\sqrt{\pi}}\int_{-\pi}^{\pi} f(x)\cos(nx)\,dx$, etc.
+
+This is the classical Fourier series, viewed as coordinate expansion in an orthonormal basis.
+</Example>
+
+---
+
+## Parseval's identity
+
+<Theorem title="Parseval's identity" number="6.2">
+For any vector $v$ in an inner product space with orthonormal basis $\{e_1, \ldots, e_n\}$:
+
+$$\|v\|^2 = \sum_{i=1}^n |\langle v, e_i \rangle|^2.$$
+
+This is the generalization of the Pythagorean theorem to $n$ dimensions.
+</Theorem>
+
+<Example id="parseval-R3" title="Parseval's identity in R^3">
+$v = (3, 4, 0)$, standard ONB $\{e_1, e_2, e_3\}$:
+
+$\|v\|^2 = 9 + 16 + 0 = 25 = 3^2 + 4^2 + 0^2 = |\langle v, e_1 \rangle|^2 + |\langle v, e_2 \rangle|^2 + |\langle v, e_3 \rangle|^2$ ✓.
+
+With the rotated ONB from the previous example ($v = (3, 1, 5)$): $\|v\|^2 = 9 + 1 + 25 = 35$ and $(2\sqrt{2})^2 + (\sqrt{2})^2 + 5^2 = 8 + 2 + 25 = 35$ ✓.
+</Example>
+
+<Example id="parseval-polynomial" title="Parseval for polynomials">
+$f(x) = x$ on $[-1, 1]$ with Legendre ONB. $\|f\|^2 = \int_{-1}^1 x^2\,dx = \frac{2}{3}$.
+
+$\langle f, P_0 \rangle = \frac{1}{\sqrt{2}} \int_{-1}^1 x\,dx = 0$, $\langle f, P_1 \rangle = \sqrt{\frac{3}{2}} \int_{-1}^1 x^2\,dx = \sqrt{\frac{3}{2}} \cdot \frac{2}{3} = \frac{2}{\sqrt{6}}$, $\langle f, P_2 \rangle = 0$ (by symmetry, $x$ is odd and $P_2$ is even).
+
+$|\langle f, P_1 \rangle|^2 = \frac{4}{6} = \frac{2}{3} = \|f\|^2$ ✓. The function $x$ lies entirely in the span of $P_1$.
+</Example>
+
+---
+
+## Bessel's inequality
+
+<Theorem title="Bessel's inequality">
+For any orthonormal set $\{e_1, \ldots, e_k\}$ (not necessarily a basis) and any $v \in V$:
+
+$$\sum_{i=1}^k |\langle v, e_i \rangle|^2 \leq \|v\|^2.$$
+
+Equality holds if and only if $v \in \operatorname{span}\{e_1, \ldots, e_k\}$.
+</Theorem>
+
+<Example id="bessel" title="Bessel's inequality with an incomplete ONB">
+In $\mathbb{R}^3$, take the partial ONB $\{e_1, e_2\}$ (just the first two standard vectors). For $v = (3, 4, 5)$:
+
+$|\langle v, e_1 \rangle|^2 + |\langle v, e_2 \rangle|^2 = 9 + 16 = 25 \leq 50 = 9 + 16 + 25 = \|v\|^2$.
+
+The gap $50 - 25 = 25 = |\langle v, e_3 \rangle|^2$ is the "energy" in the missing direction.
+</Example>
+
+---
+
+## Matrix representation
+
+<Theorem title="Matrix of a linear transformation in an ONB">
+If $T: V \to V$ is a linear transformation and $\{e_1, \ldots, e_n\}$ is an orthonormal basis, then the matrix entries are:
+
+$$a_{ij} = \langle Te_j, e_i \rangle.$$
+
+For self-adjoint operators ($T^* = T$), the matrix is symmetric (real case) or Hermitian (complex case) in any ONB.
+</Theorem>
+
+<Example id="matrix-onb" title="Matrix entries via inner products">
+$T: \mathbb{R}^2 \to \mathbb{R}^2$ defined by $T(x, y) = (2x + y, x + 3y)$ with ONB $e_1' = \frac{1}{\sqrt{2}}(1, 1)$, $e_2' = \frac{1}{\sqrt{2}}(1, -1)$.
+
+$Te_1' = \frac{1}{\sqrt{2}}(3, 4)$, $Te_2' = \frac{1}{\sqrt{2}}(1, -2)$.
+
+$a_{11} = \langle Te_1', e_1' \rangle = \frac{1}{2}(3 + 4) = \frac{7}{2}$, $a_{21} = \langle Te_1', e_2' \rangle = \frac{1}{2}(3 - 4) = -\frac{1}{2}$, $a_{12} = \langle Te_2', e_1' \rangle = \frac{1}{2}(1 - 2) = -\frac{1}{2}$, $a_{22} = \langle Te_2', e_2' \rangle = \frac{1}{2}(1 + 2) = \frac{3}{2}$.
+
+Matrix in the new ONB: $\begin{pmatrix} 7/2 & -1/2 \\ -1/2 & 3/2 \end{pmatrix}$ (symmetric, as expected since $A^T = A$ in the standard basis implies $A' = A'^T$ in any ONB).
+</Example>
+
+---
+
+## Constructing orthonormal bases
+
+<Example id="normalize" title="Normalizing an orthogonal basis">
+Given orthogonal basis $\{(1, 1, 0), (1, -1, 2), (-1, 1, 1)\}$:
+
+Norms: $\|(1,1,0)\| = \sqrt{2}$, $\|(1,-1,2)\| = \sqrt{6}$, $\|(-1,1,1)\| = \sqrt{3}$.
+
+ONB: $\left\{\frac{1}{\sqrt{2}}(1,1,0), \frac{1}{\sqrt{6}}(1,-1,2), \frac{1}{\sqrt{3}}(-1,1,1)\right\}$.
+
+Verify: $\frac{1}{\sqrt{2} \cdot \sqrt{6}}(1 - 1 + 0) = 0$ ✓, and similarly for other pairs.
+</Example>
+
+<Example id="gs-preview" title="From arbitrary basis to ONB (preview of Gram-Schmidt)">
+Starting with $\{(1, 1, 0), (1, 0, 1)\}$ in $\mathbb{R}^3$ (linearly independent but not orthogonal):
+
+Step 1: $u_1 = (1, 1, 0)$, $e_1 = \frac{1}{\sqrt{2}}(1, 1, 0)$.
+
+Step 2: $u_2 = (1, 0, 1) - \langle (1,0,1), e_1 \rangle e_1 = (1, 0, 1) - \frac{1}{\sqrt{2}} \cdot \frac{1}{\sqrt{2}}(1, 1, 0) = (1, 0, 1) - \frac{1}{2}(1, 1, 0) = (\frac{1}{2}, -\frac{1}{2}, 1)$.
+
+$e_2 = \frac{u_2}{\|u_2\|} = \frac{1}{\sqrt{3/2}}(\frac{1}{2}, -\frac{1}{2}, 1) = \frac{1}{\sqrt{6}}(1, -1, 2)$.
+
+The ONB for $\operatorname{span}\{(1,1,0), (1,0,1)\}$ is $\{e_1, e_2\}$.
+</Example>
+
+<Example id="onb-complex" title="ONB in C^2">
+$e_1 = \frac{1}{\sqrt{2}}(1, i)$, $e_2 = \frac{1}{\sqrt{2}}(i, 1)$.
+
+$\langle e_1, e_1 \rangle = \frac{1}{2}(1 \cdot 1 + i \cdot (-i)) = \frac{1}{2}(1 + 1) = 1$ ✓.
+
+$\langle e_1, e_2 \rangle = \frac{1}{2}(1 \cdot (-i) + i \cdot 1) = \frac{1}{2}(-i + i) = 0$ ✓.
+
+$\langle e_2, e_2 \rangle = \frac{1}{2}(i \cdot (-i) + 1 \cdot 1) = \frac{1}{2}(1 + 1) = 1$ ✓.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Why orthonormal bases are preferred">
+Orthonormal bases are the gold standard for inner product spaces:
+- **Coordinates** are computed by inner products: $c_i = \langle v, e_i \rangle$ (no system of equations to solve).
+- **Norms** are computed by Parseval: $\|v\|^2 = \sum |c_i|^2$.
+- **Projections** are immediate: $\operatorname{proj}_W(v) = \sum_{i} \langle v, e_i \rangle e_i$.
+- **Change-of-basis matrices** are orthogonal/unitary (hence easy to invert: $P^{-1} = P^T$).
+- The **Gram--Schmidt process** guarantees that every inner product space has an ONB, so we never need to work without one.
+</Remark>

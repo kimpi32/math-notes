@@ -1,0 +1,114 @@
+export const metadata = {
+  title: 'Freyd-Mitchell Embedding Theorem — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "3. 아벨 범주", href: "/category-theory/ch03-abelian-categories" },
+  { label: "Theorem — Freyd-Mitchell Embedding Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Freyd-Mitchell Embedding Theorem
+
+The Freyd-Mitchell Embedding Theorem states that every small abelian category can be fully faithfully embedded into a module category, preserving exactness. This theorem justifies the use of element-chasing arguments (diagram chasing) in abstract abelian categories.
+
+---
+
+## Statement
+
+<Theorem title="Freyd-Mitchell Embedding Theorem" number="3.9">
+Let $\mathcal{A}$ be a small abelian category. Then there exists a ring $R$ and an exact, fully faithful functor
+
+$$F : \mathcal{A} \hookrightarrow R\text{-}\mathbf{Mod}$$
+
+In particular, $\mathcal{A}$ is equivalent to a full subcategory of $R\text{-}\mathbf{Mod}$ that is closed under kernels, cokernels, and finite direct sums.
+</Theorem>
+
+<Remark title="What this means for diagram chasing">
+The embedding $F$ preserves and reflects exact sequences. Therefore, any statement about finite diagrams involving kernels, cokernels, images, exact sequences, etc., that holds in $R\text{-}\mathbf{Mod}$ automatically holds in $\mathcal{A}$. In particular, the Snake Lemma, Five Lemma, and all standard diagram lemmas hold in any abelian category.
+</Remark>
+
+---
+
+## Proof Sketch
+
+<Proof title="Proof sketch">
+The proof proceeds in several steps:
+
+**Step 1.** Embed $\mathcal{A}$ into the functor category $\mathrm{Lex}(\mathcal{A}^{\mathrm{op}}, \mathbf{Ab})$ of left exact functors $\mathcal{A}^{\mathrm{op}} \to \mathbf{Ab}$ via the Yoneda embedding $A \mapsto \mathrm{Hom}(-, A)$. This embedding is exact and fully faithful.
+
+**Step 2.** Show that $\mathrm{Lex}(\mathcal{A}^{\mathrm{op}}, \mathbf{Ab})$ is a Grothendieck abelian category (it has a generator, exact filtered colimits, and is cocomplete).
+
+**Step 3.** By a theorem of Gabriel, every Grothendieck abelian category with a projective generator is equivalent to $R\text{-}\mathbf{Mod}$ for some ring $R$. Show that $\mathrm{Lex}(\mathcal{A}^{\mathrm{op}}, \mathbf{Ab})$ has enough projectives.
+
+**Step 4.** Compose the embeddings to get $\mathcal{A} \hookrightarrow R\text{-}\mathbf{Mod}$.
+</Proof>
+
+---
+
+## Examples and Applications
+
+<Example title="Snake Lemma in arbitrary abelian categories" id="snake-abelian">
+The Snake Lemma is proved by element chasing in $R\text{-}\mathbf{Mod}$. By the Freyd-Mitchell theorem, it holds in every small abelian category. In practice, we work with diagrams involving finitely many objects, which always live in a small abelian subcategory.
+</Example>
+
+<Example title="Five Lemma in sheaf categories" id="five-sheaf">
+The category $\mathbf{Sh}(X)$ of sheaves is abelian. Any finite diagram in $\mathbf{Sh}(X)$ generates a small abelian subcategory, so the Five Lemma applies by the embedding theorem.
+</Example>
+
+<Example title="Diagram chasing in coherent sheaves" id="coh-diagram">
+When working with coherent sheaves on a scheme $X$, diagram lemmas (Snake, Five, Nine, etc.) hold because $\mathbf{Coh}(X)$ is abelian and any finite diagram embeds into a module category.
+</Example>
+
+<Example title="Limitation: infinite diagrams" id="infinite-diagrams">
+The embedding theorem applies to small categories and finite diagrams. For infinite diagrams (e.g., infinite products, filtered colimits), the embedding may not preserve the relevant structure. One must check directly whether the specific functor preserves the needed limits/colimits.
+</Example>
+
+<Example title="Abelian categories without enough injectives" id="no-injectives">
+Not every abelian category has enough injectives. The category of finitely generated $\mathbb{Z}$-modules is abelian, and the Freyd-Mitchell theorem embeds it into $R\text{-}\mathbf{Mod}$, but this subcategory does not have enough injectives. Having enough injectives is an additional property, not guaranteed by the embedding.
+</Example>
+
+<Example title="The ring R depends on A" id="ring-depends">
+The ring $R$ in the embedding depends on $\mathcal{A}$. For $\mathcal{A} = \mathbf{FinAb}$ (finite abelian groups), one can take $R = \mathbb{Z}$ (the embedding is the inclusion into $\mathbb{Z}\text{-}\mathbf{Mod}$). For more exotic abelian categories, $R$ may be non-commutative.
+</Example>
+
+<Example title="Representations of quivers" id="quiver-embedding">
+For a quiver $Q$, the category $\mathrm{Rep}_k(Q)$ is abelian and equivalent to $\mathrm{mod}\text{-}kQ$ (modules over the path algebra). The Freyd-Mitchell embedding in this case is the identification with modules over $kQ$.
+</Example>
+
+<Example title="Perverse sheaves" id="perverse">
+Perverse sheaves on a variety $X$ form an abelian category (the heart of a t-structure on $D^b_c(X)$). The Freyd-Mitchell theorem applies, justifying diagram chasing in this non-obvious abelian category.
+</Example>
+
+<Example title="Torsion pairs and hearts" id="torsion-heart">
+Given a torsion pair $(\mathcal{T}, \mathcal{F})$ in an abelian category $\mathcal{A}$, one can construct a new abelian category (the heart of an associated t-structure). The Freyd-Mitchell theorem applies to this new category as well.
+</Example>
+
+<Example title="D-modules" id="d-modules">
+The category of coherent D-modules on a smooth variety is abelian. Diagram chasing in this category is justified by the Freyd-Mitchell theorem, which is essential for the theory of holonomic D-modules and the Riemann-Hilbert correspondence.
+</Example>
+
+<Example title="Functorial embedding" id="functorial">
+The Freyd-Mitchell embedding is not canonical: it depends on choices. However, any exact functor between small abelian categories can be "interleaved" with the embeddings, so the non-canonicity does not affect the validity of diagram chasing.
+</Example>
+
+<Example title="Beyond abelian categories" id="beyond-abelian">
+The Freyd-Mitchell theorem does not extend to non-abelian settings. Exact categories (in the sense of Quillen) and triangulated categories do not embed into module categories in the same way. For triangulated categories, one needs the theory of [DG enhancements](/category-theory/ch05-triangulated-categories/concepts/c01-triangulated-category) to recover an abelian-like theory.
+</Example>
+
+---
+
+<Remark title="Historical note">
+The theorem was proved independently by Peter Freyd (1964) and Barry Mitchell (1964). It resolved a fundamental question: whether the diagram lemmas that were proved by element chasing in module categories actually hold in all abelian categories. The answer is yes, and the proof is non-trivial — it requires the full machinery of generators, Grothendieck categories, and Gabriel's theorem on module categories.
+</Remark>

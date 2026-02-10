@@ -1,0 +1,143 @@
+export const metadata = {
+  title: 'Vector Space — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Concept — Vector Space" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Vector Spaces
+
+A **vector space** is the central object of study in linear algebra. It abstracts the familiar properties of arrows in the plane to a far more general setting.
+
+---
+
+## Definition
+
+<Definition title="Vector space over a field F" number="1.1">
+A **vector space** over a field $F$ is a set $V$ together with two operations:
+
+- **Addition**: $V \times V \to V$, denoted $(u, v) \mapsto u + v$
+- **Scalar multiplication**: $F \times V \to V$, denoted $(a, v) \mapsto av$
+
+satisfying the following axioms for all $u, v, w \in V$ and $a, b \in F$:
+
+1. $u + v = v + u$ (commutativity)
+2. $(u + v) + w = u + (v + w)$ (associativity)
+3. There exists $0 \in V$ such that $v + 0 = v$ (zero vector)
+4. For each $v$, there exists $-v$ such that $v + (-v) = 0$ (additive inverse)
+5. $a(bv) = (ab)v$ (compatibility)
+6. $1v = v$ (identity)
+7. $a(u + v) = au + av$ (distributivity over vector addition)
+8. $(a + b)v = av + bv$ (distributivity over scalar addition)
+</Definition>
+
+<Remark title="Terminology">
+The elements of $V$ are called **vectors** and the elements of $F$ are called **scalars**. Common choices for $F$ are $\mathbb{R}$ (real vector spaces) and $\mathbb{C}$ (complex vector spaces). When the field is clear from context, we simply say "$V$ is a vector space."
+</Remark>
+
+---
+
+## Fundamental examples
+
+<Example id="rn" title="The space R^n">
+$\mathbb{R}^n = \{(a_1, a_2, \ldots, a_n) \mid a_i \in \mathbb{R}\}$ with componentwise addition and scalar multiplication:
+
+$$(a_1, \ldots, a_n) + (b_1, \ldots, b_n) = (a_1 + b_1, \ldots, a_n + b_n), \quad c(a_1, \ldots, a_n) = (ca_1, \ldots, ca_n).$$
+
+The zero vector is $(0, 0, \ldots, 0)$. This is the prototypical vector space.
+</Example>
+
+<Example id="cn" title="The space C^n">
+$\mathbb{C}^n$ is a vector space over $\mathbb{C}$ with the same operations as $\mathbb{R}^n$. Note that $\mathbb{C}^n$ can also be viewed as a vector space over $\mathbb{R}$ (of dimension $2n$).
+</Example>
+
+<Example id="matrices" title="The space M_{m x n}(F)">
+The set of all $m \times n$ matrices with entries in $F$, with the usual matrix addition and scalar multiplication, forms a vector space over $F$. The zero vector is the zero matrix.
+</Example>
+
+<Example id="polynomials" title="Polynomial spaces P_n(F) and P(F)">
+$P_n(F) = \{a_0 + a_1 x + \cdots + a_n x^n \mid a_i \in F\}$ is the space of polynomials of degree at most $n$. With the usual addition and scalar multiplication of polynomials, $P_n(F)$ is a vector space over $F$.
+
+$P(F) = \bigcup_{n=0}^{\infty} P_n(F)$ is the space of all polynomials, which is an infinite-dimensional vector space.
+</Example>
+
+<Example id="functions" title="Function spaces">
+Let $S$ be any nonempty set. The set $F(S, \mathbb{R}) = \{f : S \to \mathbb{R}\}$ of all real-valued functions on $S$ is a vector space with pointwise operations:
+
+$$(f + g)(s) = f(s) + g(s), \quad (cf)(s) = c \cdot f(s).$$
+
+The zero vector is the zero function $f(s) = 0$ for all $s$.
+</Example>
+
+<Example id="continuous" title="Continuous functions C[a, b]">
+$C[a, b] = \{f : [a, b] \to \mathbb{R} \mid f \text{ is continuous}\}$ is a vector space over $\mathbb{R}$. The sum of continuous functions is continuous, and a scalar multiple of a continuous function is continuous. This is a subspace of $F([a,b], \mathbb{R})$.
+</Example>
+
+<Example id="zero-space" title="The zero vector space">
+$V = \{0\}$ consisting of just the zero vector is a vector space over any field $F$. It is the smallest possible vector space, with $\dim V = 0$.
+</Example>
+
+<Example id="field-itself" title="F as a vector space over F">
+Any field $F$ is a vector space over itself, with scalar multiplication being the field multiplication. More generally, if $E/F$ is a field extension, then $E$ is a vector space over $F$. For instance, $\mathbb{C}$ is a 2-dimensional vector space over $\mathbb{R}$, with basis $\{1, i\}$.
+</Example>
+
+<Example id="sequences" title="Sequence spaces">
+The set $F^\infty = \{(a_1, a_2, a_3, \ldots) \mid a_i \in F\}$ of all infinite sequences is a vector space over $F$ with componentwise operations. Notable subspaces include:
+
+- $\ell^2$: sequences with $\sum |a_i|^2 < \infty$ (a Hilbert space)
+- $c_0$: sequences converging to $0$
+- $c_{00}$: sequences with only finitely many nonzero terms
+</Example>
+
+<Example id="solution-space" title="Solution space of a homogeneous system">
+The set of all solutions to a homogeneous linear system $Ax = 0$ (where $A$ is an $m \times n$ matrix) is a vector space over $F$: if $Au = 0$ and $Av = 0$, then $A(u + v) = 0$ and $A(cu) = 0$. This is a subspace of $F^n$.
+</Example>
+
+<Example id="complex-over-real" title="C as a real vector space">
+$\mathbb{C}$ is a vector space over $\mathbb{R}$ with basis $\{1, i\}$. Every complex number $z = a + bi$ is a unique linear combination of $1$ and $i$ with real coefficients. Thus $\dim_{\mathbb{R}} \mathbb{C} = 2$.
+</Example>
+
+<Example id="r-over-q" title="R as a vector space over Q">
+$\mathbb{R}$ is a vector space over $\mathbb{Q}$. However, this vector space is infinite-dimensional (in fact, uncountably so). A basis is called a **Hamel basis**, and its existence requires the axiom of choice.
+</Example>
+
+---
+
+## Basic properties
+
+<Theorem title="Uniqueness and cancellation" number="1.1">
+In any vector space $V$ over $F$:
+
+1. The zero vector $0$ is unique.
+2. The additive inverse $-v$ is unique for each $v \in V$.
+3. $0v = 0$ for all $v \in V$ (scalar zero gives vector zero).
+4. $a0 = 0$ for all $a \in F$.
+5. $(-1)v = -v$ for all $v \in V$.
+6. If $av = 0$, then $a = 0$ or $v = 0$.
+</Theorem>
+
+<Proof>
+For (3): $0v = (0 + 0)v = 0v + 0v$. Adding $-(0v)$ to both sides gives $0 = 0v$.
+
+For (5): $v + (-1)v = 1v + (-1)v = (1 + (-1))v = 0v = 0$, so $(-1)v$ is the additive inverse of $v$.
+
+For (6): Suppose $av = 0$ and $a \neq 0$. Then $a^{-1}$ exists in $F$, and $v = 1v = (a^{-1}a)v = a^{-1}(av) = a^{-1}0 = 0$.
+</Proof>
+
+<Remark title="Looking ahead">
+A vector space is an abelian group $(V, +)$ equipped with a compatible scalar multiplication by a field $F$. More generally, replacing the field by a ring $R$ gives the notion of an **$R$-module**. Modules over rings are central in commutative algebra and algebraic geometry.
+</Remark>

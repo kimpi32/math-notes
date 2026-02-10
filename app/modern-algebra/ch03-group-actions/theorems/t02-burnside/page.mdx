@@ -1,0 +1,267 @@
+export const metadata = {
+  title: "Burnside's Lemma — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Theorem — Burnside's Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Burnside's Lemma
+
+Burnside's Lemma (also known as the Cauchy--Frobenius Lemma or the orbit-counting theorem) provides a formula for counting the number of distinct objects under a group of symmetries. It states that the number of orbits equals the average number of fixed points over all group elements. This result is one of the most widely applied tools in combinatorics and has beautiful applications to counting colorings, necklaces, and other combinatorial structures.
+
+---
+
+## Statement
+
+<Theorem title="Burnside's Lemma (Cauchy--Frobenius Lemma)" number="3.13">
+Let $G$ be a finite group acting on a finite set $X$. The number of orbits $|X/G|$ is
+
+$$|X/G| = \frac{1}{|G|} \sum_{g \in G} |\operatorname{Fix}(g)|$$
+
+where $\operatorname{Fix}(g) = \{x \in X : g \cdot x = x\}$ is the set of elements fixed by $g$.
+
+In words: the number of orbits equals the average number of fixed points per group element.
+</Theorem>
+
+<Remark title="Historical note">
+Despite its name, Burnside himself attributed this result to Frobenius. The lemma was known to Cauchy even earlier. It is sometimes called the "lemma that is not Burnside's." Regardless, the name "Burnside's Lemma" is standard in modern usage.
+</Remark>
+
+---
+
+## Immediate Consequences
+
+<Remark title="Reformulation via stabilizers">
+By the duality $x \in \operatorname{Fix}(g) \iff g \in \operatorname{Stab}(x)$, we can rewrite:
+
+$$\sum_{g \in G} |\operatorname{Fix}(g)| = \sum_{x \in X} |\operatorname{Stab}(x)| = \sum_{x \in X} \frac{|G|}{|\operatorname{Orb}(x)|}$$
+
+where the last equality uses the Orbit-Stabilizer Theorem. Summing over all $x$ in an orbit of size $k$ gives $k \cdot |G|/k = |G|$, so the total is $|G| \cdot (\text{number of orbits})$. Dividing by $|G|$ recovers the formula.
+</Remark>
+
+---
+
+## Counting Colorings
+
+<Example id="burnside-triangle" title="Coloring vertices of a triangle with 2 colors">
+Color the 3 vertices of an equilateral triangle with 2 colors (black and white). How many distinct colorings are there up to rotation?
+
+The rotation group is $G = \mathbb{Z}/3\mathbb{Z} = \{e, r, r^2\}$ (rotations by $0°, 120°, 240°$). The set $X$ consists of all $2^3 = 8$ colorings.
+
+- $|\operatorname{Fix}(e)| = 8$ (identity fixes everything).
+- $|\operatorname{Fix}(r)| = 2$ (only all-same-color colorings: BBB and WWW).
+- $|\operatorname{Fix}(r^2)| = 2$ (same reason).
+
+Number of orbits: $(8 + 2 + 2)/3 = 12/3 = 4$.
+
+The 4 distinct colorings are: all white, one black, two black, all black.
+</Example>
+
+<Example id="burnside-triangle-full" title="Coloring vertices of a triangle (full symmetry)">
+Now use the full symmetry group $G = D_3$ (order 6), including reflections.
+
+- $|\operatorname{Fix}(e)| = 8$.
+- $|\operatorname{Fix}(r)| = |\operatorname{Fix}(r^2)| = 2$ (all-same-color).
+- Each reflection fixes exactly 1 vertex and swaps the other 2, so the two swapped vertices must have the same color: $|\operatorname{Fix}(s)| = |\operatorname{Fix}(sr)| = |\operatorname{Fix}(sr^2)| = 2^2 = 4$.
+
+Number of orbits: $(8 + 2 + 2 + 4 + 4 + 4)/6 = 24/6 = 4$.
+
+Same answer! The reflections do not further reduce the count because the orbits under rotation were already symmetric under reflection.
+</Example>
+
+<Example id="burnside-square" title="Coloring vertices of a square with 2 colors">
+$G = D_4$ (order 8) acts on the 4 vertices of a square. There are $2^4 = 16$ colorings with 2 colors.
+
+- $e$: $|\operatorname{Fix}| = 16$.
+- $r$ (90° rotation): all 4 vertices must be the same color. $|\operatorname{Fix}| = 2$.
+- $r^2$ (180° rotation): pairs $(1,3)$ and $(2,4)$ must match. $|\operatorname{Fix}| = 2^2 = 4$.
+- $r^3$ (270° rotation): same as $r$. $|\operatorname{Fix}| = 2$.
+- $s$ (reflection through 2 vertices): fixes 2 vertices, swaps the other pair. $|\operatorname{Fix}| = 2^3 = 8$. Wait, let us be more precise: if $s$ fixes vertices 1 and 3, then 2 and 4 must match. Free choices: color of 1, color of 3, color of $\{2,4\}$. So $|\operatorname{Fix}| = 2^3 = 8$.
+
+Actually, let me reconsider. The reflections of $D_4$ on vertices:
+- Two reflections through vertices (fixing 2 vertices each): $|\operatorname{Fix}| = 2^3 = 8$ each (wait, we have 4 vertices, fix 2, require 2 to match: 3 free binary choices).
+
+Actually: vertices 1, 2, 3, 4 around the square. Reflection $s$ through vertices 1 and 3: fixes 1 and 3, swaps 2 and 4. So colors of 1, 3 are free, and colors of 2 and 4 must match: $2 \times 2 \times 2 = 8$. Wait, that is 3 binary choices giving $2^3 = 8$, but we have 4 vertices with 1 constraint, so $2^3 = 8$ is too high. Let me recount: vertex 1: free, vertex 3: free, vertex 2 = vertex 4: free. So 3 free choices, $|\operatorname{Fix}| = 2^3 = 8$. But this seems large. With 16 total colorings and 8 fixed by one reflection, that gives the right ratio.
+
+- Two reflections through edge midpoints: swaps $(1,2)$ and $(3,4)$, or swaps $(1,4)$ and $(2,3)$. So $|\operatorname{Fix}| = 2^2 = 4$ each (two free choices).
+
+Sum: $16 + 2 + 4 + 2 + 8 + 8 + 4 + 4 = 48$. But wait, let me recount the reflections. We have $s, sr, sr^2, sr^3$. Two go through vertices ($|\operatorname{Fix}| = 2^3 = 8$), two go through edge midpoints ($|\operatorname{Fix}| = 2^2 = 4$).
+
+Hmm, actually: fix through vertices means 2 are fixed and 2 are swapped, giving $2^3 = 8$? No. 4 vertices total, 2 fixed, 2 constrained (must be equal). So the number of free color choices is 3 (one for each fixed vertex + one for the swapped pair), giving $2^3 = 8$. This is correct.
+
+Sum: $16 + 2 + 4 + 2 + 8 + 4 + 8 + 4 = 48$. Hmm, order matters. Let me just list systematically:
+
+$e$: 16. $r$: 2. $r^2$: 4. $r^3$: 2. $s$: 8. $sr$: 4. $sr^2$: 8. $sr^3$: 4.
+
+Total: $16 + 2 + 4 + 2 + 8 + 4 + 8 + 4 = 48$. Orbits: $48/8 = 6$.
+
+The 6 distinct colorings are: 0 black, 1 black, 2 adjacent black, 2 opposite black, 3 black, 4 black.
+</Example>
+
+<Example id="burnside-necklace-3" title="Necklaces with 3 beads and k colors">
+A necklace with 3 beads can be rotated (symmetry group $\mathbb{Z}/3\mathbb{Z}$). With $k$ colors:
+
+- $|\operatorname{Fix}(e)| = k^3$.
+- $|\operatorname{Fix}(r)| = k$ (all beads must be the same).
+- $|\operatorname{Fix}(r^2)| = k$.
+
+Number of distinct necklaces: $(k^3 + 2k)/3$.
+
+For $k = 2$: $(8 + 4)/3 = 4$. For $k = 3$: $(27 + 6)/3 = 11$.
+</Example>
+
+<Example id="burnside-necklace-4" title="Necklaces with 4 beads and k colors">
+Rotational symmetry group $\mathbb{Z}/4\mathbb{Z} = \{e, r, r^2, r^3\}$, with $k$ colors:
+
+- $|\operatorname{Fix}(e)| = k^4$.
+- $|\operatorname{Fix}(r)| = k$ (all beads same).
+- $|\operatorname{Fix}(r^2)| = k^2$ (beads 1,3 match and beads 2,4 match).
+- $|\operatorname{Fix}(r^3)| = k$ (all beads same).
+
+Number of necklaces: $(k^4 + k^2 + 2k)/4$.
+
+For $k = 2$: $(16 + 4 + 4)/4 = 6$. For $k = 3$: $(81 + 9 + 6)/4 = 24$.
+
+If we also allow flips ($D_4$ symmetry, bracelets), we add the 4 reflections and divide by 8 instead.
+</Example>
+
+<Example id="burnside-cube-faces" title="Coloring faces of a cube with 2 colors">
+The rotation group of a cube has order 24 (isomorphic to $S_4$). The cube has 6 faces.
+
+The 24 rotations and their fixed-point counts for 2-coloring of faces:
+
+- 1 identity: $|\operatorname{Fix}| = 2^6 = 64$.
+- 6 face rotations (90° and 270° about face axes): top/bottom fixed in color, 4 side faces must all match. $|\operatorname{Fix}| = 2^3 = 8$ each. Total: $6 \times 8 = 48$.
+
+Wait, more carefully:
+- 1 identity: 64.
+- 6 rotations by 90° or 270° (about axes through opposite faces): the two faces on the axis are free, the 4 other faces cycle, so all 4 must be the same. $|\operatorname{Fix}| = 2 \times 2 \times 2 = 8$. But 4 cycling means 1 choice for the 4 faces: $|\operatorname{Fix}| = 2^3 = 8$. Actually: 2 choices for the top face, 2 for the bottom face, 2 for the 4 side faces (all same). So $|\operatorname{Fix}| = 2^3 = 8$. Total: $6 \times 8 = 48$.
+- 3 rotations by 180° (about face axes): top/bottom free, the 4 sides split into 2 pairs. $|\operatorname{Fix}| = 2^4 = 16$. Total: $3 \times 16 = 48$.
+- 8 rotations by 120° or 240° (about vertex axes): two sets of 3 faces cycle. $|\operatorname{Fix}| = 2^2 = 4$. Total: $8 \times 4 = 32$.
+- 6 rotations by 180° (about edge midpoint axes): 3 pairs of opposite faces swap. $|\operatorname{Fix}| = 2^3 = 8$. Total: $6 \times 8 = 48$.
+
+Grand total: $64 + 48 + 48 + 32 + 48 = 240$.
+
+Number of distinct colorings: $240/24 = 10$.
+</Example>
+
+<Example id="burnside-chemical" title="Counting chemical isomers">
+Consider a carbon atom with 4 bonds arranged tetrahedrally, each bonded to one of $k$ types of atoms/groups. The symmetry group is $S_4$ acting on the 4 vertices of a tetrahedron (the rotation group is $A_4$ of order 12, but $S_4$ accounts for reflections too -- in chemistry, we use the rotation group since mirror images are different molecules in the absence of a mirror plane).
+
+For the rotation group $A_4$ (order 12) with $k$ substituent types:
+
+- 1 identity: $k^4$.
+- 8 rotations by 120°/240°: $k^2$ (two groups of 3 cycling).
+- 3 rotations by 180°: $k^2$ (two pairs swap, but actually each pair must match: $k^2$).
+
+Wait: the 180° rotation swaps two pairs, so need pair 1 to match and pair 2 to match: $k^2$. The 120°/240° rotations cycle 3 vertices (these 3 must be the same) and fix 1: $k^2$.
+
+Number of isomers: $(k^4 + 8k^2 + 3k^2)/12 = (k^4 + 11k^2)/12$.
+
+For $k = 2$: $(16 + 44)/12 = 60/12 = 5$. For $k = 4$: $(256 + 176)/12 = 432/12 = 36$.
+</Example>
+
+---
+
+## Connection to the Polya Enumeration Theorem
+
+<Remark title="Generalization: Polya enumeration">
+Burnside's lemma counts the number of orbits (distinct colorings). Polya's Enumeration Theorem generalizes this by keeping track of the **type** of each coloring, using the cycle index polynomial of the group.
+
+The **cycle index** of a group $G$ acting on $n$ elements is
+
+$$Z(G; x_1, \ldots, x_n) = \frac{1}{|G|} \sum_{g \in G} x_1^{c_1(g)} x_2^{c_2(g)} \cdots x_n^{c_n(g)}$$
+
+where $c_k(g)$ is the number of $k$-cycles in the permutation induced by $g$. Substituting $x_k = (\text{number of colors})$ for all $k$ recovers Burnside's Lemma.
+
+Polya's theorem allows refined counting: for example, the number of necklaces with exactly $r$ red beads and $b$ blue beads.
+</Remark>
+
+<Example id="cycle-index-z4" title="Cycle index of Z/4Z">
+For $G = \mathbb{Z}/4\mathbb{Z}$ acting on 4 beads:
+
+- $e$: four 1-cycles. Contributes $x_1^4$.
+- $r$: one 4-cycle. Contributes $x_4$.
+- $r^2$: two 2-cycles. Contributes $x_2^2$.
+- $r^3$: one 4-cycle. Contributes $x_4$.
+
+$$Z(\mathbb{Z}/4\mathbb{Z}) = \frac{1}{4}(x_1^4 + x_2^2 + 2x_4).$$
+
+Setting $x_k = 2$ for all $k$: $(16 + 4 + 2 \cdot 2)/4 = 24/4 = 6$ necklaces with 2 colors.
+
+Setting $x_k = \sum_i t_i^k$ with $t_1 = r, t_2 = b$ (red and blue):
+$$Z = \frac{1}{4}((r+b)^4 + (r^2+b^2)^2 + 2(r^4+b^4)).$$
+Expanding and collecting gives the number of necklaces by color composition.
+</Example>
+
+---
+
+## Additional Examples
+
+<Example id="burnside-edge-coloring" title="Coloring edges of a triangle with 2 colors">
+Color the 3 edges of a triangle with 2 colors. The symmetry group is $D_3$ (order 6).
+
+Edges are labeled $\{1,2\}, \{1,3\}, \{2,3\}$. $|X| = 2^3 = 8$ colorings.
+
+- $e$: $|\operatorname{Fix}| = 8$.
+- $r, r^2$ (rotations by 120, 240): all 3 edges cycle, so $|\operatorname{Fix}| = 2$ each.
+- $s_1, s_2, s_3$ (reflections): each fixes 1 edge and swaps 2. $|\operatorname{Fix}| = 2^2 = 4$ each.
+
+Total: $(8 + 2 + 2 + 4 + 4 + 4)/6 = 24/6 = 4$ distinct colorings.
+</Example>
+
+<Example id="burnside-pentagon" title="Coloring vertices of a pentagon with 3 colors">
+$G = \mathbb{Z}/5\mathbb{Z}$, $|X| = 3^5 = 243$, $|G| = 5$.
+
+- $e$: $|\operatorname{Fix}| = 243$.
+- $r, r^2, r^3, r^4$: all 5 vertices cycle (single 5-cycle), $|\operatorname{Fix}| = 3$ each.
+
+Total: $(243 + 3 + 3 + 3 + 3)/5 = 255/5 = 51$ necklaces.
+</Example>
+
+<Example id="burnside-binary-strings" title="Binary strings up to reversal">
+How many distinct binary strings of length 4 are there, up to reversal? The symmetry group is $G = \mathbb{Z}/2\mathbb{Z}$, acting by reversing the string. $|X| = 2^4 = 16$.
+
+- $e$: $|\operatorname{Fix}| = 16$.
+- Reversal: a string equals its reversal iff it is a palindrome. Position 1 = position 4, position 2 = position 3. $|\operatorname{Fix}| = 2^2 = 4$.
+
+Total: $(16 + 4)/2 = 10$ distinct strings up to reversal.
+</Example>
+
+<Example id="burnside-dice" title="Colorings of faces of a die">
+A standard die has 6 faces. The rotation group of a cube has order 24 (isomorphic to $S_4$). How many ways to assign the numbers 1--6 to the faces, up to rotation?
+
+$|X| = 6! = 720$ arrangements. Only the identity fixes any arrangement (since every non-identity rotation moves at least one face). Actually, a rotation fixes an arrangement only if it is compatible with the rotation, which for distinct labels means no non-identity element fixes any arrangement.
+
+So: $\sum |\operatorname{Fix}(g)| = 720 + 0 \cdot 23 = 720$, giving $720/24 = 30$ distinct dice.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+1. **Burnside's Lemma**: $|X/G| = \frac{1}{|G|} \sum_{g \in G} |\operatorname{Fix}(g)|$.
+
+2. The proof is a simple double-counting argument using the duality $x \in \operatorname{Fix}(g) \iff g \in \operatorname{Stab}(x)$.
+
+3. Applications include counting **colorings**, **necklaces**, **chemical isomers**, and other objects up to symmetry.
+
+4. **Polya's Enumeration Theorem** generalizes Burnside's Lemma using the cycle index polynomial.
+
+5. The key computational step is always determining $|\operatorname{Fix}(g)|$ for each group element $g$.
+</Remark>

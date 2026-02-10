@@ -1,0 +1,192 @@
+export const metadata = {
+  title: 'Jordan Decomposition Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "7. 표준형", href: "/linear-algebra/ch07-canonical-forms" },
+  { label: "Theorem — Jordan Decomposition" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Jordan Decomposition Theorem
+
+The Jordan decomposition expresses any matrix (over an algebraically closed field) as the sum of a diagonalizable part and a nilpotent part that commute with each other. This additive decomposition is the algebraic counterpart of the Jordan normal form and is fundamental to the structure theory of linear operators.
+
+---
+
+## Statement
+
+<Theorem title="Jordan (Additive) Decomposition" number="7.4">
+Let $A \in M_{n \times n}(F)$ where $F$ is algebraically closed. Then there exist unique matrices $D$ and $N$ such that:
+
+1. $A = D + N$,
+2. $D$ is **diagonalizable**,
+3. $N$ is **nilpotent**,
+4. $DN = ND$ (they commute).
+
+Moreover, $D$ and $N$ are polynomials in $A$: there exist $p, q \in F[\lambda]$ with $D = p(A)$ and $N = q(A)$.
+</Theorem>
+
+<Remark title="Jordan decomposition from Jordan normal form">
+If $A = PJP^{-1}$ with $J = \operatorname{diag}(J_{k_1}(\lambda_1), \ldots)$, then decompose each block: $J_k(\lambda) = \lambda I_k + N_k$. So $J = \Lambda + \tilde{N}$ where $\Lambda = \operatorname{diag}(\lambda_1 I_{k_1}, \ldots)$ is diagonal and $\tilde{N}$ is the nilpotent part. Then $D = P\Lambda P^{-1}$ and $N = P\tilde{N}P^{-1}$.
+</Remark>
+
+---
+
+## Examples
+
+<Example id="jd-2x2" title="Jordan decomposition of a 2x2 matrix">
+$A = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix} = \begin{pmatrix} 3 & 0 \\ 0 & 3 \end{pmatrix} + \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} = D + N$.
+
+$D = 3I$ is diagonalizable, $N^2 = 0$ is nilpotent, $DN = ND = \begin{pmatrix} 0 & 3 \\ 0 & 0 \end{pmatrix}$ ✓.
+</Example>
+
+<Example id="jd-3x3" title="Jordan decomposition of a 3x3 matrix">
+$A = \begin{pmatrix} 2 & 1 & 0 \\ 0 & 2 & 1 \\ 0 & 0 & 3 \end{pmatrix}$.
+
+Jordan form: $\operatorname{diag}(J_2(2), J_1(3))$, so in the Jordan basis:
+
+$D' = \operatorname{diag}(2, 2, 3)$, $N' = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+Since $A$ is already upper triangular with Jordan structure, $D = \operatorname{diag}(2, 2, 3)$ and $N = A - D = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}$.
+
+Wait -- check commutativity: $DN = \begin{pmatrix} 0 & 2 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{pmatrix}$ and $ND = \begin{pmatrix} 0 & 2 & 0 \\ 0 & 0 & 3 \\ 0 & 0 & 0 \end{pmatrix}$. These are **not equal**, so this naive decomposition is wrong.
+
+The correct $D$ and $N$ must commute. Using the Jordan form basis: if $P^{-1}AP = \operatorname{diag}(J_2(2), 3)$, then $D = P\operatorname{diag}(2, 2, 3)P^{-1}$ and $N = P\operatorname{diag}(N_2, 0)P^{-1}$. These are the correct $D, N$ which commute.
+</Example>
+
+<Example id="jd-diagonal" title="Jordan decomposition of a diagonalizable matrix">
+If $A$ is already diagonalizable: $D = A$, $N = 0$.
+
+$A = \begin{pmatrix} 1 & 0 \\ 0 & 2 \end{pmatrix}$: $D = A$, $N = 0$.
+</Example>
+
+<Example id="jd-nilpotent" title="Jordan decomposition of a nilpotent matrix">
+If $A$ is nilpotent: $D = 0$, $N = A$.
+
+$A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$: $D = 0$, $N = A$.
+</Example>
+
+---
+
+## Uniqueness
+
+<Theorem title="Uniqueness of the Jordan decomposition">
+The decomposition $A = D + N$ with $D$ diagonalizable, $N$ nilpotent, and $DN = ND$ is unique.
+</Theorem>
+
+<Proof title="Proof of uniqueness">
+Suppose $A = D_1 + N_1 = D_2 + N_2$ are two such decompositions. Then $D_1 - D_2 = N_2 - N_1$.
+
+Since $D_1, N_1$ commute and $D_2, N_2$ commute, and both pairs are polynomials in $A$, all four matrices commute pairwise.
+
+$D_1 - D_2$ is diagonalizable (difference of commuting diagonalizable matrices). $N_2 - N_1$ is nilpotent (sum of commuting nilpotent matrices). A matrix that is both diagonalizable and nilpotent must be zero (its only eigenvalue is $0$, but it equals its diagonal form, which is $0$). So $D_1 = D_2$ and $N_1 = N_2$.
+</Proof>
+
+<Example id="uniqueness-check" title="Verifying uniqueness fails without commutativity">
+$A = \begin{pmatrix} 1 & 1 \\ 0 & 0 \end{pmatrix}$. Jordan decomposition: $D = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$, $N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$.
+
+$DN = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} = ND$? $ND = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix} \neq DN$.
+
+So this obvious splitting does NOT satisfy $DN = ND$. The correct decomposition requires passing to the Jordan basis.
+
+$A$ has eigenvalues $1, 0$, so it is actually diagonalizable (distinct eigenvalues). The correct decomposition is $D = A$, $N = 0$.
+</Example>
+
+---
+
+## The polynomial property
+
+<Example id="polynomial-D-N" title="D and N as polynomials in A">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 3 \end{pmatrix}$: eigenvalues $2, 3$, diagonalizable (distinct eigenvalues).
+
+$D = A$, $N = 0$. $D = p(A)$ with $p(\lambda) = \lambda$, $N = q(A)$ with $q(\lambda) = 0$.
+
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$: $D = 2I$, $N = A - 2I$.
+
+$D = p(A)$ where $p(\lambda) = 2$ (constant polynomial). $N = q(A)$ where $q(\lambda) = \lambda - 2$.
+
+Since $D$ and $N$ are polynomials in $A$, they commute with every matrix that commutes with $A$ (not just with each other). This is a powerful structural property.
+</Example>
+
+<Example id="polynomial-construction" title="Constructing D and N via interpolation">
+For $A$ with distinct eigenvalues $\lambda_1, \ldots, \lambda_k$ (over the algebraic closure), construct $p(\lambda)$ satisfying:
+
+$p(\lambda) \equiv \lambda_i \pmod{(\lambda - \lambda_i)^{m_i}}$ for each $i$,
+
+where $m_i$ is the algebraic multiplicity. This is a Chinese Remainder Theorem problem. Then $D = p(A)$ and $N = A - p(A)$.
+
+For $A$ with $p_A(\lambda) = (\lambda - 2)^2(\lambda - 5)$: find $p$ with $p(\lambda) \equiv 2 \pmod{(\lambda-2)^2}$ and $p(\lambda) \equiv 5 \pmod{(\lambda-5)}$. By CRT: $p(\lambda) = 2 + \frac{3(\lambda - 2)^2}{(5 - 2)^2} \cdot 3 = \ldots$ (a polynomial of degree $\leq 2$).
+</Example>
+
+---
+
+## Multiplicative Jordan decomposition
+
+<Theorem title="Multiplicative Jordan decomposition">
+If $A$ is invertible, then $A = D_s \cdot U$ where $D_s$ is diagonalizable (semisimple), $U$ is unipotent ($U - I$ is nilpotent), and $D_s U = U D_s$.
+
+This follows from the additive decomposition: $A = D + N = D(I + D^{-1}N)$, so $D_s = D$ and $U = I + D^{-1}N$.
+</Theorem>
+
+<Example id="multiplicative-jd" title="Multiplicative decomposition example">
+$A = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$: $D = 2I$, $N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$.
+
+$D_s = 2I$, $U = I + \frac{1}{2}\begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 1 & 1/2 \\ 0 & 1 \end{pmatrix}$.
+
+$A = D_s U = 2I \cdot \begin{pmatrix} 1 & 1/2 \\ 0 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 0 & 2 \end{pmatrix}$ ✓.
+
+$U - I = \begin{pmatrix} 0 & 1/2 \\ 0 & 0 \end{pmatrix}$ is nilpotent ✓.
+</Example>
+
+---
+
+## Applications
+
+<Example id="jd-exponential" title="Matrix exponential via Jordan decomposition">
+$e^{A} = e^{D+N} = e^D \cdot e^N$ (since $DN = ND$, the exponential splits).
+
+$e^D$ is easy (diagonalizable: $e^D = Pe^{\Lambda}P^{-1}$). $e^N$ is a finite sum (nilpotent: $e^N = I + N + N^2/2! + \cdots + N^{k-1}/(k-1)!$).
+
+For $A = \begin{pmatrix} 3 & 1 \\ 0 & 3 \end{pmatrix}$: $e^A = e^3 \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$.
+</Example>
+
+<Example id="jd-powers" title="Matrix powers via Jordan decomposition">
+$A^n = (D + N)^n = \sum_{k=0}^{n} \binom{n}{k} D^{n-k} N^k$ (using $DN = ND$, the binomial theorem applies).
+
+Since $N$ is nilpotent with $N^m = 0$, the sum is finite (at most $m$ terms).
+
+For $A = J_2(\lambda)$: $A^n = \lambda^n I + n\lambda^{n-1} N = \begin{pmatrix} \lambda^n & n\lambda^{n-1} \\ 0 & \lambda^n \end{pmatrix}$.
+</Example>
+
+<Example id="jd-differential" title="Solving differential equations">
+$x' = Ax$ has solution $x(t) = e^{At}x_0 = e^{Dt}e^{Nt}x_0$.
+
+The diagonalizable part $e^{Dt}$ gives exponential modes. The nilpotent part $e^{Nt}$ gives polynomial corrections (polynomial times exponential solutions).
+
+For $A = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$: $x(t) = e^t\begin{pmatrix} 1 & t \\ 0 & 1 \end{pmatrix}x_0$. The solution is $x_1(t) = e^t(c_1 + c_2 t)$, $x_2(t) = c_2 e^t$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The Jordan decomposition as structure theorem">
+The Jordan decomposition $A = D + N$ is one of the most fundamental results in linear algebra:
+- It exists and is **unique** for matrices over algebraically closed fields.
+- $D$ captures the **eigenvalue behavior** (the diagonal part), $N$ captures the **deficiency from diagonalizability**.
+- Both $D$ and $N$ are **polynomials in $A$**, so they commute with everything that commutes with $A$.
+- The decomposition enables computation of $e^{At}$, $A^n$, and solutions to differential equations.
+- It generalizes to the **Jordan--Chevalley decomposition** in the theory of Lie algebras and algebraic groups.
+</Remark>

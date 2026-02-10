@@ -1,0 +1,128 @@
+export const metadata = {
+  title: 'Tor Functor — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Concept — Tor Functor" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Tor Functor
+
+The Tor functor is the left derived functor of the tensor product. It measures the failure of tensoring to be exact, detects torsion phenomena in modules, and plays a central role in flatness criteria and intersection theory. The name "Tor" comes from its connection to torsion in abelian groups.
+
+---
+
+## Definitions
+
+<Definition title="Tor Functor" number="7.10">
+For a ring $R$ and $R$-modules $A, B$, the **Tor groups** are defined as:
+
+$$\mathrm{Tor}_n^R(A, B) = L_n(A \otimes_R -)(B) = H_n(A \otimes_R P_\bullet)$$
+
+where $P_\bullet \to B$ is a projective resolution. Equivalently, using a projective resolution $Q_\bullet \to A$:
+
+$$\mathrm{Tor}_n^R(A, B) = H_n(Q_\bullet \otimes_R B)$$
+</Definition>
+
+<Definition title="Derived Tensor Product" number="7.11">
+In the derived category $D(R)$, the **derived tensor product** is:
+
+$$A \otimes^L_R B = P_\bullet \otimes_R B$$
+
+where $P_\bullet \to A$ is a projective resolution. Then $\mathrm{Tor}_n^R(A, B) = H^{-n}(A \otimes^L_R B)$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Tor_0 is tensor product" id="tor0">
+$\mathrm{Tor}_0^R(A, B) = A \otimes_R B$. This follows from $L_0(A \otimes_R -) = A \otimes_R -$ since the tensor product is right exact.
+</Example>
+
+<Example title="Tor and torsion" id="tor-torsion">
+$\mathrm{Tor}_1^{\mathbb{Z}}(\mathbb{Z}/m, \mathbb{Z}/n) \cong \mathbb{Z}/\gcd(m, n)$. Using the resolution $0 \to \mathbb{Z} \xrightarrow{m} \mathbb{Z} \to \mathbb{Z}/m \to 0$ and tensoring with $\mathbb{Z}/n$: the complex $\mathbb{Z}/n \xrightarrow{m} \mathbb{Z}/n$ has kernel $\mathbb{Z}/\gcd(m, n)$. The name "Tor" comes from this detection of torsion.
+</Example>
+
+<Example title="Tor over Z" id="tor-z">
+Over $\mathbb{Z}$: $\mathrm{Tor}_n^{\mathbb{Z}}(A, B) = 0$ for $n \geq 2$ (since $\mathbb{Z}$ has global dimension 1). $\mathrm{Tor}_1^{\mathbb{Z}}(A, B)$ is the torsion product, detecting common torsion between $A$ and $B$. If $A$ or $B$ is torsion-free, $\mathrm{Tor}_1 = 0$.
+</Example>
+
+<Example title="Tor for vector spaces" id="tor-vect">
+Over a field $k$: $\mathrm{Tor}_n^k(V, W) = 0$ for all $n \geq 1$, since every module is free (hence flat). $\mathrm{Tor}_0 = V \otimes_k W$ is the only non-vanishing term.
+</Example>
+
+<Example title="Tor and flatness" id="tor-flat">
+An $R$-module $M$ is **flat** iff $\mathrm{Tor}_1^R(M, -) = 0$ iff $\mathrm{Tor}_n^R(M, -) = 0$ for all $n \geq 1$. Flatness means that $M \otimes_R -$ is exact. Free modules and localizations are flat. Over a PID, flat = torsion-free.
+</Example>
+
+<Example title="Tor over k[x]/(x^2)" id="tor-dual-numbers">
+Over $R = k[x]/(x^2)$: $\mathrm{Tor}_n^R(k, k) \cong k$ for all $n \geq 0$. The periodic projective resolution $\cdots \xrightarrow{x} R \xrightarrow{x} R \to k \to 0$ gives $k \otimes_R R \cong k$ with differential $x \cdot - = 0$, producing $k$ in every degree.
+</Example>
+
+<Example title="Koszul complex and Tor" id="koszul-tor">
+For $R = k[x_1, \ldots, x_n]$ and the maximal ideal $\mathfrak{m} = (x_1, \ldots, x_n)$: $\mathrm{Tor}_i^R(k, k) \cong k^{\binom{n}{i}}$. The Koszul complex provides the resolution, and $\mathrm{Tor}_i$ is the $i$-th exterior power $\bigwedge^i(k^n)$.
+</Example>
+
+<Example title="Tor and intersection multiplicity" id="intersection">
+Serre's intersection multiplicity formula: for subvarieties $V, W$ of a smooth variety $X$ meeting properly at a point $p$, the intersection multiplicity is
+
+$$i(V, W; p) = \sum_{n \geq 0} (-1)^n \mathrm{length}\, \mathrm{Tor}_n^{\mathcal{O}_{X,p}}(\mathcal{O}_{V,p}, \mathcal{O}_{W,p})$$
+
+The higher Tor terms are correction terms to the naive intersection.
+</Example>
+
+<Example title="Tor and base change" id="base-change">
+For a ring map $R \to S$ and an $R$-module $M$: $\mathrm{Tor}_n^R(S, M)$ measures the failure of $M \otimes_R S$ to be exact in the $S$ variable. If $R \to S$ is flat (e.g., localization), then $\mathrm{Tor}_n^R(S, -) = 0$ for $n \geq 1$, so base change is exact.
+</Example>
+
+<Example title="Universal coefficient theorem" id="uct">
+For a chain complex $C_\bullet$ of free abelian groups, the universal coefficient theorem gives a short exact sequence:
+
+$$0 \to H_n(C) \otimes G \to H_n(C \otimes G) \to \mathrm{Tor}_1^{\mathbb{Z}}(H_{n-1}(C), G) \to 0$$
+
+The Tor term is the obstruction to the Kunneth isomorphism.
+</Example>
+
+<Example title="Tor and regular sequences" id="regular-sequences">
+If $x_1, \ldots, x_r$ is a regular sequence in $R$ and $M = R/(x_1, \ldots, x_r)$, then $\mathrm{Tor}_i^R(M, N)$ for any $R$-module $N$ can be computed using the Koszul complex on $x_1, \ldots, x_r$. In particular, $\mathrm{Tor}_i^R(M, N) = 0$ for $i > r$.
+</Example>
+
+<Example title="Symmetry of Tor" id="tor-symmetry">
+$\mathrm{Tor}_n^R(A, B) \cong \mathrm{Tor}_n^R(B, A)$ for commutative $R$. This symmetry (or "balance") follows from the fact that $\mathrm{Tor}$ can be computed using a projective resolution of either argument. For noncommutative $R$, one must be more careful with left vs right modules.
+</Example>
+
+<Example title="Long exact sequence for Tor" id="les-tor">
+A short exact sequence $0 \to A' \to A \to A'' \to 0$ of $R$-modules induces:
+
+$$\cdots \to \mathrm{Tor}_2(M, A'') \to \mathrm{Tor}_1(M, A') \to \mathrm{Tor}_1(M, A) \to \mathrm{Tor}_1(M, A'') \to M \otimes A' \to M \otimes A \to M \otimes A'' \to 0$$
+
+This long exact sequence is the primary computational tool for Tor.
+</Example>
+
+---
+
+<Theorem title="Balance of Tor" number="7.4">
+$\mathrm{Tor}$ can be computed from either variable:
+
+$$L_n(A \otimes_R -)(B) \cong L_n(- \otimes_R B)(A)$$
+
+for all $n \geq 0$. That is, one may use a projective resolution of $A$ or of $B$; both give the same Tor groups.
+</Theorem>
+
+<Remark title="Tor vs Ext duality">
+Tor and Ext are dual in a precise sense. For finitely generated modules over a Noetherian ring, $\mathrm{Tor}_n(A, B) \cong \mathrm{Ext}^n(A^*, B)^*$ in certain contexts (where $^*$ denotes an appropriate dual). More fundamentally, Tor is the left derived functor of the right exact tensor product, while Ext is the right derived functor of the left exact Hom.
+</Remark>

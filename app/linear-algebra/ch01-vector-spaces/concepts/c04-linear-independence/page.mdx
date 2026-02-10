@@ -1,0 +1,151 @@
+export const metadata = {
+  title: 'Linear Independence — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Concept — Linear Independence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Linear Independence
+
+**Linear independence** captures the idea that no vector in a set is redundant -- none can be written as a linear combination of the others.
+
+---
+
+## Definition
+
+<Definition title="Linear independence" number="1.7">
+A set of vectors $\{v_1, v_2, \ldots, v_n\}$ in a vector space $V$ over $F$ is **linearly independent** if the equation
+
+$$a_1 v_1 + a_2 v_2 + \cdots + a_n v_n = 0$$
+
+implies $a_1 = a_2 = \cdots = a_n = 0$.
+
+A set that is not linearly independent is called **linearly dependent**.
+</Definition>
+
+<Remark title="Equivalent formulation">
+$\{v_1, \ldots, v_n\}$ is linearly dependent if and only if some $v_i$ can be written as a linear combination of the other vectors. That is, there exists an index $i$ such that
+
+$$v_i = \sum_{j \neq i} c_j v_j$$
+
+for some scalars $c_j \in F$.
+</Remark>
+
+<Remark title="The empty set and singletons">
+- The empty set is linearly independent (vacuously).
+- $\{v\}$ is linearly independent if and only if $v \neq 0$. (If $av = 0$ and $v \neq 0$, then $a = 0$.)
+</Remark>
+
+---
+
+## Examples
+
+<Example id="standard-basis" title="Standard basis vectors">
+In $\mathbb{R}^n$, the standard basis vectors $e_1 = (1, 0, \ldots, 0)$, $e_2 = (0, 1, \ldots, 0)$, $\ldots$, $e_n = (0, 0, \ldots, 1)$ are linearly independent.
+
+If $a_1 e_1 + \cdots + a_n e_n = 0$, then $(a_1, a_2, \ldots, a_n) = (0, 0, \ldots, 0)$.
+</Example>
+
+<Example id="two-vectors-r2" title="Two vectors in R^2">
+$\{(1, 2), (3, 4)\}$ is linearly independent. Suppose $a(1, 2) + b(3, 4) = (0, 0)$:
+
+$$a + 3b = 0, \quad 2a + 4b = 0.$$
+
+From the first equation, $a = -3b$. Substituting: $-6b + 4b = -2b = 0$, so $b = 0$ and $a = 0$.
+</Example>
+
+<Example id="dependent-example" title="A linearly dependent set">
+$\{(1, 2, 3), (4, 5, 6), (5, 7, 9)\}$ is linearly dependent because
+
+$$(1, 2, 3) + (4, 5, 6) = (5, 7, 9).$$
+
+Equivalently, $1 \cdot (1,2,3) + 1 \cdot (4,5,6) + (-1) \cdot (5,7,9) = (0,0,0)$, a nontrivial relation.
+</Example>
+
+<Example id="polynomials-li" title="Independent polynomials">
+$\{1, x, x^2, \ldots, x^n\}$ is linearly independent in $P(F)$. If $a_0 + a_1 x + \cdots + a_n x^n = 0$ as a polynomial function, then all coefficients must be zero (when $F$ is infinite, or by comparing coefficients formally).
+</Example>
+
+<Example id="sine-cosine-li" title="sin and cos are independent">
+$\{\sin x, \cos x\}$ is linearly independent in $C(\mathbb{R})$. If $a\sin x + b\cos x = 0$ for all $x$:
+
+- Setting $x = 0$: $b = 0$.
+- Setting $x = \pi/2$: $a = 0$.
+</Example>
+
+<Example id="exponentials-li" title="Distinct exponentials are independent">
+$\{e^x, e^{2x}\}$ is linearly independent in $C^\infty(\mathbb{R})$. If $ae^x + be^{2x} = 0$ for all $x$, then dividing by $e^x$ gives $a + be^x = 0$ for all $x$, which forces $b = 0$ (let $x \to \infty$) and then $a = 0$.
+
+More generally, $\{e^{\lambda_1 x}, e^{\lambda_2 x}, \ldots, e^{\lambda_n x}\}$ is linearly independent whenever $\lambda_1, \ldots, \lambda_n$ are distinct.
+</Example>
+
+<Example id="matrices-li" title="Independent matrices">
+In $M_{2 \times 2}(\mathbb{R})$, the matrices
+
+$$A_1 = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}, \quad A_2 = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad A_3 = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}$$
+
+are linearly independent: $aA_1 + bA_2 + cA_3 = \begin{pmatrix} a & b \\ b & c \end{pmatrix} = 0$ implies $a = b = c = 0$.
+</Example>
+
+<Example id="functions-li" title="Functional independence via evaluation">
+$\{1, |x|\}$ is linearly independent in $F(\mathbb{R}, \mathbb{R})$. If $a \cdot 1 + b|x| = 0$ for all $x$:
+
+- $x = 0$: $a = 0$.
+- $x = 1$: $b = 0$.
+</Example>
+
+<Example id="zero-dependent" title="Any set containing 0 is dependent">
+If $0 \in \{v_1, \ldots, v_n\}$, the set is linearly dependent. Say $v_1 = 0$. Then $1 \cdot v_1 + 0 \cdot v_2 + \cdots + 0 \cdot v_n = 0$ is a nontrivial relation.
+</Example>
+
+<Example id="superset-dependent" title="Supersets of dependent sets are dependent">
+If $\{v_1, \ldots, v_n\}$ is linearly dependent and $w \in V$, then $\{v_1, \ldots, v_n, w\}$ is also linearly dependent: the existing nontrivial relation extends with coefficient $0$ for $w$.
+</Example>
+
+<Example id="subset-independent" title="Subsets of independent sets are independent">
+If $\{v_1, \ldots, v_n\}$ is linearly independent, then every nonempty subset is linearly independent. (Any nontrivial relation in the subset would extend to a nontrivial relation in the full set.)
+</Example>
+
+<Example id="complex-independent" title="Independence depends on the field">
+$\{1, i\}$ is linearly independent in $\mathbb{C}$ viewed as a vector space over $\mathbb{R}$, but linearly **dependent** in $\mathbb{C}$ over $\mathbb{C}$ (since $i = i \cdot 1$). The field matters.
+</Example>
+
+<Example id="wronskian" title="Wronskian test for functions">
+For $n$ times differentiable functions $f_1, \ldots, f_n$, the **Wronskian** is
+
+$$W(f_1, \ldots, f_n)(x) = \det \begin{pmatrix} f_1(x) & \cdots & f_n(x) \\ f_1'(x) & \cdots & f_n'(x) \\ \vdots & \ddots & \vdots \\ f_1^{(n-1)}(x) & \cdots & f_n^{(n-1)}(x) \end{pmatrix}.$$
+
+If $W \neq 0$ at some point, then $f_1, \ldots, f_n$ are linearly independent.
+
+For example, $W(\sin x, \cos x) = \sin x \cdot (-\sin x) - \cos x \cdot \cos x = -1 \neq 0$.
+</Example>
+
+---
+
+## Key properties
+
+<Theorem title="Dependence and span" number="1.5">
+Let $S = \{v_1, \ldots, v_n\}$ be linearly dependent and $v_n \neq 0$. If $v_k$ is a vector that can be expressed as a linear combination of the preceding vectors $v_1, \ldots, v_{k-1}$, then
+
+$$\text{span}(S) = \text{span}(S \setminus \{v_k\}).$$
+
+In other words, removing a "redundant" vector does not change the span.
+</Theorem>
+
+<Remark title="Looking ahead">
+Linear independence and spanning are dual requirements. A set that is both linearly independent and spanning is a [basis](/linear-algebra/ch01-vector-spaces/concepts/c05-basis-dimension), the central concept that connects the algebraic structure of a vector space to its "size" (dimension).
+</Remark>

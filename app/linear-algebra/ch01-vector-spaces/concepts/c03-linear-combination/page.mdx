@@ -1,0 +1,134 @@
+export const metadata = {
+  title: 'Linear Combination — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Concept — Linear Combination" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Linear Combinations and Span
+
+The notion of **linear combination** is the engine of linear algebra. It tells us what vectors we can "reach" using addition and scalar multiplication.
+
+---
+
+## Definitions
+
+<Definition title="Linear combination" number="1.5">
+Let $V$ be a vector space over $F$. A **linear combination** of vectors $v_1, v_2, \ldots, v_n \in V$ is any vector of the form
+
+$$a_1 v_1 + a_2 v_2 + \cdots + a_n v_n$$
+
+where $a_1, a_2, \ldots, a_n \in F$ are scalars.
+</Definition>
+
+<Definition title="Span" number="1.6">
+The **span** (or **linear span**) of a set $S = \{v_1, \ldots, v_n\} \subseteq V$ is the set of all linear combinations of vectors in $S$:
+
+$$\text{span}(S) = \{a_1 v_1 + \cdots + a_n v_n \mid a_i \in F\}.$$
+
+By convention, $\text{span}(\varnothing) = \{0\}$.
+
+We say $S$ **spans** $V$ (or $S$ is a **spanning set** for $V$) if $\text{span}(S) = V$.
+</Definition>
+
+<Theorem title="Span is a subspace" number="1.4">
+For any subset $S \subseteq V$, $\text{span}(S)$ is a subspace of $V$. Moreover, it is the **smallest** subspace containing $S$: if $W$ is any subspace with $S \subseteq W$, then $\text{span}(S) \subseteq W$.
+</Theorem>
+
+<Proof>
+$\text{span}(S)$ contains $0$ (take all coefficients to be $0$). If $u = \sum a_i v_i$ and $w = \sum b_i v_i$ are in $\text{span}(S)$, then $u + w = \sum (a_i + b_i)v_i$ and $cu = \sum (ca_i)v_i$ are in $\text{span}(S)$. By the subspace test, $\text{span}(S)$ is a subspace. Since every subspace containing $S$ must contain all linear combinations of elements of $S$, the minimality follows.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="span-r2" title="Spanning R^2">
+$\text{span}\{(1, 0), (0, 1)\} = \mathbb{R}^2$ because every $(a, b) = a(1, 0) + b(0, 1)$.
+
+Also $\text{span}\{(1, 0), (0, 1), (1, 1)\} = \mathbb{R}^2$: the third vector is redundant since $(1, 1) = (1, 0) + (0, 1)$.
+</Example>
+
+<Example id="span-line" title="Span of a single vector">
+$\text{span}\{(2, 3)\} = \{t(2, 3) \mid t \in \mathbb{R}\} = \{(2t, 3t) \mid t \in \mathbb{R}\}$, which is the line through the origin with slope $3/2$.
+</Example>
+
+<Example id="span-plane" title="Span of two independent vectors in R^3">
+$\text{span}\{(1, 0, 1), (0, 1, 1)\} = \{(a, b, a + b) \mid a, b \in \mathbb{R}\}$, which is the plane $z = x + y$ in $\mathbb{R}^3$.
+</Example>
+
+<Example id="span-parallel" title="Span of parallel vectors">
+$\text{span}\{(1, 2), (3, 6)\} = \text{span}\{(1, 2)\}$ because $(3, 6) = 3(1, 2)$. Two parallel vectors span only a line, not a plane. Geometrically, adding a redundant vector does not enlarge the span.
+</Example>
+
+<Example id="span-polynomials" title="Spanning polynomials">
+$\text{span}\{1, x, x^2\} = P_2(\mathbb{R})$, the space of polynomials of degree at most 2.
+
+Alternatively, $\text{span}\{1, 1+x, 1+x+x^2\} = P_2(\mathbb{R})$ as well, since: $1 = 1$, $x = (1+x) - 1$, and $x^2 = (1+x+x^2) - (1+x)$.
+</Example>
+
+<Example id="span-matrices" title="Spanning a matrix space">
+The four matrices
+
+$$E_{11} = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}, \quad E_{12} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad E_{21} = \begin{pmatrix} 0 & 0 \\ 1 & 0 \end{pmatrix}, \quad E_{22} = \begin{pmatrix} 0 & 0 \\ 0 & 1 \end{pmatrix}$$
+
+span $M_{2 \times 2}(F)$, since any matrix $\begin{pmatrix} a & b \\ c & d \end{pmatrix} = aE_{11} + bE_{12} + cE_{21} + dE_{22}$.
+</Example>
+
+<Example id="span-r3" title="Three vectors in R^3">
+Do the vectors $v_1 = (1, 2, 3)$, $v_2 = (4, 5, 6)$, $v_3 = (7, 8, 9)$ span $\mathbb{R}^3$?
+
+We check: $v_3 = 2v_2 - v_1$ (since $(7,8,9) = 2(4,5,6) - (1,2,3)$). So $\text{span}\{v_1, v_2, v_3\} = \text{span}\{v_1, v_2\}$, which is a plane in $\mathbb{R}^3$. These three vectors do **not** span $\mathbb{R}^3$.
+</Example>
+
+<Example id="span-sine-cosine" title="Span of trigonometric functions">
+In $C(\mathbb{R})$, $\text{span}\{\sin x, \cos x\}$ is the set of all functions $a\sin x + b\cos x$ with $a, b \in \mathbb{R}$. This can also be written as $\{A\sin(x + \varphi) \mid A \geq 0, \varphi \in \mathbb{R}\}$.
+</Example>
+
+<Example id="span-infinite" title="Span of infinitely many vectors">
+$\text{span}\{1, x, x^2, x^3, \ldots\} = P(\mathbb{R})$, the space of all polynomials. This is an infinite-dimensional example: no finite subset spans all of $P(\mathbb{R})$.
+</Example>
+
+<Example id="span-exp" title="Span of exponential functions">
+In $C^\infty(\mathbb{R})$, $\text{span}\{e^x, e^{2x}, e^{3x}\}$ is a 3-dimensional subspace. These functions are linearly independent (as can be verified using a Wronskian determinant).
+</Example>
+
+<Example id="span-not-rn" title="Vectors that do not span">
+$\text{span}\{(1, 0, 0), (0, 1, 0)\}$ is the $xy$-plane in $\mathbb{R}^3$, **not** all of $\mathbb{R}^3$. The vector $(0, 0, 1)$ cannot be expressed as a linear combination of $(1, 0, 0)$ and $(0, 1, 0)$.
+</Example>
+
+<Example id="generating-system" title="Finding a spanning set for a subspace">
+The subspace $W = \{(x, y, z) \in \mathbb{R}^3 \mid x + 2y - z = 0\}$ can be parametrized by setting $y = s$, $z = t$, giving $x = -2s + t$. So
+
+$$W = \{s(-2, 1, 0) + t(1, 0, 1) \mid s, t \in \mathbb{R}\} = \text{span}\{(-2, 1, 0), (1, 0, 1)\}.$$
+</Example>
+
+---
+
+## Properties of span
+
+<Remark title="Monotonicity">
+If $S_1 \subseteq S_2$, then $\text{span}(S_1) \subseteq \text{span}(S_2)$. Adding more vectors can only enlarge the span.
+</Remark>
+
+<Remark title="Idempotence">
+$\text{span}(\text{span}(S)) = \text{span}(S)$. The span of a subspace is itself.
+</Remark>
+
+<Remark title="Looking ahead">
+A spanning set may contain redundant vectors. The quest for a spanning set with **no** redundancy leads to the notion of a [basis](/linear-algebra/ch01-vector-spaces/concepts/c05-basis-dimension), which in turn requires [linear independence](/linear-algebra/ch01-vector-spaces/concepts/c04-linear-independence).
+</Remark>

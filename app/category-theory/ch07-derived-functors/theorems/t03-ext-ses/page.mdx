@@ -1,0 +1,134 @@
+export const metadata = {
+  title: 'Long Exact Sequence for Ext — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Theorem — Long Exact Sequence for Ext" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Long Exact Sequence for Ext
+
+The Ext functor is a derived functor in each variable, and a short exact sequence in either variable produces a long exact sequence in Ext. These long exact sequences are the primary computational tools for Ext groups and encode the fundamental relationships between extensions, obstructions, and deformations.
+
+---
+
+## Statement
+
+<Theorem title="Long exact sequences for Ext" number="7.9">
+Let $\mathcal{A}$ be an abelian category with enough injectives (or enough projectives).
+
+**(Covariant variable):** For a short exact sequence $0 \to B' \to B \to B'' \to 0$ and any object $A$, there is a long exact sequence:
+
+$$0 \to \mathrm{Hom}(A, B') \to \mathrm{Hom}(A, B) \to \mathrm{Hom}(A, B'') \xrightarrow{\delta^0} \mathrm{Ext}^1(A, B') \to \mathrm{Ext}^1(A, B) \to \mathrm{Ext}^1(A, B'') \xrightarrow{\delta^1} \mathrm{Ext}^2(A, B') \to \cdots$$
+
+**(Contravariant variable):** For a short exact sequence $0 \to A' \to A \to A'' \to 0$ and any object $B$, there is a long exact sequence:
+
+$$0 \to \mathrm{Hom}(A'', B) \to \mathrm{Hom}(A, B) \to \mathrm{Hom}(A', B) \xrightarrow{\delta^0} \mathrm{Ext}^1(A'', B) \to \mathrm{Ext}^1(A, B) \to \mathrm{Ext}^1(A', B) \xrightarrow{\delta^1} \mathrm{Ext}^2(A'', B) \to \cdots$$
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+**Covariant long exact sequence.**
+
+Since $\mathrm{Ext}^n(A, -) = R^n\mathrm{Hom}(A, -)$ and $\mathrm{Hom}(A, -)$ is left exact, the long exact sequence follows from the general theory of right derived functors applied to the short exact sequence $0 \to B' \to B \to B'' \to 0$.
+
+Explicitly: choose injective resolutions $B' \to I'^\bullet$, $B'' \to I''^\bullet$, and by the horseshoe lemma, construct an injective resolution $B \to I^\bullet$ fitting into a short exact sequence of complexes $0 \to I'^\bullet \to I^\bullet \to I''^\bullet \to 0$. Apply $\mathrm{Hom}(A, -)$ to get $0 \to \mathrm{Hom}(A, I'^\bullet) \to \mathrm{Hom}(A, I^\bullet) \to \mathrm{Hom}(A, I''^\bullet) \to 0$ (exact because each $I'^n, I^n, I''^n$ is injective, so $\mathrm{Hom}(A, -)$ is exact on injectives). The long exact sequence in cohomology of this short exact sequence of complexes gives the desired result.
+
+**Contravariant long exact sequence.**
+
+Take a projective resolution $P_\bullet \to A'$ and extend (using the horseshoe lemma) to resolutions fitting $0 \to P'_\bullet \to P_\bullet \to P''_\bullet \to 0$. Apply $\mathrm{Hom}(-, B)$ to get $0 \to \mathrm{Hom}(P''_\bullet, B) \to \mathrm{Hom}(P_\bullet, B) \to \mathrm{Hom}(P'_\bullet, B) \to 0$ (exact because each $P_n$ is projective). Take cohomology.
+
+**Connecting homomorphism.**
+
+The connecting map $\delta^n : \mathrm{Ext}^n(A, B'') \to \mathrm{Ext}^{n+1}(A, B')$ is the standard connecting homomorphism of the long exact sequence in cohomology. In terms of Yoneda extensions, $\delta^0 : \mathrm{Hom}(A, B'') \to \mathrm{Ext}^1(A, B')$ sends $f : A \to B''$ to the pullback of $0 \to B' \to B \to B'' \to 0$ along $f$.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Connecting map and pullback" id="connecting-pullback">
+Given $0 \to B' \xrightarrow{i} B \xrightarrow{p} B'' \to 0$ and $f : A \to B''$, the connecting map $\delta^0(f) \in \mathrm{Ext}^1(A, B')$ is the extension $0 \to B' \to E \to A \to 0$ where $E = B \times_{B''} A$ is the pullback. If $f$ lifts to $B$ (i.e., $f = p \circ g$), then $\delta^0(f) = 0$ (the extension splits).
+</Example>
+
+<Example title="Ext^1 and exact sequences for Z-modules" id="ext1-z">
+From $0 \to \mathbb{Z} \xrightarrow{n} \mathbb{Z} \to \mathbb{Z}/n \to 0$, apply $\mathrm{Hom}(\mathbb{Z}/m, -)$:
+
+$$0 \to \mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}) \to \mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}) \to \mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}/n) \xrightarrow{\delta} \mathrm{Ext}^1(\mathbb{Z}/m, \mathbb{Z}) \to \cdots$$
+
+Since $\mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}) = 0$ and $\mathrm{Ext}^1(\mathbb{Z}/m, \mathbb{Z}) = \mathbb{Z}/m$, we get $\mathrm{Hom}(\mathbb{Z}/m, \mathbb{Z}/n) \cong \mathbb{Z}/\gcd(m,n)$ surjects onto a subgroup of $\mathbb{Z}/m$.
+</Example>
+
+<Example title="Vanishing of Ext and splitting" id="vanishing-splitting">
+If $\mathrm{Ext}^1(C, A) = 0$, then every short exact sequence $0 \to A \to B \to C \to 0$ splits ($B \cong A \oplus C$). This is the fundamental criterion: a module $P$ is projective iff $\mathrm{Ext}^1(P, -) = 0$, and $I$ is injective iff $\mathrm{Ext}^1(-, I) = 0$.
+</Example>
+
+<Example title="Dimension shifting" id="dimension-shifting">
+Given an injective resolution $0 \to B \to I^0 \to \Omega^{-1}B \to 0$ (where $\Omega^{-1}B = I^0/B$), the long exact sequence gives $\mathrm{Ext}^{n+1}(A, B) \cong \mathrm{Ext}^n(A, \Omega^{-1}B)$ for $n \geq 1$ (since $\mathrm{Ext}^n(A, I^0) = 0$). This **dimension shifting** reduces higher Ext to lower Ext of a different module.
+</Example>
+
+<Example title="Obstruction theory via Ext" id="obstruction">
+Given $0 \to I \to \tilde{A} \to A \to 0$ (a square-zero extension of rings) and a module $M$ over $A$, the obstruction to lifting $M$ to a module over $\tilde{A}$ lives in $\mathrm{Ext}^2_A(M, M \otimes I)$. If the obstruction vanishes, lifts are a torsor for $\mathrm{Ext}^1_A(M, M \otimes I)$.
+</Example>
+
+<Example title="Ext and global sections" id="ext-global">
+For a line bundle $\mathcal{L}$ on a smooth projective curve $C$: $0 \to \mathcal{O}(-p) \to \mathcal{O} \to k(p) \to 0$ gives
+
+$$0 \to H^0(\mathcal{L}(-p)) \to H^0(\mathcal{L}) \to \mathcal{L}_p \to H^1(\mathcal{L}(-p)) \to H^1(\mathcal{L}) \to 0$$
+
+The cokernel of $H^0(\mathcal{L}) \to \mathcal{L}_p$ measures whether sections of $\mathcal{L}$ separate the point $p$.
+</Example>
+
+<Example title="Ext long exact sequence for coherent sheaves" id="ext-coherent">
+For $0 \to \mathcal{F}' \to \mathcal{F} \to \mathcal{F}'' \to 0$ on a smooth variety $X$ and a coherent sheaf $\mathcal{E}$:
+
+$$\cdots \to \mathrm{Ext}^n(\mathcal{E}, \mathcal{F}') \to \mathrm{Ext}^n(\mathcal{E}, \mathcal{F}) \to \mathrm{Ext}^n(\mathcal{E}, \mathcal{F}'') \to \mathrm{Ext}^{n+1}(\mathcal{E}, \mathcal{F}') \to \cdots$$
+
+This terminates after $n = \dim X$ terms by Grothendieck vanishing.
+</Example>
+
+<Example title="Serre duality and the long exact sequence" id="serre-les">
+On a smooth projective variety, Serre duality $\mathrm{Ext}^i(\mathcal{E}, \mathcal{F}) \cong \mathrm{Ext}^{n-i}(\mathcal{F}, \mathcal{E} \otimes \omega)^*$ is compatible with the long exact sequence. Dualizing the contravariant sequence for $\mathcal{E}$ gives the covariant sequence for $\mathcal{E}^* \otimes \omega$, connecting the two types of long exact sequences.
+</Example>
+
+<Example title="Ext and group extensions" id="group-extensions">
+$\mathrm{Ext}^1_{\mathbb{Z}[G]}(\mathbb{Z}, M) = H^1(G, M)$ classifies group extensions $0 \to M \to E \to G \to 1$ (where $M$ is abelian and $G$ acts on $M$ via conjugation). The long exact sequence for $\mathrm{Ext}^n_{\mathbb{Z}[G]}(\mathbb{Z}, -)$ applied to a short exact sequence of $G$-modules gives the long exact sequence in group cohomology.
+</Example>
+
+<Example title="Six-term exact sequence for Tor and Ext" id="six-term">
+Over a PID $R$ (e.g., $\mathbb{Z}$), the long exact sequences for Ext and Tor truncate: $\mathrm{Ext}^n = 0$ for $n \geq 2$ and $\mathrm{Tor}_n = 0$ for $n \geq 2$. The long exact sequences become six-term exact sequences, which are completely explicit and computable.
+</Example>
+
+<Example title="Naturality of the long exact sequence" id="naturality">
+The long exact sequence is natural: a morphism of short exact sequences induces a commutative ladder of long exact sequences. This naturality is essential for comparing Ext groups across different short exact sequences and for functoriality arguments.
+</Example>
+
+<Example title="Ext and the derived category" id="ext-derived-cat">
+In the derived category, the long exact sequence for Ext comes from the distinguished triangle $B'[0] \to B[0] \to B''[0] \to B'[1]$ and the cohomological functor $\mathrm{Hom}_{D(\mathcal{A})}(A[0], -)$. The connecting map $\delta^n$ is induced by the morphism $B''[0] \to B'[1]$ in the triangle.
+</Example>
+
+---
+
+<Remark title="Computational power">
+The two long exact sequences (in each variable) are the workhorse of Ext computations. Most Ext calculations proceed by induction on the length of a composition series or on projective/injective dimension, using the long exact sequence at each step. Combined with dimension shifting, this reduces arbitrary Ext computations to base cases.
+</Remark>
+
+<Remark title="Connecting to deformation theory">
+The connecting homomorphism $\delta^0 : \mathrm{Hom}(A, B'') \to \mathrm{Ext}^1(A, B')$ has a deformation-theoretic interpretation: it sends a first-order deformation of a morphism to the obstruction to lifting. Higher connecting maps $\delta^n$ encode higher-order obstructions, linking the long exact sequence to deformation theory and cotangent complex computations.
+</Remark>

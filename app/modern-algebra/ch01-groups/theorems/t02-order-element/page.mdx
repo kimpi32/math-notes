@@ -1,0 +1,254 @@
+export const metadata = {
+  title: 'Order of Elements — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Theorem — Order of Elements" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Order of Elements
+
+The **order** of a group element is one of the most useful invariants in group theory. It connects the algebraic structure of cyclic subgroups to divisibility properties and is a primary tool for distinguishing groups.
+
+---
+
+## Fundamental Definition and Theorem
+
+<Definition title="Order of an element" number="1.17">
+Let $G$ be a group and $g \in G$. The **order** of $g$, denoted $\mathrm{ord}(g)$ or $|g|$, is:
+
+$$\mathrm{ord}(g) = \min\{n \in \mathbb{Z}_{>0} : g^n = e\}$$
+
+if such $n$ exists. Otherwise, $g$ has **infinite order**.
+</Definition>
+
+<Theorem title="Order divides group order" number="1.31">
+If $G$ is a finite group, then for every $g \in G$:
+
+$$\mathrm{ord}(g) \;\big|\; |G|$$
+
+Equivalently, $g^{|G|} = e$ for all $g \in G$.
+</Theorem>
+
+<Proof>
+Since $\langle g \rangle$ is a subgroup of $G$ with $|\langle g \rangle| = \mathrm{ord}(g)$, Lagrange's theorem gives $\mathrm{ord}(g) \mid |G|$.
+
+For the second statement: let $n = \mathrm{ord}(g)$ and $|G| = nk$. Then $g^{|G|} = g^{nk} = (g^n)^k = e^k = e$.
+</Proof>
+
+---
+
+## Key Properties of Element Order
+
+<Theorem title="Characterization of order" number="1.32">
+Let $g \in G$ with $\mathrm{ord}(g) = n$. Then $g^k = e$ if and only if $n \mid k$.
+</Theorem>
+
+<Proof>
+$(\Leftarrow)$ If $k = nm$, then $g^k = (g^n)^m = e^m = e$.
+
+$(\Rightarrow)$ Write $k = qn + r$ with $0 \leq r < n$. Then $e = g^k = g^{qn+r} = (g^n)^q g^r = g^r$. Since $0 \leq r < n$ and $n$ is the smallest positive exponent giving the identity, $r = 0$.
+</Proof>
+
+<Theorem title="Order of a power" number="1.33">
+Let $g \in G$ with $\mathrm{ord}(g) = n$. Then for any integer $k$:
+
+$$\mathrm{ord}(g^k) = \frac{n}{\gcd(n, k)}$$
+</Theorem>
+
+<Proof>
+Let $d = \gcd(n, k)$. Then $(g^k)^{n/d} = g^{kn/d}$. Since $d \mid k$, we have $k/d \in \mathbb{Z}$, so $kn/d$ is a multiple of $n$, giving $(g^k)^{n/d} = e$.
+
+Conversely, if $(g^k)^m = g^{km} = e$, then $n \mid km$, so $n/d \mid m(k/d)$. Since $\gcd(n/d, k/d) = 1$, we get $n/d \mid m$. Thus $\mathrm{ord}(g^k) = n/d$.
+</Proof>
+
+<Example id="order-power-z12" title="Orders of powers in Z/12Z">
+Let $g$ be a generator of $\mathbb{Z}/12\mathbb{Z}$ (order 12).
+
+| $k$ | $\gcd(12, k)$ | $\mathrm{ord}(g^k) = 12/\gcd(12, k)$ |
+|---|---|---|
+| 1 | 1 | 12 |
+| 2 | 2 | 6 |
+| 3 | 3 | 4 |
+| 4 | 4 | 3 |
+| 5 | 1 | 12 |
+| 6 | 6 | 2 |
+| 7 | 1 | 12 |
+| 8 | 4 | 3 |
+| 9 | 3 | 4 |
+| 10 | 2 | 6 |
+| 11 | 1 | 12 |
+
+The elements of order 12 (generators) are $g^1, g^5, g^7, g^{11}$ — exactly those with $\gcd(k, 12) = 1$.
+</Example>
+
+<Theorem title="Order of a product (abelian case)" number="1.34">
+If $G$ is abelian and $a, b \in G$ with $\mathrm{ord}(a) = m$, $\mathrm{ord}(b) = n$, and $\gcd(m, n) = 1$, then:
+
+$$\mathrm{ord}(ab) = mn$$
+</Theorem>
+
+<Proof>
+Since $G$ is abelian, $(ab)^{mn} = a^{mn}b^{mn} = (a^m)^n(b^n)^m = e$.
+
+Now suppose $(ab)^k = e$, i.e., $a^k = b^{-k}$. Then $a^{kn} = b^{-kn} = (b^n)^{-k} = e$, so $m \mid kn$. Since $\gcd(m,n) = 1$, $m \mid k$. Similarly $n \mid k$. So $mn \mid k$.
+</Proof>
+
+<Example id="order-product-fail" title="Order of product: why coprimality matters">
+In $\mathbb{Z}/6\mathbb{Z}$: $\mathrm{ord}(2) = 3$ and $\mathrm{ord}(3) = 2$. Since $\gcd(3,2) = 1$: $\mathrm{ord}(2 + 3) = \mathrm{ord}(5) = 6 = 3 \cdot 2$.
+
+But: $\mathrm{ord}(2) = 3$ and $\mathrm{ord}(4) = 3$ with $\gcd(3,3) = 3 \neq 1$. Here $\mathrm{ord}(2 + 4) = \mathrm{ord}(0) = 1 \neq 9$.
+</Example>
+
+---
+
+## Applications to Finite Groups
+
+<Example id="orders-s3" title="Element orders in S_3">
+$S_3$ has order 6. Every element order must divide 6.
+
+| Element | Order | Subgroup generated |
+|---|---|---|
+| $e$ | 1 | $\{e\}$ |
+| $(1\;2)$ | 2 | $\{e, (1\;2)\}$ |
+| $(1\;3)$ | 2 | $\{e, (1\;3)\}$ |
+| $(2\;3)$ | 2 | $\{e, (2\;3)\}$ |
+| $(1\;2\;3)$ | 3 | $\{e, (1\;2\;3), (1\;3\;2)\}$ |
+| $(1\;3\;2)$ | 3 | $\{e, (1\;2\;3), (1\;3\;2)\}$ |
+
+No element has order 6, so $S_3$ is not cyclic.
+</Example>
+
+<Example id="orders-z-units" title="Element orders in (Z/nZ)*">
+In $(\mathbb{Z}/15\mathbb{Z})^\times = \{1, 2, 4, 7, 8, 11, 13, 14\}$, $|G| = \varphi(15) = 8$:
+
+| Element | Powers | Order |
+|---|---|---|
+| 1 | $1$ | 1 |
+| 2 | $2, 4, 8, 1$ | 4 |
+| 4 | $4, 1$ | 2 |
+| 7 | $7, 4, 13, 1$ | 4 |
+| 8 | $8, 4, 2, 1$ | 4 |
+| 11 | $11, 1$ | 2 |
+| 13 | $13, 4, 7, 1$ | 4 |
+| 14 | $14, 1$ | 2 |
+
+No element has order 8, confirming that $(\mathbb{Z}/15\mathbb{Z})^\times \cong \mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ (not cyclic).
+</Example>
+
+<Example id="max-order" title="Maximum element order constrains the group">
+If every element of $G$ has order dividing 2 (i.e., $g^2 = e$ for all $g$), then $G$ is abelian.
+
+Proof: $g^2 = e$ means $g = g^{-1}$ for all $g$. Then $ab = (ab)^{-1} = b^{-1}a^{-1} = ba$.
+
+More generally, a finite group where every non-identity element has order $p$ (for a fixed prime $p$) must have order $p^k$ for some $k$ (this follows from Cauchy's theorem).
+</Example>
+
+<Example id="order-matrix" title="Order of a matrix">
+In $\mathrm{GL}_2(\mathbb{Z}/2\mathbb{Z})$ (order 6, isomorphic to $S_3$):
+
+Let $A$ be the matrix with rows $(0, 1)$ and $(1, 1)$ over $\mathbb{F}_2$.
+
+Then $A^2$ has rows $(1, 1)$ and $(1, 0)$, and $A^3 = I$ (the identity matrix).
+
+So $\mathrm{ord}(A) = 3$.
+</Example>
+
+---
+
+## Counting Elements of Given Order
+
+<Theorem title="Number of elements of order d in a cyclic group" number="1.35">
+In a cyclic group of order $n$, the number of elements of order $d$ (where $d \mid n$) is $\varphi(d)$.
+</Theorem>
+
+<Proof>
+Let $G = \langle g \rangle$ with $|G| = n$. The elements of order $d$ are exactly $g^{kn/d}$ where $\gcd(k, d) = 1$ and $1 \leq k \leq d$. The number of such $k$ is $\varphi(d)$.
+</Proof>
+
+<Example id="count-orders-z12" title="Elements by order in Z/12Z">
+| Order $d$ | $\varphi(d)$ | Elements |
+|---|---|---|
+| 1 | 1 | $\{0\}$ |
+| 2 | 1 | $\{6\}$ |
+| 3 | 2 | $\{4, 8\}$ |
+| 4 | 2 | $\{3, 9\}$ |
+| 6 | 2 | $\{2, 10\}$ |
+| 12 | 4 | $\{1, 5, 7, 11\}$ |
+
+Check: $1 + 1 + 2 + 2 + 2 + 4 = 12 = |\mathbb{Z}/12\mathbb{Z}|$. In general, $\sum_{d \mid n} \varphi(d) = n$.
+</Example>
+
+<Example id="order-determines-cyclic" title="Criterion for a group to be cyclic">
+A finite group $G$ of order $n$ is cyclic if and only if for each $d \mid n$, there are at most $d$ elements satisfying $x^d = e$.
+
+This is because in a cyclic group, the equation $x^d = e$ has exactly $d$ solutions (the elements of the unique subgroup of order $d$). If there were more, the group would have too many elements of small order to be cyclic.
+</Example>
+
+<Example id="fp-star-cyclic" title="Why (Z/pZ)* is cyclic">
+For a prime $p$, the equation $x^d = 1$ in $\mathbb{Z}/p\mathbb{Z}$ has at most $d$ solutions (a polynomial of degree $d$ over a field has at most $d$ roots). By the criterion above, $(\mathbb{Z}/p\mathbb{Z})^\times$ is cyclic.
+
+This does not work for $(\mathbb{Z}/8\mathbb{Z})^\times$: $x^2 = 1$ has solutions $1, 3, 5, 7$ (four solutions, more than 2), so the group is not cyclic.
+</Example>
+
+---
+
+## The Exponent of a Group
+
+<Definition title="Exponent of a group" number="1.18">
+The **exponent** of a finite group $G$, denoted $\exp(G)$, is the least common multiple of all element orders:
+
+$$\exp(G) = \mathrm{lcm}\{\mathrm{ord}(g) : g \in G\}$$
+
+Equivalently, $\exp(G)$ is the smallest positive integer $m$ such that $g^m = e$ for all $g \in G$.
+</Definition>
+
+<Example id="exponents" title="Exponents of familiar groups">
+- $\exp(\mathbb{Z}/n\mathbb{Z}) = n$
+- $\exp(V_4) = \mathrm{lcm}(1, 2, 2, 2) = 2$
+- $\exp(S_3) = \mathrm{lcm}(1, 2, 2, 2, 3, 3) = 6 = |S_3|$
+- $\exp(S_4) = \mathrm{lcm}(1, 2, 3, 4) = 12 < 24 = |S_4|$
+- $\exp(A_4) = \mathrm{lcm}(1, 2, 3) = 6 < 12 = |A_4|$
+</Example>
+
+<Theorem title="Exponent divides group order" number="1.36">
+For any finite group $G$: $\exp(G) \mid |G|$.
+</Theorem>
+
+<Proof>
+Since $\mathrm{ord}(g) \mid |G|$ for all $g \in G$ (by Lagrange), and $\exp(G) = \mathrm{lcm}$ of these orders, $\exp(G) \mid |G|$.
+</Proof>
+
+<Example id="exponent-abelian" title="Exponent characterizes cyclic among abelian groups">
+A finite abelian group $G$ is cyclic if and only if $\exp(G) = |G|$.
+
+For example, $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ has $\exp = 2$ but $|G| = 4$, so it is not cyclic. But $\mathbb{Z}/6\mathbb{Z}$ has $\exp = 6 = |G|$, so it is cyclic.
+</Example>
+
+<Example id="order-in-product" title="Orders in direct products">
+In $G = \mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}$, the order of $(a, b)$ is $\mathrm{lcm}(\mathrm{ord}(a), \mathrm{ord}(b))$.
+
+- $\mathrm{ord}((1, 1)) = \mathrm{lcm}(4, 6) = 12$, so $G$ is cyclic of order 24... but $|G| = 24$ and we found an element of order 12, not 24. In fact $\exp(G) = 12 < 24$, so $G$ is not cyclic.
+- $\mathrm{ord}((1, 0)) = 4$
+- $\mathrm{ord}((0, 1)) = 6$
+- The maximum order is $\mathrm{lcm}(4, 6) = 12$.
+</Example>
+
+---
+
+## Summary
+
+The order of an element is a powerful invariant that constrains group structure via Lagrange's theorem. The order-of-a-power formula $\mathrm{ord}(g^k) = n/\gcd(n,k)$ is the key computational tool, while counting elements of given order (via Euler's totient function in cyclic groups) helps distinguish non-isomorphic groups. The exponent $\exp(G)$ provides a global measure of the "periodicity" of the group.

@@ -1,0 +1,162 @@
+export const metadata = {
+  title: '연속함수 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "개념 - 연속함수" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 연속함수 (Continuous Function)
+
+Continuity formalizes the intuition that "small changes in input produce small changes in output." It is the central concept bridging limits and the deeper theorems of analysis.
+
+---
+
+## Definition
+
+<Definition title="Continuity at a point" number="4.1">
+Let $f : A \to \mathbb{R}$ and $c \in A$. The function $f$ is **continuous at $c$** if:
+
+$$\forall \varepsilon > 0, \quad \exists \delta > 0, \quad \forall x \in A: \quad |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon.$$
+
+Equivalently (if $c$ is a limit point of $A$): $\lim_{x \to c} f(x) = f(c)$.
+
+If $c$ is an isolated point of $A$ (not a limit point), then $f$ is automatically continuous at $c$.
+</Definition>
+
+<Definition title="Continuity on a set" number="4.2">
+$f : A \to \mathbb{R}$ is **continuous on** $A$ if it is continuous at every point $c \in A$.
+</Definition>
+
+<Remark>
+Continuity at $c$ requires three things:
+1. $f(c)$ is defined.
+2. $\lim_{x \to c} f(x)$ exists.
+3. The limit equals $f(c)$.
+
+Compare with the definition of a limit, which does not require $f(c)$ to be defined.
+</Remark>
+
+---
+
+## Sequential characterization
+
+<Theorem title="Sequential criterion for continuity">
+$f$ is continuous at $c$ if and only if for every sequence $(x_n)$ in $A$ with $x_n \to c$, we have $f(x_n) \to f(c)$.
+</Theorem>
+
+<Example title="Using sequences to prove continuity">
+1. $f(x) = x^2$ is continuous at every $c \in \mathbb{R}$. If $x_n \to c$, then $f(x_n) = x_n^2 \to c^2 = f(c)$ by the algebraic limit theorem.
+</Example>
+
+<Example title="Using sequences to prove discontinuity">
+2. The Dirichlet function $f(x) = 1$ for $x \in \mathbb{Q}$, $f(x) = 0$ for $x \notin \mathbb{Q}$ is discontinuous everywhere. For any $c$, take a sequence of rationals $r_n \to c$ and a sequence of irrationals $s_n \to c$. Then $f(r_n) = 1$ and $f(s_n) = 0$.
+</Example>
+
+---
+
+## Basic examples
+
+<Example title="Polynomial continuity (epsilon-delta)">
+3. $f(x) = 2x + 3$ is continuous at $c = 1$.
+
+Let $\varepsilon > 0$. Choose $\delta = \varepsilon/2$. If $|x - 1| < \delta$, then $|f(x) - f(1)| = |2x + 3 - 5| = 2|x-1| < 2\delta = \varepsilon$.
+</Example>
+
+<Example title="Square root continuity">
+4. $f(x) = \sqrt{x}$ is continuous on $[0, \infty)$.
+
+At $c > 0$: $|\sqrt{x} - \sqrt{c}| = \frac{|x - c|}{\sqrt{x} + \sqrt{c}} \leq \frac{|x-c|}{\sqrt{c}}$. Choose $\delta = \varepsilon \sqrt{c}$.
+
+At $c = 0$: $|\sqrt{x}| = \sqrt{x} < \varepsilon$ when $x < \varepsilon^2 = \delta$.
+</Example>
+
+<Example title="Absolute value">
+5. $f(x) = |x|$ is continuous everywhere. $||x| - |c|| \leq |x - c|$. Choose $\delta = \varepsilon$.
+</Example>
+
+---
+
+## Types of discontinuity
+
+<Definition title="Types of discontinuity" number="4.3">
+If $f$ is discontinuous at $c$, the discontinuity is:
+- **Removable**: $\lim_{x \to c} f(x)$ exists but does not equal $f(c)$ (or $f(c)$ is undefined).
+- **Jump**: Both one-sided limits exist but are unequal.
+- **Essential** (or oscillatory): At least one one-sided limit fails to exist.
+</Definition>
+
+<Example title="Removable discontinuity">
+6. $f(x) = \frac{\sin x}{x}$ for $x \neq 0$, $f(0) = 0$. Here $\lim_{x \to 0} f(x) = 1 \neq 0 = f(0)$. Redefining $f(0) = 1$ removes the discontinuity.
+</Example>
+
+<Example title="Jump discontinuity">
+7. $f(x) = \lfloor x \rfloor$ (floor function) has a jump discontinuity at every integer. At $n \in \mathbb{Z}$: $\lim_{x \to n^-} f = n - 1$ and $\lim_{x \to n^+} f = n$.
+</Example>
+
+<Example title="Essential discontinuity">
+8. $f(x) = \sin(1/x)$ for $x \neq 0$, $f(0) = 0$. The limit $\lim_{x \to 0} \sin(1/x)$ does not exist (oscillation), so the discontinuity at $0$ is essential.
+</Example>
+
+---
+
+## Algebraic properties of continuous functions
+
+<Theorem title="Algebra of continuous functions">
+If $f$ and $g$ are continuous at $c$, then:
+1. $f + g$ is continuous at $c$.
+2. $\alpha f$ is continuous at $c$ for any $\alpha \in \mathbb{R}$.
+3. $fg$ is continuous at $c$.
+4. $f/g$ is continuous at $c$ provided $g(c) \neq 0$.
+</Theorem>
+
+<Example title="Continuity of polynomials and rationals">
+9. Every polynomial $p(x) = a_n x^n + \cdots + a_1 x + a_0$ is continuous on $\mathbb{R}$ (by induction on the algebra of continuous functions, starting from $f(x) = x$ and constant functions).
+
+Every rational function $p(x)/q(x)$ is continuous wherever $q(x) \neq 0$.
+</Example>
+
+---
+
+## Composition
+
+<Theorem title="Continuity of compositions">
+If $f$ is continuous at $c$ and $g$ is continuous at $f(c)$, then $g \circ f$ is continuous at $c$.
+</Theorem>
+
+<Example title="Composition examples">
+10. $f(x) = e^{\sin x}$: since $\sin$ is continuous and $\exp$ is continuous, the composition is continuous.
+
+11. $f(x) = |\sin(x^2)|$: composition of continuous functions $x^2$, $\sin$, $|\cdot|$.
+</Example>
+
+---
+
+## Thomae's function: continuous at irrationals
+
+<Example title="Thomae's function">
+12. Define $f : [0,1] \to \mathbb{R}$ by $f(x) = 0$ for irrational $x$, and $f(p/q) = 1/q$ for $p/q$ in lowest terms ($q > 0$).
+
+**Continuous at every irrational $c$**: Given $\varepsilon > 0$, only finitely many rationals $p/q$ in $[0,1]$ have $q \leq 1/\varepsilon$. So there exists $\delta > 0$ such that the only rationals within $\delta$ of $c$ have $q > 1/\varepsilon$, i.e., $f(p/q) < \varepsilon$. Since $f(c) = 0$, $|f(x) - f(c)| < \varepsilon$.
+
+**Discontinuous at every rational $c = p/q$**: Take irrationals $x_n \to c$ with $f(x_n) = 0 \neq 1/q = f(c)$.
+
+This is a function continuous on the irrationals and discontinuous on the rationals.
+</Example>
+
+<Remark>
+The existence of Thomae's function shows that the set of points of continuity of a function can be the irrationals $\mathbb{R} \setminus \mathbb{Q}$. A deep theorem states: the set of continuity points of any function $f : \mathbb{R} \to \mathbb{R}$ is always a $G_\delta$ set (a countable intersection of open sets). Since $\mathbb{Q}$ is not $G_\delta$, there is **no** function that is continuous exactly on the rationals.
+</Remark>

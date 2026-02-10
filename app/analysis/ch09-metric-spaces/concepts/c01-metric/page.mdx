@@ -1,0 +1,145 @@
+export const metadata = {
+  title: 'Metric — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "9. 거리공간", href: "/analysis/ch09-metric-spaces" },
+  { label: "개념 — 거리함수" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Metric
+
+A metric space abstracts the notion of "distance" from $\mathbb{R}^n$ to arbitrary sets. Most of the analysis from earlier chapters (convergence, continuity, completeness) generalizes to this setting.
+
+---
+
+## Definition
+
+<Definition title="Metric space" number="9.1">
+A **metric** (or **distance function**) on a set $X$ is a function $d: X \times X \to [0, \infty)$ satisfying for all $x, y, z \in X$:
+
+1. **Positivity**: $d(x, y) \geq 0$, with $d(x, y) = 0 \iff x = y$.
+2. **Symmetry**: $d(x, y) = d(y, x)$.
+3. **Triangle inequality**: $d(x, z) \leq d(x, y) + d(y, z)$.
+
+The pair $(X, d)$ is called a **metric space**.
+</Definition>
+
+<Example title="Euclidean metric on R^n">
+$X = \mathbb{R}^n$, $d(x, y) = \sqrt{\sum_{i=1}^n (x_i - y_i)^2}$. This is the standard Euclidean distance. Axioms (1) and (2) are clear; (3) follows from the Cauchy-Schwarz inequality.
+
+For $n = 1$: $d(x,y) = |x - y|$, the usual distance on $\mathbb{R}$.
+</Example>
+
+<Example title="Taxicab metric">
+$X = \mathbb{R}^n$, $d_1(x, y) = \sum_{i=1}^n |x_i - y_i|$. The "Manhattan distance." In $\mathbb{R}^2$: $d_1((0,0), (1,1)) = 2$, while the Euclidean distance is $\sqrt{2}$.
+</Example>
+
+<Example title="Maximum metric">
+$X = \mathbb{R}^n$, $d_\infty(x, y) = \max_{1 \leq i \leq n} |x_i - y_i|$. In $\mathbb{R}^2$: the "unit ball" $\{d_\infty(x, 0) < 1\}$ is a square, not a circle.
+</Example>
+
+<Example title="Discrete metric">
+On any set $X$: $d(x,y) = 0$ if $x = y$ and $d(x,y) = 1$ if $x \neq y$. The triangle inequality holds since $1 \leq 1 + 1$. This metric makes every subset both open and closed, and every function on $X$ is continuous.
+</Example>
+
+---
+
+## Function spaces
+
+<Example title="Sup metric on bounded functions">
+$X = C[a,b]$ (continuous functions on $[a,b]$), $d(f, g) = \sup_{x \in [a,b]} |f(x) - g(x)| = \|f - g\|_\infty$.
+
+This is well-defined since continuous functions on a compact interval are bounded. The triangle inequality follows from $|f(x) - h(x)| \leq |f(x) - g(x)| + |g(x) - h(x)|$ for each $x$, then taking sup.
+
+Convergence in this metric is precisely **uniform convergence**.
+</Example>
+
+<Example title="L¹ metric on integrable functions">
+$d_1(f,g) = \int_a^b |f(x) - g(x)|\,dx$ on $C[a,b]$. This satisfies the triangle inequality by $\int |f - h| \leq \int |f - g| + \int |g - h|$.
+
+Convergence in $d_1$ is weaker than uniform convergence: $\|f_n - f\|_\infty \to 0$ implies $d_1(f_n, f) \to 0$, but not conversely.
+</Example>
+
+<Example title="Sequence spaces">
+$\ell^2 = \{(x_n) : \sum x_n^2 < \infty\}$ with $d(x, y) = \sqrt{\sum (x_n - y_n)^2}$. This is a complete metric space (a Hilbert space).
+
+$\ell^\infty = \{(x_n) : \sup |x_n| < \infty\}$ with $d(x, y) = \sup |x_n - y_n|$. Also complete.
+</Example>
+
+---
+
+## Convergence and continuity
+
+<Definition title="Convergence in a metric space" number="9.2">
+A sequence $(x_n)$ in $(X, d)$ **converges** to $x \in X$ if $d(x_n, x) \to 0$, i.e., for every $\varepsilon > 0$ there exists $N$ with $d(x_n, x) < \varepsilon$ for all $n \geq N$.
+</Definition>
+
+<Example title="Convergence depends on the metric">
+In $C[0,1]$: let $f_n(x) = x^n$.
+
+With the sup metric: $\|f_n - 0\|_\infty = \sup_{[0,1]} x^n = 1$, so $f_n \not\to 0$.
+
+With the $L^1$ metric: $d_1(f_n, 0) = \int_0^1 x^n\,dx = \frac{1}{n+1} \to 0$, so $f_n \to 0$.
+
+The "same" sequence can converge in one metric and diverge in another.
+</Example>
+
+<Definition title="Continuous function between metric spaces" number="9.3">
+A function $f: (X, d_X) \to (Y, d_Y)$ is **continuous at** $x_0 \in X$ if for every $\varepsilon > 0$, there exists $\delta > 0$ such that
+
+$$d_X(x, x_0) < \delta \implies d_Y(f(x), f(x_0)) < \varepsilon.$$
+
+Equivalently: $x_n \to x_0$ in $X$ implies $f(x_n) \to f(x_0)$ in $Y$.
+</Definition>
+
+<Example title="The identity map can be discontinuous">
+Consider $\operatorname{id}: (C[0,1], d_1) \to (C[0,1], d_\infty)$. This is NOT continuous: $f_n(x) = x^n$ satisfies $d_1(f_n, 0) \to 0$ but $d_\infty(f_n, 0) = 1 \not\to 0$.
+
+The reverse $\operatorname{id}: (C[0,1], d_\infty) \to (C[0,1], d_1)$ IS continuous: $\|f - g\|_1 \leq (b-a)\|f-g\|_\infty$.
+</Example>
+
+---
+
+## Completeness
+
+<Definition title="Cauchy sequence" number="9.4">
+A sequence $(x_n)$ in $(X,d)$ is **Cauchy** if for every $\varepsilon > 0$, there exists $N$ with $d(x_m, x_n) < \varepsilon$ for all $m, n \geq N$.
+</Definition>
+
+<Definition title="Complete metric space" number="9.5">
+A metric space $(X, d)$ is **complete** if every Cauchy sequence in $X$ converges to a point in $X$.
+</Definition>
+
+<Example title="Complete metric spaces">
+- $\mathbb{R}$ with $|x-y|$ is complete (by the completeness axiom).
+- $\mathbb{R}^n$ with the Euclidean metric is complete.
+- $C[a,b]$ with the sup metric is complete (uniform limits of continuous functions are continuous).
+- $\ell^2$ is complete.
+</Example>
+
+<Example title="Incomplete metric spaces">
+- $\mathbb{Q}$ with $|x-y|$ is not complete: the sequence $1, 1.4, 1.41, 1.414, \ldots$ is Cauchy in $\mathbb{Q}$ but converges to $\sqrt{2} \notin \mathbb{Q}$.
+- $(0, 1)$ with $|x-y|$ is not complete: $x_n = 1/n$ is Cauchy but converges to $0 \notin (0,1)$.
+- $C[a,b]$ with the $L^1$ metric is not complete (Cauchy sequences can converge to discontinuous functions).
+</Example>
+
+<Example title="Completion of a metric space">
+Every metric space $(X, d)$ has a **completion** $(\hat{X}, \hat{d})$: a complete metric space containing $X$ as a dense subset. The completion of $\mathbb{Q}$ is $\mathbb{R}$. The completion of $(C[0,1], d_1)$ is $L^1[0,1]$. The completion of $(0,1)$ with the standard metric is $[0,1]$.
+</Example>
+
+<Remark>
+The metric space framework unifies the analysis of $\mathbb{R}$, $\mathbb{R}^n$, function spaces, and sequence spaces. The key concepts (convergence, continuity, completeness, compactness, connectedness) all generalize naturally, and the proofs typically carry over with only notational changes.
+</Remark>

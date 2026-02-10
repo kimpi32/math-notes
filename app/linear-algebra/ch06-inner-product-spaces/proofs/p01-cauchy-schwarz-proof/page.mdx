@@ -1,0 +1,254 @@
+export const metadata = {
+  title: 'Proof of Cauchy-Schwarz Inequality — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "6. 내적공간", href: "/linear-algebra/ch06-inner-product-spaces" },
+  { label: "Proof — Cauchy-Schwarz" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of Cauchy-Schwarz Inequality
+
+We present three proofs of the Cauchy--Schwarz inequality, each offering a different perspective: the quadratic form argument, the projection argument, and the Lagrange identity approach.
+
+---
+
+## Statement
+
+<Theorem title="Cauchy-Schwarz Inequality" number="6.5">
+For all vectors $u, v$ in an inner product space $V$:
+
+$$|\langle u, v \rangle|^2 \leq \langle u, u \rangle \cdot \langle v, v \rangle.$$
+
+Equality holds if and only if $u$ and $v$ are linearly dependent.
+</Theorem>
+
+---
+
+## Proof 1: The quadratic form argument
+
+<Proof title="Proof via non-negative quadratic form">
+**Case 1:** If $v = 0$, both sides are $0$ and the inequality holds with equality.
+
+**Case 2:** Assume $v \neq 0$. For any scalar $t \in \mathbb{R}$ (or $t \in \mathbb{C}$), consider the vector $u - tv$. By positive definiteness:
+
+$$0 \leq \langle u - tv, u - tv \rangle = \langle u, u \rangle - t\langle u, v \rangle - \bar{t}\langle v, u \rangle + |t|^2 \langle v, v \rangle.$$
+
+**Real case:** Set $t = \frac{\langle u, v \rangle}{\langle v, v \rangle}$ (the optimal $t$ minimizing the quadratic):
+
+$$0 \leq \langle u, u \rangle - 2 \frac{\langle u, v \rangle^2}{\langle v, v \rangle} + \frac{\langle u, v \rangle^2}{\langle v, v \rangle} = \langle u, u \rangle - \frac{\langle u, v \rangle^2}{\langle v, v \rangle}.$$
+
+Rearranging: $\langle u, v \rangle^2 \leq \langle u, u \rangle \cdot \langle v, v \rangle$.
+
+**Complex case:** Set $t = \frac{\langle u, v \rangle}{\langle v, v \rangle}$:
+
+$$0 \leq \langle u, u \rangle - \frac{\langle u, v \rangle \overline{\langle u, v \rangle}}{\langle v, v \rangle} = \langle u, u \rangle - \frac{|\langle u, v \rangle|^2}{\langle v, v \rangle}.$$
+
+Rearranging: $|\langle u, v \rangle|^2 \leq \langle u, u \rangle \cdot \langle v, v \rangle$.
+
+**Equality:** We have equality iff $\langle u - tv, u - tv \rangle = 0$, iff $u - tv = 0$, iff $u = tv$. $\blacksquare$
+</Proof>
+
+<Example id="quadratic-proof-R2" title="Visualizing the quadratic proof in R^2">
+$u = (3, 1)$, $v = (1, 2)$. $\langle v, v \rangle = 5$, $\langle u, v \rangle = 5$.
+
+$t = 5/5 = 1$, $u - tv = (3, 1) - (1, 2) = (2, -1)$, $\|u - tv\|^2 = 5$.
+
+$\|u\|^2 - |\langle u, v \rangle|^2 / \|v\|^2 = 10 - 25/5 = 5 \geq 0$ ✓.
+
+If instead $u = (2, 4) = 2v$: $t = 10/5 = 2$, $u - tv = 0$, equality holds.
+</Example>
+
+<Example id="quadratic-proof-complex" title="Complex case verification">
+$u = (1, i)$, $v = (1, 1)$ in $\mathbb{C}^2$.
+
+$\langle u, v \rangle = 1 \cdot 1 + i \cdot 1 = 1 + i$, $|\langle u, v \rangle|^2 = 2$.
+
+$\langle u, u \rangle = 1 + 1 = 2$, $\langle v, v \rangle = 2$. Product: $4$.
+
+$2 \leq 4$ ✓. Strict inequality because $u$ and $v$ are linearly independent (no scalar $t$ with $(1, i) = t(1, 1)$).
+</Example>
+
+---
+
+## Proof 2: Via orthogonal projection
+
+<Proof title="Proof using projection">
+If $v = 0$, the result is trivial. Assume $v \neq 0$.
+
+Decompose $u$ orthogonally with respect to $v$:
+
+$$u = \operatorname{proj}_v(u) + (u - \operatorname{proj}_v(u)), \quad \text{where } \operatorname{proj}_v(u) = \frac{\langle u, v \rangle}{\langle v, v \rangle} v.$$
+
+By the Pythagorean theorem (since the two components are orthogonal):
+
+$$\|u\|^2 = \|\operatorname{proj}_v(u)\|^2 + \|u - \operatorname{proj}_v(u)\|^2.$$
+
+Since $\|u - \operatorname{proj}_v(u)\|^2 \geq 0$:
+
+$$\|u\|^2 \geq \|\operatorname{proj}_v(u)\|^2 = \frac{|\langle u, v \rangle|^2}{\|v\|^2}.$$
+
+Multiplying both sides by $\|v\|^2$: $\|u\|^2 \|v\|^2 \geq |\langle u, v \rangle|^2$.
+
+Equality iff $u = \operatorname{proj}_v(u)$, iff $u$ is a scalar multiple of $v$. $\blacksquare$
+</Proof>
+
+<Example id="projection-proof-visual" title="Projection proof visualized">
+$u = (4, 3)$, $v = (1, 0)$.
+
+$\operatorname{proj}_v(u) = 4 \cdot (1, 0) = (4, 0)$. Residual: $(0, 3)$.
+
+$\|u\|^2 = 25 = 16 + 9 = \|\operatorname{proj}\|^2 + \|\text{residual}\|^2$.
+
+Cauchy--Schwarz: $|\langle u, v \rangle|^2 = 16 \leq 25 \cdot 1 = 25$ ✓. The gap is $\|\text{residual}\|^2 = 9$.
+</Example>
+
+<Example id="projection-proof-function" title="Projection proof for functions">
+$f(x) = x$, $g(x) = 1$ on $[0, 1]$.
+
+$\operatorname{proj}_g(f) = \frac{\langle f, g \rangle}{\|g\|^2} g = \frac{1/2}{1} \cdot 1 = \frac{1}{2}$.
+
+$\|f\|^2 = 1/3 \geq |\langle f, g \rangle|^2 / \|g\|^2 = 1/4$ ✓.
+
+The residual is $f - 1/2 = x - 1/2$, with $\|x - 1/2\|^2 = 1/3 - 1/4 = 1/12$.
+</Example>
+
+---
+
+## Proof 3: Lagrange identity (for R^n)
+
+<Proof title="Proof via Lagrange identity (real case, R^n)">
+For $u, v \in \mathbb{R}^n$, the **Lagrange identity** states:
+
+$$\|u\|^2 \|v\|^2 - (u \cdot v)^2 = \sum_{1 \leq i < j \leq n} (u_i v_j - u_j v_i)^2.$$
+
+The right side is a sum of squares, hence $\geq 0$. This gives $\|u\|^2 \|v\|^2 \geq (u \cdot v)^2$.
+
+Equality holds iff all $u_i v_j - u_j v_i = 0$ for $i < j$, iff all $2 \times 2$ minors of $\begin{pmatrix} u_1 & \cdots & u_n \\ v_1 & \cdots & v_n \end{pmatrix}$ vanish, iff $u$ and $v$ are proportional. $\blacksquare$
+</Proof>
+
+<Example id="lagrange-R2" title="Lagrange identity in R^2">
+$u = (a, b)$, $v = (c, d)$:
+
+$\|u\|^2\|v\|^2 - (u \cdot v)^2 = (a^2 + b^2)(c^2 + d^2) - (ac + bd)^2 = (ad - bc)^2$.
+
+For $u = (1, 2)$, $v = (3, 4)$: $(1 + 4)(9 + 16) - (3 + 8)^2 = 125 - 121 = 4 = (4 - 6)^2 = 4$ ✓.
+</Example>
+
+<Example id="lagrange-R3" title="Lagrange identity in R^3">
+$u = (1, 0, 0)$, $v = (0, 1, 0)$:
+
+$\|u\|^2\|v\|^2 - (u \cdot v)^2 = 1 \cdot 1 - 0 = 1$.
+
+$(u_1 v_2 - u_2 v_1)^2 + (u_1 v_3 - u_3 v_1)^2 + (u_2 v_3 - u_3 v_2)^2 = 1 + 0 + 0 = 1$ ✓.
+
+Note: in $\mathbb{R}^3$, $\|u\|^2\|v\|^2 - (u \cdot v)^2 = \|u \times v\|^2$, where $u \times v$ is the cross product.
+</Example>
+
+---
+
+## Consequences derived
+
+<Example id="triangle-derived" title="Deriving the triangle inequality">
+$\|u + v\|^2 = \|u\|^2 + 2\operatorname{Re}\langle u, v \rangle + \|v\|^2 \leq \|u\|^2 + 2\|u\|\|v\| + \|v\|^2 = (\|u\| + \|v\|)^2$.
+
+The key step uses $\operatorname{Re}\langle u, v \rangle \leq |\langle u, v \rangle| \leq \|u\|\|v\|$ (Cauchy--Schwarz).
+</Example>
+
+<Example id="bessel-derived" title="Deriving Bessel's inequality">
+For an orthonormal set $\{e_1, \ldots, e_k\}$ and any $v$, let $w = v - \sum_i \langle v, e_i \rangle e_i$. Then $w \perp e_j$ for all $j$, and:
+
+$0 \leq \|w\|^2 = \|v\|^2 - \sum_i |\langle v, e_i \rangle|^2$.
+
+This is Bessel's inequality, which is a multi-dimensional Cauchy--Schwarz.
+</Example>
+
+<Example id="angle-well-defined" title="Angle is well-defined">
+Cauchy--Schwarz guarantees $-1 \leq \frac{\langle u, v \rangle}{\|u\|\|v\|} \leq 1$ for real inner product spaces, so $\theta = \arccos\left(\frac{\langle u, v \rangle}{\|u\|\|v\|}\right) \in [0, \pi]$ is well-defined.
+
+Without Cauchy--Schwarz, the argument of $\arccos$ could exceed $[-1, 1]$, making the angle undefined.
+</Example>
+
+---
+
+## Comparison of proofs
+
+<Remark title="Three perspectives on Cauchy-Schwarz">
+- **Quadratic form proof:** The most general, works in any inner product space (real or complex, finite or infinite-dimensional). Shows that the inequality is equivalent to non-negativity of a specific scalar quadratic in $t$.
+
+- **Projection proof:** Geometrically intuitive -- the inequality says the projection of $u$ onto $v$ is at most as long as $u$ itself. The "gap" $\|u - \operatorname{proj}_v(u)\|^2$ measures how far $u$ is from being a multiple of $v$.
+
+- **Lagrange identity proof:** Algebraically explicit (for $\mathbb{R}^n$ only), showing the "defect" $\|u\|^2\|v\|^2 - (u \cdot v)^2 = \sum(u_iv_j - u_jv_i)^2$ as a sum of squares. In $\mathbb{R}^3$, this equals $\|u \times v\|^2$, connecting to the cross product.
+</Remark>
+
+---
+
+## Historical note
+
+<Remark title="History of the inequality">
+The inequality is named after Augustin-Louis Cauchy (who proved the finite sum version in 1821), Viktor Bunyakovsky (who proved the integral version in 1859), and Hermann Amandus Schwarz (who independently proved the integral version in 1884). In some traditions it is called the **Cauchy--Bunyakovsky--Schwarz inequality** or **CBS inequality**.
+
+The inequality appears in every branch of mathematics:
+- **Analysis:** the foundation of $L^p$ space theory.
+- **Probability:** bounds on covariance and correlation.
+- **Physics:** uncertainty principles in quantum mechanics.
+- **Geometry:** the angle between vectors, curvature bounds.
+- **Combinatorics:** counting arguments via the second moment method.
+</Remark>
+
+---
+
+## Extended examples
+
+<Example id="cs-quantum" title="Uncertainty principle from Cauchy-Schwarz">
+In quantum mechanics, observables $A, B$ act on a Hilbert space $\mathcal{H}$. For a state $|\psi\rangle$, the uncertainty principle:
+
+$$\Delta A \cdot \Delta B \geq \frac{1}{2}|\langle [A, B] \rangle|$$
+
+follows from Cauchy--Schwarz applied to $|u\rangle = (A - \langle A \rangle)|\psi\rangle$ and $|v\rangle = (B - \langle B \rangle)|\psi\rangle$.
+
+For position $X$ and momentum $P$ with $[X, P] = i\hbar$: $\Delta X \cdot \Delta P \geq \hbar/2$.
+</Example>
+
+<Example id="cs-number-theory" title="Cauchy-Schwarz in number theory">
+For real sequences $a_1, \ldots, a_n$ and $b_1, \ldots, b_n$:
+
+$$\left(\sum a_i b_i\right)^2 \leq \left(\sum a_i^2\right)\left(\sum b_i^2\right).$$
+
+Setting $a_i = 1$ and $b_i = d(i)$ (number of divisors of $i$): $\left(\sum_{i=1}^n d(i)\right)^2 \leq n \sum_{i=1}^n d(i)^2$. Since $\sum d(i) \sim n \log n$, this gives $\sum d(i)^2 \gg n(\log n)^2$.
+</Example>
+
+<Example id="cs-holder" title="Generalization: Holder's inequality">
+Cauchy--Schwarz is the $p = q = 2$ case of Holder's inequality: for $\frac{1}{p} + \frac{1}{q} = 1$,
+
+$$\sum |a_i b_i| \leq \left(\sum |a_i|^p\right)^{1/p} \left(\sum |b_i|^q\right)^{1/q}.$$
+
+The $p = q = 2$ case is exactly Cauchy--Schwarz.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="The cornerstone inequality">
+The Cauchy--Schwarz inequality is the single most consequential inequality in inner product space theory. From it flow:
+- The triangle inequality (hence metric space structure).
+- Bessel's inequality (finite energy of Fourier coefficients).
+- The well-definedness of angles.
+- The optimality of orthogonal projections.
+- Uncertainty principles in physics.
+
+Its proof, via the non-negativity of $\|u - tv\|^2$, is a masterclass in the power of positive definiteness.
+</Remark>

@@ -1,0 +1,181 @@
+export const metadata = {
+  title: 'DG Enhancement of Triangulated Categories — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "6. DG 범주와 A∞ 범주", href: "/higher-category-theory/ch06-dg-and-a-infinity" },
+  { label: "Concept — DG Enhancement of Triangulated Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# DG Enhancement of Triangulated Categories
+
+A DG enhancement of a triangulated category $\mathcal{T}$ is a pretriangulated DG category $\mathcal{A}$ whose homotopy category $H^0(\mathcal{A})$ is equivalent to $\mathcal{T}$ as a triangulated category. DG enhancements restore the higher homotopical information lost when passing to the homotopy category and resolve the pathologies of the triangulated framework. The existence and uniqueness of DG enhancements is a central question in homological algebra.
+
+---
+
+## Definition
+
+<Definition title="DG enhancement" number="6.1">
+Let $\mathcal{T}$ be a triangulated category. A **DG enhancement** of $\mathcal{T}$ is a pair $(\mathcal{A}, \epsilon)$ where:
+
+1. $\mathcal{A}$ is a pretriangulated DG category (over a commutative ring $k$).
+2. $\epsilon: H^0(\mathcal{A}) \xrightarrow{\sim} \mathcal{T}$ is an equivalence of triangulated categories.
+
+Two DG enhancements $(\mathcal{A}_1, \epsilon_1)$ and $(\mathcal{A}_2, \epsilon_2)$ are **equivalent** if there exists a DG quasi-equivalence $F: \mathcal{A}_1 \to \mathcal{A}_2$ such that $\epsilon_2 \circ H^0(F) \cong \epsilon_1$.
+</Definition>
+
+<Definition title="Morita DG enhancement" number="6.2">
+A **Morita DG enhancement** of $\mathcal{T}$ is a small DG category $\mathcal{B}$ together with a triangulated equivalence $\epsilon: D(\mathcal{B})^c \xrightarrow{\sim} \mathcal{T}$, where $D(\mathcal{B})^c$ denotes the compact objects in the derived category of DG modules over $\mathcal{B}$.
+
+Two Morita enhancements $(\mathcal{B}_1, \epsilon_1)$ and $(\mathcal{B}_2, \epsilon_2)$ are equivalent if $\mathcal{B}_1$ and $\mathcal{B}_2$ are Morita equivalent as DG categories.
+</Definition>
+
+---
+
+## Existence of Enhancements
+
+<Example id="enhance-derived" title="Derived categories have canonical enhancements">
+For an abelian category $\mathcal{A}$ (with enough injectives or projectives), the derived category $D(\mathcal{A})$ has a canonical DG enhancement: the DG category $\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(\mathcal{A})$ of complexes of injective objects, with the standard Hom complex. Then:
+
+$$H^0(\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(\mathcal{A})) \simeq D(\mathcal{A})$$
+
+Similarly, the DG category of h-projective complexes provides an enhancement using projective resolutions (when they exist).
+</Example>
+
+<Example id="enhance-qcoh" title="Quasi-coherent sheaves on schemes">
+For a quasi-compact quasi-separated scheme $X$, the derived category $D_{\mathrm{qc}}(X)$ of quasi-coherent sheaves has a DG enhancement given by the DG category of h-injective complexes of quasi-coherent sheaves. This enhancement is canonical and functorial in $X$.
+
+For the bounded derived category $D^b(\operatorname{Coh}(X))$ of coherent sheaves on a Noetherian scheme, the DG enhancement is obtained by restricting to complexes with coherent cohomology.
+</Example>
+
+<Example id="enhance-modules" title="Module categories over DG algebras">
+For a DG algebra $A$, the derived category $D(A)$ is enhanced by the DG category $\operatorname{Mod}_A^{\mathrm{dg}}$ of DG modules (or more precisely, the full DG subcategory of h-projective or h-injective DG modules). The perfect derived category $D^{\mathrm{perf}}(A)$ is enhanced by the full DG subcategory of compact objects.
+
+When $A$ is an ordinary ring (viewed as a DG algebra concentrated in degree $0$), this recovers the classical derived category enhancement.
+</Example>
+
+<Example id="enhance-singularity" title="Singularity categories">
+For a Noetherian ring $R$ (or a scheme $X$), the singularity category $D_{\mathrm{sg}}(R) = D^b(\operatorname{mod}\text{-}R)/D^{\mathrm{perf}}(R)$ (the Verdier quotient) has a DG enhancement obtained by the DG quotient construction of Drinfeld. The DG quotient $\mathcal{A}/\mathcal{B}$ of a DG category $\mathcal{A}$ by a full DG subcategory $\mathcal{B}$ is constructed by formally adding null-homotopies for all objects of $\mathcal{B}$.
+
+For a Gorenstein ring $R$, $D_{\mathrm{sg}}(R)$ is equivalent to the stable category of maximal Cohen--Macaulay modules $\underline{\operatorname{CM}}(R)$.
+</Example>
+
+<Example id="enhance-matrix-fact" title="Matrix factorization categories">
+The homotopy category of matrix factorizations $\operatorname{HMF}(R, w)$ for a potential $w \in R$ has a natural DG enhancement: the DG category $\operatorname{MF}_{\mathrm{dg}}(R, w)$ of matrix factorizations with the standard Hom complex.
+
+By Orlov's theorem, for a hypersurface $X_0 = \operatorname{Spec}(R/(w))$ in $\operatorname{Spec}(R)$:
+
+$$D_{\mathrm{sg}}(X_0) \simeq \operatorname{HMF}(R, w)$$
+
+Both sides have DG enhancements, and this equivalence lifts to a DG quasi-equivalence.
+</Example>
+
+---
+
+## Uniqueness Results
+
+<Example id="enhance-unique-smooth" title="Uniqueness for smooth projective varieties">
+Lunts and Orlov (2010) proved that for a smooth projective variety $X$ over a field $k$, the DG enhancement of $D^b(\operatorname{Coh}(X))$ is **unique** up to Morita equivalence.
+
+More precisely, any two DG enhancements of $D^b(\operatorname{Coh}(X))$ are connected by a zigzag of quasi-equivalences. This implies that any triangulated invariant that can be defined via DG enhancements (such as Hochschild cohomology, deformation theory, etc.) is well-defined for $D^b(\operatorname{Coh}(X))$.
+</Example>
+
+<Example id="enhance-unique-generator" title="Uniqueness via generators">
+If a triangulated category $\mathcal{T}$ has a compact generator $G$ (i.e., $\mathcal{T}$ is equivalent to $D^{\mathrm{perf}}(A)$ for $A = \operatorname{End}_{\mathcal{T}}(G)$), then any DG enhancement of $\mathcal{T}$ is Morita equivalent to the DG algebra $\tilde{A}$ (a DG lift of $A$), provided the enhancement exists.
+
+The uniqueness question reduces to: is the DG algebra $\tilde{A}$ unique up to quasi-isomorphism? For smooth and proper DG categories, the answer is often yes (by deformation-theoretic arguments).
+</Example>
+
+<Example id="enhance-non-unique" title="Non-uniqueness examples">
+Muro, Schwede, and Strickland (2007) showed that DG enhancements are not always unique. Over $\mathbb{F}_p$, there exist "exotic" triangulated structures that arise from non-equivalent DG categories.
+
+Additionally, for non-smooth or non-proper categories, uniqueness can fail. Dugger and Shipley constructed examples of distinct DG algebras $A$ and $B$ (over $\mathbb{F}_p$) with equivalent derived categories $D(A) \simeq D(B)$ as triangulated categories but non-quasi-isomorphic DG algebras.
+</Example>
+
+<Example id="enhance-non-existence" title="Triangulated categories without DG enhancements">
+Not every triangulated category admits a DG enhancement. Muro, Schwede, and Strickland constructed a triangulated category over $\mathbb{F}_2$ that admits no DG enhancement (or even $A_\infty$-enhancement). The obstruction lies in the failure of certain Toda bracket relations.
+
+However, all triangulated categories arising in "nature" (derived categories, stable homotopy categories, etc.) do admit DG enhancements, so non-enhanceable examples are somewhat exotic.
+</Example>
+
+---
+
+## What Enhancements Provide
+
+<Example id="enhance-functorial-cones" title="Functorial cones">
+In a DG enhanced triangulated category, cones become functorial: the cofiber of a closed degree-$0$ morphism $f: X \to Y$ in $\mathcal{A}$ is $\operatorname{Cone}(f) = Y \oplus X[1]$ with differential $d_{\operatorname{Cone}} = \left(\begin{smallmatrix} d_Y & f \\ 0 & -d_{X[1]} \end{smallmatrix}\right)$, and this construction is functorial in $f$ at the DG level.
+
+At the homotopy category level ($H^0$), one can only say that the cone is unique up to non-canonical isomorphism. The DG enhancement restores the canonical choice.
+</Example>
+
+<Example id="enhance-hochschild" title="Hochschild cohomology from enhancement">
+The Hochschild cohomology $HH^*(\mathcal{T})$ of a triangulated category is not well-defined intrinsically (it depends on the enhancement). Given a DG enhancement $\mathcal{A}$ of $\mathcal{T}$:
+
+$$HH^*(\mathcal{T}) := HH^*(\mathcal{A}) = H^*(\operatorname{RHom}_{\mathcal{A}^{\mathrm{op}} \otimes \mathcal{A}}(\mathcal{A}, \mathcal{A}))$$
+
+This is invariant under quasi-equivalence of DG categories. When the enhancement is unique (e.g., for smooth projective varieties), $HH^*(\mathcal{T})$ is a well-defined invariant of $\mathcal{T}$.
+</Example>
+
+<Example id="enhance-deformation" title="Deformation theory of categories">
+The DG enhancement governs deformations: deformations of a DG category $\mathcal{A}$ over $k$ are controlled by the Hochschild cohomology $HH^2(\mathcal{A})$ (first-order deformations) and $HH^3(\mathcal{A})$ (obstructions).
+
+Without a DG enhancement, one cannot define deformations of a triangulated category. The enhancement is essential for noncommutative algebraic geometry (Kontsevich, Keller).
+</Example>
+
+<Example id="enhance-fourier-mukai" title="Fourier--Mukai functors">
+For smooth projective varieties $X, Y$ over a field $k$, every exact functor $D^b(\operatorname{Coh}(X)) \to D^b(\operatorname{Coh}(Y))$ that is a DG functor (at the enhanced level) is a **Fourier--Mukai functor**: it is isomorphic to $\Phi_{\mathcal{P}} = \mathbf{R}p_{2*}(p_1^* (-) \otimes^{\mathbf{L}} \mathcal{P})$ for a unique (up to isomorphism) kernel $\mathcal{P} \in D^b(\operatorname{Coh}(X \times Y))$.
+
+The proof (Toen, Lunts--Orlov) uses the DG enhancement in an essential way: the result is not accessible from the triangulated category alone.
+</Example>
+
+<Example id="enhance-gluing" title="Gluing of DG categories">
+DG enhancements allow gluing constructions that are impossible at the triangulated level. For a semi-orthogonal decomposition $\mathcal{T} = \langle \mathcal{T}_1, \mathcal{T}_2 \rangle$, the DG enhanced version provides a gluing DG bimodule $M$ such that $\mathcal{A}$ is the upper-triangular DG category:
+
+$$\mathcal{A} = \left(\begin{smallmatrix} \mathcal{A}_1 & M \\ 0 & \mathcal{A}_2 \end{smallmatrix}\right)$$
+
+The reconstruction of $\mathcal{A}$ from $\mathcal{A}_1$, $\mathcal{A}_2$, and $M$ works at the DG level but fails at the triangulated level.
+</Example>
+
+---
+
+## Relation to Stable Infinity-Categories
+
+<Example id="enhance-stable-infinity" title="DG enhancements vs. stable infinity-category enhancements">
+A DG enhancement (over a field $k$ of characteristic $0$) is essentially the same as a $k$-linear stable $\infty$-category enhancement, via the DG nerve:
+
+$$N_{\mathrm{dg}}: \mathbf{dgCat}_k \to \operatorname{Cat}_\infty^{k\text{-lin, st}}$$
+
+is an equivalence between the $\infty$-category of DG categories (localized at quasi-equivalences) and that of $k$-linear stable $\infty$-categories.
+
+In positive characteristic, DG categories provide a strictly algebraic model, while stable $\infty$-categories work universally.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+DG enhancements restore the higher structure lost by triangulated categories:
+
+1. A DG enhancement of $\mathcal{T}$ is a pretriangulated DG category $\mathcal{A}$ with $H^0(\mathcal{A}) \simeq \mathcal{T}$.
+
+2. All "natural" triangulated categories (derived categories, categories of sheaves) **admit DG enhancements**; exotic counterexamples exist but are rare.
+
+3. For smooth projective varieties, DG enhancements are **unique** (Lunts--Orlov).
+
+4. Enhancements provide: **functorial cones**, well-defined **Hochschild cohomology**, **deformation theory**, **Fourier--Mukai** representability, and **gluing** constructions.
+
+5. Over characteristic $0$ fields, DG enhancements are equivalent to $k$-linear **stable $\infty$-category** enhancements via the DG nerve.
+</Remark>

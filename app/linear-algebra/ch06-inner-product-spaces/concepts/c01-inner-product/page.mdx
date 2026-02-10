@@ -1,0 +1,238 @@
+export const metadata = {
+  title: 'Inner Product — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "6. 내적공간", href: "/linear-algebra/ch06-inner-product-spaces" },
+  { label: "Concept — Inner Product" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Inner Product
+
+An inner product endows a vector space with geometric structure: lengths, angles, and distances. While a bare vector space only has addition and scalar multiplication, an inner product space can measure the "size" of vectors and the "angle" between them, connecting algebra to geometry.
+
+---
+
+## Definition
+
+<Definition title="Inner product (real case)" number="6.1">
+Let $V$ be a real vector space. An **inner product** on $V$ is a function $\langle \cdot, \cdot \rangle : V \times V \to \mathbb{R}$ satisfying:
+
+1. **Linearity in the first argument:** $\langle \alpha u + \beta v, w \rangle = \alpha \langle u, w \rangle + \beta \langle v, w \rangle$.
+2. **Symmetry:** $\langle u, v \rangle = \langle v, u \rangle$.
+3. **Positive definiteness:** $\langle v, v \rangle \geq 0$, with equality if and only if $v = 0$.
+
+A real vector space equipped with an inner product is called a **real inner product space** (or **Euclidean space** when finite-dimensional).
+</Definition>
+
+<Definition title="Inner product (complex case)" number="6.2">
+Let $V$ be a complex vector space. An **inner product** on $V$ is a function $\langle \cdot, \cdot \rangle : V \times V \to \mathbb{C}$ satisfying:
+
+1. **Linearity in the first argument:** $\langle \alpha u + \beta v, w \rangle = \alpha \langle u, w \rangle + \beta \langle v, w \rangle$.
+2. **Conjugate symmetry:** $\langle u, v \rangle = \overline{\langle v, u \rangle}$.
+3. **Positive definiteness:** $\langle v, v \rangle \geq 0$ (it is real by conjugate symmetry), with equality iff $v = 0$.
+
+A complex vector space with an inner product is called a **unitary space** (or **pre-Hilbert space**).
+</Definition>
+
+<Remark title="Conjugate-linearity in the second argument">
+In the complex case, conjugate symmetry together with linearity in the first argument implies **conjugate-linearity** in the second:
+
+$$\langle u, \alpha v + \beta w \rangle = \bar{\alpha} \langle u, v \rangle + \bar{\beta} \langle u, w \rangle.$$
+
+Some references (especially in physics) use the opposite convention: linear in the second argument, conjugate-linear in the first.
+</Remark>
+
+---
+
+## Standard examples
+
+<Example id="dot-product" title="The dot product on R^n">
+The standard inner product on $\mathbb{R}^n$ is the **dot product**:
+
+$$\langle x, y \rangle = x \cdot y = \sum_{i=1}^n x_i y_i = x^T y.$$
+
+For $x = (1, 2, 3)$ and $y = (4, -1, 2)$: $\langle x, y \rangle = 4 - 2 + 6 = 8$.
+
+This satisfies all three axioms: linearity is clear, symmetry gives $x \cdot y = y \cdot x$, and $\langle x, x \rangle = x_1^2 + \cdots + x_n^2 \geq 0$ with equality iff $x = 0$.
+</Example>
+
+<Example id="complex-standard" title="The standard inner product on C^n">
+On $\mathbb{C}^n$:
+
+$$\langle x, y \rangle = \sum_{i=1}^n x_i \overline{y_i} = x^* y,$$
+
+where $x^* = \bar{x}^T$ is the conjugate transpose.
+
+For $x = (1, i)$ and $y = (2, 3i)$: $\langle x, y \rangle = 1 \cdot \bar{2} + i \cdot \overline{3i} = 2 + i(-3i) = 2 + 3 = 5$.
+
+Note: $\langle x, x \rangle = |x_1|^2 + \cdots + |x_n|^2 \geq 0$, so positive definiteness holds.
+</Example>
+
+<Example id="weighted" title="Weighted inner product">
+On $\mathbb{R}^n$ with positive weights $w_1, \ldots, w_n > 0$:
+
+$$\langle x, y \rangle_w = \sum_{i=1}^n w_i x_i y_i.$$
+
+For $w = (2, 3)$ on $\mathbb{R}^2$: $\langle (1, 1), (1, -1) \rangle_w = 2 \cdot 1 \cdot 1 + 3 \cdot 1 \cdot (-1) = -1$.
+
+The vectors $(1, 1)$ and $(1, -1)$ are orthogonal in the standard inner product ($1 - 1 = 0$) but not in this weighted one.
+</Example>
+
+<Example id="function-space" title="Inner product on C[a,b]">
+On the space of continuous functions $C[a, b]$:
+
+$$\langle f, g \rangle = \int_a^b f(x) g(x) \, dx.$$
+
+For $f(x) = x$ and $g(x) = x^2$ on $[0, 1]$: $\langle f, g \rangle = \int_0^1 x^3 \, dx = \frac{1}{4}$.
+
+For $f(x) = \sin(\pi x)$ and $g(x) = \sin(2\pi x)$ on $[0, 1]$: $\langle f, g \rangle = \int_0^1 \sin(\pi x) \sin(2\pi x) \, dx = 0$ (orthogonality of Fourier modes).
+</Example>
+
+---
+
+## Norm and distance
+
+<Definition title="Norm induced by an inner product" number="6.3">
+The **norm** (or length) of a vector $v$ in an inner product space is:
+
+$$\|v\| = \sqrt{\langle v, v \rangle}.$$
+
+The **distance** between $u$ and $v$ is $d(u, v) = \|u - v\|$.
+</Definition>
+
+<Example id="norm-R3" title="Norm in R^3">
+For $v = (3, 4, 0) \in \mathbb{R}^3$ with the standard inner product:
+
+$\|v\| = \sqrt{9 + 16 + 0} = 5$.
+
+$\|(1, 1, 1)\| = \sqrt{3}$, $\|(1, 0, 0)\| = 1$.
+</Example>
+
+<Example id="norm-function" title="Norm of functions">
+With $\langle f, g \rangle = \int_0^1 f(x) g(x) \, dx$:
+
+$\|x\| = \sqrt{\int_0^1 x^2 \, dx} = \sqrt{1/3} = \frac{1}{\sqrt{3}}$.
+
+$\|1\| = \sqrt{\int_0^1 1 \, dx} = 1$.
+
+$\|\sin(\pi x)\| = \sqrt{\int_0^1 \sin^2(\pi x) \, dx} = \sqrt{1/2} = \frac{1}{\sqrt{2}}$.
+</Example>
+
+---
+
+## Properties of the norm
+
+<Theorem title="Properties of the induced norm">
+For all $u, v \in V$ and $\alpha \in F$:
+
+1. $\|v\| \geq 0$, with $\|v\| = 0$ iff $v = 0$.
+2. $\|\alpha v\| = |\alpha| \cdot \|v\|$ (homogeneity).
+3. $\|u + v\| \leq \|u\| + \|v\|$ (triangle inequality).
+4. $|\langle u, v \rangle| \leq \|u\| \cdot \|v\|$ (Cauchy--Schwarz inequality).
+</Theorem>
+
+<Example id="triangle-inequality" title="Triangle inequality in R^2">
+$u = (3, 0)$, $v = (0, 4)$: $\|u + v\| = \|(3, 4)\| = 5 \leq 3 + 4 = \|u\| + \|v\| = 7$. The inequality is strict because $u$ and $v$ are not parallel.
+
+$u = (1, 2)$, $v = (2, 4)$: $\|u + v\| = \|(3, 6)\| = 3\sqrt{5} = 3\sqrt{5}$ and $\|u\| + \|v\| = \sqrt{5} + 2\sqrt{5} = 3\sqrt{5}$. Equality holds because $v = 2u$ (they are parallel).
+</Example>
+
+---
+
+## Angles
+
+<Definition title="Angle between vectors" number="6.4">
+In a real inner product space, the **angle** $\theta$ between nonzero vectors $u, v$ is defined by:
+
+$$\cos\theta = \frac{\langle u, v \rangle}{\|u\| \cdot \|v\|}, \quad 0 \leq \theta \leq \pi.$$
+
+This is well-defined by the Cauchy--Schwarz inequality, which guarantees $|\cos\theta| \leq 1$.
+</Definition>
+
+<Example id="angle-R3" title="Angle between vectors in R^3">
+$u = (1, 0, 0)$, $v = (1, 1, 0)$: $\cos\theta = \frac{1}{\sqrt{2}}$, so $\theta = \pi/4 = 45°$.
+
+$u = (1, 0, 0)$, $v = (0, 1, 0)$: $\cos\theta = 0$, so $\theta = \pi/2 = 90°$ (perpendicular).
+
+$u = (1, 1, 1)$, $v = (-1, -1, -1)$: $\cos\theta = \frac{-3}{3} = -1$, so $\theta = \pi = 180°$ (anti-parallel).
+</Example>
+
+<Example id="angle-function" title="Angle between functions">
+With $\langle f, g \rangle = \int_0^1 f(x)g(x)\,dx$, the angle between $f(x) = 1$ and $g(x) = x$:
+
+$\cos\theta = \frac{\langle 1, x \rangle}{\|1\| \cdot \|x\|} = \frac{1/2}{1 \cdot 1/\sqrt{3}} = \frac{\sqrt{3}}{2}$, so $\theta = \pi/6 = 30°$.
+</Example>
+
+---
+
+## Inner products via matrices
+
+<Theorem title="Inner products on R^n via positive definite matrices">
+Every inner product on $\mathbb{R}^n$ has the form $\langle x, y \rangle = x^T M y$ for a unique symmetric positive definite matrix $M$. Conversely, every symmetric positive definite $M$ defines an inner product this way.
+</Theorem>
+
+<Example id="matrix-inner-product" title="Inner product from a positive definite matrix">
+$M = \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}$ is positive definite (eigenvalues $\frac{5 \pm \sqrt{5}}{2} > 0$).
+
+$\langle x, y \rangle = x^T M y$. For $x = (1, 0)$, $y = (0, 1)$: $\langle x, y \rangle = (1, 0) \begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix} \begin{pmatrix} 0 \\ 1 \end{pmatrix} = 1$.
+
+$\|e_1\|^2 = \langle e_1, e_1 \rangle = 2$, $\|e_2\|^2 = 3$. The standard basis vectors are not unit vectors in this inner product.
+</Example>
+
+<Example id="not-inner-product" title="When a bilinear form is NOT an inner product">
+$M = \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix}$ has eigenvalues $3$ and $-1$. Since $-1 < 0$, $M$ is not positive definite.
+
+$\langle (1, -1), (1, -1) \rangle = (1, -1) \begin{pmatrix} 1 & 2 \\ 2 & 1 \end{pmatrix} \begin{pmatrix} 1 \\ -1 \end{pmatrix} = (1, -1)\begin{pmatrix} -1 \\ 1 \end{pmatrix} = -2 < 0$.
+
+This fails positive definiteness, so it is not an inner product.
+</Example>
+
+---
+
+## Parallelogram law and polarization
+
+<Theorem title="Parallelogram law">
+In any inner product space: $\|u + v\|^2 + \|u - v\|^2 = 2\|u\|^2 + 2\|v\|^2$.
+
+This characterizes inner product spaces among normed spaces: a norm satisfies the parallelogram law if and only if it comes from an inner product.
+</Theorem>
+
+<Example id="parallelogram" title="Parallelogram law verification">
+$u = (1, 0)$, $v = (0, 1)$ in $\mathbb{R}^2$:
+
+$\|u + v\|^2 + \|u - v\|^2 = \|(1,1)\|^2 + \|(1,-1)\|^2 = 2 + 2 = 4$.
+$2\|u\|^2 + 2\|v\|^2 = 2 + 2 = 4$ ✓.
+</Example>
+
+<Theorem title="Polarization identity (real case)">
+The inner product can be recovered from the norm:
+
+$$\langle u, v \rangle = \frac{1}{4}(\|u + v\|^2 - \|u - v\|^2).$$
+</Theorem>
+
+---
+
+## Summary
+
+<Remark title="The inner product as geometric structure">
+An inner product transforms a bare vector space into a geometric space:
+- **Norm**: measures length, $\|v\| = \sqrt{\langle v, v \rangle}$.
+- **Distance**: $d(u,v) = \|u - v\|$ gives metric space structure.
+- **Angle**: $\cos\theta = \langle u, v \rangle / (\|u\| \|v\|)$.
+- **Orthogonality**: $u \perp v$ iff $\langle u, v \rangle = 0$.
+- Every inner product on $\mathbb{R}^n$ arises from a symmetric positive definite matrix.
+- The Cauchy--Schwarz inequality is the fundamental inequality governing the interaction between the inner product and the norm.
+</Remark>

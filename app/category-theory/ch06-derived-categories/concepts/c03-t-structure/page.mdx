@@ -1,0 +1,107 @@
+export const metadata = {
+  title: 't-structure — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Concept — t-structure" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# t-structure
+
+A t-structure on a triangulated category is a way to recover abelian structure from the triangulated framework. It provides truncation functors and a "heart" that is an abelian category. The standard t-structure on the derived category has heart $\mathcal{A}$; exotic t-structures give rise to new abelian categories, such as perverse sheaves.
+
+---
+
+## Definition
+
+<Definition title="t-structure" number="6.4">
+A **t-structure** on a triangulated category $\mathcal{T}$ is a pair of full subcategories $(\mathcal{T}^{\leq 0}, \mathcal{T}^{\geq 0})$ satisfying:
+
+1. $\mathcal{T}^{\leq 0}[1] \subseteq \mathcal{T}^{\leq 0}$ and $\mathcal{T}^{\geq 0}[-1] \subseteq \mathcal{T}^{\geq 0}$.
+2. $\mathrm{Hom}(X, Y) = 0$ for $X \in \mathcal{T}^{\leq 0}$ and $Y \in \mathcal{T}^{\geq 1} := \mathcal{T}^{\geq 0}[-1]$.
+3. For every $X \in \mathcal{T}$, there is a distinguished triangle $A \to X \to B \to A[1]$ with $A \in \mathcal{T}^{\leq 0}$ and $B \in \mathcal{T}^{\geq 1}$.
+
+We write $\mathcal{T}^{\leq n} = \mathcal{T}^{\leq 0}[-n]$ and $\mathcal{T}^{\geq n} = \mathcal{T}^{\geq 0}[-n]$.
+</Definition>
+
+<Definition title="Truncation Functors" number="6.5">
+A t-structure determines **truncation functors** $\tau_{\leq n} : \mathcal{T} \to \mathcal{T}^{\leq n}$ and $\tau_{\geq n} : \mathcal{T} \to \mathcal{T}^{\geq n}$, defined by the unique distinguished triangle $\tau_{\leq n} X \to X \to \tau_{\geq n+1} X \to (\tau_{\leq n} X)[1]$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Standard t-structure on D(A)" id="standard">
+On $D(\mathcal{A})$, the **standard t-structure** has $D^{\leq 0} = \{A^\bullet : H^n(A) = 0 \text{ for } n > 0\}$ and $D^{\geq 0} = \{A^\bullet : H^n(A) = 0 \text{ for } n < 0\}$. The truncation $\tau_{\leq 0}$ replaces $A^0$ by $\ker d^0$. The heart is $\mathcal{A}$ itself.
+</Example>
+
+<Example title="Perverse t-structure" id="perverse">
+On $D^b_c(X)$ (constructible sheaves on a stratified space), the **perverse t-structure** with perversity $p$ shifts the standard t-structure by the dimension of each stratum. The heart is the abelian category of **perverse sheaves** $\mathrm{Perv}(X)$.
+</Example>
+
+<Example title="t-structure from a torsion pair" id="torsion-pair">
+A torsion pair $(\mathcal{T}, \mathcal{F})$ in an abelian category $\mathcal{A}$ (where $\mathrm{Hom}(\mathcal{T}, \mathcal{F}) = 0$ and every object fits in a SES $0 \to T \to A \to F \to 0$) induces a t-structure on $D^b(\mathcal{A})$ by tilting.
+</Example>
+
+<Example title="Non-degenerate t-structure" id="non-degenerate">
+A t-structure is **non-degenerate** if $\bigcap_n \mathcal{T}^{\leq n} = 0 = \bigcap_n \mathcal{T}^{\geq n}$. The standard t-structure on $D^b(\mathcal{A})$ is non-degenerate. Non-degenerate t-structures allow the recovery of an object from its "cohomology objects."
+</Example>
+
+<Example title="Weight structure" id="weight">
+A weight structure (or co-t-structure) on $\mathcal{T}$ is a t-structure on $\mathcal{T}^{\mathrm{op}}$. Weight structures arise in mixed motives and provide weight filtrations on cohomology.
+</Example>
+
+<Example title="t-structure on D^b(mod-A) from tilting" id="tilting-t">
+For a tilting module $T$ over an algebra $A$, with $B = \mathrm{End}(T)$, the derived equivalence $D^b(A) \simeq D^b(B)$ transports the standard t-structure on $D^b(B)$ to a non-standard t-structure on $D^b(A)$.
+</Example>
+
+<Example title="Cohomological t-functor" id="t-functor">
+The cohomology functor $H^0 : D(\mathcal{A}) \to \mathcal{A}$ factors as $\tau_{\geq 0} \circ \tau_{\leq 0}$ and takes values in the heart. More generally, $H^n = H^0 \circ [-n]$ gives the $n$-th cohomology with respect to the t-structure.
+</Example>
+
+<Example title="Bridgeland stability conditions" id="bridgeland">
+A Bridgeland stability condition on $D^b(\mathrm{Coh}(X))$ consists of a t-structure (with heart $\mathcal{A}$) together with a central charge $Z : K_0(\mathcal{A}) \to \mathbb{C}$ satisfying stability conditions. The space of stability conditions is a complex manifold.
+</Example>
+
+<Example title="Recollement" id="recollement">
+For a closed subvariety $Z \subseteq X$ with complement $U$, there is a recollement $D^b_Z(X) \leftrightarrows D^b(X) \leftrightarrows D^b(U)$ that is compatible with t-structures. The perverse t-structure on $D^b_c(X)$ is constructed by gluing t-structures via recollement.
+</Example>
+
+<Example title="BBD decomposition" id="bbd">
+The Beilinson-Bernstein-Deligne (BBD) decomposition theorem states that for a proper map $f : X \to Y$, $Rf_* \mathrm{IC}_X \cong \bigoplus_i {}^p H^i(Rf_* \mathrm{IC}_X)[-i]$ in $D^b_c(Y)$. This uses the perverse t-structure essentially.
+</Example>
+
+<Example title="Derived categories of hearts" id="hearts-derived">
+For a bounded t-structure on $D^b(\mathcal{A})$ with heart $\mathcal{B}$, there is a realization functor $D^b(\mathcal{B}) \to D^b(\mathcal{A})$. It is not always an equivalence, but it is for the standard t-structure.
+</Example>
+
+<Example title="Intermediate extensions" id="intermediate">
+Given a locally closed subset $j : U \hookrightarrow X$, the intermediate extension $j_{!*}$ sends perverse sheaves on $U$ to perverse sheaves on $X$. It is defined using the perverse truncation functors and is neither left nor right exact in the classical sense.
+</Example>
+
+---
+
+<Theorem title="Heart is abelian" number="6.3">
+The heart $\mathcal{T}^{\leq 0} \cap \mathcal{T}^{\geq 0}$ of any t-structure is an abelian category. See the [proof](/category-theory/ch06-derived-categories/theorems/t02-heart-is-abelian).
+</Theorem>
+
+<Remark title="t-structures as a bridge">
+t-structures bridge the gap between abelian and triangulated categories. They allow one to:
+1. Recover abelian structure from a triangulated category.
+2. Construct new abelian categories (perverse sheaves, tilted hearts).
+3. Define cohomological functors and spectral sequences.
+</Remark>

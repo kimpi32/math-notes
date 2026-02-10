@@ -1,0 +1,211 @@
+export const metadata = {
+  title: 'Ring Isomorphism Theorems — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Theorem — Ring Isomorphism Theorems" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ring Isomorphism Theorems
+
+The isomorphism theorems for rings are direct analogues of the isomorphism theorems for groups. They provide the fundamental structural results that relate homomorphisms, ideals, and quotient rings.
+
+---
+
+## The First Isomorphism Theorem
+
+<Theorem title="First Isomorphism Theorem for Rings" number="4.28">
+Let $\varphi: R \to S$ be a ring homomorphism. Then:
+
+1. $\ker(\varphi)$ is an ideal of $R$.
+2. $\mathrm{im}(\varphi)$ is a subring of $S$.
+3. The map $\bar{\varphi}: R/\ker(\varphi) \to \mathrm{im}(\varphi)$ defined by $\bar{\varphi}(r + \ker(\varphi)) = \varphi(r)$ is a ring isomorphism:
+
+$$R/\ker(\varphi) \cong \mathrm{im}(\varphi)$$
+</Theorem>
+
+<Proof>
+We verify each part:
+
+**(1)** $\ker(\varphi)$ is an ideal: For $a, b \in \ker(\varphi)$ and $r \in R$: $\varphi(a - b) = \varphi(a) - \varphi(b) = 0$, so $a - b \in \ker(\varphi)$. Also $\varphi(ra) = \varphi(r)\varphi(a) = \varphi(r) \cdot 0 = 0$, so $ra \in \ker(\varphi)$. Similarly $ar \in \ker(\varphi)$.
+
+**(2)** $\mathrm{im}(\varphi)$ is a subring: It contains $\varphi(1) = 1_S$ and is closed under subtraction and multiplication.
+
+**(3)** Well-definedness: $r + \ker(\varphi) = r' + \ker(\varphi)$ implies $r - r' \in \ker(\varphi)$, so $\varphi(r) = \varphi(r')$. The map $\bar{\varphi}$ is a homomorphism (inherited from $\varphi$), surjective onto $\mathrm{im}(\varphi)$ by definition, and injective since $\bar{\varphi}(r + \ker(\varphi)) = 0$ implies $\varphi(r) = 0$, i.e., $r \in \ker(\varphi)$.
+</Proof>
+
+---
+
+## Applications of the First Isomorphism Theorem
+
+<Example id="first-iso-Z" title="Integers modulo n">
+The homomorphism $\pi: \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ has $\ker(\pi) = n\mathbb{Z}$. The First Isomorphism Theorem gives $\mathbb{Z}/n\mathbb{Z} \cong \mathbb{Z}/n\mathbb{Z}$ (tautologically). More usefully, the evaluation $\mathrm{ev}: \mathbb{Z}[x] \to \mathbb{Z}$ at $x = 3$ has $\ker = (x-3)$, giving $\mathbb{Z}[x]/(x-3) \cong \mathbb{Z}$.
+</Example>
+
+<Example id="first-iso-complex" title="Constructing the complex numbers">
+The evaluation map $\mathrm{ev}_i: \mathbb{R}[x] \to \mathbb{C}$ sending $x \mapsto i$ is a surjective ring homomorphism with $\ker = (x^2 + 1)$. By the First Isomorphism Theorem:
+
+$$\mathbb{R}[x]/(x^2 + 1) \cong \mathbb{C}$$
+</Example>
+
+<Example id="first-iso-Fp" title="Constructing finite fields">
+Let $p$ be prime. The map $\mathbb{Z} \to \mathbb{F}_p$ sending $n \mapsto n \bmod p$ has kernel $(p)$:
+
+$$\mathbb{Z}/(p) \cong \mathbb{F}_p$$
+
+For the field with $p^2$ elements, choose an irreducible quadratic $f \in \mathbb{F}_p[x]$:
+
+$$\mathbb{F}_p[x]/(f) \cong \mathbb{F}_{p^2}$$
+</Example>
+
+<Example id="first-iso-gaussian" title="Gaussian integers modulo a prime">
+Consider $\varphi: \mathbb{Z}[i] \to \mathbb{F}_5$ defined by $a + bi \mapsto a + 2b \pmod{5}$ (using $i \equiv 2 \pmod{5}$ since $2^2 = 4 \equiv -1$). This is a surjective ring homomorphism with $\ker = (2 - i)$, giving:
+
+$$\mathbb{Z}[i]/(2 - i) \cong \mathbb{F}_5$$
+</Example>
+
+<Example id="first-iso-product" title="Chinese Remainder via first isomorphism">
+For coprime $m, n$, the map $\mathbb{Z} \to \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$ sending $a \mapsto (a \bmod m, a \bmod n)$ is surjective with kernel $mn\mathbb{Z}$:
+
+$$\mathbb{Z}/mn\mathbb{Z} \cong \mathbb{Z}/m\mathbb{Z} \times \mathbb{Z}/n\mathbb{Z}$$
+</Example>
+
+<Example id="first-iso-evaluation" title="Polynomial evaluation">
+For a field $F$ and $\alpha$ algebraic over $F$ with minimal polynomial $m(x)$, the evaluation $\mathrm{ev}_\alpha: F[x] \to F(\alpha)$ gives:
+
+$$F[x]/(m(x)) \cong F(\alpha)$$
+
+This is the standard way to construct field extensions.
+</Example>
+
+---
+
+## The Second Isomorphism Theorem
+
+<Theorem title="Second Isomorphism Theorem for Rings" number="4.29">
+Let $R$ be a ring, $S \subseteq R$ a subring, and $I \subseteq R$ an ideal. Then:
+
+1. $S + I = \{s + a : s \in S, a \in I\}$ is a subring of $R$.
+2. $S \cap I$ is an ideal of $S$.
+3. There is a ring isomorphism:
+
+$$S/(S \cap I) \cong (S + I)/I$$
+</Theorem>
+
+<Proof>
+**(1)** $S + I$ contains $1 = 1 + 0$ and is closed under subtraction ($(s_1 + a_1) - (s_2 + a_2) = (s_1 - s_2) + (a_1 - a_2)$) and multiplication ($(s_1 + a_1)(s_2 + a_2) = s_1 s_2 + (s_1 a_2 + a_1 s_2 + a_1 a_2)$ where $s_1 s_2 \in S$ and the rest is in $I$).
+
+**(2)** $S \cap I$ is clearly an additive subgroup of $S$. For $s \in S$ and $a \in S \cap I$: $sa \in S$ (since $S$ is a subring) and $sa \in I$ (since $I$ is an ideal), so $sa \in S \cap I$.
+
+**(3)** Define $\varphi: S \to (S + I)/I$ by $\varphi(s) = s + I$. This is a ring homomorphism (the composition of inclusion $S \hookrightarrow S + I$ and projection $S + I \to (S+I)/I$). It is surjective since every element of $(S+I)/I$ is $(s + a) + I = s + I = \varphi(s)$. Its kernel is $\{s \in S : s \in I\} = S \cap I$. By the First Isomorphism Theorem: $S/(S \cap I) \cong (S+I)/I$.
+</Proof>
+
+<Example id="second-iso-Z" title="Second isomorphism theorem for integers">
+Let $R = \mathbb{Z}$, $S = m\mathbb{Z}$, and $I = n\mathbb{Z}$. Then:
+- $S + I = m\mathbb{Z} + n\mathbb{Z} = \gcd(m,n)\mathbb{Z}$.
+- $S \cap I = \mathrm{lcm}(m,n)\mathbb{Z}$.
+
+The Second Isomorphism Theorem gives:
+
+$$m\mathbb{Z}/\mathrm{lcm}(m,n)\mathbb{Z} \cong \gcd(m,n)\mathbb{Z}/n\mathbb{Z}$$
+
+For $m = 6, n = 4$: $6\mathbb{Z}/12\mathbb{Z} \cong 2\mathbb{Z}/4\mathbb{Z}$, both isomorphic to $\mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+---
+
+## The Third Isomorphism Theorem
+
+<Theorem title="Third Isomorphism Theorem for Rings" number="4.30">
+Let $R$ be a ring and $I \subseteq J \subseteq R$ be ideals. Then $J/I$ is an ideal of $R/I$ and:
+
+$$(R/I)/(J/I) \cong R/J$$
+</Theorem>
+
+<Proof>
+Define $\varphi: R/I \to R/J$ by $\varphi(r + I) = r + J$. This is well-defined since $I \subseteq J$: if $r + I = r' + I$, then $r - r' \in I \subseteq J$, so $r + J = r' + J$. The map $\varphi$ is a surjective ring homomorphism with $\ker(\varphi) = \{r + I : r \in J\} = J/I$. By the First Isomorphism Theorem: $(R/I)/(J/I) \cong R/J$.
+</Proof>
+
+<Example id="third-iso-Z" title="Third isomorphism for modular arithmetic">
+Take $R = \mathbb{Z}$, $I = 12\mathbb{Z}$, $J = 4\mathbb{Z}$. Then $J/I = 4\mathbb{Z}/12\mathbb{Z} \cong \mathbb{Z}/3\mathbb{Z}$ as an ideal of $\mathbb{Z}/12\mathbb{Z}$. The Third Isomorphism Theorem gives:
+
+$$(\mathbb{Z}/12\mathbb{Z})/(4\mathbb{Z}/12\mathbb{Z}) \cong \mathbb{Z}/4\mathbb{Z}$$
+
+Concretely: quotienting $\mathbb{Z}/12\mathbb{Z}$ by $\{\bar{0}, \bar{4}, \bar{8}\}$ gives $\mathbb{Z}/4\mathbb{Z}$.
+</Example>
+
+<Example id="third-iso-polynomial" title="Third isomorphism for polynomials">
+In $\mathbb{Q}[x]$, take $I = (x^2 - 1)$ and $J = (x - 1)$. Then $I \subseteq J$ (since $x^2 - 1 = (x-1)(x+1)$). The Third Isomorphism Theorem gives:
+
+$$\mathbb{Q}[x]/(x-1) \cong (\mathbb{Q}[x]/(x^2-1))/((x-1)/(x^2-1))$$
+
+Since $\mathbb{Q}[x]/(x-1) \cong \mathbb{Q}$, this says $\mathbb{Q}[x]/(x^2-1)$ modulo the image of $(x-1)$ is isomorphic to $\mathbb{Q}$.
+</Example>
+
+---
+
+## The Correspondence Theorem
+
+<Theorem title="Correspondence Theorem (Lattice Isomorphism Theorem)" number="4.31">
+Let $I$ be an ideal of a ring $R$. There is a bijection between:
+
+$$\{\text{ideals of } R \text{ containing } I\} \longleftrightarrow \{\text{ideals of } R/I\}$$
+
+given by $J \mapsto J/I$ with inverse $\bar{J} \mapsto \pi^{-1}(\bar{J})$ where $\pi: R \to R/I$ is the projection. This bijection preserves:
+- Inclusion: $J_1 \subseteq J_2 \iff J_1/I \subseteq J_2/I$.
+- Sums: $(J_1 + J_2)/I = J_1/I + J_2/I$.
+- Intersections: $(J_1 \cap J_2)/I = J_1/I \cap J_2/I$.
+- Products: $(J_1 J_2)/I = (J_1/I)(J_2/I)$.
+- Primality: $J/I$ is prime iff $J$ is prime.
+- Maximality: $J/I$ is maximal iff $J$ is maximal.
+</Theorem>
+
+<Example id="correspondence-Z12" title="Ideals of integers mod 12">
+The ideals of $\mathbb{Z}$ containing $12\mathbb{Z}$ are $\mathbb{Z}, 2\mathbb{Z}, 3\mathbb{Z}, 4\mathbb{Z}, 6\mathbb{Z}, 12\mathbb{Z}$ (divisors of $12$). The Correspondence Theorem says these correspond to the ideals of $\mathbb{Z}/12\mathbb{Z}$:
+
+$$\mathbb{Z}/12\mathbb{Z} \leftrightarrow \mathbb{Z}, \quad (\bar{2}) \leftrightarrow 2\mathbb{Z}, \quad (\bar{3}) \leftrightarrow 3\mathbb{Z}, \quad (\bar{4}) \leftrightarrow 4\mathbb{Z}, \quad (\bar{6}) \leftrightarrow 6\mathbb{Z}, \quad (\bar{0}) \leftrightarrow 12\mathbb{Z}$$
+
+The maximal ideals of $\mathbb{Z}/12\mathbb{Z}$ are $(\bar{2})$ and $(\bar{3})$, corresponding to the maximal ideals $2\mathbb{Z}$ and $3\mathbb{Z}$ of $\mathbb{Z}$ that contain $12\mathbb{Z}$.
+</Example>
+
+<Example id="correspondence-polynomial" title="Ideals of a quotient polynomial ring">
+The ideals of $\mathbb{Q}[x]/(x^3 - x)$ correspond to ideals of $\mathbb{Q}[x]$ containing $(x^3 - x) = (x)(x-1)(x+1)$. Since $\mathbb{Q}[x]$ is a PID, these are the ideals $(f)$ where $f \mid x^3 - x$:
+
+$$(1), (x), (x-1), (x+1), (x^2-x), (x^2+x), (x^2-1), (x^3-x)$$
+
+The maximal ideals are $(x), (x-1), (x+1)$, and indeed $\mathbb{Q}[x]/(x^3-x) \cong \mathbb{Q} \times \mathbb{Q} \times \mathbb{Q}$ by CRT.
+</Example>
+
+<Example id="correspondence-geometry" title="Geometric interpretation">
+For a polynomial ring $k[x_1, \ldots, x_n]$ over an algebraically closed field $k$, the Correspondence Theorem gives a bijection between algebraic subsets of $V(I) \subseteq k^n$ and ideals of $k[x_1, \ldots, x_n]/I$. This is one of the fundamental bridges between algebra and geometry.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Comparison with group isomorphism theorems">
+The ring isomorphism theorems parallel the group versions exactly:
+
+| Group Version | Ring Version |
+|---|---|
+| $G/\ker(\varphi) \cong \mathrm{im}(\varphi)$ | $R/\ker(\varphi) \cong \mathrm{im}(\varphi)$ |
+| $HN/N \cong H/(H \cap N)$ | $(S+I)/I \cong S/(S \cap I)$ |
+| $(G/N)/(K/N) \cong G/K$ | $(R/I)/(J/I) \cong R/J$ |
+| Subgroup lattice correspondence | Ideal lattice correspondence |
+
+The key difference: for groups, we need $N$ to be normal; for rings, every ideal is automatically "normal" (two-sided ideals absorb multiplication from both sides).
+</Remark>

@@ -1,0 +1,244 @@
+export const metadata = {
+  title: 'Proof of First Isomorphism Theorem — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "2. 부분군과 준동형", href: "/modern-algebra/ch02-subgroups-homomorphisms" },
+  { label: "Proof — First Isomorphism Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the First Isomorphism Theorem
+
+We give a complete, self-contained proof that every group homomorphism $\varphi : G \to H$ induces an isomorphism $G/\ker(\varphi) \cong \operatorname{im}(\varphi)$.
+
+---
+
+## Statement
+
+<Theorem title="First Isomorphism Theorem" number="FIT">
+Let $\varphi : G \to H$ be a group homomorphism. Let $K = \ker(\varphi)$. Then:
+
+1. $K \trianglelefteq G$.
+2. The map $\bar{\varphi} : G/K \to H$ defined by $\bar{\varphi}(gK) = \varphi(g)$ is a well-defined injective homomorphism.
+3. $\operatorname{im}(\bar{\varphi}) = \operatorname{im}(\varphi)$.
+4. Therefore $G/K \cong \operatorname{im}(\varphi)$.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+**Step 1: $K = \ker(\varphi) \trianglelefteq G$.**
+
+$K$ is nonempty since $\varphi(e_G) = e_H$, so $e_G \in K$.
+
+$K$ is a subgroup: if $a, b \in K$, then $\varphi(ab^{-1}) = \varphi(a)\varphi(b)^{-1} = e_H \cdot e_H^{-1} = e_H$, so $ab^{-1} \in K$.
+
+$K$ is normal: for $g \in G$ and $k \in K$, $\varphi(gkg^{-1}) = \varphi(g)\varphi(k)\varphi(g)^{-1} = \varphi(g) \cdot e_H \cdot \varphi(g)^{-1} = e_H$, so $gkg^{-1} \in K$.
+
+**Step 2: $\bar{\varphi}$ is well-defined.**
+
+We need: if $gK = g'K$, then $\varphi(g) = \varphi(g')$.
+
+$gK = g'K$ means $g^{-1}g' \in K$, i.e., $\varphi(g^{-1}g') = e_H$. So $\varphi(g)^{-1}\varphi(g') = e_H$, giving $\varphi(g) = \varphi(g')$.
+
+**Step 3: $\bar{\varphi}$ is a homomorphism.**
+
+$$\bar{\varphi}((gK)(g'K)) = \bar{\varphi}((gg')K) = \varphi(gg') = \varphi(g)\varphi(g') = \bar{\varphi}(gK) \cdot \bar{\varphi}(g'K).$$
+
+**Step 4: $\bar{\varphi}$ is injective.**
+
+$$\bar{\varphi}(gK) = e_H \implies \varphi(g) = e_H \implies g \in K \implies gK = K = e_{G/K}.$$
+
+So $\ker(\bar{\varphi}) = \{K\}$, and $\bar{\varphi}$ is injective.
+
+**Step 5: $\operatorname{im}(\bar{\varphi}) = \operatorname{im}(\varphi)$.**
+
+Every element of $\operatorname{im}(\bar{\varphi})$ has the form $\bar{\varphi}(gK) = \varphi(g) \in \operatorname{im}(\varphi)$, and conversely every $\varphi(g) = \bar{\varphi}(gK)$ is in $\operatorname{im}(\bar{\varphi})$.
+
+**Conclusion.** $\bar{\varphi} : G/K \to \operatorname{im}(\varphi)$ is a bijective homomorphism, hence an isomorphism. $\square$
+</Proof>
+
+---
+
+## Commentary on each step
+
+<Remark title="Why normality is essential">
+Step 2 requires normality of $K$. The quotient $G/K$ is only a group when $K \trianglelefteq G$, so the well-definedness of $\bar{\varphi}$ and the group structure on $G/K$ both rely on normality. The proof shows that normality is not an arbitrary requirement but a **consequence** of being a kernel.
+</Remark>
+
+<Remark title="The key insight: well-definedness = injectivity">
+Steps 2 and 4 are essentially the same computation in reverse:
+- **Well-definedness**: $gK = g'K \implies \varphi(g) = \varphi(g')$ — equal inputs give equal outputs.
+- **Injectivity**: $\varphi(g) = \varphi(g') \implies gK = g'K$ — equal outputs came from equal inputs.
+
+The kernel is exactly the "ambiguity" in $\varphi$. Quotienting by $K$ removes this ambiguity, making $\bar{\varphi}$ injective.
+</Remark>
+
+---
+
+## Worked examples
+
+<Example id="trace-z-z6" title="Tracing the proof: Z → Z/6Z">
+$\varphi : \mathbb{Z} \to \mathbb{Z}/6\mathbb{Z}$, $k \mapsto \bar{k}$.
+
+- $K = \ker(\varphi) = 6\mathbb{Z}$.
+- $G/K = \mathbb{Z}/6\mathbb{Z}$ with elements $\bar{0}, \bar{1}, \ldots, \bar{5}$.
+- $\bar{\varphi} : \mathbb{Z}/6\mathbb{Z} \to \mathbb{Z}/6\mathbb{Z}$, $\bar{\varphi}(\bar{k}) = \bar{k}$.
+- This is the identity map — trivially an isomorphism.
+
+The first isomorphism theorem is "trivial" for surjective maps to the quotient itself.
+</Example>
+
+<Example id="trace-det" title="Tracing the proof: det on GL(2, R)">
+$\varphi = \det : \mathrm{GL}(2, \mathbb{R}) \to \mathbb{R}^*$.
+
+- $K = \ker(\det) = \mathrm{SL}(2, \mathbb{R})$.
+- $G/K = \mathrm{GL}(2, \mathbb{R})/\mathrm{SL}(2, \mathbb{R})$, where $A \cdot \mathrm{SL}$ is the coset of all matrices with determinant $\det(A)$.
+- $\bar{\varphi}(A \cdot \mathrm{SL}) = \det(A)$ is well-defined (same coset = same determinant).
+- $\bar{\varphi}$ is injective: $\det(A) = 1 \implies A \in \mathrm{SL}$.
+- $\operatorname{im}(\varphi) = \mathbb{R}^*$ (since $\det$ is surjective on $\mathrm{GL}$).
+
+Conclusion: $\mathrm{GL}(2, \mathbb{R})/\mathrm{SL}(2, \mathbb{R}) \cong \mathbb{R}^*$.
+</Example>
+
+<Example id="trace-exp" title="Tracing the proof: exp as R → S¹">
+$\varphi : \mathbb{R} \to S^1$, $\theta \mapsto e^{2\pi i \theta}$.
+
+- $K = \ker(\varphi) = \mathbb{Z}$ (the integers, where $e^{2\pi i n} = 1$).
+- $\bar{\varphi} : \mathbb{R}/\mathbb{Z} \to S^1$ sends $\theta + \mathbb{Z} \mapsto e^{2\pi i \theta}$.
+- Well-defined: $\theta + \mathbb{Z} = \theta' + \mathbb{Z} \implies \theta - \theta' \in \mathbb{Z} \implies e^{2\pi i \theta} = e^{2\pi i \theta'}$.
+- Injective: $e^{2\pi i \theta} = 1 \implies \theta \in \mathbb{Z} \implies \theta + \mathbb{Z} = \mathbb{Z}$.
+- Surjective: every point on $S^1$ is $e^{2\pi i \theta}$ for some $\theta$.
+
+Conclusion: $\mathbb{R}/\mathbb{Z} \cong S^1$.
+</Example>
+
+<Example id="trace-sign" title="Tracing the proof: sgn on S₃">
+$\varphi = \mathrm{sgn} : S_3 \to \{+1, -1\}$.
+
+- $K = A_3 = \{e, (123), (132)\}$.
+- $G/K = S_3/A_3 = \{A_3, (12)A_3\}$ has two elements.
+- $\bar{\varphi}(A_3) = +1$ and $\bar{\varphi}((12)A_3) = -1$.
+- This is clearly an isomorphism $S_3/A_3 \xrightarrow{\sim} \{+1, -1\} \cong \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="trace-mod" title="Tracing the proof: reduction mod 3 on Z/12Z">
+$\varphi : \mathbb{Z}/12\mathbb{Z} \to \mathbb{Z}/3\mathbb{Z}$, $\bar{k} \mapsto k \bmod 3$.
+
+- $K = \ker(\varphi) = \{\bar{0}, \bar{3}, \bar{6}, \bar{9}\} = \langle \bar{3} \rangle$.
+- $\varphi$ is surjective ($\varphi(\bar{1}) = \bar{1}$).
+- $(\mathbb{Z}/12\mathbb{Z})/\langle \bar{3} \rangle$ has $12/4 = 3$ elements.
+- $\bar{\varphi} : (\mathbb{Z}/12\mathbb{Z})/\langle \bar{3} \rangle \xrightarrow{\sim} \mathbb{Z}/3\mathbb{Z}$ is the isomorphism.
+
+This is the third isomorphism theorem: $(\mathbb{Z}/12\mathbb{Z})/(3\mathbb{Z}/12\mathbb{Z}) \cong \mathbb{Z}/3\mathbb{Z}$.
+</Example>
+
+<Example id="non-surjective" title="Non-surjective case: inclusion Z → Q">
+$\iota : \mathbb{Z} \hookrightarrow \mathbb{Q}$, $n \mapsto n$, where both are under addition.
+
+- $K = \ker(\iota) = \{0\}$.
+- $\operatorname{im}(\iota) = \mathbb{Z} \leq \mathbb{Q}$.
+- $\bar{\iota} : \mathbb{Z}/\{0\} \cong \mathbb{Z} \xrightarrow{\sim} \mathbb{Z} = \operatorname{im}(\iota)$.
+
+A trivial application, but it illustrates that the first isomorphism theorem applies to non-surjective maps: the isomorphism is with the **image**, not the entire codomain.
+</Example>
+
+<Example id="power-map-application" title="Power map on Z/8Z">
+$\varphi : \mathbb{Z}/8\mathbb{Z} \to \mathbb{Z}/8\mathbb{Z}$, $\bar{k} \mapsto 2\bar{k} = \bar{2k}$ (multiplication by 2).
+
+- $K = \ker(\varphi) = \{\bar{0}, \bar{4}\}$.
+- $\operatorname{im}(\varphi) = \{\bar{0}, \bar{2}, \bar{4}, \bar{6}\} = \langle \bar{2} \rangle$.
+- $(\mathbb{Z}/8\mathbb{Z})/\{\bar{0}, \bar{4}\} \cong \langle \bar{2} \rangle \cong \mathbb{Z}/4\mathbb{Z}$.
+
+The quotient has 4 elements and is cyclic of order 4.
+</Example>
+
+<Example id="trace-conj" title="Tracing the proof: conjugation automorphism">
+Let $G = S_3$ and fix $g = (12)$. The map $\varphi_g : S_3 \to S_3$, $\sigma \mapsto (12)\sigma(12)$, is an automorphism.
+
+- $K = \ker(\varphi_g) = \{e\}$ (since automorphisms are injective).
+- $\operatorname{im}(\varphi_g) = S_3$ (automorphisms are surjective).
+- $S_3/\{e\} \cong S_3$ — the first isomorphism theorem is trivial for isomorphisms.
+</Example>
+
+<Example id="trace-abelianization-d4" title="Tracing the proof: abelianization of D₄">
+$D_4 = \langle r, s \mid r^4 = s^2 = e, srs = r^{-1} \rangle$. The commutator subgroup $D_4'$ is generated by $[r, s] = rsr^{-1}s^{-1} = r \cdot r^{-1} = r^2$... more carefully: $[r, s] = rs(rs)^{-1} \cdot s = rsr^{-1}s = r \cdot (sr^{-1}s) = r \cdot r = r^2$. So $D_4' = \langle r^2 \rangle = \{e, r^2\} = Z(D_4)$.
+
+The canonical map $\pi : D_4 \to D_4/D_4'$ has $\ker(\pi) = D_4' = \{e, r^2\}$, and $D_4/D_4' \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="trace-eval" title="Tracing the proof: evaluation homomorphism">
+$\varphi : \mathbb{Z}[x] \to \mathbb{Z}$, $f(x) \mapsto f(0)$ (evaluation at 0), is a surjective ring homomorphism. As an additive group homomorphism:
+
+- $K = \ker(\varphi) = (x) = \{f \in \mathbb{Z}[x] \mid f(0) = 0\}$ (polynomials with zero constant term).
+- $\operatorname{im}(\varphi) = \mathbb{Z}$.
+- $\mathbb{Z}[x]/(x) \cong \mathbb{Z}$.
+
+This is the first isomorphism theorem applied to the evaluation map.
+</Example>
+
+<Example id="trace-projection" title="Tracing the proof: projection from a direct product">
+$\pi_1 : G \times H \to G$, $(g, h) \mapsto g$, is a surjective homomorphism.
+
+- $K = \ker(\pi_1) = \{(e_G, h) \mid h \in H\} \cong H$.
+- $\operatorname{im}(\pi_1) = G$.
+- $(G \times H)/(\{e_G\} \times H) \cong G$.
+
+This confirms the obvious: quotienting out one factor of a direct product gives the other.
+</Example>
+
+<Example id="finite-field-units" title="Surjection from GL to units">
+The map $\varphi : \mathrm{GL}(1, \mathbb{F}_q) \to \mathbb{F}_q^*$ is the identity (since $1 \times 1$ matrices are just scalars). More interesting: $\det : \mathrm{GL}(2, \mathbb{F}_3) \to \mathbb{F}_3^*$ is surjective with kernel $\mathrm{SL}(2, \mathbb{F}_3)$.
+
+$|\mathrm{GL}(2, \mathbb{F}_3)| = (9-1)(9-3) = 48$, $|\mathbb{F}_3^*| = 2$, so $|\mathrm{SL}(2, \mathbb{F}_3)| = 24$.
+
+By the first isomorphism theorem: $\mathrm{GL}(2, \mathbb{F}_3)/\mathrm{SL}(2, \mathbb{F}_3) \cong \mathbb{F}_3^* \cong \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+---
+
+## Connection to other isomorphism theorems
+
+<Remark title="The second and third theorems follow from the first">
+Both the second and third isomorphism theorems are proved by **constructing an appropriate homomorphism** and applying the first isomorphism theorem:
+
+- **Second**: Use $H \to G/N$, $h \mapsto hN$. Kernel is $H \cap N$, image is $HN/N$.
+- **Third**: Use $G/N \to G/M$, $gN \mapsto gM$. Kernel is $M/N$, image is $G/M$.
+
+The first isomorphism theorem is thus the master result from which the others follow.
+</Remark>
+
+---
+
+## Historical note
+
+<Remark title="History">
+The isomorphism theorems are attributed to Emmy Noether (1920s), who formulated them in the general setting of groups and rings as part of her program to axiomatize algebra. They appeared in her influential 1927 paper "Abstrakter Aufbau der Idealtheorie in algebraischen Zahl- und Funktionenkorpern" and in the textbook *Moderne Algebra* by van der Waerden (based on lectures by Noether and Artin).
+
+The first isomorphism theorem is sometimes called the **fundamental theorem on homomorphisms**. It is the group-theoretic analogue of the rank-nullity theorem in linear algebra.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. The proof has five conceptual steps: (i) $K \trianglelefteq G$, (ii) $\bar{\varphi}$ is well-defined, (iii) homomorphism, (iv) injective, (v) same image.
+2. Well-definedness and injectivity are "dual" to each other: both reduce to checking that $g^{-1}g' \in K$ iff $\varphi(g) = \varphi(g')$.
+3. The isomorphism $G/\ker(\varphi) \cong \operatorname{im}(\varphi)$ is **canonical** (natural) — there is no choice involved.
+4. The second and third isomorphism theorems are corollaries obtained by choosing the right homomorphism and applying the first.
+</Remark>

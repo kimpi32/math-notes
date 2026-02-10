@@ -1,0 +1,175 @@
+export const metadata = {
+  title: 'Quillen Adjunction and Equivalence — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Concept — Quillen Adjunction and Equivalence" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quillen Adjunction and Equivalence
+
+Quillen adjunctions and equivalences are the correct notions of morphism and equivalence between model categories. A Quillen adjunction is an adjunction that respects the model structures, and a Quillen equivalence is one that induces an equivalence of homotopy categories. These concepts provide the framework for comparing different models of the same homotopy theory.
+
+---
+
+## Quillen Adjunctions
+
+<Definition title="Quillen adjunction" number="2.1">
+Let $\mathcal{M}$ and $\mathcal{N}$ be model categories. A **Quillen adjunction** is an adjunction
+
+$$F: \mathcal{M} \rightleftarrows \mathcal{N} : G$$
+
+(with $F$ left adjoint to $G$) satisfying any of the following equivalent conditions:
+
+1. $F$ preserves cofibrations and trivial cofibrations.
+2. $G$ preserves fibrations and trivial fibrations.
+3. $F$ preserves cofibrations and $G$ preserves fibrations.
+4. $F$ preserves trivial cofibrations and $G$ preserves trivial fibrations.
+
+We call $F$ the **left Quillen functor** and $G$ the **right Quillen functor**.
+</Definition>
+
+<Example id="quillen-adj-sset-top" title="sSet and Top">
+The geometric realization--singular set adjunction $|\cdot| \dashv \operatorname{Sing}$ is a Quillen adjunction. The left adjoint $|\cdot|$ preserves cofibrations (monomorphisms become relative CW inclusions) and trivial cofibrations (anodyne extensions become trivial cofibrations in $\mathbf{Top}$).
+</Example>
+
+<Example id="quillen-adj-dold-kan" title="Dold--Kan correspondence">
+The Dold--Kan correspondence gives a Quillen adjunction
+
+$$N: \mathbf{sAb} \rightleftarrows \mathbf{Ch}_{\geq 0}(\mathbb{Z}) : \Gamma$$
+
+where $N$ is the normalized chain complex functor and $\Gamma$ is its right adjoint. This is in fact a Quillen equivalence: simplicial abelian groups and non-negatively graded chain complexes have equivalent homotopy theories.
+</Example>
+
+<Example id="quillen-adj-free-forget" title="Free-forgetful adjunctions">
+The free-forgetful adjunction $F: \mathbf{Set} \rightleftarrows \mathbf{sSet} : \operatorname{ev}_0$ (where $F(S)$ is the constant simplicial set and $\operatorname{ev}_0$ evaluates at level $0$) is a Quillen adjunction from the trivial model structure on $\mathbf{Set}$ to the Kan--Quillen model structure on $\mathbf{sSet}$.
+</Example>
+
+<Example id="quillen-adj-change-of-rings" title="Change of rings">
+For a ring homomorphism $\varphi: R \to S$, the extension-restriction of scalars adjunction
+
+$$S \otimes_R -: \mathbf{Ch}(R) \rightleftarrows \mathbf{Ch}(S) : \operatorname{Res}$$
+
+is a Quillen adjunction (with appropriate model structures). The derived functors give $\mathbf{L}(S \otimes_R -) = S \otimes_R^{\mathbf{L}} -$ (derived tensor product along $\varphi$).
+</Example>
+
+---
+
+## Derived Adjunctions
+
+<Definition title="Total derived adjunction" number="2.2">
+A Quillen adjunction $F \dashv G$ induces a **total derived adjunction** on homotopy categories:
+
+$$\mathbf{L}F: \operatorname{Ho}(\mathcal{M}) \rightleftarrows \operatorname{Ho}(\mathcal{N}) : \mathbf{R}G$$
+
+where $\mathbf{L}F(X) = F(QX)$ (apply $F$ to a cofibrant replacement) and $\mathbf{R}G(Y) = G(RY)$ (apply $G$ to a fibrant replacement).
+
+These are adjoint: $\operatorname{Hom}_{\operatorname{Ho}(\mathcal{N})}(\mathbf{L}F(X), Y) \cong \operatorname{Hom}_{\operatorname{Ho}(\mathcal{M})}(X, \mathbf{R}G(Y))$.
+</Definition>
+
+<Example id="derived-adj-tensor-hom" title="Derived tensor-hom adjunction">
+The tensor-hom adjunction $(-\otimes M) \dashv \operatorname{Hom}(M, -)$ for $R$-modules gives a derived adjunction:
+
+$$(-\otimes_R^{\mathbf{L}} M) \dashv \mathbf{R}\operatorname{Hom}_R(M, -)$$
+
+on derived categories. This is the fundamental adjunction of homological algebra: $\operatorname{Tor}$ and $\operatorname{Ext}$ are the derived functors of this adjunction.
+</Example>
+
+<Example id="derived-adj-pushforward-pullback" title="Sheaf push-pull adjunction">
+For a morphism $f: X \to Y$ of schemes, the direct-inverse image adjunction $f^* \dashv f_*$ on sheaf categories gives a derived adjunction:
+
+$$\mathbf{L}f^* \dashv \mathbf{R}f_*$$
+
+on derived categories of sheaves. Here $\mathbf{R}f_*$ computes higher direct images $R^i f_*\mathcal{F}$, and $\mathbf{L}f^*$ is the derived pullback.
+</Example>
+
+---
+
+## Quillen Equivalences
+
+<Definition title="Quillen equivalence" number="2.3">
+A Quillen adjunction $F \dashv G: \mathcal{M} \rightleftarrows \mathcal{N}$ is a **Quillen equivalence** if the derived adjunction $\mathbf{L}F \dashv \mathbf{R}G$ is an equivalence of homotopy categories:
+
+$$\operatorname{Ho}(\mathcal{M}) \simeq \operatorname{Ho}(\mathcal{N}).$$
+
+Equivalent conditions: for every cofibrant $X \in \mathcal{M}$ and fibrant $Y \in \mathcal{N}$, a map $FX \to Y$ is a weak equivalence in $\mathcal{N}$ if and only if the adjunct $X \to GY$ is a weak equivalence in $\mathcal{M}$.
+</Definition>
+
+<Example id="quillen-equiv-sset-top" title="sSet and Top are Quillen equivalent">
+The adjunction $|\cdot| \dashv \operatorname{Sing}: \mathbf{sSet} \rightleftarrows \mathbf{Top}$ is a Quillen equivalence. The unit $X \to \operatorname{Sing}(|X|)$ is a weak equivalence for Kan complexes, and the counit $|\operatorname{Sing}(Y)| \to Y$ is a weak equivalence for all spaces. Thus $\operatorname{Ho}(\mathbf{sSet}) \simeq \operatorname{Ho}(\mathbf{Top})$.
+</Example>
+
+<Example id="quillen-equiv-dold-kan" title="Dold--Kan is a Quillen equivalence">
+The Dold--Kan adjunction $N \dashv \Gamma: \mathbf{sAb} \rightleftarrows \mathbf{Ch}_{\geq 0}(\mathbb{Z})$ is a Quillen equivalence. The homotopy category of simplicial abelian groups is equivalent to the derived category of non-negatively graded abelian groups.
+</Example>
+
+<Example id="quillen-equiv-joyal-kan" title="Joyal and Kan--Quillen are NOT Quillen equivalent">
+The identity functor $\mathrm{id}: \mathbf{sSet}_{\mathrm{Joyal}} \to \mathbf{sSet}_{\mathrm{Kan}}$ is NOT a Quillen equivalence (and not even a Quillen adjunction in general). The Joyal model structure has more weak equivalences (categorical equivalences) than the Kan--Quillen model structure, so they capture different homotopy theories. The Joyal model structure models $(\infty, 1)$-categories, while Kan--Quillen models $\infty$-groupoids (spaces).
+</Example>
+
+<Example id="quillen-equiv-segal" title="Quasi-categories and Segal categories">
+There is a Quillen equivalence between the Joyal model structure on $\mathbf{sSet}$ (modeling quasi-categories) and the model structure on Segal categories (bisimplicial sets satisfying the homotopy Segal condition). This shows that quasi-categories and Segal categories provide equivalent models for $(\infty, 1)$-categories.
+</Example>
+
+---
+
+## Properties of Quillen Equivalences
+
+<Example id="quillen-equiv-compose" title="Quillen equivalences compose">
+If $F_1 \dashv G_1: \mathcal{M} \rightleftarrows \mathcal{N}$ and $F_2 \dashv G_2: \mathcal{N} \rightleftarrows \mathcal{P}$ are Quillen equivalences, then $F_2 F_1 \dashv G_1 G_2: \mathcal{M} \rightleftarrows \mathcal{P}$ is a Quillen equivalence. This allows "chaining" Quillen equivalences to compare distant model categories.
+
+For instance, the chain $\mathbf{sAb} \simeq_Q \mathbf{Ch}_{\geq 0}(\mathbb{Z})$ and $\mathbf{sAb} \hookrightarrow \mathbf{sSet}$ (forgetful) allow comparison of chain complexes with simplicial sets.
+</Example>
+
+<Example id="quillen-equiv-zig-zag" title="Zigzags of Quillen equivalences">
+Two model categories $\mathcal{M}$ and $\mathcal{N}$ are **Quillen equivalent** if they are connected by a zigzag of Quillen equivalences:
+
+$$\mathcal{M} \leftarrow \mathcal{M}_1 \to \mathcal{M}_2 \leftarrow \cdots \to \mathcal{N}$$
+
+This happens when there is no single Quillen equivalence between them but they still have equivalent homotopy theories. The notion of Quillen equivalent model categories is an equivalence relation on model categories.
+</Example>
+
+---
+
+## Detecting Quillen Equivalences
+
+<Example id="detect-quillen-equiv" title="Criterion for Quillen equivalence">
+A Quillen adjunction $F \dashv G: \mathcal{M} \rightleftarrows \mathcal{N}$ is a Quillen equivalence if and only if:
+
+1. $G$ **reflects weak equivalences between fibrant objects**: if $Y$ is fibrant in $\mathcal{N}$ and $GY \to GY'$ is a weak equivalence in $\mathcal{M}$, then $Y \to Y'$ is a weak equivalence in $\mathcal{N}$.
+
+2. For every cofibrant $X \in \mathcal{M}$, the map $X \to G(R(FX))$ (unit followed by fibrant replacement) is a weak equivalence.
+
+Alternatively: $F \dashv G$ is a Quillen equivalence iff $\mathbf{L}F$ is essentially surjective on $\operatorname{Ho}(\mathcal{N})$ and for cofibrant $X$, the derived unit $X \to \mathbf{R}G(\mathbf{L}F(X))$ is a weak equivalence.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Quillen adjunctions and equivalences compare model categories:
+
+1. A **Quillen adjunction** $F \dashv G$ preserves the model structure: $F$ preserves cofibrations and trivial cofibrations; $G$ preserves fibrations and trivial fibrations.
+
+2. Every Quillen adjunction induces a **derived adjunction** $\mathbf{L}F \dashv \mathbf{R}G$ on homotopy categories.
+
+3. A **Quillen equivalence** induces an equivalence of homotopy categories, meaning the two model categories encode the "same" homotopy theory.
+
+4. Key examples: $\mathbf{sSet} \simeq_Q \mathbf{Top}$ (spaces), $\mathbf{sAb} \simeq_Q \mathbf{Ch}_{\geq 0}(\mathbb{Z})$ (Dold--Kan), and various models of $\infty$-categories are Quillen equivalent.
+
+5. Quillen equivalences upgrade to equivalences of $\infty$-categories, providing a more refined comparison than the homotopy category alone.
+</Remark>

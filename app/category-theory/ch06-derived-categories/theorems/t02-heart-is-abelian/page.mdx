@@ -1,0 +1,150 @@
+export const metadata = {
+  title: 'Heart is Abelian — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Theorem — Heart is Abelian" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Heart is Abelian
+
+The central structural theorem about t-structures: the heart of any t-structure on a triangulated category is an abelian category. This is remarkable because triangulated categories themselves are not abelian, yet they contain abelian subcategories in a canonical way.
+
+---
+
+## Statement
+
+<Theorem title="Heart is abelian" number="6.6">
+Let $\mathcal{T}$ be a triangulated category with a t-structure $(\mathcal{T}^{\leq 0}, \mathcal{T}^{\geq 0})$. Then the heart
+
+$$\mathcal{A} = \mathcal{T}^{\leq 0} \cap \mathcal{T}^{\geq 0}$$
+
+is an abelian category. Specifically:
+
+1. $\mathcal{A}$ is an additive category.
+2. Every morphism $f : A \to B$ in $\mathcal{A}$ has a kernel and cokernel in $\mathcal{A}$.
+3. Every monomorphism is a kernel and every epimorphism is a cokernel.
+
+Moreover, the cohomological functor $H^0 : \mathcal{T} \to \mathcal{A}$ defined by $H^0 = \tau_{\leq 0} \circ \tau_{\geq 0}$ sends distinguished triangles to long exact sequences.
+</Theorem>
+
+---
+
+## Proof
+
+<Proof>
+We construct kernels and cokernels explicitly from the triangulated structure.
+
+**Step 1: $\mathcal{A}$ is additive.**
+
+The zero object $0 \in \mathcal{T}$ lies in both $\mathcal{T}^{\leq 0}$ and $\mathcal{T}^{\geq 0}$, so $0 \in \mathcal{A}$. For $A, B \in \mathcal{A}$, the direct sum $A \oplus B$ exists in $\mathcal{T}$ (triangulated categories are additive). Since $\mathcal{T}^{\leq 0}$ and $\mathcal{T}^{\geq 0}$ are both closed under finite direct sums (being full additive subcategories closed under extensions), $A \oplus B \in \mathcal{A}$. The Hom sets in $\mathcal{A}$ inherit their abelian group structure from $\mathcal{T}$.
+
+**Step 2: Construction of kernel and cokernel.**
+
+Let $f : A \to B$ be a morphism in $\mathcal{A}$. Complete $f$ to a distinguished triangle in $\mathcal{T}$:
+
+$$A \xrightarrow{f} B \to C_f \to A[1]$$
+
+where $C_f$ is the cone of $f$. Since $A \in \mathcal{T}^{\leq 0}$, we have $A[1] \in \mathcal{T}^{\leq -1} \subseteq \mathcal{T}^{\leq 0}$. The truncation triangle for $C_f$ gives:
+
+$$\tau_{\leq 0} C_f \to C_f \to \tau_{\geq 1} C_f \to (\tau_{\leq 0} C_f)[1]$$
+
+Define $\mathrm{coker}(f) := \tau_{\leq 0} C_f \in \mathcal{T}^{\leq 0}$. We need to show it also lies in $\mathcal{T}^{\geq 0}$. From the long exact sequence of the distinguished triangle $A \to B \to C_f \to A[1]$ applied with the cohomological functor, we get $H^n(C_f) = 0$ for $n < 0$ (using $H^n(A) = 0 = H^n(B)$ for $n \neq 0$). Hence $C_f \in \mathcal{T}^{\geq 0}$, so $\tau_{\leq 0} C_f \in \mathcal{T}^{\leq 0} \cap \mathcal{T}^{\geq 0} = \mathcal{A}$.
+
+Similarly, define $\mathrm{ker}(f) := \tau_{\geq 0}(C_f[-1])$. By a dual argument, this lies in $\mathcal{A}$.
+
+**Step 3: Universal properties.**
+
+We verify that $\mathrm{coker}(f)$ satisfies the universal property of a cokernel. For any $g : B \to D$ with $D \in \mathcal{A}$ and $g \circ f = 0$, the composition $A \xrightarrow{f} B \xrightarrow{g} D$ vanishes, so $g$ factors through $C_f$. Since $D \in \mathcal{T}^{\leq 0}$, the map $C_f \to D$ factors through $\tau_{\leq 0} C_f = \mathrm{coker}(f)$ by the adjunction property of truncation. The dual argument works for the kernel.
+
+**Step 4: Every mono is a kernel, every epi is a cokernel.**
+
+Let $f : A \to B$ be a monomorphism in $\mathcal{A}$ (i.e., $\ker f = 0$). Then $f$ is the kernel of the cokernel map $B \to \mathrm{coker}(f)$. This follows from the octahedral axiom and the fact that the truncation triangle is functorial. The dual statement for epimorphisms follows similarly.
+
+**Step 5: $H^0$ is cohomological.**
+
+For a distinguished triangle $X \to Y \to Z \to X[1]$ in $\mathcal{T}$, applying $H^0 = \tau_{\leq 0} \tau_{\geq 0}$ yields a long exact sequence
+
+$$\cdots \to H^{n-1}(Z) \to H^n(X) \to H^n(Y) \to H^n(Z) \to H^{n+1}(X) \to \cdots$$
+
+in $\mathcal{A}$, where $H^n = H^0 \circ [-n]$.
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Standard heart recovers A" id="standard-heart">
+For the standard t-structure on $D(\mathcal{A})$, the heart $D^{\leq 0} \cap D^{\geq 0}$ consists of complexes with cohomology concentrated in degree 0. The equivalence $\mathcal{A} \xrightarrow{\sim} D^{\leq 0} \cap D^{\geq 0}$ sends $A \mapsto A[0]$. This is indeed abelian, confirming the theorem in its simplest case.
+</Example>
+
+<Example title="Perverse sheaves are abelian" id="perverse-abelian">
+The heart of the perverse t-structure on $D^b_c(X)$ is $\mathrm{Perv}(X)$. By the theorem, perverse sheaves form an abelian category. This is non-obvious because perverse sheaves are complexes of sheaves, and the notion of kernel/cokernel for perverse sheaves differs from that for ordinary sheaves. A short exact sequence in $\mathrm{Perv}(X)$ is a distinguished triangle all of whose vertices are perverse.
+</Example>
+
+<Example title="Kernel and cokernel via cones" id="kernel-cokernel">
+For a map $f : A \to B$ in the heart of $D^b(\mathcal{A})$, the cone $C_f$ is a complex with $H^{-1}(C_f) = \ker f$ and $H^0(C_f) = \mathrm{coker}\, f$. The kernel in the heart is $H^{-1}(C_f)[1] = (\ker f)[0]$ and the cokernel is $H^0(C_f)[0] = (\mathrm{coker}\, f)[0]$. This matches the usual kernel and cokernel in $\mathcal{A}$.
+</Example>
+
+<Example title="Tilted heart is abelian" id="tilted-abelian">
+For a torsion pair $(\mathcal{T}, \mathcal{F})$ in $\mathcal{A}$, the tilted t-structure on $D^b(\mathcal{A})$ has heart $\mathcal{A}^\sharp$ consisting of complexes with $H^0 \in \mathcal{F}$, $H^{-1} \in \mathcal{T}$, and $H^n = 0$ otherwise. The theorem guarantees $\mathcal{A}^\sharp$ is abelian, even though it is not a subcategory of $\mathcal{A}$.
+</Example>
+
+<Example title="Heart of weight structure is NOT abelian" id="weight-not-abelian">
+Weight structures (co-t-structures) also have hearts, but the theorem does not apply since the axioms differ. The heart of a weight structure is additive and idempotent complete but typically not abelian. For example, the heart of the Chow weight structure on $DM^{\mathrm{eff}}$ is the category of Chow motives, which is additive but not abelian.
+</Example>
+
+<Example title="Short exact sequences vs triangles" id="ses-vs-triangles">
+In the heart $\mathcal{A}$, a short exact sequence $0 \to K \to A \to Q \to 0$ corresponds to a distinguished triangle $K \to A \to Q \to K[1]$ where $K, A, Q \in \mathcal{A}$. The connecting morphism $Q \to K[1]$ classifies the extension: it lies in $\mathrm{Hom}_{\mathcal{T}}(Q, K[1]) = \mathrm{Ext}^1_{\mathcal{A}}(Q, K)$.
+</Example>
+
+<Example title="Ext groups from the heart" id="ext-from-heart">
+For objects $A, B$ in the heart $\mathcal{A}$, $\mathrm{Ext}^n_{\mathcal{A}}(A, B) = \mathrm{Hom}_{\mathcal{T}}(A, B[n])$. This identifies the Ext groups computed in $\mathcal{A}$ with Hom spaces in the ambient triangulated category. For the standard t-structure this recovers the classical identification $\mathrm{Ext}^n_{\mathcal{A}}(A, B) = \mathrm{Hom}_{D(\mathcal{A})}(A, B[n])$.
+</Example>
+
+<Example title="Exactness of H^0" id="h0-exact">
+The functor $H^0 : \mathcal{T} \to \mathcal{A}$ is cohomological: it maps distinguished triangles $X \to Y \to Z \to X[1]$ to exact sequences $H^0(X) \to H^0(Y) \to H^0(Z)$ in $\mathcal{A}$. Note that $H^0$ is NOT exact in the sense of triangulated functors; it is exact in the abelian sense when restricted to short exact sequences in the heart.
+</Example>
+
+<Example title="Injective objects in the heart" id="injectives-in-heart">
+An object $I \in \mathcal{A}$ is injective in the heart iff $\mathrm{Ext}^1_{\mathcal{A}}(-, I) = 0$, equivalently $\mathrm{Hom}_{\mathcal{T}}(-, I[1]) = 0$ on $\mathcal{A}$. The heart need not have enough injectives, even if $\mathcal{A}$ does. For the standard t-structure on $D^b(\mathcal{A})$, the injectives in the heart are exactly the injective objects of $\mathcal{A}$.
+</Example>
+
+<Example title="Multiple hearts on D^b(Coh(P^1))" id="multiple-hearts-p1">
+The category $D^b(\mathrm{Coh}(\mathbb{P}^1))$ admits many t-structures with non-equivalent hearts. The standard heart is $\mathrm{Coh}(\mathbb{P}^1)$. Tilting gives a heart equivalent to representations of the Kronecker quiver $\bullet \rightrightarrows \bullet$. Both are abelian by the theorem, but they are very different abelian categories.
+</Example>
+
+<Example title="Realization functor from heart" id="realization">
+Given the heart $\mathcal{A}$ of a bounded t-structure on $\mathcal{T}$, the **realization functor** $\mathrm{real} : D^b(\mathcal{A}) \to \mathcal{T}$ is the exact functor extending the inclusion $\mathcal{A} \hookrightarrow \mathcal{T}$. The theorem guarantees $\mathcal{A}$ is abelian, so $D^b(\mathcal{A})$ exists. The realization functor is always exact but not always an equivalence.
+</Example>
+
+<Example title="Bridgeland stability and hearts" id="bridgeland">
+A Bridgeland stability condition on $D^b(\mathrm{Coh}(X))$ consists of a bounded t-structure with heart $\mathcal{A}$ together with a central charge $Z : K_0(\mathcal{A}) \to \mathbb{C}$. The theorem ensures $\mathcal{A}$ is abelian, which is needed for the Harder-Narasimhan property. The space of stability conditions is a complex manifold parametrizing different abelian hearts.
+</Example>
+
+<Example title="Heart determines the t-structure" id="heart-determines">
+The heart $\mathcal{A}$ of a bounded t-structure uniquely determines the t-structure via $\mathcal{T}^{\leq 0} = \langle \mathcal{A}, \mathcal{A}[1], \mathcal{A}[2], \ldots \rangle$ (extension closure). Conversely, not every abelian subcategory of $\mathcal{T}$ arises as the heart of a t-structure. The heart must satisfy specific generation and orthogonality conditions.
+</Example>
+
+---
+
+<Remark title="Historical context">
+The theorem that the heart is abelian was proved by Beilinson, Bernstein, and Deligne in their foundational 1982 paper on perverse sheaves. It was essential for establishing that perverse sheaves form an abelian category, which in turn was needed for the decomposition theorem. The proof uses only the axioms of triangulated categories and t-structures, making it widely applicable.
+</Remark>
+
+<Remark title="Beyond abelian hearts">
+While the heart of a t-structure is always abelian, the converse question is subtle: given an abelian category $\mathcal{A}$ inside a triangulated category $\mathcal{T}$, when does $\mathcal{A}$ arise as the heart of a t-structure? Sufficient conditions involve generation (every object of $\mathcal{T}$ is built from shifts of objects in $\mathcal{A}$) and orthogonality ($\mathrm{Hom}(\mathcal{A}[i], \mathcal{A}[j]) = 0$ for $i > j$).
+</Remark>

@@ -1,0 +1,239 @@
+export const metadata = {
+  title: 'Sylow Theorems — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "3. 군의 작용과 실로 정리", href: "/modern-algebra/ch03-group-actions" },
+  { label: "Theorem — Sylow Theorems" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Sylow Theorems
+
+The Sylow theorems, proved by the Norwegian mathematician Ludwig Sylow in 1872, are among the most important results in finite group theory. They guarantee the existence of subgroups of prime-power order, describe their structure, and constrain how many such subgroups can exist. Together, the three Sylow theorems provide the most powerful general tool for analyzing the structure of finite groups.
+
+---
+
+## Statements
+
+<Definition title="Sylow p-subgroup" number="3.22">
+Let $G$ be a finite group and $p$ a prime. Write $|G| = p^n m$ where $p \nmid m$ (so $p^n$ is the largest power of $p$ dividing $|G|$). A **Sylow $p$-subgroup** of $G$ is a subgroup of order $p^n$.
+
+We write $\operatorname{Syl}_p(G)$ for the set of all Sylow $p$-subgroups of $G$, and $n_p = |\operatorname{Syl}_p(G)|$ for the number of Sylow $p$-subgroups.
+</Definition>
+
+<Theorem title="Sylow's First Theorem (Existence)" number="3.10">
+Let $G$ be a finite group and $p$ a prime dividing $|G|$. Write $|G| = p^n m$ with $\gcd(p, m) = 1$. Then $G$ contains a subgroup of order $p^n$ (a Sylow $p$-subgroup). In fact, $G$ contains subgroups of order $p^k$ for every $0 \leq k \leq n$.
+</Theorem>
+
+<Theorem title="Sylow's Second Theorem (Conjugacy)" number="3.11">
+Any two Sylow $p$-subgroups of $G$ are conjugate. That is, if $P$ and $Q$ are Sylow $p$-subgroups, then there exists $g \in G$ such that $Q = gPg^{-1}$.
+
+Consequently, every $p$-subgroup of $G$ is contained in some Sylow $p$-subgroup.
+</Theorem>
+
+<Theorem title="Sylow's Third Theorem (Counting)" number="3.12">
+The number $n_p$ of Sylow $p$-subgroups satisfies:
+
+1. $n_p \equiv 1 \pmod{p}$.
+2. $n_p$ divides $m = |G|/p^n$.
+3. $n_p = [G : N_G(P)]$ for any Sylow $p$-subgroup $P$.
+</Theorem>
+
+---
+
+## Significance
+
+<Remark title="Power of the Sylow theorems">
+The Sylow theorems are powerful because they give both **existence** and **constraints**:
+
+1. **Existence** guarantees that for every prime $p$ dividing $|G|$, there is a "maximal" $p$-subgroup.
+
+2. **Conjugacy** means there is essentially one Sylow $p$-subgroup up to conjugation. If $n_p = 1$, the unique Sylow $p$-subgroup is normal.
+
+3. **Counting** gives $n_p \equiv 1 \pmod{p}$ and $n_p \mid m$, which often forces $n_p = 1$ and produces normal subgroups.
+
+These constraints are frequently strong enough to determine the structure of groups of a given order, or at least to prove that no simple group of that order can exist.
+</Remark>
+
+---
+
+## Applications: Determining Group Structure
+
+<Example id="sylow-order-15" title="Groups of order 15">
+$|G| = 15 = 3 \cdot 5$.
+
+$n_3 \equiv 1 \pmod{3}$ and $n_3 \mid 5$, so $n_3 \in \{1\}$. Thus $n_3 = 1$, and the Sylow 3-subgroup $P_3 \cong \mathbb{Z}/3\mathbb{Z}$ is normal.
+
+$n_5 \equiv 1 \pmod{5}$ and $n_5 \mid 3$, so $n_5 \in \{1\}$. Thus $n_5 = 1$, and the Sylow 5-subgroup $P_5 \cong \mathbb{Z}/5\mathbb{Z}$ is normal.
+
+Since $P_3 \cap P_5 = \{e\}$ (their orders are coprime) and $P_3 P_5 = G$ (since $|P_3||P_5| = 15 = |G|$), we get $G \cong P_3 \times P_5 \cong \mathbb{Z}/3\mathbb{Z} \times \mathbb{Z}/5\mathbb{Z} \cong \mathbb{Z}/15\mathbb{Z}$.
+
+So **the only group of order 15 is $\mathbb{Z}/15\mathbb{Z}$**.
+</Example>
+
+<Example id="sylow-order-35" title="Groups of order 35">
+$|G| = 35 = 5 \cdot 7$.
+
+$n_5 \equiv 1 \pmod{5}$ and $n_5 \mid 7$, so $n_5 = 1$. $n_7 \equiv 1 \pmod{7}$ and $n_7 \mid 5$, so $n_7 = 1$. Both Sylow subgroups are normal, so $G \cong \mathbb{Z}/5\mathbb{Z} \times \mathbb{Z}/7\mathbb{Z} \cong \mathbb{Z}/35\mathbb{Z}$.
+</Example>
+
+<Example id="sylow-order-12" title="Groups of order 12">
+$|G| = 12 = 2^2 \cdot 3$.
+
+$n_3 \equiv 1 \pmod{3}$ and $n_3 \mid 4$, so $n_3 \in \{1, 4\}$.
+
+$n_2 \equiv 1 \pmod{2}$ and $n_2 \mid 3$, so $n_2 \in \{1, 3\}$.
+
+**Case $n_3 = 1$**: The Sylow 3-subgroup $P \cong \mathbb{Z}/3\mathbb{Z}$ is normal. Then $G$ is a semidirect product of $P$ by a Sylow 2-subgroup $Q$ (of order 4). Depending on the action of $Q$ on $P$ and the isomorphism type of $Q$, we get: $\mathbb{Z}/12\mathbb{Z}$, $\mathbb{Z}/6\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$, $\text{Dic}_{12}$ (dicyclic), or $D_6 \cong D_3 \times \mathbb{Z}/2\mathbb{Z}$.
+
+**Case $n_3 = 4$**: The action on the four Sylow 3-subgroups gives an injective $G \hookrightarrow S_4$. The image is a subgroup of order 12, which must be $A_4$.
+
+So the groups of order 12 are: $\mathbb{Z}/12\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/6\mathbb{Z}$, $A_4$, $D_6$, and the dicyclic group $\text{Dic}_{12}$.
+</Example>
+
+<Example id="sylow-order-20" title="Groups of order 20">
+$|G| = 20 = 2^2 \cdot 5$.
+
+$n_5 \equiv 1 \pmod{5}$ and $n_5 \mid 4$, so $n_5 = 1$. The Sylow 5-subgroup $P \cong \mathbb{Z}/5\mathbb{Z}$ is always normal.
+
+$n_2 \equiv 1 \pmod{2}$ and $n_2 \mid 5$, so $n_2 \in \{1, 5\}$.
+
+Since $P$ is normal, $G \cong P \rtimes Q$ where $Q$ is a Sylow 2-subgroup of order 4. The action $Q \to \operatorname{Aut}(\mathbb{Z}/5\mathbb{Z}) \cong \mathbb{Z}/4\mathbb{Z}$ determines $G$. This gives 5 groups of order 20.
+</Example>
+
+<Example id="sylow-order-200" title="Groups of order 200 are not simple">
+$|G| = 200 = 2^3 \cdot 5^2$.
+
+$n_5 \equiv 1 \pmod{5}$ and $n_5 \mid 8$, so $n_5 \in \{1\}$ (since the divisors of 8 that are $\equiv 1 \pmod{5}$ are only 1).
+
+Therefore the Sylow 5-subgroup is normal, and $G$ is not simple.
+</Example>
+
+---
+
+## Applications: Proving Non-Simplicity
+
+<Example id="nonsimple-order-56" title="No simple group of order 56">
+$|G| = 56 = 2^3 \cdot 7$.
+
+$n_7 \equiv 1 \pmod{7}$ and $n_7 \mid 8$, so $n_7 \in \{1, 8\}$.
+
+If $n_7 = 1$: not simple.
+
+If $n_7 = 8$: there are 8 Sylow 7-subgroups, each cyclic of order 7, and they pairwise intersect trivially. This accounts for $8 \times 6 = 48$ elements of order 7. The remaining $56 - 48 = 8$ elements form the unique Sylow 2-subgroup (since all 8 non-order-7 elements must lie in a group of order 8). So $n_2 = 1$, and the Sylow 2-subgroup is normal.
+
+Either way, $G$ has a normal Sylow subgroup and is not simple.
+</Example>
+
+<Example id="nonsimple-order-30" title="No simple group of order 30">
+$|G| = 30 = 2 \cdot 3 \cdot 5$.
+
+$n_5 \equiv 1 \pmod{5}$ and $n_5 \mid 6$, so $n_5 \in \{1, 6\}$.
+
+$n_3 \equiv 1 \pmod{3}$ and $n_3 \mid 10$, so $n_3 \in \{1, 10\}$.
+
+If $n_5 = 1$ or $n_3 = 1$: not simple.
+
+If $n_5 = 6$ and $n_3 = 10$: elements of order 5 give $6 \times 4 = 24$, elements of order 3 give $10 \times 2 = 20$. Total $\geq 24 + 20 + 1 = 45 > 30$, contradiction.
+
+So at least one of $n_5 = 1$ or $n_3 = 1$ holds, and $G$ is not simple.
+</Example>
+
+<Example id="nonsimple-order-48" title="No simple group of order 48">
+$|G| = 48 = 2^4 \cdot 3$.
+
+$n_2 \equiv 1 \pmod{2}$ and $n_2 \mid 3$, so $n_2 \in \{1, 3\}$.
+
+If $n_2 = 1$: the Sylow 2-subgroup is normal, not simple.
+
+If $n_2 = 3$: the action on the 3 Sylow 2-subgroups gives $\varphi: G \to S_3$. Since $|G| = 48$ and $|S_3| = 6$, we have $|\ker \varphi| \geq 48/6 = 8$. So $\ker \varphi$ is a nontrivial proper normal subgroup.
+
+Either way, $G$ is not simple.
+</Example>
+
+---
+
+## The Normalizer and Sylow Subgroups
+
+<Remark title="The normalizer controls the count">
+The number of Sylow $p$-subgroups satisfies $n_p = [G : N_G(P)]$, where $N_G(P) = \{g \in G : gPg^{-1} = P\}$ is the normalizer of a Sylow $p$-subgroup $P$.
+
+Key facts:
+- $P \leq N_G(P)$, so $n_p = [G : N_G(P)]$ divides $[G : P] = m$.
+- $n_p = 1$ if and only if $P \trianglelefteq G$ (the Sylow $p$-subgroup is normal).
+- The Sylow $p$-subgroup $P$ is the unique Sylow $p$-subgroup of its normalizer: $P$ is the unique Sylow $p$-subgroup of $N_G(P)$.
+</Remark>
+
+<Example id="normalizer-s4" title="Normalizer of a Sylow subgroup in S_4">
+In $G = S_4$, the Sylow 3-subgroups are $\langle (1\;2\;3) \rangle$, $\langle (1\;2\;4) \rangle$, $\langle (1\;3\;4) \rangle$, $\langle (2\;3\;4) \rangle$. So $n_3 = 4$.
+
+$n_3 = [S_4 : N_{S_4}(P)]$, so $|N_{S_4}(P)| = 24/4 = 6$. Indeed, $N_{S_4}(\langle(1\;2\;3)\rangle) = S_{\{1,2,3\}} \cong S_3$ (of order 6).
+
+The Sylow 2-subgroups of $S_4$ (of order 8) are the three copies of $D_4$, so $n_2 = 3$, and $|N_{S_4}(P_2)| = 24/3 = 8$, meaning each Sylow 2-subgroup is self-normalizing.
+</Example>
+
+<Example id="sylow-in-an" title="Sylow subgroups of A_5">
+$|A_5| = 60 = 2^2 \cdot 3 \cdot 5$.
+
+- $n_2$: Sylow 2-subgroups have order 4. $n_2 \equiv 1 \pmod{2}$, $n_2 \mid 15$, so $n_2 \in \{1, 3, 5, 15\}$. In fact $n_2 = 5$ (there are five copies of $V_4$ in $A_5$).
+
+- $n_3$: Sylow 3-subgroups have order 3. $n_3 \equiv 1 \pmod{3}$, $n_3 \mid 20$, so $n_3 \in \{1, 4, 10\}$. In fact $n_3 = 10$.
+
+- $n_5$: Sylow 5-subgroups have order 5. $n_5 \equiv 1 \pmod{5}$, $n_5 \mid 12$, so $n_5 \in \{1, 6\}$. In fact $n_5 = 6$.
+
+None of these equal 1, confirming that $A_5$ has no normal Sylow subgroup, consistent with being simple.
+</Example>
+
+---
+
+## Sylow Theory for Specific Primes
+
+<Example id="sylow-2-subgroups" title="Sylow 2-subgroups of S_n">
+A Sylow 2-subgroup of $S_n$ has order $2^{\lfloor n/2 \rfloor + \lfloor n/4 \rfloor + \cdots}$, where the exponent is $\sum_{k=1}^{\infty} \lfloor n/2^k \rfloor$ (by Legendre's formula for $v_2(n!)$).
+
+For $S_4$: $v_2(24) = v_2(4!) = 3$, so Sylow 2-subgroups have order 8. They are isomorphic to $D_4$.
+
+For $S_8$: $v_2(8!) = 7$, so Sylow 2-subgroups have order 128. Their structure is a wreath product: $(\mathbb{Z}/2\mathbb{Z} \wr \mathbb{Z}/2\mathbb{Z}) \wr \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+<Example id="sylow-order-24" title="Sylow subgroups of S_4 (order 24)">
+$|S_4| = 24 = 2^3 \cdot 3$.
+
+By Sylow III: $n_2 \mid 3$, $n_2 \equiv 1 \pmod{2}$, so $n_2 \in \{1, 3\}$. In fact $n_2 = 3$.
+
+The three Sylow 2-subgroups of $S_4$ are all isomorphic to $D_4$. For example, one is generated by $\{(1\;2\;3\;4), (1\;3)\}$, corresponding to symmetries of the square on vertices 1, 2, 3, 4.
+</Example>
+
+<Example id="sylow-order-pn" title="Sylow p-subgroup of Z/p^nZ x Z/mZ">
+For $G = \mathbb{Z}/p^n\mathbb{Z} \times \mathbb{Z}/m\mathbb{Z}$ with $\gcd(p, m) = 1$, the unique Sylow $p$-subgroup is $\mathbb{Z}/p^n\mathbb{Z} \times \{0\}$, and $n_p = 1$.
+
+More generally, in any finite abelian group, every Sylow $p$-subgroup is unique (hence normal), because abelian groups have exactly one subgroup of each possible order dividing the group order.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+1. **Sylow I (Existence)**: For every prime power $p^k$ dividing $|G|$, there exists a subgroup of order $p^k$.
+
+2. **Sylow II (Conjugacy)**: All Sylow $p$-subgroups are conjugate; every $p$-subgroup lies in a Sylow $p$-subgroup.
+
+3. **Sylow III (Counting)**: $n_p \equiv 1 \pmod{p}$ and $n_p \mid [G : P]$.
+
+4. $n_p = 1$ if and only if the Sylow $p$-subgroup is **normal**.
+
+5. The Sylow theorems are the primary tool for classifying groups of small order and for proving that groups of certain orders cannot be simple.
+</Remark>

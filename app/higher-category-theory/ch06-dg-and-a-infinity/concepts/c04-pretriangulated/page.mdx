@@ -1,0 +1,200 @@
+export const metadata = {
+  title: 'Pretriangulated DG Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "6. DG 범주와 A∞ 범주", href: "/higher-category-theory/ch06-dg-and-a-infinity" },
+  { label: "Concept — Pretriangulated DG Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Pretriangulated DG Category
+
+A pretriangulated DG category is a DG category that is "closed under shifts and cones" in the DG sense. The homotopy category of a pretriangulated DG category is canonically triangulated. Pretriangulated DG categories provide the correct DG-level structure that descends to triangulated categories, bridging the gap between the algebraic DG framework and the $\infty$-categorical notion of stability.
+
+---
+
+## Definition
+
+<Definition title="Pretriangulated DG category" number="6.1">
+A DG category $\mathcal{A}$ is **pretriangulated** if it satisfies:
+
+1. **Shifts exist**: For every $X \in \mathcal{A}$ and $n \in \mathbb{Z}$, there is an object $X[n] \in \mathcal{A}$ representing the functor $Y \mapsto \operatorname{Hom}_{\mathcal{A}}(Y, X)[n]$ (the shift of the Hom complex).
+
+2. **Cones exist**: For every closed degree-$0$ morphism $f: X \to Y$ in $\mathcal{A}$ (i.e., $f \in \operatorname{Hom}^0(X, Y)$ with $d(f) = 0$), there is a **cone** $\operatorname{Cone}(f) \in \mathcal{A}$ fitting into a "DG exact triangle"
+
+$$X \xrightarrow{f} Y \xrightarrow{i} \operatorname{Cone}(f) \xrightarrow{p} X[1]$$
+
+with the standard universal property at the DG level.
+
+Equivalently, $\mathcal{A}$ is pretriangulated if the Yoneda embedding $\mathcal{A} \hookrightarrow \operatorname{Mod}_{\mathcal{A}}^{\mathrm{dg}}$ factors through the DG subcategory of representable modules and is closed under shifts and cones therein.
+</Definition>
+
+<Definition title="Cone in a DG category" number="6.2">
+For a closed degree-$0$ morphism $f: X \to Y$ in a DG category, the **standard cone** (when it exists as a formal construction) is characterized by the Hom complex:
+
+$$\operatorname{Hom}(\operatorname{Cone}(f), Z) \simeq \operatorname{fib}\left(\operatorname{Hom}(Y, Z) \xrightarrow{f^*} \operatorname{Hom}(X, Z)\right)$$
+
+In concrete DG categories (e.g., chain complexes), $\operatorname{Cone}(f) = Y \oplus X[1]$ as a graded object, with differential:
+
+$$d_{\operatorname{Cone}}(y, x) = (d_Y(y) + f(x), -d_{X[1]}(x))$$
+</Definition>
+
+<Definition title="Pretriangulated hull" number="6.3">
+For any DG category $\mathcal{A}$, the **pretriangulated hull** (or pretriangulated closure) $\mathcal{A}^{\mathrm{pretr}}$ is the smallest pretriangulated DG category containing $\mathcal{A}$. It is constructed by iteratively adding shifts and cones:
+
+- Start with $\mathcal{A}$.
+- Add all shifts $X[n]$ for $X \in \mathcal{A}$, $n \in \mathbb{Z}$.
+- Add cones of all closed degree-$0$ morphisms.
+- Iterate (transfinitely if necessary).
+
+The inclusion $\mathcal{A} \hookrightarrow \mathcal{A}^{\mathrm{pretr}}$ induces a fully faithful functor $H^0(\mathcal{A}) \hookrightarrow H^0(\mathcal{A}^{\mathrm{pretr}})$, and $H^0(\mathcal{A}^{\mathrm{pretr}})$ is the triangulated hull of $H^0(\mathcal{A})$.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="pretr-chain" title="Chain complexes are pretriangulated">
+The DG category $\mathbf{C}_{\mathrm{dg}}(R)$ of chain complexes over a ring $R$ is pretriangulated:
+- Shifts: $(C[n])_p = C_{p+n}$ with differential $d_{C[n]} = (-1)^n d_C$.
+- Cones: $\operatorname{Cone}(f: C \to D) = D \oplus C[1]$ with the standard cone differential.
+
+The homotopy category $H^0(\mathbf{C}_{\mathrm{dg}}(R)) = K(R)$ (the homotopy category of chain complexes) is indeed triangulated.
+</Example>
+
+<Example id="pretr-injective" title="Injective/projective complexes">
+The full DG subcategory $\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(\mathcal{A})$ of complexes of injective objects in an abelian category $\mathcal{A}$ (with enough injectives) is pretriangulated. Its homotopy category:
+
+$$H^0(\mathbf{C}_{\mathrm{dg}}^{\mathrm{inj}}(\mathcal{A})) \simeq D(\mathcal{A})$$
+
+Similarly, the DG category of h-projective complexes is pretriangulated with homotopy category $D(\mathcal{A})$.
+</Example>
+
+<Example id="pretr-perfect" title="Perfect DG modules">
+For a DG algebra $A$, the full DG subcategory $\operatorname{Perf}_A^{\mathrm{dg}} \subset \operatorname{Mod}_A^{\mathrm{dg}}$ of perfect DG modules (compact objects) is pretriangulated. Its homotopy category is the perfect derived category:
+
+$$H^0(\operatorname{Perf}_A^{\mathrm{dg}}) = D^{\mathrm{perf}}(A)$$
+
+For an ordinary algebra $A$, perfect DG modules correspond to bounded complexes of finitely generated projective modules.
+</Example>
+
+<Example id="pretr-single-object" title="Pretriangulated hull of a single object">
+For a DG algebra $A$ viewed as a one-object DG category $\mathcal{A}$, the pretriangulated hull $\mathcal{A}^{\mathrm{pretr}}$ consists of:
+- Shifts $A[n]$ for $n \in \mathbb{Z}$.
+- Iterated cones (which are "twisted complexes" over $A$).
+
+The homotopy category $H^0(\mathcal{A}^{\mathrm{pretr}})$ is the smallest triangulated subcategory of $D(A)$ containing $A$ and closed under direct summands. When $A$ is an ordinary ring, this is $D^{\mathrm{perf}}(A)$.
+</Example>
+
+<Example id="pretr-twisted-complexes" title="Twisted complexes">
+A **twisted complex** over a DG category $\mathcal{A}$ is a finite collection of objects $E_1, \ldots, E_n \in \mathcal{A}$ with shifts $n_1, \ldots, n_k \in \mathbb{Z}$ and a strictly upper-triangular matrix of morphisms $q_{ij} \in \operatorname{Hom}^{1+n_i-n_j}(E_i, E_j)$ for $i < j$, satisfying the Maurer--Cartan equation:
+
+$$dq + q \circ q = 0$$
+
+(where $q = (q_{ij})$ is viewed as an endomorphism of $\bigoplus E_i[n_i]$).
+
+The DG category of twisted complexes $\operatorname{Tw}(\mathcal{A})$ is pretriangulated and provides a concrete model for $\mathcal{A}^{\mathrm{pretr}}$.
+</Example>
+
+<Example id="pretr-dg-sheaves" title="DG category of coherent sheaves">
+For a smooth projective variety $X$, the DG category $\operatorname{Coh}_{\mathrm{dg}}(X)$ obtained from injective resolutions of coherent sheaves is pretriangulated. It enhances $D^b(\operatorname{Coh}(X))$:
+
+$$H^0(\operatorname{Coh}_{\mathrm{dg}}(X)) \simeq D^b(\operatorname{Coh}(X))$$
+
+The pretriangulated structure ensures that cones of morphisms between complexes of coherent sheaves remain in the category.
+</Example>
+
+---
+
+## Triangulated Structure on the Homotopy Category
+
+<Example id="pretr-triangulated" title="The homotopy category is triangulated">
+For a pretriangulated DG category $\mathcal{A}$, the homotopy category $H^0(\mathcal{A})$ is triangulated with:
+
+- **Shift**: $[1]$ induced by the DG shift $X \mapsto X[1]$.
+- **Distinguished triangles**: $X \xrightarrow{f} Y \to \operatorname{Cone}(f) \to X[1]$ for closed degree-$0$ morphisms $f$.
+
+The triangulated structure is automatic: all axioms (TR1)--(TR4) follow from the DG-level constructions. In particular, the octahedral axiom follows from the existence of iterated cones at the DG level.
+</Example>
+
+<Example id="pretr-vs-stable" title="Pretriangulated DG categories vs. stable infinity-categories">
+Under the DG nerve construction $N_{\mathrm{dg}}$, a pretriangulated DG category $\mathcal{A}$ maps to a stable $\infty$-category $N_{\mathrm{dg}}(\mathcal{A})$. The key correspondence:
+
+| DG concept | Stable $\infty$-category concept |
+|---|---|
+| Pretriangulated DG category | Stable $\infty$-category |
+| Shift $X[1]$ | Suspension $\Sigma X$ |
+| Cone of $f: X \to Y$ | Cofiber of $f$ |
+| Closed degree-$0$ morphism | Morphism in $\mathcal{C}$ |
+| Homotopy ($d(h) = f - g$) | Path in $\operatorname{Map}(X, Y)$ |
+
+The pretriangulated condition ensures that the DG nerve is stable (has a zero object, all finite limits and colimits, and $\Sigma$ is an equivalence).
+</Example>
+
+<Example id="pretr-exact-dg-functors" title="Exact DG functors">
+A DG functor $F: \mathcal{A} \to \mathcal{B}$ between pretriangulated DG categories is **exact** if it preserves cones: $F(\operatorname{Cone}(f)) \cong \operatorname{Cone}(F(f))$ in $\mathcal{B}$ for all closed degree-$0$ morphisms $f$. The induced functor $H^0(F): H^0(\mathcal{A}) \to H^0(\mathcal{B})$ is then a triangulated functor.
+
+Every DG functor between pretriangulated DG categories that preserves the zero object automatically preserves cones (since cones are constructed from shifts, direct sums, and the differential, all of which are preserved).
+</Example>
+
+---
+
+## Constructions
+
+<Example id="pretr-dg-quotient" title="DG quotient (Drinfeld)">
+For a pretriangulated DG category $\mathcal{A}$ and a full pretriangulated DG subcategory $\mathcal{B} \subset \mathcal{A}$, the **DG quotient** $\mathcal{A}/\mathcal{B}$ (Drinfeld) is the DG category obtained by formally adjoining null-homotopies for all objects of $\mathcal{B}$: for each $B \in \mathcal{B}$, add a morphism $h_B \in \operatorname{Hom}^{-1}(B, B)$ with $d(h_B) = \operatorname{id}_B$.
+
+The homotopy category satisfies $H^0(\mathcal{A}/\mathcal{B}) \simeq H^0(\mathcal{A})/H^0(\mathcal{B})$ (the Verdier quotient). The DG quotient lifts the Verdier quotient to the DG level.
+</Example>
+
+<Example id="pretr-tensor" title="Tensor product of pretriangulated categories">
+The tensor product $\mathcal{A} \otimes_k \mathcal{B}$ of DG categories is generally not pretriangulated even if $\mathcal{A}$ and $\mathcal{B}$ are. One must take the pretriangulated hull $(\mathcal{A} \otimes_k \mathcal{B})^{\mathrm{pretr}}$.
+
+Alternatively, one can work with the derived tensor product $\mathcal{A} \otimes_k^{\mathbf{L}} \mathcal{B}$ in the Morita model structure, which produces a DG category Morita equivalent to the expected result.
+</Example>
+
+<Example id="pretr-semiorthogonal" title="Semi-orthogonal decompositions at the DG level">
+A semi-orthogonal decomposition $H^0(\mathcal{A}) = \langle \mathcal{T}_1, \mathcal{T}_2 \rangle$ lifts to the DG level: there exist full pretriangulated DG subcategories $\mathcal{A}_1, \mathcal{A}_2 \subset \mathcal{A}$ with $H^0(\mathcal{A}_i) = \mathcal{T}_i$ and a DG bimodule $M$ representing the "gluing data." The DG category $\mathcal{A}$ is recovered as the upper-triangular DG category:
+
+$$\mathcal{A} \simeq \left(\begin{smallmatrix} \mathcal{A}_1 & M \\ 0 & \mathcal{A}_2 \end{smallmatrix}\right)$$
+
+This lifting is possible because pretriangulated DG categories have well-defined orthogonal complements.
+</Example>
+
+<Example id="pretr-smooth-proper" title="Smooth and proper DG categories">
+A pretriangulated DG category $\mathcal{A}$ (over $k$) is:
+- **Smooth** (or homologically smooth) if the diagonal bimodule $\mathcal{A}$ is perfect as an $\mathcal{A}^{\mathrm{op}} \otimes_k \mathcal{A}$-module.
+- **Proper** if $\bigoplus_n H^n(\operatorname{Hom}(X, Y))$ is finite-dimensional for all $X, Y$.
+
+Smooth and proper DG categories are the noncommutative analogues of smooth projective varieties. They have well-defined Serre duality, finite-dimensional Hochschild cohomology, and satisfy the representability theorem for DG modules.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Pretriangulated DG categories provide the DG-level structure underlying triangulated categories:
+
+1. A pretriangulated DG category is **closed under shifts and cones** at the DG level.
+
+2. The homotopy category $H^0(\mathcal{A})$ is **canonically triangulated**, with all axioms following automatically from the DG structure.
+
+3. **Twisted complexes** provide a concrete model for the pretriangulated hull $\mathcal{A}^{\mathrm{pretr}}$.
+
+4. Under the DG nerve, pretriangulated DG categories correspond to **stable $\infty$-categories**.
+
+5. Key constructions: **DG quotient** (Drinfeld), semi-orthogonal decompositions, smooth and proper DG categories.
+</Remark>

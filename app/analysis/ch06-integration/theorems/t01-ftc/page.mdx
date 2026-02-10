@@ -1,0 +1,158 @@
+export const metadata = {
+  title: 'Fundamental Theorem of Calculus — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "6. 리만 적분", href: "/analysis/ch06-integration" },
+  { label: "정리 — 미적분학의 기본정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Fundamental Theorem of Calculus
+
+The Fundamental Theorem of Calculus (FTC) connects the two central operations of calculus: differentiation and integration. It comes in two parts, each addressing a different direction of the relationship.
+
+---
+
+## First Fundamental Theorem (Differentiation of integrals)
+
+<Theorem title="FTC Part I" number="6.14">
+Let $f: [a,b] \to \mathbb{R}$ be Riemann integrable. Define
+
+$$F(x) = \int_a^x f(t) \, dt, \qquad x \in [a,b].$$
+
+Then:
+1. $F$ is continuous on $[a,b]$.
+2. If $f$ is continuous at $c \in (a,b)$, then $F$ is differentiable at $c$ and $F'(c) = f(c)$.
+</Theorem>
+
+<Example title="Recovering a function by differentiating its integral">
+Let $f(t) = t^2$. Then $F(x) = \int_0^x t^2 \, dt = \frac{x^3}{3}$, and $F'(x) = x^2 = f(x)$. The FTC confirms what direct computation shows.
+</Example>
+
+<Example title="An integral that defines a new function">
+The function $\operatorname{Si}(x) = \int_0^x \frac{\sin t}{t} \, dt$ (with the integrand defined as $1$ at $t=0$) cannot be expressed in terms of elementary functions. Yet by FTC I, $\operatorname{Si}'(x) = \frac{\sin x}{x}$ for $x \neq 0$.
+</Example>
+
+<Example title="The error function">
+The error function $\operatorname{erf}(x) = \frac{2}{\sqrt{\pi}} \int_0^x e^{-t^2} \, dt$ has no closed-form antiderivative, but FTC I tells us $\operatorname{erf}'(x) = \frac{2}{\sqrt{\pi}} e^{-x^2}$.
+</Example>
+
+<Example title="Continuity of F even when f is not continuous">
+Let $f: [0,1] \to \mathbb{R}$ with $f(x) = 0$ for $x < \frac{1}{2}$ and $f(x) = 1$ for $x \geq \frac{1}{2}$. Then
+
+$$F(x) = \int_0^x f(t) \, dt$$
+
+For $x < \frac{1}{2}$: $F(x) = 0$. For $x \geq \frac{1}{2}$: $F(x) = x - \frac{1}{2}$.
+
+$F$ is continuous everywhere (including at $x = \frac{1}{2}$), but $F$ is not differentiable at $x = \frac{1}{2}$, the point where $f$ is discontinuous.
+</Example>
+
+<Remark>
+FTC I says that the integral $F(x) = \int_a^x f(t)\,dt$ is always continuous, but it is only differentiable at points where $f$ is continuous. This is consistent with the general principle that integration smooths functions.
+</Remark>
+
+---
+
+## Second Fundamental Theorem (Evaluation of integrals)
+
+<Theorem title="FTC Part II" number="6.15">
+Let $f: [a,b] \to \mathbb{R}$ be Riemann integrable. If $F: [a,b] \to \mathbb{R}$ is continuous on $[a,b]$, differentiable on $(a,b)$, and $F'(x) = f(x)$ for all $x \in (a,b)$, then
+
+$$\int_a^b f(x) \, dx = F(b) - F(a).$$
+</Theorem>
+
+<Example title="Evaluating standard integrals">
+- $\int_0^1 x^n \, dx = \left[\frac{x^{n+1}}{n+1}\right]_0^1 = \frac{1}{n+1}$, since $F(x) = \frac{x^{n+1}}{n+1}$ satisfies $F' = x^n$.
+
+- $\int_0^\pi \sin x \, dx = [-\cos x]_0^\pi = -\cos\pi + \cos 0 = 1 + 1 = 2$.
+
+- $\int_1^e \frac{1}{x} \, dx = [\ln x]_1^e = 1 - 0 = 1$.
+
+- $\int_0^1 e^x \, dx = [e^x]_0^1 = e - 1$.
+</Example>
+
+<Example title="The importance of continuity of F">
+Consider $f(x) = 2x \sin(1/x^2) - \frac{2}{x}\cos(1/x^2)$ for $x \neq 0$, with $f(0) = 0$. Let $F(x) = x^2 \sin(1/x^2)$ for $x \neq 0$ and $F(0) = 0$. Then $F'(x) = f(x)$ for all $x$, but $f$ is unbounded near $0$ and not Riemann integrable on $[-1,1]$. The hypothesis that $f$ be integrable is essential.
+</Example>
+
+---
+
+## Integration by substitution
+
+<Theorem title="Change of variables" number="6.16">
+Let $\varphi: [\alpha, \beta] \to [a,b]$ be continuously differentiable with $\varphi(\alpha) = a$, $\varphi(\beta) = b$. If $f$ is continuous on $[a,b]$, then
+
+$$\int_a^b f(x) \, dx = \int_\alpha^\beta f(\varphi(t)) \varphi'(t) \, dt.$$
+</Theorem>
+
+<Example title="Substitution u = x²">
+$\int_0^1 2x e^{x^2} \, dx$. Let $u = x^2$, $du = 2x \, dx$. When $x=0$, $u=0$; when $x=1$, $u=1$.
+
+$$\int_0^1 2x e^{x^2} \, dx = \int_0^1 e^u \, du = e - 1.$$
+</Example>
+
+<Example title="Trigonometric substitution">
+$\int_0^1 \frac{1}{1+x^2} \, dx$. Let $x = \tan\theta$, $dx = \sec^2\theta \, d\theta$.
+
+$$\int_0^{\pi/4} \frac{\sec^2\theta}{1 + \tan^2\theta} \, d\theta = \int_0^{\pi/4} 1 \, d\theta = \frac{\pi}{4}.$$
+</Example>
+
+---
+
+## Integration by parts
+
+<Theorem title="Integration by parts" number="6.17">
+If $f$ and $g$ are continuously differentiable on $[a,b]$, then
+
+$$\int_a^b f(x) g'(x) \, dx = f(b)g(b) - f(a)g(a) - \int_a^b f'(x) g(x) \, dx.$$
+</Theorem>
+
+<Example title="Integration by parts: ln x">
+$\int_1^e \ln x \, dx$. Take $f(x) = \ln x$, $g'(x) = 1$, so $f'(x) = 1/x$, $g(x) = x$.
+
+$$\int_1^e \ln x \, dx = [x \ln x]_1^e - \int_1^e 1 \, dx = e - (e - 1) = 1.$$
+</Example>
+
+<Example title="Repeated integration by parts">
+$\int_0^\pi x^2 \sin x \, dx$. Apply parts twice:
+
+First: $f = x^2$, $g' = \sin x$, so $\int x^2 \sin x = -x^2\cos x + 2\int x \cos x \, dx$.
+
+Second: $\int x \cos x \, dx = x \sin x - \int \sin x \, dx = x \sin x + \cos x$.
+
+$$\int_0^\pi x^2 \sin x \, dx = [-x^2 \cos x + 2x\sin x + 2\cos x]_0^\pi = \pi^2 - 4.$$
+</Example>
+
+---
+
+## Mean Value Theorem for Integrals
+
+<Theorem title="Mean Value Theorem for Integrals" number="6.18">
+If $f: [a,b] \to \mathbb{R}$ is continuous, then there exists $c \in [a,b]$ such that
+
+$$\int_a^b f(x) \, dx = f(c)(b - a).$$
+</Theorem>
+
+<Example title="Finding the mean value">
+For $f(x) = x^2$ on $[0,3]$: $\int_0^3 x^2 \, dx = 9$, so $f(c) \cdot 3 = 9$ gives $c^2 = 3$, hence $c = \sqrt{3} \approx 1.732$.
+</Example>
+
+<Example title="Average value of a function">
+The **average value** of $f$ on $[a,b]$ is $\frac{1}{b-a}\int_a^b f(x)\,dx$. For $f(x) = \sin x$ on $[0,\pi]$: average $= \frac{1}{\pi}\int_0^\pi \sin x \, dx = \frac{2}{\pi} \approx 0.637$.
+</Example>
+
+<Remark>
+The FTC is the bridge between the differential calculus of Chapter 5 and the integral calculus of this chapter. FTC I says that integration followed by differentiation returns the original function (at points of continuity). FTC II says that differentiation followed by integration gives a net change formula. The full proof is in the [proof page](/analysis/ch06-integration/proofs/p01-ftc-proof).
+</Remark>

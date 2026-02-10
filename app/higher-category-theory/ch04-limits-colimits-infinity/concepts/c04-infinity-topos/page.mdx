@@ -1,0 +1,152 @@
+export const metadata = {
+  title: 'Infinity-Topos — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "4. ∞-극한과 수반", href: "/higher-category-theory/ch04-limits-colimits-infinity" },
+  { label: "Concept — Infinity-Topos" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# $\infty$-Topos
+
+An $\infty$-topos is the $\infty$-categorical generalization of a Grothendieck topos. It is a presentable $\infty$-category satisfying descent: colimits are "universal" (stable under pullback). $\infty$-topoi are the natural homes for sheaf theory, cohomology, and homotopy theory in geometry. They include the $\infty$-category of spaces, sheaves on a topological space, and higher stacks on a site.
+
+---
+
+## Definition
+
+<Definition title="Infinity-topos" number="4.1">
+A presentable $\infty$-category $\mathcal{X}$ is an **$\infty$-topos** if it satisfies the following equivalent conditions:
+
+1. **(Giraud axioms)** $\mathcal{X}$ is generated under colimits by a set of objects, colimits are universal (stable under pullback), and groupoid objects are effective.
+
+2. **(Left exact localization)** $\mathcal{X}$ is equivalent to a left exact accessible localization of a presheaf $\infty$-category $\operatorname{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$.
+
+3. **(Descent)** $\mathcal{X}$ is presentable, and for every morphism $f: X \to Y$ in $\mathcal{X}$, the pullback functor $f^*: \mathcal{X}_{/Y} \to \mathcal{X}_{/X}$ preserves colimits.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="topos-spaces" title="The infinity-topos of spaces">
+The $\infty$-category $\mathcal{S}$ of spaces is the **terminal $\infty$-topos**: for every $\infty$-topos $\mathcal{X}$, there is an essentially unique geometric morphism $\mathcal{X} \to \mathcal{S}$.
+
+$\mathcal{S}$ is the sheaf $\infty$-topos on the point (the trivial site). It satisfies descent because pullbacks of spaces preserve colimits.
+</Example>
+
+<Example id="topos-sheaves-top" title="Sheaves on a topological space">
+For a topological space $X$, the $\infty$-category $\operatorname{Shv}(X)$ of sheaves of spaces on $X$ is an $\infty$-topos. Its objects are functors $\operatorname{Open}(X)^{\mathrm{op}} \to \mathcal{S}$ satisfying the sheaf condition (descent for open covers).
+
+$\operatorname{Shv}(X)$ is a left exact localization of the presheaf category $\operatorname{Fun}(\operatorname{Open}(X)^{\mathrm{op}}, \mathcal{S})$.
+
+When $X$ is a point, $\operatorname{Shv}(*) \simeq \mathcal{S}$.
+</Example>
+
+<Example id="topos-etale" title="Etale infinity-topos">
+For a scheme $X$, the **etale $\infty$-topos** $\operatorname{Shv}_{\mathrm{et}}(X)$ is the $\infty$-category of sheaves of spaces on the small etale site of $X$. This is an $\infty$-topos that contains the etale cohomology of $X$ as part of its structure.
+
+The constant sheaf functor $\mathcal{S} \to \operatorname{Shv}_{\mathrm{et}}(X)$ and the global sections functor $\Gamma: \operatorname{Shv}_{\mathrm{et}}(X) \to \mathcal{S}$ form a geometric morphism.
+</Example>
+
+<Example id="topos-stacks" title="Higher stacks">
+For a site $(\mathcal{C}, \tau)$, the $\infty$-category $\operatorname{Shv}_\tau(\mathcal{C})$ of sheaves valued in spaces is an $\infty$-topos. Its objects are **higher stacks**: homotopy-coherent presheaves satisfying descent for the topology $\tau$.
+
+When $\mathcal{C}$ is the category of schemes with the etale topology, $\operatorname{Shv}_{\mathrm{et}}(\mathbf{Sch})$ contains algebraic spaces, Deligne--Mumford stacks, and general higher stacks as objects.
+</Example>
+
+<Example id="topos-slice" title="Slice infinity-topoi">
+If $\mathcal{X}$ is an $\infty$-topos and $X \in \mathcal{X}$ is an object, the overcategory $\mathcal{X}_{/X}$ is again an $\infty$-topos. This corresponds to the "base change" or "localization" at $X$.
+
+For $\mathcal{X} = \operatorname{Shv}(B)$ and $X = f_*(1)$ for a continuous map $f: E \to B$, the slice $\mathcal{X}_{/X} \simeq \operatorname{Shv}(E)$.
+</Example>
+
+---
+
+## Descent
+
+<Example id="descent-colimits" title="Universality of colimits">
+In an $\infty$-topos, colimits are **universal**: for any map $f: X \to Y$ and any diagram $F: K \to \mathcal{X}_{/Y}$,
+
+$$f^*(\operatorname{colim} F) \simeq \operatorname{colim}(f^* \circ F)$$
+
+This means pullback preserves colimits. In particular, coproducts are **disjoint** ($X \times_{X \sqcup Y} Y \simeq \emptyset$) and pushouts are computed fiberwise.
+
+This universality is the $\infty$-categorical analogue of the descent condition for sheaves.
+</Example>
+
+<Example id="descent-effective" title="Effective groupoid objects">
+In an $\infty$-topos, every groupoid object is effective. A **groupoid object** in $\mathcal{X}$ is a simplicial object $U_\bullet: \Delta^{\mathrm{op}} \to \mathcal{X}$ satisfying the Segal condition and completeness. Effectiveness means $U_\bullet$ is the Cech nerve of its colimit: $U_\bullet \simeq \check{C}(U_0 \to |U_\bullet|)$.
+
+This is the $\infty$-categorical analogue of the fact that every equivalence relation in a Grothendieck topos is effective (has a quotient).
+</Example>
+
+---
+
+## Cohomology in Infinity-topoi
+
+<Example id="cohomology-topos" title="Cohomology">
+In an $\infty$-topos $\mathcal{X}$, the **cohomology** of an object $X$ with coefficients in an object $A$ is:
+
+$$H^n(X; A) = \pi_0 \operatorname{Map}_{\mathcal{X}}(X, K(A, n))$$
+
+where $K(A, n)$ is the Eilenberg--MacLane object. More generally, for any pointed connected object $B \in \mathcal{X}$, the nonabelian cohomology is $H^1(X; G) = \pi_0 \operatorname{Map}(X, BG)$ (classifying $G$-torsors).
+
+The mapping space $\operatorname{Map}(X, A)$ computes the "derived global sections" of $A$ over $X$, with its full homotopical information.
+</Example>
+
+<Example id="cohomology-dimension" title="Cohomological dimension">
+An $\infty$-topos has **homotopy dimension** $\leq n$ if for every $n$-connected object $A$ (i.e., $\pi_k(A) = 0$ for $k \leq n$), the mapping space $\operatorname{Map}(1, A)$ is contractible (where $1$ is the terminal object).
+
+For $\operatorname{Shv}(X)$ where $X$ is a topological space of covering dimension $\leq n$, the homotopy dimension is $\leq n$. This implies the vanishing of sheaf cohomology $H^k(X; \mathcal{F}) = 0$ for $k > n$ and locally constant sheaves $\mathcal{F}$.
+</Example>
+
+---
+
+## Geometric Morphisms
+
+<Definition title="Geometric morphism" number="4.2">
+A **geometric morphism** between $\infty$-topoi $f: \mathcal{X} \to \mathcal{Y}$ consists of an adjunction $f^* \dashv f_*$ where $f^*$ (the **inverse image**) preserves finite limits and $f_*$ (the **direct image**) preserves small colimits.
+
+A geometric morphism is an **equivalence** if $f^*$ is an equivalence of $\infty$-categories. It is **etale** if $f^*$ has a further left adjoint $f_!$ that preserves finite limits.
+</Definition>
+
+<Example id="geometric-morphism-continuous" title="Geometric morphisms from continuous maps">
+A continuous map $g: X \to Y$ of topological spaces induces a geometric morphism $g: \operatorname{Shv}(X) \to \operatorname{Shv}(Y)$ with $g^*(\mathcal{F})(U) = \mathcal{F}(g^{-1}(U))$ (inverse image) and $g_*(\mathcal{G})(V) = \mathcal{G}(g^{-1}(V))$ (direct image).
+</Example>
+
+<Example id="points" title="Points of infinity-topoi">
+A **point** of an $\infty$-topos $\mathcal{X}$ is a geometric morphism $p: \mathcal{S} \to \mathcal{X}$. The inverse image $p^*: \mathcal{X} \to \mathcal{S}$ computes the "stalk" of a sheaf at the point.
+
+For $\operatorname{Shv}(X)$, points correspond to points of $X$. For the etale $\infty$-topos of a scheme, points correspond to geometric points.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+$\infty$-topoi are the natural setting for sheaf theory and cohomology:
+
+1. An $\infty$-topos is a presentable $\infty$-category with **universal colimits** and **effective groupoids**.
+
+2. Key examples: $\mathcal{S}$ (spaces), $\operatorname{Shv}(X)$ (sheaves on a space), higher stacks on sites.
+
+3. **Cohomology** in an $\infty$-topos is computed via mapping spaces: $H^n(X; A) = \pi_0 \operatorname{Map}(X, K(A,n))$.
+
+4. **Geometric morphisms** generalize continuous maps and encode the relationship between different sites.
+
+5. $\infty$-topoi provide the foundation for derived algebraic geometry and spectral algebraic geometry.
+</Remark>

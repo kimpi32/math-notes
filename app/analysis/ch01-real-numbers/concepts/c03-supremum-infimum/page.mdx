@@ -1,0 +1,215 @@
+export const metadata = {
+  title: '상한과 하한 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "1. 실수의 체계", href: "/analysis/ch01-real-numbers" },
+  { label: "개념 - 상한과 하한" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 상한과 하한 (Supremum and Infimum)
+
+The concepts of supremum and infimum are the cornerstone of real analysis. They generalize the notions of maximum and minimum to sets that may not attain their extreme values, and they derive their power from the completeness axiom of $\mathbb{R}$.
+
+---
+
+## Upper and Lower Bounds
+
+<Definition title="Upper Bound" number="1.5">
+Let $S \subseteq \mathbb{R}$ be a nonempty set. A real number $M$ is an **upper bound** of $S$ if $x \leq M$ for every $x \in S$. If such an $M$ exists, we say $S$ is **bounded above**.
+</Definition>
+
+<Definition title="Lower Bound" number="1.6">
+A real number $m$ is a **lower bound** of $S$ if $m \leq x$ for every $x \in S$. If such an $m$ exists, we say $S$ is **bounded below**.
+</Definition>
+
+<Definition title="Bounded Set" number="1.7">
+A set $S \subseteq \mathbb{R}$ is **bounded** if it is both bounded above and bounded below. Equivalently, there exists $K > 0$ such that $|x| \leq K$ for all $x \in S$.
+</Definition>
+
+<Example title="Bounded and unbounded sets">
+1. The interval $(0, 1)$ is bounded. Any $M \geq 1$ is an upper bound and any $m \leq 0$ is a lower bound.
+
+2. The set $\mathbb{N} = \{1, 2, 3, \ldots\}$ is bounded below (by $0$, or by $1$) but not bounded above.
+
+3. The set $\{-n^2 : n \in \mathbb{N}\} = \{-1, -4, -9, -16, \ldots\}$ is bounded above (by $0$, for instance) but not bounded below.
+</Example>
+
+---
+
+## Supremum (Least Upper Bound)
+
+<Definition title="Supremum" number="1.8">
+Let $S \subseteq \mathbb{R}$ be nonempty and bounded above. The **supremum** (or **least upper bound**) of $S$, written $\sup S$, is the real number $\alpha$ satisfying:
+
+1. $\alpha$ is an upper bound of $S$: $x \leq \alpha$ for all $x \in S$.
+2. $\alpha$ is the **least** such bound: if $M$ is any upper bound of $S$, then $\alpha \leq M$.
+
+Equivalently, $\alpha = \sup S$ if and only if $\alpha$ is an upper bound of $S$ and no number smaller than $\alpha$ is an upper bound of $S$.
+</Definition>
+
+<Theorem title="Existence of Supremum (Completeness Axiom)" number="1.1">
+Every nonempty subset of $\mathbb{R}$ that is bounded above has a supremum in $\mathbb{R}$.
+
+This is the **completeness axiom** (or least upper bound property) of $\mathbb{R}$. It is the property that distinguishes $\mathbb{R}$ from $\mathbb{Q}$.
+</Theorem>
+
+<Remark>
+The completeness axiom is not a theorem to be proved from simpler axioms -- it is taken as an axiom in the axiomatic characterization of $\mathbb{R}$ as a complete ordered field. For more details, see [완비성 공리](/analysis/ch01-real-numbers/concepts/c02-completeness).
+</Remark>
+
+---
+
+## Characterization of Supremum
+
+<Theorem title="Epsilon Characterization of Supremum" number="1.2">
+Let $S \subseteq \mathbb{R}$ be nonempty and bounded above. Then $\alpha = \sup S$ if and only if:
+
+1. $x \leq \alpha$ for all $x \in S$, and
+2. For every $\varepsilon > 0$, there exists $x \in S$ such that $\alpha - \varepsilon < x$.
+
+Condition (2) says that $\alpha$ cannot be "pushed down" -- any number strictly less than $\alpha$ fails to be an upper bound.
+</Theorem>
+
+<Proof>
+($\Rightarrow$) Suppose $\alpha = \sup S$. Condition (1) holds since $\alpha$ is an upper bound. For (2), let $\varepsilon > 0$. Then $\alpha - \varepsilon < \alpha$, so $\alpha - \varepsilon$ is not an upper bound of $S$ (since $\alpha$ is the **least** upper bound). Hence there exists $x \in S$ with $x > \alpha - \varepsilon$.
+
+($\Leftarrow$) Condition (1) says $\alpha$ is an upper bound. Suppose $M < \alpha$ is another upper bound. Set $\varepsilon = \alpha - M > 0$. By (2), there exists $x \in S$ with $x > \alpha - \varepsilon = M$, contradicting $M$ being an upper bound. Hence $\alpha$ is the least upper bound.
+</Proof>
+
+<Example title="Using the epsilon characterization">
+4. Let $S = (0, 1)$. We claim $\sup S = 1$. First, $x < 1$ for all $x \in (0,1)$, so $1$ is an upper bound. For any $\varepsilon > 0$, choose $x = \max(1 - \varepsilon/2, 1/2)$. Then $x \in (0,1)$ and $x > 1 - \varepsilon$. By the epsilon characterization, $\sup S = 1$.
+
+5. Let $S = [0, 1]$. Then $\sup S = 1$ as well, since $1 \in S$ and $1$ is an upper bound. Note that $\sup S \in S$ in this case; the supremum is a maximum.
+</Example>
+
+---
+
+## Infimum (Greatest Lower Bound)
+
+<Definition title="Infimum" number="1.9">
+Let $S \subseteq \mathbb{R}$ be nonempty and bounded below. The **infimum** (or **greatest lower bound**) of $S$, written $\inf S$, is the real number $\beta$ satisfying:
+
+1. $\beta$ is a lower bound of $S$: $\beta \leq x$ for all $x \in S$.
+2. $\beta$ is the **greatest** such bound: if $m$ is any lower bound of $S$, then $m \leq \beta$.
+</Definition>
+
+<Theorem title="Existence of Infimum">
+Every nonempty subset of $\mathbb{R}$ that is bounded below has an infimum in $\mathbb{R}$.
+</Theorem>
+
+<Proof>
+Let $S$ be nonempty and bounded below. Consider the set $-S = \{-x : x \in S\}$. Since $S$ is bounded below, $-S$ is bounded above. By the completeness axiom, $\sup(-S)$ exists. One can verify that $\inf S = -\sup(-S)$.
+</Proof>
+
+<Theorem title="Epsilon Characterization of Infimum">
+$\beta = \inf S$ if and only if $\beta$ is a lower bound of $S$ and for every $\varepsilon > 0$, there exists $x \in S$ with $x < \beta + \varepsilon$.
+</Theorem>
+
+---
+
+## Supremum and Infimum vs. Maximum and Minimum
+
+<Definition title="Maximum and Minimum" number="1.10">
+If $\sup S \in S$, we write $\max S = \sup S$ and say the **maximum** exists. If $\inf S \in S$, we write $\min S = \inf S$ and say the **minimum** exists.
+</Definition>
+
+<Example title="Supremum attained vs. not attained">
+6. $S = [0, 1]$: $\sup S = 1 \in S$, so $\max S = 1$ exists.
+
+7. $S = (0, 1)$: $\sup S = 1 \notin S$, so the maximum does not exist. The supremum still exists but is not achieved.
+
+8. $S = \{1/n : n \in \mathbb{N}\} = \{1, 1/2, 1/3, 1/4, \ldots\}$: $\sup S = 1 \in S$ (attained at $n = 1$), so $\max S = 1$. Also $\inf S = 0 \notin S$ (since $1/n > 0$ for all $n$, but $1/n$ gets arbitrarily close to $0$), so the minimum does not exist.
+</Example>
+
+---
+
+## Fundamental Examples
+
+<Example title="Supremum of a set related to sqrt(2)">
+9. Let $S = \{r \in \mathbb{Q} : r^2 < 2\}$. This set is bounded above (e.g., by $2$, since $r^2 < 2$ implies $r < 2$). By the completeness axiom, $\sup S$ exists in $\mathbb{R}$. One can show $\sup S = \sqrt{2}$.
+
+This is a crucial example: the supremum exists in $\mathbb{R}$ but not in $\mathbb{Q}$, illustrating why completeness matters. The set $S$ is a nonempty subset of $\mathbb{Q}$ bounded above in $\mathbb{Q}$, but its least upper bound is $\sqrt{2} \notin \mathbb{Q}$.
+</Example>
+
+<Example title="Supremum of a sequence-defined set">
+10. Let $S = \{1 - 1/n : n \in \mathbb{N}\} = \{0, 1/2, 2/3, 3/4, \ldots\}$. Then $\sup S = 1$. Indeed, $1 - 1/n < 1$ for all $n$, and for any $\varepsilon > 0$, choose $n$ large enough that $1/n < \varepsilon$ (by the Archimedean property), giving $1 - 1/n > 1 - \varepsilon$.
+
+Also $\inf S = 0 = \min S$ (attained at $n = 1$).
+</Example>
+
+<Example title="Supremum of union and intersection">
+11. Let $A = (0, 2)$ and $B = (1, 3)$. Then:
+- $\sup(A \cup B) = \sup(0, 3) = 3 = \max(\sup A, \sup B)$
+- $\sup(A \cap B) = \sup(1, 2) = 2 \leq \min(\sup A, \sup B) = 2$
+
+In general, $\sup(A \cup B) = \max(\sup A, \sup B)$ and $\sup(A \cap B) \leq \min(\sup A, \sup B)$ when $A \cap B \neq \emptyset$.
+</Example>
+
+<Example title="Supremum involving arithmetic">
+12. Let $A = \{1/n : n \in \mathbb{N}\}$ and $B = \{1 - 1/m : m \in \mathbb{N}\}$. Define $A + B = \{a + b : a \in A, b \in B\}$. Then $\sup(A + B) = \sup A + \sup B = 1 + 1 = 2$. This is a general fact: for nonempty bounded sets $A$ and $B$, $\sup(A + B) = \sup A + \sup B$.
+
+To verify: $a + b \leq \sup A + \sup B$ for all $a \in A$, $b \in B$. Conversely, for $\varepsilon > 0$, pick $a_0 \in A$ with $a_0 > \sup A - \varepsilon/2$ and $b_0 \in B$ with $b_0 > \sup B - \varepsilon/2$. Then $a_0 + b_0 > \sup A + \sup B - \varepsilon$.
+</Example>
+
+---
+
+## Important Properties
+
+<Theorem title="Supremum of Scalar Multiples">
+Let $S$ be nonempty and bounded. For $c > 0$: $\sup(cS) = c \cdot \sup S$ and $\inf(cS) = c \cdot \inf S$.
+
+For $c < 0$: $\sup(cS) = c \cdot \inf S$ and $\inf(cS) = c \cdot \sup S$.
+
+Here $cS = \{cx : x \in S\}$.
+</Theorem>
+
+<Example title="Negation reverses sup and inf">
+13. Let $S = (1, 3)$. Then $\sup S = 3$ and $\inf S = 1$. The set $-S = (-3, -1)$ has $\sup(-S) = -1 = -\inf S$ and $\inf(-S) = -3 = -\sup S$.
+</Example>
+
+<Theorem title="Supremum and Subsets">
+If $A \subseteq B$ and both are nonempty and bounded above, then $\sup A \leq \sup B$.
+
+Similarly, if $A \subseteq B$ and both are bounded below, then $\inf B \leq \inf A$.
+</Theorem>
+
+<Example title="Subset ordering of suprema">
+14. $\{1/n : n \in \mathbb{N}\} \subset (0, 2)$. We have $\sup\{1/n\} = 1 \leq 2 = \sup(0,2)$, consistent with the subset property.
+</Example>
+
+---
+
+## Supremum and Infimum for Unbounded Sets
+
+<Remark>
+By convention, if $S$ is nonempty and not bounded above, we write $\sup S = +\infty$. If $S$ is not bounded below, we write $\inf S = -\infty$. Also, $\sup \emptyset = -\infty$ and $\inf \emptyset = +\infty$ (since every real number is vacuously an upper/lower bound of the empty set).
+</Remark>
+
+<Example title="Infinite supremum and infimum">
+15. $\sup \mathbb{N} = +\infty$ (the natural numbers are unbounded above).
+16. $\inf \mathbb{Z} = -\infty$ (the integers are unbounded below).
+17. $\sup \emptyset = -\infty$ and $\inf \emptyset = +\infty$ by convention.
+</Example>
+
+---
+
+## Connection to the Archimedean Property
+
+<Remark>
+The supremum concept is intimately connected to the [아르키메데스 성질](/analysis/ch01-real-numbers/theorems/t01-archimedean). The Archimedean property can be proved using the completeness axiom (i.e., the existence of suprema). Conversely, many applications of the supremum -- such as showing $\inf\{1/n : n \in \mathbb{N}\} = 0$ -- rely on the Archimedean property.
+
+This interplay between suprema and the Archimedean property is a recurring theme throughout analysis. See the [아르키메데스 성질의 증명](/analysis/ch01-real-numbers/proofs/p01-archimedean-proof) for details.
+</Remark>

@@ -1,0 +1,260 @@
+export const metadata = {
+  title: 'Dihedral Groups — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Concept — Dihedral Groups" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Dihedral Groups
+
+The **dihedral group** $D_n$ is the symmetry group of a regular $n$-gon. It is one of the most concrete and important families of non-abelian groups, providing a rich source of examples for subgroups, normal subgroups, conjugacy classes, and group presentations.
+
+---
+
+## Definition
+
+<Definition title="Dihedral group" number="1.13">
+The **dihedral group** $D_n$ (for $n \geq 3$) is the group of symmetries (rotations and reflections) of a regular $n$-gon. It has order $|D_n| = 2n$ and consists of:
+
+- $n$ **rotations**: $r^0 = e, r, r^2, \ldots, r^{n-1}$, where $r$ is rotation by $2\pi/n$
+- $n$ **reflections**: $s, rs, r^2s, \ldots, r^{n-1}s$, where $s$ is a fixed reflection
+</Definition>
+
+<Remark title="Notation warning">
+Some authors write $D_{2n}$ instead of $D_n$ for the dihedral group of order $2n$. We follow the convention where $D_n$ is the symmetry group of the regular $n$-gon, so $|D_n| = 2n$.
+</Remark>
+
+---
+
+## Group Presentation
+
+<Definition title="Presentation of D_n" number="1.14">
+The dihedral group $D_n$ has the **presentation**:
+
+$$D_n = \langle r, s \mid r^n = e, \; s^2 = e, \; srs = r^{-1} \rangle$$
+
+The relation $srs = r^{-1}$ (equivalently, $sr = r^{-1}s$ or $rs = sr^{-1}$) captures the geometric fact that a reflection reverses the direction of rotation.
+</Definition>
+
+<Remark>
+Every element of $D_n$ can be written uniquely as $r^i$ or $r^i s$ for $0 \leq i \leq n - 1$. The multiplication rules are:
+
+- $r^i \cdot r^j = r^{i+j \bmod n}$
+- $r^i s \cdot r^j = r^{i-j \bmod n} s$
+- $r^i \cdot r^j s = r^{i+j \bmod n} s$
+- $r^i s \cdot r^j s = r^{i-j \bmod n}$
+
+These follow from the fundamental relation $sr^k = r^{-k}s$.
+</Remark>
+
+---
+
+## Small Dihedral Groups
+
+<Example id="d3" title="D_3: the triangle group">
+$D_3$ is the symmetry group of an equilateral triangle. It has $2 \cdot 3 = 6$ elements.
+
+Label the vertices 1, 2, 3. Then:
+
+- $e$: identity
+- $r = (1\;2\;3)$: rotation by $120°$
+- $r^2 = (1\;3\;2)$: rotation by $240°$
+- $s = (2\;3)$: reflection fixing vertex 1
+- $rs = (1\;2)$: reflection fixing vertex 3 (rotation then reflection)
+- $r^2s = (1\;3)$: reflection fixing vertex 2
+
+As permutations, $D_3 \cong S_3$. This is the only case where $D_n \cong S_n$.
+</Example>
+
+<Example id="d4" title="D_4: the square group">
+$D_4$ is the symmetry group of a square with vertices at positions 1, 2, 3, 4 (labeled clockwise). It has $2 \cdot 4 = 8$ elements:
+
+**Rotations:**
+
+- $e$: identity
+- $r = (1\;2\;3\;4)$: rotation by $90°$
+- $r^2 = (1\;3)(2\;4)$: rotation by $180°$
+- $r^3 = (1\;4\;3\;2)$: rotation by $270°$
+
+**Reflections:**
+
+- $s = (2\;4)$: reflection across the vertical axis
+- $rs = (1\;2)(3\;4)$: reflection across a diagonal
+- $r^2s = (1\;3)$: reflection across the horizontal axis
+- $r^3s = (1\;4)(2\;3)$: reflection across the other diagonal
+
+$D_4$ is non-abelian: $rs \neq sr$. It has order 8, the same as $\mathbb{Z}/8\mathbb{Z}$ and $\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ and $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ and the quaternion group $Q_8$, but $D_4$ is isomorphic to none of these.
+</Example>
+
+<Example id="d5" title="D_5: the pentagon group">
+$D_5$ has $2 \cdot 5 = 10$ elements: 5 rotations and 5 reflections. Since 5 is odd, all reflections are conjugate to each other (they all have the same cycle type as permutations).
+
+The subgroups of $D_5$ are:
+
+- $\{e\}$ (order 1)
+- Five subgroups of order 2: $\langle s \rangle$, $\langle rs \rangle$, $\langle r^2s \rangle$, $\langle r^3s \rangle$, $\langle r^4s \rangle$
+- One subgroup of order 5: $\langle r \rangle \cong \mathbb{Z}/5\mathbb{Z}$ (this is normal in $D_5$)
+- $D_5$ itself (order 10)
+
+Since 5 is prime, $\langle r \rangle$ has no proper non-trivial subgroups.
+</Example>
+
+<Example id="d6" title="D_6: the hexagon group">
+$D_6$ has $2 \cdot 6 = 12$ elements. The rotation subgroup $\langle r \rangle \cong \mathbb{Z}/6\mathbb{Z}$ has subgroups of orders 1, 2, 3, 6. The full subgroup lattice of $D_6$ is notably rich, including:
+
+- The center $Z(D_6) = \{e, r^3\}$ (rotation by $180°$ commutes with everything)
+- Three subgroups isomorphic to $D_3$ (symmetries of inscribed triangles)
+- Three subgroups isomorphic to $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$
+</Example>
+
+---
+
+## Properties of Dihedral Groups
+
+<Theorem title="Center of D_n" number="1.22">
+The center of $D_n$ is:
+
+- $Z(D_n) = \{e\}$ if $n$ is odd
+- $Z(D_n) = \{e, r^{n/2}\}$ if $n$ is even
+
+In particular, $D_n$ is non-abelian for all $n \geq 3$.
+</Theorem>
+
+<Proof>
+An element $r^k$ commutes with $s$ iff $r^k s = s r^k$, i.e., $r^k s = r^{-k}s$, i.e., $r^{2k} = e$, i.e., $n \mid 2k$.
+
+If $n$ is odd, this forces $n \mid k$, so $k = 0$ (only the identity). If $n$ is even, $k = 0$ or $k = n/2$.
+
+No reflection $r^i s$ is central: $r(r^is) = r^{i+1}s$ but $(r^is)r = r^{i-1}s$, and $r^{i+1}s = r^{i-1}s$ iff $r^2 = e$ iff $n = 2$ (excluded since $n \geq 3$).
+</Proof>
+
+<Example id="center-d4" title="Center of D_4">
+$Z(D_4) = \{e, r^2\} = \{e, (1\;3)(2\;4)\}$. The rotation by $180°$ commutes with all symmetries of the square. The quotient $D_4/Z(D_4)$ has order 4 and is isomorphic to $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$ (the Klein four-group).
+</Example>
+
+<Theorem title="Conjugacy classes of D_n" number="1.23">
+The conjugacy classes of $D_n$ depend on the parity of $n$.
+
+**For $n$ odd:**
+
+- $\{e\}$
+- $(n-1)/2$ classes of rotations: $\{r^k, r^{-k}\}$ for $k = 1, \ldots, (n-1)/2$
+- One class of all $n$ reflections
+
+**For $n$ even:**
+
+- $\{e\}$ and $\{r^{n/2}\}$ (each a singleton)
+- $(n-2)/2$ classes of rotations: $\{r^k, r^{-k}\}$ for $k = 1, \ldots, (n-2)/2$
+- Two classes of reflections, each of size $n/2$
+</Theorem>
+
+<Example id="conjugacy-d4" title="Conjugacy classes of D_4">
+$D_4$ has 5 conjugacy classes:
+
+- $\{e\}$
+- $\{r^2\}$ (the center)
+- $\{r, r^3\}$ (rotations by $90°$ and $270°$)
+- $\{s, r^2s\}$ (reflections across horizontal/vertical axes)
+- $\{rs, r^3s\}$ (reflections across diagonals)
+
+Sizes: $1 + 1 + 2 + 2 + 2 = 8 = |D_4|$.
+</Example>
+
+---
+
+## Subgroups and Normal Subgroups
+
+<Example id="subgroups-d4" title="All subgroups of D_4">
+$D_4$ has 10 subgroups:
+
+**Order 1:** $\{e\}$
+
+**Order 2:** $\langle r^2 \rangle$, $\langle s \rangle$, $\langle r^2s \rangle$, $\langle rs \rangle$, $\langle r^3s \rangle$
+
+**Order 4:** $\langle r \rangle \cong \mathbb{Z}/4\mathbb{Z}$, $\{e, r^2, s, r^2s\} \cong V_4$, $\{e, r^2, rs, r^3s\} \cong V_4$
+
+**Order 8:** $D_4$
+
+The normal subgroups are: $\{e\}$, $\langle r^2 \rangle$, $\langle r \rangle$, $\{e, r^2, s, r^2s\}$, $\{e, r^2, rs, r^3s\}$, and $D_4$ itself. Note that $\langle s \rangle$ is **not** normal: $r s r^{-1} = r^{-2}s \neq s$ (for $n \geq 3$).
+</Example>
+
+<Theorem title="Normal subgroups of D_n" number="1.24">
+The rotation subgroup $\langle r \rangle$ is always normal in $D_n$ (it has index 2). Its subgroups are also normal in $D_n$ when $n$ is odd, but not necessarily when $n$ is even.
+</Theorem>
+
+---
+
+## Dihedral Groups as Matrix Groups
+
+<Example id="matrix-rep" title="D_n as a matrix group">
+$D_n$ can be realized as a subgroup of $\mathrm{GL}_2(\mathbb{R})$. Let $\theta = 2\pi/n$. Then:
+
+- $r$ is the rotation matrix with entries $r_{11} = \cos\theta$, $r_{12} = -\sin\theta$, $r_{21} = \sin\theta$, $r_{22} = \cos\theta$
+- $s$ is the reflection matrix with entries $s_{11} = 1$, $s_{12} = 0$, $s_{21} = 0$, $s_{22} = -1$
+
+For $D_3$ (i.e., $n = 3$, $\theta = 2\pi/3$): $r$ has entries $r_{11} = -1/2$, $r_{12} = -\sqrt{3}/2$, $r_{21} = \sqrt{3}/2$, $r_{22} = -1/2$.
+
+One can verify $r^3 = I$, $s^2 = I$, and $srs = r^{-1}$.
+</Example>
+
+---
+
+## Dihedral Groups in Geometry
+
+<Example id="symmetry-molecules" title="Molecular symmetry">
+Dihedral groups appear in chemistry as symmetry groups of molecules:
+
+- **Water** ($\mathrm{H}_2\mathrm{O}$): $D_1$ (one reflection plane — not really dihedral in our convention, but the concept)
+- **Boron trifluoride** ($\mathrm{BF}_3$): $D_3$ (triangular planar)
+- **Cyclopentadienyl** ($\mathrm{C}_5\mathrm{H}_5$): $D_5$ (pentagonal)
+- **Benzene** ($\mathrm{C}_6\mathrm{H}_6$): $D_6$ (hexagonal)
+</Example>
+
+<Example id="wallpaper" title="Dihedral groups in tiling patterns">
+Regular tilings of the plane have symmetry groups containing dihedral groups:
+
+- The square tiling has local $D_4$ symmetry at each vertex
+- The hexagonal tiling has local $D_6$ symmetry at each vertex
+- The triangular tiling has local $D_6$ symmetry at each vertex (six triangles meet)
+</Example>
+
+<Example id="d-infinity" title="The infinite dihedral group">
+$D_\infty = \langle r, s \mid s^2 = e, \; srs = r^{-1} \rangle$ (no relation $r^n = e$) is the **infinite dihedral group**. It is the symmetry group of the integer line $\mathbb{Z}$, with $r$ as translation by 1 and $s$ as reflection about 0.
+
+$D_\infty$ is isomorphic to the semidirect product $\mathbb{Z} \rtimes \mathbb{Z}/2\mathbb{Z}$.
+</Example>
+
+---
+
+## The Quaternion Group: A Contrast
+
+<Example id="q8" title="The quaternion group Q_8">
+The **quaternion group** $Q_8 = \{\pm 1, \pm i, \pm j, \pm k\}$ has order 8, like $D_4$. Its multiplication is governed by the rules $i^2 = j^2 = k^2 = ijk = -1$.
+
+Although $|Q_8| = |D_4| = 8$, these groups are **not isomorphic**:
+
+- In $D_4$, there are 5 elements of order 2 ($r^2$, $s$, $rs$, $r^2s$, $r^3s$).
+- In $Q_8$, there is only 1 element of order 2 ($-1$).
+
+$Q_8$ is the smallest group that is not isomorphic to any dihedral group or cyclic group.
+</Example>
+
+---
+
+## Summary
+
+The dihedral group $D_n$ concretely realizes abstract group theory through geometry: every axiom, every subgroup, every conjugacy class has a visible geometric meaning. The interplay between the cyclic rotation subgroup $\langle r \rangle$ and the reflection $s$ — captured by the relation $srs = r^{-1}$ — makes $D_n$ the prototypical example of a **semidirect product**. Understanding $D_n$ thoroughly provides essential intuition for the general theory of groups.

@@ -1,0 +1,148 @@
+export const metadata = {
+  title: '최대최소 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "4. 연속성", href: "/analysis/ch04-continuity" },
+  { label: "정리 - 최대최소 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 최대최소 정리 (Extreme Value Theorem)
+
+The Extreme Value Theorem (EVT) guarantees that a continuous function on a closed bounded interval always attains its maximum and minimum values. This is fundamental for optimization.
+
+---
+
+## Statement
+
+<Theorem title="Extreme Value Theorem" number="4.2">
+Let $f : [a, b] \to \mathbb{R}$ be continuous. Then $f$ attains its maximum and minimum on $[a, b]$. That is, there exist $x_*, x^* \in [a, b]$ such that
+
+$$f(x_*) \leq f(x) \leq f(x^*) \quad \text{for all } x \in [a, b].$$
+
+Equivalently, $\sup_{x \in [a,b]} f(x)$ and $\inf_{x \in [a,b]} f(x)$ are attained.
+</Theorem>
+
+---
+
+## Proof outline
+
+<Proof>
+**Step 1 (Boundedness).** We first show $f$ is bounded. Suppose not: for each $n$, there exists $x_n \in [a,b]$ with $|f(x_n)| > n$. By Bolzano--Weierstrass, $(x_n)$ has a convergent subsequence $x_{n_k} \to c \in [a,b]$. By continuity, $f(x_{n_k}) \to f(c)$, contradicting $|f(x_{n_k})| > n_k \to \infty$.
+
+**Step 2 (Maximum is attained).** Let $M = \sup\{f(x) : x \in [a,b]\}$. By definition of supremum, for each $n$ there exists $x_n$ with $f(x_n) > M - \frac{1}{n}$. By Bolzano--Weierstrass, $x_{n_k} \to c \in [a,b]$. By continuity, $f(c) = \lim f(x_{n_k}) = M$.
+
+The minimum case is analogous (or apply the maximum result to $-f$).
+</Proof>
+
+---
+
+## Applications
+
+<Example title="Maximum of a quadratic">
+1. $f(x) = -x^2 + 4x + 1$ on $[0, 5]$. By EVT, the maximum is attained. The vertex is at $x = 2$, $f(2) = 5$. We must also check endpoints: $f(0) = 1$, $f(5) = -4$. Maximum is $5$ at $x = 2$.
+</Example>
+
+<Example title="Distance to a point">
+2. Let $K = [0, 1]$ and $p = 2$. The function $f(x) = |x - 2|$ on $[0,1]$ is continuous. By EVT, the minimum is attained: $f(1) = 1$ is the minimum. The nearest point in $[0,1]$ to $p = 2$ is $x = 1$.
+</Example>
+
+<Example title="Optimization with constraints">
+3. Minimize $f(x, y) = x^2 + y^2$ subject to $x + y = 1$, $x, y \in [0, 1]$. Substituting $y = 1 - x$: minimize $g(x) = x^2 + (1-x)^2 = 2x^2 - 2x + 1$ on $[0, 1]$. By EVT, minimum exists. $g'(x) = 4x - 2 = 0$ at $x = 1/2$, giving $g(1/2) = 1/2$.
+</Example>
+
+---
+
+## Counterexamples: why the hypotheses matter
+
+<Example title="Open interval: no maximum">
+4. $f(x) = x$ on $(0, 1)$: $\sup f = 1$ but there is no $x \in (0,1)$ with $f(x) = 1$. The interval must be **closed**.
+</Example>
+
+<Example title="Unbounded interval: no maximum">
+5. $f(x) = \frac{x}{1+x}$ on $[0, \infty)$: $\sup f = 1$ but $f(x) < 1$ for all $x$. The interval must be **bounded**.
+</Example>
+
+<Example title="Discontinuous function: no maximum">
+6. $f(x) = x$ for $x \in [0, 1)$, $f(1) = 0$. Then $\sup f = 1$ but $f$ never achieves $1$. The function must be **continuous**.
+</Example>
+
+<Example title="Bounded but not closed">
+7. $f(x) = \sin(1/x)$ on $(0, 1]$: continuous, $\sup f = 1$, and $f(\frac{2}{pi}) = 1$, so the max is actually attained here. But on the domain $(0, 1/\pi)$, $f$ can get arbitrarily close to $1$ without reaching it.
+</Example>
+
+---
+
+## Applications in calculus and analysis
+
+<Example title="Rolle's theorem setup">
+8. If $f : [a,b] \to \mathbb{R}$ is continuous with $f(a) = f(b)$, the EVT gives points $x_*$ (min) and $x^*$ (max). If both are endpoints, then $f$ is constant. Otherwise, an extremum occurs in the interior, which (if $f$ is differentiable) gives $f'(c) = 0$. This is [Rolle's theorem](/analysis/ch05-differentiation/theorems/t01-rolle).
+</Example>
+
+<Example title="Norm attainment">
+9. If $V$ is a finite-dimensional normed space and $K \subseteq V$ is compact, every continuous function $f : K \to \mathbb{R}$ attains its maximum and minimum. In infinite dimensions, this can fail (the unit ball is not compact).
+</Example>
+
+<Example title="Weierstrass approximation context">
+10. The EVT ensures that $\|p - f\|_\infty = \max_{x \in [a,b]} |p(x) - f(x)|$ is attained for any continuous $f$ and polynomial $p$. This is needed to make the Weierstrass approximation theorem precise.
+</Example>
+
+---
+
+## Connection to compactness
+
+<Theorem title="EVT via compactness">
+The EVT is a consequence of a more general fact: the continuous image of a compact set is compact. Since $[a,b]$ is compact and $f$ is continuous, $f([a,b])$ is compact in $\mathbb{R}$, hence closed and bounded. A closed bounded subset of $\mathbb{R}$ contains its supremum and infimum.
+</Theorem>
+
+<Example title="Compact domain ensures EVT">
+11. Any continuous $f : K \to \mathbb{R}$ on a compact set $K \subseteq \mathbb{R}^n$ attains its extrema. For example, $f(x, y) = x^2 + y^2$ on the closed disk $\overline{D} = \{x^2 + y^2 \leq 1\}$.
+</Example>
+
+<Example title="EVT for sequences">
+12. Discrete version: a function $f$ on a finite set $S$ always attains its max and min (trivially). The EVT extends this to the "continuous" setting of $[a,b]$ via compactness. The Bolzano--Weierstrass theorem is the bridge.
+</Example>
+
+---
+
+## Applications to inequalities
+
+<Example title="AM-GM via EVT">
+13. To prove $\sqrt{xy} \leq \frac{x+y}{2}$ for $x, y > 0$: fix $s = x + y$ and maximize $f(x) = x(s-x)$ on $[0, s]$. By EVT, the max exists. $f'(x) = s - 2x = 0$ gives $x = s/2$, so $f(x) \leq f(s/2) = s^2/4$. Hence $xy \leq (x+y)^2/4$.
+</Example>
+
+<Example title="Isoperimetric inequality setup">
+14. Among all curves of fixed length $L$ enclosing an area, the circle maximizes the area. The EVT (in an appropriate function space with compactness) guarantees the maximum is attained. The maximizer is then identified as the circle.
+</Example>
+
+---
+
+## Boundedness lemma (prerequisite)
+
+<Remark>
+The proof of EVT has two steps: first show $f$ is **bounded** (Step 1), then show the supremum is **attained** (Step 2). Some texts prove boundedness as a separate lemma:
+
+**Boundedness Theorem**: A continuous function on $[a,b]$ is bounded.
+
+Both steps use the Bolzano--Weierstrass theorem (or equivalently, the compactness of $[a,b]$). Step 2 additionally uses the definition of supremum.
+</Remark>
+
+---
+
+## Historical note
+
+<Remark>
+The EVT was proved by Weierstrass in the 1860s as part of his program to put calculus on rigorous foundations. Before Weierstrass, mathematicians used the theorem implicitly, often assuming that "a continuous function on an interval always has a maximum." The modern proof via Bolzano--Weierstrass demonstrates how compactness arguments work, and is a model for many existence proofs in analysis and optimization.
+</Remark>

@@ -1,0 +1,114 @@
+export const metadata = {
+  title: 'Classical Derived Functors — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Concept — Classical Derived Functors" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Classical Derived Functors (R^nF, L_nF)
+
+Classical derived functors measure the failure of a functor to be exact. Given a left exact functor $F$, its right derived functors $R^nF$ capture the "higher-order" information lost when $F$ fails to preserve surjections. Dually, the left derived functors $L_nF$ of a right exact functor use projective resolutions. This construction is the foundation of Ext, Tor, sheaf cohomology, and group cohomology.
+
+---
+
+## Definitions
+
+<Definition title="Right Derived Functor" number="7.5">
+Let $F : \mathcal{A} \to \mathcal{B}$ be a left exact functor between abelian categories, with $\mathcal{A}$ having enough injectives. The **$n$-th right derived functor** $R^nF : \mathcal{A} \to \mathcal{B}$ is defined by:
+
+$$R^nF(A) = H^n(F(I^\bullet))$$
+
+where $0 \to A \to I^0 \to I^1 \to \cdots$ is an injective resolution of $A$. This is independent of the choice of resolution (up to canonical isomorphism).
+</Definition>
+
+<Definition title="Left Derived Functor" number="7.6">
+Let $G : \mathcal{A} \to \mathcal{B}$ be a right exact functor with $\mathcal{A}$ having enough projectives. The **$n$-th left derived functor** $L_nG : \mathcal{A} \to \mathcal{B}$ is defined by:
+
+$$L_nG(A) = H_{-n}(G(P_\bullet)) = H^{-n}(G(P_\bullet))$$
+
+where $\cdots \to P_1 \to P_0 \to A \to 0$ is a projective resolution of $A$.
+</Definition>
+
+<Definition title="Effaceable and Universal Delta-Functor" number="7.7">
+A **cohomological delta-functor** is a sequence of functors $(T^n)_{n \geq 0}$ with connecting morphisms $\delta^n : T^n(C) \to T^{n+1}(A)$ for each short exact sequence $0 \to A \to B \to C \to 0$, forming long exact sequences. It is **universal** if it is the unique such up to natural isomorphism. The right derived functors $(R^nF)_{n \geq 0}$ form a universal delta-functor.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="R^nF and left exactness" id="r0-left-exact">
+For a left exact functor $F$, we have $R^0F \cong F$: since $F$ preserves the exactness of $0 \to A \to I^0 \to I^1$, we get $H^0(F(I^\bullet)) = \ker(F(I^0) \to F(I^1)) \cong F(A)$. The higher $R^nF$ measure the failure of $F$ to be exact.
+</Example>
+
+<Example title="Sheaf cohomology" id="sheaf-cohomology">
+The global sections functor $\Gamma(X, -) : \mathbf{Sh}(X) \to \mathbf{Ab}$ is left exact. Its right derived functors are sheaf cohomology: $H^n(X, \mathcal{F}) = R^n\Gamma(X, \mathcal{F})$. Compute by taking an injective resolution $\mathcal{F} \to \mathcal{I}^\bullet$ and setting $H^n(X, \mathcal{F}) = H^n(\Gamma(X, \mathcal{I}^\bullet))$.
+</Example>
+
+<Example title="Group cohomology" id="group-cohomology">
+For a group $G$, the functor $(-)^G : G\text{-}\mathbf{Mod} \to \mathbf{Ab}$ sending $M$ to the $G$-fixed points $M^G = \mathrm{Hom}_{\mathbb{Z}[G]}(\mathbb{Z}, M)$ is left exact. Its right derived functors give group cohomology: $H^n(G, M) = R^n((-)^G)(M) = \mathrm{Ext}^n_{\mathbb{Z}[G]}(\mathbb{Z}, M)$.
+</Example>
+
+<Example title="Lie algebra cohomology" id="lie-cohomology">
+For a Lie algebra $\mathfrak{g}$ and a $\mathfrak{g}$-module $M$, the functor of $\mathfrak{g}$-invariants $M \mapsto M^{\mathfrak{g}} = \mathrm{Hom}_{U(\mathfrak{g})}(k, M)$ is left exact. Its right derived functors give Lie algebra cohomology: $H^n(\mathfrak{g}, M) = \mathrm{Ext}^n_{U(\mathfrak{g})}(k, M)$.
+</Example>
+
+<Example title="L_nG and right exactness" id="l0-right-exact">
+For a right exact functor $G$, we have $L_0G \cong G$. The classical example: $G = M \otimes_R -$ is right exact, and $L_n(M \otimes_R -)(N) = \mathrm{Tor}_n^R(M, N)$.
+</Example>
+
+<Example title="Derived functors vanish on adapted objects" id="vanish-adapted">
+$R^nF(I) = 0$ for all $n > 0$ when $I$ is injective (since $I$ is its own injective resolution). More generally, $R^nF(A) = 0$ for $n > 0$ if $A$ is **$F$-acyclic** (i.e., $R^nF(A) = 0$ for $n \geq 1$). Acyclic objects can be used in place of injectives for computing derived functors.
+</Example>
+
+<Example title="Cech cohomology and derived functors" id="cech">
+For a good cover $\mathcal{U}$ of $X$, Cech cohomology $\check{H}^n(\mathcal{U}, \mathcal{F})$ agrees with the derived functor cohomology $H^n(X, \mathcal{F})$ when $\mathcal{F}$ is a sheaf on a paracompact Hausdorff space or when the cover is acyclic for $\mathcal{F}$.
+</Example>
+
+<Example title="de Rham cohomology as derived functor" id="de-rham">
+On a smooth manifold $X$, the de Rham complex $\Omega^\bullet_X$ is a resolution of the constant sheaf $\mathbb{R}_X$ (by the Poincare lemma). Hence $H^n_{\mathrm{dR}}(X) = H^n(\Gamma(X, \Omega^\bullet)) \cong H^n(X, \mathbb{R}_X) = R^n\Gamma(X, \mathbb{R}_X)$.
+</Example>
+
+<Example title="Long exact sequence of derived functors" id="les-derived">
+A short exact sequence $0 \to A \to B \to C \to 0$ in $\mathcal{A}$ induces a long exact sequence
+
+$$0 \to F(A) \to F(B) \to F(C) \to R^1F(A) \to R^1F(B) \to R^1F(C) \to R^2F(A) \to \cdots$$
+
+This is the fundamental computational tool: knowing $R^nF$ on two of three terms determines the third (up to extensions).
+</Example>
+
+<Example title="Higher direct images" id="higher-direct">
+For a morphism $f : X \to Y$ of topological spaces (or schemes), the direct image $f_* : \mathbf{Sh}(X) \to \mathbf{Sh}(Y)$ is left exact. Its right derived functors $R^nf_*$ are the **higher direct image sheaves**. The stalk $(R^nf_*\mathcal{F})_y \cong H^n(f^{-1}(y), \mathcal{F}|_{f^{-1}(y)})$ (under mild hypotheses).
+</Example>
+
+<Example title="Derived functors and dimension" id="dimension">
+The **cohomological dimension** of an object $A$ with respect to $F$ is $\mathrm{cd}_F(A) = \sup\{n : R^nF(A) \neq 0\}$. For sheaf cohomology on an $n$-dimensional manifold, Grothendieck's vanishing theorem gives $H^k(X, \mathcal{F}) = 0$ for $k > n$.
+</Example>
+
+<Example title="Derived category perspective" id="derived-cat-perspective">
+In the derived category, the total right derived functor $RF : D^+(\mathcal{A}) \to D^+(\mathcal{B})$ is defined by $RF(A^\bullet) = F(I^\bullet)$ where $A^\bullet \to I^\bullet$ is an injective resolution in $D^+$. The classical derived functors are recovered as $R^nF(A) = H^n(RF(A[0]))$.
+</Example>
+
+---
+
+<Theorem title="Universality of derived functors" number="7.2">
+The sequence $(R^nF)_{n \geq 0}$ with connecting morphisms from the long exact sequence forms a universal cohomological delta-functor. Any other cohomological delta-functor $(T^n)_{n \geq 0}$ with $T^0 \cong F$ admits a unique natural transformation $R^nF \to T^n$ for all $n$.
+</Theorem>
+
+<Remark title="Beyond classical derived functors">
+The classical approach defines $R^nF$ one degree at a time. The modern approach defines the **total derived functor** $RF$ as a single functor on derived categories, from which $R^nF = H^n \circ RF$. The total derived functor remembers more information: it captures all the $R^nF$ simultaneously, together with extension data between them.
+</Remark>

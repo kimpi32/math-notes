@@ -1,0 +1,178 @@
+export const metadata = {
+  title: 'Gram-Schmidt Process — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "6. 내적공간", href: "/linear-algebra/ch06-inner-product-spaces" },
+  { label: "Theorem — Gram-Schmidt Process" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Gram-Schmidt Process
+
+The Gram--Schmidt process is an algorithm that takes any linearly independent set of vectors and produces an orthogonal (or orthonormal) set spanning the same subspace. It guarantees the existence of orthonormal bases in every finite-dimensional inner product space and is the constructive backbone of many algorithms in numerical linear algebra.
+
+---
+
+## Statement
+
+<Theorem title="Gram-Schmidt Orthogonalization" number="6.3">
+Let $V$ be an inner product space and $\{v_1, v_2, \ldots, v_k\}$ a linearly independent set. Define recursively:
+
+$$u_1 = v_1, \quad u_j = v_j - \sum_{i=1}^{j-1} \frac{\langle v_j, u_i \rangle}{\langle u_i, u_i \rangle} u_i \quad \text{for } j = 2, \ldots, k.$$
+
+Then $\{u_1, u_2, \ldots, u_k\}$ is an orthogonal set with $\operatorname{span}\{u_1, \ldots, u_j\} = \operatorname{span}\{v_1, \ldots, v_j\}$ for each $j$.
+
+Normalizing: $e_j = u_j / \|u_j\|$ gives an orthonormal set.
+</Theorem>
+
+<Remark title="Why it works">
+At each step, $u_j = v_j - \operatorname{proj}_{\operatorname{span}\{u_1,\ldots,u_{j-1}\}}(v_j)$ subtracts the component of $v_j$ in the previously constructed orthogonal directions, leaving only the component perpendicular to all previous vectors. Since $v_j \notin \operatorname{span}\{v_1, \ldots, v_{j-1}\}$ (linear independence), this perpendicular component is nonzero.
+</Remark>
+
+---
+
+## Worked examples
+
+<Example id="gs-R3" title="Gram-Schmidt in R^3">
+Input: $v_1 = (1, 1, 0)$, $v_2 = (1, 0, 1)$, $v_3 = (0, 1, 1)$.
+
+**Step 1:** $u_1 = v_1 = (1, 1, 0)$.
+
+**Step 2:** $u_2 = v_2 - \frac{\langle v_2, u_1 \rangle}{\langle u_1, u_1 \rangle} u_1 = (1, 0, 1) - \frac{1}{2}(1, 1, 0) = (\frac{1}{2}, -\frac{1}{2}, 1)$.
+
+Check: $\langle u_1, u_2 \rangle = \frac{1}{2} - \frac{1}{2} + 0 = 0$ ✓.
+
+**Step 3:** $u_3 = v_3 - \frac{\langle v_3, u_1 \rangle}{\langle u_1, u_1 \rangle} u_1 - \frac{\langle v_3, u_2 \rangle}{\langle u_2, u_2 \rangle} u_2$.
+
+$\langle v_3, u_1 \rangle = 0 + 1 + 0 = 1$, $\langle v_3, u_2 \rangle = 0 - \frac{1}{2} + 1 = \frac{1}{2}$, $\langle u_2, u_2 \rangle = \frac{1}{4} + \frac{1}{4} + 1 = \frac{3}{2}$.
+
+$u_3 = (0, 1, 1) - \frac{1}{2}(1, 1, 0) - \frac{1/2}{3/2}(\frac{1}{2}, -\frac{1}{2}, 1) = (0, 1, 1) - (\frac{1}{2}, \frac{1}{2}, 0) - \frac{1}{3}(\frac{1}{2}, -\frac{1}{2}, 1) = (-\frac{2}{3}, \frac{2}{3}, \frac{2}{3})$.
+
+Check: $\langle u_1, u_3 \rangle = -\frac{2}{3} + \frac{2}{3} = 0$ ✓, $\langle u_2, u_3 \rangle = -\frac{1}{3} - \frac{1}{3} + \frac{2}{3} = 0$ ✓.
+
+**Normalize:** $e_1 = \frac{1}{\sqrt{2}}(1, 1, 0)$, $e_2 = \frac{1}{\sqrt{3/2}}(\frac{1}{2}, -\frac{1}{2}, 1) = \frac{1}{\sqrt{6}}(1, -1, 2)$, $e_3 = \frac{1}{\sqrt{4/3}} \cdot (-\frac{2}{3}, \frac{2}{3}, \frac{2}{3}) = \frac{1}{\sqrt{3}}(-1, 1, 1)$.
+</Example>
+
+<Example id="gs-R2" title="Gram-Schmidt in R^2">
+Input: $v_1 = (3, 4)$, $v_2 = (1, 0)$.
+
+$u_1 = (3, 4)$, $e_1 = \frac{1}{5}(3, 4)$.
+
+$u_2 = (1, 0) - \frac{\langle (1,0), (3,4) \rangle}{25}(3, 4) = (1, 0) - \frac{3}{25}(3, 4) = (\frac{16}{25}, -\frac{12}{25})$.
+
+$e_2 = \frac{25}{20} \cdot (\frac{16}{25}, -\frac{12}{25}) = \frac{1}{5}(4, -3)$.
+
+The ONB is $\{\frac{1}{5}(3, 4), \frac{1}{5}(4, -3)\}$.
+</Example>
+
+<Example id="gs-polynomial" title="Gram-Schmidt for polynomials">
+$V = \mathcal{P}_2$ with $\langle f, g \rangle = \int_{-1}^{1} f(x)g(x)\,dx$, starting from $\{1, x, x^2\}$.
+
+$u_1 = 1$, $\|u_1\|^2 = 2$.
+
+$u_2 = x - \frac{\langle x, 1 \rangle}{\langle 1, 1 \rangle} \cdot 1 = x - \frac{0}{2} = x$ (since $\int_{-1}^1 x\,dx = 0$).
+
+$u_3 = x^2 - \frac{\langle x^2, 1 \rangle}{2} - \frac{\langle x^2, x \rangle}{\langle x, x \rangle} x = x^2 - \frac{2/3}{2} - 0 = x^2 - \frac{1}{3}$.
+
+These are (up to normalization) the Legendre polynomials: $P_0 = 1$, $P_1 = x$, $P_2 = x^2 - 1/3$.
+</Example>
+
+---
+
+## QR decomposition
+
+<Theorem title="QR decomposition" number="6.4">
+Every $m \times n$ matrix $A$ with linearly independent columns can be factored as $A = QR$, where:
+- $Q$ is an $m \times n$ matrix with orthonormal columns,
+- $R$ is an $n \times n$ upper triangular matrix with positive diagonal entries.
+
+The columns of $Q$ are the orthonormalized versions of the columns of $A$ (via Gram--Schmidt), and $R$ records the coefficients.
+</Theorem>
+
+<Example id="qr-example" title="QR decomposition of a 3x2 matrix">
+$A = \begin{pmatrix} 1 & 1 \\ 1 & 0 \\ 0 & 1 \end{pmatrix}$.
+
+Column 1: $v_1 = (1, 1, 0)$, $\|v_1\| = \sqrt{2}$, $q_1 = \frac{1}{\sqrt{2}}(1, 1, 0)$.
+
+Column 2: $v_2 = (1, 0, 1)$, $\langle v_2, q_1 \rangle = \frac{1}{\sqrt{2}}$, $u_2 = (1, 0, 1) - \frac{1}{\sqrt{2}} q_1 = (1, 0, 1) - (\frac{1}{2}, \frac{1}{2}, 0) = (\frac{1}{2}, -\frac{1}{2}, 1)$.
+
+$\|u_2\| = \sqrt{3/2}$, $q_2 = \frac{1}{\sqrt{6}}(1, -1, 2)$.
+
+$Q = \begin{pmatrix} 1/\sqrt{2} & 1/\sqrt{6} \\ 1/\sqrt{2} & -1/\sqrt{6} \\ 0 & 2/\sqrt{6} \end{pmatrix}$, $R = \begin{pmatrix} \sqrt{2} & 1/\sqrt{2} \\ 0 & \sqrt{3/2} \end{pmatrix}$.
+</Example>
+
+<Example id="qr-square" title="QR decomposition of a square matrix">
+$A = \begin{pmatrix} 1 & 2 \\ 0 & 3 \end{pmatrix}$.
+
+$v_1 = (1, 0)$, $q_1 = (1, 0)$. $v_2 = (2, 3)$, $u_2 = (2, 3) - 2(1, 0) = (0, 3)$, $q_2 = (0, 1)$.
+
+$Q = I$, $R = A$. When $A$ already has orthogonal columns (in the first column direction), QR is trivial.
+
+For $A = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$: $q_1 = \frac{1}{\sqrt{2}}(1, 1)$, $\langle v_2, q_1 \rangle = 0$, so $q_2 = \frac{1}{\sqrt{2}}(1, -1)$.
+
+$Q = \frac{1}{\sqrt{2}}\begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$, $R = \begin{pmatrix} \sqrt{2} & 0 \\ 0 & \sqrt{2} \end{pmatrix}$.
+</Example>
+
+---
+
+## Applications
+
+<Example id="least-squares" title="Least squares via QR">
+The least-squares solution to $Ax = b$ (overdetermined system) is $x = R^{-1}Q^Tb$, which is numerically more stable than the normal equations $A^TAx = A^Tb$.
+
+For $A = \begin{pmatrix} 1 & 1 \\ 1 & 0 \\ 0 & 1 \end{pmatrix}$, $b = \begin{pmatrix} 1 \\ 2 \\ 0 \end{pmatrix}$: using the QR from before, $Q^Tb = \begin{pmatrix} 3/\sqrt{2} \\ -1/\sqrt{6} \end{pmatrix}$, then solve $Rx = Q^Tb$.
+</Example>
+
+<Example id="orthogonal-basis-existence" title="Every inner product space has an ONB">
+Starting from any basis $\{v_1, \ldots, v_n\}$, Gram--Schmidt produces an ONB $\{e_1, \ldots, e_n\}$. This proves:
+
+**Every finite-dimensional inner product space has an orthonormal basis.**
+
+This existence theorem is nonconstructive in the sense that the result depends on the choice of starting basis, but the algorithm itself is fully constructive.
+</Example>
+
+<Example id="projection-formula" title="Projection via Gram-Schmidt">
+To find $\operatorname{proj}_W(v)$ where $W = \operatorname{span}\{w_1, w_2\}$: first orthonormalize $\{w_1, w_2\}$ to $\{e_1, e_2\}$ via Gram--Schmidt, then:
+
+$$\operatorname{proj}_W(v) = \langle v, e_1 \rangle e_1 + \langle v, e_2 \rangle e_2.$$
+
+For $W = \operatorname{span}\{(1,0,1), (0,1,1)\}$ and $v = (1, 1, 1)$: after Gram--Schmidt, $e_1 = \frac{1}{\sqrt{2}}(1,0,1)$, $e_2 = \frac{1}{\sqrt{6}}(-1, 2, 1)$.
+
+$\operatorname{proj}_W(v) = \frac{2}{\sqrt{2}} e_1 + \frac{2}{\sqrt{6}} e_2 = (1, 0, 1) + \frac{1}{3}(-1, 2, 1) = (\frac{2}{3}, \frac{2}{3}, \frac{4}{3})$.
+</Example>
+
+---
+
+## Numerical stability
+
+<Remark title="Modified Gram-Schmidt">
+The classical Gram--Schmidt algorithm can suffer from numerical instability due to floating-point errors. The **modified Gram--Schmidt** algorithm orthogonalizes against each previously computed vector one at a time (rather than computing all projections simultaneously), and is significantly more stable:
+
+For $j = 1, \ldots, k$: set $u_j = v_j$, then for $i = 1, \ldots, j-1$: update $u_j \leftarrow u_j - \langle u_j, e_i \rangle e_i$.
+
+Mathematically equivalent, but numerically superior. Householder reflections provide even better stability for the QR decomposition.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Gram-Schmidt as the fundamental construction">
+The Gram--Schmidt process is the algorithmic heart of inner product space theory:
+- It **proves existence** of orthonormal bases.
+- It **computes** the QR factorization, used in solving least-squares problems and eigenvalue algorithms.
+- It **connects** the abstract theory (inner product, orthogonality) to computational practice.
+- The process preserves the "progressive spans": $\operatorname{span}\{e_1, \ldots, e_j\} = \operatorname{span}\{v_1, \ldots, v_j\}$ for all $j$.
+</Remark>

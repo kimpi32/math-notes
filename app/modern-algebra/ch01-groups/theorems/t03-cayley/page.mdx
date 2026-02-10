@@ -1,0 +1,196 @@
+export const metadata = {
+  title: "Cayley's Theorem — Modern Algebra — Math Notes",
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "1. 군", href: "/modern-algebra/ch01-groups" },
+  { label: "Theorem — Cayley's Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Cayley's Theorem
+
+Cayley's theorem is a foundational result that shows every abstract group can be concretely realized as a group of permutations. While this embedding is often too large to be practical, the theorem is conceptually important: it tells us that the theory of abstract groups is, in principle, a part of the theory of permutation groups.
+
+---
+
+## Statement
+
+<Theorem title="Cayley's Theorem" number="1.37">
+Every group $G$ is isomorphic to a subgroup of the symmetric group $\mathrm{Sym}(G)$. If $G$ is finite with $|G| = n$, then $G$ is isomorphic to a subgroup of $S_n$.
+</Theorem>
+
+---
+
+## Proof
+
+<Definition title="Left regular representation" number="1.19">
+For each $g \in G$, define the **left multiplication map** $\lambda_g : G \to G$ by:
+
+$$\lambda_g(x) = gx$$
+
+The map $\lambda_g$ is a bijection (a permutation of $G$), since it has the inverse $\lambda_{g^{-1}}$.
+</Definition>
+
+<Proof title="Proof of Cayley's Theorem">
+Define $\Phi : G \to \mathrm{Sym}(G)$ by $\Phi(g) = \lambda_g$.
+
+**$\Phi$ is a homomorphism:** For all $g, h \in G$ and $x \in G$:
+
+$$\Phi(gh)(x) = \lambda_{gh}(x) = (gh)x = g(hx) = \lambda_g(\lambda_h(x)) = (\Phi(g) \circ \Phi(h))(x)$$
+
+So $\Phi(gh) = \Phi(g) \circ \Phi(h)$.
+
+**$\Phi$ is injective:** If $\Phi(g) = \Phi(h)$, then $\lambda_g = \lambda_h$, so $gx = hx$ for all $x \in G$. Taking $x = e$: $g = h$.
+
+By the First Isomorphism Theorem, $G \cong \Phi(G) \leq \mathrm{Sym}(G)$.
+</Proof>
+
+---
+
+## Examples
+
+<Example id="z3-cayley" title="Cayley embedding of Z/3Z">
+$G = \mathbb{Z}/3\mathbb{Z} = \{0, 1, 2\}$. The left multiplication maps are:
+
+- $\lambda_0$: $0 \mapsto 0, 1 \mapsto 1, 2 \mapsto 2$ (identity)
+- $\lambda_1$: $0 \mapsto 1, 1 \mapsto 2, 2 \mapsto 0$ (cycle $(0\;1\;2)$)
+- $\lambda_2$: $0 \mapsto 2, 1 \mapsto 0, 2 \mapsto 1$ (cycle $(0\;2\;1)$)
+
+So $\Phi(\mathbb{Z}/3\mathbb{Z}) = \{e, (0\;1\;2), (0\;2\;1)\} \leq S_3$, which is $A_3 \cong \mathbb{Z}/3\mathbb{Z}$.
+</Example>
+
+<Example id="v4-cayley" title="Cayley embedding of the Klein four-group">
+$V_4 = \{e, a, b, c\}$ with $a^2 = b^2 = c^2 = e$, $ab = c$.
+
+- $\lambda_e = \mathrm{id}$
+- $\lambda_a$: $e \mapsto a, a \mapsto e, b \mapsto c, c \mapsto b$, i.e., $(e\;a)(b\;c)$
+- $\lambda_b$: $e \mapsto b, a \mapsto c, b \mapsto e, c \mapsto a$, i.e., $(e\;b)(a\;c)$
+- $\lambda_c$: $e \mapsto c, a \mapsto b, b \mapsto a, c \mapsto e$, i.e., $(e\;c)(a\;b)$
+
+Relabeling $e \to 1, a \to 2, b \to 3, c \to 4$:
+
+$\Phi(V_4) = \{e, (1\;2)(3\;4), (1\;3)(2\;4), (1\;4)(2\;3)\} \leq S_4$
+
+This is the Klein four-group inside $A_4$.
+</Example>
+
+<Example id="z4-cayley" title="Cayley embedding of Z/4Z">
+$G = \mathbb{Z}/4\mathbb{Z} = \{0, 1, 2, 3\}$.
+
+- $\lambda_0 = e$
+- $\lambda_1$: $0 \to 1 \to 2 \to 3 \to 0$, i.e., $(0\;1\;2\;3)$
+- $\lambda_2$: $0 \to 2, 1 \to 3, 2 \to 0, 3 \to 1$, i.e., $(0\;2)(1\;3)$
+- $\lambda_3$: $0 \to 3 \to 2 \to 1 \to 0$, i.e., $(0\;3\;2\;1)$
+
+So $\Phi(\mathbb{Z}/4\mathbb{Z}) = \langle (0\;1\;2\;3) \rangle \leq S_4$.
+</Example>
+
+<Example id="s3-cayley" title="Cayley embedding of S_3">
+$S_3$ has 6 elements, so Cayley embeds $S_3$ into $S_6$. This embedding is much larger than necessary (since $S_3$ is already a permutation group on 3 elements). This illustrates a weakness of Cayley's theorem: the embedding is often far from optimal.
+</Example>
+
+<Example id="z2-cayley" title="Cayley embedding of Z/2Z">
+$G = \{0, 1\}$. The embedding is:
+
+- $\lambda_0 = e$
+- $\lambda_1 = (0\;1)$
+
+So $\mathbb{Z}/2\mathbb{Z} \cong \{e, (0\;1)\} \leq S_2$.
+</Example>
+
+---
+
+## Right Regular Representation
+
+<Example id="right-regular" title="Right regular representation">
+Alternatively, we can use right multiplication: $\rho_g(x) = xg^{-1}$. The map $g \mapsto \rho_g$ is also an injective homomorphism $G \to \mathrm{Sym}(G)$.
+
+The inverse $g^{-1}$ is needed to make $\rho$ a homomorphism (without it, $x \mapsto xg$ would be an anti-homomorphism).
+
+For $G = \mathbb{Z}/3\mathbb{Z}$:
+
+- $\rho_0 = e$
+- $\rho_1$: $x \mapsto x + (-1) = x - 1$, so $0 \to 2, 1 \to 0, 2 \to 1$, i.e., $(0\;2\;1)$
+- $\rho_2$: $x \mapsto x - 2$, so $0 \to 1, 1 \to 2, 2 \to 0$, i.e., $(0\;1\;2)$
+
+The image is the same subgroup as before, but the embedding differs: $\rho_1 = \Phi(2)$ and $\rho_2 = \Phi(1)$.
+</Example>
+
+---
+
+## Generalizations and Improvements
+
+<Theorem title="Cayley's theorem with actions" number="1.38">
+If $G$ acts faithfully on a set $X$ (meaning the only element acting as the identity is $e$), then $G$ embeds into $\mathrm{Sym}(X)$.
+</Theorem>
+
+<Example id="d4-better" title="Better embedding: D_4 into S_4 instead of S_8">
+$D_4$ has order 8, so Cayley gives an embedding $D_4 \hookrightarrow S_8$. But $D_4$ acts faithfully on the 4 vertices of a square, giving an embedding $D_4 \hookrightarrow S_4$. This is much more efficient.
+
+In general, if $H \leq G$ with $[G:H] = k$ and $\bigcap_{g \in G} gHg^{-1} = \{e\}$, then $G$ embeds into $S_k$ (via the action on cosets).
+</Example>
+
+<Example id="efficient-embedding" title="Efficient embedding via subgroups">
+Let $G = \mathbb{Z}/6\mathbb{Z}$ and $H = \{0, 3\}$. Then $[G : H] = 3$, and the action of $G$ on the 3 cosets gives a homomorphism $G \to S_3$. The kernel is the largest normal subgroup of $G$ contained in $H$, which is $H$ itself (since $G$ is abelian, $H$ is normal). So the map is not injective.
+
+However, taking $H = \{0, 2, 4\}$ (index 2): the action on cosets gives $G \to S_2$, which has kernel $H$. The quotient $G/H \cong \mathbb{Z}/2\mathbb{Z}$ embeds into $S_2$.
+</Example>
+
+<Example id="cayley-infinite" title="Cayley for infinite groups">
+Cayley's theorem applies to infinite groups too. For instance, $(\mathbb{Z}, +)$ embeds into $\mathrm{Sym}(\mathbb{Z})$ via $n \mapsto (k \mapsto k + n)$. Each $\lambda_n$ is a permutation of $\mathbb{Z}$ (a "translation").
+
+This gives $\mathbb{Z}$ as a subgroup of $\mathrm{Sym}(\mathbb{Z})$, the group of all bijections $\mathbb{Z} \to \mathbb{Z}$.
+</Example>
+
+---
+
+## Historical and Conceptual Significance
+
+<Example id="historical" title="Historical context">
+Arthur Cayley proved this theorem in 1854. Before abstract group theory was formalized, groups were primarily studied as permutation groups (following Galois, Cauchy, and Jordan). Cayley's theorem justified this approach by showing that every abstract group is a permutation group.
+
+However, the abstract viewpoint (axioms, homomorphisms, quotients) ultimately proved more powerful. Cayley's theorem is now seen more as a foundational sanity check than a practical tool.
+</Example>
+
+<Remark title="Connection to the Yoneda Lemma">
+In category theory, Cayley's theorem is a special case of the **Yoneda lemma**. A group $G$ can be viewed as a one-object category $\mathbf{B}G$. A functor $\mathbf{B}G \to \mathbf{Set}$ is a $G$-set. The Yoneda embedding $\mathbf{B}G \hookrightarrow [\mathbf{B}G^{\mathrm{op}}, \mathbf{Set}]$ sends the unique object to the "representable" $G$-set, which is exactly the left regular representation. The faithfulness of Yoneda = the injectivity of Cayley.
+</Remark>
+
+<Example id="smallest-sn" title="Smallest S_n containing a given group">
+What is the smallest $n$ such that $G$ embeds into $S_n$?
+
+- $\mathbb{Z}/p\mathbb{Z}$: $n = p$ (Cayley is optimal here)
+- $\mathbb{Z}/4\mathbb{Z}$: $n = 4$ (Cayley gives this)
+- $V_4$: $n = 4$ (Cayley gives this)
+- $\mathbb{Z}/6\mathbb{Z}$: $n = 5$ (not 6!). Embed via $\mathbb{Z}/6\mathbb{Z} \hookrightarrow S_3 \times S_2 \hookrightarrow S_5$.
+- $D_4$: $n = 4$ (much better than Cayley's $n = 8$)
+- $Q_8$: $n = 8$ (Cayley is essentially optimal; $Q_8$ does not embed into $S_7$)
+</Example>
+
+<Example id="cayley-graph" title="The Cayley graph">
+Given a group $G$ and a generating set $S$, the **Cayley graph** $\mathrm{Cay}(G, S)$ is the directed graph with vertex set $G$ and edges $g \to gs$ for each $g \in G, s \in S$.
+
+For $G = \mathbb{Z}/4\mathbb{Z}$ with $S = \{1\}$: the Cayley graph is a directed 4-cycle $0 \to 1 \to 2 \to 3 \to 0$.
+
+For $G = D_3$ with $S = \{r, s\}$: the Cayley graph is a hexagonal structure with 6 vertices and 12 directed edges.
+
+The left regular representation is exactly the action of $G$ on its own Cayley graph by left multiplication.
+</Example>
+
+---
+
+## Summary
+
+Cayley's theorem establishes that every group is isomorphic to a permutation group, via the left regular representation $g \mapsto \lambda_g$. While the resulting embedding into $S_{|G|}$ is often inefficient, the theorem has deep conceptual significance: it bridges the abstract and concrete approaches to group theory. More efficient embeddings come from considering faithful group actions on smaller sets, and the theorem generalizes to the Yoneda lemma in category theory.

@@ -1,0 +1,170 @@
+export const metadata = {
+  title: 'Root Test — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "7. 급수", href: "/analysis/ch07-series" },
+  { label: "정리 — 근판정법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Root Test
+
+The root test (Cauchy's test) determines convergence by examining the $n$th root of $|a_n|$. It is theoretically stronger than the ratio test and handles a wider class of series.
+
+---
+
+## Statement
+
+<Theorem title="Root test (Cauchy)" number="7.20">
+Let $\sum a_n$ be a series and define
+
+$$\alpha = \limsup_{n \to \infty} |a_n|^{1/n}.$$
+
+1. If $\alpha < 1$, the series converges absolutely.
+2. If $\alpha > 1$, the series diverges.
+3. If $\alpha = 1$, the test is inconclusive.
+</Theorem>
+
+<Proof>
+**(1)** Suppose $\alpha < 1$. Choose $r$ with $\alpha < r < 1$. By definition of limsup, there exists $N$ such that $|a_n|^{1/n} < r$ for all $n \geq N$, i.e., $|a_n| < r^n$. Since $\sum r^n$ converges (geometric, $r < 1$), comparison gives convergence.
+
+**(2)** If $\alpha > 1$, then $|a_n|^{1/n} > 1$ for infinitely many $n$, so $|a_n| > 1$ infinitely often. Thus $a_n \not\to 0$ and the series diverges.
+</Proof>
+
+---
+
+## Examples: convergence
+
+<Example title="Geometric-type series">
+$\sum_{n=1}^\infty \left(\frac{n}{2n+1}\right)^n$:
+
+$$|a_n|^{1/n} = \frac{n}{2n+1} \to \frac{1}{2} < 1.$$
+
+The series converges by the root test.
+</Example>
+
+<Example title="Exponential decay">
+$\sum_{n=1}^\infty \frac{n^{10}}{2^n}$:
+
+$$|a_n|^{1/n} = \frac{n^{10/n}}{2} \to \frac{1}{2} < 1$$
+
+since $n^{10/n} = e^{(10 \ln n)/n} \to e^0 = 1$. Converges.
+</Example>
+
+<Example title="Series with nth power">
+$\sum_{n=1}^\infty \left(\frac{3n+1}{4n-2}\right)^n$:
+
+$$|a_n|^{1/n} = \frac{3n+1}{4n-2} \to \frac{3}{4} < 1.$$
+
+Converges.
+</Example>
+
+<Example title="Mixed exponential terms">
+$\sum_{n=1}^\infty \left(\frac{1}{n}\right)^n$:
+
+$$|a_n|^{1/n} = \frac{1}{n} \to 0 < 1.$$
+
+Converges. In fact the terms decrease extremely rapidly: $a_{10} = 10^{-10}$.
+</Example>
+
+---
+
+## Examples: divergence
+
+<Example title="Root exceeds 1">
+$\sum_{n=1}^\infty \left(\frac{n+1}{n}\right)^{n^2}$:
+
+$$|a_n|^{1/n} = \left(\frac{n+1}{n}\right)^n = \left(1 + \frac{1}{n}\right)^n \to e > 1.$$
+
+Diverges.
+</Example>
+
+<Example title="Another divergent example">
+$\sum_{n=1}^\infty \left(\frac{2n}{n+1}\right)^n$:
+
+$$|a_n|^{1/n} = \frac{2n}{n+1} \to 2 > 1.$$
+
+Diverges.
+</Example>
+
+---
+
+## The inconclusive case
+
+<Example title="Root test fails for p-series">
+$\sum \frac{1}{n^p}$: $|a_n|^{1/n} = n^{-p/n} = e^{(-p \ln n)/n} \to e^0 = 1$. Inconclusive for all $p$, same as the ratio test.
+</Example>
+
+<Example title="Root test inconclusive for 1/(n ln²n)">
+$\sum_{n=2}^\infty \frac{1}{n (\ln n)^2}$: $|a_n|^{1/n} = \frac{1}{n^{1/n} (\ln n)^{2/n}} \to 1$.
+
+Inconclusive, though the series converges (by integral test).
+</Example>
+
+---
+
+## Root test vs ratio test
+
+<Theorem title="The root test is at least as strong as the ratio test" number="7.21">
+For any sequence $(a_n)$ with $a_n > 0$:
+
+$$\liminf \frac{a_{n+1}}{a_n} \leq \liminf a_n^{1/n} \leq \limsup a_n^{1/n} \leq \limsup \frac{a_{n+1}}{a_n}.$$
+
+In particular, if the ratio test concludes convergence or divergence, so does the root test.
+</Theorem>
+
+<Example title="Root test succeeds where ratio test fails">
+Define $a_n = 2^{-n}$ for odd $n$ and $a_n = 3^{-n}$ for even $n$.
+
+**Ratio test**: $a_{n+1}/a_n$ alternates between $\frac{2^n}{3^{n+1}} = \frac{1}{3}(2/3)^n \to 0$ and $\frac{3^n}{2^{n+1}} = \frac{1}{2}(3/2)^n \to \infty$. The limsup is $\infty$ and liminf is $0$, so the ratio test is inconclusive.
+
+**Root test**: $|a_n|^{1/n}$ alternates between $1/2$ and $1/3$. So $\limsup |a_n|^{1/n} = 1/2 < 1$. Converges by the root test.
+</Example>
+
+<Example title="Both tests agree on standard examples">
+For $\sum \frac{x^n}{n!}$:
+
+**Ratio**: $|a_{n+1}/a_n| = |x|/(n+1) \to 0$. Converges.
+
+**Root**: $|a_n|^{1/n} = |x|/(n!)^{1/n} \to 0$ (since $(n!)^{1/n} \to \infty$). Converges.
+
+Both give the same conclusion. The ratio test is easier to compute here.
+</Example>
+
+---
+
+## Condensation test
+
+<Theorem title="Cauchy condensation test" number="7.22">
+If $(a_n)$ is a decreasing sequence of nonnegative terms, then
+
+$$\sum_{n=1}^\infty a_n \text{ converges} \iff \sum_{k=0}^\infty 2^k a_{2^k} \text{ converges}.$$
+</Theorem>
+
+<Example title="p-series via condensation">
+$a_n = 1/n^p$: $2^k a_{2^k} = 2^k / 2^{kp} = 2^{k(1-p)} = (2^{1-p})^k$.
+
+This is a geometric series with ratio $r = 2^{1-p}$, which converges iff $r < 1$, i.e., $1 - p < 0$, i.e., $p > 1$.
+</Example>
+
+<Example title="Logarithmic series via condensation">
+$a_n = \frac{1}{n \ln n}$ for $n \geq 2$: $2^k a_{2^k} = \frac{2^k}{2^k \cdot k \ln 2} = \frac{1}{k \ln 2}$.
+
+So $\sum 2^k a_{2^k} = \frac{1}{\ln 2} \sum \frac{1}{k}$, which diverges. Hence $\sum \frac{1}{n \ln n}$ diverges.
+</Example>
+
+<Remark>
+The root test is the theoretically optimal test based on the growth rate of $|a_n|$. Its connection to the radius of convergence of power series ($1/R = \limsup |a_n|^{1/n}$) makes it especially natural in that context. For computational convenience, the ratio test is often preferred when the ratio $|a_{n+1}/a_n|$ simplifies nicely.
+</Remark>

@@ -1,0 +1,114 @@
+export const metadata = {
+  title: 'Total Derived Functor RF, LF — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "7. 유도 함자", href: "/category-theory/ch07-derived-functors" },
+  { label: "Concept — Total Derived Functor RF, LF" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Total Derived Functor RF, LF
+
+The total derived functor lifts a functor between abelian categories to a functor between their derived categories. Unlike the classical approach (which produces a sequence of functors $R^nF$), the total derived functor $RF$ is a single exact functor that encodes all derived functors simultaneously, together with the extension data between them.
+
+---
+
+## Definitions
+
+<Definition title="Total Right Derived Functor" number="7.12">
+Let $F : \mathcal{A} \to \mathcal{B}$ be a left exact functor between abelian categories, with $\mathcal{A}$ having enough injectives. The **total right derived functor** is the exact functor
+
+$$RF : D^+(\mathcal{A}) \to D^+(\mathcal{B})$$
+
+defined by $RF(X^\bullet) = F(I^\bullet)$ where $X^\bullet \to I^\bullet$ is a quasi-isomorphism to a complex of injectives. The classical derived functors are recovered: $R^nF(A) = H^n(RF(A[0]))$.
+</Definition>
+
+<Definition title="Total Left Derived Functor" number="7.13">
+For a right exact functor $G : \mathcal{A} \to \mathcal{B}$ with $\mathcal{A}$ having enough projectives:
+
+$$LG : D^-(\mathcal{A}) \to D^-(\mathcal{B})$$
+
+is defined by $LG(X^\bullet) = G(P^\bullet)$ where $P^\bullet \to X^\bullet$ is a quasi-isomorphism from a complex of projectives. Then $L_nG(A) = H^{-n}(LG(A[0]))$.
+</Definition>
+
+<Definition title="Adapted Class" number="7.14">
+A class of objects $\mathcal{R} \subseteq \mathcal{A}$ is **adapted** (or **$F$-acyclic**) to a left exact functor $F$ if: (1) every object of $\mathcal{A}$ embeds into an object of $\mathcal{R}$, and (2) $F$ sends acyclic complexes in $K^+(\mathcal{R})$ to acyclic complexes. Then $RF$ can be computed using $\mathcal{R}$-resolutions instead of injective resolutions.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="RF applied to a single object" id="rf-single">
+For $A \in \mathcal{A}$ viewed as $A[0] \in D^+(\mathcal{A})$, $RF(A[0]) = F(I^\bullet)$ where $A \to I^\bullet$ is an injective resolution. The cohomology $H^n(RF(A[0])) = R^nF(A)$ recovers the classical derived functors. But $RF(A[0])$ is the entire complex, not just its cohomology.
+</Example>
+
+<Example title="RF remembers more than R^nF" id="rf-more">
+The complex $RF(A)$ contains extension data lost by the individual $R^nF(A)$. For example, the class of $RF(A)$ in $D^+(\mathcal{B})$ determines not just the groups $R^nF(A)$ but also the differentials in spectral sequences computing them. A complex is not determined by its cohomology groups alone.
+</Example>
+
+<Example title="Total derived Hom and RHom" id="rhom">
+The total derived functor of $\mathrm{Hom}_R(A, -)$ is $R\mathrm{Hom}_R(A, -) : D^+(R) \to D^+(\mathbf{Ab})$. For complexes $A^\bullet, B^\bullet$, $R\mathrm{Hom}(A^\bullet, B^\bullet)$ is a complex whose cohomology gives $\mathrm{Ext}^n(A^\bullet, B^\bullet) = H^n(R\mathrm{Hom}(A^\bullet, B^\bullet))$.
+</Example>
+
+<Example title="Derived tensor product" id="derived-tensor">
+The total left derived functor of $- \otimes_R -$ is $- \otimes^L_R - : D^-(R) \times D^-(R) \to D^-(R)$. For modules, $A \otimes^L_R B = P_\bullet \otimes_R B$ where $P_\bullet \to A$ is a projective resolution. Then $\mathrm{Tor}_n(A, B) = H^{-n}(A \otimes^L B)$.
+</Example>
+
+<Example title="Derived global sections" id="derived-global">
+$R\Gamma(X, -) : D^+(\mathbf{Sh}(X)) \to D^+(\mathbf{Ab})$ is the total derived functor of $\Gamma(X, -)$. For a sheaf $\mathcal{F}$, $R\Gamma(X, \mathcal{F})$ is a complex whose cohomology is $H^n(X, \mathcal{F})$. One can compute using flasque, soft, or fine resolutions (not just injective).
+</Example>
+
+<Example title="Derived pushforward" id="derived-push">
+For $f : X \to Y$, $Rf_* : D^+(\mathbf{Sh}(X)) \to D^+(\mathbf{Sh}(Y))$ is the total derived functor of $f_*$. The stalk formula $(R^nf_*\mathcal{F})_y = H^n(f^{-1}(y), \mathcal{F})$ comes from $H^n$ of the total derived functor. The Leray spectral sequence $H^p(Y, R^qf_*\mathcal{F}) \Rightarrow H^{p+q}(X, \mathcal{F})$ arises from the composition $R\Gamma_Y \circ Rf_* = R\Gamma_X$.
+</Example>
+
+<Example title="Composition of derived functors" id="composition">
+For composable left exact functors $F : \mathcal{A} \to \mathcal{B}$ and $G : \mathcal{B} \to \mathcal{C}$, there is a natural morphism $R(G \circ F) \to RG \circ RF$. The Grothendieck spectral sequence arises from the failure of this to be an isomorphism at the cohomological level: $R^pG(R^qF(A)) \Rightarrow R^{p+q}(G \circ F)(A)$.
+</Example>
+
+<Example title="Acyclic resolutions" id="acyclic">
+Flasque sheaves are $\Gamma$-acyclic, so $R\Gamma(X, \mathcal{F})$ can be computed using a flasque resolution. Similarly, soft sheaves on a paracompact space and fine sheaves on a smooth manifold are $\Gamma$-acyclic. The de Rham complex $\Omega^\bullet_X$ is a fine resolution of $\mathbb{R}_X$, so $R\Gamma(X, \mathbb{R}_X) \simeq \Gamma(X, \Omega^\bullet_X)$.
+</Example>
+
+<Example title="Derived pullback" id="derived-pullback">
+For $f : X \to Y$, the inverse image $f^* : \mathbf{Sh}(Y) \to \mathbf{Sh}(X)$ is exact, so $Lf^* = f^*$ (no higher derived functors). But for $\mathcal{O}_X$-modules, $f^* = f^{-1}(-) \otimes_{f^{-1}\mathcal{O}_Y} \mathcal{O}_X$ involves a tensor product, giving $Lf^* = f^{-1}(-) \otimes^L_{f^{-1}\mathcal{O}_Y} \mathcal{O}_X$ with higher Tor terms.
+</Example>
+
+<Example title="Adjunction at the derived level" id="derived-adjunction">
+If $F \dashv G$ is an adjunction with $F$ right exact and $G$ left exact, then under suitable hypotheses $LF \dashv RG$ is an adjunction at the derived level: $\mathrm{Hom}_{D(\mathcal{B})}(LF(X), Y) \cong \mathrm{Hom}_{D(\mathcal{A})}(X, RG(Y))$. The derived tensor-Hom adjunction $A \otimes^L - \dashv R\mathrm{Hom}(A, -)$ is the prototypical example.
+</Example>
+
+<Example title="Dualizing complex" id="dualizing">
+On a scheme $X$, the dualizing complex $\omega_X^\bullet \in D^b_c(X)$ represents the functor $R\mathrm{Hom}(-, \omega_X^\bullet)$, which gives Grothendieck duality: $Rf_* R\mathrm{Hom}(\mathcal{F}, \omega_X^\bullet) \cong R\mathrm{Hom}(Rf_!\mathcal{F}, \omega_Y^\bullet)$. For a smooth variety, $\omega_X^\bullet = \omega_X[\dim X]$.
+</Example>
+
+<Example title="Derived categories of coherent sheaves" id="derived-coh">
+The functor $R\mathrm{Hom}(\mathcal{E}, -) : D^b(\mathrm{Coh}(X)) \to D^b(\mathrm{Coh}(X))$ for a vector bundle $\mathcal{E}$ is computed using a locally free resolution of $\mathcal{E}$. The Fourier-Mukai transform $\Phi_{\mathcal{P}} = Rp_{2*}(p_1^*(-) \otimes^L \mathcal{P})$ is a composition of total derived functors.
+</Example>
+
+<Example title="Projection formula" id="projection">
+For $f : X \to Y$ proper and $\mathcal{F} \in D^b(X)$, $\mathcal{G} \in D^b(Y)$: the projection formula states $Rf_*(\mathcal{F} \otimes^L f^*\mathcal{G}) \cong Rf_*\mathcal{F} \otimes^L \mathcal{G}$. This is an identity of total derived functors, not just of individual cohomology groups.
+</Example>
+
+---
+
+<Theorem title="Existence and uniqueness of total derived functors" number="7.5">
+Let $F : \mathcal{A} \to \mathcal{B}$ be a left exact functor with $\mathcal{A}$ having enough injectives. Then $RF : D^+(\mathcal{A}) \to D^+(\mathcal{B})$ exists and is unique (up to canonical isomorphism) as the right derived functor of $F$ in the sense of derived categories. It satisfies the universal property: $RF$ is initial among exact functors $G : D^+(\mathcal{A}) \to D^+(\mathcal{B})$ equipped with a natural transformation $Q \circ F \to G \circ Q$ (where $Q$ is the localization functor).
+</Theorem>
+
+<Remark title="Why total derived functors matter">
+The passage from classical derived functors $R^nF$ to total derived functors $RF$ is analogous to the passage from cohomology groups $H^n$ to the derived category. Individual groups lose information about extensions and differentials; the total object preserves them. This is why derived categories and total derived functors are essential for the Grothendieck duality, base change theorems, and the formalism of six functors.
+</Remark>

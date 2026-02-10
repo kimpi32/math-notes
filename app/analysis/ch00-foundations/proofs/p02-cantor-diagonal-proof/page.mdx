@@ -1,0 +1,196 @@
+export const metadata = {
+  title: '실수의 비가산성 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "증명 - 실수의 비가산성 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 실수의 비가산성 증명 (Uncountability of the Reals)
+
+This page provides the full, rigorous proof that the real numbers are uncountable, using Cantor's diagonal argument. We also prove the more general Cantor's Theorem: for any set $S$, the power set $\mathcal{P}(S)$ has strictly greater cardinality than $S$.
+
+---
+
+## Part I: The Interval $(0, 1)$ is Uncountable
+
+<Theorem title="Uncountability of (0,1)" number="0.3">
+There is no surjection $f: \mathbb{N} \to (0, 1)$. Equivalently, the interval $(0, 1)$ is uncountable.
+</Theorem>
+
+<Proof>
+We proceed by contradiction.
+
+**Step 1: Assume a bijection exists.**
+
+Suppose, for the sake of contradiction, that $(0,1)$ is countable. Then there exists a surjection $f: \mathbb{N} \to (0,1)$. We can list all real numbers in $(0,1)$ as a sequence:
+
+$$f(1) = r_1, \quad f(2) = r_2, \quad f(3) = r_3, \quad \ldots$$
+
+with every element of $(0,1)$ appearing somewhere in this list.
+
+**Step 2: Write each number in decimal expansion.**
+
+Each $r_n$ has a decimal expansion $r_n = 0.d_{n,1}\, d_{n,2}\, d_{n,3}\, \ldots$ where each $d_{n,k} \in \lbrace 0, 1, 2, \ldots, 9 \rbrace$. To ensure uniqueness, we choose the expansion that does **not** end in repeating $9$s (i.e., we use the terminating form when there is ambiguity, such as $0.5000\ldots$ rather than $0.4999\ldots$).
+
+We can arrange all these expansions in an infinite table:
+
+$$r_1 = 0.\mathbf{d_{1,1}}\, d_{1,2}\, d_{1,3}\, d_{1,4}\, \ldots$$
+$$r_2 = 0.\, d_{2,1}\, \mathbf{d_{2,2}}\, d_{2,3}\, d_{2,4}\, \ldots$$
+$$r_3 = 0.\, d_{3,1}\, d_{3,2}\, \mathbf{d_{3,3}}\, d_{3,4}\, \ldots$$
+$$r_4 = 0.\, d_{4,1}\, d_{4,2}\, d_{4,3}\, \mathbf{d_{4,4}}\, \ldots$$
+$$\vdots$$
+
+The bold entries form the **diagonal**: $d_{1,1},\, d_{2,2},\, d_{3,3},\, d_{4,4},\, \ldots$
+
+**Step 3: Construct a number not on the list.**
+
+Define a new real number $d = 0.e_1\, e_2\, e_3\, \ldots$ where each digit $e_n$ is chosen as follows:
+
+- $e_n = 2$ if $d_{n,n} \neq 2$
+- $e_n = 3$ if $d_{n,n} = 2$
+
+In other words, we look at the $n$-th diagonal digit $d_{n,n}$ and choose $e_n$ to be **different** from it. We specifically choose values $2$ and $3$ (avoiding $0$ and $9$) to ensure that $d$ does not end in repeating $0$s or $9$s, which would create ambiguity in the decimal representation.
+
+**Step 4: Verify $d \in (0, 1)$.**
+
+Since each $e_n \in \lbrace 2, 3 \rbrace$, we have $d \geq 0.222\ldots = 2/9 > 0$ and $d \leq 0.333\ldots = 1/3 < 1$. So $d \in (0, 1)$.
+
+**Step 5: Show $d$ is not on the list.**
+
+For each $n \in \mathbb{N}$, the number $d$ differs from $r_n$ in the $n$-th decimal place:
+
+$$e_n \neq d_{n,n}$$
+
+Since $d$ and $r_n$ differ in at least one decimal place (and neither representation ends in repeating $9$s), we have $d \neq r_n$.
+
+Therefore $d \in (0, 1)$ but $d \neq r_n$ for all $n \in \mathbb{N}$, meaning $d$ is not in the range of $f$. This contradicts the assumption that $f$ is surjective.
+
+**Step 6: Conclusion.**
+
+The assumption that $(0,1)$ is countable leads to a contradiction. Therefore $(0,1)$ is uncountable.
+
+Since $(0,1) \subseteq \mathbb{R}$, this immediately implies $\mathbb{R}$ is uncountable.
+</Proof>
+
+<Remark>
+The key insight is the **diagonalization**: by choosing $e_n$ to differ from $d_{n,n}$, we ensure that the constructed number $d$ disagrees with the $n$-th listed number in the $n$-th position. No matter how cleverly we attempt to list the reals, this construction always produces a real number that escapes the list.
+
+The choice of digits $2$ and $3$ (rather than, say, $0$ and $1$) is a technical detail that avoids the $0.999\ldots = 1.000\ldots$ ambiguity in decimal representations. Without this care, one might construct a number that equals some $r_n$ via a different decimal expansion.
+</Remark>
+
+---
+
+## Part II: Cantor's Theorem ($|S| < |\mathcal{P}(S)|$)
+
+<Theorem title="Cantor's Theorem" number="0.4">
+For any set $S$ (finite or infinite), there is no surjection from $S$ onto $\mathcal{P}(S)$. Consequently, $|S| < |\mathcal{P}(S)|$.
+</Theorem>
+
+<Proof>
+We prove this in two steps.
+
+**Step 1: There exists an injection $S \hookrightarrow \mathcal{P}(S)$.**
+
+Define $\iota: S \to \mathcal{P}(S)$ by $\iota(x) = \lbrace x \rbrace$. This is clearly injective: if $\lbrace x \rbrace = \lbrace y \rbrace$, then $x = y$. So $|S| \leq |\mathcal{P}(S)|$.
+
+**Step 2: There is no surjection $S \to \mathcal{P}(S)$.**
+
+Suppose, for contradiction, that $g: S \to \mathcal{P}(S)$ is surjective. Define the **diagonal set**:
+
+$$D = \lbrace x \in S : x \notin g(x) \rbrace$$
+
+Since $D \subseteq S$, we have $D \in \mathcal{P}(S)$. Because $g$ is assumed surjective, there exists some $a \in S$ with $g(a) = D$.
+
+Now we ask: is $a \in D$?
+
+- **Case 1**: $a \in D$. By definition of $D$, this means $a \notin g(a)$. But $g(a) = D$, so $a \notin D$. Contradiction.
+
+- **Case 2**: $a \notin D$. By definition of $D$, this means $a \in g(a)$. But $g(a) = D$, so $a \in D$. Contradiction.
+
+Both cases lead to a contradiction, so no such surjection $g$ can exist.
+
+**Conclusion**: Since there is an injection $S \hookrightarrow \mathcal{P}(S)$ but no surjection $S \to \mathcal{P}(S)$, we conclude $|S| < |\mathcal{P}(S)|$ (by the Cantor-Bernstein-Schroder theorem, or directly from the definition of strict inequality of cardinals).
+</Proof>
+
+<Remark>
+The diagonal set $D = \lbrace x \in S : x \notin g(x) \rbrace$ is the abstract version of the diagonal argument. For each $x$, we look at whether $x$ is a member of $g(x)$ (the set assigned to $x$ by $g$), and we include $x$ in $D$ precisely when it is **not** in $g(x)$. This ensures $D$ differs from every $g(x)$ at the "coordinate" $x$ itself.
+
+This is structurally identical to the decimal diagonal argument: in both cases, we construct an object that differs from the $n$-th listed object at the $n$-th position.
+</Remark>
+
+---
+
+## Why the Diagonal Argument Fails for $\mathbb{Q}$
+
+<Remark>
+A natural question: why can we not diagonalize over the rationals? The answer is that the constructed diagonal number $d = 0.e_1 e_2 e_3 \ldots$ is a real number, but it need not be rational. In fact, $d$ is almost certainly irrational (its decimal expansion is non-repeating by construction). So the argument shows that $d \notin \mathbb{Q}$ is missing from any list of rationals, but this is not a contradiction since we never claimed $\mathbb{Q}$ contains $d$.
+
+The diagonal argument works for $\mathbb{R}$ precisely because $\mathbb{R}$ is **complete**: every decimal expansion corresponds to a real number. This is another manifestation of the completeness axiom.
+</Remark>
+
+---
+
+## Detailed Verification: Key Technical Points
+
+### Why avoid digits 0 and 9?
+
+<Remark>
+In the decimal system, some real numbers have two representations:
+
+$$0.4999\ldots = 0.5000\ldots$$
+
+If we used $e_n = 0$ when $d_{n,n} \neq 0$ (and $e_n = 1$ otherwise), the constructed number $d$ might end in repeating $0$s, and its "other" representation (ending in repeating $9$s) could match some $r_n$. By restricting to digits $2$ and $3$, the number $d$ has a unique decimal representation, and the argument is airtight.
+</Remark>
+
+### Extending to all of $\mathbb{R}$
+
+<Remark>
+Once we know $(0,1)$ is uncountable, uncountability of $\mathbb{R}$ follows immediately: if $\mathbb{R}$ were countable, then $(0,1) \subseteq \mathbb{R}$ would be countable (a subset of a countable set is countable), contradicting the theorem.
+
+Alternatively, the function $\tan: (-\pi/2, \pi/2) \to \mathbb{R}$ is a bijection, showing $|(-\pi/2, \pi/2)| = |\mathbb{R}|$. Since $(-\pi/2, \pi/2)$ has the same cardinality as $(0,1)$ (via a linear map), we get $|(0,1)| = |\mathbb{R}|$.
+</Remark>
+
+---
+
+## Connection to the Power Set Proof
+
+The two proofs are deeply connected. One can make the correspondence explicit:
+
+Each real number in $(0,1)$ can be written in binary as $0.b_1 b_2 b_3 \ldots$ with $b_k \in \lbrace 0, 1 \rbrace$. This binary expansion defines a subset of $\mathbb{N}$:
+
+$$T = \lbrace k \in \mathbb{N} : b_k = 1 \rbrace \in \mathcal{P}(\mathbb{N})$$
+
+This gives a (nearly bijective) map $(0,1) \to \mathcal{P}(\mathbb{N})$. The diagonal argument for $(0,1)$ in binary is then literally the same as the diagonal argument for $\mathcal{P}(\mathbb{N})$: flipping the $n$-th bit of the $n$-th binary expansion is the same as toggling membership of $n$ in the $n$-th subset.
+
+---
+
+## Summary of the Proof Strategy
+
+<Remark>
+The diagonal argument is a **proof by contradiction** with the following universal structure:
+
+1. Assume a complete enumeration exists.
+2. Use the enumeration against itself: construct a new object by "diagonalizing" (differing from the $n$-th object at the $n$-th coordinate).
+3. The new object must be in the set (by closure properties) but cannot be in the enumeration (by construction).
+4. This contradiction shows the enumeration cannot exist.
+
+This pattern recurs throughout mathematics:
+- **Russell's Paradox**: the set $R = \lbrace x : x \notin x \rbrace$ is a diagonalization over all sets.
+- **Godel's Incompleteness Theorem**: the Godel sentence "I am not provable" diagonalizes over all proofs.
+- **The Halting Problem**: the machine that does the opposite of what machine $n$ does on input $n$ diagonalizes over all Turing machines.
+- **Fixed-point theorems** (Lawvere): Cantor's theorem can be seen as a consequence of the non-existence of certain surjections, formalized categorically.
+</Remark>

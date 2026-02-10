@@ -1,0 +1,195 @@
+export const metadata = {
+  title: '드모르간 법칙 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "0. 기초와 표기법", href: "/analysis/ch00-foundations" },
+  { label: "정리 - 드모르간 법칙" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 드모르간 법칙 (De Morgan's Laws)
+
+De Morgan's Laws describe how complementation interacts with union and intersection of sets, and equivalently how negation interacts with conjunction and disjunction in propositional logic. These identities are fundamental throughout analysis, appearing whenever we negate quantified statements, manipulate complements of open/closed sets, or work with sigma-algebras.
+
+---
+
+## Statement (Set Theory)
+
+<Theorem title="De Morgan's Laws for Sets" number="0.1">
+Let $A$ and $B$ be subsets of a universal set $U$. Then:
+
+**First Law (complement of union):**
+
+$$(A \cup B)^c = A^c \cap B^c$$
+
+**Second Law (complement of intersection):**
+
+$$(A \cap B)^c = A^c \cup B^c$$
+
+where $S^c = U \setminus S$ denotes the complement of $S$ in $U$.
+</Theorem>
+
+---
+
+## Statement (Propositional Logic)
+
+<Theorem title="De Morgan's Laws for Logic" number="0.2">
+Let $P$ and $Q$ be propositions. Then:
+
+**First Law (negation of disjunction):**
+
+$$\neg(P \lor Q) \equiv (\neg P) \land (\neg Q)$$
+
+**Second Law (negation of conjunction):**
+
+$$\neg(P \land Q) \equiv (\neg P) \lor (\neg Q)$$
+</Theorem>
+
+<Remark>
+The set-theoretic and logical versions are intimately related. An element $x \in (A \cup B)^c$ means $\neg(x \in A \lor x \in B)$, which by the logical De Morgan law equals $(\neg(x \in A)) \land (\neg(x \in B))$, i.e., $x \in A^c \cap B^c$. So the set identities are really the logical identities applied pointwise.
+</Remark>
+
+---
+
+## Proof of the Set-Theoretic Version
+
+<Proof>
+We prove the first law: $(A \cup B)^c = A^c \cap B^c$. The proof proceeds by showing mutual inclusion.
+
+**($\subseteq$)** Let $x \in (A \cup B)^c$. Then $x \notin A \cup B$, which means $x \notin A$ and $x \notin B$. Therefore $x \in A^c$ and $x \in B^c$, so $x \in A^c \cap B^c$.
+
+**($\supseteq$)** Let $x \in A^c \cap B^c$. Then $x \in A^c$ and $x \in B^c$, so $x \notin A$ and $x \notin B$. Therefore $x \notin A \cup B$, which means $x \in (A \cup B)^c$.
+
+Since each side is a subset of the other, $(A \cup B)^c = A^c \cap B^c$.
+
+The second law $(A \cap B)^c = A^c \cup B^c$ is proved similarly, or by applying the first law to $A^c$ and $B^c$:
+
+$$(A^c \cup B^c)^c = (A^c)^c \cap (B^c)^c = A \cap B$$
+
+Taking complements of both sides gives $A^c \cup B^c = (A \cap B)^c$.
+</Proof>
+
+---
+
+## Generalization to Arbitrary Families
+
+<Theorem title="Generalized De Morgan's Laws" number="0.3">
+Let $\mathcal{F} = \lbrace A_\alpha \rbrace_{\alpha \in I}$ be an arbitrary (possibly uncountable) family of subsets of $U$, indexed by a set $I$. Then:
+
+$$\left(\bigcup_{\alpha \in I} A_\alpha\right)^c = \bigcap_{\alpha \in I} A_\alpha^c$$
+
+$$\left(\bigcap_{\alpha \in I} A_\alpha\right)^c = \bigcup_{\alpha \in I} A_\alpha^c$$
+</Theorem>
+
+<Remark>
+The generalized version is crucial in analysis. For instance, the complement of an arbitrary union of sets is the intersection of the complements. This is used constantly in topology (complements of open sets are closed, and vice versa) and in measure theory (sigma-algebras are closed under complements and countable unions/intersections).
+</Remark>
+
+---
+
+## Examples and Applications
+
+<Example title="Complement of an interval union">
+1. Let $U = \mathbb{R}$, $A = (-\infty, 3)$, $B = (1, \infty)$. Then $A \cup B = \mathbb{R}$, so $(A \cup B)^c = \varnothing$.
+
+Checking: $A^c = [3, \infty)$ and $B^c = (-\infty, 1]$, so $A^c \cap B^c = [3, \infty) \cap (-\infty, 1] = \varnothing$. Consistent with De Morgan.
+</Example>
+
+<Example title="Complement of an intersection of intervals">
+2. With $A = (-\infty, 3)$ and $B = (1, \infty)$ as above, $A \cap B = (1, 3)$, so $(A \cap B)^c = (-\infty, 1] \cup [3, \infty)$.
+
+Checking: $A^c \cup B^c = [3, \infty) \cup (-\infty, 1] = (-\infty, 1] \cup [3, \infty)$. Again consistent.
+</Example>
+
+<Example title="Negating a convergence statement">
+3. The statement "$\lim_{n \to \infty} a_n = L$" is:
+
+$$\forall \varepsilon > 0,\; \exists N \in \mathbb{N},\; \forall n \geq N:\; |a_n - L| < \varepsilon$$
+
+Its negation, obtained by applying De Morgan's laws to the quantifiers (swapping $\forall \leftrightarrow \exists$ and negating the innermost predicate), is:
+
+$$\exists \varepsilon > 0,\; \forall N \in \mathbb{N},\; \exists n \geq N:\; |a_n - L| \geq \varepsilon$$
+
+This systematic negation is a direct application of the logical De Morgan laws to quantified statements.
+</Example>
+
+<Example title="Complement of open sets in topology">
+4. In a topological space $X$, let $\lbrace U_\alpha \rbrace_{\alpha \in I}$ be open sets. Their union $\bigcup_\alpha U_\alpha$ is open. By De Morgan, the complement is:
+
+$$\left(\bigcup_{\alpha \in I} U_\alpha\right)^c = \bigcap_{\alpha \in I} U_\alpha^c$$
+
+Each $U_\alpha^c$ is closed, and the intersection of closed sets is closed. This proves: the complement of an open set is closed.
+</Example>
+
+<Example title="Probability: complement of a union of events">
+5. In probability, for events $A$ and $B$, the event "neither $A$ nor $B$ occurs" is $(A \cup B)^c = A^c \cap B^c$. If $A$ = "it rains" and $B$ = "it snows", then "it neither rains nor snows" equals "it does not rain" AND "it does not snow."
+
+This is used constantly in computing probabilities: $P(A^c \cap B^c) = P((A \cup B)^c) = 1 - P(A \cup B)$.
+</Example>
+
+<Example title="Digital logic: NAND and NOR gates">
+6. In digital circuits, De Morgan's laws are applied directly:
+
+- $\overline{A + B} = \overline{A} \cdot \overline{B}$ (NOR equals AND of complements)
+- $\overline{A \cdot B} = \overline{A} + \overline{B}$ (NAND equals OR of complements)
+
+These identities are the theoretical foundation for building any logic circuit using only NAND gates (or only NOR gates), since any Boolean function can be expressed using these universal gates.
+</Example>
+
+<Example title="Countable intersection of open sets (G-delta sets)">
+7. A $G_\delta$ set is a countable intersection of open sets: $G = \bigcap_{n=1}^{\infty} U_n$, where each $U_n$ is open. By De Morgan:
+
+$$G^c = \left(\bigcap_{n=1}^{\infty} U_n\right)^c = \bigcup_{n=1}^{\infty} U_n^c$$
+
+Each $U_n^c$ is closed, so $G^c$ is an $F_\sigma$ set (countable union of closed sets). This duality between $G_\delta$ and $F_\sigma$ sets is fundamental in descriptive set theory and in understanding the Borel hierarchy.
+</Example>
+
+<Example title="Verifying with a Venn diagram (finite case)">
+8. Let $U = \lbrace 1, 2, 3, 4, 5 \rbrace$, $A = \lbrace 1, 2, 3 \rbrace$, $B = \lbrace 2, 3, 4 \rbrace$.
+
+- $A \cup B = \lbrace 1, 2, 3, 4 \rbrace$, so $(A \cup B)^c = \lbrace 5 \rbrace$.
+- $A^c = \lbrace 4, 5 \rbrace$, $B^c = \lbrace 1, 5 \rbrace$, so $A^c \cap B^c = \lbrace 5 \rbrace$. Verified.
+
+- $A \cap B = \lbrace 2, 3 \rbrace$, so $(A \cap B)^c = \lbrace 1, 4, 5 \rbrace$.
+- $A^c \cup B^c = \lbrace 4, 5 \rbrace \cup \lbrace 1, 5 \rbrace = \lbrace 1, 4, 5 \rbrace$. Verified.
+</Example>
+
+<Example title="Negating a uniform continuity statement">
+9. A function $f: D \to \mathbb{R}$ is uniformly continuous if:
+
+$$\forall \varepsilon > 0,\; \exists \delta > 0,\; \forall x, y \in D:\; |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon$$
+
+By systematically applying De Morgan (negating quantifiers), $f$ is **not** uniformly continuous if:
+
+$$\exists \varepsilon > 0,\; \forall \delta > 0,\; \exists x, y \in D:\; |x - y| < \delta \text{ and } |f(x) - f(y)| \geq \varepsilon$$
+
+The ability to negate complex quantified statements via De Morgan is essential for constructing counterexamples in analysis.
+</Example>
+
+---
+
+## Connection to Analysis
+
+<Remark>
+De Morgan's Laws appear throughout real analysis in the following key contexts:
+
+- **Negating limit definitions**: Every $\varepsilon$-$\delta$ or $\varepsilon$-$N$ statement involves alternating quantifiers. To prove something does **not** converge, we negate using De Morgan.
+
+- **Topology of $\mathbb{R}$**: The complement of an open set is closed, and vice versa. This duality is De Morgan applied to arbitrary unions and intersections of open (or closed) sets.
+
+- **Sigma-algebras**: In measure theory, a sigma-algebra must be closed under complements and countable unions. De Morgan then guarantees closure under countable intersections as well.
+
+- **Indicator functions**: For sets $A$ and $B$, $\mathbf{1}_{(A \cup B)^c} = \mathbf{1}_{A^c} \cdot \mathbf{1}_{B^c}$ and $\mathbf{1}_{(A \cap B)^c} = 1 - \mathbf{1}_A \cdot \mathbf{1}_B$, which are algebraic restatements of De Morgan.
+</Remark>

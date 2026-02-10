@@ -1,0 +1,158 @@
+export const metadata = {
+  title: 'Proof of Replacement Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Proof — Replacement Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Replacement Theorem
+
+We prove the [Replacement Theorem](/linear-algebra/ch01-vector-spaces/theorems/t01-replacement): if $V$ is spanned by a set $G$ with $|G| = n$, and $L = \{v_1, \ldots, v_m\}$ is linearly independent, then $m \leq n$ and there exists $H \subseteq G$ with $|H| = n - m$ such that $\text{span}(L \cup H) = V$.
+
+---
+
+## Proof by induction on $m$
+
+<Proof>
+We induct on $m = |L|$.
+
+**Base case** ($m = 0$): $L = \varnothing$, and we take $H = G$. Then $|H| = n = n - 0$ and $\text{span}(\varnothing \cup G) = \text{span}(G) = V$.
+
+**Inductive step**: Assume the result holds for $m - 1$ independent vectors. Suppose $L = \{v_1, \ldots, v_m\}$ is linearly independent.
+
+By the inductive hypothesis applied to $\{v_1, \ldots, v_{m-1}\}$, there exist $m - 1$ elements of $G$ that can be "replaced," leaving a subset $H' \subseteq G$ with $|H'| = n - (m-1) = n - m + 1$ such that
+
+$$\text{span}(\{v_1, \ldots, v_{m-1}\} \cup H') = V.$$
+
+Write $H' = \{g_1, g_2, \ldots, g_{n-m+1}\}$.
+
+Since $v_m \in V = \text{span}(\{v_1, \ldots, v_{m-1}\} \cup H')$, we can write
+
+$$v_m = a_1 v_1 + \cdots + a_{m-1} v_{m-1} + b_1 g_1 + \cdots + b_{n-m+1} g_{n-m+1}.$$
+
+**Claim**: At least one $b_j \neq 0$.
+
+*Proof of claim*: If all $b_j = 0$, then $v_m = a_1 v_1 + \cdots + a_{m-1} v_{m-1}$, contradicting the linear independence of $\{v_1, \ldots, v_m\}$.
+
+So some $b_j \neq 0$. Without loss of generality, say $b_1 \neq 0$. Then we can solve for $g_1$:
+
+$$g_1 = \frac{1}{b_1}\left(v_m - a_1 v_1 - \cdots - a_{m-1} v_{m-1} - b_2 g_2 - \cdots - b_{n-m+1} g_{n-m+1}\right).$$
+
+This shows $g_1 \in \text{span}(\{v_1, \ldots, v_m, g_2, \ldots, g_{n-m+1}\})$.
+
+Therefore:
+
+$$V = \text{span}(\{v_1, \ldots, v_{m-1}\} \cup H') = \text{span}(\{v_1, \ldots, v_m, g_2, \ldots, g_{n-m+1}\}).$$
+
+Set $H = \{g_2, \ldots, g_{n-m+1}\} \subseteq G$ with $|H| = n - m$. Then $\text{span}(L \cup H) = V$.
+
+**Bounding $m$**: We need $|H'| = n - m + 1 \geq 1$, i.e., $m \leq n$. If $m > n$, then at the step where $|H'|$ becomes $0$, we would have $V = \text{span}\{v_1, \ldots, v_n\}$, and $v_{n+1}$ would be a linear combination of $v_1, \ldots, v_n$, contradicting independence.
+</Proof>
+
+---
+
+## Worked examples illustrating the proof
+
+<Example id="trace-r3" title="Tracing the proof in R^3">
+$G = \{e_1, e_2, e_3\}$ spans $\mathbb{R}^3$, $n = 3$. Let $L = \{v_1, v_2\}$ with $v_1 = (1, 1, 0)$, $v_2 = (0, 1, 1)$.
+
+**Step 1** ($m = 1$): We write $v_1 = 1 \cdot e_1 + 1 \cdot e_2 + 0 \cdot e_3$. The coefficient of $e_1$ is $1 \neq 0$, so replace $e_1$:
+
+$$\mathbb{R}^3 = \text{span}\{v_1, e_2, e_3\}.$$
+
+**Step 2** ($m = 2$): We write $v_2 = (0, 1, 1)$ in terms of $\{v_1, e_2, e_3\}$:
+
+$$v_2 = 0 \cdot v_1 + 1 \cdot e_2 + 1 \cdot e_3.$$
+
+We need a nonzero coefficient on $e_2$ or $e_3$. The coefficient of $e_2$ is $1 \neq 0$, so replace $e_2$:
+
+$$\mathbb{R}^3 = \text{span}\{v_1, v_2, e_3\}.$$
+
+Result: $H = \{e_3\}$, $|H| = 1 = 3 - 2$.
+</Example>
+
+<Example id="trace-p2" title="Tracing the proof in P_2(R)">
+$G = \{1, x, x^2\}$ spans $P_2(\mathbb{R})$, $n = 3$. Let $L = \{1 + x + x^2\}$, so $m = 1$.
+
+$v_1 = 1 + x + x^2 = 1 \cdot 1 + 1 \cdot x + 1 \cdot x^2$. All coefficients are nonzero. Choose to replace $1$:
+
+$$P_2(\mathbb{R}) = \text{span}\{1 + x + x^2, x, x^2\}.$$
+
+Indeed: $1 = (1 + x + x^2) - x - x^2$.
+
+$H = \{x, x^2\}$, $|H| = 2 = 3 - 1$.
+</Example>
+
+<Example id="trace-impossible" title="Why m > n is impossible">
+Try to find 4 independent vectors in $\mathbb{R}^3$. Say $v_1, v_2, v_3, v_4$ are independent. After replacing 3 vectors from $G = \{e_1, e_2, e_3\}$:
+
+$$\mathbb{R}^3 = \text{span}\{v_1, v_2, v_3\}.$$
+
+Then $v_4 \in \text{span}\{v_1, v_2, v_3\}$, contradicting independence of $\{v_1, v_2, v_3, v_4\}$.
+</Example>
+
+<Example id="choosing-replacements" title="Freedom in choosing replacements">
+In the proof, when $v_m = \sum a_i v_i + \sum b_j g_j$, we can replace any $g_j$ with $b_j \neq 0$. For $v_1 = (1, 2, 3)$ and $G = \{e_1, e_2, e_3\}$:
+
+$$v_1 = 1 \cdot e_1 + 2 \cdot e_2 + 3 \cdot e_3.$$
+
+All three coefficients are nonzero, so we could replace any one of $e_1$, $e_2$, or $e_3$. Each choice gives a valid spanning set.
+</Example>
+
+<Example id="non-constructive" title="The proof is constructive">
+Unlike many existence proofs in mathematics, the Replacement Theorem's proof is fully constructive: it provides an explicit algorithm to find $H$. Process $v_1, v_2, \ldots, v_m$ one at a time, each time replacing one element of $G$ based on a nonzero coefficient. This algorithm is essentially **Gaussian elimination**.
+</Example>
+
+<Example id="dimension-corollary" title="Corollary: dimension is well-defined">
+If $\beta_1$ and $\beta_2$ are two bases for $V$, then $\beta_1$ is independent and $\beta_2$ is spanning, so $|\beta_1| \leq |\beta_2|$ by the Replacement Theorem. By symmetry, $|\beta_2| \leq |\beta_1|$. Hence $|\beta_1| = |\beta_2|$.
+
+This is the most important consequence: the number $\dim V$ does not depend on the choice of basis.
+</Example>
+
+<Example id="maximal-ind-corollary" title="Corollary: maximal independent = basis">
+An independent set $L$ with $|L| = \dim V$ is a basis. The Replacement Theorem gives $H \subseteq G$ with $|H| = n - n = 0$, so $\text{span}(L) = V$.
+</Example>
+
+<Example id="minimal-span-corollary" title="Corollary: minimal spanning = basis">
+A spanning set $G$ with $|G| = \dim V$ is a basis. If $G$ were dependent, we could remove an element and still span, giving a spanning set of size $n - 1 < n$. But any independent subset (e.g., a basis) has $n$ elements, contradicting $n \leq n - 1$.
+</Example>
+
+<Example id="extension" title="Corollary: independent sets extend to bases">
+If $L = \{v_1, \ldots, v_m\}$ is independent and $m < n = \dim V$, then there exist $g_1, \ldots, g_{n-m} \in G$ such that $\{v_1, \ldots, v_m, g_1, \ldots, g_{n-m}\}$ is a basis for $V$.
+</Example>
+
+<Example id="lattice-analogy" title="Lattice-theoretic viewpoint">
+The Replacement Theorem can be seen as a statement about the lattice of subspaces: any maximal chain from $\{0\}$ to $V$ (a **composition series**) has the same length, $\dim V$. This is a special case of the Jordan-Holder theorem in group theory.
+</Example>
+
+<Example id="infinite-dim-remark" title="Infinite-dimensional extension">
+In infinite-dimensional spaces, the analogous theorem holds with Zorn's lemma replacing induction. Any linearly independent set can be extended to a (Hamel) basis, and all bases have the same cardinality.
+</Example>
+
+<Example id="subspace-dim" title="Corollary: subspace dimension bound">
+If $W \subseteq V$ is a subspace of a finite-dimensional space $V$, then $\dim W \leq \dim V$. Any basis of $W$ is an independent set in $V$, and by the Replacement Theorem, its size cannot exceed $|G| = \dim V$. Moreover, $\dim W = \dim V$ implies $W = V$ (extend a basis of $W$ -- but no extension is needed since it already has $\dim V$ vectors, so it spans $V$).
+</Example>
+
+---
+
+<Remark title="Summary">
+The Replacement Theorem is the cornerstone of finite-dimensional linear algebra. It ensures:
+- Dimension is well-defined.
+- Independent sets are "small" ($\leq \dim V$ elements).
+- Spanning sets are "large" ($\geq \dim V$ elements).
+- Bases are precisely the independent sets (or spanning sets) of size $\dim V$.
+</Remark>

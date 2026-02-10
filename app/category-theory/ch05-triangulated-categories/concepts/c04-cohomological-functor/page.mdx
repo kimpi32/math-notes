@@ -1,0 +1,106 @@
+export const metadata = {
+  title: 'Cohomological Functor — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Concept — Cohomological Functor" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Cohomological Functor
+
+A cohomological functor converts distinguished triangles into long exact sequences. It is the triangulated analogue of a half-exact functor in abelian categories. The prototype is the cohomology functor $H^n$ on the derived category.
+
+---
+
+## Definition
+
+<Definition title="Cohomological Functor" number="5.6">
+An additive functor $H : \mathcal{T} \to \mathcal{A}$ from a triangulated category to an abelian category is **cohomological** if for every distinguished triangle $X \to Y \to Z \to X[1]$, the induced sequence
+
+$$H(X) \to H(Y) \to H(Z)$$
+
+is exact in $\mathcal{A}$.
+</Definition>
+
+<Remark title="Long exact sequence">
+By applying $H$ to the rotations of the triangle, a cohomological functor produces a long exact sequence:
+
+$$\cdots \to H(X[n]) \to H(Y[n]) \to H(Z[n]) \to H(X[n+1]) \to \cdots$$
+
+Writing $H^n(-) = H(-[n])$, this becomes $\cdots \to H^n(X) \to H^n(Y) \to H^n(Z) \to H^{n+1}(X) \to \cdots$.
+</Remark>
+
+---
+
+## Examples
+
+<Example title="Cohomology functor H^n" id="cohomology-functor">
+$H^n : D(\mathcal{A}) \to \mathcal{A}$ is a cohomological functor. For a distinguished triangle $A \to B \to C \to A[1]$, the sequence $H^n(A) \to H^n(B) \to H^n(C)$ is exact for each $n$, giving the long exact sequence in cohomology.
+</Example>
+
+<Example title="Hom functor" id="hom-functor">
+For any object $W$ in a triangulated category $\mathcal{T}$, the functor $\mathrm{Hom}(W, -) : \mathcal{T} \to \mathbf{Ab}$ is cohomological. This follows from the axioms of distinguished triangles.
+</Example>
+
+<Example title="Contravariant Hom" id="contra-hom">
+$\mathrm{Hom}(-, W) : \mathcal{T}^{\mathrm{op}} \to \mathbf{Ab}$ is cohomological (a **homological** functor in Gelfand-Manin's terminology). For a triangle $X \to Y \to Z \to X[1]$: $\mathrm{Hom}(Z, W) \to \mathrm{Hom}(Y, W) \to \mathrm{Hom}(X, W)$ is exact.
+</Example>
+
+<Example title="Global sections as cohomological" id="global-sections">
+On $D^b(\mathbf{Sh}(X))$, the derived global sections functor $R\Gamma(X, -) : D^b(\mathbf{Sh}(X)) \to D^b(\mathbf{Ab})$ is exact (maps distinguished triangles to distinguished triangles). Composing with $H^0$ gives the cohomological functor $H^0 \circ R\Gamma = H^0(X, -)$.
+</Example>
+
+<Example title="Euler characteristic is NOT cohomological" id="euler-not-coh">
+The Euler characteristic $\chi : K_0(D^b(\mathcal{A})) \to \mathbb{Z}$ is additive on triangles ($\chi(Y) = \chi(X) + \chi(Z)$), but it is not a functor (it does not act on morphisms), so it is not cohomological in the strict sense.
+</Example>
+
+<Example title="K-theory as a cohomological functor" id="k-theory">
+For a triangulated category $\mathcal{T}$ with a bounded t-structure, the K-theory functor $K_0 : \mathcal{T} \to \mathbb{Z}$ (sending objects to their class in the Grothendieck group) is additive on distinguished triangles.
+</Example>
+
+<Example title="Ext as cohomological" id="ext-coh">
+$\mathrm{Ext}^n(X, -) = \mathrm{Hom}_{D(\mathcal{A})}(X, -[n]) = H^n \circ \mathrm{RHom}(X, -)$ is cohomological. For a triangle $A \to B \to C \to A[1]$: $\cdots \to \mathrm{Ext}^n(X, A) \to \mathrm{Ext}^n(X, B) \to \mathrm{Ext}^n(X, C) \to \mathrm{Ext}^{n+1}(X, A) \to \cdots$.
+</Example>
+
+<Example title="Stalk functor for sheaves" id="stalk-coh">
+For sheaves on $X$ and a point $x \in X$, the stalk functor $(-)_x : D^b(\mathbf{Sh}(X)) \to D^b(\mathbf{Ab})$ is exact. Composing with $H^n$ gives the cohomological functor $\mathcal{F}^\bullet \mapsto H^n(\mathcal{F}^\bullet_x)$.
+</Example>
+
+<Example title="Hypercohomology" id="hypercoh">
+$\mathbb{H}^n(X, -) = H^n \circ R\Gamma(X, -)$ is a cohomological functor from $D^b(\mathbf{Sh}(X))$ to $\mathbf{Ab}$. It converts distinguished triangles of sheaf complexes into long exact sequences.
+</Example>
+
+<Example title="Representable cohomological functors" id="representable">
+In a triangulated category with enough structure, the Brown representability theorem states that every cohomological functor $H : \mathcal{T}^{\mathrm{op}} \to \mathbf{Ab}$ satisfying a product condition is representable: $H(-) \cong \mathrm{Hom}(-, E)$ for some $E \in \mathcal{T}$.
+</Example>
+
+<Example title="Perverse cohomology" id="perverse-coh">
+The perverse cohomology functors ${}^p H^n : D^b_c(X) \to \mathrm{Perv}(X)$ associated to the perverse t-structure are cohomological functors. They send distinguished triangles to long exact sequences of perverse sheaves.
+</Example>
+
+<Example title="Derived tensor product" id="derived-tensor">
+$H^n(A \otimes^L -) : D(\mathcal{A}) \to \mathcal{A}$ is a cohomological functor for each fixed $A$ and each $n$. This gives the long exact sequence for Tor: $\cdots \to \mathrm{Tor}_n(A, X) \to \mathrm{Tor}_n(A, Y) \to \mathrm{Tor}_n(A, Z) \to \cdots$.
+</Example>
+
+---
+
+<Theorem title="Characterization via representability" number="5.3">
+In a triangulated category $\mathcal{T}$, a functor $H : \mathcal{T} \to \mathcal{A}$ is cohomological if and only if it converts distinguished triangles to exact sequences. By rotation, this is equivalent to converting them to long exact sequences.
+</Theorem>
+
+<Remark title="Exact functors vs cohomological functors">
+An **exact functor** $F : \mathcal{T} \to \mathcal{T}'$ between triangulated categories sends distinguished triangles to distinguished triangles (and commutes with shift). A **cohomological functor** $H : \mathcal{T} \to \mathcal{A}$ to an abelian category sends them to exact sequences. The composition $H \circ F$ is cohomological.
+</Remark>

@@ -1,0 +1,155 @@
+export const metadata = {
+  title: 'Matrix Operations — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "3. 행렬", href: "/linear-algebra/ch03-matrices" },
+  { label: "Concept — Matrix Operations" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Matrix Operations
+
+Matrices are the computational backbone of linear algebra. Every linear map between finite-dimensional spaces can be represented as a matrix, and matrix operations correspond to operations on linear maps.
+
+---
+
+## Definitions
+
+<Definition title="Matrix" number="3.1">
+An **$m \times n$ matrix** over a field $F$ is a rectangular array $A = (a_{ij})$ with $m$ rows and $n$ columns, where $a_{ij} \in F$. The entry in row $i$ and column $j$ is denoted $a_{ij}$ or $A_{ij}$ or $(A)_{ij}$.
+</Definition>
+
+<Definition title="Matrix addition and scalar multiplication" number="3.2">
+For $A, B \in M_{m \times n}(F)$ and $c \in F$:
+
+$$(A + B)_{ij} = a_{ij} + b_{ij}, \quad (cA)_{ij} = c \cdot a_{ij}.$$
+
+With these operations, $M_{m \times n}(F)$ is a vector space of dimension $mn$.
+</Definition>
+
+<Definition title="Matrix multiplication" number="3.3">
+For $A \in M_{m \times n}(F)$ and $B \in M_{n \times p}(F)$, the product $AB \in M_{m \times p}(F)$ is defined by
+
+$$(AB)_{ij} = \sum_{k=1}^{n} a_{ik} b_{kj}.$$
+
+The $(i, j)$ entry of $AB$ is the dot product of the $i$-th row of $A$ with the $j$-th column of $B$.
+</Definition>
+
+---
+
+## Examples
+
+<Example id="2x2-product" title="Product of 2 x 2 matrices">
+$$\begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix} \begin{pmatrix} 5 & 6 \\ 7 & 8 \end{pmatrix} = \begin{pmatrix} 1 \cdot 5 + 2 \cdot 7 & 1 \cdot 6 + 2 \cdot 8 \\ 3 \cdot 5 + 4 \cdot 7 & 3 \cdot 6 + 4 \cdot 8 \end{pmatrix} = \begin{pmatrix} 19 & 22 \\ 43 & 50 \end{pmatrix}.$$
+</Example>
+
+<Example id="noncommutative" title="Matrix multiplication is not commutative">
+$$AB = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad BA = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}.$$
+
+$AB \neq BA$. In fact, $AB \neq 0$ but $BA = 0$: the product of two nonzero matrices can be zero.
+</Example>
+
+<Example id="matrix-vector" title="Matrix-vector product">
+$$\begin{pmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{pmatrix} \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} x + 2y + 3z \\ 4x + 5y + 6z \end{pmatrix} = x\begin{pmatrix} 1 \\ 4 \end{pmatrix} + y\begin{pmatrix} 2 \\ 5 \end{pmatrix} + z\begin{pmatrix} 3 \\ 6 \end{pmatrix}.$$
+
+$Ax$ is a linear combination of the **columns** of $A$ with coefficients from $x$. This is the **column picture** of matrix-vector multiplication.
+</Example>
+
+<Example id="identity-matrix" title="Identity matrix">
+The $n \times n$ **identity matrix** $I_n$ has $1$'s on the diagonal and $0$'s elsewhere: $(I_n)_{ij} = \delta_{ij}$ (the Kronecker delta). For any $A \in M_{m \times n}(F)$:
+
+$$I_m A = A = A I_n.$$
+</Example>
+
+<Example id="diagonal-product" title="Diagonal matrices multiply componentwise">
+If $D_1 = \text{diag}(d_1, \ldots, d_n)$ and $D_2 = \text{diag}(e_1, \ldots, e_n)$, then
+
+$$D_1 D_2 = \text{diag}(d_1 e_1, \ldots, d_n e_n).$$
+
+Diagonal matrices always commute with each other.
+</Example>
+
+<Example id="powers" title="Matrix powers">
+For a square matrix $A$, $A^k = \underbrace{A \cdot A \cdots A}_{k \text{ times}}$ and $A^0 = I$.
+
+$$\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}^n = \begin{pmatrix} 1 & n \\ 0 & 1 \end{pmatrix}$$
+
+(proved by induction).
+</Example>
+
+<Example id="nilpotent" title="Nilpotent matrix">
+$N = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}$ satisfies $N^2 = 0$. A matrix $N$ with $N^k = 0$ for some $k$ is called **nilpotent**. The smallest such $k$ is the **index of nilpotency**.
+</Example>
+
+<Example id="idempotent" title="Idempotent matrix">
+$P = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix}$ satisfies $P^2 = P$. Such a matrix is called **idempotent** and represents a projection.
+</Example>
+
+<Example id="block-multiplication" title="Block multiplication">
+Block (partitioned) matrices can be multiplied "as if blocks were scalars," provided dimensions match:
+
+$$\begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix}\begin{pmatrix} B_{11} & B_{12} \\ B_{21} & B_{22} \end{pmatrix} = \begin{pmatrix} A_{11}B_{11} + A_{12}B_{21} & A_{11}B_{12} + A_{12}B_{22} \\ A_{21}B_{11} + A_{22}B_{21} & A_{21}B_{12} + A_{22}B_{22} \end{pmatrix}.$$
+</Example>
+
+<Example id="outer-product" title="Outer product">
+For column vectors $u \in F^m$ and $v \in F^n$, the **outer product** $uv^T$ is an $m \times n$ matrix of rank at most 1:
+
+$$(uv^T)_{ij} = u_i v_j.$$
+
+Every rank-1 matrix has this form.
+</Example>
+
+<Example id="transpose-properties" title="Transpose properties">
+For the **transpose** $A^T$ (with $(A^T)_{ij} = a_{ji}$):
+
+- $(A + B)^T = A^T + B^T$
+- $(cA)^T = cA^T$
+- $(AB)^T = B^T A^T$ (order reverses)
+- $(A^T)^T = A$
+</Example>
+
+<Example id="composition-product" title="Matrix product = composition of linear maps">
+If $T : F^p \to F^n$ has matrix $A$ and $S : F^n \to F^m$ has matrix $B$, then $S \circ T : F^p \to F^m$ has matrix $BA$. Matrix multiplication **is** composition.
+</Example>
+
+---
+
+## Matrix representation of linear maps
+
+<Definition title="Matrix of a linear transformation" number="3.4">
+Let $T : V \to W$ be linear, $\beta = \{v_1, \ldots, v_n\}$ a basis for $V$, and $\gamma = \{w_1, \ldots, w_m\}$ a basis for $W$. The **matrix of $T$ with respect to $\beta$ and $\gamma$** is the $m \times n$ matrix $[T]_\beta^\gamma$ whose $j$-th column is $[T(v_j)]_\gamma$, the coordinate vector of $T(v_j)$ with respect to $\gamma$.
+</Definition>
+
+<Example id="matrix-rep" title="Matrix representation example">
+$T : \mathbb{R}^2 \to \mathbb{R}^3$, $T(x, y) = (x + y, x - y, 2x)$, with standard bases.
+
+$T(e_1) = (1, 1, 2)$ and $T(e_2) = (1, -1, 0)$, so $[T] = \begin{pmatrix} 1 & 1 \\ 1 & -1 \\ 2 & 0 \end{pmatrix}$.
+</Example>
+
+<Remark title="Change of basis">
+If $Q$ is the change-of-basis matrix from $\beta'$ to $\beta$ and $P$ is the change-of-basis matrix from $\gamma$ to $\gamma'$, then
+
+$$[T]_{\beta'}^{\gamma'} = P [T]_\beta^\gamma Q.$$
+
+For a linear operator $T : V \to V$ with two bases $\beta$ and $\beta'$ related by $Q$:
+
+$$[T]_{\beta'} = Q^{-1} [T]_\beta Q.$$
+
+Matrices related by $B = Q^{-1}AQ$ are called **similar** and represent the same linear operator in different bases.
+</Remark>
+
+<Remark title="Looking ahead">
+The question of finding the "simplest" matrix for a given linear operator (via a good choice of basis) leads to [eigenvalues](/linear-algebra/ch05-eigenvalues/concepts/c01-eigenvalue), [diagonalization](/linear-algebra/ch05-eigenvalues/concepts/c03-diagonalization), and ultimately [Jordan normal form](/linear-algebra/ch07-canonical-forms/concepts/c01-jordan-form).
+</Remark>

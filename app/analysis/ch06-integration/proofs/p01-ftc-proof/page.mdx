@@ -1,0 +1,188 @@
+export const metadata = {
+  title: 'Proof of FTC — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "6. 리만 적분", href: "/analysis/ch06-integration" },
+  { label: "증명 — 미적분학의 기본정리의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Fundamental Theorem of Calculus
+
+We prove both parts of the FTC. The proofs rely on the completeness of $\mathbb{R}$, properties of the Riemann integral, and the $\varepsilon$-$\delta$ definition of continuity and differentiability.
+
+---
+
+## Statement (FTC Part I)
+
+<Theorem title="FTC Part I">
+Let $f \in \mathcal{R}[a,b]$ and define $F(x) = \int_a^x f(t)\,dt$. Then $F$ is continuous on $[a,b]$. Moreover, if $f$ is continuous at $c \in (a,b)$, then $F'(c) = f(c)$.
+</Theorem>
+
+<Proof title="Proof of FTC I — Continuity of F">
+Since $f$ is bounded, there exists $M > 0$ with $|f(x)| \leq M$ for all $x \in [a,b]$. For $x, y \in [a,b]$ with $x < y$:
+
+$$|F(y) - F(x)| = \left|\int_x^y f(t) \, dt\right| \leq \int_x^y |f(t)| \, dt \leq M(y - x).$$
+
+Given $\varepsilon > 0$, choose $\delta = \varepsilon / M$. Then $|y - x| < \delta$ implies $|F(y) - F(x)| \leq M \cdot \delta = \varepsilon$.
+
+So $F$ is Lipschitz continuous (hence uniformly continuous) on $[a,b]$.
+</Proof>
+
+<Proof title="Proof of FTC I — Differentiability at points of continuity">
+Suppose $f$ is continuous at $c \in (a,b)$. We must show
+
+$$\lim_{h \to 0} \frac{F(c+h) - F(c)}{h} = f(c).$$
+
+We have
+
+$$\frac{F(c+h) - F(c)}{h} = \frac{1}{h} \int_c^{c+h} f(t) \, dt.$$
+
+Since $f(c)$ is a constant, $f(c) = \frac{1}{h}\int_c^{c+h} f(c)\,dt$. Therefore
+
+$$\frac{F(c+h) - F(c)}{h} - f(c) = \frac{1}{h} \int_c^{c+h} (f(t) - f(c)) \, dt.$$
+
+Given $\varepsilon > 0$, by continuity of $f$ at $c$, there exists $\delta > 0$ such that $|t - c| < \delta$ implies $|f(t) - f(c)| < \varepsilon$.
+
+For $0 < |h| < \delta$:
+
+$$\left|\frac{F(c+h) - F(c)}{h} - f(c)\right| \leq \frac{1}{|h|} \int_c^{c+h} |f(t) - f(c)| \, dt \leq \frac{1}{|h|} \cdot \varepsilon \cdot |h| = \varepsilon.$$
+
+(Here we use $|h|$ to handle both $h > 0$ and $h < 0$ cases.) Since $\varepsilon > 0$ was arbitrary, $F'(c) = f(c)$.
+</Proof>
+
+<Example title="Verifying FTC I for f(t) = 3t²">
+$F(x) = \int_0^x 3t^2 \, dt = x^3$. Since $f(t) = 3t^2$ is continuous everywhere, FTC I gives $F'(x) = 3x^2 = f(x)$ for all $x$. Direct differentiation confirms: $(x^3)' = 3x^2$.
+</Example>
+
+<Example title="FTC I at a discontinuity">
+Let $f(t) = \operatorname{sgn}(t)$ on $[-1,1]$ (so $f(t) = -1$ for $t < 0$, $f(0) = 0$, $f(t) = 1$ for $t > 0$). Then $F(x) = \int_{-1}^x f(t)\,dt = |x| - 1$ for $x \in [-1,1]$.
+
+$F$ is continuous (as guaranteed by FTC I), but $F'(0)$ does not exist since $|x|$ is not differentiable at $0$. FTC I does not promise differentiability at points where $f$ is discontinuous.
+</Example>
+
+---
+
+## Statement (FTC Part II)
+
+<Theorem title="FTC Part II">
+Let $f \in \mathcal{R}[a,b]$ and let $F$ be continuous on $[a,b]$, differentiable on $(a,b)$, with $F'(x) = f(x)$ for all $x \in (a,b)$. Then
+
+$$\int_a^b f(x) \, dx = F(b) - F(a).$$
+</Theorem>
+
+<Proof title="Proof of FTC II">
+Let $P = \{x_0, x_1, \ldots, x_n\}$ be any partition of $[a,b]$. By the Mean Value Theorem, for each $i$ there exists $c_i \in (x_{i-1}, x_i)$ with
+
+$$F(x_i) - F(x_{i-1}) = F'(c_i)(x_i - x_{i-1}) = f(c_i)(x_i - x_{i-1}).$$
+
+Summing over $i$:
+
+$$F(b) - F(a) = \sum_{i=1}^n (F(x_i) - F(x_{i-1})) = \sum_{i=1}^n f(c_i)(x_i - x_{i-1}).$$
+
+This is a telescoping sum on the left. The right side is a Riemann sum $S(f, P, c)$. Now, since $m_i \leq f(c_i) \leq M_i$:
+
+$$L(f, P) \leq F(b) - F(a) \leq U(f, P).$$
+
+This holds for every partition $P$. Taking the supremum over all $P$ on the left and infimum on the right:
+
+$$\underline{\int_a^b} f \leq F(b) - F(a) \leq \overline{\int_a^b} f.$$
+
+Since $f \in \mathcal{R}[a,b]$, the upper and lower integrals are equal to $\int_a^b f$. Therefore $\int_a^b f = F(b) - F(a)$.
+</Proof>
+
+<Example title="Verifying FTC II for sin x on [0, pi]">
+$F(x) = -\cos x$ satisfies $F'(x) = \sin x$. By FTC II:
+
+$$\int_0^\pi \sin x \, dx = F(\pi) - F(0) = -\cos\pi - (-\cos 0) = 1 + 1 = 2.$$
+
+One can verify directly: $U(f, P_n) \to 2$ and $L(f, P_n) \to 2$ for uniform partitions.
+</Example>
+
+<Example title="Verifying FTC II for 1/x on [1, e]">
+$F(x) = \ln x$ satisfies $F'(x) = 1/x$ on $(0, \infty)$. By FTC II:
+
+$$\int_1^e \frac{1}{x} \, dx = \ln e - \ln 1 = 1 - 0 = 1.$$
+</Example>
+
+---
+
+## The two parts work together
+
+<Remark title="How FTC I and II are related">
+FTC I and II are in a sense inverses of each other:
+
+**FTC I**: Start with $f$, define $F(x) = \int_a^x f$, conclude $F' = f$. (Integration then differentiation gives back $f$.)
+
+**FTC II**: Start with $F' = f$ (given an antiderivative), conclude $\int_a^b f = F(b) - F(a)$. (Differentiation then integration gives net change.)
+
+Combining them: if $f$ is continuous, then $G(x) = \int_a^x f(t)\,dt$ is an antiderivative of $f$ (by FTC I), and any other antiderivative differs from $G$ by a constant (by the MVT corollary). Then FTC II evaluates the integral.
+</Remark>
+
+<Example title="Computing a derivative of an integral with variable limits">
+Find $\frac{d}{dx} \int_0^{x^2} e^{-t^2} dt$.
+
+Let $G(u) = \int_0^u e^{-t^2} dt$, so by FTC I, $G'(u) = e^{-u^2}$.
+
+The given expression is $G(x^2)$, so by the chain rule:
+
+$$\frac{d}{dx} G(x^2) = G'(x^2) \cdot 2x = 2x \cdot e^{-x^4}.$$
+</Example>
+
+<Example title="Leibniz integral rule">
+More generally, for $H(x) = \int_{a(x)}^{b(x)} f(t)\,dt$ with $f$ continuous:
+
+$$H'(x) = f(b(x)) \cdot b'(x) - f(a(x)) \cdot a'(x).$$
+
+For example, $\frac{d}{dx} \int_{\sin x}^{\cos x} t^3 \, dt = \cos^3 x \cdot (-\sin x) - \sin^3 x \cdot \cos x = -\sin x \cos x(\cos^2 x + \sin^2 x) = -\sin x \cos x$.
+</Example>
+
+<Example title="Using FTC to prove an inequality">
+For $x > 0$: since $\frac{1}{1+t} < 1$ for $t > 0$, integrating from $0$ to $x$:
+
+$$\ln(1+x) = \int_0^x \frac{1}{1+t}\,dt < \int_0^x 1 \, dt = x.$$
+
+Similarly, $\frac{1}{1+t} > 1 - t$ for $t \in (0,1)$ gives $\ln(1+x) > x - \frac{x^2}{2}$ for $x \in (0,1)$.
+</Example>
+
+<Example title="Recovering the original function: a subtle example">
+Define $f(x) = 0$ for $x \neq 0$ and $f(0) = 1$ on $[-1,1]$. Then $f \in \mathcal{R}[-1,1]$ (one discontinuity) and
+
+$$F(x) = \int_{-1}^x f(t)\,dt = 0 \quad \text{for all } x \in [-1,1].$$
+
+So $F'(x) = 0$ for all $x$, but $F'(0) = 0 \neq 1 = f(0)$. FTC I only guarantees $F' = f$ at points where $f$ is continuous.
+</Example>
+
+<Example title="FTC II for polynomial integrals">
+$\int_1^3 (2x + 1)\,dx$. An antiderivative is $F(x) = x^2 + x$. By FTC II: $F(3) - F(1) = 12 - 2 = 10$.
+</Example>
+
+<Example title="Integral of a trigonometric composition">
+$\int_0^{\pi/2} \cos^2 x \, dx$. Using $\cos^2 x = \frac{1 + \cos 2x}{2}$, an antiderivative is $F(x) = \frac{x}{2} + \frac{\sin 2x}{4}$. By FTC II: $F(\pi/2) - F(0) = \frac{\pi}{4}$.
+</Example>
+
+<Example title="FTC applied to an improper integral">
+$\int_0^1 \frac{1}{\sqrt{x}}\,dx = \lim_{\varepsilon \to 0^+} \int_\varepsilon^1 x^{-1/2}\,dx = \lim_{\varepsilon \to 0^+} [2\sqrt{x}]_\varepsilon^1 = 2 - \lim_{\varepsilon \to 0^+} 2\sqrt{\varepsilon} = 2$.
+
+Here FTC II is applied on $[\varepsilon, 1]$ (where $f(x) = x^{-1/2}$ is continuous), and we take the limit afterwards.
+</Example>
+
+<Example title="An antiderivative that is piecewise defined">
+Let $f(x) = |x|$ on $[-1, 1]$. An antiderivative is $F(x) = x^2/2$ for $x \geq 0$ and $F(x) = -x^2/2$ for $x < 0$ (more compactly, $F(x) = x|x|/2$). FTC II gives $\int_{-1}^1 |x|\,dx = F(1) - F(-1) = 1/2 - (-1/2) = 1$.
+</Example>
+
+<Remark>
+The Fundamental Theorem of Calculus is arguably the most important theorem in all of analysis. It transforms the problem of computing integrals (limits of sums) into the problem of finding antiderivatives (an algebraic task), and vice versa. Its generalizations include the divergence theorem, Stokes' theorem, and the Atiyah-Singer index theorem.
+</Remark>

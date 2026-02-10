@@ -1,0 +1,129 @@
+export const metadata = {
+  title: 'Replacement Theorem — Linear Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "선형대수", href: "/linear-algebra" },
+  { label: "1. 벡터공간", href: "/linear-algebra/ch01-vector-spaces" },
+  { label: "Theorem — Replacement Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Replacement Theorem (Steinitz Exchange Lemma)
+
+The Replacement Theorem is the fundamental result that makes the concept of **dimension** well-defined. It shows that linearly independent sets cannot be larger than spanning sets.
+
+---
+
+## Statement
+
+<Theorem title="Replacement Theorem" number="1.8">
+Let $V$ be a vector space spanned by a set $G$ with $|G| = n$. If $L = \{v_1, v_2, \ldots, v_m\}$ is a linearly independent subset of $V$, then $m \leq n$, and there exists a subset $H \subseteq G$ with $|H| = n - m$ such that
+
+$$\text{span}(L \cup H) = V.$$
+
+In other words, we can "replace" $m$ elements of the spanning set $G$ by the independent set $L$ and still span $V$.
+</Theorem>
+
+<Remark title="Key consequences">
+The Replacement Theorem immediately implies:
+
+1. **Dimension is well-defined**: Any two bases of $V$ have the same number of elements. (If $\beta_1$ and $\beta_2$ are bases with $|\beta_1| = m$ and $|\beta_2| = n$, then $m \leq n$ (apply the theorem with $L = \beta_1$, $G = \beta_2$) and $n \leq m$ (apply with roles reversed), so $m = n$.)
+
+2. **Independent sets are small**: Any linearly independent set has at most $\dim V$ elements.
+
+3. **Spanning sets are large**: Any spanning set has at least $\dim V$ elements.
+
+4. **Basis extension**: Every linearly independent set can be extended to a basis.
+</Remark>
+
+---
+
+## Examples
+
+<Example id="replacement-r3" title="Replacement in R^3">
+Let $G = \{e_1, e_2, e_3\}$ (standard basis) and $L = \{(1, 1, 0)\}$. Then $m = 1$, $n = 3$, and we can replace one element of $G$. For instance:
+
+$$\text{span}\{(1, 1, 0), e_2, e_3\} = \mathbb{R}^3$$
+
+since $(1, 1, 0), e_2, e_3$ are linearly independent. We replaced $e_1$ (we could also have replaced $e_2$, but not $e_3$ since $(1,1,0)$ has $0$ in the third component and we would lose coverage of that direction).
+</Example>
+
+<Example id="replacement-r2" title="Replacement in R^2">
+$G = \{(1, 0), (0, 1)\}$ spans $\mathbb{R}^2$ and $L = \{(1, 1), (1, -1)\}$ is linearly independent with $|L| = 2 = |G|$. The theorem says $m \leq n$ ($2 \leq 2$) and we can replace all of $G$ by $L$:
+
+$$\text{span}\{(1, 1), (1, -1)\} = \mathbb{R}^2.$$
+
+The set $H$ is empty.
+</Example>
+
+<Example id="replacement-polynomial" title="Replacement in P_2(R)">
+$G = \{1, x, x^2\}$ spans $P_2(\mathbb{R})$ with $|G| = 3$. The set $L = \{1 + x, 1 - x\}$ is linearly independent ($|L| = 2$). The theorem guarantees we can keep one element of $G$:
+
+$$\text{span}\{1 + x, 1 - x, x^2\} = P_2(\mathbb{R}).$$
+
+Indeed: $1 = \tfrac{1}{2}(1+x) + \tfrac{1}{2}(1-x)$ and $x = \tfrac{1}{2}(1+x) - \tfrac{1}{2}(1-x)$.
+</Example>
+
+<Example id="too-many-independent" title="Too many independent vectors">
+In $\mathbb{R}^3$, we cannot have 4 linearly independent vectors. If $\{v_1, v_2, v_3, v_4\}$ were independent and $G = \{e_1, e_2, e_3\}$, the theorem gives $4 \leq 3$, a contradiction.
+</Example>
+
+<Example id="replacement-failing" title="Why spanning is needed">
+The theorem requires $G$ to span $V$. Consider $V = \mathbb{R}^3$, $G = \{(1, 0, 0), (0, 1, 0)\}$ (not spanning), and $L = \{(0, 0, 1)\}$. Here $L$ is independent and $|L| = 1 \leq 2 = |G|$, but we cannot replace an element of $G$ and still span $V$ (since $G$ did not span $V$ to begin with).
+</Example>
+
+<Example id="steinitz-historical" title="Historical note">
+The theorem is also known as the **Steinitz Exchange Lemma**, after Ernst Steinitz who proved it in 1913. The "exchange" viewpoint: if $v$ is a vector outside $\text{span}(S)$, we can add $v$ to $S$ and remove some element of $S$ while preserving the span.
+</Example>
+
+<Example id="replacement-uniqueness" title="Non-uniqueness of H">
+The subset $H$ in the theorem is generally not unique. In $\mathbb{R}^3$ with $G = \{e_1, e_2, e_3\}$ and $L = \{(1, 1, 1)\}$, we can take $H = \{e_2, e_3\}$ or $H = \{e_1, e_3\}$ or $H = \{e_1, e_2\}$. All three choices work.
+</Example>
+
+<Example id="constructive" title="Constructive replacement">
+In practice, the replacement is done one vector at a time. Given $G = \{g_1, g_2, g_3\}$ spanning $\mathbb{R}^3$ and $v_1 = 2g_1 + 3g_2 + g_3$:
+
+Since the coefficient of $g_1$ is nonzero, we can solve for $g_1$: $g_1 = \tfrac{1}{2}(v_1 - 3g_2 - g_3)$. So $\text{span}\{v_1, g_2, g_3\} = \text{span}\{g_1, g_2, g_3\}$.
+</Example>
+
+<Example id="maximal-independent" title="Maximal independent sets are bases">
+A linearly independent set $L$ in a finite-dimensional space $V$ is a basis if and only if $|L| = \dim V$. This follows from the Replacement Theorem: if $|L| = \dim V = n$ and $G$ is any basis, then $H = \varnothing$, so $\text{span}(L) = V$.
+</Example>
+
+<Example id="minimal-spanning" title="Minimal spanning sets are bases">
+A spanning set $G$ for $V$ is a basis if and only if $|G| = \dim V$. If $|G| = n = \dim V$ and $G$ were dependent, removing a vector gives a spanning set of size $n-1$. But any basis has $n$ elements, contradicting that it can be extended from a subset of this smaller spanning set.
+</Example>
+
+<Example id="dim-subspace" title="Dimensions of subspaces of R^4">
+By the Replacement Theorem, the subspaces of $\mathbb{R}^4$ have dimensions $0, 1, 2, 3$, or $4$:
+- $\dim = 0$: only $\{0\}$
+- $\dim = 1$: lines through the origin
+- $\dim = 2$: planes through the origin
+- $\dim = 3$: hyperplanes $\{x \mid a \cdot x = 0\}$
+- $\dim = 4$: $\mathbb{R}^4$ itself
+</Example>
+
+<Example id="infinite-dim-failure" title="Infinite-dimensional remark">
+In infinite-dimensional spaces, the Replacement Theorem still holds for finite independent sets, but the full theory of dimension requires more care (Zorn's lemma for the existence of bases).
+</Example>
+
+---
+
+## Proof
+
+See the [detailed proof](/linear-algebra/ch01-vector-spaces/proofs/p01-replacement-proof).
+
+<Remark title="Looking ahead">
+The Replacement Theorem is the key tool for proving the [Dimension Theorem](/linear-algebra/ch01-vector-spaces/theorems/t02-dimension) and the [Rank-Nullity Theorem](/linear-algebra/ch02-linear-transformations/theorems/t01-rank-nullity).
+</Remark>

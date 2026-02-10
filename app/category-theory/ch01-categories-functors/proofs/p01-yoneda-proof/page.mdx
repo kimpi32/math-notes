@@ -1,0 +1,372 @@
+export const metadata = {
+  title: 'Proof of Yoneda Lemma — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Proof — Yoneda Lemma" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Proof of the Yoneda Lemma
+
+We give a complete and detailed proof of the [Yoneda Lemma](/category-theory/ch01-categories-functors/theorems/t01-yoneda), the single most important result in category theory. The proof constructs an explicit bijection, verifies it is an isomorphism, and establishes naturality in both variables. We then derive the key corollaries.
+
+---
+
+## Statement
+
+<Theorem title="Yoneda Lemma" number="1.1">
+Let $\mathcal{C}$ be a locally small category, $A \in \mathrm{Ob}(\mathcal{C})$, and $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ a functor (i.e., a presheaf on $\mathcal{C}$). Then there is a bijection
+
+$$\Phi_{A,F} : \mathrm{Nat}(h^A, F) \xrightarrow{\;\sim\;} F(A)$$
+
+given by $\Phi_{A,F}(\alpha) = \alpha_A(\mathrm{id}_A)$, where $h^A = \mathrm{Hom}_{\mathcal{C}}(-, A)$ is the representable presheaf and $\mathrm{Nat}(h^A, F)$ is the set of natural transformations from $h^A$ to $F$.
+
+Moreover, this bijection is **natural in both $A$ and $F$**: it defines a natural isomorphism of bifunctors $\mathcal{C} \times [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}] \to \mathbf{Set}$.
+</Theorem>
+
+---
+
+## Step 1: Defining the Map $\Phi$
+
+<Proof title="Definition of Phi">
+Given a natural transformation $\alpha : h^A \Rightarrow F$, the component at $A$ is a function
+
+$$\alpha_A : \mathrm{Hom}(A, A) \to F(A)$$
+
+We define
+
+$$\Phi(\alpha) = \alpha_A(\mathrm{id}_A) \in F(A)$$
+
+This is the "evaluation at the identity" map. The key insight is that, by naturality, the entire natural transformation $\alpha$ is determined by this single element.
+</Proof>
+
+---
+
+## Step 2: Constructing the Inverse $\Psi$
+
+<Proof title="Construction of Psi">
+Given an element $x \in F(A)$, we must construct a natural transformation $\Psi(x) : h^A \Rightarrow F$. For each object $X \in \mathcal{C}$, we define the component
+
+$$\Psi(x)_X : \mathrm{Hom}(X, A) \to F(X), \qquad f \mapsto F(f)(x)$$
+
+Here $F(f) : F(A) \to F(X)$ is the image of $f : X \to A$ under the contravariant functor $F$ (recall $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$, so a morphism $f : X \to A$ in $\mathcal{C}$ gives $F(f) : F(A) \to F(X)$).
+
+**Claim:** $\Psi(x)$ is a natural transformation.
+
+We must verify that for every morphism $g : X \to Y$ in $\mathcal{C}$, the following diagram commutes:
+
+$$
+\begin{array}{ccc}
+\mathrm{Hom}(Y, A) & \xrightarrow{\Psi(x)_Y} & F(Y) \\[6pt]
+\downarrow\scriptstyle{g^*} & & \downarrow\scriptstyle{F(g)} \\[6pt]
+\mathrm{Hom}(X, A) & \xrightarrow{\Psi(x)_X} & F(X)
+\end{array}
+$$
+
+where $g^* = h^A(g)$ is precomposition by $g$, i.e., $g^*(f) = f \circ g$.
+
+**Verification:** Let $f \in \mathrm{Hom}(Y, A)$.
+
+Going right then down:
+$$F(g)\bigl(\Psi(x)_Y(f)\bigr) = F(g)\bigl(F(f)(x)\bigr) = \bigl(F(g) \circ F(f)\bigr)(x) = F(f \circ g)(x)$$
+
+where the last equality uses the functor law $F(g) \circ F(f) = F(f \circ g)$ (note the reversal since $F$ is contravariant).
+
+Going down then right:
+$$\Psi(x)_X\bigl(g^*(f)\bigr) = \Psi(x)_X(f \circ g) = F(f \circ g)(x)$$
+
+Both paths yield $F(f \circ g)(x)$, so the diagram commutes. Thus $\Psi(x) : h^A \Rightarrow F$ is indeed a natural transformation.
+</Proof>
+
+---
+
+## Step 3: $\Phi$ and $\Psi$ Are Inverses
+
+<Proof title="Phi and Psi are mutually inverse">
+We verify both compositions are identities.
+
+**($\Phi \circ \Psi = \mathrm{id}_{F(A)}$):** Let $x \in F(A)$. Then
+
+$$\Phi(\Psi(x)) = \Psi(x)_A(\mathrm{id}_A) = F(\mathrm{id}_A)(x) = \mathrm{id}_{F(A)}(x) = x$$
+
+where we used the functor law $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$.
+
+**($\Psi \circ \Phi = \mathrm{id}_{\mathrm{Nat}(h^A, F)}$):** Let $\alpha : h^A \Rightarrow F$ be a natural transformation. We must show $\Psi(\Phi(\alpha)) = \alpha$, i.e., for every object $X$ and every $f : X \to A$:
+
+$$\Psi(\Phi(\alpha))_X(f) = \alpha_X(f)$$
+
+The left side is:
+$$\Psi(\Phi(\alpha))_X(f) = F(f)(\Phi(\alpha)) = F(f)(\alpha_A(\mathrm{id}_A))$$
+
+Now we use the **naturality of $\alpha$** at the morphism $f : X \to A$. The naturality square for $\alpha$ at $f$ gives:
+
+$$
+\begin{array}{ccc}
+\mathrm{Hom}(A, A) & \xrightarrow{\alpha_A} & F(A) \\[6pt]
+\downarrow\scriptstyle{f^*} & & \downarrow\scriptstyle{F(f)} \\[6pt]
+\mathrm{Hom}(X, A) & \xrightarrow{\alpha_X} & F(X)
+\end{array}
+$$
+
+Commutativity says: $\alpha_X \circ f^* = F(f) \circ \alpha_A$. Evaluating both sides at $\mathrm{id}_A$:
+
+$$\alpha_X(f^*(\mathrm{id}_A)) = F(f)(\alpha_A(\mathrm{id}_A))$$
+
+Since $f^*(\mathrm{id}_A) = \mathrm{id}_A \circ f = f$, the left side becomes $\alpha_X(f)$. Therefore:
+
+$$\Psi(\Phi(\alpha))_X(f) = F(f)(\alpha_A(\mathrm{id}_A)) = \alpha_X(f)$$
+
+Since this holds for all $X$ and all $f$, we conclude $\Psi(\Phi(\alpha)) = \alpha$.
+
+Hence $\Phi$ and $\Psi$ are mutually inverse, and $\Phi : \mathrm{Nat}(h^A, F) \xrightarrow{\sim} F(A)$ is a bijection. $\square$
+</Proof>
+
+---
+
+## Step 4: Naturality in $F$
+
+<Proof title="Naturality in F">
+We show $\Phi$ is natural in the variable $F$. Let $\sigma : F \Rightarrow G$ be a natural transformation of presheaves. We must show that the following square commutes:
+
+$$
+\begin{array}{ccc}
+\mathrm{Nat}(h^A, F) & \xrightarrow{\Phi_{A,F}} & F(A) \\[6pt]
+\downarrow\scriptstyle{\sigma_*} & & \downarrow\scriptstyle{\sigma_A} \\[6pt]
+\mathrm{Nat}(h^A, G) & \xrightarrow{\Phi_{A,G}} & G(A)
+\end{array}
+$$
+
+where $\sigma_* : \mathrm{Nat}(h^A, F) \to \mathrm{Nat}(h^A, G)$ is post-composition by $\sigma$, sending $\alpha \mapsto \sigma \circ \alpha$.
+
+Let $\alpha \in \mathrm{Nat}(h^A, F)$.
+
+Going right then down:
+$$\sigma_A(\Phi_{A,F}(\alpha)) = \sigma_A(\alpha_A(\mathrm{id}_A))$$
+
+Going down then right:
+$$\Phi_{A,G}(\sigma_*(\alpha)) = \Phi_{A,G}(\sigma \circ \alpha) = (\sigma \circ \alpha)_A(\mathrm{id}_A) = \sigma_A(\alpha_A(\mathrm{id}_A))$$
+
+These are equal, so $\Phi$ is natural in $F$. $\square$
+</Proof>
+
+---
+
+## Step 5: Naturality in $A$
+
+<Proof title="Naturality in A">
+We show $\Phi$ is natural in $A$. We must be careful about variance. A morphism $u : A \to B$ in $\mathcal{C}$ induces:
+
+- A natural transformation $h^u = u_* : h^A \Rightarrow h^B$ (post-composition by $u$), which gives a pullback map $u^* : \mathrm{Nat}(h^B, F) \to \mathrm{Nat}(h^A, F)$ by pre-composition with $h^u$.
+- A map $F(u) : F(B) \to F(A)$ (since $F$ is contravariant).
+
+Both sides are contravariant in $A$, so the naturality is with respect to the functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.
+
+The naturality square we must verify is:
+
+$$
+\begin{array}{ccc}
+\mathrm{Nat}(h^B, F) & \xrightarrow{\Phi_{B,F}} & F(B) \\[6pt]
+\downarrow\scriptstyle{u^*} & & \downarrow\scriptstyle{F(u)} \\[6pt]
+\mathrm{Nat}(h^A, F) & \xrightarrow{\Phi_{A,F}} & F(A)
+\end{array}
+$$
+
+where $u^*(\beta) = \beta \circ h^u$ for $\beta : h^B \Rightarrow F$.
+
+Let $\beta \in \mathrm{Nat}(h^B, F)$.
+
+Going right then down:
+$$F(u)(\Phi_{B,F}(\beta)) = F(u)(\beta_B(\mathrm{id}_B))$$
+
+Going down then right:
+$$\Phi_{A,F}(u^*(\beta)) = \Phi_{A,F}(\beta \circ h^u) = (\beta \circ h^u)_A(\mathrm{id}_A) = \beta_A(h^u_A(\mathrm{id}_A)) = \beta_A(u \circ \mathrm{id}_A) = \beta_A(u)$$
+
+Now, by the naturality of $\beta$ at $u : A \to B$:
+
+$$
+\begin{array}{ccc}
+\mathrm{Hom}(B, B) & \xrightarrow{\beta_B} & F(B) \\[6pt]
+\downarrow\scriptstyle{u^*} & & \downarrow\scriptstyle{F(u)} \\[6pt]
+\mathrm{Hom}(A, B) & \xrightarrow{\beta_A} & F(A)
+\end{array}
+$$
+
+we get $\beta_A(u^*(\mathrm{id}_B)) = F(u)(\beta_B(\mathrm{id}_B))$, i.e., $\beta_A(u) = F(u)(\beta_B(\mathrm{id}_B))$.
+
+Both paths give $\beta_A(u) = F(u)(\beta_B(\mathrm{id}_B))$, so the diagram commutes. Hence $\Phi$ is natural in $A$. $\square$
+</Proof>
+
+---
+
+## Covariant Version
+
+<Remark title="Covariant Yoneda Lemma">
+There is a dual version for covariant functors. For $F : \mathcal{C} \to \mathbf{Set}$ and $h_A = \mathrm{Hom}_{\mathcal{C}}(A, -)$, the **covariant Yoneda Lemma** states:
+
+$$\mathrm{Nat}(h_A, F) \cong F(A)$$
+
+naturally in $A$ and $F$. The proof is entirely analogous: the bijection sends $\alpha : h_A \Rightarrow F$ to $\alpha_A(\mathrm{id}_A) \in F(A)$, and the inverse sends $x \in F(A)$ to the natural transformation with components $f \mapsto F(f)(x)$.
+</Remark>
+
+---
+
+## Corollary: The Yoneda Embedding
+
+<Theorem title="Yoneda Embedding is Fully Faithful" number="1.2">
+The **Yoneda embedding**
+
+$$\mathbf{y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}], \qquad A \mapsto h^A = \mathrm{Hom}(-, A)$$
+
+is fully faithful. That is, for all objects $A, B \in \mathcal{C}$:
+
+$$\mathrm{Hom}_{\mathcal{C}}(A, B) \cong \mathrm{Nat}(h^A, h^B)$$
+</Theorem>
+
+<Proof title="Proof via Yoneda Lemma">
+Apply the Yoneda Lemma with $F = h^B = \mathrm{Hom}(-, B)$:
+
+$$\mathrm{Nat}(h^A, h^B) \cong h^B(A) = \mathrm{Hom}(A, B)$$
+
+The bijection sends a natural transformation $\alpha : h^A \Rightarrow h^B$ to $\alpha_A(\mathrm{id}_A) \in \mathrm{Hom}(A, B)$, and the inverse sends a morphism $f : A \to B$ to the natural transformation $f_* : h^A \Rightarrow h^B$ given by post-composition with $f$.
+
+**Faithfulness:** If $f_* = g_*$ as natural transformations, then $(f_*)_A(\mathrm{id}_A) = (g_*)_A(\mathrm{id}_A)$, i.e., $f \circ \mathrm{id}_A = g \circ \mathrm{id}_A$, so $f = g$.
+
+**Fullness:** Every natural transformation $\alpha : h^A \Rightarrow h^B$ equals $f_*$ where $f = \alpha_A(\mathrm{id}_A)$. This is precisely the content of $\Psi \circ \Phi = \mathrm{id}$. $\square$
+</Proof>
+
+---
+
+## Corollary: Representable Functors Determine Objects
+
+<Theorem title="Representable functors detect isomorphisms" number="1.3">
+Let $A, B \in \mathcal{C}$. Then $A \cong B$ in $\mathcal{C}$ if and only if $h^A \cong h^B$ as presheaves. More precisely, the Yoneda embedding reflects isomorphisms.
+</Theorem>
+
+<Proof title="Isomorphism detection">
+Since $\mathbf{y}$ is fully faithful, it reflects isomorphisms. Concretely:
+
+**($\Rightarrow$):** If $f : A \xrightarrow{\sim} B$ is an isomorphism, then $f_* : h^A \Rightarrow h^B$ is a natural isomorphism with inverse $(f^{-1})_*$.
+
+**($\Leftarrow$):** Suppose $\alpha : h^A \xrightarrow{\sim} h^B$ is a natural isomorphism. By full faithfulness, $\alpha = f_*$ for some morphism $f : A \to B$, and $\alpha^{-1} = g_*$ for some $g : B \to A$. Then:
+
+Note that post-composition reverses the order: $(g \circ f)_* = f_* \circ g_*$ does **not** hold in general. Instead, $\mathbf{y}$ is a covariant functor, so $(g \circ f)_* = g_* \circ f_*$. We compute:
+
+$$(\mathrm{id}_A)_* = \alpha^{-1} \circ \alpha = g_* \circ f_* = (g \circ f)_*$$
+
+Since $\mathbf{y}$ is faithful, $g \circ f = \mathrm{id}_A$. Similarly, $\alpha \circ \alpha^{-1} = \mathrm{id}_{h^B}$ gives $(f \circ g)_* = (\mathrm{id}_B)_*$, so $f \circ g = \mathrm{id}_B$. Therefore $f$ is an isomorphism. $\square$
+</Proof>
+
+---
+
+## Applications and Examples
+
+<Example title="Cayley's Theorem from Yoneda">
+Let $G$ be a group, viewed as a one-object category $\mathbf{B}G$ with a single object $\bullet$ and $\mathrm{Hom}(\bullet, \bullet) = G$. The Yoneda embedding gives
+
+$$\mathbf{y} : \mathbf{B}G \to [\mathbf{B}G^{\mathrm{op}}, \mathbf{Set}] \cong G\text{-}\mathbf{Set}$$
+
+The single object $\bullet$ maps to $h^\bullet = \mathrm{Hom}(-, \bullet) = G$ as a left $G$-set (acting on itself by left multiplication). The Yoneda Lemma tells us this embedding is fully faithful, which in this context means the left regular representation is faithful. This is precisely **Cayley's theorem**: every group embeds into the symmetric group $\mathrm{Sym}(G)$.
+</Example>
+
+<Example title="Universal elements and representing objects">
+Let $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ be a presheaf. A **representation** of $F$ is a pair $(A, u)$ where $A \in \mathcal{C}$ and $u \in F(A)$ such that $\Psi(u) : h^A \Rightarrow F$ is a natural isomorphism. By the Yoneda Lemma, this is equivalent to saying that for every object $X$, the map
+
+$$\mathrm{Hom}(X, A) \to F(X), \qquad f \mapsto F(f)(u)$$
+
+is a bijection. The element $u$ is called the **universal element**. For instance, if $F = \mathrm{Hom}(- \times B, C)$, then a representing object is the exponential $C^B$ with universal element $\mathrm{ev} : C^B \times B \to C$.
+</Example>
+
+<Example title="Recovering morphisms from natural transformations">
+In algebraic geometry, a scheme $X$ is determined by its functor of points $h_X : \mathbf{Sch}^{\mathrm{op}} \to \mathbf{Set}$, sending $S \mapsto \mathrm{Hom}(S, X)$. By Yoneda, morphisms $X \to Y$ correspond bijectively to natural transformations $h_X \Rightarrow h_Y$. This is the foundation of the functor-of-points approach: to define a morphism of schemes, it suffices to specify it functorially on $S$-points for all test schemes $S$.
+</Example>
+
+<Example title="Yoneda for preorders">
+Let $(P, \leq)$ be a preorder viewed as a category. The presheaf category $[P^{\mathrm{op}}, \mathbf{Set}]$ consists of $\mathbf{Set}$-valued presheaves. The Yoneda embedding sends $p \in P$ to the "downward closed set" $h^p(q) = \mathrm{Hom}(q, p)$, which is a singleton if $q \leq p$ and empty otherwise. This is the principal downset $\downarrow p$. The Yoneda Lemma says $\mathrm{Nat}(h^p, F) \cong F(p)$ -- a natural transformation out of a representable presheaf is determined by its value at the "top" element.
+</Example>
+
+<Example title="Products via representability">
+The [product](/category-theory/ch02-limits-colimits/concepts/c02-product-coproduct) $A \times B$ in a category $\mathcal{C}$ is defined as the representing object for the functor $F(X) = \mathrm{Hom}(X, A) \times \mathrm{Hom}(X, B)$. That is, we require a natural isomorphism
+
+$$\mathrm{Hom}(X, A \times B) \cong \mathrm{Hom}(X, A) \times \mathrm{Hom}(X, B)$$
+
+By the Yoneda Lemma, $A \times B$ is unique up to unique isomorphism (if it exists), because two representing objects for the same functor must be isomorphic via a unique isomorphism compatible with the universal elements.
+</Example>
+
+<Example title="Yoneda and adjunctions">
+An [adjunction](/category-theory/ch02-limits-colimits/concepts/c05-adjunction) $F \dashv G$ between categories $\mathcal{C}$ and $\mathcal{D}$ is a natural isomorphism
+
+$$\mathrm{Hom}_{\mathcal{D}}(F(X), Y) \cong \mathrm{Hom}_{\mathcal{C}}(X, G(Y))$$
+
+For each fixed $Y$, this says the functor $\mathrm{Hom}(-, G(Y))$ is represented by $F(-)$ evaluated appropriately. The Yoneda Lemma ensures the unit $\eta_X : X \to GF(X)$ and counit $\varepsilon_Y : FG(Y) \to Y$ are uniquely determined by this natural bijection.
+</Example>
+
+<Example title="Density theorem (Yoneda extension)">
+The **density theorem** states that every presheaf $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is a colimit of representable presheaves:
+
+$$F \cong \mathrm{colim}_{(A, x) \in \int F}\, h^A$$
+
+where $\int F$ is the category of elements of $F$. This is a direct consequence of the Yoneda Lemma: the universal element construction $\Psi$ tells us that each $x \in F(A)$ gives a "probe" $h^A \Rightarrow F$, and $F$ is assembled from all such probes.
+</Example>
+
+<Example title="Yoneda for enriched categories">
+The Yoneda Lemma generalizes to categories enriched over a symmetric monoidal closed category $\mathcal{V}$. For a $\mathcal{V}$-enriched category $\mathcal{C}$ and a $\mathcal{V}$-functor $F : \mathcal{C}^{\mathrm{op}} \to \mathcal{V}$, the enriched Yoneda Lemma states:
+
+$$[\mathcal{C}^{\mathrm{op}}, \mathcal{V}](h^A, F) \cong F(A)$$
+
+as objects of $\mathcal{V}$, naturally in $A$ and $F$. The proof follows the same structure: define $\Phi$ by evaluation at $\mathrm{id}_A$, construct $\Psi$ using the enriched functor structure, and verify they are mutually inverse.
+</Example>
+
+<Example title="Moduli problems as representability">
+In algebraic geometry, a **moduli problem** is a functor $\mathcal{F} : \mathbf{Sch}^{\mathrm{op}} \to \mathbf{Set}$ (or to groupoids). A **fine moduli space** is a scheme $M$ representing $\mathcal{F}$, i.e., $\mathcal{F} \cong h^M$ naturally. By the Yoneda Lemma, this means there is a universal family $\mathcal{U} \in \mathcal{F}(M)$ such that every family over any base $S$ is the pullback of $\mathcal{U}$ along a unique map $S \to M$. When no fine moduli space exists (e.g., for curves of genus $g \geq 2$ with automorphisms), one passes to [algebraic stacks](/algebraic-stacks).
+</Example>
+
+<Example title="Naturality forces the Yoneda bijection">
+The Yoneda bijection is the only natural bijection $\mathrm{Nat}(h^A, F) \cong F(A)$. Indeed, suppose $\Phi'$ is any natural bijection. Naturality in $F$ applied to the natural transformation $\Psi(x) : h^A \Rightarrow F$ (for $x \in F(A)$) forces $\Phi'$ to agree with $\Phi$. This "rigidity" illustrates how naturality severely constrains the possible constructions.
+</Example>
+
+<Example title="Presheaf category has all limits and colimits">
+Since $\mathbf{Set}$ has all small limits and colimits, the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ inherits them (computed pointwise). The Yoneda embedding $\mathbf{y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ thus embeds $\mathcal{C}$ fully faithfully into a category that is complete and cocomplete. This is a "free cocompletion": $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is the free cocompletion of $\mathcal{C}$ under small colimits, a fact that rests on the density theorem and the Yoneda Lemma.
+</Example>
+
+<Example title="Yoneda in homotopy theory">
+In the homotopy category $\mathrm{Ho}(\mathbf{Top}_*)$ of pointed spaces, the representable functor $[-, X]$ sends a space $Y$ to the set of homotopy classes $[Y, X]$. Brown's representability theorem can be viewed as a homotopical analogue of the Yoneda Lemma: under mild conditions, a contravariant functor from $\mathrm{Ho}(\mathbf{Top}_*)$ to $\mathbf{Set}$ that converts coproducts to products and satisfies a Mayer-Vietoris condition is representable. The Eilenberg-MacLane spaces $K(\pi, n)$ represent ordinary cohomology: $H^n(X; \pi) \cong [X, K(\pi, n)]$.
+</Example>
+
+---
+
+## Summary of the Proof Strategy
+
+<Remark title="The structure of the proof">
+The proof of the Yoneda Lemma follows a clean three-part strategy:
+
+1. **Define** $\Phi(\alpha) = \alpha_A(\mathrm{id}_A)$ -- extract the "essential data" from a natural transformation by evaluating at the identity.
+
+2. **Construct** $\Psi(x)_X(f) = F(f)(x)$ -- rebuild a natural transformation from a single element by "transporting" it along morphisms via the functor $F$.
+
+3. **Verify** $\Phi \circ \Psi = \mathrm{id}$ (using the functor law $F(\mathrm{id}) = \mathrm{id}$) and $\Psi \circ \Phi = \mathrm{id}$ (using the naturality condition on $\alpha$).
+
+The naturality of $\Phi$ in both variables follows from direct diagram chasing. The entire argument is elementary -- no set-theoretic subtleties arise because we only work with hom-sets (local smallness) and the set $F(A)$.
+</Remark>
+
+<Remark title="Philosophical significance">
+The Yoneda Lemma expresses a deep principle: **an object is completely determined by how other objects map into it**. This "relational" perspective -- knowing an object by its interactions rather than its internal structure -- pervades modern mathematics:
+
+- In algebraic geometry, the functor of points $h_X$ replaces the scheme $X$.
+- In homotopy theory, spaces are probed by mapping spheres into them.
+- In topos theory, a topos is studied through its points (geometric morphisms from $\mathbf{Set}$).
+
+As Ravi Vakil puts it: "If you want to understand an object, look at the maps to and from it."
+</Remark>

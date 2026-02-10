@@ -1,0 +1,180 @@
+export const metadata = {
+  title: '유리수 조밀성의 증명 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "1. 실수의 체계", href: "/analysis/ch01-real-numbers" },
+  { label: "증명 - 유리수 조밀성의 증명" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="proof" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 유리수 조밀성의 증명 (Proof of Density of Rationals)
+
+This page gives a complete, step-by-step proof that the rational numbers are dense in $\mathbb{R}$, and then extends the result to prove density of the irrationals. The key tool is the [아르키메데스 성질](/analysis/ch01-real-numbers/theorems/t01-archimedean), which itself depends on the completeness of $\mathbb{R}$.
+
+---
+
+## Statement
+
+<Theorem title="Density of Rationals" number="1.3">
+If $a, b \in \mathbb{R}$ with $a < b$, then there exists $q \in \mathbb{Q}$ such that $a < q < b$.
+</Theorem>
+
+---
+
+## Proof: Density of Rationals
+
+<Proof>
+Let $a, b \in \mathbb{R}$ with $a < b$. We must find integers $m$ and $n$ with $n > 0$ such that $a < m/n < b$.
+
+**Step 1: Use the Archimedean property to find $n$.**
+
+Since $b - a > 0$, by the Archimedean property there exists $n \in \mathbb{N}$ such that
+
+$$n(b - a) > 1, \quad \text{i.e.,} \quad \frac{1}{n} < b - a.$$
+
+This $n$ is chosen so that the "mesh size" $1/n$ is small enough to fit between $a$ and $b$.
+
+**Step 2: Use the Archimedean property to find $m$.**
+
+We now need an integer $m$ such that $a < m/n < b$, or equivalently $na < m < nb$.
+
+By the Archimedean property, the set $\{k \in \mathbb{Z} : k > na\}$ is nonempty. (Specifically, there exists $k_1 \in \mathbb{N}$ with $k_1 > na$, and also $k_2 \in \mathbb{N}$ with $k_2 > -na$, so $-k_2 < na$, meaning integers both above and below $na$ exist.)
+
+Let $m$ be the **smallest integer** greater than $na$. Formally, define
+
+$$m = \lfloor na \rfloor + 1,$$
+
+where $\lfloor \cdot \rfloor$ denotes the floor function. Then $m - 1 \leq na < m$, which gives us:
+
+$$na < m.$$
+
+**Step 3: Show that $m < nb$.**
+
+From $m - 1 \leq na$, we get $m \leq na + 1$. Since $1 < n(b - a)$ (from Step 1), we have $1 < nb - na$, i.e., $na + 1 < nb$. Combining:
+
+$$m \leq na + 1 < nb.$$
+
+**Step 4: Combine to get $a < m/n < b$.**
+
+From Steps 2 and 3 we have $na < m < nb$. Dividing by $n > 0$:
+
+$$a < \frac{m}{n} < b.$$
+
+Since $m \in \mathbb{Z}$ and $n \in \mathbb{N}$, the number $q = m/n$ is rational. This completes the proof.
+</Proof>
+
+---
+
+## Detailed Walkthrough of a Concrete Case
+
+<Example title="Walkthrough: finding a rational between sqrt(2) and sqrt(3)">
+1. Let $a = \sqrt{2} \approx 1.4142$ and $b = \sqrt{3} \approx 1.7321$.
+
+**Step 1**: $b - a \approx 0.3179$. We need $1/n < 0.3179$, so $n > 3.14\ldots$. Take $n = 4$.
+
+**Step 2**: $na = 4\sqrt{2} \approx 5.6569$. So $m = \lfloor 5.6569 \rfloor + 1 = 5 + 1 = 6$.
+
+**Step 3**: Check: $nb = 4\sqrt{3} \approx 6.9282$. Indeed $6 < 6.9282$.
+
+**Step 4**: $q = 6/4 = 3/2 = 1.5$, and indeed $\sqrt{2} < 1.5 < \sqrt{3}$.
+</Example>
+
+<Example title="Walkthrough: very close real numbers">
+2. Let $a = 3.14159$ and $b = 3.14160$.
+
+**Step 1**: $b - a = 0.00001 = 10^{-5}$. We need $1/n < 10^{-5}$, so $n > 100{,}000$. Take $n = 100{,}000$.
+
+**Step 2**: $na = 314{,}159$. So $m = 314{,}159 + 1 = 314{,}160$ (since $na$ is already an integer, $\lfloor na \rfloor = 314{,}159$).
+
+**Step 3**: $nb = 314{,}160$. Wait -- $m = nb$ exactly, so $m/n = b$, which does not give strict inequality. We should take $n = 200{,}000$ instead: $na = 628{,}318$, $m = 628{,}319$, $nb = 628{,}320$, and $q = 628{,}319/200{,}000 = 3.141595$.
+
+This illustrates a subtlety: when $na$ happens to be an integer, the chosen $m$ still works because the proof gives $na < m$ strictly. The issue above arose only because $a$ was already rational; in that edge case, choosing a slightly larger $n$ resolves it cleanly.
+</Example>
+
+---
+
+## Proof: Density of Irrationals
+
+<Theorem title="Density of Irrationals" number="1.4">
+If $a, b \in \mathbb{R}$ with $a < b$, then there exists an irrational number $\xi$ with $a < \xi < b$.
+</Theorem>
+
+<Proof>
+**Method 1: Translation by $\sqrt{2}$.**
+
+Since $a < b$, we have $a - \sqrt{2} < b - \sqrt{2}$. By density of rationals, there exists $q \in \mathbb{Q}$ with
+
+$$a - \sqrt{2} < q < b - \sqrt{2}.$$
+
+Adding $\sqrt{2}$ to all parts:
+
+$$a < q + \sqrt{2} < b.$$
+
+Now $\xi = q + \sqrt{2}$ is irrational: if $q + \sqrt{2}$ were rational, then $\sqrt{2} = (q + \sqrt{2}) - q$ would be the difference of two rationals, hence rational -- contradicting the irrationality of $\sqrt{2}$.
+
+**Method 2: Scaling.**
+
+Since $a/\sqrt{2} < b/\sqrt{2}$, by density of rationals there exists $q \in \mathbb{Q} \setminus \{0\}$ with $a/\sqrt{2} < q < b/\sqrt{2}$. Then $\xi = q\sqrt{2}$ is irrational (since $q \neq 0$ and $\sqrt{2}$ is irrational), and $a < \xi < b$.
+
+(To ensure $q \neq 0$: if $0 \notin (a/\sqrt{2}, b/\sqrt{2})$, any rational $q$ in the interval works. If $0 \in (a/\sqrt{2}, b/\sqrt{2})$, then $a < 0 < b$, and we can find a nonzero rational in $(0, b/\sqrt{2})$ since this interval is nonempty.)
+</Proof>
+
+---
+
+## Examples
+
+<Example title="Irrationals between rationals">
+3. Between $1$ and $2$: the number $\sqrt{2} \approx 1.414$ is irrational and lies in $(1, 2)$. By the proof, we could also use $q + \sqrt{2}$ where $q \in \mathbb{Q}$ and $1 - \sqrt{2} < q < 2 - \sqrt{2}$, e.g., $q = 0$ gives $\xi = \sqrt{2}$.
+</Example>
+
+<Example title="Irrationals between close rationals">
+4. Between $1/3$ and $1/2$: $b - a = 1/6$. We can take $\xi = \sqrt{2}/3 \approx 0.4714$, since $1/3 \approx 0.333 < 0.4714 < 0.5 = 1/2$.
+</Example>
+
+<Example title="Irrationals between irrationals">
+5. Between $\sqrt{2}$ and $\sqrt{3}$: the number $\sqrt{2.5} = \sqrt{5}/\sqrt{2} = \sqrt{10}/2 \approx 1.5811$ is irrational and lies in $(\sqrt{2}, \sqrt{3}) \approx (1.414, 1.732)$.
+</Example>
+
+---
+
+## Why the Archimedean Property is Essential
+
+<Example title="Without Archimedean: density can fail">
+6. In the non-Archimedean ordered field of formal Laurent series $\mathbb{R}((t))$, the element $t$ is "infinitely small" -- it is positive but less than $1/n$ for every $n \in \mathbb{N}$. The interval $(0, t)$ contains no element of the form $m/n$ with $m, n \in \mathbb{Z}$, $n > 0$, because every such element is either $\leq 0$ or $\geq 1/n > t$. So the density theorem fails in this non-Archimedean setting.
+</Example>
+
+---
+
+## Infinitely Many Rationals and Irrationals
+
+<Example title="Infinitely many of each in every interval">
+7. By applying the density theorem iteratively, every nonempty open interval $(a, b)$ contains infinitely many rationals **and** infinitely many irrationals. Starting with $q_1 \in \mathbb{Q} \cap (a, b)$, the interval $(a, q_1)$ is nonempty and contains another rational $q_2$, and so on. The same argument works for irrationals.
+
+In fact, $(a, b)$ contains **uncountably many** irrationals (since $(a, b)$ is uncountable and $\mathbb{Q} \cap (a, b)$ is countable) and **countably infinitely many** rationals.
+</Example>
+
+---
+
+## Summary of the Proof Structure
+
+<Remark>
+The proof of density of rationals follows a two-step strategy:
+
+1. **Make the mesh fine enough**: Use the Archimedean property to find $n$ with $1/n < b - a$, ensuring that the "grid" $\{\ldots, -2/n, -1/n, 0, 1/n, 2/n, \ldots\}$ has spacing small enough that at least one grid point falls in $(a, b)$.
+
+2. **Locate the grid point**: Find the smallest integer $m$ with $m > na$, and verify that $m < nb$.
+
+This "find a fine grid, then locate a grid point" strategy reappears in many constructive arguments in analysis, including proofs about uniform continuity and Riemann integrability.
+</Remark>

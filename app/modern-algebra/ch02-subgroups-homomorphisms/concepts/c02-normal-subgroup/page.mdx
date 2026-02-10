@@ -1,0 +1,201 @@
+export const metadata = {
+  title: 'Normal Subgroups — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "2. 부분군과 준동형", href: "/modern-algebra/ch02-subgroups-homomorphisms" },
+  { label: "Concept — Normal Subgroups" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Normal Subgroups
+
+Normal subgroups are the subgroups for which the quotient $G/N$ naturally becomes a group. They are precisely the kernels of group homomorphisms.
+
+---
+
+## Cosets
+
+<Definition title="Left and right cosets" number="2.8">
+Let $H \leq G$ and $a \in G$. The **left coset** of $H$ containing $a$ is
+
+$$aH = \{ah \mid h \in H\}.$$
+
+The **right coset** is $Ha = \{ha \mid h \in H\}$. The set of all left cosets is denoted $G/H = \{aH \mid a \in G\}$.
+</Definition>
+
+<Remark title="Cosets partition G">
+The left cosets of $H$ partition $G$: every element belongs to exactly one coset, and $aH = bH$ if and only if $a^{-1}b \in H$. The number of distinct cosets is the **index** $[G : H] = |G/H|$. By Lagrange's theorem, $|G| = [G:H] \cdot |H|$.
+</Remark>
+
+<Example id="cosets-z-2z" title="Cosets of 2Z in Z">
+In $(\mathbb{Z}, +)$, the cosets of $2\mathbb{Z}$ are $0 + 2\mathbb{Z} = 2\mathbb{Z}$ (even integers) and $1 + 2\mathbb{Z}$ (odd integers). The index $[\mathbb{Z} : 2\mathbb{Z}] = 2$.
+</Example>
+
+<Example id="cosets-s3" title="Cosets of H = {e, (12)} in S₃">
+Let $H = \{e, (12)\} \leq S_3$. The left cosets are:
+
+- $eH = \{e, (12)\}$
+- $(13)H = \{(13), (132)\}$
+- $(23)H = \{(23), (123)\}$
+
+The right cosets are:
+
+- $He = \{e, (12)\}$
+- $H(13) = \{(13), (123)\}$
+- $H(23) = \{(23), (132)\}$
+
+Notice: $gH \neq Hg$ in general (e.g., $(13)H \neq H(13)$). This means $H$ is **not** normal in $S_3$.
+</Example>
+
+---
+
+## Definition of normal subgroup
+
+<Definition title="Normal subgroup" number="2.9">
+A subgroup $N \leq G$ is **normal in $G$**, written $N \trianglelefteq G$, if $gNg^{-1} = N$ for all $g \in G$. Equivalently, any of the following conditions hold:
+
+1. $gN = Ng$ for all $g \in G$ (left cosets equal right cosets),
+2. $gng^{-1} \in N$ for all $g \in G$ and $n \in N$,
+3. $N$ is a union of conjugacy classes of $G$,
+4. $N = \ker(\varphi)$ for some homomorphism $\varphi : G \to H$.
+</Definition>
+
+<Remark title="gN = Ng does not mean gn = ng">
+The condition $gN = Ng$ means every left coset equals the corresponding right coset **as a set**. It does **not** mean $gn = ng$ for all $n \in N$. For example, if $gn_1 = n_2 g$ for some possibly different $n_1, n_2 \in N$, the condition still holds.
+</Remark>
+
+<Example id="abelian-normal" title="Every subgroup of an abelian group is normal">
+If $G$ is abelian, then $gng^{-1} = gg^{-1}n = n \in N$ for all $g \in G$, $n \in N$. So every subgroup is normal.
+
+In particular, $n\mathbb{Z} \trianglelefteq \mathbb{Z}$ for all $n$.
+</Example>
+
+<Example id="a3-normal" title="A₃ is normal in S₃">
+$A_3 = \{e, (123), (132)\}$ has index $[S_3 : A_3] = 2$. Any subgroup of index 2 is automatically normal: if $[G:N] = 2$, then $G = N \sqcup gN = N \sqcup Ng$ for any $g \notin N$, so $gN = Ng$.
+</Example>
+
+<Example id="index-2-normal" title="Index 2 implies normal">
+If $[G : H] = 2$, then $H \trianglelefteq G$. This is because there are only two cosets: $H$ and $G \setminus H$. So for $g \notin H$, $gH = G \setminus H = Hg$, and of course $gH = Hg = H$ for $g \in H$.
+
+Applications: $A_n \trianglelefteq S_n$ for all $n$, $\mathrm{SL}(n, \mathbb{R}) \trianglelefteq \mathrm{GL}(n, \mathbb{R})$ when... well, $\mathrm{SL}$ has infinite index. But $\{1, -1\} \trianglelefteq \mathbb{Z}^*$ does apply.
+</Example>
+
+<Example id="not-normal" title="Non-normal subgroup in S₃">
+$H = \{e, (12)\}$ is **not** normal in $S_3$. Check: $(13)(12)(13)^{-1} = (13)(12)(13) = (23) \notin H$. So $gHg^{-1} \neq H$ for $g = (13)$.
+</Example>
+
+---
+
+## Conjugation and conjugacy
+
+<Definition title="Conjugate" number="2.10">
+For $g, a \in G$, the **conjugate** of $a$ by $g$ is $gag^{-1}$. Two elements $a, b \in G$ are **conjugate** if $b = gag^{-1}$ for some $g \in G$. The **conjugacy class** of $a$ is
+
+$$\mathrm{Cl}(a) = \{gag^{-1} \mid g \in G\}.$$
+</Definition>
+
+<Definition title="Conjugate subgroup" number="2.11">
+For $H \leq G$ and $g \in G$, the **conjugate subgroup** is
+
+$$gHg^{-1} = \{ghg^{-1} \mid h \in H\}.$$
+
+This is always a subgroup of $G$, isomorphic to $H$. The subgroup $N$ is normal iff $gNg^{-1} = N$ for all $g$.
+</Definition>
+
+<Example id="conjugacy-s3" title="Conjugacy classes of S₃">
+The conjugacy classes of $S_3$ are:
+
+- $\{e\}$ — the identity
+- $\{(12), (13), (23)\}$ — all transpositions
+- $\{(123), (132)\}$ — all 3-cycles
+
+$A_3 = \{e, (123), (132)\}$ is a union of conjugacy classes, confirming $A_3 \trianglelefteq S_3$.
+
+$H = \{e, (12)\}$ is **not** a union of conjugacy classes (it contains $(12)$ but not $(13)$ or $(23)$), confirming $H \not\trianglelefteq S_3$.
+</Example>
+
+<Example id="conjugation-matrix" title="Conjugation in GL(n, F)">
+In $\mathrm{GL}(n, F)$, conjugation $A \mapsto PAP^{-1}$ is precisely **change of basis**. The conjugacy class of $A$ consists of all matrices similar to $A$ — they share eigenvalues, trace, determinant, characteristic polynomial, and Jordan form (over $\bar{F}$).
+</Example>
+
+<Example id="normal-in-gl" title="Normal subgroups of GL(n, F)">
+$\mathrm{SL}(n, F) \trianglelefteq \mathrm{GL}(n, F)$: for any $P \in \mathrm{GL}$ and $A \in \mathrm{SL}$,
+
+$$\det(PAP^{-1}) = \det(P)\det(A)\det(P)^{-1} = 1,$$
+
+so $PAP^{-1} \in \mathrm{SL}$.
+
+The **scalar matrices** $Z = \{\lambda I \mid \lambda \in F^*\}$ form the center $Z(\mathrm{GL}(n, F))$, which is also normal.
+</Example>
+
+---
+
+## The normal subgroup test
+
+<Theorem title="Normal subgroup test" number="2.3">
+Let $N \leq G$. Then $N \trianglelefteq G$ if and only if $gNg^{-1} \subseteq N$ for all $g \in G$.
+</Theorem>
+
+<Proof>
+If $gNg^{-1} \subseteq N$ for all $g$, then also $g^{-1}Ng \subseteq N$ (apply the hypothesis with $g$ replaced by $g^{-1}$). So $N \subseteq gNg^{-1}$, giving $gNg^{-1} = N$.
+</Proof>
+
+<Example id="kernel-normal" title="Kernels are always normal">
+If $\varphi : G \to H$ is a homomorphism, then $\ker(\varphi) \trianglelefteq G$. For $n \in \ker(\varphi)$ and $g \in G$:
+
+$$\varphi(gng^{-1}) = \varphi(g)\varphi(n)\varphi(g)^{-1} = \varphi(g) \cdot e_H \cdot \varphi(g)^{-1} = e_H.$$
+
+So $gng^{-1} \in \ker(\varphi)$.
+</Example>
+
+<Example id="det-kernel" title="SL as kernel">
+$\det : \mathrm{GL}(n, F) \to F^*$ is a homomorphism, and $\mathrm{SL}(n, F) = \ker(\det)$. So $\mathrm{SL}(n, F) \trianglelefteq \mathrm{GL}(n, F)$, which we already know.
+</Example>
+
+<Example id="sign-kernel" title="Aₙ as kernel">
+The sign homomorphism $\mathrm{sgn} : S_n \to \{+1, -1\}$ has kernel $A_n$ (even permutations). So $A_n \trianglelefteq S_n$.
+</Example>
+
+---
+
+## Commutator subgroup
+
+<Definition title="Commutator and commutator subgroup" number="2.12">
+The **commutator** of $a, b \in G$ is $[a, b] = aba^{-1}b^{-1}$. The **commutator subgroup** (or **derived subgroup**) of $G$ is
+
+$$G' = [G, G] = \langle [a, b] \mid a, b \in G \rangle.$$
+</Definition>
+
+<Theorem title="G' is normal and G/G' is abelian" number="2.4">
+$G' \trianglelefteq G$, and $G/G'$ is abelian. Moreover, $G' $ is the **smallest** normal subgroup $N$ such that $G/N$ is abelian: if $N \trianglelefteq G$ and $G/N$ is abelian, then $G' \leq N$.
+</Theorem>
+
+<Example id="commutator-s3" title="Commutator subgroup of S₃">
+Compute: $[(12),(123)] = (12)(123)(12)^{-1}(123)^{-1} = (12)(123)(12)(132) = (132)$. Since $(132) \in A_3$ and $|A_3| = 3$ is prime, $\langle (132) \rangle = A_3$. So $S_3' = A_3$.
+
+Indeed, $S_3/A_3 \cong \mathbb{Z}/2\mathbb{Z}$ is abelian.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+1. $N \trianglelefteq G$ iff $gNg^{-1} = N$ for all $g$ iff left cosets = right cosets.
+2. Every kernel is normal; every normal subgroup is a kernel (of the projection $G \to G/N$).
+3. Index 2 subgroups are always normal.
+4. $N$ is normal iff it is a union of conjugacy classes.
+5. The commutator subgroup $G'$ is the smallest normal subgroup with abelian quotient.
+</Remark>

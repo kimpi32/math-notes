@@ -1,0 +1,230 @@
+export const metadata = {
+  title: 'Horn Fillers and Extension Conditions — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "1. 단체집합", href: "/higher-category-theory/ch01-simplicial-sets" },
+  { label: "Concept — Horn Fillers" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Horn Fillers and Extension Conditions
+
+Horn filling conditions are the central organizing principle of higher category theory. By varying which horns must be filled and whether fillers are unique, we distinguish between ordinary categories (unique inner horn fillers), Kan complexes (all horn fillers), and quasi-categories (inner horn fillers). These extension conditions encode composition, invertibility, and coherence all at once.
+
+---
+
+## Types of Horns
+
+<Definition title="Inner and outer horns" number="1.1">
+For $n \geq 2$ and $0 \leq k \leq n$, the horn $\Lambda^n_k$ is called:
+
+- An **inner horn** if $0 < k < n$ (i.e., the missing face is neither the first nor the last).
+- An **outer horn** if $k = 0$ or $k = n$.
+
+The inner horns are $\Lambda^n_1, \Lambda^n_2, \ldots, \Lambda^n_{n-1}$. The outer horns are $\Lambda^n_0$ and $\Lambda^n_n$.
+
+For $n = 1$: $\Lambda^1_0$ and $\Lambda^1_1$ are both outer horns (there are no inner horns for $n = 1$).
+</Definition>
+
+<Example id="inner-horn-composition" title="Inner horns and composition">
+The inner horn $\Lambda^2_1$ consists of two edges $f: c_0 \to c_1$ and $g: c_1 \to c_2$ sharing the vertex $c_1$. Filling this horn means finding a $2$-simplex with faces $d_2 = f$, $d_0 = g$, and $d_1 = $ some composite $h: c_0 \to c_2$.
+
+So inner horn filling for $\Lambda^2_1$ encodes the **existence of composition**: given $f$ and $g$, there exists a composite $g \circ f$.
+
+If the filler is **unique**, composition is strictly defined (as in ordinary categories). If the filler **exists but is not unique**, composition is defined up to a contractible space of choices (as in $\infty$-categories).
+</Example>
+
+<Example id="outer-horn-inverse" title="Outer horns and inverses">
+The outer horn $\Lambda^2_0$ gives edges $g: c_1 \to c_2$ and $h: c_0 \to c_2$. Filling this horn means finding $f: c_0 \to c_1$ with $g \circ f = h$ (i.e., $f = g^{-1} \circ h$ if $g$ is invertible).
+
+The outer horn $\Lambda^2_2$ gives edges $f: c_0 \to c_1$ and $h: c_0 \to c_2$. Filling requires $g: c_1 \to c_2$ with $g \circ f = h$ (i.e., $g = h \circ f^{-1}$ if $f$ is invertible).
+
+Outer horn fillers at the $2$-simplex level encode **invertibility** of morphisms. This is why Kan complexes (all horns fillable) model groupoids/$\infty$-groupoids.
+</Example>
+
+---
+
+## Classification by Horn Conditions
+
+<Definition title="Horn filling conditions" number="1.2">
+A simplicial set $X$ can satisfy various horn filling conditions:
+
+1. **Kan complex**: Every horn $\Lambda^n_k \to X$ has a filler ($n \geq 1$, all $k$). This models $\infty$-groupoids.
+
+2. **Quasi-category (inner Kan complex)**: Every **inner** horn $\Lambda^n_k \to X$ has a filler ($n \geq 2$, $0 < k < n$). This models $\infty$-categories.
+
+3. **Nerve of a category**: Every inner horn $\Lambda^n_k \to X$ has a **unique** filler. This characterizes nerves of ordinary categories.
+
+4. **Nerve of a groupoid**: Every horn $\Lambda^n_k \to X$ has a **unique** filler. This characterizes nerves of groupoids.
+</Definition>
+
+<Example id="hierarchy" title="The hierarchy of simplicial sets">
+The following containments hold:
+
+$$\text{Nerves of groupoids} \subset \text{Kan complexes} \subset \text{Quasi-categories} \subset \mathbf{sSet}$$
+$$\text{Nerves of groupoids} \subset \text{Nerves of categories} \subset \text{Quasi-categories}$$
+
+Nerves of groupoids are both Kan and nerves; they have unique fillers for all horns.
+
+Nerves of (non-groupoid) categories have unique inner horn fillers but do **not** have outer horn fillers in general.
+
+Kan complexes have all horn fillers but not necessarily unique ones.
+
+Quasi-categories have inner horn fillers but not necessarily outer ones or unique ones.
+</Example>
+
+---
+
+## The Segal Condition
+
+<Definition title="Segal condition" number="1.3">
+A simplicial set $X$ satisfies the **Segal condition** if for every $n \geq 2$, the **Segal map**
+
+$$X_n \to X_1 \times_{X_0} X_1 \times_{X_0} \cdots \times_{X_0} X_1$$
+
+(given by the spine inclusion $I[n] \hookrightarrow \Delta[n]$) is a bijection. Here $I[n]$ is the **spine**: the union of edges $\{0,1\}, \{1,2\}, \ldots, \{n-1,n\}$ in $\Delta[n]$.
+
+The Segal condition says that an $n$-simplex is uniquely determined by its $n$ consecutive edges. This is equivalent to the unique inner horn filling condition.
+</Definition>
+
+<Example id="segal-nerve" title="Nerves satisfy the Segal condition">
+For the nerve $N(\mathcal{C})$, the Segal map is a bijection:
+
+$$N(\mathcal{C})_n \cong N(\mathcal{C})_1 \times_{N(\mathcal{C})_0} \cdots \times_{N(\mathcal{C})_0} N(\mathcal{C})_1$$
+
+This says that a composable chain $c_0 \to c_1 \to \cdots \to c_n$ is uniquely determined by its individual morphisms. This is trivially true since a chain of morphisms is exactly a sequence of composable morphisms.
+</Example>
+
+<Example id="segal-space" title="Segal spaces (homotopy Segal condition)">
+A **Segal space** is a simplicial space $X: \Delta^{\mathrm{op}} \to \mathbf{sSet}$ (or $\to \mathbf{Top}$) where the Segal map
+
+$$X_n \to X_1 \times_{X_0}^h X_1 \times_{X_0}^h \cdots \times_{X_0}^h X_1$$
+
+is a **weak equivalence** (using the homotopy fiber product). This is the "up to homotopy" version of the Segal condition. Segal spaces provide another model for $\infty$-categories, equivalent to quasi-categories.
+</Example>
+
+---
+
+## Higher Horn Fillers and Coherence
+
+<Example id="3-horn-associativity" title="3-dimensional inner horns: associativity">
+Consider the inner horn $\Lambda^3_1 \to X$ for a quasi-category $X$. This horn provides:
+- Face $d_0$: a $2$-simplex witnessing $h \circ g$
+- Face $d_2$: a $2$-simplex witnessing $g \circ f$
+- Face $d_3$: a $2$-simplex witnessing some composite at $f$
+
+Filling $\Lambda^3_1$ produces the missing face $d_1$ (a $2$-simplex witnessing $h \circ (g \circ f)$ or equivalently $(h \circ g) \circ f$), along with a $3$-simplex connecting all four faces. This $3$-simplex is an **associator**: a witness that the two ways of composing $f, g, h$ are homotopic.
+
+The fact that the $3$-horn filler exists but is not unique means that the associator is defined up to a contractible space of choices.
+</Example>
+
+<Example id="4-horn-pentagon" title="4-dimensional horns: pentagon coherence">
+Filling $4$-dimensional inner horns provides witnesses for the **pentagon identity**: the coherence condition relating the five ways of associating a four-fold composition. The $4$-simplex produced by filling $\Lambda^4_k$ (for inner $k$) encodes a homotopy between different associators.
+
+In an $\infty$-category, all higher coherences (Mac Lane's coherence conditions, and their higher analogues) are automatically encoded by the horn-filling conditions. This is one of the great advantages of the quasi-categorical approach: coherence is built in, not imposed by hand.
+</Example>
+
+<Example id="higher-horn-unique-nerve" title="Unique higher horn fillers for nerves">
+For the nerve of a category, ALL inner horn fillers are unique (not just the $2$-dimensional ones). This is because nerves are $2$-coskeletal: the higher simplices are uniquely determined by the $2$-simplices.
+
+A $3$-simplex in $N(\mathcal{C})$ is a composable triple $f, g, h$, and there is exactly one such simplex -- associativity is a strict equality, not a homotopy. There is no room for different associators.
+</Example>
+
+---
+
+## Extension Properties
+
+<Definition title="Right lifting property" number="1.4">
+A map $p: X \to Y$ of simplicial sets has the **right lifting property** (RLP) with respect to a map $i: A \to B$ if every commutative square
+
+$$A \xrightarrow{\;\;} X$$
+$$\downarrow^i \quad\quad \downarrow^p$$
+$$B \xrightarrow{\;\;} Y$$
+
+has a diagonal lift $B \to X$. We write $i \;\square\; p$.
+</Definition>
+
+<Example id="rlp-anodyne" title="Anodyne extensions">
+A map $i: A \to B$ is an **anodyne extension** (or **anodyne map**) if it has the left lifting property with respect to all Kan fibrations. The class of anodyne extensions is the smallest saturated class containing all horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$.
+
+Examples of anodyne extensions:
+- All horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$
+- The map $\{0\} \hookrightarrow J$ where $J$ is the nerve of the groupoid with two objects and a unique isomorphism between them (the "walking isomorphism")
+- Pushouts and transfinite compositions of anodyne extensions
+
+Anodyne extensions are weak equivalences. They provide the technical machinery for constructing homotopy-theoretic arguments in $\mathbf{sSet}$.
+</Example>
+
+<Example id="inner-anodyne" title="Inner anodyne extensions">
+A map is **inner anodyne** if it belongs to the smallest saturated class containing all inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 < k < n$. Inner anodyne maps have the left lifting property with respect to inner fibrations (maps with the RLP against inner horns).
+
+The inner anodyne maps are the "correct" class of trivial cofibrations for the Joyal model structure on $\mathbf{sSet}$, where the fibrant objects are quasi-categories.
+</Example>
+
+<Example id="left-right-anodyne" title="Left and right anodyne extensions">
+**Left anodyne** maps are generated by the horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $0 \leq k < n$ (all horns except the last outer horn). **Right anodyne** maps use $0 < k \leq n$ (all horns except the first outer horn).
+
+Left fibrations (maps with RLP against left anodyne maps) model covariant functors valued in spaces ($\infty$-groupoids). Right fibrations model contravariant functors. This is the $\infty$-categorical analogue of the Grothendieck construction.
+</Example>
+
+---
+
+## Comparison of Filling Conditions
+
+<Example id="filling-comparison-table" title="Summary of horn filling conditions">
+The key horn filling conditions and their categorical meaning:
+
+**All horns, unique fillers** = Nerve of a groupoid (strict $1$-groupoid)
+
+**Inner horns, unique fillers** = Nerve of a category (strict $1$-category)
+
+**All horns, existence** = Kan complex ($\infty$-groupoid)
+
+**Inner horns, existence** = Quasi-category ($\infty$-category)
+
+**Left horns, existence** = Left fibration over $\Delta[0]$ (used in straightening/unstraightening)
+
+**Right horns, existence** = Right fibration over $\Delta[0]$ (dual)
+
+This clean hierarchy shows how the theory of higher categories emerges naturally from combinatorial conditions on simplicial sets.
+</Example>
+
+<Example id="weakening-principle" title="The weakening principle">
+Going from ordinary categories to $\infty$-categories involves two conceptual steps:
+
+1. **Relax uniqueness**: Replace "unique filler" with "existence of fillers." This replaces equalities (like $h \circ (g \circ f) = (h \circ g) \circ f$) with coherent homotopies.
+
+2. **Extend to outer horns for groupoids**: Adding outer horn fillers makes all morphisms invertible (up to homotopy), giving $\infty$-groupoids (Kan complexes).
+
+Each step corresponds to a well-defined weakening of the horn extension condition, making the progression from $1$-categories to $\infty$-categories precise and systematic.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Horn filler conditions organize higher category theory:
+
+1. **Inner horns** encode composition; **outer horns** encode invertibility.
+
+2. **Unique** fillers give strict structures (ordinary categories/groupoids); **existence** gives homotopy-coherent structures ($\infty$-categories/$\infty$-groupoids).
+
+3. The **Segal condition** (unique inner horn fillers) characterizes nerves of categories.
+
+4. Higher-dimensional horn fillers automatically encode **coherence**: associativity, pentagon identity, and all higher coherences.
+
+5. Various classes of **anodyne extensions** (inner, left, right) provide the technical tools for the different flavors of higher categorical structure.
+</Remark>

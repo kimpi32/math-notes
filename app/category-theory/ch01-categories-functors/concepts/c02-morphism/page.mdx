@@ -1,0 +1,158 @@
+export const metadata = {
+  title: 'Morphisms and Isomorphisms — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Concept — Morphisms and Isomorphisms" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Morphisms and Isomorphisms
+
+In category theory, we study objects not by their internal structure but through their morphisms. The various special types of morphisms — monomorphisms, epimorphisms, isomorphisms, sections, retractions — capture algebraic and structural phenomena purely in terms of composition.
+
+---
+
+## Types of Morphisms
+
+<Definition title="Monomorphism" number="1.3">
+A morphism $f : A \to B$ in a category $\mathcal{C}$ is a **monomorphism** (or is **monic**) if it is left-cancellable: for all morphisms $g, h : C \to A$,
+
+$$f \circ g = f \circ h \implies g = h$$
+
+We write $f : A \rightarrowtail B$ to indicate a monomorphism.
+</Definition>
+
+<Definition title="Epimorphism" number="1.4">
+A morphism $f : A \to B$ is an **epimorphism** (or is **epic**) if it is right-cancellable: for all morphisms $g, h : B \to C$,
+
+$$g \circ f = h \circ f \implies g = h$$
+
+We write $f : A \twoheadrightarrow B$ to indicate an epimorphism.
+</Definition>
+
+<Remark title="Mono/epi versus injective/surjective">
+In $\mathbf{Set}$, monomorphisms are exactly injective functions and epimorphisms are exactly surjective functions. However, this correspondence can fail in other categories. In the category $\mathbf{Ring}$, the inclusion $\mathbb{Z} \hookrightarrow \mathbb{Q}$ is an epimorphism (any two ring maps out of $\mathbb{Q}$ that agree on $\mathbb{Z}$ must agree everywhere), even though it is far from surjective.
+</Remark>
+
+<Definition title="Isomorphism" number="1.5">
+A morphism $f : A \to B$ is an **isomorphism** if there exists a morphism $g : B \to A$ such that
+
+$$g \circ f = \mathrm{id}_A \quad \text{and} \quad f \circ g = \mathrm{id}_B$$
+
+The morphism $g$ is called the **inverse** of $f$, written $g = f^{-1}$. If an isomorphism $A \to B$ exists, we say $A$ and $B$ are **isomorphic**, written $A \cong B$.
+</Definition>
+
+<Theorem title="Uniqueness of inverses" number="1.3">
+If $f : A \to B$ has both a left inverse $g$ (i.e., $g \circ f = \mathrm{id}_A$) and a right inverse $h$ (i.e., $f \circ h = \mathrm{id}_B$), then $g = h$ and $f$ is an isomorphism.
+</Theorem>
+
+<Proof>
+We compute: $g = g \circ \mathrm{id}_B = g \circ (f \circ h) = (g \circ f) \circ h = \mathrm{id}_A \circ h = h$.
+</Proof>
+
+---
+
+## Sections and Retractions
+
+<Definition title="Section and Retraction" number="1.6">
+Let $f : A \to B$ be a morphism.
+
+- A **section** (or **right inverse**) of $f$ is a morphism $s : B \to A$ such that $f \circ s = \mathrm{id}_B$.
+- A **retraction** (or **left inverse**) of $f$ is a morphism $r : B \to A$ such that $r \circ f = \mathrm{id}_A$.
+
+If $f$ has a section, $f$ is called a **split epimorphism**. If $f$ has a retraction, $f$ is called a **split monomorphism**.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Isomorphisms in Set" id="iso-set">
+In $\mathbf{Set}$, isomorphisms are bijections. A function $f : A \to B$ is an isomorphism if and only if it is both injective and surjective.
+</Example>
+
+<Example title="Isomorphisms in Grp" id="iso-grp">
+In $\mathbf{Grp}$, isomorphisms are bijective group homomorphisms. The map $\varphi : \mathbb{Z}/6\mathbb{Z} \to \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$ given by $\varphi(\bar{1}) = (\bar{1}, \bar{1})$ is an isomorphism by the Chinese Remainder Theorem.
+</Example>
+
+<Example title="Isomorphisms in Top" id="iso-top">
+In $\mathbf{Top}$, isomorphisms are homeomorphisms: continuous bijections with continuous inverse. A continuous bijection need not be a homeomorphism (e.g., the identity map from $\mathbb{R}$ with the discrete topology to $\mathbb{R}$ with the standard topology).
+</Example>
+
+<Example title="Monomorphism that is not injective on elements" id="mono-ring">
+In $\mathbf{Ring}$, the inclusion $\iota : \mathbb{Z} \hookrightarrow \mathbb{Q}$ is both a monomorphism and an epimorphism, but it is not an isomorphism. This shows that "mono + epi" does not imply "iso" in general categories.
+</Example>
+
+<Example title="Epimorphisms in Ab" id="epi-ab">
+In $\mathbf{Ab}$, epimorphisms are exactly surjective homomorphisms. The projection $\pi : \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z}$ is an epimorphism. It has a section if and only if $n = 1$ (i.e., the sequence $0 \to n\mathbb{Z} \to \mathbb{Z} \to \mathbb{Z}/n\mathbb{Z} \to 0$ splits if and only if $n = 1$). For $n \geq 2$, $\pi$ is a non-split epimorphism.
+</Example>
+
+<Example title="Section and retraction" id="section-retraction">
+Consider the inclusion $\iota : A \hookrightarrow A \oplus B$ in $\mathbf{Ab}$ given by $a \mapsto (a, 0)$, and the projection $\pi : A \oplus B \to A$ given by $(a,b) \mapsto a$. Then $\pi \circ \iota = \mathrm{id}_A$, so $\iota$ is a section of $\pi$ (equivalently, $\pi$ is a retraction of $\iota$). The inclusion $\iota$ is a split monomorphism and $\pi$ is a split epimorphism.
+</Example>
+
+<Example title="Isomorphisms in a poset category" id="iso-poset">
+In a poset $(P, \leq)$ viewed as a category, a morphism $x \to y$ (meaning $x \leq y$) is an isomorphism if and only if $x = y$. Indeed, an isomorphism requires both $x \leq y$ and $y \leq x$, which gives $x = y$ by antisymmetry.
+</Example>
+
+<Example title="Automorphisms" id="automorphism">
+An **automorphism** of an object $A$ is an isomorphism $f : A \to A$. The set of all automorphisms of $A$ forms a group $\mathrm{Aut}(A)$ under composition. For example:
+- In $\mathbf{Vect}_k$: $\mathrm{Aut}(k^n) = \mathrm{GL}_n(k)$.
+- In $\mathbf{Grp}$: $\mathrm{Aut}(G)$ is the automorphism group of $G$.
+- In a poset: $\mathrm{Aut}(x) = \{e\}$ is trivial for every element.
+</Example>
+
+<Example title="Groupoid: every morphism is an isomorphism" id="groupoid">
+A **groupoid** is a category in which every morphism is an isomorphism. Examples include:
+- The fundamental groupoid $\Pi_1(X)$ of a topological space $X$: objects are points, morphisms are homotopy classes of paths.
+- $\mathbf{B}G$ for a group $G$: the single-object category with morphisms $G$.
+- The category of finite sets and bijections.
+</Example>
+
+<Example title="Monomorphism via kernel" id="mono-kernel">
+In an abelian category $\mathcal{A}$, a morphism $f : A \to B$ is a monomorphism if and only if $\ker f = 0$. This connects the categorical notion to the algebraic one: in $R\text{-}\mathbf{Mod}$, $f$ is monic iff $\ker f = 0$ iff $f$ is injective.
+</Example>
+
+<Example title="Split short exact sequences" id="split-ses">
+In $R\text{-}\mathbf{Mod}$, a short exact sequence $0 \to A \xrightarrow{f} B \xrightarrow{g} C \to 0$ **splits** if and only if $g$ has a section (equivalently, $f$ has a retraction). In this case $B \cong A \oplus C$. The sequence $0 \to \mathbb{Z} \xrightarrow{2} \mathbb{Z} \to \mathbb{Z}/2\mathbb{Z} \to 0$ does not split.
+</Example>
+
+<Example title="Endomorphisms vs automorphisms" id="endomorphism">
+An **endomorphism** is a morphism $f : A \to A$. The set $\mathrm{End}(A) = \mathrm{Hom}(A, A)$ forms a monoid under composition, with $\mathrm{Aut}(A) \subseteq \mathrm{End}(A)$ as the group of units. In $\mathbf{Vect}_k$, $\mathrm{End}(k^n) = M_n(k)$ (all $n \times n$ matrices) and $\mathrm{Aut}(k^n) = \mathrm{GL}_n(k)$ (invertible matrices).
+</Example>
+
+---
+
+## Key Properties
+
+<Theorem title="Properties of mono/epi/iso" number="1.4">
+In any category:
+
+1. Every isomorphism is both a monomorphism and an epimorphism.
+2. The composition of two monomorphisms is a monomorphism.
+3. The composition of two epimorphisms is an epimorphism.
+4. The composition of two isomorphisms is an isomorphism.
+5. If $g \circ f$ is monic, then $f$ is monic.
+6. If $g \circ f$ is epic, then $g$ is epic.
+</Theorem>
+
+<Proof>
+We prove (5); the others are similar or straightforward. Suppose $g \circ f$ is monic and $f \circ h_1 = f \circ h_2$. Then $g \circ f \circ h_1 = g \circ f \circ h_2$, so $h_1 = h_2$ since $g \circ f$ is monic.
+</Proof>
+
+<Remark title="Looking ahead">
+The notions of mono, epi, and iso become especially structured in [abelian categories](/category-theory/ch03-abelian-categories/concepts/c02-abelian-category), where every monomorphism is a kernel and every epimorphism is a cokernel. The [Freyd-Mitchell embedding theorem](/category-theory/ch03-abelian-categories/theorems/t03-freyd-mitchell) guarantees that any small abelian category can be embedded into a module category, so diagram chasing with elements is always available.
+</Remark>

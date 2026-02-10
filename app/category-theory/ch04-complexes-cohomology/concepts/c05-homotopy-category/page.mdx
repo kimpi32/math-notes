@@ -1,0 +1,116 @@
+export const metadata = {
+  title: 'Homotopy Category K(A) — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Concept — Homotopy Category K(A)" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Homotopy Category K(A)
+
+The homotopy category $K(\mathcal{A})$ is obtained from the category of chain complexes by identifying chain homotopic maps. It is the first step in the construction of the derived category: we mod out by the "irrelevant" data of chain homotopies, keeping only the cohomological information. The homotopy category is a triangulated category, but it is not abelian.
+
+---
+
+## Definition
+
+<Definition title="Homotopy Category" number="4.10">
+The **homotopy category** $K(\mathcal{A})$ of an abelian category $\mathcal{A}$ has:
+
+- **Objects:** Cochain complexes in $\mathcal{A}$ (same as $\mathbf{Ch}(\mathcal{A})$).
+- **Morphisms:** Chain maps modulo chain homotopy: $\mathrm{Hom}_{K(\mathcal{A})}(A^\bullet, B^\bullet) = \mathrm{Hom}_{\mathbf{Ch}}(A^\bullet, B^\bullet) / \sim$.
+- **Composition:** Inherited from $\mathbf{Ch}(\mathcal{A})$ (well-defined since homotopy is compatible with composition).
+
+We also write $K^+(\mathcal{A})$, $K^-(\mathcal{A})$, $K^b(\mathcal{A})$ for the full subcategories of bounded below, bounded above, and bounded complexes.
+</Definition>
+
+---
+
+## Triangulated Structure
+
+<Definition title="Distinguished triangles in K(A)" number="4.11">
+For a chain map $f : A^\bullet \to B^\bullet$, the **standard triangle** is
+
+$$A^\bullet \xrightarrow{f} B^\bullet \xrightarrow{\iota} \mathrm{Cone}(f) \xrightarrow{p} A^\bullet[1]$$
+
+A triangle in $K(\mathcal{A})$ is **distinguished** if it is isomorphic (in $K(\mathcal{A})$) to a standard triangle.
+</Definition>
+
+<Theorem title="K(A) is triangulated" number="4.5">
+With the shift functor $[1]$ and the distinguished triangles above, $K(\mathcal{A})$ is a [triangulated category](/category-theory/ch05-triangulated-categories/concepts/c01-triangulated-category).
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="K(A) is not abelian" id="k-not-abelian">
+$K(\mathcal{A})$ is generally not abelian. For instance, in $K(\mathbb{Z}\text{-}\mathbf{Mod})$, the map $\mathbb{Z}[0] \xrightarrow{2} \mathbb{Z}[0]$ has no kernel in $K(\mathcal{A})$. The failure of abelianness is precisely why we need the derived category.
+</Example>
+
+<Example title="K(A) is additive" id="k-additive">
+$K(\mathcal{A})$ is additive: morphisms can be added (addition of chain maps is compatible with homotopy), and biproducts exist (direct sums of complexes).
+</Example>
+
+<Example title="Cohomology factors through K(A)" id="coh-factors">
+Since homotopic maps induce equal maps on cohomology, the functor $H^n : \mathbf{Ch}(\mathcal{A}) \to \mathcal{A}$ factors through $K(\mathcal{A})$: we get $H^n : K(\mathcal{A}) \to \mathcal{A}$.
+</Example>
+
+<Example title="Homotopy equivalence = isomorphism in K(A)" id="he-iso">
+A chain map $f$ is a homotopy equivalence iff it becomes an isomorphism in $K(\mathcal{A})$. A quasi-isomorphism becomes an isomorphism in $D(\mathcal{A})$ but not necessarily in $K(\mathcal{A})$.
+</Example>
+
+<Example title="Mapping cone triangle" id="cone-triangle">
+For any $f : A^\bullet \to B^\bullet$, the triangle $A \to B \to \mathrm{Cone}(f) \to A[1]$ is distinguished. The long exact sequence in cohomology $\cdots \to H^n(A) \to H^n(B) \to H^n(\mathrm{Cone}(f)) \to H^{n+1}(A) \to \cdots$ is the long exact sequence associated to this distinguished triangle.
+</Example>
+
+<Example title="K(Proj) and K(Inj)" id="k-proj-inj">
+$K^-(\mathrm{Proj}\, R)$ (bounded above complexes of projectives) is equivalent to $D^-(\mathcal{A})$ via the natural functor. Similarly, $K^+(\mathrm{Inj}\, \mathcal{A})$ is equivalent to $D^+(\mathcal{A})$. These equivalences are the foundation for computing derived functors.
+</Example>
+
+<Example title="Derived Hom in K(A)" id="derived-hom">
+In $K(\mathcal{A})$, for complexes $A^\bullet, B^\bullet$ of injectives (resp. projectives), $\mathrm{Hom}_{K(\mathcal{A})}(A^\bullet, B^\bullet)$ computes the "derived Hom" up to a shift. This motivates the enrichment of $K(\mathcal{A})$ to a DG category.
+</Example>
+
+<Example title="Null-homotopic maps form an ideal" id="null-ideal">
+The null-homotopic maps $\mathrm{Ht}(A^\bullet, B^\bullet) \subseteq \mathrm{Hom}_{\mathbf{Ch}}(A^\bullet, B^\bullet)$ form a two-sided ideal. The quotient $\mathrm{Hom}_K = \mathrm{Hom}_{\mathbf{Ch}} / \mathrm{Ht}$ gives the hom-sets of $K(\mathcal{A})$.
+</Example>
+
+<Example title="Split exact complexes are zero in K(A)" id="split-zero">
+A split exact complex (one that is contractible) becomes isomorphic to zero in $K(\mathcal{A})$. However, an exact (acyclic) but non-split complex may be nonzero in $K(\mathcal{A})$ — it becomes zero only in $D(\mathcal{A})$.
+</Example>
+
+<Example title="Rotation of triangles" id="rotation">
+If $A \to B \to C \to A[1]$ is a distinguished triangle, then $B \to C \to A[1] \to B[1]$ is also distinguished (with appropriate signs). This is one of the axioms of a triangulated category.
+</Example>
+
+<Example title="K(A) and model categories" id="model-k">
+The homotopy category $K(\mathcal{A})$ can be obtained from the model category structure on $\mathbf{Ch}(\mathcal{A})$ (projective or injective model structure) by inverting weak equivalences. The Quillen model structure gives $K(\mathcal{A})$ as the homotopy category of a model category, and $D(\mathcal{A})$ as the localization at weak equivalences.
+</Example>
+
+<Example title="Ext via K(A)" id="ext-k">
+$\mathrm{Ext}^n(M, N) \cong \mathrm{Hom}_{K(\mathcal{A})}(P_\bullet, N[n])$ where $P_\bullet \to M$ is a projective resolution. This gives a "derived" interpretation of Ext within the homotopy category.
+</Example>
+
+---
+
+<Remark title="K(A) as an intermediate step">
+The homotopy category sits between $\mathbf{Ch}(\mathcal{A})$ and $D(\mathcal{A})$:
+
+$$\mathbf{Ch}(\mathcal{A}) \twoheadrightarrow K(\mathcal{A}) \to D(\mathcal{A})$$
+
+The first arrow mods out by homotopy; the second inverts quasi-isomorphisms. The composition gives the localization functor $Q : \mathbf{Ch}(\mathcal{A}) \to D(\mathcal{A})$.
+</Remark>

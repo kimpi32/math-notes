@@ -1,0 +1,168 @@
+export const metadata = {
+  title: 'Homotopy Limit and Colimit — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "4. ∞-극한과 수반", href: "/higher-category-theory/ch04-limits-colimits-infinity" },
+  { label: "Concept — Homotopy Limit and Colimit" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Homotopy Limit and Colimit
+
+Homotopy limits and colimits are the correct notion of limit and colimit in the world of $\infty$-categories. Unlike ordinary limits, they are invariant under weak equivalences and capture the full homotopy-coherent structure. In a quasi-category $\mathcal{C}$, a limit of a diagram $F: K \to \mathcal{C}$ is a terminal object in the overcategory $\mathcal{C}_{/F}$, encoding the universal property up to coherent homotopy.
+
+---
+
+## Definition in Quasi-categories
+
+<Definition title="Limit in a quasi-category" number="4.1">
+Let $\mathcal{C}$ be a quasi-category and $F: K \to \mathcal{C}$ a diagram (a map of simplicial sets). A **limit** of $F$ is an extension of $F$ to a map $\bar{F}: K^\triangleleft \to \mathcal{C}$ (where $K^\triangleleft = \Delta[0] \star K$ is the left cone on $K$) such that $\bar{F}$ is a terminal object in the quasi-category $\operatorname{Fun}_{/F}(K^\triangleleft, \mathcal{C})$ of extensions of $F$.
+
+Equivalently, the limit is an object $\lim F \in \mathcal{C}$ together with a natural map $\lim F \to F(k)$ for each $k \in K$, universal in the $\infty$-categorical sense:
+
+$$\operatorname{Map}_{\mathcal{C}}(c, \lim F) \simeq \lim_{k \in K} \operatorname{Map}_{\mathcal{C}}(c, F(k))$$
+
+for all $c \in \mathcal{C}$. The limit on the right is a homotopy limit of spaces.
+
+A **colimit** is defined dually using the right cone $K^\triangleright = K \star \Delta[0]$.
+</Definition>
+
+---
+
+## Relation to Classical Homotopy Limits
+
+<Example id="holim-model-cat" title="Homotopy limits in model categories">
+In a model category $\mathcal{M}$, the homotopy limit $\operatorname{holim}_I F$ of a diagram $F: I \to \mathcal{M}$ is computed by:
+
+1. Replace $F$ by a fibrant diagram (a pointwise fibrant replacement).
+2. Apply a derived limit construction (e.g., the Bousfield--Kan formula).
+
+The Bousfield--Kan formula gives:
+
+$$\operatorname{holim}_I F = \operatorname{eq}\left(\prod_{i \in I} F(i)^{N(I/i)} \rightrightarrows \prod_{(i \to j) \in I} F(j)^{N(I/i)}\right)$$
+
+In the $\infty$-categorical setting, homotopy limits ARE limits: there is no need for fibrant replacement or derived constructions because the quasi-category already incorporates the homotopy theory.
+</Example>
+
+<Example id="holim-pullback" title="Homotopy pullback">
+The homotopy pullback of $X \xrightarrow{f} Z \xleftarrow{g} Y$ is the $\infty$-categorical limit of the diagram $\Lambda^2_1 \to \mathcal{C}$. Concretely:
+
+$$X \times^h_Z Y \simeq X \times_Z Z^{\Delta[1]} \times_Z Y$$
+
+This is the space of triples $(x, \gamma, y)$ where $x \in X$, $y \in Y$, and $\gamma$ is a path from $f(x)$ to $g(y)$ in $Z$.
+
+For the diagram $* \to BG \leftarrow *$ (in spaces), the homotopy pullback is $G$ (the group as a space). The ordinary pullback would be just a point.
+</Example>
+
+<Example id="holim-product" title="Homotopy products">
+Homotopy products (limits over discrete indexing categories) agree with ordinary products when the factors are fibrant. For spaces: $\prod^h X_i = \prod X_i$ (ordinary product with the product topology).
+
+For chain complexes: the homotopy product is the ordinary product of chain complexes (products of chain complexes are exact, so no derived correction is needed).
+</Example>
+
+---
+
+## Colimits
+
+<Example id="hocolim-pushout" title="Homotopy pushout">
+The homotopy pushout of $Y \xleftarrow{f} X \xrightarrow{g} Z$ is:
+
+$$Y \sqcup^h_X Z \simeq Y \sqcup_X (X \times \Delta[1]) \sqcup_X Z$$
+
+This is the double mapping cylinder: glue $Y$ and $Z$ together via a cylinder on $X$.
+
+For the diagram $* \leftarrow S^{n-1} \to D^n$ (in spaces), the homotopy pushout is $S^n$ (the $n$-sphere). The ordinary pushout $D^n / S^{n-1}$ gives the same answer since the maps are cofibrations.
+</Example>
+
+<Example id="hocolim-coproduct" title="Homotopy coproducts">
+Homotopy coproducts over discrete indexing categories agree with ordinary coproducts: $\coprod^h X_i = \coprod X_i$. For simplicial sets, disjoint union is already homotopically correct.
+</Example>
+
+<Example id="hocolim-sequential" title="Sequential homotopy colimits">
+A sequential homotopy colimit $\operatorname{hocolim}(X_0 \to X_1 \to X_2 \to \cdots)$ is the **telescope construction**:
+
+$$\operatorname{Tel}(X_\bullet) = \operatorname{hocolim}_n X_n \simeq \operatorname{colim}\left(X_0 \xrightarrow{f_0} X_1 \xrightarrow{f_1} X_2 \to \cdots\right)$$
+
+when the maps are cofibrations. In general, one replaces the maps by cofibrations first (using the mapping cylinder).
+
+Example: the sequential colimit $S^0 \hookrightarrow S^1 \hookrightarrow S^2 \hookrightarrow \cdots$ (equatorial inclusions) has homotopy colimit $S^\infty \simeq *$ (contractible).
+</Example>
+
+---
+
+## Limits in Specific Infinity-categories
+
+<Example id="limits-in-spaces" title="Limits in the infinity-category of spaces">
+The $\infty$-category $\mathcal{S}$ of spaces has all limits and colimits:
+- **Products** are Cartesian products.
+- **Pullbacks** are homotopy pullbacks (fiber products with path data).
+- **Coproducts** are disjoint unions.
+- **Pushouts** are homotopy pushouts (double mapping cylinders).
+- **Totalizations** (limits over $\Delta$) compute spaces of sections.
+
+The homotopy groups of a limit diagram are related by the Milnor exact sequence and the Bousfield--Kan spectral sequence.
+</Example>
+
+<Example id="limits-in-derived" title="Limits in derived infinity-categories">
+In the derived $\infty$-category $D(R)$:
+- **Products** are products of chain complexes.
+- **Pullbacks** are derived fiber products (mapping cones shifted).
+- **Coproducts** are direct sums.
+- **Pushouts** involve mapping cones: $\operatorname{cofib}(A \to B) = B/A$ (the cofiber).
+
+The distinguished triangles of the triangulated homotopy category are shadows of pushout/pullback squares in $D(R)$.
+</Example>
+
+<Example id="limits-in-cat-infty" title="Limits of infinity-categories">
+The $\infty$-category $\operatorname{Cat}_\infty$ has all limits and colimits:
+- **Products** $\mathcal{C} \times \mathcal{D}$ are Cartesian products of quasi-categories.
+- **Pullbacks** are homotopy pullbacks.
+- **Functor categories** $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$ are exponential objects.
+- **Localizations** $\mathcal{C}[W^{-1}]$ are colimits in $\operatorname{Cat}_\infty$.
+</Example>
+
+---
+
+## Universal Properties
+
+<Example id="universal-property" title="Universal property of limits">
+In a quasi-category $\mathcal{C}$, the limit $\lim F$ of a diagram $F: K \to \mathcal{C}$ satisfies:
+
+$$\operatorname{Map}_{\mathcal{C}}(c, \lim F) \simeq \operatorname{Map}_{\operatorname{Fun}(K, \mathcal{C})}(\underline{c}, F)$$
+
+where $\underline{c}: K \to \mathcal{C}$ is the constant diagram at $c$. This is the mapping space version of the classical universal property.
+
+Dually, $\operatorname{Map}_{\mathcal{C}}(\operatorname{colim} F, c) \simeq \operatorname{Map}_{\operatorname{Fun}(K, \mathcal{C})}(F, \underline{c})$.
+
+These are equivalences of spaces (Kan complexes), not just bijections of sets. This is the key difference from ordinary category theory.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Homotopy limits and colimits are fundamental to $\infty$-category theory:
+
+1. In a quasi-category, **limits and colimits** are defined via universal properties in overcategories/undercategories.
+
+2. They are automatically **homotopy invariant** -- no derived corrections needed.
+
+3. **Homotopy pullbacks** use path data; **homotopy pushouts** use mapping cylinders.
+
+4. Universal properties are stated as **equivalences of mapping spaces**, not bijections of sets.
+
+5. The $\infty$-categories $\mathcal{S}$, $D(R)$, and $\operatorname{Cat}_\infty$ all have **all** limits and colimits.
+</Remark>

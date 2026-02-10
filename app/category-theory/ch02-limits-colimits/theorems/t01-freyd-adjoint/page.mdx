@@ -1,0 +1,117 @@
+export const metadata = {
+  title: 'Freyd Adjoint Functor Theorem — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "2. 극한과 쌍대극한", href: "/category-theory/ch02-limits-colimits" },
+  { label: "Theorem — Freyd Adjoint Functor Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Freyd Adjoint Functor Theorem
+
+The Freyd Adjoint Functor Theorem gives a criterion for a functor to have an adjoint. It converts the problem of constructing an adjoint (which involves building universal objects) into checking two conditions: preservation of limits and a set-theoretic "solution set" condition.
+
+---
+
+## Statement
+
+<Theorem title="General Adjoint Functor Theorem (Freyd)" number="2.8">
+Let $G : \mathcal{D} \to \mathcal{C}$ be a functor where $\mathcal{D}$ is complete and locally small. Then $G$ has a left adjoint if and only if:
+
+1. **$G$ preserves all (small) limits.**
+2. **Solution set condition:** For every object $C \in \mathcal{C}$, there exists a set $S_C$ of morphisms $\{f_i : C \to G(D_i)\}_{i \in I}$ such that every morphism $f : C \to G(D)$ factors as $f = G(h) \circ f_i$ for some $i \in I$ and some morphism $h : D_i \to D$ in $\mathcal{D}$.
+</Theorem>
+
+<Theorem title="Special Adjoint Functor Theorem" number="2.9">
+Let $G : \mathcal{D} \to \mathcal{C}$ be a functor where $\mathcal{D}$ is complete, locally small, and well-powered, and $\mathcal{D}$ has a cogenerating set. Then $G$ has a left adjoint if and only if $G$ preserves all small limits.
+</Theorem>
+
+<Remark title="When the solution set condition is automatic">
+The Special Adjoint Functor Theorem says that for "nice enough" categories (complete, locally small, well-powered, with a cogenerating set), limit preservation alone suffices. The categories $\mathbf{Set}$, $\mathbf{Ab}$, $R\text{-}\mathbf{Mod}$, $\mathbf{Grp}$, and $\mathbf{Top}$ all satisfy these conditions.
+</Remark>
+
+---
+
+## Proof Sketch
+
+<Proof title="Proof sketch of the General AFT">
+**Necessity.** If $G$ has a left adjoint $F$, then $G$ preserves limits by RAPL. The solution set condition holds with $S_C = \{\eta_C : C \to GF(C)\}$ (the unit), since every $f : C \to G(D)$ factors as $f = G(\tilde{f}) \circ \eta_C$ by the adjunction.
+
+**Sufficiency.** We construct the left adjoint $F(C)$ as follows. Consider the category $\mathcal{I}_C$ whose objects are pairs $(D, f : C \to G(D))$ and whose morphisms $(D, f) \to (D', f')$ are maps $h : D \to D'$ with $G(h) \circ f = f'$. The solution set condition ensures $\mathcal{I}_C$ has a small cofinal subcategory. Since $\mathcal{D}$ is complete, we can take the limit $L = \varprojlim_{(D,f) \in \mathcal{I}_C} D$. Since $G$ preserves limits, $G(L) = \varprojlim G(D)$, and the compatible family of $f$'s gives a map $C \to G(L)$. Checking the universal property shows $L$ serves as $F(C)$.
+</Proof>
+
+---
+
+## Examples and Applications
+
+<Example title="Existence of free groups" id="free-groups">
+The forgetful functor $U : \mathbf{Grp} \to \mathbf{Set}$ preserves all limits (products of groups are products of underlying sets, etc.) and $\mathbf{Grp}$ satisfies the hypotheses of the Special AFT. Therefore $U$ has a left adjoint: the free group functor.
+</Example>
+
+<Example title="Existence of free modules" id="free-modules">
+$U : R\text{-}\mathbf{Mod} \to \mathbf{Set}$ preserves limits and $R\text{-}\mathbf{Mod}$ is complete, locally small, well-powered, with a cogenerating set. The Special AFT gives the existence of free $R$-modules.
+</Example>
+
+<Example title="Existence of Stone-Cech compactification" id="stone-cech">
+The inclusion $\iota : \mathbf{CHaus} \hookrightarrow \mathbf{Top}$ preserves limits. Since $\mathbf{CHaus}$ is complete and satisfies the solution set condition (using $[0,1]$ as a cogenerator), the General AFT gives a left adjoint $\beta : \mathbf{Top} \to \mathbf{CHaus}$: the Stone-Cech compactification.
+</Example>
+
+<Example title="Existence of sheafification" id="sheafification">
+The inclusion $\iota : \mathbf{Sh}(X) \hookrightarrow \mathbf{PSh}(X)$ preserves all limits. The AFT gives the left adjoint: the sheafification functor.
+</Example>
+
+<Example title="Existence of tensor products" id="tensor">
+The functor $\mathrm{Hom}_R(M, -) : R\text{-}\mathbf{Mod} \to \mathbf{Ab}$ preserves limits. The AFT provides the left adjoint $M \otimes_R - : \mathbf{Ab} \to R\text{-}\mathbf{Mod}$ (more precisely, via the appropriate reformulation).
+</Example>
+
+<Example title="Representable functors preserve limits" id="rep-preserves-limits">
+The representable functor $\mathrm{Hom}(A, -) : \mathcal{C} \to \mathbf{Set}$ preserves all limits. This is an immediate consequence of the definition of limits via universal properties. Conversely, by the AFT, a functor $\mathcal{C} \to \mathbf{Set}$ that preserves all limits and satisfies the solution set condition is representable.
+</Example>
+
+<Example title="Colimit-preserving functors between presheaf categories" id="cocontinuous">
+For small categories $\mathcal{C}$ and $\mathcal{D}$, a cocontinuous (colimit-preserving) functor $F : [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}] \to [\mathcal{D}^{\mathrm{op}}, \mathbf{Set}]$ is determined by its restriction to representables. This is a consequence of the density theorem and the AFT.
+</Example>
+
+<Example title="Non-example: no left adjoint to the inclusion of fields" id="no-adjoint-fields">
+The inclusion $\mathbf{Field} \hookrightarrow \mathbf{CRing}$ does not have a left adjoint. There is no "free field" on a commutative ring: the category of fields is not complete, and the solution set condition fails for fundamental reasons (there is no way to "universally" adjoin inverses to all nonzero elements).
+</Example>
+
+<Example title="Existence of limits implies representability (Brown)" id="brown-rep">
+In homotopy theory, the Brown representability theorem can be viewed as an analogue of the AFT: a contravariant functor from the homotopy category of CW-complexes to $\mathbf{Set}$ that converts coproducts to products and satisfies a Mayer-Vietoris condition is representable.
+</Example>
+
+<Example title="Left adjoint to restriction of scalars" id="restriction-scalars">
+For a ring homomorphism $\varphi : R \to S$, restriction of scalars $\varphi^* : S\text{-}\mathbf{Mod} \to R\text{-}\mathbf{Mod}$ preserves all limits. By the AFT, it has a left adjoint: extension of scalars $S \otimes_R - : R\text{-}\mathbf{Mod} \to S\text{-}\mathbf{Mod}$.
+</Example>
+
+<Example title="Right adjoint to restriction of scalars" id="right-adj-restriction">
+The same restriction of scalars $\varphi^*$ also preserves colimits (it has an exact left adjoint). By the dual AFT, it also has a right adjoint: coextension of scalars $\mathrm{Hom}_R(S, -) : R\text{-}\mathbf{Mod} \to S\text{-}\mathbf{Mod}$.
+</Example>
+
+<Example title="Adjoint Functor Theorem for abelian categories" id="abelian-aft">
+In the context of Grothendieck abelian categories, if $G : \mathcal{A} \to \mathcal{B}$ is an exact functor between Grothendieck categories that preserves small products, then $G$ has a left adjoint. The solution set condition is automatically satisfied by the existence of a generator.
+</Example>
+
+---
+
+## Significance
+
+<Remark title="Existence vs construction">
+The AFT is an existence theorem: it tells you an adjoint exists without explicitly constructing it. In practice, knowing the adjoint exists is often sufficient, and explicit constructions (free groups, tensor products, etc.) can be developed independently. The theorem is most powerful when applied to prove that certain functors must have adjoints.
+</Remark>
+
+<Remark title="Connection to derived categories">
+In the Gelfand-Manin framework, the AFT and its variants are used to establish the existence of [derived functors](/category-theory/ch07-derived-functors/concepts/c05-total-derived) and to prove that certain functors between [derived categories](/category-theory/ch06-derived-categories/concepts/c01-derived-category) have adjoints (e.g., the Grothendieck duality adjunction $Rf_* \dashv f^!$).
+</Remark>

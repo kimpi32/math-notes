@@ -1,0 +1,140 @@
+export const metadata = {
+  title: 'Representable Functor — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "1. 범주와 함자", href: "/category-theory/ch01-categories-functors" },
+  { label: "Concept — Representable Functor" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Representable Functor
+
+Representable functors connect abstract functorial constructions to concrete objects in a category. A functor is representable when it is naturally isomorphic to a Hom functor — meaning the functor's values are completely determined by morphisms into (or out of) a single representing object. This concept is the gateway to universal properties and the Yoneda Lemma.
+
+---
+
+## Definition
+
+<Definition title="Representable Functor (Contravariant)" number="1.18">
+A functor $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is **representable** if there exists an object $A \in \mathcal{C}$ and a natural isomorphism
+
+$$\alpha : \mathrm{Hom}_{\mathcal{C}}(-, A) \xrightarrow{\;\sim\;} F$$
+
+The object $A$ is called the **representing object** and the element $\xi = \alpha_A(\mathrm{id}_A) \in F(A)$ is called the **universal element**. The pair $(A, \xi)$ is a **representation** of $F$.
+</Definition>
+
+<Definition title="Representable Functor (Covariant)" number="1.19">
+Dually, a functor $F : \mathcal{C} \to \mathbf{Set}$ is **representable** if there exists $A \in \mathcal{C}$ and a natural isomorphism
+
+$$\mathrm{Hom}_{\mathcal{C}}(A, -) \xrightarrow{\;\sim\;} F$$
+</Definition>
+
+<Theorem title="Uniqueness of representing objects" number="1.9">
+If $F$ is representable with representations $(A, \xi)$ and $(A', \xi')$, then there exists a unique isomorphism $\varphi : A \xrightarrow{\sim} A'$ such that $F(\varphi)(\xi') = \xi$ (for the contravariant case) or $F(\varphi)(\xi) = \xi'$ (for the covariant case).
+</Theorem>
+
+<Proof>
+This follows from the [Yoneda Lemma](/category-theory/ch01-categories-functors/theorems/t01-yoneda): natural isomorphisms $h^A \cong F \cong h^{A'}$ give a natural isomorphism $h^A \cong h^{A'}$, and by the Yoneda embedding being fully faithful, this corresponds to a unique isomorphism $A \cong A'$.
+</Proof>
+
+---
+
+## The Yoneda Embedding
+
+<Definition title="Yoneda Embedding" number="1.20">
+The **Yoneda embedding** is the functor
+
+$$\mathbf{y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}], \qquad A \mapsto h^A = \mathrm{Hom}(-, A)$$
+
+On morphisms, $f : A \to B$ maps to the natural transformation $f_* : h^A \to h^B$ with $(f_*)_X(g) = f \circ g$.
+
+By the Yoneda Lemma, $\mathbf{y}$ is fully faithful: $\mathrm{Hom}(A, B) \cong \mathrm{Nat}(h^A, h^B)$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="Free group as a representable functor" id="free-group">
+The forgetful functor $U : \mathbf{Grp} \to \mathbf{Set}$ is representable: $U(G) = \mathrm{Hom}_{\mathbf{Grp}}(\mathbb{Z}, G)$ since a group homomorphism $\mathbb{Z} \to G$ is determined by the image of $1$, giving a bijection with $U(G)$. The representing object is $\mathbb{Z}$ and the universal element is $1 \in U(\mathbb{Z})$.
+</Example>
+
+<Example title="Forgetful functor for modules" id="module-forgetful">
+For a ring $R$, the forgetful functor $U : R\text{-}\mathbf{Mod} \to \mathbf{Set}$ is representable: $U(M) \cong \mathrm{Hom}_R(R, M)$, since an $R$-module homomorphism $R \to M$ is determined by the image of $1 \in R$. The representing object is $R$ itself (viewed as a left module).
+</Example>
+
+<Example title="Evaluation functor" id="evaluation">
+For a set $S$ and a fixed element $s \in S$, the evaluation functor $\mathrm{ev}_s : \mathbf{Set}^S \to \mathbf{Set}$ sending $f \mapsto f(s)$ is representable, represented by the characteristic function of $s$.
+</Example>
+
+<Example title="Product as a representable functor" id="product-rep">
+The product $A \times B$ in a category $\mathcal{C}$ (if it exists) represents the functor $X \mapsto \mathrm{Hom}(X, A) \times \mathrm{Hom}(X, B)$. That is:
+
+$$\mathrm{Hom}(X, A \times B) \cong \mathrm{Hom}(X, A) \times \mathrm{Hom}(X, B)$$
+
+naturally in $X$. The universal element consists of the two projections $\pi_A : A \times B \to A$ and $\pi_B : A \times B \to B$.
+</Example>
+
+<Example title="Coproduct as a corepresentable functor" id="coproduct-rep">
+Dually, the coproduct $A \sqcup B$ corepresents $X \mapsto \mathrm{Hom}(A, X) \times \mathrm{Hom}(B, X)$:
+
+$$\mathrm{Hom}(A \sqcup B, X) \cong \mathrm{Hom}(A, X) \times \mathrm{Hom}(B, X)$$
+
+In $\mathbf{Set}$, $A \sqcup B$ is the disjoint union; in $\mathbf{Ab}$, it is the direct sum $A \oplus B$; in $\mathbf{Grp}$, it is the free product $A * B$.
+</Example>
+
+<Example title="Tensor product as a representable functor" id="tensor-rep">
+For $R$-modules $M$ and $N$, the tensor product $M \otimes_R N$ represents the functor of bilinear maps: there is a natural isomorphism
+
+$$\mathrm{Hom}_R(M \otimes_R N, P) \cong \mathrm{Bil}_R(M \times N, P)$$
+
+The universal bilinear map $M \times N \to M \otimes_R N$ is the universal element.
+</Example>
+
+<Example title="Fiber functor in Galois theory" id="galois-fiber">
+In Galois theory, for a field extension $K/k$, the fiber functor $\omega : \mathbf{FEt}_k \to \mathbf{FinSet}$ sends a finite etale $k$-algebra $A$ to the set $\mathrm{Hom}_k(A, K)$. When $K = k^{\mathrm{sep}}$, this functor is pro-representable: $\omega(A) \cong \mathrm{Hom}(A, \varinjlim L_i)$ where the colimit runs over finite separable extensions.
+</Example>
+
+<Example title="Hilbert functor" id="hilbert">
+In algebraic geometry, the Hilbert functor $\mathrm{Hilb}_{X/S}^P : \mathbf{Sch}/S \to \mathbf{Set}$ sends a scheme $T$ to the set of closed subschemes $Z \subseteq X \times_S T$ flat over $T$ with Hilbert polynomial $P$. When this functor is representable, the representing scheme is the **Hilbert scheme** $\mathrm{Hilb}_{X/S}^P$.
+</Example>
+
+<Example title="Spectrum of a commutative ring" id="spec-rep">
+The functor $\mathrm{Hom}_{\mathbf{CRing}}(A, -) : \mathbf{CRing} \to \mathbf{Set}$ is representable by definition, represented by $A$. Under the equivalence $\mathbf{Aff} \simeq \mathbf{CRing}^{\mathrm{op}}$, this becomes $\mathrm{Hom}_{\mathbf{Sch}}(-, \mathrm{Spec}\, A) : \mathbf{Aff}^{\mathrm{op}} \to \mathbf{Set}$, which is the "functor of points" of $\mathrm{Spec}\, A$.
+</Example>
+
+<Example title="Presheaves and the density theorem" id="density">
+Every presheaf $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is a colimit of representables: $F \cong \varinjlim_{(A, x) \in \mathcal{C}/F} h^A$. This is the **density theorem** (or co-Yoneda lemma). It says that representable presheaves form a "basis" for all presheaves, analogous to how every vector is a linear combination of basis vectors.
+</Example>
+
+<Example title="Non-representable functor" id="non-representable">
+The power set functor $\mathcal{P} : \mathbf{Set}^{\mathrm{op}} \to \mathbf{Set}$ sending $S \mapsto \mathcal{P}(S) = 2^S$ is not representable. If it were, there would exist a set $A$ with $\mathcal{P}(S) \cong \mathrm{Hom}(S, A)$ naturally. Setting $S = A$ gives $|\mathcal{P}(A)| = |A^A|$, i.e., $2^{|A|} = |A|^{|A|}$, which fails for all infinite cardinals (and most finite ones).
+</Example>
+
+<Example title="Brown representability" id="brown">
+In the homotopy category of CW-complexes, the Brown representability theorem states that every contravariant functor $F : \mathbf{hCW}^{\mathrm{op}} \to \mathbf{Set}$ satisfying the wedge axiom and the Mayer-Vietoris axiom is representable. This gives the existence of classifying spaces: ordinary cohomology $H^n(-, G)$ is represented by the Eilenberg-Mac Lane space $K(G, n)$.
+</Example>
+
+---
+
+## The Universal Property Perspective
+
+<Remark title="Representability = Universal property">
+Saying that $F$ is represented by $(A, \xi)$ is equivalent to saying that $A$ has a **universal property** with respect to $F$: for every object $X$ and element $x \in F(X)$, there is a unique morphism $f : X \to A$ such that $F(f)(\xi) = x$. This is the categorical pattern underlying free objects, products, limits, tensor products, and virtually every important construction in mathematics.
+</Remark>
+
+<Remark title="From Yoneda to derived categories">
+In the Gelfand-Manin approach, the idea that objects can be replaced by the functors they represent is the seed from which derived categories grow. The Yoneda embedding $\mathcal{C} \hookrightarrow [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ shows that we lose nothing by working with presheaves. Analogously, the derived category $D(\mathcal{A})$ can be thought of as an embedding of $\mathcal{A}$ into a larger category where homological operations become representable.
+</Remark>

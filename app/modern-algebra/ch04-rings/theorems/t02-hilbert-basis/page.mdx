@@ -1,0 +1,209 @@
+export const metadata = {
+  title: 'Hilbert Basis Theorem — Modern Algebra — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "현대대수학", href: "/modern-algebra" },
+  { label: "4. 환과 아이디얼", href: "/modern-algebra/ch04-rings" },
+  { label: "Theorem — Hilbert Basis Theorem" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Hilbert Basis Theorem
+
+The Hilbert Basis Theorem is one of the most important theorems in commutative algebra. It guarantees that polynomial rings over Noetherian rings are themselves Noetherian, which has profound consequences for algebraic geometry and invariant theory.
+
+---
+
+## Statement
+
+<Theorem title="Hilbert Basis Theorem" number="4.32">
+If $R$ is a Noetherian ring, then the polynomial ring $R[x]$ is also Noetherian.
+</Theorem>
+
+<Theorem title="Corollary: multivariate case" number="4.33">
+If $R$ is a Noetherian ring, then $R[x_1, x_2, \ldots, x_n]$ is Noetherian for every $n \geq 1$.
+</Theorem>
+
+<Proof>
+Apply the Hilbert Basis Theorem inductively: $R$ Noetherian implies $R[x_1]$ Noetherian, which implies $R[x_1, x_2] = R[x_1][x_2]$ Noetherian, and so on.
+</Proof>
+
+<Theorem title="Corollary: finitely generated algebras" number="4.34">
+Every finitely generated algebra over a Noetherian ring is Noetherian. That is, if $R$ is Noetherian and $S = R[a_1, \ldots, a_n]$ is a finitely generated $R$-algebra, then $S$ is Noetherian.
+</Theorem>
+
+<Proof>
+$S$ is a quotient of $R[x_1, \ldots, x_n]$ via $x_i \mapsto a_i$. Since $R[x_1, \ldots, x_n]$ is Noetherian (by the multivariate corollary) and quotients of Noetherian rings are Noetherian, $S$ is Noetherian.
+</Proof>
+
+---
+
+## Significance
+
+<Remark title="Historical context">
+David Hilbert proved this theorem in 1888 in the context of invariant theory. It was one of the first major results established by a pure existence proof (using the ascending chain condition) without explicitly constructing the generators. This "non-constructive" approach was initially controversial -- Paul Gordan reportedly said "This is not mathematics, this is theology!" -- but it revolutionized algebra.
+</Remark>
+
+<Remark title="Why the theorem matters">
+The Hilbert Basis Theorem has far-reaching consequences:
+
+1. **Algebraic geometry**: Every algebraic variety in $k^n$ is defined by finitely many polynomial equations. This is because ideals of $k[x_1, \ldots, x_n]$ are finitely generated.
+
+2. **Invariant theory**: The ring of invariants $k[x_1, \ldots, x_n]^G$ of a group $G$ acting on a polynomial ring is finitely generated (Hilbert's 14th problem, true for reductive groups).
+
+3. **Commutative algebra**: The Noetherian property is preserved under the most common ring constructions (polynomial rings, quotients, localizations).
+
+4. **Algebraic number theory**: Rings of integers $\mathcal{O}_K$ are Noetherian, since they are finitely generated over $\mathbb{Z}$.
+</Remark>
+
+---
+
+## Examples and Applications
+
+<Example id="noetherian-examples" title="Noetherian rings">
+The following rings are Noetherian (by the Hilbert Basis Theorem and its corollaries):
+- $\mathbb{Z}[x_1, \ldots, x_n]$ (since $\mathbb{Z}$ is Noetherian).
+- $k[x_1, \ldots, x_n]$ for any field $k$.
+- $\mathbb{Z}[i] = \mathbb{Z}[x]/(x^2+1)$ (quotient of a Noetherian ring).
+- $\mathbb{Z}[\sqrt{-5}] = \mathbb{Z}[x]/(x^2+5)$.
+- $k[x, y]/(x^2 + y^2 - 1)$ (the coordinate ring of a circle).
+- $\mathbb{R}[x, y, z]/(x^2 + y^2 + z^2 - 1)$ (the coordinate ring of a sphere).
+</Example>
+
+<Example id="non-noetherian" title="Non-Noetherian rings">
+Not all rings are Noetherian:
+- $k[x_1, x_2, x_3, \ldots]$ (polynomials in infinitely many variables): the ideal $(x_1, x_2, x_3, \ldots)$ is not finitely generated.
+- The ring of all algebraic integers $\overline{\mathbb{Z}}$: the ideal $(\sqrt{2}, \sqrt[4]{2}, \sqrt[8]{2}, \ldots)$ is not finitely generated.
+- $C^\infty(\mathbb{R})$ (smooth functions on $\mathbb{R}$): the ideal of functions vanishing to infinite order at $0$ is not finitely generated.
+</Example>
+
+<Example id="finite-equations" title="Varieties need only finitely many equations">
+Every algebraic variety $V \subseteq k^n$ can be defined by finitely many polynomial equations. For instance, the ideal $I(V) \subseteq k[x_1, \ldots, x_n]$ is finitely generated, say $I(V) = (f_1, \ldots, f_m)$, and $V = V(f_1, \ldots, f_m)$.
+
+This is NOT obvious: a priori, one might need infinitely many equations. The Hilbert Basis Theorem guarantees this cannot happen.
+</Example>
+
+<Example id="acc-chain" title="Ascending chain condition in action">
+In $\mathbb{Z}[x]$, consider the chain of ideals:
+
+$$(x) \subseteq (x, 2) \subseteq (x, 2, \ldots)$$
+
+This must stabilize. Indeed $(x, 2) = (x, 2)$ already, since any element of $\mathbb{Z}[x]$ with even constant term is in $(x, 2)$.
+
+Another chain: $(x^2) \subseteq (x) \subseteq \mathbb{Z}[x]$. This stabilizes trivially.
+</Example>
+
+<Example id="application-invariant" title="Invariant theory application">
+Let $G = S_n$ (symmetric group) act on $k[x_1, \ldots, x_n]$ by permuting variables. The ring of invariants is the ring of symmetric polynomials $k[x_1, \ldots, x_n]^{S_n}$. By the Fundamental Theorem of Symmetric Polynomials, this is $k[e_1, \ldots, e_n]$ where $e_i$ are elementary symmetric polynomials.
+
+The Hilbert Basis Theorem (combined with Hilbert's finiteness theorem for reductive groups) guarantees such a finite set of generators exists even for more general group actions.
+</Example>
+
+<Example id="power-series-noetherian" title="Power series rings">
+If $R$ is Noetherian, then $R[[x]]$ (formal power series) is also Noetherian. The proof is similar to the Hilbert Basis Theorem but uses the "lowest degree term" instead of the leading coefficient.
+</Example>
+
+---
+
+## The Noetherian Property
+
+<Definition title="Noetherian ring" number="4.31">
+A ring $R$ is **Noetherian** if it satisfies any of the following equivalent conditions:
+
+1. Every ideal of $R$ is finitely generated.
+2. (**ACC**) Every ascending chain of ideals $I_1 \subseteq I_2 \subseteq I_3 \subseteq \cdots$ stabilizes: there exists $N$ with $I_n = I_N$ for all $n \geq N$.
+3. (**Maximum condition**) Every nonempty collection of ideals has a maximal element (under inclusion).
+</Definition>
+
+<Example id="noetherian-basic" title="Basic Noetherian rings">
+- Every field $F$ is Noetherian (the only ideals are $(0)$ and $F$).
+- Every PID is Noetherian (ideals are principal, hence finitely generated by one element).
+- $\mathbb{Z}$ is Noetherian (it is a PID).
+</Example>
+
+<Theorem title="Quotients and localizations preserve Noetherian" number="4.35">
+Let $R$ be a Noetherian ring. Then:
+
+1. Every quotient $R/I$ is Noetherian.
+2. Every localization $S^{-1}R$ is Noetherian.
+</Theorem>
+
+<Example id="localization-noetherian" title="Localizations of Noetherian rings">
+Since $\mathbb{Z}$ is Noetherian:
+- $\mathbb{Z}_{(p)} = \{a/b : p \nmid b\}$ is Noetherian (a local PID).
+- $\mathbb{Q} = \mathbb{Z}[(1/p)_{p \text{ prime}}]$ is Noetherian (it is a field).
+
+Since $k[x, y]$ is Noetherian:
+- $k[x, y]_{(x,y)} = \{f/g : g(0,0) \neq 0\}$ is a Noetherian local ring.
+- $k(x)[y] = (k[x] \setminus \{0\})^{-1}k[x, y]$ is Noetherian (a PID).
+</Example>
+
+<Example id="coordinate-ring" title="Coordinate rings of varieties">
+The coordinate ring of an affine variety is always Noetherian. For example:
+- $k[x, y]/(y^2 - x^3 + x)$ is the coordinate ring of an elliptic curve: Noetherian (quotient of Noetherian).
+- $k[x, y, z]/(xy - z^2)$ is the coordinate ring of a quadric cone: Noetherian.
+- $k[x_{ij} : 1 \leq i,j \leq n] / I_r$ where $I_r$ is the ideal of $(r+1) \times (r+1)$ minors: the coordinate ring of a determinantal variety, also Noetherian.
+</Example>
+
+<Example id="module-noetherian" title="Noetherian modules">
+A ring $R$ is Noetherian iff every finitely generated $R$-module is Noetherian (i.e., satisfies ACC on submodules). For $R = k[x, y]$, any finitely generated module has the property that every submodule is finitely generated. This is essential for the theory of coherent sheaves in algebraic geometry.
+</Example>
+
+<Example id="ascending-chain-illustration" title="An ascending chain that stabilizes">
+In $\mathbb{Q}[x, y]$, consider the ideals $I_n = (x, y^n)$ for $n = 1, 2, 3, \ldots$. Then $I_1 \supseteq I_2 \supseteq I_3 \supseteq \cdots$ is a *descending* chain (not ascending). For an ascending chain: $(y) \subseteq (x, y) \subseteq (x, y) = (x, y) = \cdots$, which stabilizes immediately. The Hilbert Basis Theorem guarantees every ascending chain in $\mathbb{Q}[x, y]$ stabilizes.
+</Example>
+
+---
+
+## Related Results
+
+<Theorem title="Cohen's Theorem" number="4.36">
+A commutative ring $R$ is Noetherian if and only if every prime ideal of $R$ is finitely generated.
+</Theorem>
+
+<Remark title="Significance of Cohen's theorem">
+Cohen's theorem provides a useful criterion: to show a ring is Noetherian, it suffices to check that prime ideals are finitely generated, rather than all ideals. This can simplify proofs considerably.
+</Remark>
+
+<Theorem title="Hilbert's Nullstellensatz (weak form)" number="4.37">
+Let $k$ be an algebraically closed field. Then every maximal ideal of $k[x_1, \ldots, x_n]$ is of the form
+
+$$\mathfrak{m} = (x_1 - a_1, x_2 - a_2, \ldots, x_n - a_n)$$
+
+for some $(a_1, \ldots, a_n) \in k^n$.
+</Theorem>
+
+<Example id="nullstellensatz-application" title="Nullstellensatz and the Hilbert Basis Theorem">
+The Nullstellensatz uses the Hilbert Basis Theorem in its proof. Combined, they tell us:
+- Every ideal $I \subseteq k[x_1, \ldots, x_n]$ is finitely generated (HBT).
+- The variety $V(I)$ is determined by finitely many equations.
+- The correspondence $V \leftrightarrow I(V)$ between varieties and radical ideals is inclusion-reversing.
+
+For example, $V(x^2 + y^2 - 1) \subseteq \mathbb{R}^2$ is the unit circle, defined by the single equation $x^2 + y^2 = 1$. The Hilbert Basis Theorem guarantees that no ideal requires infinitely many generators.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key takeaways">
+The Hilbert Basis Theorem establishes that:
+
+1. Polynomial rings over Noetherian rings are Noetherian.
+2. In particular, $k[x_1, \ldots, x_n]$ is Noetherian for any field $k$.
+3. Every finitely generated $k$-algebra is Noetherian.
+4. The proof (given in the [proof page](/modern-algebra/ch04-rings/proofs/p01-hilbert-basis-proof)) uses a clever argument with leading coefficients and the ACC in $R$.
+
+This theorem is foundational for commutative algebra, algebraic geometry, and invariant theory. Without it, we would not know that algebraic varieties can be defined by finitely many equations.
+</Remark>

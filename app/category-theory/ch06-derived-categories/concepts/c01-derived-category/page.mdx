@@ -1,0 +1,112 @@
+export const metadata = {
+  title: 'Derived Category D(A) — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "6. 유도 범주", href: "/category-theory/ch06-derived-categories" },
+  { label: "Concept — Derived Category D(A)" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Derived Category D(A)
+
+The derived category $D(\mathcal{A})$ is the central construction in Gelfand-Manin's approach to homological algebra. It is obtained by inverting quasi-isomorphisms in the homotopy category, creating a setting where complexes with the same cohomology become isomorphic. Derived functors, spectral sequences, and duality theorems all find their natural home here.
+
+---
+
+## Construction
+
+<Definition title="Derived Category" number="6.1">
+The **derived category** $D(\mathcal{A})$ of an abelian category $\mathcal{A}$ is the localization
+
+$$D(\mathcal{A}) = K(\mathcal{A})[\mathrm{qis}^{-1}]$$
+
+of the homotopy category at the class of quasi-isomorphisms. It is a triangulated category by Verdier localization.
+
+Equivalently, $D(\mathcal{A}) = K(\mathcal{A}) / K_{\mathrm{ac}}(\mathcal{A})$, the Verdier quotient by the thick subcategory of acyclic complexes.
+</Definition>
+
+<Definition title="Morphisms in D(A)" number="6.2">
+Morphisms in $D(\mathcal{A})$ are represented by **roofs**: $A \xleftarrow{s} C \xrightarrow{f} B$ where $s$ is a quasi-isomorphism. Two roofs are equivalent if they admit a common refinement.
+
+When $\mathcal{A}$ has enough injectives, $\mathrm{Hom}_{D(\mathcal{A})}(A, B) \cong \mathrm{Hom}_{K(\mathcal{A})}(A, I_B^\bullet)$ where $I_B^\bullet$ is an injective resolution of $B$.
+</Definition>
+
+---
+
+## Examples
+
+<Example title="D(R-Mod)" id="d-rmod">
+For a ring $R$, $D(R\text{-}\mathbf{Mod})$ is the derived category of $R$-modules. Objects are complexes of $R$-modules; morphisms are chain maps modulo homotopy, with quasi-isomorphisms inverted. $\mathrm{Hom}_{D(R)}(M[0], N[n]) = \mathrm{Ext}^n_R(M, N)$.
+</Example>
+
+<Example title="D(Ab)" id="d-ab">
+$D(\mathbf{Ab})$ is the derived category of abelian groups. Since $\mathbb{Z}$ has global dimension 1, every object in $D^b(\mathbf{Ab})$ is isomorphic to a direct sum $\bigoplus_n H^n[{-n}]$ of its cohomology groups (placed in the appropriate degrees).
+</Example>
+
+<Example title="D^b(Coh(X))" id="d-coh">
+For a smooth projective variety $X$, $D^b(\mathrm{Coh}(X))$ is the bounded derived category of coherent sheaves. It is a fundamental invariant of $X$: the Bondal-Orlov reconstruction theorem states that $X$ can be recovered from $D^b(\mathrm{Coh}(X))$ (for varieties with ample or anti-ample canonical bundle).
+</Example>
+
+<Example title="Embedding of A into D(A)" id="embedding">
+The functor $\mathcal{A} \to D(\mathcal{A})$ sending $A \mapsto A[0]$ (complex concentrated in degree 0) is exact and fully faithful. It identifies $\mathcal{A}$ with the heart of the standard t-structure on $D(\mathcal{A})$.
+</Example>
+
+<Example title="Derived tensor product" id="derived-tensor">
+In $D(R)$, the derived tensor product $A \otimes^L B$ is defined by $P_A \otimes B$ where $P_A \to A$ is a projective resolution. $H^{-n}(A \otimes^L B) = \mathrm{Tor}_n(A, B)$.
+</Example>
+
+<Example title="RHom" id="rhom">
+$\mathrm{RHom}(A, B) = \mathrm{Hom}(A, I_B)$ where $B \to I_B$ is an injective resolution. $H^n(\mathrm{RHom}(A, B)) = \mathrm{Ext}^n(A, B)$.
+</Example>
+
+<Example title="Fourier-Mukai transforms" id="fourier-mukai">
+An equivalence $D^b(\mathrm{Coh}(X)) \simeq D^b(\mathrm{Coh}(Y))$ is called a **Fourier-Mukai equivalence**. By the Orlov representability theorem, every exact equivalence between derived categories of smooth projective varieties is of Fourier-Mukai type.
+</Example>
+
+<Example title="Tilting" id="tilting">
+A tilting object $T$ in $D^b(\mathcal{A})$ gives an equivalence $D^b(\mathcal{A}) \simeq D^b(\mathrm{mod}\text{-}\mathrm{End}(T))$. This is the derived Morita theory.
+</Example>
+
+<Example title="Serre duality in D^b" id="serre-duality">
+For a smooth projective variety $X$ of dimension $n$, Serre duality gives $\mathrm{Hom}_{D^b}(A, B) \cong \mathrm{Hom}_{D^b}(B, A \otimes \omega_X[n])^*$. The Serre functor is $S(-) = (-) \otimes \omega_X[n]$.
+</Example>
+
+<Example title="Derived categories of an elliptic curve" id="elliptic">
+For an elliptic curve $E$, $D^b(\mathrm{Coh}(E)) \simeq D^b(\mathrm{Coh}(\hat{E}))$ where $\hat{E}$ is the dual elliptic curve. This is the original Fourier-Mukai equivalence, generalizing the Fourier transform.
+</Example>
+
+<Example title="D(A) vs K(A)" id="d-vs-k">
+In $D(\mathcal{A})$, quasi-isomorphic complexes are isomorphic. In $K(\mathcal{A})$, only homotopy equivalent complexes are isomorphic. The passage $K \to D$ identifies more objects: a module and its projective resolution become isomorphic in $D$ but not in $K$.
+</Example>
+
+<Example title="Exceptional collections" id="exceptional">
+An exceptional collection $\langle E_1, \ldots, E_n \rangle$ in $D^b(\mathrm{Coh}(X))$ generates the derived category if every object is built from $E_i$ by shifts, cones, and direct sums. For $\mathbb{P}^n$, the exceptional collection $\langle \mathcal{O}, \mathcal{O}(1), \ldots, \mathcal{O}(n) \rangle$ generates.
+</Example>
+
+---
+
+## Key Properties
+
+<Theorem title="Fundamental properties of D(A)" number="6.1">
+1. $D(\mathcal{A})$ is a triangulated category.
+2. $H^n : D(\mathcal{A}) \to \mathcal{A}$ is a cohomological functor.
+3. $\mathrm{Hom}_{D(\mathcal{A})}(A[0], B[n]) = \mathrm{Ext}^n_{\mathcal{A}}(A, B)$ for objects $A, B \in \mathcal{A}$.
+4. If $\mathcal{A}$ has enough injectives, $D^+(\mathcal{A}) \simeq K^+(\mathrm{Inj}\, \mathcal{A})$.
+5. If $\mathcal{A}$ has enough projectives, $D^-(\mathcal{A}) \simeq K^-(\mathrm{Proj}\, \mathcal{A})$.
+</Theorem>
+
+<Remark title="The derived category philosophy">
+The derived category embodies the principle that "complexes are more natural than individual objects." In Gelfand-Manin's approach, derived functors, spectral sequences, and duality are all expressed most cleanly as functors between derived categories, rather than as sequences of functors $R^nF$ on individual objects.
+</Remark>

@@ -1,0 +1,96 @@
+export const metadata = {
+  title: 'Verdier Localization — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "5. 삼각 범주", href: "/category-theory/ch05-triangulated-categories" },
+  { label: "Theorem — Verdier Localization" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Verdier Localization
+
+Verdier localization constructs the quotient of a triangulated category by a thick subcategory. The resulting quotient inherits a canonical triangulated structure. The derived category $D(\mathcal{A}) = K(\mathcal{A})/K_{\mathrm{ac}}(\mathcal{A})$ is the primary example.
+
+---
+
+## Statement
+
+<Definition title="Thick Subcategory" number="5.9">
+A full triangulated subcategory $\mathcal{S} \subseteq \mathcal{T}$ is **thick** (or **epaisse**) if it is closed under direct summands: if $X \oplus Y \in \mathcal{S}$, then $X, Y \in \mathcal{S}$.
+</Definition>
+
+<Theorem title="Verdier Localization" number="5.5">
+Let $\mathcal{T}$ be a triangulated category and $\mathcal{S} \subseteq \mathcal{T}$ a thick subcategory. Then the **Verdier quotient** $\mathcal{T}/\mathcal{S}$, defined as the localization of $\mathcal{T}$ at the class of morphisms $f$ whose cone lies in $\mathcal{S}$, is a triangulated category. The localization functor $Q : \mathcal{T} \to \mathcal{T}/\mathcal{S}$ is exact (preserves distinguished triangles and commutes with the shift).
+
+Moreover, $\ker Q = \mathcal{S}$ (the objects sent to zero are exactly those in $\mathcal{S}$).
+</Theorem>
+
+---
+
+## Examples
+
+<Example title="Derived category" id="derived-verdier">
+$D(\mathcal{A}) = K(\mathcal{A}) / K_{\mathrm{ac}}(\mathcal{A})$, where $K_{\mathrm{ac}}(\mathcal{A})$ is the thick subcategory of acyclic complexes. The quasi-isomorphisms are exactly the morphisms whose cones are acyclic.
+</Example>
+
+<Example title="Bounded derived category" id="bounded-verdier">
+$D^b(\mathcal{A}) = K^b(\mathcal{A}) / K^b_{\mathrm{ac}}(\mathcal{A})$. Similarly for $D^+$ and $D^-$.
+</Example>
+
+<Example title="Singularity category" id="singularity-verdier">
+$D_{\mathrm{sg}}(R) = D^b(\mathrm{mod}\text{-}R) / \mathrm{Perf}(R)$: the singularity category is the Verdier quotient by perfect complexes. It is trivial iff $R$ has finite global dimension.
+</Example>
+
+<Example title="Localization sequence" id="localization-seq">
+For a closed subvariety $Z \subseteq X$ with open complement $U$, there is a localization sequence $D^b_Z(X) \to D^b(X) \to D^b(U)$ where $D^b_Z(X)$ consists of complexes supported on $Z$. The Verdier quotient $D^b(X)/D^b_Z(X) \simeq D^b(U)$.
+</Example>
+
+<Example title="Morphisms in the quotient" id="morphisms-quotient">
+Morphisms in $\mathcal{T}/\mathcal{S}$ are represented by "roofs": $X \xleftarrow{s} X' \xrightarrow{f} Y$ where the cone of $s$ lies in $\mathcal{S}$. Two roofs are equivalent if they can be connected by a common refinement.
+</Example>
+
+<Example title="Derived category of sheaves with support" id="support">
+$D^b_c(X) / D^b_Z(X) \simeq D^b_c(U)$ for a closed subset $Z$ with complement $U$. This is the sheaf-theoretic localization sequence, crucial for excision arguments.
+</Example>
+
+<Example title="Quotient by compact objects" id="compact-quotient">
+In a compactly generated triangulated category $\mathcal{T}$, the quotient $\mathcal{T}/\mathcal{T}^c$ (modding out compact objects) captures the "large-scale" behavior. This perspective is used in the theory of Brown representability.
+</Example>
+
+<Example title="Torsion quotient" id="torsion-quotient">
+For $R = \mathbb{Z}$, the quotient $D^b(\mathbb{Z}\text{-}\mathrm{mod}) / D^b(\mathrm{torsion})$ is equivalent to $D^b(\mathbb{Q}\text{-}\mathrm{Vect})$: modding out torsion modules gives rational vector spaces.
+</Example>
+
+<Example title="Quotient and Serre subcategories" id="serre-quotient">
+For an abelian category $\mathcal{A}$ and a Serre subcategory $\mathcal{S}$, $D^b(\mathcal{A})/D^b(\mathcal{S}) \simeq D^b(\mathcal{A}/\mathcal{S})$ under suitable hypotheses. This relates Verdier localization to Gabriel localization.
+</Example>
+
+<Example title="Stable module category as Verdier quotient" id="stable-verdier">
+For a self-injective algebra $A$, the stable module category $\underline{\mathrm{mod}}\text{-}A = \mathrm{mod}\text{-}A / \mathrm{proj}\text{-}A$ can be realized as a Verdier quotient of the bounded derived category.
+</Example>
+
+<Example title="Localization and K-theory" id="k-theory-localization">
+The localization sequence $\mathcal{S} \to \mathcal{T} \to \mathcal{T}/\mathcal{S}$ induces a long exact sequence in algebraic K-theory: $\cdots \to K_n(\mathcal{S}) \to K_n(\mathcal{T}) \to K_n(\mathcal{T}/\mathcal{S}) \to K_{n-1}(\mathcal{S}) \to \cdots$.
+</Example>
+
+<Example title="Universal property" id="universal-verdier">
+The Verdier quotient $\mathcal{T}/\mathcal{S}$ is universal among exact functors $\mathcal{T} \to \mathcal{T}'$ that send $\mathcal{S}$ to zero: any such functor factors uniquely through $Q : \mathcal{T} \to \mathcal{T}/\mathcal{S}$.
+</Example>
+
+---
+
+<Remark title="Verdier vs Bousfield">
+Verdier localization is the "quotient" approach (mod out a subcategory). Bousfield localization is the "reflection" approach (project onto a subcategory). They are related: the Verdier quotient $\mathcal{T}/\mathcal{S}$ is equivalent to the right orthogonal $\mathcal{S}^\perp$ when a suitable adjunction exists.
+</Remark>

@@ -1,0 +1,154 @@
+export const metadata = {
+  title: 'Ratio Test — Real Analysis — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "7. 급수", href: "/analysis/ch07-series" },
+  { label: "정리 — 비율판정법" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Ratio Test
+
+The ratio test determines convergence by examining the ratio of consecutive terms. It is especially effective for series involving factorials, exponentials, or products.
+
+---
+
+## Statement
+
+<Theorem title="Ratio test (d'Alembert)" number="7.18">
+Let $\sum a_n$ be a series with $a_n \neq 0$ for all $n$. Consider the limit
+
+$$L = \lim_{n \to \infty} \left|\frac{a_{n+1}}{a_n}\right|.$$
+
+1. If $L < 1$, the series converges absolutely.
+2. If $L > 1$ (or $L = \infty$), the series diverges.
+3. If $L = 1$, the test is inconclusive.
+</Theorem>
+
+<Proof>
+**(1)** Suppose $L < 1$. Choose $r$ with $L < r < 1$. Then there exists $N$ such that $|a_{n+1}/a_n| < r$ for all $n \geq N$. So $|a_{N+k}| < r^k |a_N|$ for all $k \geq 0$. Since $\sum r^k |a_N|$ is a convergent geometric series (as $r < 1$), comparison gives $\sum |a_n|$ converges.
+
+**(2)** If $L > 1$, then $|a_{n+1}| > |a_n|$ eventually, so $|a_n| \not\to 0$ and the series diverges by the divergence test.
+</Proof>
+
+---
+
+## Examples: convergence
+
+<Example title="Series with factorials">
+$\sum_{n=1}^\infty \frac{n!}{n^n}$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{(n+1)!}{(n+1)^{n+1}} \cdot \frac{n^n}{n!} = \frac{n^n}{(n+1)^n} = \left(\frac{n}{n+1}\right)^n = \frac{1}{(1 + 1/n)^n} \to \frac{1}{e} < 1.$$
+
+The series converges.
+</Example>
+
+<Example title="Series with exponentials and factorials">
+$\sum_{n=0}^\infty \frac{2^n}{n!}$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{2^{n+1}}{(n+1)!} \cdot \frac{n!}{2^n} = \frac{2}{n+1} \to 0 < 1.$$
+
+Converges (the sum equals $e^2$).
+</Example>
+
+<Example title="Power over factorial">
+$\sum_{n=0}^\infty \frac{x^n}{n!}$ for any fixed $x$:
+
+$$\left|\frac{a_{n+1}}{a_n}\right| = \frac{|x|}{n+1} \to 0 < 1.$$
+
+Converges for all $x \in \mathbb{R}$. This is the exponential series $e^x$.
+</Example>
+
+<Example title="Double factorial">
+$\sum_{n=1}^\infty \frac{(2n)!}{4^n (n!)^2}$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{(2n+2)!}{4^{n+1}((n+1)!)^2} \cdot \frac{4^n (n!)^2}{(2n)!} = \frac{(2n+2)(2n+1)}{4(n+1)^2} = \frac{2(2n+1)}{4(n+1)} = \frac{2n+1}{2(n+1)} \to 1.$$
+
+The ratio test is inconclusive. (The series actually diverges, as $a_n \sim \frac{1}{\sqrt{\pi n}}$ by Stirling's approximation.)
+</Example>
+
+---
+
+## Examples: divergence
+
+<Example title="Factorial over power">
+$\sum_{n=1}^\infty \frac{n!}{10^n}$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{(n+1)!}{10^{n+1}} \cdot \frac{10^n}{n!} = \frac{n+1}{10} \to \infty > 1.$$
+
+The series diverges. Factorials grow much faster than exponentials.
+</Example>
+
+<Example title="Ratio greater than 1">
+$\sum_{n=1}^\infty \frac{3^n}{n^2}$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{3^{n+1}}{(n+1)^2} \cdot \frac{n^2}{3^n} = 3 \cdot \frac{n^2}{(n+1)^2} \to 3 > 1.$$
+
+Diverges.
+</Example>
+
+---
+
+## The inconclusive case
+
+<Example title="Ratio test fails for p-series">
+$\sum \frac{1}{n^p}$ for any $p > 0$:
+
+$$\frac{a_{n+1}}{a_n} = \frac{n^p}{(n+1)^p} = \left(\frac{n}{n+1}\right)^p \to 1.$$
+
+Inconclusive for all $p$, even though the series converges for $p > 1$ and diverges for $p \leq 1$.
+</Example>
+
+<Example title="Ratio test fails for 1/n and 1/n²">
+Both $\sum \frac{1}{n}$ (divergent) and $\sum \frac{1}{n^2}$ (convergent) give $L = 1$. This confirms that $L = 1$ truly gives no information.
+</Example>
+
+<Remark>
+The ratio test is most powerful for series whose terms involve factorials, exponentials, or products (where the ratio simplifies nicely). It is useless for p-series and polynomial-type series, where the root test or comparison test should be used instead.
+</Remark>
+
+---
+
+## Refined ratio test
+
+<Theorem title="Ratio test with limsup/liminf" number="7.19">
+If the limit $L = \lim |a_{n+1}/a_n|$ does not exist, we can still conclude:
+
+- If $\limsup_{n\to\infty} |a_{n+1}/a_n| < 1$, the series converges absolutely.
+- If $\liminf_{n\to\infty} |a_{n+1}/a_n| > 1$, the series diverges.
+- Otherwise, the test is inconclusive.
+</Theorem>
+
+<Example title="Oscillating ratios">
+Consider $a_n = r^n$ if $n$ is odd and $a_n = s^n$ if $n$ is even, where $0 < s < 1 < r$ but $rs < 1$. The ratios $|a_{n+1}/a_n|$ oscillate between values above and below $1$, so the standard limit may not exist. The limsup/liminf version handles such cases.
+</Example>
+
+<Example title="Comparing ratio and root tests">
+The root test (using $\limsup |a_n|^{1/n}$) is strictly stronger than the ratio test: whenever the ratio test gives convergence, so does the root test, but the root test can succeed where the ratio test is inconclusive.
+
+For example, consider $a_n = 2^{-n}$ for odd $n$ and $a_n = 3^{-n}$ for even $n$. The ratio $|a_{n+1}/a_n|$ oscillates, but $|a_n|^{1/n}$ is bounded by $1/2$ for odd $n$ and $1/3$ for even $n$, so $\limsup |a_n|^{1/n} = 1/2 < 1$. The root test concludes convergence.
+</Example>
+
+<Example title="Ratio test with binomial coefficients">
+$\sum_{n=0}^\infty \binom{2n}{n} \frac{1}{4^n}$: $\frac{a_{n+1}}{a_n} = \frac{\binom{2n+2}{n+1}}{\binom{2n}{n}} \cdot \frac{1}{4} = \frac{(2n+2)(2n+1)}{(n+1)^2} \cdot \frac{1}{4} = \frac{2(2n+1)}{4(n+1)} \to 1$. Inconclusive. (The series diverges since $\binom{2n}{n}/4^n \sim 1/\sqrt{\pi n}$ by Stirling.)
+</Example>
+
+<Example title="Ratio test for a rapidly convergent series">
+$\sum_{n=1}^\infty \frac{n^{100}}{(1.01)^n}$: $\frac{a_{n+1}}{a_n} = \frac{(n+1)^{100}}{n^{100}} \cdot \frac{1}{1.01} = \frac{1}{1.01}\left(1 + \frac{1}{n}\right)^{100} \to \frac{1}{1.01} < 1$. Converges. Despite the $n^{100}$ factor, the exponential denominator wins.
+</Example>
+
+<Remark>
+In practice, the ratio test is the first tool to try when the general term involves factorials or products. When it gives $L = 1$, switch to comparison, integral, or root tests.
+</Remark>

@@ -1,0 +1,146 @@
+export const metadata = {
+  title: '테일러 정리 - 해석학 - 수학 강의 노트',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "해석학", href: "/analysis" },
+  { label: "5. 미분", href: "/analysis/ch05-differentiation" },
+  { label: "정리 - 테일러 정리" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="theorem" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# 테일러 정리 (Taylor's Theorem)
+
+Taylor's theorem generalizes the Mean Value Theorem to higher-order approximations. It provides a polynomial approximation to a smooth function together with an explicit error term.
+
+---
+
+## Statement
+
+<Theorem title="Taylor's Theorem with Lagrange remainder" number="5.5">
+Let $f : [a, b] \to \mathbb{R}$ be $n + 1$ times differentiable on $(a, b)$ with $f^{(n)}$ continuous on $[a, b]$. For any $x_0 \in [a, b]$ and $x \in [a, b]$:
+
+$$f(x) = \sum_{k=0}^{n} \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k + R_n(x),$$
+
+where the **Lagrange remainder** is
+
+$$R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x - x_0)^{n+1}$$
+
+for some $\xi$ between $x_0$ and $x$.
+</Theorem>
+
+<Remark>
+When $n = 0$: Taylor's theorem reduces to the Mean Value Theorem: $f(x) = f(x_0) + f'(\xi)(x - x_0)$.
+
+The Taylor polynomial $T_n(x) = \sum_{k=0}^{n} \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$ is the unique polynomial of degree $\leq n$ that matches $f$ and its first $n$ derivatives at $x_0$.
+</Remark>
+
+---
+
+## Other remainder forms
+
+<Theorem title="Cauchy remainder">
+Under the same hypotheses:
+
+$$R_n(x) = \frac{f^{(n+1)}(\xi)}{n!}(x - \xi)^n (x - x_0)$$
+
+for some $\xi$ between $x_0$ and $x$.
+</Theorem>
+
+<Theorem title="Integral remainder">
+If $f^{(n+1)}$ is continuous:
+
+$$R_n(x) = \frac{1}{n!}\int_{x_0}^{x} f^{(n+1)}(t)(x - t)^n\,dt.$$
+
+This form is exact (no unknown $\xi$) and gives the best estimates.
+</Theorem>
+
+---
+
+## Taylor series of standard functions
+
+<Example title="Exponential function at 0">
+1. $e^x = \sum_{k=0}^{n} \frac{x^k}{k!} + R_n(x)$, where $|R_n(x)| \leq \frac{e^{|x|}}{(n+1)!}|x|^{n+1} \to 0$ for every fixed $x$.
+
+So $e^x = \sum_{k=0}^{\infty} \frac{x^k}{k!}$ for all $x \in \mathbb{R}$.
+</Example>
+
+<Example title="Sine at 0">
+2. $\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \cdots = \sum_{k=0}^{\infty} \frac{(-1)^k x^{2k+1}}{(2k+1)!}$.
+
+Remainder: $|R_n(x)| \leq \frac{|x|^{n+1}}{(n+1)!} \to 0$ for all $x$.
+</Example>
+
+<Example title="Cosine at 0">
+3. $\cos x = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \cdots = \sum_{k=0}^{\infty} \frac{(-1)^k x^{2k}}{(2k)!}$.
+</Example>
+
+<Example title="Natural logarithm at 1">
+4. $\ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \cdots = \sum_{k=1}^{\infty} \frac{(-1)^{k+1} x^k}{k}$ for $|x| \leq 1$ (and $x \neq -1$).
+
+At $x = 1$: $\ln 2 = 1 - \frac{1}{2} + \frac{1}{3} - \frac{1}{4} + \cdots$ (slowly convergent).
+</Example>
+
+---
+
+## Error estimation
+
+<Example title="Approximating e">
+5. How many terms of $e = \sum \frac{1}{k!}$ are needed for $6$-decimal accuracy?
+
+$|R_n| \leq \frac{e}{(n+1)!} < \frac{3}{(n+1)!}$. Need $\frac{3}{(n+1)!} < 5 \times 10^{-7}$. Since $10! = 3628800 > 6000000$, $n = 9$ suffices: $e \approx \sum_{k=0}^{9} \frac{1}{k!} = 2.718281\ldots$
+</Example>
+
+<Example title="Approximating sin(0.1)">
+6. $\sin(0.1) \approx 0.1 - \frac{(0.1)^3}{6} = 0.1 - 0.000167 = 0.099833$.
+
+Error: $|R_2| \leq \frac{(0.1)^5}{120} < 10^{-7}$. So $5$ correct decimal places with just two terms.
+</Example>
+
+<Example title="Approximating cos(1)">
+7. $\cos(1) \approx 1 - \frac{1}{2} + \frac{1}{24} - \frac{1}{720} = 0.5403$.
+
+$|R_6| \leq \frac{1}{5040} < 0.0002$. Actual value: $\cos(1) = 0.54030\ldots$
+</Example>
+
+---
+
+## Applications to limits
+
+<Example title="Taylor expansion for limits">
+8. $\lim_{x \to 0} \frac{e^x - 1 - x}{x^2}$: expand $e^x = 1 + x + \frac{x^2}{2} + O(x^3)$. Then $\frac{e^x - 1 - x}{x^2} = \frac{1}{2} + O(x) \to \frac{1}{2}$.
+</Example>
+
+<Example title="Higher-order limits">
+9. $\lim_{x \to 0} \frac{\sin x - x + x^3/6}{x^5}$: expand $\sin x = x - \frac{x^3}{6} + \frac{x^5}{120} + O(x^7)$. Then $\frac{\sin x - x + x^3/6}{x^5} = \frac{1}{120} + O(x^2) \to \frac{1}{120}$.
+</Example>
+
+---
+
+## Taylor's theorem and optimization
+
+<Example title="Second derivative test">
+10. If $f'(c) = 0$ and $f''(c) > 0$, then $f(x) = f(c) + \frac{f''(c)}{2}(x-c)^2 + o((x-c)^2)$. Since $f''(c) > 0$, $f(x) > f(c)$ near $c$, so $c$ is a local minimum. Similarly, $f''(c) < 0$ gives a local maximum.
+</Example>
+
+---
+
+## Convergence of Taylor series
+
+<Example title="Convergence for all x">
+11. The Taylor series of $e^x$, $\sin x$, $\cos x$ converge for all $x \in \mathbb{R}$ (entire functions). The key: $|R_n(x)| \leq C \frac{|x|^{n+1}}{(n+1)!} \to 0$ since factorials grow faster than exponentials.
+</Example>
+
+<Example title="Finite radius of convergence">
+12. $\frac{1}{1-x} = \sum_{k=0}^{\infty} x^k$ converges only for $|x| < 1$ (geometric series). The Taylor series of $\frac{1}{1+x^2}$ around $x_0 = 0$ has radius of convergence $1$, even though $\frac{1}{1+x^2}$ is smooth everywhere on $\mathbb{R}$. The "obstruction" is the poles at $x = \pm i$ in the complex plane.
+</Example>

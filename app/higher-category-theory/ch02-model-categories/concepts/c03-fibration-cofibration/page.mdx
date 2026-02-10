@@ -1,0 +1,185 @@
+export const metadata = {
+  title: 'Fibration and Cofibration — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "2. 모형 범주", href: "/higher-category-theory/ch02-model-categories" },
+  { label: "Concept — Fibration and Cofibration" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Fibration and Cofibration
+
+Fibrations and cofibrations are the two structural pillars of a model category, complementing the weak equivalences. Fibrations capture "good surjections" (maps with path-lifting properties), while cofibrations capture "good inclusions" (maps with extension properties). Together, they provide the lifting and factorization machinery that makes homotopy theory work.
+
+---
+
+## Lifting Properties
+
+<Definition title="Lifting property" number="2.1">
+A morphism $i: A \to B$ has the **left lifting property** (LLP) with respect to $p: X \to Y$, equivalently $p$ has the **right lifting property** (RLP) with respect to $i$, written $i \;\square\; p$, if every commutative square
+
+$$A \xrightarrow{f} X$$
+$$\downarrow^i \quad\quad\quad \downarrow^p$$
+$$B \xrightarrow{g} Y$$
+
+admits a diagonal lift $h: B \to X$ with $h \circ i = f$ and $p \circ h = g$.
+</Definition>
+
+<Definition title="Fibrations and cofibrations via lifting" number="2.2">
+In a model category $\mathcal{M}$:
+- **Fibrations** = morphisms with the RLP with respect to all trivial cofibrations.
+- **Trivial fibrations** = morphisms with the RLP with respect to all cofibrations.
+- **Cofibrations** = morphisms with the LLP with respect to all trivial fibrations.
+- **Trivial cofibrations** = morphisms with the LLP with respect to all fibrations.
+
+The model structure is determined by the weak equivalences and either the fibrations or the cofibrations (the other is determined by the lifting property).
+</Definition>
+
+---
+
+## Fibrations
+
+<Example id="serre-fibration" title="Serre fibrations in Top">
+A continuous map $p: E \to B$ is a **Serre fibration** if it has the homotopy lifting property for all CW complexes. Equivalently, it has the RLP with respect to $D^n \times \{0\} \hookrightarrow D^n \times [0,1]$ for all $n \geq 0$.
+
+Examples:
+- Fiber bundles are Serre fibrations.
+- Covering maps are Serre fibrations.
+- The projection $E \times F \to E$ is a (trivial) Serre fibration.
+- The path fibration $PX \to X$ (evaluating a path at its endpoint) is a Serre fibration with fiber $\Omega X$.
+</Example>
+
+<Example id="kan-fibration" title="Kan fibrations in sSet">
+A map $p: X \to Y$ of simplicial sets is a **Kan fibration** if it has the RLP with respect to all horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$ for $n \geq 1$, $0 \leq k \leq n$.
+
+When $Y = \Delta[0]$, a Kan fibration $X \to \Delta[0]$ means $X$ is a Kan complex. In general, Kan fibrations are "families of Kan complexes parametrized by $Y$" (the fibers are Kan complexes).
+
+The geometric realization of a Kan fibration (with countable base) is a Serre fibration.
+</Example>
+
+<Example id="fibration-chain" title="Fibrations in chain complexes">
+In $\mathbf{Ch}_{\geq 0}(R)$ with the projective model structure, a chain map $f: C \to D$ is a fibration if $f_n: C_n \to D_n$ is surjective for all $n \geq 1$.
+
+The fibration condition does not require surjectivity in degree $0$. A trivial fibration is a surjective quasi-isomorphism (surjective in all degrees, including $0$, and inducing isomorphisms on homology).
+</Example>
+
+---
+
+## Cofibrations
+
+<Example id="cofibration-top" title="Cofibrations in Top">
+In the Quillen model structure on $\mathbf{Top}$, cofibrations are retracts of relative CW inclusions: maps $i: A \to X$ where $X$ is obtained from $A$ by attaching cells.
+
+Cofibrant objects are retracts of CW complexes. Since every space is fibrant, the bifibrant objects are exactly the CW complexes (up to retract).
+
+The cofibration $S^{n-1} \hookrightarrow D^n$ (including the boundary sphere into the disk) is a generating cofibration: all cofibrations are built from these by pushout, transfinite composition, and retract.
+</Example>
+
+<Example id="cofibration-sset" title="Cofibrations in sSet">
+In the Kan--Quillen model structure on $\mathbf{sSet}$, cofibrations are **monomorphisms** (levelwise injective maps). Since every simplicial set is a colimit of $\Delta[n]$'s and the boundary inclusions $\partial\Delta[n] \hookrightarrow \Delta[n]$ generate all monomorphisms, these are the generating cofibrations.
+
+Every simplicial set is cofibrant (the map $\emptyset \hookrightarrow X$ is always a monomorphism). This is one of the main technical advantages of working in $\mathbf{sSet}$.
+</Example>
+
+<Example id="cofibration-chain" title="Cofibrations in chain complexes">
+In $\mathbf{Ch}_{\geq 0}(R)$ with the projective model structure, cofibrations are monomorphisms with levelwise projective cokernel. The generating cofibrations are the maps $0 \to D^n$ (the disk chain complex: $R$ in degrees $n$ and $n-1$, with identity differential) and $S^{n-1} \hookrightarrow D^n$ (the sphere to disk inclusion).
+
+Cofibrant chain complexes are complexes of projective modules.
+</Example>
+
+---
+
+## Generating Sets
+
+<Definition title="Cofibrantly generated model category" number="2.3">
+A model category $\mathcal{M}$ is **cofibrantly generated** if there exist sets (not proper classes) $I$ and $J$ of morphisms such that:
+- $I$ is a set of **generating cofibrations**: the cofibrations are exactly the maps with the LLP with respect to maps having the RLP with respect to $I$.
+- $J$ is a set of **generating trivial cofibrations**: similarly for trivial cofibrations.
+
+Both $I$ and $J$ must satisfy the **small object argument** condition: the domains are small relative to $I$-cell (resp. $J$-cell) complexes.
+</Definition>
+
+<Example id="generating-sets-sset" title="Generating sets for sSet">
+The Kan--Quillen model structure on $\mathbf{sSet}$ is cofibrantly generated:
+- $I = \{\partial\Delta[n] \hookrightarrow \Delta[n] : n \geq 0\}$ (generating cofibrations).
+- $J = \{\Lambda^n_k \hookrightarrow \Delta[n] : n \geq 1, 0 \leq k \leq n\}$ (generating trivial cofibrations).
+
+The fibrations are maps with RLP against $J$ (Kan fibrations), and the trivial fibrations are maps with RLP against $I$ (maps surjective on all simplices).
+</Example>
+
+<Example id="generating-sets-top" title="Generating sets for Top">
+The Quillen model structure on $\mathbf{Top}$ is cofibrantly generated:
+- $I = \{S^{n-1} \hookrightarrow D^n : n \geq 0\}$ (boundary sphere inclusions).
+- $J = \{D^n \times \{0\} \hookrightarrow D^n \times [0,1] : n \geq 0\}$ (cylinder inclusions).
+</Example>
+
+---
+
+## Properties and Closure
+
+<Example id="closure-cofibrations" title="Closure properties of cofibrations">
+Cofibrations in any model category are closed under:
+- **Composition**: if $i: A \to B$ and $j: B \to C$ are cofibrations, so is $j \circ i$.
+- **Pushout**: if $i: A \to B$ is a cofibration and $f: A \to C$ is any map, then $C \to B \sqcup_A C$ is a cofibration.
+- **Transfinite composition**: a transfinite composition of cofibrations is a cofibration.
+- **Retract**: a retract of a cofibration is a cofibration.
+- **Coproduct**: a coproduct of cofibrations is a cofibration.
+
+The same closure properties hold for fibrations (with pullback replacing pushout, and limits replacing colimits).
+</Example>
+
+<Example id="pushout-cofibration" title="Pushout along cofibrations">
+In $\mathbf{sSet}$, the pushout of $\partial\Delta[n] \hookrightarrow \Delta[n]$ along a map $\partial\Delta[n] \to X$ produces $X$ with an $n$-cell attached:
+
+$$X \hookrightarrow X \sqcup_{\partial\Delta[n]} \Delta[n]$$
+
+This is a cofibration (since cofibrations are closed under pushout). Cell attachment is the basic building block for constructing CW-type objects in any cofibrantly generated model category.
+</Example>
+
+<Example id="pullback-fibration" title="Pullback of fibrations">
+If $p: E \to B$ is a Kan fibration and $f: B' \to B$ is any map, the pullback $f^*(E) = E \times_B B' \to B'$ is again a Kan fibration. The fiber over a point $b' \in B'$ is the same as the fiber of $p$ over $f(b')$.
+
+This is the simplicial analogue of pulling back a fiber bundle along a map.
+</Example>
+
+---
+
+## The Small Object Argument
+
+<Remark title="Small object argument">
+The **small object argument** (due to Quillen) constructs factorizations from generating sets. Given a map $f: X \to Y$ and a set of generating cofibrations $I$, it produces a factorization $X \xrightarrow{i} Z \xrightarrow{p} Y$ where $i$ is a relative $I$-cell complex (built by iteratively attaching cells from $I$) and $p$ has the RLP with respect to $I$.
+
+The construction is transfinite: at each step, all "obstructions" to lifting are killed by attaching cells. After sufficiently many (possibly transfinitely many) steps, the map $p$ has the desired lifting property.
+
+This argument is the engine behind functorial factorization in cofibrantly generated model categories.
+</Remark>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Fibrations and cofibrations provide the structural framework of model categories:
+
+1. **Fibrations** have the RLP against trivial cofibrations; they are the "good surjections" with path-lifting properties.
+
+2. **Cofibrations** have the LLP against trivial fibrations; they are the "good inclusions" with extension properties.
+
+3. In $\mathbf{sSet}$: cofibrations = monomorphisms; fibrations = Kan fibrations. In $\mathbf{Top}$: cofibrations = relative CW inclusions; fibrations = Serre fibrations.
+
+4. **Cofibrantly generated** model categories are specified by sets of generators, enabling the **small object argument** for constructing factorizations.
+
+5. Both classes are closed under composition, (co)base change, transfinite composition, and retracts.
+</Remark>

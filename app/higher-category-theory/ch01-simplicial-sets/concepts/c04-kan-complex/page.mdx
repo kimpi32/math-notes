@@ -1,0 +1,200 @@
+export const metadata = {
+  title: 'Kan Complex — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "1. 단체집합", href: "/higher-category-theory/ch01-simplicial-sets" },
+  { label: "Concept — Kan Complex" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Kan Complex
+
+A Kan complex is a simplicial set satisfying the Kan extension condition: every horn can be filled. Kan complexes are the simplicial analogue of topological spaces -- they model homotopy types combinatorially. The singular simplicial set of any topological space is a Kan complex, and conversely, the geometric realization of a Kan complex has the "correct" homotopy type. Kan complexes are also precisely the $\infty$-groupoids in the theory of quasi-categories.
+
+---
+
+## Horns
+
+<Definition title="Horn" number="1.1">
+The **$(n,k)$-horn** $\Lambda^n_k$ (for $n \geq 1$, $0 \leq k \leq n$) is the simplicial subset of $\Delta[n]$ obtained by removing the interior and the $k$-th face. Formally:
+
+$$\Lambda^n_k = \bigcup_{i \neq k} d^i(\Delta[n-1]) \subseteq \Delta[n]$$
+
+where $d^i: \Delta[n-1] \to \Delta[n]$ is the $i$-th face inclusion. An $m$-simplex $\varphi: [m] \to [n]$ belongs to $\Lambda^n_k$ if and only if $\varphi$ is not surjective, or $\varphi$ is surjective and its image misses some vertex other than $k$.
+</Definition>
+
+<Example id="horn-21" title="The horns of Delta[2]">
+The standard $2$-simplex $\Delta[2]$ has three horns:
+
+- $\Lambda^2_0$: edges $\{0,1\}$ and $\{0,2\}$ (the two edges meeting at vertex $0$), missing the edge $\{1,2\}$ and the interior. This looks like a "V" opening toward the right.
+
+- $\Lambda^2_1$: edges $\{0,1\}$ and $\{1,2\}$ (the two edges meeting at vertex $1$), missing the edge $\{0,2\}$ and the interior. This is the "inner horn."
+
+- $\Lambda^2_2$: edges $\{0,2\}$ and $\{1,2\}$ (the two edges meeting at vertex $2$), missing the edge $\{0,1\}$ and the interior. This looks like a "V" opening toward the left.
+
+Filling $\Lambda^2_1$ means finding a $2$-simplex with the given edges -- geometrically, filling in a triangle. This is related to composition in a category.
+</Example>
+
+<Example id="horn-31" title="Horns of Delta[3]">
+$\Delta[3]$ has four horns $\Lambda^3_0, \Lambda^3_1, \Lambda^3_2, \Lambda^3_3$. Each is obtained by removing one face of the tetrahedron. For instance, $\Lambda^3_1$ consists of the faces $\{0,1,2\}$, $\{0,1,3\}$, and $\{0,2,3\}$ -- everything except the face $\{1,2,3\}$.
+
+Filling a horn in $\Delta[3]$ requires finding a $3$-simplex (a solid tetrahedron) with the given faces. In the context of categories, this encodes associativity of composition.
+</Example>
+
+---
+
+## The Kan Condition
+
+<Definition title="Kan complex" number="1.2">
+A simplicial set $X$ is a **Kan complex** if every horn has a filler. That is, for every $n \geq 1$ and $0 \leq k \leq n$, every map $\Lambda^n_k \to X$ extends to a map $\Delta[n] \to X$:
+
+$$\text{For every } \Lambda^n_k \to X, \text{ there exists } \Delta[n] \to X \text{ making the diagram commute.}$$
+
+Equivalently, the restriction map $\operatorname{Hom}(\Delta[n], X) \to \operatorname{Hom}(\Lambda^n_k, X)$ is surjective for all $n \geq 1$ and $0 \leq k \leq n$.
+
+Note: the filler is required to **exist** but is not required to be **unique**. This non-uniqueness corresponds to the non-uniqueness of homotopies in topology.
+</Definition>
+
+<Example id="sing-is-kan" title="Singular simplicial sets are Kan complexes">
+For any topological space $Y$, the singular simplicial set $\operatorname{Sing}(Y)$ is a Kan complex. Given a horn $\Lambda^n_k \to \operatorname{Sing}(Y)$, which is a continuous map $|\Lambda^n_k| \to Y$, we need to extend it to $|\Delta^n| \to Y$. Since $|\Lambda^n_k|$ is a retract of $|\Delta^n|$ (the topological horn can be deformation-retracted to the boundary missing one face, and then extended), such an extension always exists.
+
+More precisely, there is a retraction $r: |\Delta^n| \to |\Lambda^n_k|$, so $f \circ r$ gives the desired extension.
+</Example>
+
+<Example id="nerve-not-kan" title="Nerves of non-groupoid categories are not Kan">
+Consider the category $[1] = (0 \to 1)$ with one non-identity morphism. Its nerve $N([1]) = \Delta[1]$. The horn $\Lambda^2_0 \to \Delta[1]$ given by the identity $\mathrm{id}: 0 \to 0$ on edge $\{0,1\}$ and the morphism $f: 0 \to 1$ on edge $\{0,2\}$ would require a filler -- a $2$-simplex with $d_0$ being a morphism $0 \to 1$ and $d_2$ being $\mathrm{id}_0$. This filler does exist. But the horn $\Lambda^2_2$ with edge $\{0,2\} = f$ and $\{1,2\} = \mathrm{id}_1$ would require finding a morphism $0 \to 1$ composing correctly, which may not exist in general categories.
+
+In fact, $N(\mathcal{C})$ is a Kan complex if and only if $\mathcal{C}$ is a **groupoid** (every morphism is invertible). The outer horn fillers require inverses.
+</Example>
+
+<Example id="groupoid-kan" title="Nerves of groupoids are Kan complexes">
+If $\mathcal{G}$ is a groupoid, then $N(\mathcal{G})$ is a Kan complex. Given any horn $\Lambda^n_k \to N(\mathcal{G})$, the missing face can be filled using compositions and inverses of the given morphisms.
+
+For instance, a $\Lambda^2_0$-horn in $N(\mathcal{G})$ gives morphisms $g: c_1 \to c_2$ and $h: c_0 \to c_2$. The filler requires $f: c_0 \to c_1$ with $g \circ f = h$, which is $f = g^{-1} \circ h$.
+
+A $\Lambda^2_2$-horn gives $f: c_0 \to c_1$ and $h: c_0 \to c_2$. The filler requires $g: c_1 \to c_2$ with $g \circ f = h$, so $g = h \circ f^{-1}$.
+</Example>
+
+---
+
+## Homotopy Groups
+
+<Definition title="Homotopy groups of a Kan complex" number="1.3">
+Let $X$ be a Kan complex with a basepoint $x \in X_0$. The **$n$-th homotopy group** $\pi_n(X, x)$ for $n \geq 1$ is defined as follows:
+
+An element of $\pi_n(X, x)$ is represented by an $n$-simplex $\sigma \in X_n$ such that $d_i(\sigma) = s_{n-1} \cdots s_0(x)$ (the unique degenerate $(n-1)$-simplex at $x$) for all $0 \leq i \leq n$. Two such simplices $\sigma, \tau$ represent the same element if they are homotopic relative to the boundary.
+
+For $n = 1$: an element of $\pi_1(X, x)$ is a $1$-simplex $\sigma$ with $d_0(\sigma) = d_1(\sigma) = x$ (a "loop" at $x$), up to homotopy.
+
+For $n \geq 2$, $\pi_n(X, x)$ is abelian. For $n = 1$, $\pi_1(X, x)$ is a group (possibly non-abelian).
+</Definition>
+
+<Example id="homotopy-groups-bg" title="Homotopy groups of BG">
+For a group $G$, the nerve $N(BG)$ is a Kan complex (since $BG$ is a groupoid). Its homotopy groups are:
+
+$$\pi_0(N(BG)) = \{*\}, \quad \pi_1(N(BG)) = G, \quad \pi_n(N(BG)) = 0 \text{ for } n \geq 2.$$
+
+So $N(BG)$ is a $K(G, 1)$, an Eilenberg--MacLane space. This matches the topological classifying space $BG$.
+</Example>
+
+<Example id="homotopy-groups-sing" title="Homotopy groups via Sing">
+For $\operatorname{Sing}(S^n)$ (the singular set of the $n$-sphere):
+
+$$\pi_k(\operatorname{Sing}(S^n)) = \pi_k(S^n)$$
+
+since $\operatorname{Sing}$ preserves homotopy groups. So $\pi_n(\operatorname{Sing}(S^n)) = \mathbb{Z}$, $\pi_3(\operatorname{Sing}(S^2)) = \mathbb{Z}$ (Hopf), etc.
+
+The simplicial homotopy groups agree with the topological ones via geometric realization.
+</Example>
+
+<Example id="kan-contractible" title="Contractible Kan complexes">
+A Kan complex $X$ is **contractible** if $\pi_0(X) = \{*\}$ and $\pi_n(X, x) = 0$ for all $n \geq 1$ and all basepoints $x$. Equivalently, the map $X \to \Delta[0]$ is a weak equivalence.
+
+For example, $\operatorname{Sing}(\mathbb{R}^n)$ is contractible for all $n$, as is $\operatorname{Sing}(|\Delta^n|)$.
+</Example>
+
+---
+
+## Kan Fibrations
+
+<Definition title="Kan fibration" number="1.4">
+A map $p: X \to Y$ of simplicial sets is a **Kan fibration** if it has the right lifting property with respect to all horn inclusions $\Lambda^n_k \hookrightarrow \Delta[n]$. That is, for every commutative square
+
+$$\Lambda^n_k \to X$$
+$$\downarrow \quad\quad \downarrow p$$
+$$\Delta[n] \to Y$$
+
+there exists a lift $\Delta[n] \to X$ making both triangles commute.
+
+A simplicial set $X$ is a Kan complex if and only if the unique map $X \to \Delta[0]$ is a Kan fibration.
+</Definition>
+
+<Example id="trivial-fibration" title="Trivial Kan fibrations">
+A map $p: X \to Y$ is a **trivial Kan fibration** (also called an **acyclic fibration**) if it has the right lifting property with respect to all boundary inclusions $\partial\Delta[n] \hookrightarrow \Delta[n]$.
+
+Trivial Kan fibrations are both Kan fibrations and weak equivalences. If $p: X \to \Delta[0]$ is a trivial Kan fibration, then $X$ is contractible.
+
+Any simplicial set $X$ admits a trivial Kan fibration $\widetilde{X} \to X$ where $\widetilde{X}$ is a contractible Kan complex. This is the simplicial analogue of a path space.
+</Example>
+
+<Example id="fiber-of-fibration" title="Fibers of Kan fibrations">
+If $p: X \to Y$ is a Kan fibration and $y \in Y_0$ is a vertex, the fiber $p^{-1}(y) = X \times_Y \{y\}$ is a Kan complex. The long exact sequence of homotopy groups applies:
+
+$$\cdots \to \pi_n(p^{-1}(y)) \to \pi_n(X) \to \pi_n(Y) \to \pi_{n-1}(p^{-1}(y)) \to \cdots$$
+
+This is the simplicial analogue of the long exact sequence for a fibration in topology.
+</Example>
+
+<Example id="path-space-fibration" title="Path space fibration">
+For a Kan complex $X$ with basepoint $x \in X_0$, the **path space** $PX$ is defined so that $(PX)_n$ consists of $(n+1)$-simplices $\sigma$ of $X$ with $d_0(\sigma) = s_0^n(x)$ (the degenerate $n$-simplex at $x$). The evaluation map $PX \to X$ sending $\sigma$ to $d_1 d_2 \cdots d_{n+1}(\sigma)$ is a Kan fibration, with fiber the loop space $\Omega X$.
+
+This gives $\pi_n(X) \cong \pi_{n-1}(\Omega X)$, the fundamental looping-delooping relationship.
+</Example>
+
+---
+
+## Minimal Kan Complexes
+
+<Definition title="Minimal Kan complex" number="1.5">
+A Kan complex $X$ is **minimal** if whenever two simplices $\sigma, \tau \in X_n$ are homotopic relative to their boundary (i.e., $d_i(\sigma) = d_i(\tau)$ for all $i$ and there exists a homotopy fixing the boundary), then $\sigma = \tau$.
+
+Equivalently, $X$ is minimal if the homotopy relation on simplices with the same boundary is trivial.
+</Definition>
+
+<Example id="minimal-kan-uniqueness" title="Uniqueness of minimal models">
+Every Kan complex $X$ contains a minimal sub-Kan complex $X_{\min} \subseteq X$ that is a deformation retract. The inclusion $X_{\min} \hookrightarrow X$ is a weak equivalence.
+
+Moreover, two minimal Kan complexes are weakly equivalent if and only if they are isomorphic. This provides a canonical "normal form" for each homotopy type.
+
+For example, the minimal Kan complex representing $K(\mathbb{Z}, 1)$ has one $0$-simplex, $\mathbb{Z}$ many non-degenerate $1$-simplices, and its higher simplices are determined by the group structure.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+The essential ideas about Kan complexes are:
+
+1. A **Kan complex** is a simplicial set where every horn has a filler. This is the combinatorial analogue of a topological space.
+
+2. $\operatorname{Sing}(Y)$ is always a Kan complex. The nerve $N(\mathcal{C})$ is Kan if and only if $\mathcal{C}$ is a groupoid.
+
+3. **Homotopy groups** $\pi_n(X, x)$ are well-defined for Kan complexes and match topological homotopy groups via geometric realization.
+
+4. **Kan fibrations** are the "good" notion of fibration for simplicial sets, with fibers being Kan complexes and long exact sequences of homotopy groups.
+
+5. Kan complexes are precisely the **$\infty$-groupoids** -- this is one formulation of the **homotopy hypothesis**.
+</Remark>

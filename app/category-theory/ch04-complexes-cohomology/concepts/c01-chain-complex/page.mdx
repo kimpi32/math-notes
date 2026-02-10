@@ -1,0 +1,113 @@
+export const metadata = {
+  title: 'Chain Complex — Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "범주론", href: "/category-theory" },
+  { label: "4. 복체와 코호몰로지", href: "/category-theory/ch04-complexes-cohomology" },
+  { label: "Concept — Chain Complex" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Chain Complex
+
+A chain complex is a sequence of objects and morphisms in an abelian category with the fundamental property that "the composition of two consecutive differentials is zero." Chain complexes are the basic objects from which cohomology, homotopy categories, and derived categories are built.
+
+---
+
+## Definition
+
+<Definition title="Cochain Complex" number="4.1">
+A **(cochain) complex** $A^\bullet$ in an abelian category $\mathcal{A}$ is a sequence of objects and morphisms (called **differentials**):
+
+$$\cdots \xrightarrow{d^{n-2}} A^{n-1} \xrightarrow{d^{n-1}} A^n \xrightarrow{d^n} A^{n+1} \xrightarrow{d^{n+1}} \cdots$$
+
+such that $d^n \circ d^{n-1} = 0$ for all $n \in \mathbb{Z}$.
+</Definition>
+
+<Definition title="Chain Map" number="4.2">
+A **chain map** (or **morphism of complexes**) $f : A^\bullet \to B^\bullet$ is a family of morphisms $f^n : A^n \to B^n$ commuting with the differentials:
+
+$$f^{n+1} \circ d_A^n = d_B^n \circ f^n \quad \text{for all } n$$
+</Definition>
+
+<Definition title="Category of Complexes" number="4.3">
+The **category of complexes** $\mathbf{Ch}(\mathcal{A})$ (or $\mathbf{C}(\mathcal{A})$) has cochain complexes as objects and chain maps as morphisms. We also use:
+- $\mathbf{Ch}^+(\mathcal{A})$: bounded below complexes ($A^n = 0$ for $n \ll 0$).
+- $\mathbf{Ch}^-(\mathcal{A})$: bounded above complexes ($A^n = 0$ for $n \gg 0$).
+- $\mathbf{Ch}^b(\mathcal{A})$: bounded complexes ($A^n = 0$ for $|n| \gg 0$).
+</Definition>
+
+---
+
+## Examples
+
+<Example title="De Rham complex" id="de-rham">
+For a smooth manifold $M$, the de Rham complex is $\Omega^0(M) \xrightarrow{d} \Omega^1(M) \xrightarrow{d} \Omega^2(M) \xrightarrow{d} \cdots$ where $\Omega^k(M)$ is the space of smooth $k$-forms and $d$ is the exterior derivative. The condition $d^2 = 0$ is the Poincare lemma.
+</Example>
+
+<Example title="Singular chain complex" id="singular">
+For a topological space $X$, the singular chain complex has $C_n(X) = \mathbb{Z}[\mathrm{Sing}_n(X)]$ (free abelian group on singular $n$-simplices) with the boundary map $\partial_n = \sum_{i=0}^n (-1)^i \partial_i$. The condition $\partial^2 = 0$ follows from the alternating signs.
+</Example>
+
+<Example title="Koszul complex" id="koszul">
+For a commutative ring $R$ and elements $x_1, \ldots, x_n \in R$, the **Koszul complex** $K(x_1, \ldots, x_n)$ is defined on the exterior algebra $\bigwedge^p R^n$ with the differential $d(e_{i_1} \wedge \cdots \wedge e_{i_p}) = \sum_j (-1)^{j+1} x_{i_j} \, e_{i_1} \wedge \cdots \wedge \hat{e}_{i_j} \wedge \cdots \wedge e_{i_p}$.
+</Example>
+
+<Example title="Short complex" id="short-complex">
+Any morphism $f : A \to B$ in an abelian category gives a complex $\cdots \to 0 \to A \xrightarrow{f} B \to 0 \to \cdots$ concentrated in two degrees. The cohomology is $\ker f$ and $\mathrm{coker}\, f$.
+</Example>
+
+<Example title="Object as a complex" id="object-complex">
+Any object $A \in \mathcal{A}$ gives a complex $A[0]$ concentrated in degree $0$: all other terms are zero and all differentials are zero. This gives an embedding $\mathcal{A} \hookrightarrow \mathbf{Ch}(\mathcal{A})$.
+</Example>
+
+<Example title="Cech complex" id="cech">
+For a sheaf $\mathcal{F}$ and an open cover $\mathcal{U} = \{U_i\}$ of $X$, the Cech complex $\check{C}^\bullet(\mathcal{U}, \mathcal{F})$ has $\check{C}^p = \prod_{i_0 < \cdots < i_p} \mathcal{F}(U_{i_0} \cap \cdots \cap U_{i_p})$ with the alternating restriction maps as differentials.
+</Example>
+
+<Example title="Bar resolution" id="bar-resolution">
+For a group $G$ and a $G$-module $M$, the bar resolution $\cdots \to \mathbb{Z}[G^3] \to \mathbb{Z}[G^2] \to \mathbb{Z}[G] \to \mathbb{Z} \to 0$ is a free resolution of $\mathbb{Z}$ as a $G$-module. Applying $\mathrm{Hom}_G(-, M)$ gives the complex computing group cohomology $H^n(G, M)$.
+</Example>
+
+<Example title="Mapping cone" id="mapping-cone">
+For a chain map $f : A^\bullet \to B^\bullet$, the **mapping cone** $\mathrm{Cone}(f)$ is the complex with $\mathrm{Cone}(f)^n = A^{n+1} \oplus B^n$ and differential $d(a, b) = (-d_A(a), f(a) + d_B(b))$. The condition $d^2 = 0$ uses $f$ being a chain map.
+</Example>
+
+<Example title="Double complex" id="double-complex">
+A **double complex** $A^{p,q}$ has horizontal differentials $d_h : A^{p,q} \to A^{p+1,q}$ and vertical differentials $d_v : A^{p,q} \to A^{p,q+1}$ with $d_h^2 = 0$, $d_v^2 = 0$, and $d_h \circ d_v + d_v \circ d_h = 0$ (anticommutativity). The total complex $\mathrm{Tot}(A)^n = \bigoplus_{p+q=n} A^{p,q}$ is a single complex.
+</Example>
+
+<Example title="Complex of sheaves" id="sheaf-complex">
+A complex of sheaves $\mathcal{F}^\bullet$ on $X$ is a complex in the abelian category $\mathbf{Sh}(X)$. The hypercohomology $\mathbb{H}^n(X, \mathcal{F}^\bullet)$ generalizes ordinary sheaf cohomology.
+</Example>
+
+<Example title="Projective resolution as a complex" id="projective-resolution">
+A projective resolution $\cdots \to P_2 \to P_1 \to P_0 \to M \to 0$ of a module $M$ gives a complex $P_\bullet$ with $P_\bullet \to M[0]$ a quasi-isomorphism. This is the starting point for computing derived functors.
+</Example>
+
+<Example title="Shift functor" id="shift">
+The **shift** $A[k]$ of a complex $A^\bullet$ is defined by $A[k]^n = A^{n+k}$ with differential $d_{A[k]}^n = (-1)^k d_A^{n+k}$. The shift is an autoequivalence of $\mathbf{Ch}(\mathcal{A})$ and plays a central role in [triangulated categories](/category-theory/ch05-triangulated-categories/concepts/c03-shift-functor).
+</Example>
+
+---
+
+## Properties
+
+<Theorem title="Ch(A) is abelian" number="4.1">
+If $\mathcal{A}$ is abelian, then $\mathbf{Ch}(\mathcal{A})$ is abelian. Kernels, cokernels, and exact sequences are computed degreewise.
+</Theorem>
+
+<Remark title="Looking ahead">
+The category $\mathbf{Ch}(\mathcal{A})$ has "too many" morphisms for the purposes of homological algebra: we want to identify chain maps that are [chain homotopic](/category-theory/ch04-complexes-cohomology/concepts/c03-chain-homotopy). Passing to the [homotopy category](/category-theory/ch04-complexes-cohomology/concepts/c05-homotopy-category) $K(\mathcal{A})$ and then to the [derived category](/category-theory/ch06-derived-categories/concepts/c01-derived-category) $D(\mathcal{A})$ gives categories where [quasi-isomorphisms](/category-theory/ch04-complexes-cohomology/concepts/c04-quasi-isomorphism) become isomorphisms.
+</Remark>

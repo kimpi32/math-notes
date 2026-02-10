@@ -1,0 +1,166 @@
+export const metadata = {
+  title: 'Quasi-category (Infinity-category) — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "3. 준범주", href: "/higher-category-theory/ch03-quasi-categories" },
+  { label: "Concept — Quasi-category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# Quasi-category ($\infty$-category)
+
+A quasi-category (also called an $\infty$-category in Joyal--Lurie's sense) is a simplicial set satisfying the inner horn extension condition: every inner horn has a filler (not necessarily unique). Quasi-categories generalize ordinary categories by allowing morphisms to compose up to coherent homotopy rather than strictly. They have become the standard framework for higher category theory, unifying homotopy theory, homological algebra, and algebraic geometry.
+
+---
+
+## Definition
+
+<Definition title="Quasi-category" number="3.1">
+A simplicial set $X$ is a **quasi-category** (or **$\infty$-category**, or **inner Kan complex**, or **weak Kan complex**) if for every $n \geq 2$ and every $0 < k < n$, every map $\Lambda^n_k \to X$ extends to a map $\Delta[n] \to X$. That is, every inner horn has a filler.
+
+Equivalently, $X \to \Delta[0]$ is an **inner fibration**: it has the RLP with respect to all inner horn inclusions.
+</Definition>
+
+<Remark title="Comparison with other notions">
+- **Nerve of a category**: Inner horns fill **uniquely**. (Strict composition, strict associativity.)
+- **Quasi-category**: Inner horns fill, but **not necessarily uniquely**. (Composition up to homotopy, coherent associativity.)
+- **Kan complex**: **All** horns fill (inner and outer). (All morphisms invertible up to homotopy = $\infty$-groupoid.)
+
+Every Kan complex is a quasi-category. Every nerve of a category is a quasi-category.
+</Remark>
+
+---
+
+## Objects and Morphisms
+
+<Definition title="Objects and morphisms" number="3.2">
+Let $\mathcal{C}$ be a quasi-category.
+
+The **objects** of $\mathcal{C}$ are its $0$-simplices: $\operatorname{Ob}(\mathcal{C}) = \mathcal{C}_0$.
+
+The **morphisms** of $\mathcal{C}$ are its $1$-simplices: a $1$-simplex $f \in \mathcal{C}_1$ with $d_1(f) = x$ and $d_0(f) = y$ is a morphism $f: x \to y$.
+
+The **identity** morphism of $x$ is the degenerate $1$-simplex $\mathrm{id}_x = s_0(x)$.
+
+A **$2$-simplex** $\sigma \in \mathcal{C}_2$ with $d_2(\sigma) = f$, $d_0(\sigma) = g$, and $d_1(\sigma) = h$ witnesses that $h$ is **a** composite of $f$ and $g$: we write $h \simeq g \circ f$.
+</Definition>
+
+<Example id="qcat-nerve" title="Nerves as quasi-categories">
+For any category $\mathcal{C}$, the nerve $N(\mathcal{C})$ is a quasi-category. The objects are the objects of $\mathcal{C}$, the morphisms are the morphisms of $\mathcal{C}$, and composition is strict (unique $2$-simplex fillers).
+
+Every ordinary category embeds into the world of $\infty$-categories via the nerve.
+</Example>
+
+<Example id="qcat-kan" title="Kan complexes as infinity-groupoids">
+Every Kan complex $X$ is a quasi-category. In this case, all morphisms are invertible up to homotopy: for any $f: x \to y$, there exists $g: y \to x$ with $g \circ f \simeq \mathrm{id}_x$ and $f \circ g \simeq \mathrm{id}_y$.
+
+Kan complexes = $\infty$-groupoids = spaces. The homotopy hypothesis (Grothendieck) asserts this identification.
+</Example>
+
+<Example id="qcat-sing" title="Singular simplicial sets">
+For any topological space $Y$, $\operatorname{Sing}(Y)$ is a Kan complex, hence a quasi-category. The objects are points of $Y$, morphisms are paths, $2$-simplices are homotopies between paths, and so on. This is the prototypical $\infty$-groupoid.
+</Example>
+
+---
+
+## Composition
+
+<Example id="composition-not-unique" title="Composition is defined up to contractible choice">
+In a quasi-category $\mathcal{C}$, given morphisms $f: x \to y$ and $g: y \to z$, the inner horn $\Lambda^2_1 \to \mathcal{C}$ (with edges $f$ and $g$) has a filler -- a $2$-simplex $\sigma$ with $d_2(\sigma) = f$, $d_0(\sigma) = g$, and $d_1(\sigma) = h$ for some $h: x \to z$. This $h$ is "a" composite of $g$ and $f$.
+
+The composite is **not unique**, but the space of all composites is **contractible**: any two composites are connected by a homotopy (a $3$-simplex), any two homotopies by a higher homotopy ($4$-simplex), and so on. This is the hallmark of $\infty$-categorical structure.
+</Example>
+
+<Example id="composition-associative" title="Associativity up to homotopy">
+Given $f: w \to x$, $g: x \to y$, $h: y \to z$, we can form $h \circ (g \circ f)$ and $(h \circ g) \circ f$. These are not equal, but they are connected by a $3$-simplex (the filler of an inner $3$-horn $\Lambda^3_1$ or $\Lambda^3_2$). This $3$-simplex is an **associator**: a homotopy witnessing associativity.
+
+Higher coherences (pentagon, etc.) are automatically encoded by fillers of higher-dimensional inner horns. This is the key advantage of quasi-categories: all coherence data is built into the definition.
+</Example>
+
+---
+
+## Fundamental Examples
+
+<Example id="qcat-dg" title="DG categories give quasi-categories">
+A DG category $\mathcal{A}$ (a category enriched in chain complexes) gives rise to a quasi-category $N_{\mathrm{dg}}(\mathcal{A})$ via the DG nerve construction. Objects are the same, and the mapping spaces are the Dold--Kan images of the mapping chain complexes.
+
+This provides a bridge between algebraic (DG) and homotopical (quasi-categorical) approaches to derived categories.
+</Example>
+
+<Example id="qcat-model-cat" title="Model categories give quasi-categories">
+Every model category $\mathcal{M}$ has an underlying quasi-category $N(\mathcal{M})[W^{-1}]$, obtained by inverting the weak equivalences in the $\infty$-categorical sense (Dwyer--Kan localization). This $\infty$-category contains strictly more information than $\operatorname{Ho}(\mathcal{M})$: it remembers the full mapping spaces, not just their $\pi_0$.
+</Example>
+
+<Example id="qcat-spaces" title="The quasi-category of spaces">
+The quasi-category $\mathcal{S}$ of spaces (also denoted $\operatorname{Kan}$ or $\infty\text{-}\operatorname{Gpd}$) has Kan complexes as objects and mapping spaces $\operatorname{Map}(X, Y)$ between them. This is the $\infty$-categorical analogue of $\mathbf{Set}$: it plays the role of the "universe" of $\infty$-groupoids.
+
+$\mathcal{S}$ can be constructed as the coherent nerve of the simplicial category of Kan complexes.
+</Example>
+
+<Example id="qcat-cat-infty" title="The quasi-category of quasi-categories">
+There is a quasi-category $\operatorname{Cat}_\infty$ whose objects are (small) quasi-categories and whose morphisms are functors. This is the $\infty$-categorical analogue of $\mathbf{Cat}$.
+
+$\operatorname{Cat}_\infty$ is itself a large quasi-category. It has a rich internal structure: mapping spaces $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$ are themselves quasi-categories.
+</Example>
+
+---
+
+## Functors Between Quasi-categories
+
+<Definition title="Functor of quasi-categories" number="3.3">
+A **functor** between quasi-categories $\mathcal{C}$ and $\mathcal{D}$ is simply a map of simplicial sets $F: \mathcal{C} \to \mathcal{D}$. No additional conditions are needed: the inner horn condition is automatically preserved.
+
+The **functor quasi-category** $\operatorname{Fun}(\mathcal{C}, \mathcal{D}) = \mathcal{D}^{\mathcal{C}}$ is the simplicial set with $n$-simplices $\operatorname{Hom}_{\mathbf{sSet}}(\mathcal{C} \times \Delta[n], \mathcal{D})$. When $\mathcal{D}$ is a quasi-category, $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$ is also a quasi-category.
+</Definition>
+
+<Example id="functor-nerve" title="Functors between nerves">
+A functor $F: N(\mathcal{C}) \to N(\mathcal{D})$ between nerves of ordinary categories is exactly a functor $\mathcal{C} \to \mathcal{D}$ in the classical sense (since the nerve is fully faithful). A natural transformation $\alpha: F \Rightarrow G$ corresponds to a $1$-simplex in $\operatorname{Fun}(N(\mathcal{C}), N(\mathcal{D}))$.
+</Example>
+
+<Example id="natural-transformation" title="Natural transformations as 1-simplices">
+In the functor quasi-category $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$, a $1$-simplex from $F$ to $G$ is a map $\mathcal{C} \times \Delta[1] \to \mathcal{D}$ restricting to $F$ and $G$ at the endpoints. This is the $\infty$-categorical analogue of a natural transformation.
+
+A natural equivalence is an invertible $1$-simplex in $\operatorname{Fun}(\mathcal{C}, \mathcal{D})$: a natural transformation $\alpha: F \Rightarrow G$ such that $\alpha_c: F(c) \to G(c)$ is an equivalence for every object $c$.
+</Example>
+
+---
+
+## Equivalences
+
+<Definition title="Equivalence of quasi-categories" number="3.4">
+A functor $F: \mathcal{C} \to \mathcal{D}$ between quasi-categories is an **equivalence** if there exists a functor $G: \mathcal{D} \to \mathcal{C}$ and natural equivalences $G \circ F \simeq \mathrm{id}_{\mathcal{C}}$ and $F \circ G \simeq \mathrm{id}_{\mathcal{D}}$.
+
+Equivalently, $F$ is an equivalence if and only if it is:
+- **Essentially surjective**: for every object $d \in \mathcal{D}$, there exists $c \in \mathcal{C}$ with $F(c) \simeq d$.
+- **Fully faithful**: the induced map $\operatorname{Map}_{\mathcal{C}}(x, y) \to \operatorname{Map}_{\mathcal{D}}(F(x), F(y))$ is a homotopy equivalence for all $x, y$.
+</Definition>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+Quasi-categories are the standard model for $\infty$-categories:
+
+1. A quasi-category is a simplicial set with **inner horn fillers** -- composition exists but is defined only up to contractible choice.
+
+2. **Objects** are $0$-simplices, **morphisms** are $1$-simplices, **composition witnesses** are $2$-simplices, **associators** are $3$-simplices.
+
+3. All coherence data is **automatically encoded** by the horn-filling conditions.
+
+4. **Functors** are simply maps of simplicial sets; **natural transformations** are $1$-simplices in functor quasi-categories.
+
+5. Every Kan complex is a quasi-category ($\infty$-groupoid), and every nerve of a category is a quasi-category (embedding $1$-categories into $\infty$-categories).
+</Remark>

@@ -1,0 +1,189 @@
+export const metadata = {
+  title: 'A-infinity Category — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "6. DG 범주와 A∞ 범주", href: "/higher-category-theory/ch06-dg-and-a-infinity" },
+  { label: "Concept — A-infinity Category" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# $A_\infty$-Category
+
+An $A_\infty$-category is a generalization of a DG category where composition is associative only up to a coherent system of higher homotopies. $A_\infty$-categories arise naturally in symplectic geometry (Fukaya categories), homological algebra (minimal models), and deformation theory. They provide the most flexible algebraic framework for categories with homotopy-coherent composition.
+
+---
+
+## Definition
+
+<Definition title="A-infinity category" number="6.1">
+An **$A_\infty$-category** $\mathcal{A}$ over a field $k$ consists of:
+
+1. A class of objects $\operatorname{Ob}(\mathcal{A})$.
+2. For each pair $X, Y$, a $\mathbb{Z}$-graded $k$-vector space $\operatorname{Hom}_{\mathcal{A}}(X, Y) = \bigoplus_{n \in \mathbb{Z}} \operatorname{Hom}^n(X, Y)$.
+3. For each $n \geq 1$ and sequence of objects $X_0, X_1, \ldots, X_n$, a **higher composition map** of degree $2 - n$:
+
+$$m_n: \operatorname{Hom}(X_{n-1}, X_n) \otimes \cdots \otimes \operatorname{Hom}(X_0, X_1) \to \operatorname{Hom}(X_0, X_n)[2-n]$$
+
+satisfying the **$A_\infty$-relations**: for each $n \geq 1$,
+
+$$\sum_{\substack{i+j = n+1 \\ 1 \leq j \leq n}} \sum_{s=0}^{n-j} (-1)^{\epsilon} \, m_i(a_n, \ldots, a_{s+j+1}, m_j(a_{s+j}, \ldots, a_{s+1}), a_s, \ldots, a_1) = 0$$
+
+where $\epsilon = |a_1| + \cdots + |a_s| - s$ (Koszul sign convention with shifted degrees).
+</Definition>
+
+<Definition title="Meaning of low-degree operations" number="6.2">
+The $A_\infty$-relations unpack as follows for small $n$:
+
+- **$n = 1$**: $m_1 \circ m_1 = 0$, so $m_1$ is a differential on each Hom space.
+- **$n = 2$**: $m_1(m_2(a, b)) = m_2(m_1(a), b) + (-1)^{|a|-1} m_2(a, m_1(b))$, so $m_2$ is a chain map (composition respects the differential, i.e., $m_1$ is a derivation for $m_2$).
+- **$n = 3$**: $m_2(m_2(a, b), c) - m_2(a, m_2(b, c)) = \pm m_1(m_3(a, b, c)) \pm m_3(\ldots)$, so $m_2$ is associative **up to the homotopy** $m_3$.
+- **$n \geq 4$**: Higher coherence conditions ensuring that $m_3$ satisfies its own coherence up to $m_4$, and so on.
+</Definition>
+
+<Definition title="Strictly unital A-infinity category" number="6.3">
+An $A_\infty$-category is **strictly unital** if for each object $X$, there exists $e_X \in \operatorname{Hom}^0(X, X)$ with $m_1(e_X) = 0$ and:
+- $m_2(e_X, f) = f$ and $m_2(f, e_X) = f$ for all $f$.
+- $m_n(\ldots, e_X, \ldots) = 0$ for $n \geq 3$.
+
+Every $A_\infty$-category is quasi-isomorphic to a strictly unital one.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="ainfty-dg-special-case" title="DG categories as strict A-infinity categories">
+A DG category is an $A_\infty$-category with $m_n = 0$ for $n \geq 3$. In this case:
+- $m_1 = d$ (the differential).
+- $m_2 = $ composition (strictly associative).
+- $m_3 = m_4 = \cdots = 0$.
+
+The $A_\infty$-relation for $n = 3$ reduces to $m_2(m_2(a, b), c) = m_2(a, m_2(b, c))$, i.e., strict associativity. Thus DG categories are the "strict" case of $A_\infty$-categories.
+</Example>
+
+<Example id="ainfty-algebra" title="A-infinity algebras">
+An $A_\infty$-algebra is an $A_\infty$-category with a single object. It consists of a graded vector space $A$ with operations $m_n: A^{\otimes n} \to A$ of degree $2 - n$ satisfying the $A_\infty$-relations.
+
+The classical example: for a topological space $X$, the singular cochain complex $C^*(X; k)$ is a DG algebra under the cup product, but it also carries a natural $A_\infty$-structure that encodes the higher Massey products.
+</Example>
+
+<Example id="ainfty-minimal-model" title="Minimal A-infinity structures">
+An $A_\infty$-category (or algebra) is **minimal** if $m_1 = 0$ (the differential vanishes). The **homological perturbation lemma** shows that every $A_\infty$-category is quasi-isomorphic to a minimal one.
+
+For a minimal $A_\infty$-algebra $H^*(\mathcal{A})$, the operations $m_n$ for $n \geq 3$ encode the "higher Massey product" information that is lost when passing to cohomology. The minimal model is unique up to $A_\infty$-isomorphism.
+</Example>
+
+<Example id="ainfty-fukaya" title="The Fukaya category">
+The Fukaya category $\operatorname{Fuk}(M, \omega)$ of a symplectic manifold $(M, \omega)$ is an $A_\infty$-category with:
+- Objects: Lagrangian submanifolds $L$ (with extra data: grading, spin structure, flat line bundle).
+- $\operatorname{Hom}(L_0, L_1)$: the Floer cochain complex $CF^*(L_0, L_1)$, generated by intersection points.
+- $m_1$: counts pseudo-holomorphic strips (Floer differential).
+- $m_2$: counts pseudo-holomorphic triangles (pair-of-pants).
+- $m_n$: counts pseudo-holomorphic $(n+1)$-gons.
+
+The $A_\infty$-relations follow from the compactification of the moduli space of pseudo-holomorphic polygons (Gromov compactness + gluing). Composition is not strictly associative because the moduli space of quadrilaterals has a boundary consisting of two types of degenerate configurations.
+</Example>
+
+<Example id="ainfty-ext-algebra" title="Ext algebra as an A-infinity algebra">
+For modules $M, N$ over a ring $R$, the Ext algebra $\operatorname{Ext}^*_R(M, M)$ has a natural $A_\infty$-structure (its minimal model). The operation $m_2$ is the Yoneda product, and the higher operations $m_n$ encode Massey products.
+
+This $A_\infty$-structure determines the derived category $D^b(\operatorname{mod}\text{-}R)$ near $M$: the $A_\infty$-modules over $\operatorname{Ext}^*_R(M, M)$ recover the subcategory generated by $M$.
+</Example>
+
+<Example id="ainfty-transfer" title="Homological perturbation and transfer">
+Given a DG category $\mathcal{A}$ and a deformation retract of its Hom complexes onto their cohomology, the **transfer theorem** produces a minimal $A_\infty$-structure on $H^*(\mathcal{A})$ such that the inclusion $H^*(\mathcal{A}) \hookrightarrow \mathcal{A}$ extends to an $A_\infty$-quasi-isomorphism.
+
+The transferred operations $m_n$ are computed by summing over planar rooted trees with $n$ leaves, where each internal vertex contributes a homotopy and each edge contributes a projection or inclusion. This is the **homological perturbation lemma** (HPL) in the $A_\infty$ setting.
+</Example>
+
+<Example id="ainfty-deformation" title="Deformation theory and A-infinity structures">
+The Maurer--Cartan equation in an $A_\infty$-algebra $A$ is:
+
+$$\sum_{n=1}^{\infty} m_n(a, \ldots, a) = 0 \quad \text{for } a \in A^1$$
+
+Solutions parametrize deformations of the underlying object. The deformation theory of an associative algebra $B$ is controlled by the $A_\infty$-structure on its Hochschild cochain complex $C^*(B, B)$.
+</Example>
+
+---
+
+## Morphisms and Quasi-Isomorphisms
+
+<Example id="ainfty-functor" title="A-infinity functors">
+An **$A_\infty$-functor** $F: \mathcal{A} \to \mathcal{B}$ between $A_\infty$-categories consists of:
+- A map on objects $F: \operatorname{Ob}(\mathcal{A}) \to \operatorname{Ob}(\mathcal{B})$.
+- For each $n \geq 1$, multilinear maps $F_n: \operatorname{Hom}(X_{n-1}, X_n) \otimes \cdots \otimes \operatorname{Hom}(X_0, X_1) \to \operatorname{Hom}(F(X_0), F(X_n))$ of degree $1 - n$.
+
+These satisfy compatibility equations with the $A_\infty$-structures. In particular, $F_1$ need not be a chain map; the failure is corrected by $F_2$, and so on. When $F_n = 0$ for $n \geq 2$, we recover a DG functor (or strict $A_\infty$-functor).
+</Example>
+
+<Example id="ainfty-quasi-iso" title="A-infinity quasi-isomorphisms">
+An $A_\infty$-functor $F: \mathcal{A} \to \mathcal{B}$ is a **quasi-isomorphism** (or quasi-equivalence) if:
+1. Each $F_1: \operatorname{Hom}_{\mathcal{A}}(X, Y) \to \operatorname{Hom}_{\mathcal{B}}(F(X), F(Y))$ induces an isomorphism on cohomology.
+2. The induced functor $H^0(F): H^0(\mathcal{A}) \to H^0(\mathcal{B})$ is essentially surjective.
+
+A fundamental theorem (Kadeishvili, Kontsevich--Soibelman) states that every $A_\infty$-quasi-isomorphism has an $A_\infty$-quasi-inverse: an $A_\infty$-functor $G: \mathcal{B} \to \mathcal{A}$ with $G \circ F$ and $F \circ G$ homotopic to the identity.
+</Example>
+
+<Example id="ainfty-natural-transformation" title="A-infinity natural transformations">
+An $A_\infty$-natural transformation (or pre-natural transformation) $\eta: F \Rightarrow G$ between $A_\infty$-functors $F, G: \mathcal{A} \to \mathcal{B}$ consists of multilinear maps:
+
+$$\eta_n: \operatorname{Hom}(X_{n-1}, X_n) \otimes \cdots \otimes \operatorname{Hom}(X_0, X_1) \to \operatorname{Hom}(F(X_0), G(X_n))$$
+
+for $n \geq 0$, satisfying compatibility equations. When $n = 0$, $\eta_0$ provides a "component" $\eta_0(X) \in \operatorname{Hom}(F(X), G(X))$ for each object $X$, and the higher components encode the homotopy coherence of naturality.
+</Example>
+
+---
+
+## Relation to Other Structures
+
+<Example id="ainfty-vs-dg" title="A-infinity categories vs. DG categories">
+Every $A_\infty$-category is quasi-isomorphic to a DG category. The construction proceeds by taking the "bar construction": for an $A_\infty$-category $\mathcal{A}$, the category of $A_\infty$-modules $\operatorname{Mod}_{\mathcal{A}}^{A_\infty}$ is naturally a DG category (after passing to the bar complex), and $\mathcal{A}$ embeds into it via the Yoneda functor.
+
+The advantage of $A_\infty$-categories is that they admit **minimal models** ($m_1 = 0$), which do not generally exist in the DG world (since a DG category with $d = 0$ has trivial homotopy theory).
+</Example>
+
+<Example id="ainfty-vs-infinity" title="A-infinity categories and infinity-categories">
+An $A_\infty$-category over $k$ gives rise to a $k$-linear $\infty$-category via the DG nerve construction (applied to the equivalent DG category). The passage is:
+
+$$A_\infty\text{-Cat}_k \to \mathbf{dgCat}_k \xrightarrow{N_{\mathrm{dg}}} \operatorname{Cat}_\infty^{k\text{-linear}}$$
+
+In the other direction, any $k$-linear stable $\infty$-category with a set of generators can be modeled by an $A_\infty$-category (its full subcategory on the generators).
+</Example>
+
+<Example id="ainfty-operadic" title="Operadic perspective">
+An $A_\infty$-algebra is an algebra over the $A_\infty$-operad, which is a cofibrant resolution of the associative operad $\operatorname{Assoc}$ in the model category of operads. Similarly:
+- $E_\infty$-algebras are algebras over a cofibrant resolution of $\operatorname{Comm}$ (commutative operad).
+- $L_\infty$-algebras are algebras over a cofibrant resolution of $\operatorname{Lie}$ (Lie operad).
+
+The $A_\infty$-operad is the minimal resolution of $\operatorname{Assoc}$ and is governed by the Stasheff associahedra $K_n$ (convex polytopes whose faces encode the $A_\infty$-relations).
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+$A_\infty$-categories generalize DG categories with homotopy-coherent composition:
+
+1. An $A_\infty$-category has operations $m_n$ for $n \geq 1$, where $m_1$ is a differential, $m_2$ is composition, and $m_n$ for $n \geq 3$ are **higher homotopies** for associativity.
+
+2. DG categories are the **strict case** ($m_n = 0$ for $n \geq 3$).
+
+3. Every $A_\infty$-category is quasi-isomorphic to a DG category, but $A_\infty$-categories admit **minimal models** ($m_1 = 0$).
+
+4. The **Fukaya category** is the primary example: composition counts pseudo-holomorphic polygons.
+
+5. $A_\infty$-categories connect to $\infty$-categories via the DG nerve, providing an algebraic model for $k$-linear stable $\infty$-categories.
+</Remark>

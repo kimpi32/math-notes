@@ -1,0 +1,143 @@
+export const metadata = {
+  title: 't-Structures on Stable Infinity-Categories — Higher Category Theory — Math Notes',
+}
+
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
+import { Tag } from '@/components/ui/Tag'
+import { StatusBadge } from '@/components/ui/StatusBadge'
+
+<Breadcrumbs items={[
+  { label: "고차 범주론", href: "/higher-category-theory" },
+  { label: "5. 안정 ∞-범주", href: "/higher-category-theory/ch05-stable-infinity" },
+  { label: "Concept — t-Structures on Stable Infinity-Categories" },
+]} />
+
+<div className="mb-6">
+  <div className="flex items-center gap-3 mb-3">
+    <Tag type="concept" />
+    <StatusBadge status="complete" />
+  </div>
+</div>
+
+# t-Structures on Stable $\infty$-Categories
+
+A t-structure on a stable $\infty$-category decomposes it into "non-negative" and "non-positive" parts, analogous to the standard truncation of chain complexes. The heart of a t-structure is an abelian category sitting inside the stable $\infty$-category. t-structures provide the bridge between the $\infty$-categorical world and classical homological algebra.
+
+---
+
+## Definition
+
+<Definition title="t-structure" number="5.1">
+A **t-structure** on a stable $\infty$-category $\mathcal{C}$ consists of two full subcategories $\mathcal{C}_{\geq 0}$ and $\mathcal{C}_{\leq 0}$ such that:
+
+1. $\mathcal{C}_{\geq 0}$ and $\mathcal{C}_{\leq 0}$ are closed under equivalence.
+2. $\Sigma \mathcal{C}_{\geq 0} \subseteq \mathcal{C}_{\geq 0}$ and $\Omega \mathcal{C}_{\leq 0} \subseteq \mathcal{C}_{\leq 0}$ (equivalently, $\mathcal{C}_{\geq 0} \subseteq \mathcal{C}_{\geq -1}$ and $\mathcal{C}_{\leq 0} \subseteq \mathcal{C}_{\leq 1}$).
+3. For $X \in \mathcal{C}_{\geq 0}$ and $Y \in \mathcal{C}_{\leq -1}$: $\operatorname{Map}_{\mathcal{C}}(X, Y) \simeq *$ (contractible).
+4. For every $X \in \mathcal{C}$, there is a fiber sequence $X_{\geq 0} \to X \to X_{\leq -1}$ with $X_{\geq 0} \in \mathcal{C}_{\geq 0}$ and $X_{\leq -1} \in \mathcal{C}_{\leq -1}$.
+
+We write $\mathcal{C}_{\geq n} = \Sigma^n \mathcal{C}_{\geq 0}$ and $\mathcal{C}_{\leq n} = \Sigma^n \mathcal{C}_{\leq 0}$.
+</Definition>
+
+<Definition title="Heart of a t-structure" number="5.2">
+The **heart** of a t-structure is $\mathcal{C}^\heartsuit = \mathcal{C}_{\geq 0} \cap \mathcal{C}_{\leq 0}$. This is an abelian category (as an ordinary category, via $\pi_0$ of mapping spaces).
+
+The truncation functors $\tau_{\geq n}: \mathcal{C} \to \mathcal{C}_{\geq n}$ and $\tau_{\leq n}: \mathcal{C} \to \mathcal{C}_{\leq n}$ are right and left adjoints to the inclusions, respectively.
+</Definition>
+
+---
+
+## Key Examples
+
+<Example id="t-standard-derived" title="Standard t-structure on D(R)">
+The derived $\infty$-category $D(R)$ has the **standard t-structure**:
+- $D(R)_{\geq 0}$: complexes $C$ with $H_n(C) = 0$ for $n < 0$.
+- $D(R)_{\leq 0}$: complexes $C$ with $H_n(C) = 0$ for $n > 0$.
+
+The heart is $D(R)^\heartsuit \simeq \operatorname{Mod}_R$ (the abelian category of $R$-modules). The truncation $\tau_{\leq 0}(C)$ is the good truncation of a chain complex.
+
+The homotopy objects $\pi_n(C) = H_n(C)$ are the homology groups.
+</Example>
+
+<Example id="t-postnikov" title="Postnikov t-structure on spectra">
+The $\infty$-category $\operatorname{Sp}$ has the standard t-structure:
+- $\operatorname{Sp}_{\geq 0}$: connective spectra ($\pi_n = 0$ for $n < 0$).
+- $\operatorname{Sp}_{\leq 0}$: coconnective spectra ($\pi_n = 0$ for $n > 0$).
+
+The heart is $\operatorname{Sp}^\heartsuit \simeq \mathbf{Ab}$ (the category of abelian groups). The functor $\pi_0: \operatorname{Sp} \to \mathbf{Ab}$ is the "zeroth homotopy group."
+</Example>
+
+<Example id="t-perverse" title="Perverse t-structure">
+On the derived $\infty$-category $D^b_c(X)$ of constructible sheaves on a complex algebraic variety $X$, the **perverse t-structure** has heart equal to the abelian category of **perverse sheaves**. This t-structure depends on a stratification of $X$ and is shifted relative to the standard t-structure.
+
+Perverse sheaves are fundamental in geometric representation theory (Kazhdan--Lusztig theory, intersection cohomology).
+</Example>
+
+<Example id="t-homotopy" title="Homotopy t-structure on motivic spectra">
+In motivic stable homotopy theory, the $\infty$-category $\operatorname{SH}(k)$ of motivic spectra over a field $k$ has several t-structures, including the homotopy t-structure whose heart is related to Voevodsky's homotopy modules.
+</Example>
+
+---
+
+## Truncation and Homotopy Objects
+
+<Example id="truncation-functors" title="Truncation functors">
+The truncation functors $\tau_{\geq n}$ and $\tau_{\leq n}$ fit into fiber sequences:
+
+$$\tau_{\geq n}(X) \to X \to \tau_{\leq n-1}(X)$$
+
+These give the **Postnikov tower** of $X$:
+
+$$\cdots \to \tau_{\leq 2} X \to \tau_{\leq 1} X \to \tau_{\leq 0} X$$
+
+with $X \simeq \lim_n \tau_{\leq n} X$ (when the t-structure is complete).
+
+The **homotopy objects** are $\pi_n(X) = \tau_{\leq 0} \tau_{\geq 0} \Sigma^{-n} X \in \mathcal{C}^\heartsuit$, giving the "homology" of $X$ in the heart.
+</Example>
+
+<Example id="long-exact-sequence" title="Long exact sequence of homotopy objects">
+A fiber sequence $A \to B \to C$ in $\mathcal{C}$ gives a long exact sequence in the heart:
+
+$$\cdots \to \pi_{n+1}(C) \to \pi_n(A) \to \pi_n(B) \to \pi_n(C) \to \pi_{n-1}(A) \to \cdots$$
+
+This is the $\infty$-categorical generalization of the long exact sequence in homology for a short exact sequence of chain complexes.
+</Example>
+
+---
+
+## Properties of t-Structures
+
+<Example id="t-left-complete" title="Left and right completeness">
+A t-structure is **left complete** if $\mathcal{C} \simeq \lim_n \mathcal{C}_{\leq n}$ (every object is determined by its truncations). It is **right complete** if $\mathcal{C} \simeq \lim_n \mathcal{C}_{\geq -n}$.
+
+The standard t-structure on $D(R)$ is both left and right complete. The standard t-structure on $\operatorname{Sp}$ is right complete but generally not left complete (there exist non-zero spectra with all homotopy groups zero in some exotic situations, though this requires careful set-theoretic considerations).
+</Example>
+
+<Example id="t-accessible" title="Accessible t-structures">
+A t-structure on a presentable stable $\infty$-category $\mathcal{C}$ is **accessible** if $\mathcal{C}_{\geq 0}$ is presentable (equivalently, closed under filtered colimits). The standard t-structures on $D(R)$ and $\operatorname{Sp}$ are accessible.
+
+Accessible t-structures are determined by their hearts: the functor $\mathcal{C} \to \operatorname{Fun}(\mathbb{Z}^{\mathrm{op}}, \mathcal{C}^\heartsuit)$ (sending $X$ to its Postnikov tower) is conservative for complete accessible t-structures.
+</Example>
+
+<Example id="t-bounded" title="Bounded objects">
+An object $X \in \mathcal{C}$ is **bounded** (with respect to a t-structure) if $X \in \mathcal{C}_{\geq m} \cap \mathcal{C}_{\leq n}$ for some $m, n$. The full subcategory of bounded objects $\mathcal{C}^b$ is a stable $\infty$-category.
+
+For $D(R)$: bounded objects are complexes with finitely many nonzero homology groups, giving $D^b(R)$.
+</Example>
+
+---
+
+## Summary
+
+<Remark title="Key points">
+t-structures connect stable $\infty$-categories to abelian categories:
+
+1. A t-structure decomposes $\mathcal{C}$ into $\mathcal{C}_{\geq 0}$ and $\mathcal{C}_{\leq 0}$ with truncation functors.
+
+2. The **heart** $\mathcal{C}^\heartsuit = \mathcal{C}_{\geq 0} \cap \mathcal{C}_{\leq 0}$ is an abelian category.
+
+3. **Homotopy objects** $\pi_n(X) \in \mathcal{C}^\heartsuit$ generalize homology groups.
+
+4. Fiber sequences give **long exact sequences** of homotopy objects.
+
+5. Key examples: standard t-structure on $D(R)$ (heart = $\operatorname{Mod}_R$), on $\operatorname{Sp}$ (heart = $\mathbf{Ab}$), perverse t-structure.
+</Remark>
